@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AlertDialog
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
@@ -10,8 +11,9 @@ import com.simplemobiletools.gallery.pro.R
 import kotlinx.android.synthetic.main.dialog_save_as.view.*
 import java.io.File
 
+@SuppressLint("InflateParams", "SetTextI18n")
 class SaveAsDialog(
-    val activity: BaseSimpleActivity, val path: String, val appendFilename: Boolean, val cancelCallback: (() -> Unit)? = null,
+    val activity: BaseSimpleActivity, val path: String, private val appendFilename: Boolean, private val cancelCallback: (() -> Unit)? = null,
     val callback: (savePath: String) -> Unit
 ) {
     init {
@@ -40,7 +42,7 @@ class SaveAsDialog(
             filename_value.setText(name)
             folder_value.setOnClickListener {
                 activity.hideKeyboard(folder_value)
-                FilePickerDialog(activity, realPath, false, false, true, true) {
+                FilePickerDialog(activity, realPath, pickFile = false, showHidden = false, showFAB = true, canAddShowHiddenButton = true) {
                     folder_value.setText(activity.humanizePath(it))
                     realPath = it
                 }
@@ -49,7 +51,7 @@ class SaveAsDialog(
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
-            .setNegativeButton(R.string.cancel) { dialog, which -> cancelCallback?.invoke() }
+            .setNegativeButton(R.string.cancel) { _, _ -> cancelCallback?.invoke() }
             .setOnCancelListener { cancelCallback?.invoke() }
             .apply {
                 activity.setupDialogStuff(view, this, R.string.save_as) { alertDialog ->

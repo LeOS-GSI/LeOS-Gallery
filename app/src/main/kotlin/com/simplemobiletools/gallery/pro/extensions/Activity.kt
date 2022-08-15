@@ -285,7 +285,14 @@ fun BaseSimpleActivity.tryCopyMoveFilesTo(fileDirItems: ArrayList<FileDirItem>, 
     }
 
     val source = fileDirItems[0].getParentPath()
-    PickDirectoryDialog(this, source, true, false, true, false) {
+    PickDirectoryDialog(
+        this,
+        source,
+        showOtherFolderButton = true,
+        showFavoritesBin = false,
+        isPickingCopyMoveDestination = true,
+        isPickingFolderForWidget = false
+    ) { it ->
         val destination = it
         handleSAFDialog(source) {
             if (it) {
@@ -663,7 +670,7 @@ fun BaseSimpleActivity.saveRotatedImageToFile(oldPath: String, newPath: String, 
             showErrorToast(e)
         }
     } finally {
-        tryDeleteFileDirItem(tmpFileDirItem, false, true)
+        tryDeleteFileDirItem(tmpFileDirItem, allowDeleteFolder = false, deleteFromDatabase = true)
     }
 }
 

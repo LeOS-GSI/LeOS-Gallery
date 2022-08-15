@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
@@ -14,8 +15,11 @@ import com.simplemobiletools.gallery.pro.helpers.*
 import kotlinx.android.synthetic.main.dialog_change_folder_thumbnail_style.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 
+@SuppressLint("InflateParams")
 class ChangeFolderThumbnailStyleDialog(val activity: BaseSimpleActivity, val callback: () -> Unit) : DialogInterface.OnClickListener {
+
     private var config = activity.config
+
     private var view = activity.layoutInflater.inflate(R.layout.dialog_change_folder_thumbnail_style, null).apply {
         dialog_folder_limit_title.isChecked = config.limitFolderTitle
     }
@@ -35,7 +39,7 @@ class ChangeFolderThumbnailStyleDialog(val activity: BaseSimpleActivity, val cal
 
     private fun setupStyle() {
         val styleRadio = view.dialog_radio_folder_style
-        styleRadio.setOnCheckedChangeListener { group, checkedId ->
+        styleRadio.setOnCheckedChangeListener { _, _ ->
             updateSample()
         }
 
@@ -49,7 +53,7 @@ class ChangeFolderThumbnailStyleDialog(val activity: BaseSimpleActivity, val cal
 
     private fun setupMediaCount() {
         val countRadio = view.dialog_radio_folder_count_holder
-        countRadio.setOnCheckedChangeListener { group, checkedId ->
+        countRadio.setOnCheckedChangeListener { _, _ ->
             updateSample()
         }
 
@@ -62,6 +66,7 @@ class ChangeFolderThumbnailStyleDialog(val activity: BaseSimpleActivity, val cal
         countBtn.isChecked = true
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateSample() {
         val photoCount = 36
         val folderName = "Camera"

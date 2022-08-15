@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.graphics.Point
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -8,6 +9,7 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.gallery.pro.R
 import kotlinx.android.synthetic.main.dialog_resize_image.view.*
 
+@SuppressLint("InflateParams")
 class ResizeDialog(val activity: BaseSimpleActivity, val size: Point, val callback: (newSize: Point) -> Unit) {
     init {
         val view = activity.layoutInflater.inflate(R.layout.dialog_resize_image, null)

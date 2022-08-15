@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.helpers
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
@@ -20,6 +21,7 @@ import com.simplemobiletools.gallery.pro.models.ThumbnailItem
 import com.simplemobiletools.gallery.pro.models.ThumbnailSection
 import java.io.File
 import java.util.*
+import kotlin.math.roundToInt
 
 class MediaFetcher(val context: Context) {
     var shouldStop = false
@@ -81,6 +83,7 @@ class MediaFetcher(val context: Context) {
         return curMedia
     }
 
+    @SuppressLint("Recycle")
     fun getFoldersToScan(): ArrayList<String> {
         return try {
             val OTGPath = context.config.OTGPath
@@ -190,7 +193,7 @@ class MediaFetcher(val context: Context) {
         }
 
         if (filterMedia and TYPE_VIDEOS != 0) {
-            videoExtensions.forEach {
+            videoExtensions.forEach { _ ->
                 query.append("${Images.Media.DATA} LIKE ? OR ")
             }
         }
@@ -417,8 +420,10 @@ class MediaFetcher(val context: Context) {
                 }
 
                 val isFavorite = favoritePaths.contains(path)
-                val medium = Medium(null, filename, path, file.parent, lastModified, dateTaken, size, type, videoDuration, isFavorite, 0L, 0L)
-                media.add(medium)
+                val medium = file.parent?.let { Medium(null, filename, path, it, lastModified, dateTaken, size, type, videoDuration, isFavorite, 0L, 0L) }
+                if (medium != null) {
+                    media.add(medium)
+                }
             }
         }
 
@@ -520,7 +525,7 @@ class MediaFetcher(val context: Context) {
                     dateTaken = lastModified
                 }
 
-                val videoDuration = Math.round(cursor.getIntValue(MediaStore.MediaColumns.DURATION) / 1000.toDouble()).toInt()
+                val videoDuration = (cursor.getIntValue(MediaStore.MediaColumns.DURATION) / 1000.toDouble()).roundToInt()
                 val isFavorite = favoritePaths.contains(path)
                 val medium =
                     Medium(null, filename, path, path.getParentPath(), lastModified, dateTaken, size, type, videoDuration, isFavorite, 0L, mediaStoreId)
@@ -546,7 +551,7 @@ class MediaFetcher(val context: Context) {
         val files = context.getDocumentFile(folder)?.listFiles() ?: return media
         val checkFileExistence = context.config.fileLoadingPriority == PRIORITY_VALIDITY
         val showHidden = context.config.shouldShowHidden
-        val OTGPath = context.config.OTGPath
+        val oTGPath = context.config.OTGPath
 
         for (file in files) {
             if (shouldStop) {
@@ -582,7 +587,7 @@ class MediaFetcher(val context: Context) {
                 continue
 
             val size = file.length()
-            if (size <= 0L || (checkFileExistence && !context.getDoesFilePathExist(file.uri.toString(), OTGPath)))
+            if (size <= 0L || (checkFileExistence && !context.getDoesFilePathExist(file.uri.toString(), oTGPath)))
                 continue
 
             val dateTaken = file.lastModified()

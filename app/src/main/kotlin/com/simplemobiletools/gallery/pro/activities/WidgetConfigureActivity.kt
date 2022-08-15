@@ -61,7 +61,7 @@ class WidgetConfigureActivity : SimpleActivity() {
             handleFolderNameDisplay()
         }
 
-        getCachedDirectories(false, false) {
+        getCachedDirectories(getVideosOnly = false, getImagesOnly = false) {
             mDirectories = it
             val path = it.firstOrNull()?.path
             if (path != null) {
@@ -160,7 +160,14 @@ class WidgetConfigureActivity : SimpleActivity() {
     }
 
     private fun changeSelectedFolder() {
-        PickDirectoryDialog(this, "", false, true, false, true) {
+        PickDirectoryDialog(
+            this,
+            "",
+            showOtherFolderButton = false,
+            showFavoritesBin = true,
+            isPickingCopyMoveDestination = false,
+            isPickingFolderForWidget = true
+        ) {
             updateFolderImage(it)
         }
     }

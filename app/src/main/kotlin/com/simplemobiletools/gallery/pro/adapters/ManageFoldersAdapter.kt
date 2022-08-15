@@ -13,7 +13,7 @@ import com.simplemobiletools.gallery.pro.extensions.config
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
 
 class ManageFoldersAdapter(
-    activity: BaseSimpleActivity, var folders: ArrayList<String>, val isShowingExcludedFolders: Boolean, val listener: RefreshRecyclerViewListener?,
+    activity: BaseSimpleActivity, var folders: ArrayList<String>, private val isShowingExcludedFolders: Boolean, val listener: RefreshRecyclerViewListener?,
     recyclerView: MyRecyclerView, itemClick: (Any) -> Unit
 ) : MyRecyclerViewAdapter(activity, recyclerView, itemClick) {
 
@@ -49,7 +49,7 @@ class ManageFoldersAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val folder = folders[position]
-        holder.bindView(folder, true, true) { itemView, adapterPosition ->
+        holder.bindView(folder, allowSingleClick = true, allowLongClick = true) { itemView, _ ->
             setupView(itemView, folder)
         }
         bindViewHolder(holder)
@@ -119,7 +119,7 @@ class ManageFoldersAdapter(
             }
         }
 
-        folders.removeAll(removeFolders)
+        folders.removeAll(removeFolders.toSet())
         removeSelectedItems(positions)
         if (folders.isEmpty()) {
             listener?.refreshItems()

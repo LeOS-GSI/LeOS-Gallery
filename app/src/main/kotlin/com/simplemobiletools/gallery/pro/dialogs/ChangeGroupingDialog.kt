@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.view.View
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
@@ -11,11 +12,12 @@ import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.helpers.*
 import kotlinx.android.synthetic.main.dialog_change_grouping.view.*
 
+@SuppressLint("InflateParams")
 class ChangeGroupingDialog(val activity: BaseSimpleActivity, val path: String = "", val callback: () -> Unit) :
     DialogInterface.OnClickListener {
     private var currGrouping = 0
     private var config = activity.config
-    private val pathToUse = if (path.isEmpty()) SHOW_ALL else path
+    private val pathToUse = path.ifEmpty { SHOW_ALL }
     private var view: View
 
     init {

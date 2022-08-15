@@ -1,7 +1,6 @@
 package com.simplemobiletools.gallery.pro.helpers
 
 import com.simplemobiletools.commons.helpers.MONTH_SECONDS
-import com.simplemobiletools.commons.helpers.isQPlus
 
 // shared preferences
 const val DIRECTORY_SORT_ORDER = "directory_sort_order"

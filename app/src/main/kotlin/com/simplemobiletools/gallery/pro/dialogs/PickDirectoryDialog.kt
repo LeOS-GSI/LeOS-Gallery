@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.view.KeyEvent
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +16,7 @@ import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.models.Directory
 import kotlinx.android.synthetic.main.dialog_directory_picker.view.*
 
+@SuppressLint("InflateParams")
 class PickDirectoryDialog(
     val activity: BaseSimpleActivity,
     val sourcePath: String,
@@ -28,6 +30,7 @@ class PickDirectoryDialog(
     private var shownDirectories = ArrayList<Directory>()
     private var allDirectories = ArrayList<Directory>()
     private var openedSubfolders = arrayListOf("")
+
     private var view = activity.layoutInflater.inflate(R.layout.dialog_directory_picker, null)
     private var isGridViewType = activity.config.viewTypeFolders == VIEW_TYPE_GRID
     private var showHidden = activity.config.shouldShowHidden
@@ -44,7 +47,7 @@ class PickDirectoryDialog(
         val builder = activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
-            .setOnKeyListener { dialogInterface, i, keyEvent ->
+            .setOnKeyListener { _, i, keyEvent ->
                 if (keyEvent.action == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK) {
                     backPressed()
                 }
@@ -52,7 +55,7 @@ class PickDirectoryDialog(
             }
 
         if (showOtherFolderButton) {
-            builder.setNeutralButton(R.string.other_folder) { dialogInterface, i -> showOtherFolder() }
+            builder.setNeutralButton(R.string.other_folder) { _, _ -> showOtherFolder() }
         }
 
         builder.apply {
@@ -75,8 +78,8 @@ class PickDirectoryDialog(
     private fun fetchDirectories(forceShowHidden: Boolean) {
         activity.getCachedDirectories(forceShowHidden = forceShowHidden) {
             if (it.isNotEmpty()) {
-                it.forEach {
-                    it.subfoldersMediaCount = it.mediaCnt
+                it.forEach { directory ->
+                    directory.subfoldersMediaCount = directory.mediaCnt
                 }
 
                 activity.runOnUiThread {
@@ -87,7 +90,14 @@ class PickDirectoryDialog(
     }
 
     private fun showOtherFolder() {
-        FilePickerDialog(activity, sourcePath, !isPickingCopyMoveDestination && !isPickingFolderForWidget, showHidden, true, true) {
+        FilePickerDialog(
+            activity,
+            sourcePath,
+            !isPickingCopyMoveDestination && !isPickingFolderForWidget,
+            showHidden,
+            showFAB = true,
+            canAddShowHiddenButton = true
+        ) {
             activity.handleLockedFolderOpening(it) { success ->
                 if (success) {
                     callback(it)

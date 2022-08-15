@@ -10,17 +10,13 @@ import com.simplemobiletools.commons.extensions.isPathOnSD
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.views.MyRecyclerView
 import com.simplemobiletools.gallery.pro.R
-import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.removeNoMedia
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
-import java.util.*
 
 class ManageHiddenFoldersAdapter(
     activity: BaseSimpleActivity, var folders: ArrayList<String>, val listener: RefreshRecyclerViewListener?,
     recyclerView: MyRecyclerView, itemClick: (Any) -> Unit
 ) : MyRecyclerViewAdapter(activity, recyclerView, itemClick) {
-
-    private val config = activity.config
 
     init {
         setupDragListener(true)
@@ -52,7 +48,7 @@ class ManageHiddenFoldersAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val folder = folders[position]
-        holder.bindView(folder, true, true) { itemView, adapterPosition ->
+        holder.bindView(folder, allowSingleClick = true, allowLongClick = true) { itemView, _ ->
             setupView(itemView, folder)
         }
         bindViewHolder(holder)
@@ -100,7 +96,7 @@ class ManageHiddenFoldersAdapter(
             activity.removeNoMedia(it)
         }
 
-        folders.removeAll(removeFolders)
+        folders.removeAll(removeFolders.toSet())
         removeSelectedItems(position)
         if (folders.isEmpty()) {
             listener?.refreshItems()

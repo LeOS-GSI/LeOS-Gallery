@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,16 @@ import com.simplemobiletools.gallery.pro.models.FilterItem
 import kotlinx.android.synthetic.main.editor_filter_item.view.*
 import java.util.*
 
-class FiltersAdapter(val context: Context, val filterItems: ArrayList<FilterItem>, val itemClick: (Int) -> Unit) : RecyclerView.Adapter<FiltersAdapter.ViewHolder>() {
+class FiltersAdapter(
+    val context: Context,
+    private val filterItems: ArrayList<FilterItem>,
+    private val itemClick: (Int) -> Unit
+) :
+    RecyclerView.Adapter<FiltersAdapter.ViewHolder>() {
 
     private var currentSelection = filterItems.first()
+
+    @SuppressLint("UseCompatLoadingForDrawables")
     private var strokeBackground = context.resources.getDrawable(R.drawable.stroke_background)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -28,6 +36,7 @@ class FiltersAdapter(val context: Context, val filterItems: ArrayList<FilterItem
 
     fun getCurrentFilter() = currentSelection
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setCurrentFilter(position: Int) {
         val filterItem = filterItems.getOrNull(position) ?: return
         if (currentSelection != filterItem) {

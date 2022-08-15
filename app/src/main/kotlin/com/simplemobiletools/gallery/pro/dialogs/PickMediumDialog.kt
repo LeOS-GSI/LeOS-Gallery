@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
@@ -20,6 +21,7 @@ import com.simplemobiletools.gallery.pro.models.ThumbnailItem
 import com.simplemobiletools.gallery.pro.models.ThumbnailSection
 import kotlinx.android.synthetic.main.dialog_medium_picker.view.*
 
+@SuppressLint("InflateParams")
 class PickMediumDialog(val activity: BaseSimpleActivity, val path: String, val callback: (path: String) -> Unit) {
     private var dialog: AlertDialog? = null
     private var shownMedia = ArrayList<ThumbnailItem>()
@@ -39,7 +41,7 @@ class PickMediumDialog(val activity: BaseSimpleActivity, val path: String, val c
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
-            .setNeutralButton(R.string.other_folder) { dialogInterface, i -> showOtherFolder() }
+            .setNeutralButton(R.string.other_folder) { _, _ -> showOtherFolder() }
             .apply {
                 activity.setupDialogStuff(view, this, R.string.select_photo) { alertDialog ->
                     dialog = alertDialog
@@ -55,13 +57,20 @@ class PickMediumDialog(val activity: BaseSimpleActivity, val path: String, val c
             }
         }
 
-        GetMediaAsynctask(activity, path, false, false, false) {
+        GetMediaAsynctask(activity, path, isPickImage = false, isPickVideo = false, showAll = false) {
             gotMedia(it)
         }.execute()
     }
 
     private fun showOtherFolder() {
-        PickDirectoryDialog(activity, path, true, true, false, false) {
+        PickDirectoryDialog(
+            activity,
+            path,
+            showOtherFolderButton = true,
+            showFavoritesBin = true,
+            isPickingCopyMoveDestination = false,
+            isPickingFolderForWidget = false
+        ) {
             callback(it)
             dialog?.dismiss()
         }
@@ -72,7 +81,15 @@ class PickMediumDialog(val activity: BaseSimpleActivity, val path: String, val c
             return
 
         shownMedia = media
-        val adapter = MediaAdapter(activity, shownMedia.clone() as ArrayList<ThumbnailItem>, null, true, false, path, view.media_grid) {
+        val adapter = MediaAdapter(
+            activity,
+            shownMedia.clone() as ArrayList<ThumbnailItem>,
+            listener = null,
+            isAGetIntent = true,
+            allowMultiplePicks = false,
+            path,
+            view.media_grid
+        ) {
             if (it is Medium) {
                 callback(it.path)
                 dialog?.dismiss()

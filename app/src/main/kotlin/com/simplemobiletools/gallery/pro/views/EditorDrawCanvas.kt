@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.views
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
@@ -54,6 +55,7 @@ class EditorDrawCanvas(context: Context, attrs: AttributeSet) : View(context, at
         canvas.restore()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
         val y = event.y

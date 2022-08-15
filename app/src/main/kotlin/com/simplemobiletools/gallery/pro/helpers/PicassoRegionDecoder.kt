@@ -6,11 +6,11 @@ import android.net.Uri
 import com.davemorrissey.labs.subscaleview.ImageRegionDecoder
 
 class PicassoRegionDecoder(
-    val showHighestQuality: Boolean,
-    val screenWidth: Int,
-    val screenHeight: Int,
-    val minTileDpi: Int,
-    val isHeic: Boolean
+    private val showHighestQuality: Boolean,
+    private val screenWidth: Int,
+    private val screenHeight: Int,
+    private val minTileDpi: Int,
+    private val isHeic: Boolean
 ) : ImageRegionDecoder {
     private var decoder: BitmapRegionDecoder? = null
     private val decoderLock = Any()

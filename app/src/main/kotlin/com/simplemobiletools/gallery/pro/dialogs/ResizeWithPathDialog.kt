@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.graphics.Point
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
@@ -11,6 +12,7 @@ import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.extensions.config
 import kotlinx.android.synthetic.main.dialog_resize_image_with_path.view.*
 
+@SuppressLint("SetTextI18n", "InflateParams")
 class ResizeWithPathDialog(val activity: BaseSimpleActivity, val size: Point, val path: String, val callback: (newSize: Point, newPath: String) -> Unit) {
     init {
         var realPath = path.getParentPath()
@@ -29,7 +31,14 @@ class ResizeWithPathDialog(val activity: BaseSimpleActivity, val size: Point, va
 
             filename_value.setText(name)
             folder.setOnClickListener {
-                FilePickerDialog(activity, realPath, false, activity.config.shouldShowHidden, true, true) {
+                FilePickerDialog(
+                    activity,
+                    realPath,
+                    false,
+                    activity.config.shouldShowHidden,
+                    showFAB = true,
+                    canAddShowHiddenButton = true
+                ) {
                     folder.setText(activity.humanizePath(it))
                     realPath = it
                 }

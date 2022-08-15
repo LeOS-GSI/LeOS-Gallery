@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.adapters
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
@@ -55,7 +56,7 @@ import java.util.*
 
 class DirectoryAdapter(
     activity: BaseSimpleActivity, var dirs: ArrayList<Directory>, val listener: DirectoryOperationsListener?, recyclerView: MyRecyclerView,
-    val isPickIntent: Boolean, val swipeRefreshLayout: SwipeRefreshLayout? = null, itemClick: (Any) -> Unit
+    private val isPickIntent: Boolean, private val swipeRefreshLayout: SwipeRefreshLayout? = null, itemClick: (Any) -> Unit
 ) :
     MyRecyclerViewAdapter(activity, recyclerView, itemClick), ItemTouchHelperContract, RecyclerViewFastScroller.OnPopupTextUpdate {
 
@@ -97,7 +98,7 @@ class DirectoryAdapter(
 
     override fun onBindViewHolder(holder: MyRecyclerViewAdapter.ViewHolder, position: Int) {
         val dir = dirs.getOrNull(position) ?: return
-        holder.bindView(dir, true, !isPickIntent) { itemView, adapterPosition ->
+        holder.bindView(dir, true, !isPickIntent) { itemView, _ ->
             setupView(itemView, dir, holder)
         }
         bindViewHolder(holder)
@@ -172,6 +173,7 @@ class DirectoryAdapter(
 
     override fun onActionModeCreated() {}
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onActionModeDestroyed() {
         if (isDragAndDropping) {
             notifyDataSetChanged()
@@ -205,6 +207,7 @@ class DirectoryAdapter(
         menu.findItem(R.id.cab_unpin).isVisible = selectedPaths.any { pinnedFolders.contains(it) }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun moveSelectedItemsToTop() {
         selectedKeys.reversed().forEach { key ->
             val position = dirs.indexOfFirst { it.path.hashCode() == key }
@@ -216,6 +219,7 @@ class DirectoryAdapter(
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun moveSelectedItemsToBottom() {
         selectedKeys.forEach { key ->
             val position = dirs.indexOfFirst { it.path.hashCode() == key }
@@ -553,6 +557,7 @@ class DirectoryAdapter(
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createShortcut() {
         val manager = activity.getSystemService(ShortcutManager::class.java)
@@ -623,7 +628,7 @@ class DirectoryAdapter(
 
         val SAFPath = getFirstSelectedItemPath() ?: return
         val selectedDirs = getSelectedItems()
-        activity.handleSAFDialog(SAFPath) {
+        activity.handleSAFDialog(SAFPath) { it ->
             if (!it) {
                 return@handleSAFDialog
             }
@@ -728,6 +733,7 @@ class DirectoryAdapter(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateDirs(newDirs: ArrayList<Directory>) {
         val directories = newDirs.clone() as ArrayList<Directory>
         if (directories.hashCode() != currentDirectoriesHash) {
@@ -739,16 +745,19 @@ class DirectoryAdapter(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateAnimateGifs(animateGifs: Boolean) {
         this.animateGifs = animateGifs
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCropThumbnails(cropThumbnails: Boolean) {
         this.cropThumbnails = cropThumbnails
         notifyDataSetChanged()
     }
 
+    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     private fun setupView(view: View, directory: Directory, holder: ViewHolder) {
         val isSelected = selectedKeys.contains(directory.path.hashCode())
         view.apply {
@@ -857,7 +866,7 @@ class DirectoryAdapter(
 
             if (isDragAndDropping) {
                 dir_drag_handle.applyColorFilter(textColor)
-                dir_drag_handle.setOnTouchListener { v, event ->
+                dir_drag_handle.setOnTouchListener { _, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
                         startReorderDragListener?.requestDrag(holder)
                     }

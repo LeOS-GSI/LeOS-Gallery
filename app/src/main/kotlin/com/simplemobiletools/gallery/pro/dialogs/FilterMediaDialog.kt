@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
@@ -9,6 +10,7 @@ import com.simplemobiletools.gallery.pro.helpers.*
 import kotlinx.android.synthetic.main.dialog_filter_media.view.*
 
 class FilterMediaDialog(val activity: BaseSimpleActivity, val callback: (result: Int) -> Unit) {
+    @SuppressLint("InflateParams")
     private var view = activity.layoutInflater.inflate(R.layout.dialog_filter_media, null)
 
     init {
@@ -23,7 +25,7 @@ class FilterMediaDialog(val activity: BaseSimpleActivity, val callback: (result:
         }
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(view, this, R.string.filter_media)

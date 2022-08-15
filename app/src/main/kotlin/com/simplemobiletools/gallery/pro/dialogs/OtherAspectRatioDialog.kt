@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AlertDialog
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
@@ -7,9 +8,10 @@ import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.gallery.pro.R
 import kotlinx.android.synthetic.main.dialog_other_aspect_ratio.view.*
 
+@SuppressLint("InflateParams")
 class OtherAspectRatioDialog(
     val activity: BaseSimpleActivity,
-    val lastOtherAspectRatio: Pair<Float, Float>?,
+    private val lastOtherAspectRatio: Pair<Float, Float>?,
     val callback: (aspectRatio: Pair<Float, Float>) -> Unit
 ) {
     private var dialog: AlertDialog? = null

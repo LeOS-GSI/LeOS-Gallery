@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +17,12 @@ import kotlinx.android.synthetic.main.portrait_photo_item.view.*
 import java.util.*
 
 class PortraitPhotosAdapter(val context: Context, val photos: ArrayList<String>, val sideElementWidth: Int, val itemClick: (Int, Int) -> Unit) :
-        RecyclerView.Adapter<PortraitPhotosAdapter.ViewHolder>() {
+    RecyclerView.Adapter<PortraitPhotosAdapter.ViewHolder>() {
 
     var currentSelectionIndex = -1
     var views = HashMap<Int, View>()
+
+    @SuppressLint("UseCompatLoadingForDrawables")
     private var strokeBackground = context.resources.getDrawable(R.drawable.stroke_background)
     private val itemWidth = context.resources.getDimension(R.dimen.portrait_photos_stripe_height).toInt()
 
@@ -34,6 +37,7 @@ class PortraitPhotosAdapter(val context: Context, val photos: ArrayList<String>,
 
     override fun getItemCount() = photos.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setCurrentPhoto(position: Int) {
         if (currentSelectionIndex != position) {
             currentSelectionIndex = position
@@ -61,15 +65,15 @@ class PortraitPhotosAdapter(val context: Context, val photos: ArrayList<String>,
                 }
 
                 val options = RequestOptions()
-                        .signature(ObjectKey(photo.getFileKey()))
-                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .centerCrop()
+                    .signature(ObjectKey(photo.getFileKey()))
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .centerCrop()
 
                 Glide.with(context)
-                        .load(photo)
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .apply(options)
-                        .into(portrait_photo_item_thumbnail)
+                    .load(photo)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .apply(options)
+                    .into(portrait_photo_item_thumbnail)
 
                 if (photo.isNotEmpty()) {
                     isClickable = true

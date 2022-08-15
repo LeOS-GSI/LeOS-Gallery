@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.adapters
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
@@ -40,8 +41,8 @@ import kotlinx.android.synthetic.main.video_item_grid.view.medium_name
 import kotlinx.android.synthetic.main.video_item_grid.view.medium_thumbnail
 
 class MediaAdapter(
-    activity: BaseSimpleActivity, var media: ArrayList<ThumbnailItem>, val listener: MediaOperationsListener?, val isAGetIntent: Boolean,
-    val allowMultiplePicks: Boolean, val path: String, recyclerView: MyRecyclerView, itemClick: (Any) -> Unit
+    activity: BaseSimpleActivity, var media: ArrayList<ThumbnailItem>, val listener: MediaOperationsListener?, private val isAGetIntent: Boolean,
+    private val allowMultiplePicks: Boolean, val path: String, recyclerView: MyRecyclerView, itemClick: (Any) -> Unit
 ) :
     MyRecyclerViewAdapter(activity, recyclerView, itemClick), RecyclerViewFastScroller.OnPopupTextUpdate {
 
@@ -106,7 +107,7 @@ class MediaAdapter(
         }
 
         val allowLongPress = (!isAGetIntent || allowMultiplePicks) && tmbItem is Medium
-        holder.bindView(tmbItem, tmbItem is Medium, allowLongPress) { itemView, adapterPosition ->
+        holder.bindView(tmbItem, tmbItem is Medium, allowLongPress) { itemView, _ ->
             if (tmbItem is Medium) {
                 setupThumbnail(itemView, tmbItem)
             } else {
@@ -533,6 +534,7 @@ class MediaAdapter(
 
     private fun getItemWithKey(key: Int): Medium? = media.firstOrNull { (it as? Medium)?.path?.hashCode() == key } as? Medium
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateMedia(newMedia: ArrayList<ThumbnailItem>) {
         val thumbnailItems = newMedia.clone() as ArrayList<ThumbnailItem>
         if (thumbnailItems.hashCode() != currentMediaHash) {
@@ -544,22 +546,26 @@ class MediaAdapter(
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateDisplayFilenames(displayFilenames: Boolean) {
         this.displayFilenames = displayFilenames
         enableInstantLoad()
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateAnimateGifs(animateGifs: Boolean) {
         this.animateGifs = animateGifs
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateCropThumbnails(cropThumbnails: Boolean) {
         this.cropThumbnails = cropThumbnails
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateShowFileTypes(showFileTypes: Boolean) {
         this.showFileTypes = showFileTypes
         notifyDataSetChanged()

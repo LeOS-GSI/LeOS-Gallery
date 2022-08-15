@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.view.View
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.beVisibleIf
@@ -12,10 +13,11 @@ import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.helpers.SHOW_ALL
 import kotlinx.android.synthetic.main.dialog_change_view_type.view.*
 
-class ChangeViewTypeDialog(val activity: BaseSimpleActivity, val fromFoldersView: Boolean, val path: String = "", val callback: () -> Unit) {
+@SuppressLint("InflateParams")
+class ChangeViewTypeDialog(val activity: BaseSimpleActivity, private val fromFoldersView: Boolean, val path: String = "", val callback: () -> Unit) {
     private var view: View
     private var config = activity.config
-    private var pathToUse = if (path.isEmpty()) SHOW_ALL else path
+    private var pathToUse = path.ifEmpty { SHOW_ALL }
 
     init {
         view = activity.layoutInflater.inflate(R.layout.dialog_change_view_type, null).apply {
@@ -47,7 +49,7 @@ class ChangeViewTypeDialog(val activity: BaseSimpleActivity, val fromFoldersView
         }
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(view, this)

@@ -58,7 +58,7 @@ class HiddenFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun addFolder() {
-        FilePickerDialog(this, config.lastFilepickerPath, false, config.shouldShowHidden, false, true) {
+        FilePickerDialog(this, config.lastFilepickerPath, false, config.shouldShowHidden, showFAB = false, canAddShowHiddenButton = true) {
             config.lastFilepickerPath = it
             ensureBackgroundThread {
                 addNoMedia(it) {

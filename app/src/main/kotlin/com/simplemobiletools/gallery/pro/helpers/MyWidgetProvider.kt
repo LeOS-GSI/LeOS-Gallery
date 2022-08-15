@@ -1,12 +1,15 @@
 package com.simplemobiletools.gallery.pro.helpers
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.RemoteViews
+import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -24,6 +27,7 @@ import com.simplemobiletools.gallery.pro.extensions.widgetsDB
 import com.simplemobiletools.gallery.pro.models.Widget
 
 class MyWidgetProvider : AppWidgetProvider() {
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setupAppOpenIntent(context: Context, views: RemoteViews, id: Int, widget: Widget) {
         val intent = Intent(context, MediaActivity::class.java).apply {
             putExtra(DIRECTORY, widget.folderPath)
@@ -33,6 +37,8 @@ class MyWidgetProvider : AppWidgetProvider() {
         views.setOnClickPendingIntent(id, pendingIntent)
     }
 
+    @SuppressLint("CheckResult")
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         ensureBackgroundThread {
@@ -61,7 +67,7 @@ class MyWidgetProvider : AppWidgetProvider() {
                 val width = appWidgetOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
                 val height = appWidgetOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
 
-                val widgetSize = (Math.max(width, height) * density).toInt()
+                val widgetSize = (width.coerceAtLeast(height) * density).toInt()
                 try {
                     val image = Glide.with(context)
                         .asBitmap()
@@ -83,6 +89,7 @@ class MyWidgetProvider : AppWidgetProvider() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
         onUpdate(context, appWidgetManager, intArrayOf(appWidgetId))

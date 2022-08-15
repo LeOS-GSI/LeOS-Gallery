@@ -307,7 +307,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 findItem(R.id.reduce_column_count).isVisible = config.viewTypeFolders == VIEW_TYPE_GRID && config.dirColumnCnt > 1
                 findItem(R.id.hide_the_recycle_bin).isVisible = useBin && config.showRecycleBinAtFolders
                 findItem(R.id.show_the_recycle_bin).isVisible = useBin && !config.showRecycleBinAtFolders
-                findItem(R.id.set_as_default_folder).isVisible = !config.defaultFolder.isEmpty()
+                findItem(R.id.set_as_default_folder).isVisible = config.defaultFolder.isNotEmpty()
                 setupSearch(this)
             }
         }
@@ -531,7 +531,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun showSortingDialog() {
-        ChangeSortingDialog(this, true, false) {
+        ChangeSortingDialog(this, isDirectorySorting = true, showFolderCheckbox = false) {
             directories_grid.adapter = null
             if (config.directorySorting and SORT_BY_DATE_MODIFIED != 0 || config.directorySorting and SORT_BY_DATE_TAKEN != 0) {
                 getDirectories()
@@ -636,7 +636,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         val itemsToDelete = ArrayList<FileDirItem>()
         val filter = config.filterMedia
         val showHidden = config.shouldShowHidden
-        fileDirItems.filter { it.isDirectory }.forEach {
+        fileDirItems.filter { it.isDirectory }.forEach { it ->
             val files = File(it.path).listFiles()
             files?.filter {
                 it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
@@ -753,7 +753,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun createNewFolder() {
-        FilePickerDialog(this, internalStoragePath, false, config.shouldShowHidden, false, true) {
+        FilePickerDialog(this, internalStoragePath, false, config.shouldShowHidden, showFAB = false, canAddShowHiddenButton = true) { it ->
             CreateNewFolderDialog(this, it) {
                 config.tempFolderPath = it
                 ensureBackgroundThread {
@@ -808,6 +808,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     private fun isVideoType(intent: Intent) = (intent.type?.startsWith("video/") == true || intent.type == Video.Media.CONTENT_TYPE)
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == PICK_MEDIA && resultData != null) {

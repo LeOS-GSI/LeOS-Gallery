@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.view.View
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
@@ -11,6 +12,7 @@ import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.extensions.config
 import kotlinx.android.synthetic.main.dialog_change_file_thumbnail_style.view.*
 
+@SuppressLint("InflateParams")
 class ChangeFileThumbnailStyleDialog(val activity: BaseSimpleActivity) : DialogInterface.OnClickListener {
     private var config = activity.config
     private var view: View
@@ -68,6 +70,7 @@ class ChangeFileThumbnailStyleDialog(val activity: BaseSimpleActivity) : DialogI
         config.thumbnailSpacing = thumbnailSpacing
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateThumbnailSpacingText() {
         view.dialog_file_style_spacing.text = "${thumbnailSpacing}x"
     }

@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -12,7 +13,8 @@ import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.extensions.config
 import kotlinx.android.synthetic.main.dialog_exclude_folder.view.*
 
-class ExcludeFolderDialog(val activity: BaseSimpleActivity, val selectedPaths: List<String>, val callback: () -> Unit) {
+@SuppressLint("InflateParams")
+class ExcludeFolderDialog(val activity: BaseSimpleActivity, private val selectedPaths: List<String>, val callback: () -> Unit) {
     private val alternativePaths = getAlternativePathsList()
     private var radioGroup: RadioGroup? = null
 
@@ -24,7 +26,7 @@ class ExcludeFolderDialog(val activity: BaseSimpleActivity, val selectedPaths: L
             exclude_folder_radio_group.beVisibleIf(alternativePaths.size > 1)
         }
 
-        alternativePaths.forEachIndexed { index, value ->
+        alternativePaths.forEachIndexed { index, _ ->
             val radioButton = (activity.layoutInflater.inflate(R.layout.radio_button, null) as RadioButton).apply {
                 text = alternativePaths[index]
                 isChecked = index == 0
@@ -34,7 +36,7 @@ class ExcludeFolderDialog(val activity: BaseSimpleActivity, val selectedPaths: L
         }
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(view, this)

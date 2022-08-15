@@ -53,7 +53,7 @@ class MyPagerAdapter(val activity: ViewPagerActivity, fm: FragmentManager, val m
     fun getCurrentFragment(position: Int) = fragments[position]
 
     fun toggleFullscreen(isFullscreen: Boolean) {
-        for ((pos, fragment) in fragments) {
+        for ((_, fragment) in fragments) {
             fragment.fullscreenToggled(isFullscreen)
         }
     }

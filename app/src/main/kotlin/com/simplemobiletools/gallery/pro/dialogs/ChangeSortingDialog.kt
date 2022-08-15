@@ -1,5 +1,6 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.view.View
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
@@ -10,6 +11,7 @@ import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.helpers.SHOW_ALL
 import kotlinx.android.synthetic.main.dialog_change_sorting.view.*
 
+@SuppressLint("InflateParams")
 class ChangeSortingDialog(
     val activity: BaseSimpleActivity, val isDirectorySorting: Boolean, val showFolderCheckbox: Boolean,
     val path: String = "", val callback: () -> Unit
@@ -47,7 +49,7 @@ class ChangeSortingDialog(
 
     private fun setupSortRadio() {
         val sortingRadio = view.sorting_dialog_radio_sorting
-        sortingRadio.setOnCheckedChangeListener { group, checkedId ->
+        sortingRadio.setOnCheckedChangeListener { _, checkedId ->
             val isSortingByNameOrPath = checkedId == sortingRadio.sorting_dialog_radio_name.id || checkedId == sortingRadio.sorting_dialog_radio_path.id
             view.sorting_dialog_numeric_sorting.beVisibleIf(isSortingByNameOrPath)
             view.use_for_this_folder_divider.beVisibleIf(view.sorting_dialog_numeric_sorting.isVisible() || view.sorting_dialog_use_for_this_folder.isVisible())
