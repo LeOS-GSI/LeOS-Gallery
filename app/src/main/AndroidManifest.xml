@@ -202,7 +202,7 @@
             android:parentActivityName=".activities.SettingsActivity" />
 
         <activity
-            android:name=".activities.PhotoActivity"
+            android:name=".photo.PhotoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true">
             <intent-filter

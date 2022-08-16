@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.fragments
+package com.simplemobiletools.gallery.pro.photo
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -48,13 +48,13 @@ import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.activities.PanoramaPhotoActivity
-import com.simplemobiletools.gallery.pro.activities.PhotoActivity
 import com.simplemobiletools.gallery.pro.base.PhotoVideoActivity
 import com.simplemobiletools.gallery.pro.activities.ViewPagerActivity
 import com.simplemobiletools.gallery.pro.adapters.PortraitPhotosAdapter
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.saveRotatedImageToFile
 import com.simplemobiletools.gallery.pro.extensions.sendFakeClick
+import com.simplemobiletools.gallery.pro.fragments.ViewPagerFragment
 import com.simplemobiletools.gallery.pro.helpers.*
 import com.simplemobiletools.gallery.pro.models.Medium
 import com.simplemobiletools.gallery.pro.svg.SvgSoftwareLayerSetter
@@ -71,16 +71,17 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.ceil
 
-class PhotoFragment : ViewPagerFragment() {
-    private val DEFAULT_DOUBLE_TAP_ZOOM = 2f
-    private val ZOOMABLE_VIEW_LOAD_DELAY = 100L
-    private val SAME_ASPECT_RATIO_THRESHOLD = 0.01
+private const val DEFAULT_DOUBLE_TAP_ZOOM = 2f
+private const val ZOOMABLE_VIEW_LOAD_DELAY = 100L
+private const val SAME_ASPECT_RATIO_THRESHOLD = 0.01
 
-    // devices with good displays, but the rest of the hardware not good enough for them
-    private val WEIRD_DEVICES = arrayListOf(
-        "motorola xt1685",
-        "google nexus 5x"
-    )
+// devices with good displays, but the rest of the hardware not good enough for them
+private val WEIRD_DEVICES = arrayListOf(
+    "motorola xt1685",
+    "google nexus 5x"
+)
+
+class PhotoFragment : ViewPagerFragment() {
 
     var mCurrentRotationDegrees = 0
     private var mIsFragmentVisible = false
@@ -735,7 +736,7 @@ class PhotoFragment : ViewPagerFragment() {
     private fun getMinTileDpi(): Int {
         val metrics = resources.displayMetrics
         val averageDpi = (metrics.xdpi + metrics.ydpi) / 2
-        val device = "${Build.BRAND} ${Build.MODEL}".toLowerCase(Locale.ROOT)
+        val device = "${Build.BRAND} ${Build.MODEL}".lowercase(Locale.ROOT)
         return when {
             WEIRD_DEVICES.contains(device) -> WEIRD_TILE_DPI
             averageDpi > 400 -> HIGH_TILE_DPI

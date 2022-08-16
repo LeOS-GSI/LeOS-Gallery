@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.photo
 
 import android.os.Bundle
 import com.simplemobiletools.gallery.pro.base.PhotoVideoActivity
