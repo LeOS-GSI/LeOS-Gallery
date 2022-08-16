@@ -35,7 +35,7 @@ import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.gallery.pro.BuildConfig
 import com.simplemobiletools.gallery.pro.R
-import com.simplemobiletools.gallery.pro.activities.SettingsActivity
+import com.simplemobiletools.gallery.pro.settings.SettingsActivity
 import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.simplemobiletools.gallery.pro.dialogs.PickDirectoryDialog
 import com.simplemobiletools.gallery.pro.helpers.RECYCLE_BIN
