@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.base
 
 import android.content.Intent
 import android.content.res.Configuration
@@ -15,7 +15,7 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.gallery.pro.BuildConfig
 import com.simplemobiletools.gallery.pro.R
-import com.simplemobiletools.gallery.pro.base.SimpleActivity
+import com.simplemobiletools.gallery.pro.activities.*
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.fragments.PhotoFragment
 import com.simplemobiletools.gallery.pro.fragments.VideoFragment

@@ -40,7 +40,8 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label">
+        tools:replace="android:label"
+        tools:targetApi="o">
 
         <activity
             android:name=".activities.SplashActivity"
@@ -103,7 +104,8 @@
             android:exported="false"
             android:label="@string/search"
             android:parentActivityName=".activities.MainActivity"
-            android:resizeableActivity="true">
+            android:resizeableActivity="true"
+            tools:targetApi="n">
 
             <meta-data
                 android:name="android.app.default_searchable"
@@ -157,7 +159,7 @@
         </activity>
 
         <activity
-            android:name=".activities.PhotoVideoActivity"
+            android:name=".base.PhotoVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:theme="@style/TranslucentTheme" />
@@ -203,7 +205,9 @@
             android:name=".activities.PhotoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true">
-            <intent-filter>
+            <intent-filter
+                android:scheme="http"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -217,7 +221,9 @@
             android:name=".activities.VideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true">
-            <intent-filter>
+            <intent-filter
+                android:scheme="http"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -276,7 +282,7 @@
         <activity
             android:name=".activities.WidgetConfigureActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullSensor"
             android:theme="@style/MyWidgetConfigTheme">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -295,7 +301,9 @@
 
         <receiver
             android:name=".receivers.RefreshMediaReceiver"
-            android:exported="true">
+            android:exported="true"
+            android:permission="TODO"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.simplemobiletools.REFRESH_MEDIA" />
             </intent-filter>
