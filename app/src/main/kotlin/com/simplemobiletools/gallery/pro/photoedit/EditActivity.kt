@@ -1,5 +1,6 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.photoedit
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Intent
@@ -52,6 +53,20 @@ import kotlinx.android.synthetic.main.bottom_editor_draw_actions.*
 import kotlinx.android.synthetic.main.bottom_editor_primary_actions.*
 import java.io.*
 
+private const val TEMP_FOLDER_NAME = "images"
+private const val ASPECT_X = "aspectX"
+private const val ASPECT_Y = "aspectY"
+private const val CROP = "crop"
+
+// constants for bottom primary action groups
+private const val PRIMARY_ACTION_NONE = 0
+private const val PRIMARY_ACTION_FILTER = 1
+private const val PRIMARY_ACTION_CROP_ROTATE = 2
+private const val PRIMARY_ACTION_DRAW = 3
+
+private const val CROP_ROTATE_NONE = 0
+private const val CROP_ROTATE_ASPECT_RATIO = 1
+
 class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener {
     companion object {
         init {
@@ -59,19 +74,6 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
     }
 
-    private val TEMP_FOLDER_NAME = "images"
-    private val ASPECT_X = "aspectX"
-    private val ASPECT_Y = "aspectY"
-    private val CROP = "crop"
-
-    // constants for bottom primary action groups
-    private val PRIMARY_ACTION_NONE = 0
-    private val PRIMARY_ACTION_FILTER = 1
-    private val PRIMARY_ACTION_CROP_ROTATE = 2
-    private val PRIMARY_ACTION_DRAW = 3
-
-    private val CROP_ROTATE_NONE = 0
-    private val CROP_ROTATE_ASPECT_RATIO = 1
 
     private lateinit var saveUri: Uri
     private var uri: Uri? = null
@@ -568,11 +570,12 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
     private fun updateBrushSize(percent: Int) {
         editor_draw_canvas.updateBrushSize(percent)
-        val scale = Math.max(0.03f, percent / 100f)
+        val scale = 0.03f.coerceAtLeast(percent / 100f)
         bottom_draw_color.scaleX = scale
         bottom_draw_color.scaleY = scale
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updatePrimaryActionButtons() {
         if (crop_image_view.isGone() && currPrimaryAction == PRIMARY_ACTION_CROP_ROTATE) {
             loadCropImageView()
