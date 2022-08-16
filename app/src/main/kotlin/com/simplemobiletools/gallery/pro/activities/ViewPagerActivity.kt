@@ -53,7 +53,7 @@ import com.simplemobiletools.gallery.pro.dialogs.SaveAsDialog
 import com.simplemobiletools.gallery.pro.dialogs.SlideshowDialog
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.fragments.PhotoFragment
-import com.simplemobiletools.gallery.pro.fragments.VideoFragment
+import com.simplemobiletools.gallery.pro.video.VideoFragment
 import com.simplemobiletools.gallery.pro.fragments.ViewPagerFragment
 import com.simplemobiletools.gallery.pro.helpers.*
 import com.simplemobiletools.gallery.pro.models.Medium

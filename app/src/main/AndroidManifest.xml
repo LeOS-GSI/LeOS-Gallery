@@ -218,7 +218,7 @@
         </activity>
 
         <activity
-            android:name=".activities.VideoActivity"
+            android:name=".video.VideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true">
             <intent-filter
