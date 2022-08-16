@@ -7,6 +7,7 @@ import com.simplemobiletools.commons.helpers.NavigationIcon
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.adapters.ManageFoldersAdapter
+import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.simplemobiletools.gallery.pro.extensions.config
 import kotlinx.android.synthetic.main.activity_manage_folders.*
 

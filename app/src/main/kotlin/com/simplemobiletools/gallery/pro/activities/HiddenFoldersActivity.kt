@@ -9,6 +9,7 @@ import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.adapters.ManageHiddenFoldersAdapter
+import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.simplemobiletools.gallery.pro.extensions.addNoMedia
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.getNoMediaFolders

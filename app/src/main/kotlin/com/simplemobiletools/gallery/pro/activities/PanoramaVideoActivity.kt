@@ -16,6 +16,7 @@ import com.google.vr.sdk.widgets.video.VrVideoView
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.gallery.pro.R
+import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.hasNavBar
 import com.simplemobiletools.gallery.pro.extensions.hideSystemUI

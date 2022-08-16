@@ -21,6 +21,7 @@ import com.simplemobiletools.commons.views.MyGridLayoutManager
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.adapters.MediaAdapter
 import com.simplemobiletools.gallery.pro.asynctasks.GetMediaAsynctask
+import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.helpers.GridSpacingItemDecoration
 import com.simplemobiletools.gallery.pro.helpers.MediaFetcher

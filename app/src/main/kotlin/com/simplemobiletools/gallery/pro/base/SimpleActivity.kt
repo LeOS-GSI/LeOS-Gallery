@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.base
 
 import android.database.ContentObserver
 import android.net.Uri
@@ -17,8 +17,11 @@ import com.simplemobiletools.gallery.pro.extensions.addPathToDB
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.updateDirectoryPath
 
+/**
+ * This is the base Activity used for all our activities.
+ */
 open class SimpleActivity : BaseSimpleActivity() {
-    val observer = object : ContentObserver(null) {
+    private val observer = object : ContentObserver(null) {
         override fun onChange(selfChange: Boolean, uri: Uri?) {
             super.onChange(selfChange, uri)
             if (uri != null) {
@@ -85,7 +88,14 @@ open class SimpleActivity : BaseSimpleActivity() {
     }
 
     protected fun showAddIncludedFolderDialog(callback: () -> Unit) {
-        FilePickerDialog(this, config.lastFilepickerPath, false, config.shouldShowHidden, false, true) {
+        FilePickerDialog(
+            activity = this,
+            currPath = config.lastFilepickerPath,
+            pickFile = false,
+            showHidden = config.shouldShowHidden,
+            showFAB = false,
+            canAddShowHiddenButton = true
+        ) {
             config.lastFilepickerPath = it
             config.addIncludedFolder(it)
             callback()

@@ -14,6 +14,7 @@ import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.gallery.pro.R
+import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_set_wallpaper.*
 import kotlinx.android.synthetic.main.bottom_set_wallpaper_actions.*
