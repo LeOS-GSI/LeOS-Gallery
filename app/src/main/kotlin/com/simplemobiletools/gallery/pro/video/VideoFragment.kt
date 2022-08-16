@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.fragments
+package com.simplemobiletools.gallery.pro.video
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -28,10 +28,10 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.activities.PanoramaVideoActivity
-import com.simplemobiletools.gallery.pro.activities.VideoActivity
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.hasNavBar
 import com.simplemobiletools.gallery.pro.extensions.parseFileChannel
+import com.simplemobiletools.gallery.pro.fragments.ViewPagerFragment
 import com.simplemobiletools.gallery.pro.helpers.*
 import com.simplemobiletools.gallery.pro.models.Medium
 import com.simplemobiletools.gallery.pro.views.MediaSideScroll
@@ -42,7 +42,7 @@ import java.io.FileInputStream
 import kotlin.math.roundToInt
 
 class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, SeekBar.OnSeekBarChangeListener {
-    private val PROGRESS = "progress"
+    private val _progress = "progress"
 
     private var mIsFullscreen = false
     private var mWasFragmentInit = false
@@ -195,7 +195,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
 
         if (!mIsPanorama) {
             if (savedInstanceState != null) {
-                mCurrTime = savedInstanceState.getInt(PROGRESS)
+                mCurrTime = savedInstanceState.getInt(_progress)
             }
 
             mWasFragmentInit = true
@@ -294,7 +294,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(PROGRESS, mCurrTime)
+        outState.putInt(_progress, mCurrTime)
     }
 
     private fun storeStateVariables() {

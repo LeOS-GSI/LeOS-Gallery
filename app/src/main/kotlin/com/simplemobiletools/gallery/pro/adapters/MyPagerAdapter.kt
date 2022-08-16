@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import com.simplemobiletools.gallery.pro.activities.ViewPagerActivity
 import com.simplemobiletools.gallery.pro.fragments.PhotoFragment
-import com.simplemobiletools.gallery.pro.fragments.VideoFragment
+import com.simplemobiletools.gallery.pro.video.VideoFragment
 import com.simplemobiletools.gallery.pro.fragments.ViewPagerFragment
 import com.simplemobiletools.gallery.pro.helpers.MEDIUM
 import com.simplemobiletools.gallery.pro.helpers.SHOULD_INIT_FRAGMENT
