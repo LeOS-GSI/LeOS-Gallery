@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.PagerAdapter
 import com.simplemobiletools.gallery.pro.activities.ViewPagerActivity
-import com.simplemobiletools.gallery.pro.photo.PhotoFragment
+import com.simplemobiletools.gallery.pro.photoview.PhotoFragment
 import com.simplemobiletools.gallery.pro.video.VideoFragment
 import com.simplemobiletools.gallery.pro.fragments.ViewPagerFragment
 import com.simplemobiletools.gallery.pro.helpers.MEDIUM

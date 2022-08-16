@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.photo
+package com.simplemobiletools.gallery.pro.photoview
 
 import android.annotation.SuppressLint
 import android.content.Intent
