@@ -261,7 +261,7 @@
         </activity>
 
         <activity
-            android:name=".activities.SetWallpaperActivity"
+            android:name=".wallpaper.SetWallpaperActivity"
             android:exported="true"
             android:label="@string/simple_wallpaper">
             <intent-filter>

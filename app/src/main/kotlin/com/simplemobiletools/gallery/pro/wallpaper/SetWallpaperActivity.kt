@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.wallpaper
 
 import android.app.Activity
 import android.app.WallpaperManager
@@ -14,22 +14,24 @@ import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.gallery.pro.R
+import com.simplemobiletools.gallery.pro.activities.MainActivity
 import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_set_wallpaper.*
 import kotlinx.android.synthetic.main.bottom_set_wallpaper_actions.*
 
-class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener {
-    private val RATIO_PORTRAIT = 0
-    private val RATIO_LANDSCAPE = 1
-    private val RATIO_SQUARE = 2
+private const val RATIO_PORTRAIT = 0
+private const val RATIO_LANDSCAPE = 1
+private const val RATIO_SQUARE = 2
+private const val PICK_IMAGE = 1
 
-    private val PICK_IMAGE = 1
+
+class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener {
+
     private var aspectRatio = RATIO_PORTRAIT
     private var wallpaperFlag = -1
-
     lateinit var uri: Uri
-    lateinit var wallpaperManager: WallpaperManager
+    private lateinit var wallpaperManager: WallpaperManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +59,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
         setupToolbar(set_wallpaper_toolbar, NavigationIcon.Arrow)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         if (requestCode == PICK_IMAGE) {
             if (resultCode == Activity.RESULT_OK && resultData != null) {
