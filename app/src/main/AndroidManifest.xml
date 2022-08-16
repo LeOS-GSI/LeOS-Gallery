@@ -165,7 +165,7 @@
             android:theme="@style/TranslucentTheme" />
 
         <activity
-            android:name=".activities.VideoPlayerActivity"
+            android:name=".video.VideoPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:parentActivityName=".activities.MediaActivity"

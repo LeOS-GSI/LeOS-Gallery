@@ -1,5 +1,6 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.video
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -32,6 +33,8 @@ import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.helpers.*
 import kotlinx.android.synthetic.main.activity_video_player.*
 import kotlinx.android.synthetic.main.bottom_video_time_holder.*
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListener, TextureView.SurfaceTextureListener {
     private val PLAY_WHEN_READY_DRAG_DELAY = 100L
@@ -167,6 +170,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun initPlayer() {
         mUri = intent.data ?: return
         video_toolbar.title = getFilenameFromUri(mUri!!)
@@ -201,7 +205,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
             }
         })
 
-        video_surface_frame.setOnTouchListener { view, event ->
+        video_surface_frame.setOnTouchListener { _, event ->
             handleEvent(event)
             gestureDetector.onTouchEvent(event)
             false
@@ -211,15 +215,15 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         video_surface.surfaceTextureListener = this
 
         if (config.allowVideoGestures) {
-            video_brightness_controller.initialize(this, slide_info, true, video_player_holder, singleTap = { x, y ->
+            video_brightness_controller.initialize(this, slide_info, true, video_player_holder, singleTap = { _, _ ->
                 toggleFullscreen()
-            }, doubleTap = { x, y ->
+            }, doubleTap = { _, _ ->
                 doSkip(false)
             })
 
-            video_volume_controller.initialize(this, slide_info, false, video_player_holder, singleTap = { x, y ->
+            video_volume_controller.initialize(this, slide_info, false, video_player_holder, singleTap = { _, _ ->
                 toggleFullscreen()
-            }, doubleTap = { x, y ->
+            }, doubleTap = { _, _ ->
                 doSkip(true)
             })
         } else {
@@ -444,7 +448,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
             if (mVideoSize.x > mVideoSize.y) {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             } else if (mVideoSize.x < mVideoSize.y) {
-                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             }
         }
     }
@@ -537,8 +541,8 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
 
         val curr = mExoPlayer!!.currentPosition
         val newProgress = if (forward) curr + FAST_FORWARD_VIDEO_MS else curr - FAST_FORWARD_VIDEO_MS
-        val roundProgress = Math.round(newProgress / 1000f)
-        val limitedProgress = Math.max(Math.min(mExoPlayer!!.duration.toInt() / 1000, roundProgress), 0)
+        val roundProgress = (newProgress / 1000f).roundToInt()
+        val limitedProgress = (mExoPlayer!!.duration.toInt() / 1000).coerceAtMost(roundProgress).coerceAtLeast(0)
         setPosition(limitedProgress)
         if (!mIsPlaying) {
             togglePlayPause()
@@ -558,7 +562,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
                 val diffX = event.x - mTouchDownX
                 val diffY = event.y - mTouchDownY
 
-                if (mIsDragged || (Math.abs(diffX) > mDragThreshold && Math.abs(diffX) > Math.abs(diffY)) && video_surface_frame.controller.state.zoom == 1f) {
+                if (mIsDragged || (abs(diffX) > mDragThreshold && abs(diffX) > abs(diffY)) && video_surface_frame.controller.state.zoom == 1f) {
                     if (!mIsDragged) {
                         arrayOf(video_curr_time, video_seekbar, video_duration).forEach {
                             it.animate().alpha(1f).start()
@@ -567,11 +571,11 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
                     mIgnoreCloseDown = true
                     mIsDragged = true
                     var percent = ((diffX / mScreenWidth) * 100).toInt()
-                    percent = Math.min(100, Math.max(-100, percent))
+                    percent = 100.coerceAtMost((-100).coerceAtLeast(percent))
 
                     val skipLength = (mDuration * 1000f) * (percent / 100f)
                     var newProgress = mProgressAtDown + skipLength
-                    newProgress = Math.max(Math.min(mExoPlayer!!.duration.toFloat(), newProgress), 0f)
+                    newProgress = mExoPlayer!!.duration.toFloat().coerceAtMost(newProgress).coerceAtLeast(0f)
                     val newSeconds = (newProgress / 1000).toInt()
                     setPosition(newSeconds)
                     resetPlayWhenReady()
@@ -582,7 +586,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
                 val diffY = mTouchDownY - event.y
 
                 val downGestureDuration = System.currentTimeMillis() - mTouchDownTime
-                if (config.allowDownGesture && !mIgnoreCloseDown && Math.abs(diffY) > Math.abs(diffX) && diffY < -mCloseDownThreshold &&
+                if (config.allowDownGesture && !mIgnoreCloseDown && abs(diffY) > abs(diffX) && diffY < -mCloseDownThreshold &&
                     downGestureDuration < MAX_CLOSE_DOWN_GESTURE_DURATION &&
                     video_surface_frame.controller.state.zoom == 1f
                 ) {

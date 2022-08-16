@@ -22,6 +22,7 @@ import com.simplemobiletools.gallery.pro.video.VideoFragment
 import com.simplemobiletools.gallery.pro.fragments.ViewPagerFragment
 import com.simplemobiletools.gallery.pro.helpers.*
 import com.simplemobiletools.gallery.pro.models.Medium
+import com.simplemobiletools.gallery.pro.video.VideoPlayerActivity
 import kotlinx.android.synthetic.main.bottom_actions.*
 import kotlinx.android.synthetic.main.fragment_holder.*
 import java.io.File
@@ -328,7 +329,13 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         val selectionArgs = arrayOf(path)
 
         try {
-            val cursor = contentResolver.query(uri, null, selection, selectionArgs, null)
+            val cursor = contentResolver.query(
+                uri,
+                null,
+                selection,
+                selectionArgs,
+                null
+            )
             cursor?.use {
                 return cursor.moveToFirst()
             }
