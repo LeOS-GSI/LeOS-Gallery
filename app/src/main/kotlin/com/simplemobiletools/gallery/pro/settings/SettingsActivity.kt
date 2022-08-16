@@ -1,5 +1,6 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.settings
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +12,9 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.gallery.pro.R
+import com.simplemobiletools.gallery.pro.activities.ExcludedFoldersActivity
+import com.simplemobiletools.gallery.pro.activities.HiddenFoldersActivity
+import com.simplemobiletools.gallery.pro.activities.IncludedFoldersActivity
 import com.simplemobiletools.gallery.pro.base.SimpleActivity
 import com.simplemobiletools.gallery.pro.dialogs.ChangeFileThumbnailStyleDialog
 import com.simplemobiletools.gallery.pro.dialogs.ChangeFolderThumbnailStyleDialog
@@ -23,9 +27,11 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.io.InputStream
 import java.util.*
+import kotlin.system.exitProcess
+
+private const val PICK_IMPORT_SOURCE_INTENT = 1
 
 class SettingsActivity : SimpleActivity() {
-    private val PICK_IMPORT_SOURCE_INTENT = 1
     private var mRecycleBinContentSize = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,6 +134,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         if (requestCode == PICK_IMPORT_SOURCE_INTENT && resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
@@ -142,6 +149,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupUseEnglish() {
         settings_use_english_holder.beVisibleIf(config.wasUseEnglishToggled || Locale.getDefault().language != "en")
         settings_use_english.isChecked = config.useEnglish
@@ -153,7 +161,7 @@ class SettingsActivity : SimpleActivity() {
         settings_use_english_holder.setOnClickListener {
             settings_use_english.toggle()
             config.useEnglish = settings_use_english.isChecked
-            System.exit(0)
+            exitProcess(0)
         }
     }
 
@@ -212,6 +220,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupShowHiddenItems() {
         if (isRPlus() && !isExternalStorageManager()) {
             settings_show_hidden_items_holder.beGone()
@@ -501,6 +510,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateDeepZoomToggleButtons() {
         settings_allow_rotating_with_gestures_holder.beVisibleIf(config.allowZoomingImages)
         settings_show_highest_quality_holder.beVisibleIf(config.allowZoomingImages)
@@ -565,6 +575,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateExtendedDetailsButtons() {
         settings_manage_extended_details_holder.beVisibleIf(config.showExtendedDetails)
         settings_hide_extended_details_holder.beVisibleIf(config.showExtendedDetails)
@@ -630,6 +641,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateManageBottomActionsButtons() {
         settings_manage_bottom_actions_holder.beVisibleIf(config.bottomActions)
         if (config.bottomActions) {
@@ -669,6 +681,7 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateRecycleBinButtons() {
         settings_show_recycle_bin_last_holder.beVisibleIf(config.useRecycleBin && config.showRecycleBinAtFolders)
         settings_empty_recycle_bin_holder.beVisibleIf(config.useRecycleBin)
