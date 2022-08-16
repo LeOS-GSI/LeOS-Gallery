@@ -46,9 +46,11 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.mydebug
 import com.simplemobiletools.gallery.pro.R
-import com.simplemobiletools.gallery.pro.activities.*
+import com.simplemobiletools.gallery.pro.activities.PanoramaPhotoActivity
+import com.simplemobiletools.gallery.pro.activities.PhotoActivity
+import com.simplemobiletools.gallery.pro.activities.PhotoVideoActivity
+import com.simplemobiletools.gallery.pro.activities.ViewPagerActivity
 import com.simplemobiletools.gallery.pro.adapters.PortraitPhotosAdapter
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.saveRotatedImageToFile
@@ -66,8 +68,7 @@ import pl.droidsonroids.gif.InputSource
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import kotlin.math.abs
 import kotlin.math.ceil
 
 class PhotoFragment : ViewPagerFragment() {
@@ -617,13 +618,13 @@ class PhotoFragment : ViewPagerFragment() {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setupStripeUpListener(adapter: PortraitPhotosAdapter, screenWidth: Int, itemWidth: Int) {
-        mView.photo_portrait_stripe.setOnTouchListener { v, event ->
+        mView.photo_portrait_stripe.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
                 var closestIndex = -1
                 var closestDistance = Integer.MAX_VALUE
                 val center = screenWidth / 2
                 for ((key, value) in adapter.views) {
-                    val distance = Math.abs(value.x.toInt() + itemWidth / 2 - center)
+                    val distance = abs(value.x.toInt() + itemWidth / 2 - center)
                     if (distance < closestDistance) {
                         closestDistance = distance
                         closestIndex = key
@@ -802,7 +803,7 @@ class PhotoFragment : ViewPagerFragment() {
         val bitmapAspectRatio = height / width.toFloat()
         val screenAspectRatio = mScreenHeight / mScreenWidth.toFloat()
 
-        return if (context == null || Math.abs(bitmapAspectRatio - screenAspectRatio) < SAME_ASPECT_RATIO_THRESHOLD) {
+        return if (context == null || abs(bitmapAspectRatio - screenAspectRatio) < SAME_ASPECT_RATIO_THRESHOLD) {
             DEFAULT_DOUBLE_TAP_ZOOM
         } else if (requireContext().portrait && bitmapAspectRatio <= screenAspectRatio) {
             mScreenHeight / height.toFloat()
