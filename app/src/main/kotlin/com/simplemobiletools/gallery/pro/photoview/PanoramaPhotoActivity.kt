@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.activities
+package com.simplemobiletools.gallery.pro.photoview
 
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -23,8 +23,9 @@ import com.simplemobiletools.gallery.pro.extensions.showSystemUI
 import com.simplemobiletools.gallery.pro.helpers.PATH
 import kotlinx.android.synthetic.main.activity_panorama_photo.*
 
+private const val CARDBOARD_DISPLAY_MODE = 3
+
 open class PanoramaPhotoActivity : SimpleActivity() {
-    private val CARDBOARD_DISPLAY_MODE = 3
 
     private var isFullscreen = false
     private var isExploreEnabled = true

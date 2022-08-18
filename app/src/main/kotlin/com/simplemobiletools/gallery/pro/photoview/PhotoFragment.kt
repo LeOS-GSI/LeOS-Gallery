@@ -47,7 +47,6 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.gallery.pro.R
-import com.simplemobiletools.gallery.pro.activities.PanoramaPhotoActivity
 import com.simplemobiletools.gallery.pro.base.PhotoVideoActivity
 import com.simplemobiletools.gallery.pro.activities.ViewPagerActivity
 import com.simplemobiletools.gallery.pro.adapters.PortraitPhotosAdapter

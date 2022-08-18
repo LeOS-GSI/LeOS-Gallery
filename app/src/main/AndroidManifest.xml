@@ -144,10 +144,10 @@
             android:name="com.simplemobiletools.commons.activities.CustomizationActivity"
             android:exported="false"
             android:label="@string/customize_colors"
-            android:parentActivityName=".activities.SettingsActivity" />
+            android:parentActivityName=".settings.SettingsActivity" />
 
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name=".settings.SettingsActivity"
             android:exported="true"
             android:label="@string/settings"
             android:parentActivityName=".activities.MainActivity">
@@ -172,7 +172,7 @@
             android:theme="@style/TranslucentTheme" />
 
         <activity
-            android:name=".activities.PanoramaPhotoActivity"
+            android:name=".photoview.PanoramaPhotoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:theme="@style/FullScreenTheme" />
@@ -187,19 +187,19 @@
             android:name=".activities.IncludedFoldersActivity"
             android:exported="false"
             android:label="@string/include_folders"
-            android:parentActivityName=".activities.SettingsActivity" />
+            android:parentActivityName=".settings.SettingsActivity" />
 
         <activity
             android:name=".activities.ExcludedFoldersActivity"
             android:exported="false"
             android:label="@string/excluded_folders"
-            android:parentActivityName=".activities.SettingsActivity" />
+            android:parentActivityName=".settings.SettingsActivity" />
 
         <activity
             android:name=".activities.HiddenFoldersActivity"
             android:exported="false"
             android:label="@string/hidden_folders"
-            android:parentActivityName=".activities.SettingsActivity" />
+            android:parentActivityName=".settings.SettingsActivity" />
 
         <activity
             android:name=".photoview.PhotoActivity"
@@ -234,7 +234,7 @@
         </activity>
 
         <activity
-            android:name=".activities.EditActivity"
+            android:name=".photoedit.EditActivity"
             android:exported="true"
             android:label="@string/editor">
 
