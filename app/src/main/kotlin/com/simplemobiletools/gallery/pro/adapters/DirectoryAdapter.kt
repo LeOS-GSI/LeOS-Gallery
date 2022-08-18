@@ -37,7 +37,7 @@ import com.simplemobiletools.gallery.pro.dialogs.ExcludeFolderDialog
 import com.simplemobiletools.gallery.pro.dialogs.PickMediumDialog
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.helpers.*
-import com.simplemobiletools.gallery.pro.interfaces.DirectoryOperationsListener
+import com.simplemobiletools.gallery.pro.database.DirectoryOperationsListener
 import com.simplemobiletools.gallery.pro.models.AlbumCover
 import com.simplemobiletools.gallery.pro.models.Directory
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*

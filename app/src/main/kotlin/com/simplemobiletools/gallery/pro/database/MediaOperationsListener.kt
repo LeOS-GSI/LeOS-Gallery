@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.interfaces
+package com.simplemobiletools.gallery.pro.database
 
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.gallery.pro.models.ThumbnailItem

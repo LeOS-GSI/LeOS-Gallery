@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.interfaces
+package com.simplemobiletools.gallery.pro.database
 
 import com.simplemobiletools.gallery.pro.models.Directory
 import java.io.File

@@ -1,4 +1,4 @@
-package com.simplemobiletools.gallery.pro.interfaces
+package com.simplemobiletools.gallery.pro.database
 
 import androidx.room.Dao
 import androidx.room.Delete

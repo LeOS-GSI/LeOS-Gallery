@@ -27,7 +27,7 @@ import com.simplemobiletools.gallery.pro.helpers.GridSpacingItemDecoration
 import com.simplemobiletools.gallery.pro.helpers.MediaFetcher
 import com.simplemobiletools.gallery.pro.helpers.PATH
 import com.simplemobiletools.gallery.pro.helpers.SHOW_ALL
-import com.simplemobiletools.gallery.pro.interfaces.MediaOperationsListener
+import com.simplemobiletools.gallery.pro.database.MediaOperationsListener
 import com.simplemobiletools.gallery.pro.models.Medium
 import com.simplemobiletools.gallery.pro.models.ThumbnailItem
 import kotlinx.android.synthetic.main.activity_search.*

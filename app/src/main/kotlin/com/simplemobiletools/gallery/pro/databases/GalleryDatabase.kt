@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.simplemobiletools.gallery.pro.interfaces.*
+import com.simplemobiletools.gallery.pro.database.*
 import com.simplemobiletools.gallery.pro.models.*
 
 @Database(entities = [Directory::class, Medium::class, Widget::class, DateTaken::class, Favorite::class], version = 10)
