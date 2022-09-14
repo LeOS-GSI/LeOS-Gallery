@@ -553,7 +553,7 @@ class PhotoFragment : ViewPagerFragment() {
             mView.photo_portrait_stripe.adapter = adapter
             setupStripeBottomMargin()
 
-            val coverIndex = getCoverImageIndex(paths)
+            val coverIndex = viewModel.getCoverImageIndex(paths)
             if (coverIndex != -1) {
                 mCurrentPortraitPhotoPath = paths[coverIndex]
                 setupStripeUpListener(adapter, screenWidth, itemWidth)
@@ -592,24 +592,6 @@ class PhotoFragment : ViewPagerFragment() {
             bottomMargin += resources.getDimension(R.dimen.bottom_actions_height).toInt()
         }
         (mView.photo_portrait_stripe_wrapper.layoutParams as RelativeLayout.LayoutParams).bottomMargin = bottomMargin
-    }
-
-    private fun getCoverImageIndex(paths: ArrayList<String>): Int {
-        var coverIndex = -1
-        paths.forEachIndexed { index, path ->
-            if (path.contains("cover", true)) {
-                coverIndex = index
-            }
-        }
-
-        if (coverIndex == -1) {
-            paths.forEachIndexed { index, path ->
-                if (path.isNotEmpty()) {
-                    coverIndex = index
-                }
-            }
-        }
-        return coverIndex
     }
 
     @SuppressLint("ClickableViewAccessibility")
