@@ -78,6 +78,10 @@ android {
 }
 
 dependencies {
+
+    // All the kotlin extensions for Fragment
+    implementation 'androidx.fragment:fragment-ktx:1.5.2'
+
     implementation 'com.github.SimpleMobileTools:Simple-Commons:0c82e5f216'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'it.sephiroth.android.exif:library:1.0.1'
