@@ -24,6 +24,7 @@ import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
 import androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION
+import androidx.fragment.app.viewModels
 import com.alexvasilkov.gestures.GestureController
 import com.alexvasilkov.gestures.State
 import com.bumptech.glide.Glide
@@ -81,6 +82,8 @@ private val WEIRD_DEVICES = arrayListOf(
 )
 
 class PhotoFragment : ViewPagerFragment() {
+
+    private val viewModel: PhotoViewModel by viewModels()
 
     var mCurrentRotationDegrees = 0
     private var mIsFragmentVisible = false
