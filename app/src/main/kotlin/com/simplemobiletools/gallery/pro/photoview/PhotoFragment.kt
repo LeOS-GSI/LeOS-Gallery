@@ -351,15 +351,8 @@ class PhotoFragment : ViewPagerFragment() {
         }
     }
 
-    private fun degreesForRotation(orientation: Int) = when (orientation) {
-        ORIENTATION_ROTATE_270 -> 270
-        ORIENTATION_ROTATE_180 -> 180
-        ORIENTATION_ROTATE_90 -> 90
-        else -> 0
-    }
-
     private fun rotateViaMatrix(original: Bitmap, orientation: Int): Bitmap {
-        val degrees = degreesForRotation(orientation).toFloat()
+        val degrees = viewModel.degreesForRotation(orientation).toFloat()
         return if (degrees == 0f) {
             original
         } else {
@@ -505,7 +498,7 @@ class PhotoFragment : ViewPagerFragment() {
             if (mCurrentRotationDegrees != 0) {
                 picasso.rotate(mCurrentRotationDegrees.toFloat())
             } else {
-                degreesForRotation(mImageOrientation).toFloat()
+                viewModel.degreesForRotation(mImageOrientation).toFloat()
             }
 
             picasso.into(mView.gestures_view, object : Callback {
@@ -661,7 +654,7 @@ class PhotoFragment : ViewPagerFragment() {
     }
 
     private fun addZoomableView() {
-        val rotation = degreesForRotation(mImageOrientation)
+        val rotation = viewModel.degreesForRotation(mImageOrientation)
         mIsSubsamplingVisible = true
         val config = requireContext().config
         val showHighestQuality = config.showHighestQuality
