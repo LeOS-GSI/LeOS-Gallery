@@ -20,7 +20,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
 import androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION
@@ -48,9 +47,9 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.gallery.pro.R
-import com.simplemobiletools.gallery.pro.base.PhotoVideoActivity
 import com.simplemobiletools.gallery.pro.activities.ViewPagerActivity
 import com.simplemobiletools.gallery.pro.adapters.PortraitPhotosAdapter
+import com.simplemobiletools.gallery.pro.base.PhotoVideoActivity
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.extensions.saveRotatedImageToFile
 import com.simplemobiletools.gallery.pro.extensions.sendFakeClick
@@ -74,12 +73,6 @@ import kotlin.math.ceil
 private const val DEFAULT_DOUBLE_TAP_ZOOM = 2f
 private const val ZOOMABLE_VIEW_LOAD_DELAY = 100L
 private const val SAME_ASPECT_RATIO_THRESHOLD = 0.01
-
-// devices with good displays, but the rest of the hardware not good enough for them
-private val WEIRD_DEVICES = arrayListOf(
-    "motorola xt1685",
-    "google nexus 5x"
-)
 
 class PhotoFragment : ViewPagerFragment() {
 
@@ -715,7 +708,7 @@ class PhotoFragment : ViewPagerFragment() {
         val averageDpi = (metrics.xdpi + metrics.ydpi) / 2
         val device = "${Build.BRAND} ${Build.MODEL}".lowercase(Locale.ROOT)
         return when {
-            WEIRD_DEVICES.contains(device) -> WEIRD_TILE_DPI
+            PhotoViewModel.WEIRD_DEVICES.contains(device) -> WEIRD_TILE_DPI
             averageDpi > 400 -> HIGH_TILE_DPI
             averageDpi > 300 -> NORMAL_TILE_DPI
             else -> LOW_TILE_DPI

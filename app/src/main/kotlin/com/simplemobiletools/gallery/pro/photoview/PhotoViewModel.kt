@@ -6,6 +6,8 @@ import java.util.ArrayList
 
 class PhotoViewModel() : ViewModel() {
 
+
+
     fun degreesForRotation(orientation: Int) = when (orientation) {
         ExifInterface.ORIENTATION_ROTATE_270 -> 270
         ExifInterface.ORIENTATION_ROTATE_180 -> 180
@@ -29,5 +31,13 @@ class PhotoViewModel() : ViewModel() {
             }
         }
         return coverIndex
+    }
+
+    companion object {
+        // devices with good displays, but the rest of the hardware not good enough for them
+        val WEIRD_DEVICES = arrayListOf(
+            "motorola xt1685",
+            "google nexus 5x"
+        )
     }
 }
