@@ -55,13 +55,6 @@ android {
         }
     }
 
-    flavorDimensions "licensing"
-    productFlavors {
-        proprietary {}
-        foss {}
-        prepaid {}
-    }
-
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
