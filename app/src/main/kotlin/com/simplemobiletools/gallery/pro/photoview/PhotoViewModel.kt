@@ -4,9 +4,7 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.ViewModel
 import java.util.ArrayList
 
-class PhotoViewModel() : ViewModel() {
-
-
+class PhotoViewModel : ViewModel() {
 
     fun degreesForRotation(orientation: Int) = when (orientation) {
         ExifInterface.ORIENTATION_ROTATE_270 -> 270
