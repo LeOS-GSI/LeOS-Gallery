@@ -7,6 +7,7 @@ import com.squareup.picasso.Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.Request
 import okhttp3.Response
+import timber.log.Timber
 
 class App : Application() {
     override fun onCreate() {
@@ -18,5 +19,8 @@ class App : Application() {
 
             override fun shutdown() {}
         }).build())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }

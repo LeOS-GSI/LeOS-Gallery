@@ -79,6 +79,9 @@ android {
 
 dependencies {
 
+    // Timber logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
     // All the kotlin extensions for Fragment
     implementation 'androidx.fragment:fragment-ktx:1.5.2'
 
