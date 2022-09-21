@@ -16,6 +16,7 @@ import com.simplemobiletools.gallery.pro.activities.ExcludedFoldersActivity
 import com.simplemobiletools.gallery.pro.activities.HiddenFoldersActivity
 import com.simplemobiletools.gallery.pro.activities.IncludedFoldersActivity
 import com.simplemobiletools.gallery.pro.base.SimpleActivity
+import com.simplemobiletools.gallery.pro.databinding.ActivitySettingsBinding
 import com.simplemobiletools.gallery.pro.dialogs.ChangeFileThumbnailStyleDialog
 import com.simplemobiletools.gallery.pro.dialogs.ChangeFolderThumbnailStyleDialog
 import com.simplemobiletools.gallery.pro.dialogs.ManageBottomActionsDialog
@@ -23,7 +24,6 @@ import com.simplemobiletools.gallery.pro.dialogs.ManageExtendedDetailsDialog
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.helpers.*
 import com.simplemobiletools.gallery.pro.models.AlbumCover
-import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.io.InputStream
 import java.util.*
@@ -32,16 +32,19 @@ import kotlin.system.exitProcess
 private const val PICK_IMPORT_SOURCE_INTENT = 1
 
 class SettingsActivity : SimpleActivity() {
+
+    private lateinit var binding: ActivitySettingsBinding
     private var mRecycleBinContentSize = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onResume() {
         super.onResume()
-        setupToolbar(settings_toolbar, NavigationIcon.Arrow)
+        setupToolbar(binding.settingsToolbar, NavigationIcon.Arrow)
         setupSettingItems()
     }
 
@@ -92,43 +95,43 @@ class SettingsActivity : SimpleActivity() {
         setupShowRecycleBin()
         setupShowRecycleBinLast()
         setupEmptyRecycleBin()
-        updateTextColors(settings_holder)
+        updateTextColors(binding.settingsHolder)
         setupClearCache()
         setupExportSettings()
         setupImportSettings()
 
         arrayOf(
-            settings_color_customization_label,
-            settings_general_settings_label,
-            settings_videos_label,
-            settings_thumbnails_label,
-            settings_scrolling_label,
-            settings_fullscreen_media_label,
-            settings_deep_zoomable_images_label,
-            settings_extended_details_label,
-            settings_security_label,
-            settings_file_operations_label,
-            settings_bottom_actions_label,
-            settings_recycle_bin_label,
-            settings_migrating_label
+            binding.settingsColorCustomizationLabel,
+            binding.settingsGeneralSettingsLabel,
+            binding.settingsVideosLabel,
+            binding.settingsThumbnailsLabel,
+            binding.settingsScrollingLabel,
+            binding.settingsFullscreenMediaLabel,
+            binding.settingsDeepZoomableImagesLabel,
+            binding.settingsExtendedDetailsLabel,
+            binding.settingsSecurityLabel,
+            binding.settingsFileOperationsLabel,
+            binding.settingsBottomActionsLabel,
+            binding.settingsRecycleBinLabel,
+            binding.settingsMigratingLabel
         ).forEach {
             it.setTextColor(getProperPrimaryColor())
         }
 
         arrayOf(
-            settings_color_customization_holder,
-            settings_general_settings_holder,
-            settings_videos_holder,
-            settings_thumbnails_holder,
-            settings_scrolling_holder,
-            settings_fullscreen_media_holder,
-            settings_deep_zoomable_images_holder,
-            settings_extended_details_holder,
-            settings_security_holder,
-            settings_file_operations_holder,
-            settings_bottom_actions_holder,
-            settings_recycle_bin_holder,
-            settings_migrating_holder
+            binding.settingsColorCustomizationHolder,
+            binding.settingsGeneralSettingsHolder,
+            binding.settingsVideosHolder,
+            binding.settingsThumbnailsHolder,
+            binding.settingsScrollingHolder,
+            binding.settingsFullscreenMediaHolder,
+            binding.settingsDeepZoomableImagesHolder,
+            binding.settingsExtendedDetailsHolder,
+            binding.settingsSecurityHolder,
+            binding.settingsFileOperationsHolder,
+            binding.settingsBottomActionsHolder,
+            binding.settingsRecycleBinHolder,
+            binding.settingsMigratingHolder
         ).forEach {
             it.background.applyColorFilter(getProperBackgroundColor().getContrastColor())
         }
@@ -144,37 +147,37 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupCustomizeColors() {
-        settings_customize_colors_holder.setOnClickListener {
+        binding.settingsCustomizeColorsHolder.setOnClickListener {
             startCustomizationActivity()
         }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupUseEnglish() {
-        settings_use_english_holder.beVisibleIf(config.wasUseEnglishToggled || Locale.getDefault().language != "en")
-        settings_use_english.isChecked = config.useEnglish
+        binding.settingsUseEnglishHolder.beVisibleIf(config.wasUseEnglishToggled || Locale.getDefault().language != "en")
+        binding.settingsUseEnglish.isChecked = config.useEnglish
 
-        if (settings_use_english_holder.isGone()) {
-            settings_change_date_time_format_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+        if (binding.settingsUseEnglishHolder.isGone()) {
+            binding.settingsChangeDateTimeFormatHolder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }
 
-        settings_use_english_holder.setOnClickListener {
-            settings_use_english.toggle()
-            config.useEnglish = settings_use_english.isChecked
+        binding.settingsUseEnglishHolder.setOnClickListener {
+            binding.settingsUseEnglish.toggle()
+            config.useEnglish = binding.settingsUseEnglish.isChecked
             exitProcess(0)
         }
     }
 
     private fun setupChangeDateTimeFormat() {
-        settings_change_date_time_format_holder.setOnClickListener {
+        binding.settingsChangeDateTimeFormatHolder.setOnClickListener {
             ChangeDateTimeFormatDialog(this) {}
         }
     }
 
     private fun setupFileLoadingPriority() {
-        settings_file_loading_priority_holder.beGoneIf(isRPlus() && !isExternalStorageManager())
-        settings_file_loading_priority.text = getFileLoadingPriorityText()
-        settings_file_loading_priority_holder.setOnClickListener {
+        binding.settingsFileLoadingPriorityHolder.beGoneIf(isRPlus() && !isExternalStorageManager())
+        binding.settingsFileLoadingPriority.text = getFileLoadingPriorityText()
+        binding.settingsFileLoadingPriorityHolder.setOnClickListener {
             val items = arrayListOf(
                 RadioItem(PRIORITY_SPEED, getString(R.string.speed)),
                 RadioItem(PRIORITY_COMPROMISE, getString(R.string.compromise)),
@@ -183,7 +186,7 @@ class SettingsActivity : SimpleActivity() {
 
             RadioGroupDialog(this@SettingsActivity, items, config.fileLoadingPriority) {
                 config.fileLoadingPriority = it as Int
-                settings_file_loading_priority.text = getFileLoadingPriorityText()
+                binding.settingsFileLoadingPriority.text = getFileLoadingPriorityText()
             }
         }
     }
@@ -197,14 +200,14 @@ class SettingsActivity : SimpleActivity() {
     )
 
     private fun setupManageIncludedFolders() {
-        settings_manage_included_folders_holder.beGoneIf(isRPlus() && !isExternalStorageManager())
-        settings_manage_included_folders_holder.setOnClickListener {
+        binding.settingsManageIncludedFoldersHolder.beGoneIf(isRPlus() && !isExternalStorageManager())
+        binding.settingsManageIncludedFoldersHolder.setOnClickListener {
             startActivity(Intent(this, IncludedFoldersActivity::class.java))
         }
     }
 
     private fun setupManageExcludedFolders() {
-        settings_manage_excluded_folders_holder.setOnClickListener {
+        binding.settingsManageExcludedFoldersHolder.setOnClickListener {
             handleExcludedFolderPasswordProtection {
                 startActivity(Intent(this, ExcludedFoldersActivity::class.java))
             }
@@ -212,8 +215,8 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupManageHiddenFolders() {
-        settings_manage_hidden_folders_holder.beGoneIf(isQPlus())
-        settings_manage_hidden_folders_holder.setOnClickListener {
+        binding.settingsManageHiddenFoldersHolder.beGoneIf(isQPlus())
+        binding.settingsManageHiddenFoldersHolder.setOnClickListener {
             handleHiddenFolderPasswordProtection {
                 startActivity(Intent(this, HiddenFoldersActivity::class.java))
             }
@@ -223,12 +226,12 @@ class SettingsActivity : SimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupShowHiddenItems() {
         if (isRPlus() && !isExternalStorageManager()) {
-            settings_show_hidden_items_holder.beGone()
-            settings_manage_excluded_folders_holder.background = resources.getDrawable(R.drawable.ripple_bottom_corners, theme)
+            binding.settingsShowHiddenItemsHolder.beGone()
+            binding.settingsManageExcludedFoldersHolder.background = resources.getDrawable(R.drawable.ripple_bottom_corners, theme)
         }
 
-        settings_show_hidden_items.isChecked = config.showHiddenMedia
-        settings_show_hidden_items_holder.setOnClickListener {
+        binding.settingsShowHiddenItems.isChecked = config.showHiddenMedia
+        binding.settingsShowHiddenItemsHolder.setOnClickListener {
             if (config.showHiddenMedia) {
                 toggleHiddenItems()
             } else {
@@ -240,96 +243,98 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun toggleHiddenItems() {
-        settings_show_hidden_items.toggle()
-        config.showHiddenMedia = settings_show_hidden_items.isChecked
+        binding.settingsShowHiddenItems.toggle()
+        config.showHiddenMedia = binding.settingsShowHiddenItems.isChecked
     }
 
     private fun setupAutoplayVideos() {
-        settings_autoplay_videos.isChecked = config.autoplayVideos
-        settings_autoplay_videos_holder.setOnClickListener {
-            settings_autoplay_videos.toggle()
-            config.autoplayVideos = settings_autoplay_videos.isChecked
+        binding.settingsAutoplayVideos.isChecked = config.autoplayVideos
+        binding.settingsAutoplayVideosHolder.setOnClickListener {
+            binding.settingsAutoplayVideos.toggle()
+            config.autoplayVideos = binding.settingsAutoplayVideos.isChecked
         }
     }
 
     private fun setupRememberLastVideo() {
-        settings_remember_last_video_position.isChecked = config.rememberLastVideoPosition
-        settings_remember_last_video_position_holder.setOnClickListener {
-            settings_remember_last_video_position.toggle()
-            config.rememberLastVideoPosition = settings_remember_last_video_position.isChecked
+        binding.settingsRememberLastVideoPosition.isChecked = config.rememberLastVideoPosition
+        binding.settingsRememberLastVideoPositionHolder.setOnClickListener {
+            binding.settingsRememberLastVideoPosition.toggle()
+            config.rememberLastVideoPosition = binding.settingsRememberLastVideoPosition.isChecked
         }
     }
 
     private fun setupLoopVideos() {
-        settings_loop_videos.isChecked = config.loopVideos
-        settings_loop_videos_holder.setOnClickListener {
-            settings_loop_videos.toggle()
-            config.loopVideos = settings_loop_videos.isChecked
+        binding.settingsLoopVideos.isChecked = config.loopVideos
+        binding.settingsLoopVideosHolder.setOnClickListener {
+            binding.settingsLoopVideos.toggle()
+            config.loopVideos =
+                binding.settingsLoopVideos.isChecked
         }
     }
 
     private fun setupOpenVideosOnSeparateScreen() {
-        settings_open_videos_on_separate_screen.isChecked = config.openVideosOnSeparateScreen
-        settings_open_videos_on_separate_screen_holder.setOnClickListener {
-            settings_open_videos_on_separate_screen.toggle()
-            config.openVideosOnSeparateScreen = settings_open_videos_on_separate_screen.isChecked
+        binding.settingsOpenVideosOnSeparateScreen.isChecked = config.openVideosOnSeparateScreen
+        binding.settingsOpenVideosOnSeparateScreenHolder.setOnClickListener {
+            binding.settingsOpenVideosOnSeparateScreen.toggle()
+            config.openVideosOnSeparateScreen =
+                binding.settingsOpenVideosOnSeparateScreen.isChecked
         }
     }
 
     private fun setupMaxBrightness() {
-        settings_max_brightness.isChecked = config.maxBrightness
-        settings_max_brightness_holder.setOnClickListener {
-            settings_max_brightness.toggle()
-            config.maxBrightness = settings_max_brightness.isChecked
+        binding.settingsMaxBrightness.isChecked = config.maxBrightness
+        binding.settingsMaxBrightnessHolder.setOnClickListener {
+            binding.settingsMaxBrightness.toggle()
+            config.maxBrightness = binding.settingsMaxBrightness.isChecked
         }
     }
 
     private fun setupCropThumbnails() {
-        settings_crop_thumbnails.isChecked = config.cropThumbnails
-        settings_crop_thumbnails_holder.setOnClickListener {
-            settings_crop_thumbnails.toggle()
-            config.cropThumbnails = settings_crop_thumbnails.isChecked
+        binding.settingsCropThumbnails.isChecked = config.cropThumbnails
+        binding.settingsCropThumbnailsHolder.setOnClickListener {
+            binding.settingsCropThumbnails.toggle()
+            config.cropThumbnails = binding.settingsCropThumbnails.isChecked
         }
     }
 
     private fun setupDarkBackground() {
-        settings_black_background.isChecked = config.blackBackground
-        settings_black_background_holder.setOnClickListener {
-            settings_black_background.toggle()
-            config.blackBackground = settings_black_background.isChecked
+        binding.settingsBlackBackground.isChecked = config.blackBackground
+        binding.settingsBlackBackgroundHolder.setOnClickListener {
+            binding.settingsBlackBackground.toggle()
+            config.blackBackground = binding.settingsBlackBackground.isChecked
         }
     }
 
     private fun setupScrollHorizontally() {
-        settings_scroll_horizontally.isChecked = config.scrollHorizontally
-        settings_scroll_horizontally_holder.setOnClickListener {
-            settings_scroll_horizontally.toggle()
-            config.scrollHorizontally = settings_scroll_horizontally.isChecked
+        binding.settingsScrollHorizontally.isChecked = config.scrollHorizontally
+        binding.settingsScrollHorizontallyHolder.setOnClickListener {
+            binding.settingsScrollHorizontally.toggle()
+            config.scrollHorizontally = binding.settingsScrollHorizontally.isChecked
 
             if (config.scrollHorizontally) {
                 config.enablePullToRefresh = false
-                settings_enable_pull_to_refresh.isChecked = false
+                binding.settingsEnablePullToRefresh.isChecked = false
             }
         }
     }
 
     private fun setupHideSystemUI() {
-        settings_hide_system_ui.isChecked = config.hideSystemUI
-        settings_hide_system_ui_holder.setOnClickListener {
-            settings_hide_system_ui.toggle()
-            config.hideSystemUI = settings_hide_system_ui.isChecked
+        binding.settingsHideSystemUi.isChecked = config.hideSystemUI
+        binding.settingsHideSystemUiHolder.setOnClickListener {
+            binding.settingsHideSystemUi.toggle()
+            config.hideSystemUI = binding.settingsHideSystemUi.isChecked
         }
     }
 
     private fun setupHiddenItemPasswordProtection() {
-        settings_hidden_item_password_protection_holder.beGoneIf(isRPlus() && !isExternalStorageManager())
-        settings_hidden_item_password_protection.isChecked = config.isHiddenPasswordProtectionOn
-        settings_hidden_item_password_protection_holder.setOnClickListener {
+        binding.settingsHiddenItemPasswordProtectionHolder.beGoneIf(isRPlus() && !isExternalStorageManager())
+        binding.settingsHiddenItemPasswordProtection.isChecked = config.isHiddenPasswordProtectionOn
+        binding.settingsHiddenItemPasswordProtectionHolder.setOnClickListener {
             val tabToShow = if (config.isHiddenPasswordProtectionOn) config.hiddenProtectionType else SHOW_ALL_TABS
             SecurityDialog(this, config.hiddenPasswordHash, tabToShow) { hash, type, success ->
                 if (success) {
                     val hasPasswordProtection = config.isHiddenPasswordProtectionOn
-                    settings_hidden_item_password_protection.isChecked = !hasPasswordProtection
+                    binding.settingsHiddenItemPasswordProtection.isChecked = !hasPasswordProtection
                     config.isHiddenPasswordProtectionOn = !hasPasswordProtection
                     config.hiddenPasswordHash = if (hasPasswordProtection) "" else hash
                     config.hiddenProtectionType = type
@@ -345,14 +350,14 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupExcludedItemPasswordProtection() {
-        settings_excluded_item_password_protection_holder.beGoneIf(settings_hidden_item_password_protection_holder.isVisible())
-        settings_excluded_item_password_protection.isChecked = config.isExcludedPasswordProtectionOn
-        settings_excluded_item_password_protection_holder.setOnClickListener {
+        binding.settingsExcludedItemPasswordProtectionHolder.beGoneIf(binding.settingsHiddenItemPasswordProtectionHolder.isVisible())
+        binding.settingsExcludedItemPasswordProtection.isChecked = config.isExcludedPasswordProtectionOn
+        binding.settingsExcludedItemPasswordProtectionHolder.setOnClickListener {
             val tabToShow = if (config.isExcludedPasswordProtectionOn) config.excludedProtectionType else SHOW_ALL_TABS
             SecurityDialog(this, config.excludedPasswordHash, tabToShow) { hash, type, success ->
                 if (success) {
                     val hasPasswordProtection = config.isExcludedPasswordProtectionOn
-                    settings_excluded_item_password_protection.isChecked = !hasPasswordProtection
+                    binding.settingsExcludedItemPasswordProtection.isChecked = !hasPasswordProtection
                     config.isExcludedPasswordProtectionOn = !hasPasswordProtection
                     config.excludedPasswordHash = if (hasPasswordProtection) "" else hash
                     config.excludedProtectionType = type
@@ -368,13 +373,13 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupAppPasswordProtection() {
-        settings_app_password_protection.isChecked = config.isAppPasswordProtectionOn
-        settings_app_password_protection_holder.setOnClickListener {
+        binding.settingsAppPasswordProtection.isChecked = config.isAppPasswordProtectionOn
+        binding.settingsAppPasswordProtectionHolder.setOnClickListener {
             val tabToShow = if (config.isAppPasswordProtectionOn) config.appProtectionType else SHOW_ALL_TABS
             SecurityDialog(this, config.appPasswordHash, tabToShow) { hash, type, success ->
                 if (success) {
                     val hasPasswordProtection = config.isAppPasswordProtectionOn
-                    settings_app_password_protection.isChecked = !hasPasswordProtection
+                    binding.settingsAppPasswordProtection.isChecked = !hasPasswordProtection
                     config.isAppPasswordProtectionOn = !hasPasswordProtection
                     config.appPasswordHash = if (hasPasswordProtection) "" else hash
                     config.appProtectionType = type
@@ -390,13 +395,13 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupFileDeletionPasswordProtection() {
-        settings_file_deletion_password_protection.isChecked = config.isDeletePasswordProtectionOn
-        settings_file_deletion_password_protection_holder.setOnClickListener {
+        binding.settingsFileDeletionPasswordProtection.isChecked = config.isDeletePasswordProtectionOn
+        binding.settingsFileDeletionPasswordProtectionHolder.setOnClickListener {
             val tabToShow = if (config.isDeletePasswordProtectionOn) config.deleteProtectionType else SHOW_ALL_TABS
             SecurityDialog(this, config.deletePasswordHash, tabToShow) { hash, type, success ->
                 if (success) {
                     val hasPasswordProtection = config.isDeletePasswordProtectionOn
-                    settings_file_deletion_password_protection.isChecked = !hasPasswordProtection
+                    binding.settingsFileDeletionPasswordProtection.isChecked = !hasPasswordProtection
                     config.isDeletePasswordProtectionOn = !hasPasswordProtection
                     config.deletePasswordHash = if (hasPasswordProtection) "" else hash
                     config.deleteProtectionType = type
@@ -412,65 +417,67 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupDeleteEmptyFolders() {
-        settings_delete_empty_folders.isChecked = config.deleteEmptyFolders
-        settings_delete_empty_folders_holder.setOnClickListener {
-            settings_delete_empty_folders.toggle()
-            config.deleteEmptyFolders = settings_delete_empty_folders.isChecked
+        binding.settingsDeleteEmptyFolders.isChecked = config.deleteEmptyFolders
+        binding.settingsDeleteEmptyFoldersHolder.setOnClickListener {
+            binding.settingsDeleteEmptyFolders.toggle()
+            config.deleteEmptyFolders = binding.settingsDeleteEmptyFolders.isChecked
         }
     }
 
     private fun setupAllowPhotoGestures() {
-        settings_allow_photo_gestures.isChecked = config.allowPhotoGestures
-        settings_allow_photo_gestures_holder.setOnClickListener {
-            settings_allow_photo_gestures.toggle()
-            config.allowPhotoGestures = settings_allow_photo_gestures.isChecked
+        binding.settingsAllowPhotoGestures.isChecked = config.allowPhotoGestures
+        binding.settingsAllowPhotoGesturesHolder.setOnClickListener {
+            binding.settingsAllowPhotoGestures.toggle()
+            config.allowPhotoGestures = binding.settingsAllowPhotoGestures.isChecked
         }
     }
 
     private fun setupAllowVideoGestures() {
-        settings_allow_video_gestures.isChecked = config.allowVideoGestures
-        settings_allow_video_gestures_holder.setOnClickListener {
-            settings_allow_video_gestures.toggle()
-            config.allowVideoGestures = settings_allow_video_gestures.isChecked
+        binding.settingsAllowVideoGestures.isChecked = config.allowVideoGestures
+        binding.settingsAllowVideoGesturesHolder.setOnClickListener {
+            binding.settingsAllowVideoGestures.toggle()
+            config.allowVideoGestures = binding.settingsAllowVideoGestures.isChecked
         }
     }
 
     private fun setupAllowDownGesture() {
-        settings_allow_down_gesture.isChecked = config.allowDownGesture
-        settings_allow_down_gesture_holder.setOnClickListener {
-            settings_allow_down_gesture.toggle()
-            config.allowDownGesture = settings_allow_down_gesture.isChecked
+        binding.settingsAllowDownGesture.isChecked = config.allowDownGesture
+        binding.settingsAllowDownGestureHolder.setOnClickListener {
+            binding.settingsAllowDownGesture.toggle()
+            config.allowDownGesture = binding.settingsAllowDownGesture.isChecked
         }
     }
 
     private fun setupAllowRotatingWithGestures() {
-        settings_allow_rotating_with_gestures.isChecked = config.allowRotatingWithGestures
-        settings_allow_rotating_with_gestures_holder.setOnClickListener {
-            settings_allow_rotating_with_gestures.toggle()
-            config.allowRotatingWithGestures = settings_allow_rotating_with_gestures.isChecked
+        binding.settingsAllowRotatingWithGestures.isChecked = config.allowRotatingWithGestures
+        binding.settingsAllowRotatingWithGesturesHolder.setOnClickListener {
+            binding.settingsAllowRotatingWithGestures.toggle()
+            config.allowRotatingWithGestures = binding.settingsAllowRotatingWithGestures.isChecked
         }
     }
 
     private fun setupShowNotch() {
-        settings_show_notch_holder.beVisibleIf(isPiePlus())
-        settings_show_notch.isChecked = config.showNotch
-        settings_show_notch_holder.setOnClickListener {
-            settings_show_notch.toggle()
-            config.showNotch = settings_show_notch.isChecked
+        binding.settingsShowNotchHolder.beVisibleIf(isPiePlus())
+        binding.settingsShowNotch.isChecked = config.showNotch
+        binding.settingsShowNotchHolder.setOnClickListener {
+            binding.settingsShowNotch.toggle()
+            config.showNotch = binding.settingsShowNotch.isChecked
         }
     }
 
     private fun setupFileThumbnailStyle() {
-        settings_file_thumbnail_style_holder.setOnClickListener {
+        binding.settingsFileThumbnailStyleHolder.setOnClickListener {
             ChangeFileThumbnailStyleDialog(this)
         }
     }
 
     private fun setupFolderThumbnailStyle() {
-        settings_folder_thumbnail_style.text = getFolderStyleText()
-        settings_folder_thumbnail_style_holder.setOnClickListener {
-            ChangeFolderThumbnailStyleDialog(this) {
-                settings_folder_thumbnail_style.text = getFolderStyleText()
+        with(binding) {
+            settingsFolderThumbnailStyle.text = getFolderStyleText()
+            settingsFolderThumbnailStyleHolder.setOnClickListener {
+                ChangeFolderThumbnailStyleDialog(this@SettingsActivity) {
+                    settingsFolderThumbnailStyle.text = getFolderStyleText()
+                }
             }
         }
     }
@@ -483,93 +490,113 @@ class SettingsActivity : SimpleActivity() {
     )
 
     private fun setupKeepLastModified() {
-        settings_keep_last_modified.isChecked = config.keepLastModified
-        settings_keep_last_modified_holder.setOnClickListener {
-            handleMediaManagementPrompt {
-                settings_keep_last_modified.toggle()
-                config.keepLastModified = settings_keep_last_modified.isChecked
+        with(binding) {
+            settingsKeepLastModified.isChecked = config.keepLastModified
+            settingsKeepLastModifiedHolder.setOnClickListener {
+                handleMediaManagementPrompt {
+                    settingsKeepLastModified.toggle()
+                    config.keepLastModified = settingsKeepLastModified.isChecked
+                }
             }
         }
     }
 
     private fun setupEnablePullToRefresh() {
-        settings_enable_pull_to_refresh.isChecked = config.enablePullToRefresh
-        settings_enable_pull_to_refresh_holder.setOnClickListener {
-            settings_enable_pull_to_refresh.toggle()
-            config.enablePullToRefresh = settings_enable_pull_to_refresh.isChecked
+        with(binding) {
+            settingsEnablePullToRefresh.isChecked = config.enablePullToRefresh
+            settingsEnablePullToRefreshHolder.setOnClickListener {
+                settingsEnablePullToRefresh.toggle()
+                config.enablePullToRefresh = settingsEnablePullToRefresh.isChecked
+            }
         }
     }
 
     private fun setupAllowZoomingImages() {
-        settings_allow_zooming_images.isChecked = config.allowZoomingImages
-        updateDeepZoomToggleButtons()
-        settings_allow_zooming_images_holder.setOnClickListener {
-            settings_allow_zooming_images.toggle()
-            config.allowZoomingImages = settings_allow_zooming_images.isChecked
+        with(binding) {
+            settingsAllowZoomingImages.isChecked = config.allowZoomingImages
             updateDeepZoomToggleButtons()
+            settingsAllowZoomingImagesHolder.setOnClickListener {
+                settingsAllowZoomingImages.toggle()
+                config.allowZoomingImages = settingsAllowZoomingImages.isChecked
+                updateDeepZoomToggleButtons()
+            }
         }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateDeepZoomToggleButtons() {
-        settings_allow_rotating_with_gestures_holder.beVisibleIf(config.allowZoomingImages)
-        settings_show_highest_quality_holder.beVisibleIf(config.allowZoomingImages)
-        settings_allow_one_to_one_zoom_holder.beVisibleIf(config.allowZoomingImages)
+        with(binding) {
+            settingsAllowRotatingWithGesturesHolder.beVisibleIf(config.allowZoomingImages)
+            settingsShowHighestQualityHolder.beVisibleIf(config.allowZoomingImages)
+            settingsAllowOneToOneZoomHolder.beVisibleIf(config.allowZoomingImages)
 
-        if (config.allowZoomingImages) {
-            settings_allow_zooming_images_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
-        } else {
-            settings_allow_zooming_images_holder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+            if (config.allowZoomingImages) {
+                settingsAllowZoomingImagesHolder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+            } else {
+                settingsAllowZoomingImagesHolder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+            }
         }
     }
 
     private fun setupShowHighestQuality() {
-        settings_show_highest_quality.isChecked = config.showHighestQuality
-        settings_show_highest_quality_holder.setOnClickListener {
-            settings_show_highest_quality.toggle()
-            config.showHighestQuality = settings_show_highest_quality.isChecked
+        with(binding) {
+            settingsShowHighestQuality.isChecked = config.showHighestQuality
+            settingsShowHighestQualityHolder.setOnClickListener {
+                settingsShowHighestQuality.toggle()
+                config.showHighestQuality = settingsShowHighestQuality.isChecked
+            }
         }
     }
 
     private fun setupAllowOneToOneZoom() {
-        settings_allow_one_to_one_zoom.isChecked = config.allowOneToOneZoom
-        settings_allow_one_to_one_zoom_holder.setOnClickListener {
-            settings_allow_one_to_one_zoom.toggle()
-            config.allowOneToOneZoom = settings_allow_one_to_one_zoom.isChecked
+        with(binding) {
+            settingsAllowOneToOneZoom.isChecked = config.allowOneToOneZoom
+            settingsAllowOneToOneZoomHolder.setOnClickListener {
+                settingsAllowOneToOneZoom.toggle()
+                config.allowOneToOneZoom = settingsAllowOneToOneZoom.isChecked
+            }
         }
     }
 
     private fun setupAllowInstantChange() {
-        settings_allow_instant_change.isChecked = config.allowInstantChange
-        settings_allow_instant_change_holder.setOnClickListener {
-            settings_allow_instant_change.toggle()
-            config.allowInstantChange = settings_allow_instant_change.isChecked
+        with(binding) {
+            settingsAllowInstantChange.isChecked = config.allowInstantChange
+            settingsAllowInstantChangeHolder.setOnClickListener {
+                settingsAllowInstantChange.toggle()
+                config.allowInstantChange = settingsAllowInstantChange.isChecked
+            }
         }
     }
 
     private fun setupShowExtendedDetails() {
-        settings_show_extended_details.isChecked = config.showExtendedDetails
-        updateExtendedDetailsButtons()
-        settings_show_extended_details_holder.setOnClickListener {
-            settings_show_extended_details.toggle()
-            config.showExtendedDetails = settings_show_extended_details.isChecked
+        with(binding) {
+            settingsShowExtendedDetails.isChecked = config.showExtendedDetails
             updateExtendedDetailsButtons()
+            settingsShowExtendedDetailsHolder.setOnClickListener {
+                settingsShowExtendedDetails.toggle()
+                config.showExtendedDetails = settingsShowExtendedDetails.isChecked
+                updateExtendedDetailsButtons()
+            }
         }
     }
 
     private fun setupHideExtendedDetails() {
-        settings_hide_extended_details.isChecked = config.hideExtendedDetails
-        settings_hide_extended_details_holder.setOnClickListener {
-            settings_hide_extended_details.toggle()
-            config.hideExtendedDetails = settings_hide_extended_details.isChecked
+        with(binding) {
+            settingsHideExtendedDetails.isChecked = config.hideExtendedDetails
+            settingsHideExtendedDetailsHolder.setOnClickListener {
+                settingsHideExtendedDetails.toggle()
+                config.hideExtendedDetails = settingsHideExtendedDetails.isChecked
+            }
         }
     }
 
     private fun setupManageExtendedDetails() {
-        settings_manage_extended_details_holder.setOnClickListener {
-            ManageExtendedDetailsDialog(this) {
-                if (config.extendedDetails == 0) {
-                    settings_show_extended_details_holder.callOnClick()
+        with(binding) {
+            settingsManageExtendedDetailsHolder.setOnClickListener {
+                ManageExtendedDetailsDialog(this@SettingsActivity) {
+                    if (config.extendedDetails == 0) {
+                        settingsShowExtendedDetailsHolder.callOnClick()
+                    }
                 }
             }
         }
@@ -577,36 +604,40 @@ class SettingsActivity : SimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateExtendedDetailsButtons() {
-        settings_manage_extended_details_holder.beVisibleIf(config.showExtendedDetails)
-        settings_hide_extended_details_holder.beVisibleIf(config.showExtendedDetails)
-
-        if (config.showExtendedDetails) {
-            settings_show_extended_details_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
-        } else {
-            settings_show_extended_details_holder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+        with(binding) {
+            settingsManageExtendedDetailsHolder.beVisibleIf(config.showExtendedDetails)
+            settingsHideExtendedDetailsHolder.beVisibleIf(config.showExtendedDetails)
+            if (config.showExtendedDetails) {
+                settingsShowExtendedDetailsHolder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+            } else {
+                settingsShowExtendedDetailsHolder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+            }
         }
     }
 
     private fun setupSkipDeleteConfirmation() {
-        settings_skip_delete_confirmation.isChecked = config.skipDeleteConfirmation
-        settings_skip_delete_confirmation_holder.setOnClickListener {
-            settings_skip_delete_confirmation.toggle()
-            config.skipDeleteConfirmation = settings_skip_delete_confirmation.isChecked
+        with(binding) {
+            settingsSkipDeleteConfirmation.isChecked = config.skipDeleteConfirmation
+            settingsSkipDeleteConfirmationHolder.setOnClickListener {
+                settingsSkipDeleteConfirmation.toggle()
+                config.skipDeleteConfirmation = settingsSkipDeleteConfirmation.isChecked
+            }
         }
     }
 
     private fun setupScreenRotation() {
-        settings_screen_rotation.text = getScreenRotationText()
-        settings_screen_rotation_holder.setOnClickListener {
-            val items = arrayListOf(
-                RadioItem(ROTATE_BY_SYSTEM_SETTING, getString(R.string.screen_rotation_system_setting)),
-                RadioItem(ROTATE_BY_DEVICE_ROTATION, getString(R.string.screen_rotation_device_rotation)),
-                RadioItem(ROTATE_BY_ASPECT_RATIO, getString(R.string.screen_rotation_aspect_ratio))
-            )
-
-            RadioGroupDialog(this@SettingsActivity, items, config.screenRotation) {
-                config.screenRotation = it as Int
-                settings_screen_rotation.text = getScreenRotationText()
+        with(binding) {
+            settingsScreenRotation.text = getScreenRotationText()
+            settingsScreenRotationHolder.setOnClickListener {
+                val items = arrayListOf(
+                    RadioItem(ROTATE_BY_SYSTEM_SETTING, getString(R.string.screen_rotation_system_setting)),
+                    RadioItem(ROTATE_BY_DEVICE_ROTATION, getString(R.string.screen_rotation_device_rotation)),
+                    RadioItem(ROTATE_BY_ASPECT_RATIO, getString(R.string.screen_rotation_aspect_ratio))
+                )
+                RadioGroupDialog(this@SettingsActivity, items, config.screenRotation) {
+                    config.screenRotation = it as Int
+                    settingsScreenRotation.text = getScreenRotationText()
+                }
             }
         }
     }
@@ -620,22 +651,26 @@ class SettingsActivity : SimpleActivity() {
     )
 
     private fun setupBottomActions() {
-        settings_bottom_actions_checkbox.isChecked = config.bottomActions
-        updateManageBottomActionsButtons()
-        settings_bottom_actions_checkbox_holder.setOnClickListener {
-            settings_bottom_actions_checkbox.toggle()
-            config.bottomActions = settings_bottom_actions_checkbox.isChecked
+        with(binding) {
+            settingsBottomActionsCheckbox.isChecked = config.bottomActions
             updateManageBottomActionsButtons()
+            settingsBottomActionsCheckboxHolder.setOnClickListener {
+                settingsBottomActionsCheckbox.toggle()
+                config.bottomActions = settingsBottomActionsCheckbox.isChecked
+                updateManageBottomActionsButtons()
+            }
         }
     }
 
     private fun setupManageBottomActions() {
-        settings_manage_bottom_actions_holder.setOnClickListener {
-            ManageBottomActionsDialog(this) {
-                if (config.visibleBottomActions == 0) {
-                    settings_bottom_actions_checkbox_holder.callOnClick()
-                    config.bottomActions = false
-                    config.visibleBottomActions = DEFAULT_BOTTOM_ACTIONS
+        with(binding) {
+            settingsManageBottomActionsHolder.setOnClickListener {
+                ManageBottomActionsDialog(this@SettingsActivity) {
+                    if (config.visibleBottomActions == 0) {
+                        settingsBottomActionsCheckboxHolder.callOnClick()
+                        config.bottomActions = false
+                        config.visibleBottomActions = DEFAULT_BOTTOM_ACTIONS
+                    }
                 }
             }
         }
@@ -643,54 +678,63 @@ class SettingsActivity : SimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateManageBottomActionsButtons() {
-        settings_manage_bottom_actions_holder.beVisibleIf(config.bottomActions)
-        if (config.bottomActions) {
-            settings_bottom_actions_checkbox_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
-        } else {
-            settings_bottom_actions_checkbox_holder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+        with(binding) {
+            settingsManageBottomActionsHolder.beVisibleIf(config.bottomActions)
+            if (config.bottomActions) {
+                settingsBottomActionsCheckboxHolder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+            } else {
+                settingsBottomActionsCheckboxHolder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+            }
         }
     }
 
     private fun setupUseRecycleBin() {
         updateRecycleBinButtons()
-        settings_use_recycle_bin.isChecked = config.useRecycleBin
-        settings_use_recycle_bin_holder.setOnClickListener {
-            settings_use_recycle_bin.toggle()
-            config.useRecycleBin = settings_use_recycle_bin.isChecked
-            updateRecycleBinButtons()
+        with(binding) {
+            settingsUseRecycleBin.isChecked = config.useRecycleBin
+            settingsUseRecycleBinHolder.setOnClickListener {
+                settingsUseRecycleBin.toggle()
+                config.useRecycleBin = settingsUseRecycleBin.isChecked
+                updateRecycleBinButtons()
+            }
         }
     }
 
     private fun setupShowRecycleBin() {
-        settings_show_recycle_bin.isChecked = config.showRecycleBinAtFolders
-        settings_show_recycle_bin_holder.setOnClickListener {
-            settings_show_recycle_bin.toggle()
-            config.showRecycleBinAtFolders = settings_show_recycle_bin.isChecked
-            updateRecycleBinButtons()
+        with(binding) {
+            settingsShowRecycleBin.isChecked = config.showRecycleBinAtFolders
+            settingsShowRecycleBinHolder.setOnClickListener {
+                settingsShowRecycleBin.toggle()
+                config.showRecycleBinAtFolders = settingsShowRecycleBin.isChecked
+                updateRecycleBinButtons()
+            }
         }
     }
 
     private fun setupShowRecycleBinLast() {
-        settings_show_recycle_bin_last.isChecked = config.showRecycleBinLast
-        settings_show_recycle_bin_last_holder.setOnClickListener {
-            settings_show_recycle_bin_last.toggle()
-            config.showRecycleBinLast = settings_show_recycle_bin_last.isChecked
-            if (config.showRecycleBinLast) {
-                config.removePinnedFolders(setOf(RECYCLE_BIN))
+        with(binding) {
+            settingsShowRecycleBinLast.isChecked = config.showRecycleBinLast
+            settingsShowRecycleBinLastHolder.setOnClickListener {
+                settingsShowRecycleBinLast.toggle()
+                config.showRecycleBinLast = settingsShowRecycleBinLast.isChecked
+                if (config.showRecycleBinLast) {
+                    config.removePinnedFolders(setOf(RECYCLE_BIN))
+                }
             }
         }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateRecycleBinButtons() {
-        settings_show_recycle_bin_last_holder.beVisibleIf(config.useRecycleBin && config.showRecycleBinAtFolders)
-        settings_empty_recycle_bin_holder.beVisibleIf(config.useRecycleBin)
-        settings_show_recycle_bin_holder.beVisibleIf(config.useRecycleBin)
-
-        if (config.useRecycleBin) {
-            settings_use_recycle_bin_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
-        } else {
-            settings_use_recycle_bin_holder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+        with(binding) {
+            settingsShowRecycleBinLastHolder.beVisibleIf(config.useRecycleBin && config.showRecycleBinAtFolders)
+            settingsEmptyRecycleBinHolder.beVisibleIf(config.useRecycleBin)
+            settingsShowRecycleBinHolder.beVisibleIf(config.useRecycleBin)
+            if (config.useRecycleBin) {
+                settingsUseRecycleBinHolder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+            } else {
+                settingsUseRecycleBinHolder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+            }
         }
     }
 
@@ -710,18 +754,18 @@ class SettingsActivity : SimpleActivity() {
             }
 
             runOnUiThread {
-                settings_empty_recycle_bin_size.text = mRecycleBinContentSize.formatSize()
+                binding.settingsEmptyRecycleBinSize.text = mRecycleBinContentSize.formatSize()
             }
         }
 
-        settings_empty_recycle_bin_holder.setOnClickListener {
+        binding.settingsEmptyRecycleBinHolder.setOnClickListener {
             if (mRecycleBinContentSize == 0L) {
                 toast(R.string.recycle_bin_empty)
             } else {
                 showRecycleBinEmptyingDialog {
                     emptyTheRecycleBin()
                     mRecycleBinContentSize = 0L
-                    settings_empty_recycle_bin_size.text = 0L.formatSize()
+                    binding.settingsEmptyRecycleBinSize.text = 0L.formatSize()
                 }
             }
         }
@@ -731,22 +775,22 @@ class SettingsActivity : SimpleActivity() {
         ensureBackgroundThread {
             val size = cacheDir.getProperSize(true).formatSize()
             runOnUiThread {
-                settings_clear_cache_size.text = size
+                binding.settingsClearCacheSize.text = size
             }
         }
 
-        settings_clear_cache_holder.setOnClickListener {
+        binding.settingsClearCacheHolder.setOnClickListener {
             ensureBackgroundThread {
                 cacheDir.deleteRecursively()
                 runOnUiThread {
-                    settings_clear_cache_size.text = cacheDir.getProperSize(true).formatSize()
+                    binding.settingsClearCacheSize.text = cacheDir.getProperSize(true).formatSize()
                 }
             }
         }
     }
 
     private fun setupExportSettings() {
-        settings_export_holder.setOnClickListener {
+        binding.settingsExportHolder.setOnClickListener {
             val configItems = LinkedHashMap<String, Any>().apply {
                 put(IS_USING_SHARED_THEME, config.isUsingSharedTheme)
                 put(TEXT_COLOR, config.textColor)
@@ -839,7 +883,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupImportSettings() {
-        settings_import_holder.setOnClickListener {
+        binding.settingsImportHolder.setOnClickListener {
             if (isQPlus()) {
                 Intent(Intent.ACTION_GET_CONTENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
