@@ -28,12 +28,14 @@ import com.simplemobiletools.gallery.pro.helpers.MediaFetcher
 import com.simplemobiletools.gallery.pro.helpers.PATH
 import com.simplemobiletools.gallery.pro.helpers.SHOW_ALL
 import com.simplemobiletools.gallery.pro.database.MediaOperationsListener
+import com.simplemobiletools.gallery.pro.databinding.ActivitySearchBinding
 import com.simplemobiletools.gallery.pro.models.Medium
 import com.simplemobiletools.gallery.pro.models.ThumbnailItem
-import kotlinx.android.synthetic.main.activity_search.*
 import java.io.File
 
 class SearchActivity : SimpleActivity(), MediaOperationsListener {
+
+    private lateinit var binding: ActivitySearchBinding
     private var mIsSearchOpen = false
     private var mLastSearchedText = ""
 
@@ -43,16 +45,17 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupOptionsMenu()
-        search_empty_text_placeholder.setTextColor(getProperTextColor())
+        binding.searchEmptyTextPlaceholder.setTextColor(getProperTextColor())
         getAllMedia()
-        search_fastscroller.updateColors(getProperPrimaryColor())
+        binding.searchFastscroller.updateColors(getProperPrimaryColor())
     }
 
     override fun onResume() {
         super.onResume()
-        setupToolbar(search_toolbar, NavigationIcon.Arrow, searchMenuItem = mSearchMenuItem)
+        setupToolbar(binding.searchToolbar, NavigationIcon.Arrow, searchMenuItem = mSearchMenuItem)
     }
 
     override fun onDestroy() {
@@ -61,8 +64,8 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun setupOptionsMenu() {
-        setupSearch(search_toolbar.menu)
-        search_toolbar.setOnMenuItemClickListener { menuItem ->
+        setupSearch(binding.searchToolbar.menu)
+        binding.searchToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.toggle_filename -> toggleFilenameVisibility()
                 else -> return@setOnMenuItemClickListener false
@@ -116,10 +119,10 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
                 val grouped = MediaFetcher(applicationContext).groupMedia(filtered as ArrayList<Medium>, "")
                 runOnUiThread {
                     if (grouped.isEmpty()) {
-                        search_empty_text_placeholder.text = getString(R.string.no_items_found)
-                        search_empty_text_placeholder.beVisible()
+                        binding.searchEmptyTextPlaceholder.text = getString(R.string.no_items_found)
+                        binding.searchEmptyTextPlaceholder.beVisible()
                     } else {
-                        search_empty_text_placeholder.beGone()
+                        binding.searchEmptyTextPlaceholder.beGone()
                     }
 
                     handleGridSpacing(grouped)
@@ -131,14 +134,14 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun setupAdapter() {
-        val currAdapter = search_grid.adapter
+        val currAdapter = binding.searchGrid.adapter
         if (currAdapter == null) {
-            MediaAdapter(this, ArrayList(), this, false, false, "", search_grid) {
+            MediaAdapter(activity = this, ArrayList(), listener = this, isAGetIntent = false, allowMultiplePicks = false, path = "", binding.searchGrid) {
                 if (it is Medium) {
                     itemClicked(it.path)
                 }
             }.apply {
-                search_grid.adapter = this
+                binding.searchGrid.adapter = this
             }
             setupLayoutManager()
             handleGridSpacing(mAllMedia)
@@ -155,18 +158,18 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     private fun handleGridSpacing(media: ArrayList<ThumbnailItem>) {
         val viewType = config.getFolderViewType(SHOW_ALL)
         if (viewType == VIEW_TYPE_GRID) {
-            if (search_grid.itemDecorationCount > 0) {
-                search_grid.removeItemDecorationAt(0)
+            if (binding.searchGrid.itemDecorationCount > 0) {
+                binding.searchGrid.removeItemDecorationAt(0)
             }
 
             val spanCount = config.mediaColumnCnt
             val spacing = config.thumbnailSpacing
             val decoration = GridSpacingItemDecoration(spanCount, spacing, config.scrollHorizontally, config.fileRoundedCorners, media, true)
-            search_grid.addItemDecoration(decoration)
+            binding.searchGrid.addItemDecoration(decoration)
         }
     }
 
-    private fun getMediaAdapter() = search_grid.adapter as? MediaAdapter
+    private fun getMediaAdapter() = binding.searchGrid.adapter as? MediaAdapter
 
     private fun toggleFilenameVisibility() {
         config.displayFileNames = !config.displayFileNames
@@ -196,13 +199,13 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun setupGridLayoutManager() {
-        val layoutManager = search_grid.layoutManager as MyGridLayoutManager
+        val layoutManager = binding.searchGrid.layoutManager as MyGridLayoutManager
         if (config.scrollHorizontally) {
             layoutManager.orientation = RecyclerView.HORIZONTAL
-            search_grid.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            binding.searchGrid.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
         } else {
             layoutManager.orientation = RecyclerView.VERTICAL
-            search_grid.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            binding.searchGrid.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
 
         layoutManager.spanCount = config.mediaColumnCnt
@@ -219,7 +222,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun setupListLayoutManager() {
-        val layoutManager = search_grid.layoutManager as MyGridLayoutManager
+        val layoutManager = binding.searchGrid.layoutManager as MyGridLayoutManager
         layoutManager.spanCount = 1
         layoutManager.orientation = RecyclerView.VERTICAL
     }
@@ -227,7 +230,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     private fun setupScrollDirection() {
         val viewType = config.getFolderViewType(SHOW_ALL)
         val scrollHorizontally = config.scrollHorizontally && viewType == VIEW_TYPE_GRID
-        search_fastscroller.setScrollVertically(!scrollHorizontally)
+        binding.searchFastscroller.setScrollVertically(!scrollHorizontally)
     }
 
     private fun getAllMedia() {
