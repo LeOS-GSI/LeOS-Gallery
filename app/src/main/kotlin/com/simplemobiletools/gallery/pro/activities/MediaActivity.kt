@@ -39,14 +39,15 @@ import com.simplemobiletools.gallery.pro.dialogs.FilterMediaDialog
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.helpers.*
 import com.simplemobiletools.gallery.pro.database.MediaOperationsListener
+import com.simplemobiletools.gallery.pro.databinding.ActivityMediaBinding
 import com.simplemobiletools.gallery.pro.models.Medium
 import com.simplemobiletools.gallery.pro.models.ThumbnailItem
 import com.simplemobiletools.gallery.pro.models.ThumbnailSection
-import kotlinx.android.synthetic.main.activity_media.*
 import java.io.File
 import java.io.IOException
 
 class MediaActivity : SimpleActivity(), MediaOperationsListener {
+    private lateinit var binding: ActivityMediaBinding
     private val LAST_MEDIA_CHECK_PERIOD = 3000L
 
     private var mPath = ""
@@ -84,7 +85,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_media)
+        binding = ActivityMediaBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         intent.apply {
             mIsGetImageIntent = getBooleanExtra(GET_IMAGE_INTENT, false)
@@ -93,7 +95,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             mAllowPickingMultiple = getBooleanExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
         }
 
-        media_refresh_layout.setOnRefreshListener { getMedia() }
+        binding.mediaRefreshLayout.setOnRefreshListener { getMedia() }
         try {
             mPath = intent.getStringExtra(DIRECTORY) ?: ""
         } catch (e: Exception) {
@@ -110,7 +112,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             registerFileUpdateListener()
         }
 
-        media_empty_text_placeholder_2.setOnClickListener {
+        binding.mediaEmptyTextPlaceholder2.setOnClickListener {
             showFilterMediaDialog()
         }
 
@@ -134,7 +136,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
         if (mStoredScrollHorizontally != config.scrollHorizontally) {
             mLoadedInitialPhotos = false
-            media_grid.adapter = null
+            binding.mediaGrid.adapter = null
             getMedia()
         }
 
@@ -156,7 +158,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             || mStoredRoundedCorners != config.fileRoundedCorners
             || mStoredMarkFavoriteItems != config.markFavoriteItems
         ) {
-            media_grid.adapter = null
+            binding.mediaGrid.adapter = null
             setupAdapter()
         }
 
@@ -166,19 +168,19 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             NavigationIcon.Arrow
         }
 
-        setupToolbar(media_toolbar, navigation, searchMenuItem = mSearchMenuItem)
+        setupToolbar(binding.mediaToolbar, navigation, searchMenuItem = mSearchMenuItem)
         refreshMenuItems()
 
-        media_fastscroller.updateColors(primaryColor)
-        media_refresh_layout.isEnabled = config.enablePullToRefresh
+        binding.mediaFastscroller.updateColors(primaryColor)
+        binding.mediaRefreshLayout.isEnabled = config.enablePullToRefresh
         getMediaAdapter()?.apply {
             dateFormat = config.dateFormat
             timeFormat = getTimeFormat()
         }
 
-        media_empty_text_placeholder.setTextColor(getProperTextColor())
-        media_empty_text_placeholder_2.setTextColor(getProperPrimaryColor())
-        media_empty_text_placeholder_2.bringToFront()
+        binding.mediaEmptyTextPlaceholder.setTextColor(getProperTextColor())
+        binding.mediaEmptyTextPlaceholder2.setTextColor(getProperPrimaryColor())
+        binding.mediaEmptyTextPlaceholder2.bringToFront()
 
         // do not refresh Random sorted files after opening a fullscreen image and going Back
         val isRandomSorting = config.getFolderSorting(mPath) and SORT_BY_RANDOM != 0
@@ -200,11 +202,11 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     override fun onPause() {
         super.onPause()
         mIsGettingMedia = false
-        media_refresh_layout.isRefreshing = false
+        binding.mediaRefreshLayout.isRefreshing = false
         storeStateVariables()
         mLastMediaHandler.removeCallbacksAndMessages(null)
 
-        if (!mMedia.isEmpty()) {
+        if (mMedia.isNotEmpty()) {
             mCurrAsyncTask?.stopFetching()
         }
     }
@@ -243,9 +245,9 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun refreshMenuItems() {
-        val isDefaultFolder = !config.defaultFolder.isEmpty() && File(config.defaultFolder).compareTo(File(mPath)) == 0
+        val isDefaultFolder = config.defaultFolder.isNotEmpty() && File(config.defaultFolder).compareTo(File(mPath)) == 0
 
-        media_toolbar.menu.apply {
+        binding.mediaToolbar.menu.apply {
             findItem(R.id.group).isVisible = !config.scrollHorizontally
 
             findItem(R.id.empty_recycle_bin).isVisible = mPath == RECYCLE_BIN
@@ -271,8 +273,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun setupOptionsMenu() {
-        setupSearch(media_toolbar.menu)
-        media_toolbar.setOnMenuItemClickListener { menuItem ->
+        setupSearch(binding.mediaToolbar.menu)
+        binding.mediaToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.sort -> showSortingDialog()
                 R.id.filter -> showFilterMediaDialog()
@@ -351,7 +353,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         MenuItemCompat.setOnActionExpandListener(mSearchMenuItem, object : MenuItemCompat.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
                 mIsSearchOpen = true
-                media_refresh_layout.isEnabled = false
+                binding.mediaRefreshLayout.isEnabled = false
                 return true
             }
 
@@ -361,7 +363,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                     mIsSearchOpen = false
                     mLastSearchedText = ""
 
-                    media_refresh_layout.isEnabled = config.enablePullToRefresh
+                    binding.mediaRefreshLayout.isEnabled = config.enablePullToRefresh
                     searchQueryChanged("")
                 }
                 return true
@@ -377,12 +379,12 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 val grouped = MediaFetcher(applicationContext).groupMedia(filtered as ArrayList<Medium>, mPath)
                 runOnUiThread {
                     if (grouped.isEmpty()) {
-                        media_empty_text_placeholder.text = getString(R.string.no_items_found)
-                        media_empty_text_placeholder.beVisible()
-                        media_fastscroller.beGone()
+                        binding.mediaEmptyTextPlaceholder.text = getString(R.string.no_items_found)
+                        binding.mediaEmptyTextPlaceholder.beVisible()
+                        binding.mediaFastscroller.beGone()
                     } else {
-                        media_empty_text_placeholder.beGone()
-                        media_fastscroller.beVisible()
+                        binding.mediaEmptyTextPlaceholder.beGone()
+                        binding.mediaFastscroller.beVisible()
                     }
 
                     handleGridSpacing(grouped)
@@ -403,7 +405,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                     else -> getHumanizedFilename(mPath)
                 }
 
-                media_toolbar.title = if (mShowAll) resources.getString(R.string.all_folders) else dirName
+                binding.mediaToolbar.title = if (mShowAll) resources.getString(R.string.all_folders) else dirName
                 getMedia()
                 setupLayoutManager()
             } else {
@@ -413,31 +415,31 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         }
     }
 
-    private fun getMediaAdapter() = media_grid.adapter as? MediaAdapter
+    private fun getMediaAdapter() = binding.mediaGrid.adapter as? MediaAdapter
 
     private fun setupAdapter() {
         if (!mShowAll && isDirEmpty()) {
             return
         }
 
-        val currAdapter = media_grid.adapter
+        val currAdapter = binding.mediaGrid.adapter
         if (currAdapter == null) {
             initZoomListener()
             MediaAdapter(
                 this, mMedia.clone() as ArrayList<ThumbnailItem>, this, mIsGetImageIntent || mIsGetVideoIntent || mIsGetAnyIntent,
-                mAllowPickingMultiple, mPath, media_grid
+                mAllowPickingMultiple, mPath, binding.mediaGrid
             ) {
                 if (it is Medium && !isFinishing) {
                     itemClicked(it.path)
                 }
             }.apply {
                 setupZoomListener(mZoomListener)
-                media_grid.adapter = this
+                binding.mediaGrid.adapter = this
             }
 
             val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
             if (viewType == VIEW_TYPE_LIST && areSystemAnimationsEnabled) {
-                media_grid.scheduleLayoutAnimation()
+                binding.mediaGrid.scheduleLayoutAnimation()
             }
 
             setupLayoutManager()
@@ -455,7 +457,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun setupScrollDirection() {
         val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
         val scrollHorizontally = config.scrollHorizontally && viewType == VIEW_TYPE_GRID
-        media_fastscroller.setScrollVertically(!scrollHorizontally)
+        binding.mediaFastscroller.setScrollVertically(!scrollHorizontally)
     }
 
     private fun checkLastMediaChanged() {
@@ -484,7 +486,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun showSortingDialog() {
         ChangeSortingDialog(this, false, true, mPath) {
             mLoadedInitialPhotos = false
-            media_grid.adapter = null
+            binding.mediaGrid.adapter = null
             getMedia()
         }
     }
@@ -492,8 +494,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun showFilterMediaDialog() {
         FilterMediaDialog(this) {
             mLoadedInitialPhotos = false
-            media_refresh_layout.isRefreshing = true
-            media_grid.adapter = null
+            binding.mediaRefreshLayout.isRefreshing = true
+            binding.mediaGrid.adapter = null
             getMedia()
         }
     }
@@ -540,7 +542,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         ChangeViewTypeDialog(this, false, mPath) {
             refreshMenuItems()
             setupLayoutManager()
-            media_grid.adapter = null
+            binding.mediaGrid.adapter = null
             setupAdapter()
         }
     }
@@ -548,7 +550,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun showGroupByDialog() {
         ChangeGroupingDialog(this, mPath) {
             mLoadedInitialPhotos = false
-            media_grid.adapter = null
+            binding.mediaGrid.adapter = null
             getMedia()
         }
     }
@@ -578,7 +580,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             getCachedMedia(mPath, mIsGetVideoIntent, mIsGetImageIntent) {
                 if (it.isEmpty()) {
                     runOnUiThread {
-                        media_refresh_layout.isRefreshing = true
+                        binding.mediaRefreshLayout.isRefreshing = true
                     }
                 } else {
                     gotMedia(it, true)
@@ -679,13 +681,13 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun setupGridLayoutManager() {
-        val layoutManager = media_grid.layoutManager as MyGridLayoutManager
+        val layoutManager = binding.mediaGrid.layoutManager as MyGridLayoutManager
         if (config.scrollHorizontally) {
             layoutManager.orientation = RecyclerView.HORIZONTAL
-            media_refresh_layout.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            binding.mediaRefreshLayout.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
         } else {
             layoutManager.orientation = RecyclerView.VERTICAL
-            media_refresh_layout.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            binding.mediaRefreshLayout.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
 
         layoutManager.spanCount = config.mediaColumnCnt
@@ -702,10 +704,10 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun setupListLayoutManager() {
-        val layoutManager = media_grid.layoutManager as MyGridLayoutManager
+        val layoutManager = binding.mediaGrid.layoutManager as MyGridLayoutManager
         layoutManager.spanCount = 1
         layoutManager.orientation = RecyclerView.VERTICAL
-        media_refresh_layout.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        binding.mediaRefreshLayout.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         mZoomListener = null
     }
 
@@ -717,17 +719,17 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             val useGridPosition = media.firstOrNull() is ThumbnailSection
 
             var currentGridDecoration: GridSpacingItemDecoration? = null
-            if (media_grid.itemDecorationCount > 0) {
-                currentGridDecoration = media_grid.getItemDecorationAt(0) as GridSpacingItemDecoration
+            if (binding.mediaGrid.itemDecorationCount > 0) {
+                currentGridDecoration = binding.mediaGrid.getItemDecorationAt(0) as GridSpacingItemDecoration
                 currentGridDecoration.items = media
             }
 
             val newGridDecoration = GridSpacingItemDecoration(spanCount, spacing, config.scrollHorizontally, config.fileRoundedCorners, media, useGridPosition)
             if (currentGridDecoration.toString() != newGridDecoration.toString()) {
                 if (currentGridDecoration != null) {
-                    media_grid.removeItemDecoration(currentGridDecoration)
+                    binding.mediaGrid.removeItemDecoration(currentGridDecoration)
                 }
-                media_grid.addItemDecoration(newGridDecoration)
+                binding.mediaGrid.addItemDecoration(newGridDecoration)
             }
         }
     }
@@ -735,7 +737,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun initZoomListener() {
         val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
         if (viewType == VIEW_TYPE_GRID) {
-            val layoutManager = media_grid.layoutManager as MyGridLayoutManager
+            val layoutManager = binding.mediaGrid.layoutManager as MyGridLayoutManager
             mZoomListener = object : MyRecyclerView.MyZoomListener {
                 override fun zoomIn() {
                     if (layoutManager.spanCount > 1) {
@@ -757,12 +759,12 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun increaseColumnCount() {
-        config.mediaColumnCnt = ++(media_grid.layoutManager as MyGridLayoutManager).spanCount
+        config.mediaColumnCnt = ++(binding.mediaGrid.layoutManager as MyGridLayoutManager).spanCount
         columnCountChanged()
     }
 
     private fun reduceColumnCount() {
-        config.mediaColumnCnt = --(media_grid.layoutManager as MyGridLayoutManager).spanCount
+        config.mediaColumnCnt = --(binding.mediaGrid.layoutManager as MyGridLayoutManager).spanCount
         columnCountChanged()
     }
 
@@ -854,14 +856,14 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         mMedia = media
 
         runOnUiThread {
-            media_refresh_layout.isRefreshing = false
-            media_empty_text_placeholder.beVisibleIf(media.isEmpty() && !isFromCache)
-            media_empty_text_placeholder_2.beVisibleIf(media.isEmpty() && !isFromCache)
+            binding.mediaRefreshLayout.isRefreshing = false
+            binding.mediaEmptyTextPlaceholder.beVisibleIf(media.isEmpty() && !isFromCache)
+            binding.mediaEmptyTextPlaceholder2.beVisibleIf(media.isEmpty() && !isFromCache)
 
-            if (media_empty_text_placeholder.isVisible()) {
-                media_empty_text_placeholder.text = getString(R.string.no_media_with_filters)
+            if (binding.mediaEmptyTextPlaceholder.isVisible()) {
+                binding.mediaEmptyTextPlaceholder.text = getString(R.string.no_media_with_filters)
             }
-            media_fastscroller.beVisibleIf(media_empty_text_placeholder.isGone())
+            binding.mediaFastscroller.beVisibleIf(binding.mediaEmptyTextPlaceholder.isGone())
             setupAdapter()
         }
 
@@ -952,8 +954,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             }
         }
 
-        if (media_grid.itemDecorationCount > 0) {
-            val currentGridDecoration = media_grid.getItemDecorationAt(0) as GridSpacingItemDecoration
+        if (binding.mediaGrid.itemDecorationCount > 0) {
+            val currentGridDecoration = binding.mediaGrid.getItemDecorationAt(0) as GridSpacingItemDecoration
             currentGridDecoration.items = media
         }
     }
