@@ -12,28 +12,32 @@ import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.adapters.ManageFoldersAdapter
 import com.simplemobiletools.gallery.pro.base.SimpleActivity
+import com.simplemobiletools.gallery.pro.databinding.ActivityManageFoldersBinding
 import com.simplemobiletools.gallery.pro.extensions.config
-import kotlinx.android.synthetic.main.activity_manage_folders.*
 
 class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
+
+    private lateinit var binding: ActivityManageFoldersBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_manage_folders)
+        binding = ActivityManageFoldersBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         updateFolders()
         setupOptionsMenu()
-        manage_folders_toolbar.title = getString(R.string.excluded_folders)
+        binding.manageFoldersToolbar.title = getString(R.string.excluded_folders)
     }
 
     override fun onResume() {
         super.onResume()
-        setupToolbar(manage_folders_toolbar, NavigationIcon.Arrow)
+        setupToolbar(binding.manageFoldersToolbar, NavigationIcon.Arrow)
     }
 
     private fun updateFolders() {
         val folders = ArrayList<String>()
         config.excludedFolders.mapTo(folders) { it }
         var placeholderText = getString(R.string.excluded_activity_placeholder)
-        manage_folders_placeholder.apply {
+        binding.manageFoldersPlaceholder.apply {
             beVisibleIf(folders.isEmpty())
             setTextColor(getProperTextColor())
 
@@ -44,12 +48,12 @@ class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
             text = placeholderText
         }
 
-        val adapter = ManageFoldersAdapter(this, folders, true, this, manage_folders_list) {}
-        manage_folders_list.adapter = adapter
+        val adapter = ManageFoldersAdapter(this, folders, true, this, binding.manageFoldersList) {}
+        binding.manageFoldersList.adapter = adapter
     }
 
     private fun setupOptionsMenu() {
-        manage_folders_toolbar.setOnMenuItemClickListener { menuItem ->
+        binding.manageFoldersToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.add_folder -> addFolder()
                 else -> return@setOnMenuItemClickListener false
