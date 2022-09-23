@@ -568,7 +568,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener, View
         animator.addUpdateListener(object : ValueAnimator.AnimatorUpdateListener {
             var oldDragPosition = 0
             override fun onAnimationUpdate(animation: ValueAnimator) {
-                if (binding.viewPager?.isFakeDragging == true) {
+                if (binding.viewPager.isFakeDragging) {
                     val dragPosition = animation.animatedValue as Int
                     val dragOffset = dragPosition - oldDragPosition
                     oldDragPosition = dragPosition
@@ -763,6 +763,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener, View
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun createShortcut() {
         if (!isOreoPlus()) {
             return
@@ -845,107 +846,112 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener, View
     private fun initBottomActionButtons() {
         val currentMedium = getCurrentMedium()
         val visibleBottomActions = if (config.bottomActions) config.visibleBottomActions else 0
-        binding.bottomActions.bottomFavorite.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE != 0 && currentMedium?.getIsInRecycleBin() == false)
-        binding.bottomActions.bottomFavorite.setOnLongClickListener { toast(R.string.toggle_favorite); true }
-        binding.bottomActions.bottomFavorite.setOnClickListener {
-            toggleFavorite()
-        }
-
-        binding.bottomActions.bottomEdit.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && currentMedium?.isSVG() == false)
-        binding.bottomActions.bottomEdit.setOnLongClickListener { toast(R.string.edit); true }
-        binding.bottomActions.bottomEdit.setOnClickListener {
-            openEditor(getCurrentPath())
-        }
-
-        binding.bottomActions.bottomShare.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
-        binding.bottomActions.bottomShare.setOnLongClickListener { toast(R.string.share); true }
-        binding.bottomActions.bottomShare.setOnClickListener {
-            shareMediumPath(getCurrentPath())
-        }
-
-        binding.bottomActions.bottomDelete.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_DELETE != 0)
-        binding.bottomActions.bottomDelete.setOnLongClickListener { toast(R.string.delete); true }
-        binding.bottomActions.bottomDelete.setOnClickListener {
-            checkDeleteConfirmation()
-        }
-
-        binding.bottomActions.bottomRotate.beVisibleIf(config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true)
-        binding.bottomActions.bottomRotate.setOnLongClickListener { toast(R.string.rotate); true }
-        binding.bottomActions.bottomRotate.setOnClickListener {
-            rotateImage(90)
-        }
-
-        binding.bottomActions.bottomProperties.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_PROPERTIES != 0)
-        binding.bottomActions.bottomProperties.setOnLongClickListener { toast(R.string.properties); true }
-        binding.bottomActions.bottomProperties.setOnClickListener {
-            showProperties()
-        }
-
-        binding.bottomActions.bottomChangeOrientation.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_CHANGE_ORIENTATION != 0)
-        binding.bottomActions.bottomChangeOrientation.setOnLongClickListener { toast(R.string.change_orientation); true }
-        binding.bottomActions.bottomChangeOrientation.setOnClickListener {
-            requestedOrientation = when (requestedOrientation) {
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                else -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        with(binding.bottomActions.bottomFavorite) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE != 0 && currentMedium?.getIsInRecycleBin() == false)
+            setOnLongClickListener { toast(R.string.toggle_favorite); true }
+            setOnClickListener {
+                toggleFavorite()
             }
-            mIsOrientationLocked = requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            updateBottomActionIcons(currentMedium)
         }
 
-        binding.bottomActions.bottomSlideshow.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SLIDESHOW != 0)
-        binding.bottomActions.bottomSlideshow.setOnLongClickListener { toast(R.string.slideshow); true }
-        binding.bottomActions.bottomSlideshow.setOnClickListener {
-            initSlideshow()
+        with(binding.bottomActions.bottomEdit) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && currentMedium?.isSVG() == false)
+            setOnLongClickListener { toast(R.string.edit); true }
+            setOnClickListener { openEditor(getCurrentPath()) }
         }
 
-        binding.bottomActions.bottomShowOnMap.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0)
-        binding.bottomActions.bottomShowOnMap.setOnLongClickListener { toast(R.string.show_on_map); true }
-        binding.bottomActions.bottomShowOnMap.setOnClickListener {
-            showFileOnMap(getCurrentPath())
+        with(binding.bottomActions.bottomShare) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
+            setOnLongClickListener { toast(R.string.share); true }
+            setOnClickListener { shareMediumPath(getCurrentPath()) }
         }
 
-        binding.bottomActions.bottomToggleFileVisibility.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY != 0)
-        binding.bottomActions.bottomToggleFileVisibility.setOnLongClickListener {
-            toast(if (currentMedium?.isHidden() == true) R.string.unhide else R.string.hide); true
+        with(binding.bottomActions.bottomDelete) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_DELETE != 0)
+            setOnLongClickListener { toast(R.string.delete); true }
+            setOnClickListener { checkDeleteConfirmation() }
         }
 
-        binding.bottomActions.bottomToggleFileVisibility.setOnClickListener {
-            currentMedium?.apply {
-                toggleFileVisibility(!isHidden()) {
-                    updateBottomActionIcons(currentMedium)
+        with(binding.bottomActions.bottomRotate) {
+            beVisibleIf(config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true)
+            setOnLongClickListener { toast(R.string.rotate); true }
+            setOnClickListener { rotateImage(90) }
+        }
+
+        with(binding.bottomActions.bottomProperties) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_PROPERTIES != 0)
+            setOnLongClickListener { toast(R.string.properties); true }
+            setOnClickListener { showProperties() }
+        }
+
+        with(binding.bottomActions.bottomChangeOrientation) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_CHANGE_ORIENTATION != 0)
+            setOnLongClickListener { toast(R.string.change_orientation); true }
+            setOnClickListener {
+                requestedOrientation = when (requestedOrientation) {
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    else -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                }
+                mIsOrientationLocked = requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                updateBottomActionIcons(currentMedium)
+            }
+        }
+
+        with(binding.bottomActions.bottomSlideshow) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SLIDESHOW != 0)
+            setOnLongClickListener { toast(R.string.slideshow); true }
+            setOnClickListener { initSlideshow() }
+        }
+
+        with(binding.bottomActions.bottomShowOnMap) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0)
+            setOnLongClickListener { toast(R.string.show_on_map); true }
+            setOnClickListener { showFileOnMap(getCurrentPath()) }
+        }
+
+        with(binding.bottomActions.bottomToggleFileVisibility) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY != 0)
+            setOnLongClickListener {
+                toast(if (currentMedium?.isHidden() == true) R.string.unhide else R.string.hide); true
+            }
+            setOnClickListener {
+                currentMedium?.apply {
+                    toggleFileVisibility(!isHidden()) {
+                        updateBottomActionIcons(currentMedium)
+                    }
                 }
             }
         }
 
-        binding.bottomActions.bottomRename.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RENAME != 0 && currentMedium?.getIsInRecycleBin() == false)
-        binding.bottomActions.bottomRename.setOnLongClickListener { toast(R.string.rename); true }
-        binding.bottomActions.bottomRename.setOnClickListener {
-            checkMediaManagementAndRename()
+        with(binding.bottomActions.bottomRename) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RENAME != 0 && currentMedium?.getIsInRecycleBin() == false)
+            setOnLongClickListener { toast(R.string.rename); true }
+            setOnClickListener { checkMediaManagementAndRename() }
         }
 
-        binding.bottomActions.bottomSetAs.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SET_AS != 0)
-        binding.bottomActions.bottomSetAs.setOnLongClickListener { toast(R.string.set_as); true }
-        binding.bottomActions.bottomSetAs.setOnClickListener {
-            setAs(getCurrentPath())
+        with(binding.bottomActions.bottomSetAs) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SET_AS != 0)
+            setOnLongClickListener { toast(R.string.set_as); true }
+            setOnClickListener { setAs(getCurrentPath()) }
         }
 
-        binding.bottomActions.bottomCopy.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_COPY != 0)
-        binding.bottomActions.bottomCopy.setOnLongClickListener { toast(R.string.copy); true }
-        binding.bottomActions.bottomCopy.setOnClickListener {
-            checkMediaManagementAndCopy(true)
+        with(binding.bottomActions.bottomCopy) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_COPY != 0)
+            setOnLongClickListener { toast(R.string.copy); true }
+            setOnClickListener { checkMediaManagementAndCopy(true) }
         }
 
-        binding.bottomActions.bottomMove.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_MOVE != 0)
-        binding.bottomActions.bottomMove.setOnLongClickListener { toast(R.string.move); true }
-        binding.bottomActions.bottomMove.setOnClickListener {
-            moveFileTo()
+        with(binding.bottomActions.bottomMove) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_MOVE != 0)
+            setOnLongClickListener { toast(R.string.move); true }
+            setOnClickListener { moveFileTo() }
         }
 
-        binding.bottomActions.bottomResize.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RESIZE != 0 && currentMedium?.isImage() == true)
-        binding.bottomActions.bottomResize.setOnLongClickListener { toast(R.string.resize); true }
-        binding.bottomActions.bottomResize.setOnClickListener {
-            resizeImage()
+        with(binding.bottomActions.bottomResize) {
+            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RESIZE != 0 && currentMedium?.isImage() == true)
+            setOnLongClickListener { toast(R.string.resize); true }
+            setOnClickListener { resizeImage() }
         }
     }
 
@@ -955,13 +961,14 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener, View
         }
 
         val favoriteIcon = if (medium.isFavorite) R.drawable.ic_star_vector else R.drawable.ic_star_outline_vector
-        binding.bottomActions.bottomFavorite.setImageResource(favoriteIcon)
 
-        val hideIcon = if (medium.isHidden()) R.drawable.ic_unhide_vector else R.drawable.ic_hide_vector
-        binding.bottomActions.bottomToggleFileVisibility.setImageResource(hideIcon)
-
-        binding.bottomActions.bottomRotate.beVisibleIf(config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true)
-        binding.bottomActions.bottomChangeOrientation.setImageResource(getChangeOrientationIcon())
+        with(binding.bottomActions) {
+            bottomFavorite.setImageResource(favoriteIcon)
+            val hideIcon = if (medium.isHidden()) R.drawable.ic_unhide_vector else R.drawable.ic_hide_vector
+            bottomToggleFileVisibility.setImageResource(hideIcon)
+            bottomRotate.beVisibleIf(config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true)
+            bottomChangeOrientation.setImageResource(getChangeOrientationIcon())
+        }
     }
 
     private fun toggleFavorite() {
@@ -1036,7 +1043,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener, View
                         return false
                     }
                 }).submit(requestedWidth, requestedHeight)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
     }
 
@@ -1046,6 +1053,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener, View
         }
     }
 
+    @SuppressLint("Recycle")
     @TargetApi(Build.VERSION_CODES.N)
     private fun resizeImage() {
         val oldPath = getCurrentPath()
