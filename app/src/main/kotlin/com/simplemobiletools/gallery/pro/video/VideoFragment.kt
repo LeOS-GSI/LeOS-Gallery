@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.*
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import com.bumptech.glide.Glide
@@ -76,7 +75,6 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
     private lateinit var mVolumeSideScroll: MediaSideScroll
     private lateinit var mMedium: Medium
     private lateinit var mConfig: Config
-    private lateinit var mTextureView: TextureView
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -112,8 +110,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
 
             mBrightnessSideScroll = videoBrightnessController
             mVolumeSideScroll = videoVolumeController
-            mTextureView = videoSurface
-            mTextureView.surfaceTextureListener = this@VideoFragment
+            videoSurface.surfaceTextureListener = this@VideoFragment
 
             val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
                 override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
@@ -245,8 +242,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
         mConfig = requireContext().config      // make sure we get a new config, in case the user changed something in the app settings
         requireActivity().updateTextColors(binding.videoHolder)
         val allowVideoGestures = mConfig.allowVideoGestures
-        mTextureView.beGoneIf(mConfig.openVideosOnSeparateScreen || mIsPanorama)
-        binding.videoSurfaceFrame.beGoneIf(mTextureView.isGone())
+        binding.videoSurface.beGoneIf(mConfig.openVideosOnSeparateScreen || mIsPanorama)
+        binding.videoSurfaceFrame.beGoneIf(binding.videoSurface.isGone())
 
         mVolumeSideScroll.beVisibleIf(allowVideoGestures && !mIsPanorama)
         mBrightnessSideScroll.beVisibleIf(allowVideoGestures && !mIsPanorama)
@@ -375,8 +372,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
         mExoPlayer!!.audioStreamType = C.STREAM_TYPE_MUSIC
         mExoPlayer!!.prepare(audioSource)
 
-        if (mTextureView.surfaceTexture != null) {
-            mExoPlayer!!.setVideoSurface(Surface(mTextureView.surfaceTexture))
+        if (binding.videoSurface.surfaceTexture != null) {
+            mExoPlayer!!.setVideoSurface(Surface(binding.videoSurface.surfaceTexture))
         }
 
         mExoPlayer!!.addListener(object : Player.EventListener {
@@ -776,7 +773,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
         ensureBackgroundThread {
-            mExoPlayer?.setVideoSurface(Surface(mTextureView.surfaceTexture))
+            mExoPlayer?.setVideoSurface(Surface(binding.videoSurface.surfaceTexture))
         }
     }
 
@@ -797,7 +794,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
 
         val screenProportion = screenWidth.toFloat() / screenHeight.toFloat()
 
-        mTextureView.layoutParams.apply {
+        binding.videoSurface.layoutParams.apply {
             if (videoProportion > screenProportion) {
                 width = screenWidth
                 height = (screenWidth.toFloat() / videoProportion).toInt()
@@ -805,7 +802,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
                 width = (videoProportion * screenHeight.toFloat()).toInt()
                 height = screenHeight
             }
-            mTextureView.layoutParams = this
+                binding.videoSurface.layoutParams = this
         }
     }
 }
