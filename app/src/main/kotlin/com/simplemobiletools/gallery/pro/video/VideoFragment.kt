@@ -232,11 +232,6 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     override fun onResume() {
         super.onResume()
         mConfig = requireContext().config      // make sure we get a new config, in case the user changed something in the app settings
@@ -267,6 +262,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
         if (activity?.isChangingConfigurations == false) {
             cleanup()
         }
+        _binding = null
     }
 
     override fun setMenuVisibility(menuVisible: Boolean) {
