@@ -8,22 +8,31 @@ import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.gallery.pro.R
-import kotlinx.android.synthetic.main.dialog_save_as.view.*
+import com.simplemobiletools.gallery.pro.databinding.DialogSaveAsBinding
 import java.io.File
+
+// TODO: this dialog should be replaced by DialogFragment.
 
 @SuppressLint("InflateParams", "SetTextI18n")
 class SaveAsDialog(
-    val activity: BaseSimpleActivity, val path: String, private val appendFilename: Boolean, private val cancelCallback: (() -> Unit)? = null,
+    val activity: BaseSimpleActivity,
+    val path: String,
+    private val appendFilename: Boolean,
+    private val cancelCallback: (() -> Unit)? = null,
     val callback: (savePath: String) -> Unit
 ) {
     init {
+
+        // we create the binding by referencing the owner Activity
+        val binding = DialogSaveAsBinding.inflate(activity.layoutInflater)
+
         var realPath = path.getParentPath()
         if (activity.isRestrictedWithSAFSdk30(realPath) && !activity.isInDownloadDir(realPath)) {
             realPath = activity.getPicturesDirectoryPath(realPath)
         }
 
-        val view = activity.layoutInflater.inflate(R.layout.dialog_save_as, null).apply {
-            folder_value.setText("${activity.humanizePath(realPath).trimEnd('/')}/")
+        binding.apply {
+            folderValue.setText("${activity.humanizePath(realPath).trimEnd('/')}/")
 
             val fullName = path.getFilenameFromPath()
             val dotAt = fullName.lastIndexOf(".")
@@ -32,18 +41,18 @@ class SaveAsDialog(
             if (dotAt > 0) {
                 name = fullName.substring(0, dotAt)
                 val extension = fullName.substring(dotAt + 1)
-                extension_value.setText(extension)
+                binding.extensionValue.setText(extension)
             }
 
             if (appendFilename) {
                 name += "_1"
             }
 
-            filename_value.setText(name)
-            folder_value.setOnClickListener {
-                activity.hideKeyboard(folder_value)
+            binding.filenameValue.setText(name)
+            binding.folderValue.setOnClickListener {
+                activity.hideKeyboard(binding.folderValue)
                 FilePickerDialog(activity, realPath, pickFile = false, showHidden = false, showFAB = true, canAddShowHiddenButton = true) {
-                    folder_value.setText(activity.humanizePath(it))
+                    binding.folderValue.setText(activity.humanizePath(it))
                     realPath = it
                 }
             }
@@ -54,11 +63,11 @@ class SaveAsDialog(
             .setNegativeButton(R.string.cancel) { _, _ -> cancelCallback?.invoke() }
             .setOnCancelListener { cancelCallback?.invoke() }
             .apply {
-                activity.setupDialogStuff(view, this, R.string.save_as) { alertDialog ->
-                    alertDialog.showKeyboard(view.filename_value)
+                activity.setupDialogStuff(binding.root, this, R.string.save_as) { alertDialog ->
+                    alertDialog.showKeyboard(binding.filenameValue)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        val filename = view.filename_value.value
-                        val extension = view.extension_value.value
+                        val filename = binding.filenameValue.value
+                        val extension = binding.extensionValue.value
 
                         if (filename.isEmpty()) {
                             activity.toast(R.string.filename_cannot_be_empty)
