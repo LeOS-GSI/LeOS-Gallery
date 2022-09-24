@@ -16,9 +16,8 @@ import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.activities.MainActivity
 import com.simplemobiletools.gallery.pro.base.SimpleActivity
+import com.simplemobiletools.gallery.pro.databinding.ActivitySetWallpaperBinding
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.android.synthetic.main.activity_set_wallpaper.*
-import kotlinx.android.synthetic.main.bottom_set_wallpaper_actions.*
 
 private const val RATIO_PORTRAIT = 0
 private const val RATIO_LANDSCAPE = 1
@@ -28,6 +27,8 @@ private const val PICK_IMAGE = 1
 
 class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener {
 
+    private lateinit var binding: ActivitySetWallpaperBinding
+
     private var aspectRatio = RATIO_PORTRAIT
     private var wallpaperFlag = -1
     lateinit var uri: Uri
@@ -35,7 +36,8 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_set_wallpaper)
+        binding = ActivitySetWallpaperBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupBottomActions()
 
         if (checkAppSideloading()) {
@@ -56,7 +58,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
 
     override fun onResume() {
         super.onResume()
-        setupToolbar(set_wallpaper_toolbar, NavigationIcon.Arrow)
+        setupToolbar(binding.setWallpaperToolbar, NavigationIcon.Arrow)
     }
 
     @Deprecated("Deprecated in Java")
@@ -72,10 +74,10 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
     }
 
     private fun setupOptionsMenu() {
-        set_wallpaper_toolbar.setOnMenuItemClickListener { menuItem ->
+        binding.setWallpaperToolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.save -> confirmWallpaper()
-                R.id.allow_changing_aspect_ratio -> crop_image_view.clearAspectRatio()
+                R.id.allow_changing_aspect_ratio -> binding.cropImageView.clearAspectRatio()
                 else -> return@setOnMenuItemClickListener false
             }
             return@setOnMenuItemClickListener true
@@ -91,7 +93,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
         }
 
         wallpaperManager = WallpaperManager.getInstance(applicationContext)
-        crop_image_view.apply {
+        binding.cropImageView.apply {
             setOnCropImageCompleteListener(this@SetWallpaperActivity)
             setImageUriAsync(uri)
         }
@@ -100,12 +102,12 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
     }
 
     private fun setupBottomActions() {
-        bottom_set_wallpaper_aspect_ratio.setOnClickListener {
+        binding.bottomSetWallpaperActions.bottomSetWallpaperAspectRatio.setOnClickListener {
             changeAspectRatio()
         }
 
-        bottom_set_wallpaper_rotate.setOnClickListener {
-            crop_image_view.rotateImage(90)
+        binding.bottomSetWallpaperActions.bottomSetWallpaperRotate.setOnClickListener {
+            binding.cropImageView.rotateImage(90)
         }
     }
 
@@ -117,9 +119,9 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
         }
 
         when (aspectRatio) {
-            RATIO_PORTRAIT -> crop_image_view.setAspectRatio(heightToUse, widthToUse)
-            RATIO_LANDSCAPE -> crop_image_view.setAspectRatio(widthToUse, heightToUse)
-            else -> crop_image_view.setAspectRatio(widthToUse, widthToUse)
+            RATIO_PORTRAIT -> binding.cropImageView.setAspectRatio(heightToUse, widthToUse)
+            RATIO_LANDSCAPE -> binding.cropImageView.setAspectRatio(widthToUse, heightToUse)
+            else -> binding.cropImageView.setAspectRatio(widthToUse, widthToUse)
         }
     }
 
@@ -138,10 +140,10 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
 
             RadioGroupDialog(this, items) {
                 wallpaperFlag = it as Int
-                crop_image_view.getCroppedImageAsync()
+                binding.cropImageView.getCroppedImageAsync()
             }
         } else {
-            crop_image_view.getCroppedImageAsync()
+            binding.cropImageView.getCroppedImageAsync()
         }
     }
 
