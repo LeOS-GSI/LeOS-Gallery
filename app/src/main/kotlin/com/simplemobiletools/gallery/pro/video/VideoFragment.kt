@@ -71,8 +71,6 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
     private var mStoredExtendedDetails = 0
     private var mStoredRememberLastVideoPosition = false
 
-    private lateinit var mBrightnessSideScroll: MediaSideScroll
-    private lateinit var mVolumeSideScroll: MediaSideScroll
     private lateinit var mMedium: Medium
     private lateinit var mConfig: Config
 
@@ -107,9 +105,6 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
             rlBottomVideoTimeHolder.videoSeekbar.setOnSeekBarChangeListener(this@VideoFragment)
             // adding an empty click listener just to avoid ripple animation at toggling fullscreen
             rlBottomVideoTimeHolder.videoSeekbar.setOnClickListener { }
-
-            mBrightnessSideScroll = videoBrightnessController
-            mVolumeSideScroll = videoVolumeController
             videoSurface.surfaceTextureListener = this@VideoFragment
 
             val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
@@ -181,8 +176,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
             binding.apply {
                 panoramaOutline.beVisible()
                 videoPlayOutline.beGone()
-                mVolumeSideScroll.beGone()
-                mBrightnessSideScroll.beGone()
+                videoVolumeController.beGone()
+                videoBrightnessController.beGone()
                 Glide.with(requireContext()).load(mMedium.path).into(videoPreview)
             }
         }
@@ -196,7 +191,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
             setVideoSize()
 
             binding.apply {
-                mBrightnessSideScroll.initialize(requireActivity(), slideInfo, true, container, singleTap = { _, _ ->
+                videoBrightnessController.initialize(requireActivity(), slideInfo, true, container, singleTap = { _, _ ->
                     if (mConfig.allowInstantChange) {
                         listener?.goToPrevItem()
                     } else {
@@ -206,7 +201,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
                     doSkip(false)
                 })
 
-                mVolumeSideScroll.initialize(requireActivity(), slideInfo, false, container, singleTap = { _, _ ->
+                videoVolumeController.initialize(requireActivity(), slideInfo, false, container, singleTap = { _, _ ->
                     if (mConfig.allowInstantChange) {
                         listener?.goToNextItem()
                     } else {
@@ -239,9 +234,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
         val allowVideoGestures = mConfig.allowVideoGestures
         binding.videoSurface.beGoneIf(mConfig.openVideosOnSeparateScreen || mIsPanorama)
         binding.videoSurfaceFrame.beGoneIf(binding.videoSurface.isGone())
-
-        mVolumeSideScroll.beVisibleIf(allowVideoGestures && !mIsPanorama)
-        mBrightnessSideScroll.beVisibleIf(allowVideoGestures && !mIsPanorama)
+        binding.videoVolumeController.beVisibleIf(allowVideoGestures && !mIsPanorama)
+        binding.videoBrightnessController.beVisibleIf(allowVideoGestures && !mIsPanorama)
 
         checkExtendedDetails()
         initTimeHolder()
@@ -798,7 +792,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
                 width = (videoProportion * screenHeight.toFloat()).toInt()
                 height = screenHeight
             }
-                binding.videoSurface.layoutParams = this
+            binding.videoSurface.layoutParams = this
         }
     }
 }
