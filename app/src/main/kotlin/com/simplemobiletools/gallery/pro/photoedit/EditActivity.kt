@@ -46,7 +46,6 @@ import com.simplemobiletools.gallery.pro.models.FilterItem
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
-//import kotlinx.android.synthetic.main.bottom_actions_aspect_ratio.*
 import java.io.*
 
 private const val TEMP_FOLDER_NAME = "images"
