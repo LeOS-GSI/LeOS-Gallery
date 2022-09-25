@@ -1,7 +1,5 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
-import android.annotation.SuppressLint
-import android.view.View
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
@@ -9,40 +7,47 @@ import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
 import com.simplemobiletools.gallery.pro.R
+import com.simplemobiletools.gallery.pro.databinding.DialogChangeViewTypeBinding
 import com.simplemobiletools.gallery.pro.extensions.config
 import com.simplemobiletools.gallery.pro.helpers.SHOW_ALL
-import kotlinx.android.synthetic.main.dialog_change_view_type.view.*
 
-@SuppressLint("InflateParams")
-class ChangeViewTypeDialog(val activity: BaseSimpleActivity, private val fromFoldersView: Boolean, val path: String = "", val callback: () -> Unit) {
-    private var view: View
+class ChangeViewTypeDialog(
+    val activity: BaseSimpleActivity,
+    private val fromFoldersView: Boolean,
+    val path: String = "",
+    val callback: () -> Unit
+) {
+
+    // we create the binding by referencing the owner Activity
+    var binding = DialogChangeViewTypeBinding.inflate(activity.layoutInflater)
+
     private var config = activity.config
     private var pathToUse = path.ifEmpty { SHOW_ALL }
 
     init {
-        view = activity.layoutInflater.inflate(R.layout.dialog_change_view_type, null).apply {
+        binding.apply {
             val viewToCheck = if (fromFoldersView) {
                 if (config.viewTypeFolders == VIEW_TYPE_GRID) {
-                    change_view_type_dialog_radio_grid.id
+                    changeViewTypeDialogRadioGrid.id
                 } else {
-                    change_view_type_dialog_radio_list.id
+                    changeViewTypeDialogRadioList.id
                 }
             } else {
                 val currViewType = config.getFolderViewType(pathToUse)
                 if (currViewType == VIEW_TYPE_GRID) {
-                    change_view_type_dialog_radio_grid.id
+                    changeViewTypeDialogRadioGrid.id
                 } else {
-                    change_view_type_dialog_radio_list.id
+                    changeViewTypeDialogRadioList.id
                 }
             }
 
-            change_view_type_dialog_radio.check(viewToCheck)
-            change_view_type_dialog_group_direct_subfolders.apply {
+            changeViewTypeDialogRadio.check(viewToCheck)
+            changeViewTypeDialogGroupDirectSubfolders.apply {
                 beVisibleIf(fromFoldersView)
                 isChecked = config.groupDirectSubfolders
             }
 
-            change_view_type_dialog_use_for_this_folder.apply {
+            changeViewTypeDialogUseForThisFolder.apply {
                 beVisibleIf(!fromFoldersView)
                 isChecked = config.hasCustomViewType(pathToUse)
             }
@@ -52,12 +57,12 @@ class ChangeViewTypeDialog(val activity: BaseSimpleActivity, private val fromFol
             .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(view, this)
+                activity.setupDialogStuff(binding.root, this)
             }
     }
 
     private fun dialogConfirmed() {
-        val viewType = if (view.change_view_type_dialog_radio.checkedRadioButtonId == view.change_view_type_dialog_radio_grid.id) {
+        val viewType = if (binding.changeViewTypeDialogRadio.checkedRadioButtonId == binding.changeViewTypeDialogRadioGrid.id) {
             VIEW_TYPE_GRID
         } else {
             VIEW_TYPE_LIST
@@ -65,9 +70,9 @@ class ChangeViewTypeDialog(val activity: BaseSimpleActivity, private val fromFol
 
         if (fromFoldersView) {
             config.viewTypeFolders = viewType
-            config.groupDirectSubfolders = view.change_view_type_dialog_group_direct_subfolders.isChecked
+            config.groupDirectSubfolders = binding.changeViewTypeDialogGroupDirectSubfolders.isChecked
         } else {
-            if (view.change_view_type_dialog_use_for_this_folder.isChecked) {
+            if (binding.changeViewTypeDialogUseForThisFolder.isChecked) {
                 config.saveFolderViewType(pathToUse, viewType)
             } else {
                 config.removeFolderViewType(pathToUse)
