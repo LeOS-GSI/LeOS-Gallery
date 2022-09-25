@@ -8,7 +8,9 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/selector"
-    android:paddingStart="@dimen/activity_margin">
+    android:paddingStart="@dimen/activity_margin"
+    tools:ignore="RtlSymmetry,UnusedAttribute"
+    tools:targetApi="m">
 
     <com.simplemobiletools.commons.views.MyTextView
         android:id="@+id/manage_folder_title"
@@ -28,7 +30,8 @@
         android:layout_centerVertical="true"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="@dimen/activity_margin"
-        android:src="@drawable/ic_three_dots_vector" />
+        android:src="@drawable/ic_three_dots_vector"
+        android:contentDescription="@string/menu_overflow" />
 
     <View
         android:id="@+id/overflow_menu_anchor"
