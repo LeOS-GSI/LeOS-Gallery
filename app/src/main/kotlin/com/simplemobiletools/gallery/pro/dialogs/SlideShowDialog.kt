@@ -22,12 +22,10 @@ class SlideShowDialog(
     val activity: BaseSimpleActivity,
     val callback: () -> Unit
 ) {
+    // we create the binding by referencing the owner Activity
     var binding = DialogSlideshowBinding.inflate(activity.layoutInflater)
 
     init {
-
-        // we create the binding by referencing the owner Activity
-
         binding.apply {
             intervalHint.hint = activity.getString(R.string.seconds_raw).replaceFirstChar { it.uppercaseChar() }
             intervalValue.setOnClickListener {
