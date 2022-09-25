@@ -10,20 +10,29 @@ import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.gallery.pro.R
+import com.simplemobiletools.gallery.pro.databinding.DialogExcludeFolderBinding
 import com.simplemobiletools.gallery.pro.extensions.config
-import kotlinx.android.synthetic.main.dialog_exclude_folder.view.*
+
 
 @SuppressLint("InflateParams")
-class ExcludeFolderDialog(val activity: BaseSimpleActivity, private val selectedPaths: List<String>, val callback: () -> Unit) {
+class ExcludeFolderDialog(
+    val activity: BaseSimpleActivity,
+    private val selectedPaths: List<String>,
+    val callback: () -> Unit
+) {
+
+    // we create the binding by referencing the owner Activity
+    var binding = DialogExcludeFolderBinding.inflate(activity.layoutInflater)
+
     private val alternativePaths = getAlternativePathsList()
     private var radioGroup: RadioGroup? = null
 
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_exclude_folder, null).apply {
-            exclude_folder_parent.beVisibleIf(alternativePaths.size > 1)
+        binding.apply {
+            excludeFolderParent.beVisibleIf(alternativePaths.size > 1)
 
-            radioGroup = exclude_folder_radio_group
-            exclude_folder_radio_group.beVisibleIf(alternativePaths.size > 1)
+            radioGroup = excludeFolderRadioGroup
+            excludeFolderRadioGroup.beVisibleIf(alternativePaths.size > 1)
         }
 
         alternativePaths.forEachIndexed { index, _ ->
@@ -39,7 +48,7 @@ class ExcludeFolderDialog(val activity: BaseSimpleActivity, private val selected
             .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(view, this)
+                activity.setupDialogStuff(binding.root, this)
             }
     }
 
