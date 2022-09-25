@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/delete_remember_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -14,7 +15,8 @@
         android:paddingStart="@dimen/small_margin"
         android:paddingBottom="@dimen/activity_margin"
         android:text="@string/proceed_with_deletion"
-        android:textSize="@dimen/bigger_text_size" />
+        android:textSize="@dimen/bigger_text_size"
+        tools:ignore="RtlSymmetry" />
 
     <com.simplemobiletools.commons.views.MyAppCompatCheckbox
         android:id="@+id/delete_remember_checkbox"
