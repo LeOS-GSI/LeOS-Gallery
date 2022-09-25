@@ -12,9 +12,9 @@ import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.views.MyGridLayoutManager
 import com.simplemobiletools.gallery.pro.R
 import com.simplemobiletools.gallery.pro.adapters.DirectoryAdapter
+import com.simplemobiletools.gallery.pro.databinding.DialogDirectoryPickerBinding
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.models.Directory
-import kotlinx.android.synthetic.main.dialog_directory_picker.view.*
 
 @SuppressLint("InflateParams")
 class PickDirectoryDialog(
@@ -26,23 +26,26 @@ class PickDirectoryDialog(
     val isPickingFolderForWidget: Boolean,
     val callback: (path: String) -> Unit
 ) {
+
+    // we create the binding by referencing the owner Activity
+    var binding = DialogDirectoryPickerBinding.inflate(activity.layoutInflater)
+
     private var dialog: AlertDialog? = null
     private var shownDirectories = ArrayList<Directory>()
     private var allDirectories = ArrayList<Directory>()
     private var openedSubfolders = arrayListOf("")
 
-    private var view = activity.layoutInflater.inflate(R.layout.dialog_directory_picker, null)
     private var isGridViewType = activity.config.viewTypeFolders == VIEW_TYPE_GRID
     private var showHidden = activity.config.shouldShowHidden
     private var currentPathPrefix = ""
 
     init {
-        (view.directories_grid.layoutManager as MyGridLayoutManager).apply {
+        (binding.directoriesGrid.layoutManager as MyGridLayoutManager).apply {
             orientation = if (activity.config.scrollHorizontally && isGridViewType) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
             spanCount = if (isGridViewType) activity.config.dirColumnCnt else 1
         }
 
-        view.directories_fastscroller.updateColors(activity.getProperPrimaryColor())
+        binding.directoriesFastscroller.updateColors(activity.getProperPrimaryColor())
 
         val builder = activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
@@ -59,12 +62,12 @@ class PickDirectoryDialog(
         }
 
         builder.apply {
-            activity.setupDialogStuff(view, this, R.string.select_destination) { alertDialog ->
+            activity.setupDialogStuff(binding.root, this, R.string.select_destination) { alertDialog ->
                 dialog = alertDialog
-                view.directories_show_hidden.beVisibleIf(!context.config.shouldShowHidden)
-                view.directories_show_hidden.setOnClickListener {
+                binding.directoriesShowHidden.beVisibleIf(!context.config.shouldShowHidden)
+                binding.directoriesShowHidden.setOnClickListener {
                     activity.handleHiddenFolderPasswordProtection {
-                        view.directories_show_hidden.beGone()
+                        binding.directoriesShowHidden.beGone()
                         showHidden = true
                         fetchDirectories(true)
                     }
@@ -120,7 +123,7 @@ class PickDirectoryDialog(
         }
 
         shownDirectories = dirs
-        val adapter = DirectoryAdapter(activity, dirs.clone() as ArrayList<Directory>, null, view.directories_grid, true) {
+        val adapter = DirectoryAdapter(activity, dirs.clone() as ArrayList<Directory>, null, binding.directoriesGrid, true) {
             val clickedDir = it as Directory
             val path = clickedDir.path
             if (clickedDir.subfoldersCount == 1 || !activity.config.groupDirectSubfolders) {
@@ -146,9 +149,9 @@ class PickDirectoryDialog(
         }
 
         val scrollHorizontally = activity.config.scrollHorizontally && isGridViewType
-        view.apply {
-            directories_grid.adapter = adapter
-            directories_fastscroller.setScrollVertically(!scrollHorizontally)
+        binding.apply {
+            directoriesGrid.adapter = adapter
+            directoriesFastscroller.setScrollVertically(!scrollHorizontally)
         }
     }
 
