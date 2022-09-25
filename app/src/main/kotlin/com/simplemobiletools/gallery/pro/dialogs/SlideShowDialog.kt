@@ -19,7 +19,7 @@ import com.simplemobiletools.gallery.pro.helpers.SLIDESHOW_DEFAULT_INTERVAL
 import kotlinx.android.synthetic.main.dialog_slideshow.view.*
 
 @SuppressLint("InflateParams")
-class SlideshowDialog(val activity: BaseSimpleActivity, val callback: () -> Unit) {
+class SlideShowDialog(val activity: BaseSimpleActivity, val callback: () -> Unit) {
     private val view: View
 
     init {

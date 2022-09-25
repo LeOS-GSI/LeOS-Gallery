@@ -51,7 +51,7 @@ import com.simplemobiletools.gallery.pro.databinding.ActivityMediumBinding
 import com.simplemobiletools.gallery.pro.dialogs.DeleteWithRememberDialog
 import com.simplemobiletools.gallery.pro.dialogs.ResizeWithPathDialog
 import com.simplemobiletools.gallery.pro.dialogs.SaveAsDialog
-import com.simplemobiletools.gallery.pro.dialogs.SlideshowDialog
+import com.simplemobiletools.gallery.pro.dialogs.SlideShowDialog
 import com.simplemobiletools.gallery.pro.extensions.*
 import com.simplemobiletools.gallery.pro.photoview.PhotoFragment
 import com.simplemobiletools.gallery.pro.video.VideoFragment
@@ -495,7 +495,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener, View
     }
 
     private fun initSlideshow() {
-        SlideshowDialog(this) {
+        SlideShowDialog(this) {
             startSlideshow()
         }
     }
