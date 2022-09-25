@@ -1,6 +1,5 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
-import android.annotation.SuppressLint
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
@@ -9,27 +8,32 @@ import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.showKeyboard
 import com.simplemobiletools.commons.extensions.value
 import com.simplemobiletools.gallery.pro.R
-import kotlinx.android.synthetic.main.dialog_custom_aspect_ratio.view.*
+import com.simplemobiletools.gallery.pro.databinding.DialogCustomAspectRatioBinding
 
-@SuppressLint("InflateParams")
 class CustomAspectRatioDialog(
-    val activity: BaseSimpleActivity, private val defaultCustomAspectRatio: Pair<Float, Float>?, val callback: (aspectRatio: Pair<Float, Float>) -> Unit
+    val activity: BaseSimpleActivity,
+    private val defaultCustomAspectRatio: Pair<Float, Float>?,
+    val callback: (aspectRatio: Pair<Float, Float>) -> Unit
 ) {
+
+    // we create the binding by referencing the owner Activity
+    var binding = DialogCustomAspectRatioBinding.inflate(activity.layoutInflater)
+
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_custom_aspect_ratio, null).apply {
-            aspect_ratio_width.setText(defaultCustomAspectRatio?.first?.toInt()?.toString() ?: "")
-            aspect_ratio_height.setText(defaultCustomAspectRatio?.second?.toInt()?.toString() ?: "")
+        binding.apply {
+            aspectRatioWidth.setText(defaultCustomAspectRatio?.first?.toInt()?.toString() ?: "")
+            aspectRatioHeight.setText(defaultCustomAspectRatio?.second?.toInt()?.toString() ?: "")
         }
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(view, this) { alertDialog ->
-                    alertDialog.showKeyboard(view.aspect_ratio_width)
+                activity.setupDialogStuff(binding.root, this) { alertDialog ->
+                    alertDialog.showKeyboard(binding.aspectRatioWidth)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        val width = getViewValue(view.aspect_ratio_width)
-                        val height = getViewValue(view.aspect_ratio_height)
+                        val width = getViewValue(binding.aspectRatioWidth)
+                        val height = getViewValue(binding.aspectRatioHeight)
                         callback(Pair(width, height))
                         alertDialog.dismiss()
                     }
