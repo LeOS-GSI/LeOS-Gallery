@@ -1,27 +1,33 @@
 package com.simplemobiletools.gallery.pro.dialogs
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.gallery.pro.R
-import kotlinx.android.synthetic.main.dialog_confirm_delete_folder.view.*
+import com.simplemobiletools.gallery.pro.databinding.DialogConfirmDeleteFolderBinding
 
-@SuppressLint("InflateParams")
-class ConfirmDeleteFolderDialog(activity: Activity, message: String, warningMessage: String, val callback: () -> Unit) {
+class ConfirmDeleteFolderDialog(
+    activity: Activity,
+    message: String,
+    warningMessage: String,
+    val callback: () -> Unit
+) {
+
+    // we create the binding by referencing the owner Activity
+    var binding = DialogConfirmDeleteFolderBinding.inflate(activity.layoutInflater)
+
     private var dialog: AlertDialog? = null
 
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_confirm_delete_folder, null)
-        view.message.text = message
-        view.message_warning.text = warningMessage
+        binding.message.text = message
+        binding.messageWarning.text = warningMessage
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.yes) { _, _ -> dialogConfirmed() }
             .setNegativeButton(R.string.no, null)
             .apply {
-                activity.setupDialogStuff(view, this) { alertDialog ->
+                activity.setupDialogStuff(binding.root, this) { alertDialog ->
                     dialog = alertDialog
                 }
             }
