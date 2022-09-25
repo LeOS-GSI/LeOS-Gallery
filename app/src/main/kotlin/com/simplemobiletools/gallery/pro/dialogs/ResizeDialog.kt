@@ -7,44 +7,47 @@ import androidx.appcompat.app.AlertDialog
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.gallery.pro.R
-import kotlinx.android.synthetic.main.dialog_resize_image.view.*
+import com.simplemobiletools.gallery.pro.databinding.DialogResizeImageBinding
 
 @SuppressLint("InflateParams")
-class ResizeDialog(val activity: BaseSimpleActivity, val size: Point, val callback: (newSize: Point) -> Unit) {
+class ResizeDialog(
+    val activity: BaseSimpleActivity,
+    val size: Point,
+    val callback: (newSize: Point) -> Unit
+) {
+
+    // we create the binding by referencing the owner Activity
+    var binding = DialogResizeImageBinding.inflate(activity.layoutInflater)
+
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_resize_image, null)
-        val widthView = view.resize_image_width
-        val heightView = view.resize_image_height
 
-        widthView.setText(size.x.toString())
-        heightView.setText(size.y.toString())
-
+        binding.resizeImageWidth.setText(size.x.toString())
+        binding.resizeImageHeight.setText(size.y.toString())
         val ratio = size.x / size.y.toFloat()
-
-        widthView.onTextChangeListener {
-            if (widthView.hasFocus()) {
-                var width = getViewValue(widthView)
+        binding.resizeImageWidth.onTextChangeListener {
+            if (binding.resizeImageWidth.hasFocus()) {
+                var width = getViewValue(binding.resizeImageWidth)
                 if (width > size.x) {
-                    widthView.setText(size.x.toString())
+                    binding.resizeImageWidth.setText(size.x.toString())
                     width = size.x
                 }
 
-                if (view.keep_aspect_ratio.isChecked) {
-                    heightView.setText((width / ratio).toInt().toString())
+                if (binding.keepAspectRatio.isChecked) {
+                    binding.resizeImageHeight.setText((width / ratio).toInt().toString())
                 }
             }
         }
 
-        heightView.onTextChangeListener {
-            if (heightView.hasFocus()) {
-                var height = getViewValue(heightView)
+        binding.resizeImageHeight.onTextChangeListener {
+            if (binding.resizeImageHeight.hasFocus()) {
+                var height = getViewValue(binding.resizeImageHeight)
                 if (height > size.y) {
-                    heightView.setText(size.y.toString())
+                    binding.resizeImageHeight.setText(size.y.toString())
                     height = size.y
                 }
 
-                if (view.keep_aspect_ratio.isChecked) {
-                    widthView.setText((height * ratio).toInt().toString())
+                if (binding.keepAspectRatio.isChecked) {
+                    binding.resizeImageWidth.setText((height * ratio).toInt().toString())
                 }
             }
         }
@@ -53,17 +56,17 @@ class ResizeDialog(val activity: BaseSimpleActivity, val size: Point, val callba
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(view, this, R.string.resize_and_save) { alertDialog ->
-                    alertDialog.showKeyboard(view.resize_image_width)
+                activity.setupDialogStuff(binding.root, this, R.string.resize_and_save) { alertDialog ->
+                    alertDialog.showKeyboard(binding.resizeImageWidth)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        val width = getViewValue(widthView)
-                        val height = getViewValue(heightView)
+                        val width = getViewValue(binding.resizeImageWidth)
+                        val height = getViewValue(binding.resizeImageHeight)
                         if (width <= 0 || height <= 0) {
                             activity.toast(R.string.invalid_values)
                             return@setOnClickListener
                         }
 
-                        val newSize = Point(getViewValue(widthView), getViewValue(heightView))
+                        val newSize = Point(getViewValue(binding.resizeImageWidth), getViewValue(binding.resizeImageHeight))
                         callback(newSize)
                         alertDialog.dismiss()
                     }
