@@ -30,7 +30,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="2:1"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_3_2"
@@ -40,7 +41,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="3:2"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_4_3"
@@ -50,7 +52,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="4:3"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_5_3"
@@ -60,7 +63,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="5:3"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_16_9"
@@ -70,7 +74,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="16:9"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_19_9"
@@ -80,7 +85,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="19:9"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_custom"
@@ -90,7 +96,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="@string/custom"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
         </RadioGroup>
 
@@ -109,7 +116,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="1:2"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_2_3"
@@ -119,7 +127,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="2:3"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
@@ -130,7 +139,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="3:4"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_3_5"
@@ -140,7 +150,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="3:5"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_9_16"
@@ -150,7 +161,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="9:16"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <com.simplemobiletools.commons.views.MyCompatRadioButton
                 android:id="@+id/other_aspect_ratio_9_19"
@@ -160,7 +172,8 @@
                 android:paddingTop="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="9:19"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
         </RadioGroup>
     </LinearLayout>
