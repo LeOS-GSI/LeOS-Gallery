@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/manage_bottom_actions_scrollview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -20,7 +19,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/toggle_favorite"/>
+            android:text="@string/toggle_favorite" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_edit"
@@ -28,7 +27,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/edit"/>
+            android:text="@string/edit" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_share"
@@ -36,7 +35,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/share"/>
+            android:text="@string/share" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_delete"
@@ -44,7 +43,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/delete"/>
+            android:text="@string/delete" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_rotate"
@@ -52,7 +51,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/rotate"/>
+            android:text="@string/rotate" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_properties"
@@ -60,7 +59,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/properties"/>
+            android:text="@string/properties" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_change_orientation"
@@ -68,7 +67,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/change_orientation"/>
+            android:text="@string/change_orientation" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_slideshow"
@@ -76,7 +75,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/slideshow"/>
+            android:text="@string/slideshow" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_show_on_map"
@@ -84,7 +83,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/show_on_map"/>
+            android:text="@string/show_on_map" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_toggle_visibility"
@@ -92,7 +91,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/toggle_file_visibility"/>
+            android:text="@string/toggle_file_visibility" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_rename"
@@ -100,7 +99,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/rename"/>
+            android:text="@string/rename" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_set_as"
@@ -108,7 +107,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/set_as"/>
+            android:text="@string/set_as" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_copy"
@@ -116,7 +115,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/copy"/>
+            android:text="@string/copy" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_move"
@@ -124,7 +123,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/move"/>
+            android:text="@string/move" />
 
         <com.simplemobiletools.commons.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_resize"
@@ -132,7 +131,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_margin"
             android:paddingBottom="@dimen/activity_margin"
-            android:text="@string/resize"/>
+            android:text="@string/resize" />
 
     </LinearLayout>
 </ScrollView>
