@@ -41,8 +41,14 @@ import kotlinx.android.synthetic.main.video_item_grid.view.medium_name
 import kotlinx.android.synthetic.main.video_item_grid.view.medium_thumbnail
 
 class MediaAdapter(
-    activity: BaseSimpleActivity, var media: ArrayList<ThumbnailItem>, val listener: MediaOperationsListener?, private val isAGetIntent: Boolean,
-    private val allowMultiplePicks: Boolean, val path: String, recyclerView: MyRecyclerView, itemClick: (Any) -> Unit
+    activity: BaseSimpleActivity,
+    var media: ArrayList<ThumbnailItem>,
+    val listener: MediaOperationsListener?,
+    private val isAGetIntent: Boolean,
+    private val allowMultiplePicks: Boolean,
+    val path: String,
+    recyclerView: MyRecyclerView,
+    itemClick: (Any) -> Unit
 ) :
     MyRecyclerViewAdapter(activity, recyclerView, itemClick), RecyclerViewFastScroller.OnPopupTextUpdate {
 

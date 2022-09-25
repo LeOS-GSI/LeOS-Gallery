@@ -16,7 +16,10 @@ import kotlinx.android.synthetic.main.dialog_change_folder_thumbnail_style.view.
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 
 @SuppressLint("InflateParams")
-class ChangeFolderThumbnailStyleDialog(val activity: BaseSimpleActivity, val callback: () -> Unit) : DialogInterface.OnClickListener {
+class ChangeFolderThumbnailStyleDialog(
+    val activity: BaseSimpleActivity,
+    val callback: () -> Unit
+) : DialogInterface.OnClickListener {
 
     private var config = activity.config
 

@@ -13,7 +13,10 @@ import com.simplemobiletools.gallery.pro.extensions.config
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
 
 class ManageFoldersAdapter(
-    activity: BaseSimpleActivity, var folders: ArrayList<String>, private val isShowingExcludedFolders: Boolean, val listener: RefreshRecyclerViewListener?,
+    activity: BaseSimpleActivity,
+    var folders: ArrayList<String>,
+    private val isShowingExcludedFolders: Boolean,
+    val listener: RefreshRecyclerViewListener?,
     recyclerView: MyRecyclerView, itemClick: (Any) -> Unit
 ) : MyRecyclerViewAdapter(activity, recyclerView, itemClick) {
 

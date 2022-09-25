@@ -14,7 +14,9 @@ import com.simplemobiletools.gallery.pro.extensions.removeNoMedia
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
 
 class ManageHiddenFoldersAdapter(
-    activity: BaseSimpleActivity, var folders: ArrayList<String>, val listener: RefreshRecyclerViewListener?,
+    activity: BaseSimpleActivity,
+    var folders: ArrayList<String>,
+    val listener: RefreshRecyclerViewListener?,
     recyclerView: MyRecyclerView, itemClick: (Any) -> Unit
 ) : MyRecyclerViewAdapter(activity, recyclerView, itemClick) {
 
