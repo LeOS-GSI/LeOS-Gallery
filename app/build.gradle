@@ -13,12 +13,12 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.simplemobiletools.gallery.pro"
+        applicationId "ca.on.sudbury.hojat.smartgallery"
         minSdk 21
         targetSdk 31
         versionCode 374
         versionName "6.24.1"
-        setProperty("archivesBaseName", "gallery-$versionCode")
+        setProperty("archivesBaseName", "ca.on.sudbury.hojat.smartgallery-$versionCode")
         vectorDrawables.useSupportLibrary = true
     }
 
