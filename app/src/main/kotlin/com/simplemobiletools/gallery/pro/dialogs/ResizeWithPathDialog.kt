@@ -9,14 +9,22 @@ import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.gallery.pro.R
+import com.simplemobiletools.gallery.pro.databinding.DialogResizeImageWithPathBinding
 import com.simplemobiletools.gallery.pro.extensions.config
-import kotlinx.android.synthetic.main.dialog_resize_image_with_path.view.*
 
 @SuppressLint("SetTextI18n", "InflateParams")
-class ResizeWithPathDialog(val activity: BaseSimpleActivity, val size: Point, val path: String, val callback: (newSize: Point, newPath: String) -> Unit) {
+class ResizeWithPathDialog(
+    val activity: BaseSimpleActivity,
+    val size: Point,
+    val path: String,
+    val callback: (newSize: Point, newPath: String) -> Unit
+) {
+    // we create the binding by referencing the owner Activity
+    var binding = DialogResizeImageWithPathBinding.inflate(activity.layoutInflater)
+
     init {
         var realPath = path.getParentPath()
-        val view = activity.layoutInflater.inflate(R.layout.dialog_resize_image_with_path, null).apply {
+        binding.apply {
             folder.setText("${activity.humanizePath(realPath).trimEnd('/')}/")
 
             val fullName = path.getFilenameFromPath()
@@ -26,10 +34,10 @@ class ResizeWithPathDialog(val activity: BaseSimpleActivity, val size: Point, va
             if (dotAt > 0) {
                 name = fullName.substring(0, dotAt)
                 val extension = fullName.substring(dotAt + 1)
-                extension_value.setText(extension)
+                extensionValue.setText(extension)
             }
 
-            filename_value.setText(name)
+            filenameValue.setText(name)
             folder.setOnClickListener {
                 FilePickerDialog(
                     activity,
@@ -45,8 +53,8 @@ class ResizeWithPathDialog(val activity: BaseSimpleActivity, val size: Point, va
             }
         }
 
-        val widthView = view.resize_image_width
-        val heightView = view.resize_image_height
+        val widthView = binding.resizeImageWidth
+        val heightView = binding.resizeImageHeight
 
         widthView.setText(size.x.toString())
         heightView.setText(size.y.toString())
@@ -81,8 +89,8 @@ class ResizeWithPathDialog(val activity: BaseSimpleActivity, val size: Point, va
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(view, this) { alertDialog ->
-                    alertDialog.showKeyboard(view.resize_image_width)
+                activity.setupDialogStuff(binding.root, this) { alertDialog ->
+                    alertDialog.showKeyboard(binding.resizeImageWidth)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         val width = getViewValue(widthView)
                         val height = getViewValue(heightView)
@@ -93,8 +101,8 @@ class ResizeWithPathDialog(val activity: BaseSimpleActivity, val size: Point, va
 
                         val newSize = Point(getViewValue(widthView), getViewValue(heightView))
 
-                        val filename = view.filename_value.value
-                        val extension = view.extension_value.value
+                        val filename = binding.filenameValue.value
+                        val extension = binding.extensionValue.value
                         if (filename.isEmpty()) {
                             activity.toast(R.string.filename_cannot_be_empty)
                             return@setOnClickListener
