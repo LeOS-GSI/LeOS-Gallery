@@ -133,6 +133,7 @@
         android:paddingEnd="@dimen/small_margin"
         android:paddingBottom="@dimen/small_margin"
         android:src="@drawable/ic_sd_card_vector"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="RtlSymmetry" />
 
 </RelativeLayout>
