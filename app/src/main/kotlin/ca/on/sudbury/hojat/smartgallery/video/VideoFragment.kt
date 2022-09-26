@@ -250,8 +250,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         if (activity?.isChangingConfigurations == false) {
             cleanup()
         }
@@ -314,8 +314,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
     }
 
     private fun setupTimeHolder() {
-        binding.rlBottomVideoTimeHolder.videoSeekbar.max = mDuration
-        binding.rlBottomVideoTimeHolder.videoDuration.text = mDuration.getFormattedDuration()
+        _binding?.rlBottomVideoTimeHolder?.videoSeekbar?.max = mDuration
+        _binding?.rlBottomVideoTimeHolder?.videoDuration?.text = mDuration.getFormattedDuration()
         setupTimer()
     }
 
@@ -324,8 +324,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
             override fun run() {
                 if (mExoPlayer != null && !mIsDragged && mIsPlaying) {
                     mCurrTime = (mExoPlayer!!.currentPosition / 1000).toInt()
-                    binding.rlBottomVideoTimeHolder.videoSeekbar.progress = mCurrTime
-                    binding.rlBottomVideoTimeHolder.videoCurrTime.text = mCurrTime.getFormattedDuration()
+                    _binding?.rlBottomVideoTimeHolder?.videoSeekbar?.progress = mCurrTime
+                    _binding?.rlBottomVideoTimeHolder?.videoCurrTime?.text = mCurrTime.getFormattedDuration()
                 }
 
                 mTimerHandler.postDelayed(this, 1000)
@@ -672,8 +672,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener, S
 
     private fun setPosition(seconds: Int) {
         mExoPlayer?.seekTo(seconds * 1000L)
-        binding.rlBottomVideoTimeHolder.videoSeekbar.progress = seconds
-        binding.rlBottomVideoTimeHolder.videoCurrTime.text = seconds.getFormattedDuration()
+        _binding?.rlBottomVideoTimeHolder?.videoSeekbar?.progress = seconds
+        _binding?.rlBottomVideoTimeHolder?.videoCurrTime?.text = seconds.getFormattedDuration()
 
         if (!mIsPlaying) {
             mPositionAtPause = mExoPlayer?.currentPosition ?: 0L
