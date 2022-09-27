@@ -19,6 +19,10 @@ import android.provider.MediaStore.Images
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
@@ -40,7 +44,9 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.FileDirItem
+import com.simplemobiletools.commons.views.MyTextView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_title.view.*
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -92,6 +98,68 @@ fun Activity.openEditor(path: String, forceChooser: Boolean = false) {
 fun Activity.launchCamera() {
     val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
     launchActivityIntent(intent)
+}
+
+fun Activity.setupDialogStuff(
+    view: View,
+    dialog: AlertDialog,
+    titleId: Int = 0,
+    titleText: String = "",
+    cancelOnTouchOutside: Boolean = true,
+    callback: (() -> Unit)? = null
+) {
+    if (isDestroyed || isFinishing) {
+        return
+    }
+
+    val textColor = getProperTextColor()
+    val backgroundColor = getProperBackgroundColor()
+    val primaryColor = getProperPrimaryColor()
+    if (view is ViewGroup) {
+        updateTextColors(view)
+    } else if (view is MyTextView) {
+        view.setColors(textColor, primaryColor, backgroundColor)
+    }
+
+    var title: TextView? = null
+    if (titleId != 0 || titleText.isNotEmpty()) {
+        title = layoutInflater.inflate(com.simplemobiletools.commons.R.layout.dialog_title, null) as TextView
+        title.dialog_title_textview.apply {
+            if (titleText.isNotEmpty()) {
+                text = titleText
+            } else {
+                setText(titleId)
+            }
+            setTextColor(textColor)
+        }
+    }
+
+    // if we use the same primary and background color, use the text color for dialog confirmation buttons
+    val dialogButtonColor = if (primaryColor == baseConfig.backgroundColor) {
+        textColor
+    } else {
+        primaryColor
+    }
+
+    dialog.apply {
+        setView(view)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        setCustomTitle(title)
+        setCanceledOnTouchOutside(cancelOnTouchOutside)
+        show()
+        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(dialogButtonColor)
+        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(dialogButtonColor)
+        getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(dialogButtonColor)
+
+        val bgDrawable = when {
+            isBlackAndWhiteTheme() -> resources.getDrawable(com.simplemobiletools.commons.R.drawable.black_dialog_background, theme)
+            baseConfig.isUsingSystemTheme -> resources.getDrawable(com.simplemobiletools.commons.R.drawable.dialog_you_background, theme)
+            else -> resources.getColoredDrawableWithColor(com.simplemobiletools.commons.R.drawable.dialog_bg, baseConfig.backgroundColor)
+        }
+
+        window?.setBackgroundDrawable(bgDrawable)
+    }
+    callback?.invoke()
 }
 
 fun SimpleActivity.launchSettings() {
