@@ -27,6 +27,7 @@ import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.*
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.video.VideoPlayerActivity
+import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import java.io.File
 import java.io.FileInputStream
 

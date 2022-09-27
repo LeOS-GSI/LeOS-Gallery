@@ -49,6 +49,21 @@ fun Activity.sharePath(path: String) {
     sharePathIntent(path, BuildConfig.APPLICATION_ID)
 }
 
+fun Activity.checkAppSideloading(): Boolean {
+    val isSideloaded = when (baseConfig.appSideloadingStatus) {
+        SIDELOADING_TRUE -> true
+        SIDELOADING_FALSE -> false
+        else -> isAppSideloaded()
+    }
+
+    baseConfig.appSideloadingStatus = if (isSideloaded) SIDELOADING_TRUE else SIDELOADING_FALSE
+    if (isSideloaded) {
+        showSideloadingDialog()
+    }
+
+    return isSideloaded
+}
+
 fun Activity.sharePaths(paths: ArrayList<String>) {
     sharePathsIntent(paths, BuildConfig.APPLICATION_ID)
 }
