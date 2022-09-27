@@ -15,6 +15,8 @@ import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogDirectoryPickerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.*
 import ca.on.sudbury.hojat.smartgallery.models.Directory
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
+
 
 @SuppressLint("InflateParams")
 class PickDirectoryDialog(

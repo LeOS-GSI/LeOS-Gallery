@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
+import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
@@ -8,10 +9,13 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.drawable.PictureDrawable
 import android.media.AudioManager
+import android.os.Handler
+import android.os.Looper
 import android.os.Process
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.widget.ImageView
+import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -41,6 +45,12 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
+import kotlin.collections.LinkedHashSet
 import kotlin.collections.set
 
 val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -51,6 +61,33 @@ fun Context.getHumanizedFilename(path: String): String {
 }
 
 val Context.baseConfig: BaseConfig get() = BaseConfig.newInstance(this)
+
+private fun doToast(context: Context, message: String, length: Int) {
+    if (context is Activity) {
+        if (!context.isFinishing && !context.isDestroyed) {
+            Toast.makeText(context, message, length).show()
+        }
+    } else {
+        Toast.makeText(context, message, length).show()
+    }
+}
+
+fun Context.toast(id: Int, length: Int = Toast.LENGTH_SHORT) {
+    toast(getString(id), length)
+}
+
+fun Context.toast(msg: String, length: Int = Toast.LENGTH_SHORT) {
+    try {
+        if (isOnMainThread()) {
+            doToast(this, msg, length)
+        } else {
+            Handler(Looper.getMainLooper()).post {
+                doToast(this, msg, length)
+            }
+        }
+    } catch (_: Exception) {
+    }
+}
 
 val Context.config: Config get() = Config.newInstance(applicationContext)
 
@@ -125,26 +162,29 @@ fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Direct
         var result = when {
             sorting and SORT_BY_NAME != 0 -> {
                 if (o1.sortValue.isEmpty()) {
-                    o1.sortValue = o1.name.toLowerCase()
+                    o1.sortValue = o1.name.lowercase(Locale.ROOT)
                 }
 
                 if (o2.sortValue.isEmpty()) {
-                    o2.sortValue = o2.name.toLowerCase()
+                    o2.sortValue = o2.name.lowercase(Locale.ROOT)
                 }
 
                 if (sorting and SORT_USE_NUMERIC_VALUE != 0) {
-                    AlphanumericComparator().compare(o1.sortValue.normalizeString().toLowerCase(), o2.sortValue.normalizeString().toLowerCase())
+                    AlphanumericComparator().compare(
+                        o1.sortValue.normalizeString().lowercase(Locale.ROOT),
+                        o2.sortValue.normalizeString().lowercase(Locale.ROOT)
+                    )
                 } else {
-                    o1.sortValue.normalizeString().toLowerCase().compareTo(o2.sortValue.normalizeString().toLowerCase())
+                    o1.sortValue.normalizeString().lowercase(Locale.ROOT).compareTo(o2.sortValue.normalizeString().toLowerCase(Locale.ROOT))
                 }
             }
             sorting and SORT_BY_PATH != 0 -> {
                 if (o1.sortValue.isEmpty()) {
-                    o1.sortValue = o1.path.toLowerCase()
+                    o1.sortValue = o1.path.lowercase(Locale.ROOT)
                 }
 
                 if (o2.sortValue.isEmpty()) {
-                    o2.sortValue = o2.path.toLowerCase()
+                    o2.sortValue = o2.path.lowercase(Locale.ROOT)
                 }
 
                 if (sorting and SORT_USE_NUMERIC_VALUE != 0) {

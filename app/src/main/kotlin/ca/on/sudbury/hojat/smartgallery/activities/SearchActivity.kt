@@ -23,6 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.GridSpacingItemDecoration
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL

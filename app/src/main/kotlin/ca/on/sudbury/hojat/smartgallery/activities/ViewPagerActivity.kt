@@ -47,6 +47,7 @@ import com.simplemobiletools.commons.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.MyPagerAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediumBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialog

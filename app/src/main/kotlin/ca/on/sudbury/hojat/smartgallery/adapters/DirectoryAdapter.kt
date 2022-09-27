@@ -27,6 +27,7 @@ import com.simplemobiletools.commons.dialogs.*
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.interfaces.ItemMoveCallback
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.interfaces.ItemTouchHelperContract
 import com.simplemobiletools.commons.interfaces.StartReorderDragListener
 import com.simplemobiletools.commons.models.FileDirItem

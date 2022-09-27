@@ -26,6 +26,7 @@ import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.views.MyGridLayoutManager
 import com.simplemobiletools.commons.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter

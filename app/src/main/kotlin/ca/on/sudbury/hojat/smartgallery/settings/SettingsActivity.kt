@@ -21,6 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialog
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.*
 import ca.on.sudbury.hojat.smartgallery.helpers.*
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
