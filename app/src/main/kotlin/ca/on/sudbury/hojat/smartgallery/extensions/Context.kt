@@ -50,6 +50,8 @@ fun Context.getHumanizedFilename(path: String): String {
     return humanized.substring(humanized.lastIndexOf("/") + 1)
 }
 
+val Context.baseConfig: BaseConfig get() = BaseConfig.newInstance(this)
+
 val Context.config: Config get() = Config.newInstance(applicationContext)
 
 val Context.widgetsDB: WidgetsDao get() = GalleryDatabase.getInstance(applicationContext).WidgetsDao()
