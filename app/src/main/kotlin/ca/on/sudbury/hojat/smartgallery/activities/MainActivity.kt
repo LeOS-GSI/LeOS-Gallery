@@ -89,7 +89,6 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding

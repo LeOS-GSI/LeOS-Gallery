@@ -22,7 +22,6 @@ import com.simplemobiletools.commons.dialogs.RenameItemDialog
 import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialog

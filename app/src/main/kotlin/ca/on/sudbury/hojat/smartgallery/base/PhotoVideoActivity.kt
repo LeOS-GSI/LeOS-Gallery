@@ -25,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.photoview.PhotoFragment
 import ca.on.sudbury.hojat.smartgallery.video.VideoFragment
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.*
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.video.VideoPlayerActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading

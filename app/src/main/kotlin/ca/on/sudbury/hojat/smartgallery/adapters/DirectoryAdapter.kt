@@ -61,7 +61,6 @@ import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
 import com.simplemobiletools.commons.interfaces.ItemMoveCallback
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.interfaces.ItemTouchHelperContract
 import com.simplemobiletools.commons.interfaces.StartReorderDragListener
 import com.simplemobiletools.commons.models.FileDirItem
