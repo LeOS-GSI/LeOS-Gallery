@@ -23,11 +23,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
-import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
-import ca.on.sudbury.hojat.smartgallery.models.DateTaken
-import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -40,6 +35,11 @@ import com.simplemobiletools.commons.extensions.*
 import com.simplemobiletools.commons.helpers.*
 import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
+import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
+import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
+import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.squareup.picasso.Picasso
 import java.io.*
 import java.text.SimpleDateFormat
@@ -267,7 +267,7 @@ fun BaseSimpleActivity.toggleFileVisibility(oldPath: String, hide: Boolean, call
     }
 
     val newPath = "$path/$filename"
-    renameFile(oldPath, newPath, false) { _, _ ->
+    renameFile(oldPath, newPath, false) { success, useAndroid30Way ->
         runOnUiThread {
             callback?.invoke(newPath)
         }
@@ -542,7 +542,7 @@ fun AppCompatActivity.fixDateTaken(
                     val separator = dateTime.substring(4, 5)
                     val format = "yyyy${separator}MM${separator}dd${t}kk:mm:ss"
                     val formatter = SimpleDateFormat(format, Locale.getDefault())
-                    val timestamp = formatter.parse(dateTime)?.time
+                    val timestamp = formatter.parse(dateTime).time
 
                     val uri = getFileUri(path)
                     ContentProviderOperation.newUpdate(uri).apply {
@@ -558,25 +558,19 @@ fun AppCompatActivity.fixDateTaken(
                         operations.clear()
                     }
 
-                    if (timestamp != null) {
-                        mediaDB.updateFavoriteDateTaken(path, timestamp)
-                    }
+                    mediaDB.updateFavoriteDateTaken(path, timestamp)
                     didUpdateFile = true
 
-                    val dateTaken = timestamp?.let {
-                        DateTaken(
-                            null,
-                            path,
-                            path.getFilenameFromPath(),
-                            path.getParentPath(),
-                            it,
-                            (System.currentTimeMillis() / 1000).toInt(),
-                            File(path).lastModified()
-                        )
-                    }
-                    if (dateTaken != null) {
-                        dateTakens.add(dateTaken)
-                    }
+                    val dateTaken = DateTaken(
+                        null,
+                        path,
+                        path.getFilenameFromPath(),
+                        path.getParentPath(),
+                        timestamp,
+                        (System.currentTimeMillis() / 1000).toInt(),
+                        File(path).lastModified()
+                    )
+                    dateTakens.add(dateTaken)
                     if (!hasRescanned && getFileDateTaken(path) == 0L) {
                         pathsToRescan.add(path)
                     }
@@ -759,7 +753,7 @@ fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> U
 
         try {
             (drawable as LayerDrawable).setDrawableByLayerId(R.id.shortcut_image, builder.get())
-        } catch (_: Exception) {
+        } catch (e: Exception) {
         }
 
         runOnUiThread {
