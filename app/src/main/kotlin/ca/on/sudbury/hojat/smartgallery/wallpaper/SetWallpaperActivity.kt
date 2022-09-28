@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
+import com.simplemobiletools.commons.extensions.checkAppSideloading
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
@@ -16,7 +17,6 @@ import com.simplemobiletools.commons.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.MainActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySetWallpaperBinding
-import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import com.theartofdev.edmodo.cropper.CropImageView
 
 private const val RATIO_PORTRAIT = 0
