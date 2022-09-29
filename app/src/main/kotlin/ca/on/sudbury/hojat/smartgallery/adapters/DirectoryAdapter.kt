@@ -74,6 +74,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.*
 import ca.on.sudbury.hojat.smartgallery.helpers.*
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
+import com.simplemobiletools.commons.extensions.toast
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.dir_check
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.dir_location
