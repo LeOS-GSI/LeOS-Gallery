@@ -2,7 +2,11 @@ package ca.on.sudbury.hojat.smartgallery.views
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Path
+import android.graphics.Paint
+import android.graphics.Color
+import android.graphics.Canvas
+import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
