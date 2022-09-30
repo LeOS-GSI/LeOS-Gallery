@@ -6,8 +6,16 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import ca.on.sudbury.hojat.smartgallery.database.*
-import ca.on.sudbury.hojat.smartgallery.models.*
+import ca.on.sudbury.hojat.smartgallery.database.DirectoryDao
+import ca.on.sudbury.hojat.smartgallery.database.MediumDao
+import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
+import ca.on.sudbury.hojat.smartgallery.database.DateTakensDao
+import ca.on.sudbury.hojat.smartgallery.database.FavoritesDao
+import ca.on.sudbury.hojat.smartgallery.models.Directory
+import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.models.Widget
+import ca.on.sudbury.hojat.smartgallery.models.DateTaken
+import ca.on.sudbury.hojat.smartgallery.models.Favorite
 
 @Database(entities = [Directory::class, Medium::class, Widget::class, DateTaken::class, Favorite::class], version = 10)
 abstract class GalleryDatabase : RoomDatabase() {

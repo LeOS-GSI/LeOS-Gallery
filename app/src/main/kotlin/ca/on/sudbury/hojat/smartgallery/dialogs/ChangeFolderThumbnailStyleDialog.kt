@@ -9,9 +9,17 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
+import com.simplemobiletools.commons.extensions.setupDialogStuff
+import com.simplemobiletools.commons.extensions.beGone
+import com.simplemobiletools.commons.extensions.beVisible
+import com.simplemobiletools.commons.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.*
+import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_SQUARE
+import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_LINE
+import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_BRACKETS
+import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_ROUNDED_CORNERS
+import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_NONE
 import kotlinx.android.synthetic.main.dialog_change_folder_thumbnail_style.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 
