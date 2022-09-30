@@ -42,6 +42,8 @@ import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.getBasePath
+import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isGif
 import com.simplemobiletools.commons.extensions.isRawFast
@@ -118,6 +120,15 @@ val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as Audi
 fun Context.getHumanizedFilename(path: String): String {
     val humanized = humanizePath(path)
     return humanized.substring(humanized.lastIndexOf("/") + 1)
+}
+
+fun Context.humanizePath(path: String): String {
+    val trimmedPath = path.trimEnd('/')
+    val basePath = path.getBasePath(this)
+    return when (basePath) {
+        "/" -> "${getHumanReadablePath(basePath)}$trimmedPath"
+        else -> trimmedPath.replaceFirst(basePath, getHumanReadablePath(basePath))
+    }
 }
 
 val Context.config: Config get() = Config.newInstance(applicationContext)
