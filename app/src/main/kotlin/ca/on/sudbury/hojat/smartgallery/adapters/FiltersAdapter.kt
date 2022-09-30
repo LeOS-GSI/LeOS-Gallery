@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
 import kotlinx.android.synthetic.main.editor_filter_item.view.*
-import java.util.*
+
 
 class FiltersAdapter(
     val context: Context,
