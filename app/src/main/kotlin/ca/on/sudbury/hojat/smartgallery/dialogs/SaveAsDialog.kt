@@ -7,7 +7,24 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogSaveAsBinding
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.getParentPath
+import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
+import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
+import com.simplemobiletools.commons.extensions.isInDownloadDir
+import com.simplemobiletools.commons.extensions.humanizePath
+import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.hideKeyboard
+import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
+import com.simplemobiletools.commons.extensions.setupDialogStuff
+import com.simplemobiletools.commons.extensions.showKeyboard
+import com.simplemobiletools.commons.extensions.value
+import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.isAValidFilename
+import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import com.simplemobiletools.commons.extensions.isInSubFolderInDownloadDir
+import com.simplemobiletools.commons.extensions.toFileDirItem
+import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.helpers.isRPlus
 import java.io.File
 
