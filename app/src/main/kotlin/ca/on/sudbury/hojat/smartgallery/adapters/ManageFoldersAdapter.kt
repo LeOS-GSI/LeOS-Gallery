@@ -1,6 +1,10 @@
 package ca.on.sudbury.hojat.smartgallery.adapters
 
-import android.view.*
+import android.view.View
+import android.view.ViewGroup
+import android.view.Menu
+import android.view.ContextThemeWrapper
+import android.view.Gravity
 import android.widget.PopupMenu
 import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
