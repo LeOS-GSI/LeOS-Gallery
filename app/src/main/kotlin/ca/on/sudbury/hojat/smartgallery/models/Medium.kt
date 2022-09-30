@@ -1,15 +1,41 @@
 package ca.on.sudbury.hojat.smartgallery.models
 
 import android.content.Context
-import androidx.room.*
-import ca.on.sudbury.hojat.smartgallery.helpers.*
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.Index
+import androidx.room.ColumnInfo
+import androidx.room.Ignore
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FILE_TYPE
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_EXTENSION
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.extensions.isWebP
+import com.simplemobiletools.commons.extensions.isApng
+import com.simplemobiletools.commons.extensions.formatSize
+import com.simplemobiletools.commons.extensions.formatDate
+import com.simplemobiletools.commons.extensions.getFilenameExtension
+import com.simplemobiletools.commons.helpers.SORT_BY_NAME
+import com.simplemobiletools.commons.helpers.SORT_BY_PATH
+import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
 import com.simplemobiletools.commons.models.FileDirItem
 import java.io.File
 import java.io.Serializable
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+
 
 @Entity(tableName = "media", indices = [(Index(value = ["full_path"], unique = true))])
 data class Medium(
@@ -53,7 +79,7 @@ data class Medium(
 
     fun isHidden() = name.startsWith('.')
 
-    fun isHeic() = name.toLowerCase().endsWith(".heic") || name.toLowerCase().endsWith(".heif")
+    fun isHeic() = name.lowercase(Locale.ROOT).endsWith(".heic") || name.lowercase(Locale.ROOT).endsWith(".heif")
 
     fun getBubbleText(sorting: Int, context: Context, dateFormat: String, timeFormat: String) = when {
         sorting and SORT_BY_NAME != 0 -> name
@@ -71,7 +97,7 @@ data class Medium(
             groupBy and GROUP_BY_DATE_TAKEN_DAILY != 0 -> getDayStartTS(taken, false)
             groupBy and GROUP_BY_DATE_TAKEN_MONTHLY != 0 -> getDayStartTS(taken, true)
             groupBy and GROUP_BY_FILE_TYPE != 0 -> type.toString()
-            groupBy and GROUP_BY_EXTENSION != 0 -> name.getFilenameExtension().toLowerCase()
+            groupBy and GROUP_BY_EXTENSION != 0 -> name.getFilenameExtension().lowercase(Locale.ROOT)
             groupBy and GROUP_BY_FOLDER != 0 -> parentPath
             else -> ""
         }

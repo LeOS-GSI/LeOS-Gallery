@@ -1,7 +1,12 @@
 package ca.on.sudbury.hojat.smartgallery.helpers
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.BitmapRegionDecoder
+import android.graphics.Point
+import android.graphics.Rect
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import com.davemorrissey.labs.subscaleview.ImageRegionDecoder
 
@@ -15,6 +20,7 @@ class PicassoRegionDecoder(
     private var decoder: BitmapRegionDecoder? = null
     private val decoderLock = Any()
 
+    @SuppressLint("Recycle")
     override fun init(context: Context, uri: Uri): Point {
         val newUri = Uri.parse(uri.toString().replace("%", "%25").replace("#", "%23"))
         val inputStream = context.contentResolver.openInputStream(newUri)

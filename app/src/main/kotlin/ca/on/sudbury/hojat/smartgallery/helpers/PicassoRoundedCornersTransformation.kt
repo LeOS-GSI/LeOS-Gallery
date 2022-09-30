@@ -1,6 +1,11 @@
 package ca.on.sudbury.hojat.smartgallery.helpers
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.BitmapShader
+import android.graphics.Shader
+import android.graphics.RectF
 import com.squareup.picasso.Transformation
 
 // taken from https://stackoverflow.com/a/35241525/1967672

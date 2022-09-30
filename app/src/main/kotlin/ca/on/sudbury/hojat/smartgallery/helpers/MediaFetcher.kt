@@ -13,14 +13,53 @@ import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.text.format.DateFormat
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.*
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
+import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.getUpdatedDeletedMedia
+import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
+import ca.on.sudbury.hojat.smartgallery.extensions.shouldFolderBeVisible
+import ca.on.sudbury.hojat.smartgallery.extensions.dateTakensDB
+import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
+import com.simplemobiletools.commons.extensions.getParentPath
+import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import com.simplemobiletools.commons.extensions.isImageFast
+import com.simplemobiletools.commons.extensions.isVideoFast
+import com.simplemobiletools.commons.extensions.isGif
+import com.simplemobiletools.commons.extensions.isRawFast
+import com.simplemobiletools.commons.extensions.isSvg
+import com.simplemobiletools.commons.extensions.getDuration
+import com.simplemobiletools.commons.extensions.getDocumentFile
+import com.simplemobiletools.commons.extensions.getStringValue
+import com.simplemobiletools.commons.extensions.showErrorToast
+import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import com.simplemobiletools.commons.extensions.queryCursor
+import com.simplemobiletools.commons.extensions.normalizeString
+import com.simplemobiletools.commons.extensions.getLongValue
+import com.simplemobiletools.commons.extensions.getIntValue
+import com.simplemobiletools.commons.extensions.humanizePath
+import com.simplemobiletools.commons.extensions.areDigitsOnly
+import com.simplemobiletools.commons.extensions.isPathOnOTG
+import com.simplemobiletools.commons.extensions.hasOTGConnected
+import com.simplemobiletools.commons.helpers.SORT_BY_PATH
+import com.simplemobiletools.commons.helpers.SORT_USE_NUMERIC_VALUE
+import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import com.simplemobiletools.commons.helpers.SORT_DESCENDING
+import com.simplemobiletools.commons.helpers.AlphanumericComparator
+import com.simplemobiletools.commons.helpers.videoExtensions
+import com.simplemobiletools.commons.helpers.rawExtensions
+import com.simplemobiletools.commons.helpers.FAVORITES
+import com.simplemobiletools.commons.helpers.isRPlus
+import com.simplemobiletools.commons.helpers.NOMEDIA
+import com.simplemobiletools.commons.helpers.photoExtensions
+import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
+import com.simplemobiletools.commons.helpers.SORT_BY_NAME
+import com.simplemobiletools.commons.helpers.DAY_SECONDS
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import java.io.File
-import java.util.*
+import java.util.Locale
+import java.util.Calendar
 import kotlin.math.roundToInt
 
 class MediaFetcher(val context: Context) {
@@ -45,12 +84,12 @@ class MediaFetcher(val context: Context) {
             }
         } else {
             if (curPath != FAVORITES && curPath != RECYCLE_BIN && isRPlus() && !isExternalStorageManager()) {
-                if (android11Files?.containsKey(curPath.toLowerCase()) == true) {
-                    curMedia.addAll(android11Files[curPath.toLowerCase()]!!)
+                if (android11Files?.containsKey(curPath.lowercase(Locale.ROOT)) == true) {
+                    curMedia.addAll(android11Files[curPath.lowercase(Locale.ROOT)]!!)
                 } else if (android11Files == null) {
                     val files = getAndroid11FolderMedia(isPickImage, isPickVideo, favoritePaths, false, getProperDateTaken, dateTakens)
-                    if (files.containsKey(curPath.toLowerCase())) {
-                        curMedia.addAll(files[curPath.toLowerCase()]!!)
+                    if (files.containsKey(curPath.lowercase(Locale.ROOT))) {
+                        curMedia.addAll(files[curPath.lowercase(Locale.ROOT)]!!)
                     }
                 }
             }
@@ -536,7 +575,7 @@ class MediaFetcher(val context: Context) {
                 }
 
                 media[parent]?.add(medium)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
 
@@ -632,7 +671,7 @@ class MediaFetcher(val context: Context) {
                         val name = cursor.getStringValue(Images.Media.DISPLAY_NAME)
                         dateTakens["$folder/$name"] = dateTaken
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
@@ -671,7 +710,7 @@ class MediaFetcher(val context: Context) {
                         val path = cursor.getStringValue(Images.Media.DATA)
                         dateTakens[path] = dateTaken
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
 
@@ -680,7 +719,7 @@ class MediaFetcher(val context: Context) {
             dateTakenValues.forEach {
                 dateTakens[it.fullPath] = it.taken
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
 
         return dateTakens
@@ -705,7 +744,7 @@ class MediaFetcher(val context: Context) {
                         val name = cursor.getStringValue(Images.Media.DISPLAY_NAME)
                         lastModifieds["$folder/$name"] = lastModified
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
@@ -730,10 +769,10 @@ class MediaFetcher(val context: Context) {
                         val path = cursor.getStringValue(Images.Media.DATA)
                         lastModifieds[path] = lastModified
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
 
         return lastModifieds
@@ -758,7 +797,7 @@ class MediaFetcher(val context: Context) {
                         val name = cursor.getStringValue(Images.Media.DISPLAY_NAME)
                         sizes["$folder/$name"] = size
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
@@ -778,16 +817,16 @@ class MediaFetcher(val context: Context) {
             var result = when {
                 sorting and SORT_BY_NAME != 0 -> {
                     if (sorting and SORT_USE_NUMERIC_VALUE != 0) {
-                        AlphanumericComparator().compare(o1.name.normalizeString().toLowerCase(), o2.name.normalizeString().toLowerCase())
+                        AlphanumericComparator().compare(o1.name.normalizeString().lowercase(Locale.ROOT), o2.name.normalizeString().lowercase(Locale.ROOT))
                     } else {
-                        o1.name.normalizeString().toLowerCase().compareTo(o2.name.normalizeString().toLowerCase())
+                        o1.name.normalizeString().lowercase(Locale.ROOT).compareTo(o2.name.normalizeString().lowercase(Locale.ROOT))
                     }
                 }
                 sorting and SORT_BY_PATH != 0 -> {
                     if (sorting and SORT_USE_NUMERIC_VALUE != 0) {
-                        AlphanumericComparator().compare(o1.path.toLowerCase(), o2.path.toLowerCase())
+                        AlphanumericComparator().compare(o1.path.lowercase(Locale.ROOT), o2.path.lowercase(Locale.ROOT))
                     } else {
-                        o1.path.toLowerCase().compareTo(o2.path.toLowerCase())
+                        o1.path.lowercase(Locale.ROOT).compareTo(o2.path.lowercase(Locale.ROOT))
                     }
                 }
                 sorting and SORT_BY_SIZE != 0 -> o1.size.compareTo(o2.size)
@@ -803,7 +842,7 @@ class MediaFetcher(val context: Context) {
     }
 
     fun groupMedia(media: ArrayList<Medium>, path: String): ArrayList<ThumbnailItem> {
-        val pathToCheck = if (path.isEmpty()) SHOW_ALL else path
+        val pathToCheck = path.ifEmpty { SHOW_ALL }
         val currentGrouping = context.config.getFolderGrouping(pathToCheck)
         if (currentGrouping and GROUP_BY_NONE != 0) {
             return media as ArrayList<ThumbnailItem>
@@ -868,7 +907,7 @@ class MediaFetcher(val context: Context) {
             )
             grouping and GROUP_BY_LAST_MODIFIED_MONTHLY != 0 || grouping and GROUP_BY_DATE_TAKEN_MONTHLY != 0 -> formatDate(key, false)
             grouping and GROUP_BY_FILE_TYPE != 0 -> getFileTypeString(key)
-            grouping and GROUP_BY_EXTENSION != 0 -> key.toUpperCase()
+            grouping and GROUP_BY_EXTENSION != 0 -> key.uppercase(Locale.ROOT)
             grouping and GROUP_BY_FOLDER != 0 -> context.humanizePath(key)
             else -> key
         }
