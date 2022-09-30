@@ -8,7 +8,17 @@ import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.*
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_SHOW_FILE_COUNT
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_NONE
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FILE_TYPE
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_EXTENSION
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_DESCENDING
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 
 class ChangeGroupingDialog(
     val activity: BaseSimpleActivity,

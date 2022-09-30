@@ -4,8 +4,20 @@ import android.content.DialogInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeSortingBinding
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.extensions.beVisibleIf
+import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
+import com.simplemobiletools.commons.extensions.setupDialogStuff
+import com.simplemobiletools.commons.extensions.isVisible
+import com.simplemobiletools.commons.extensions.beGoneIf
+import com.simplemobiletools.commons.helpers.SORT_BY_PATH
+import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_TAKEN
+import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
+import com.simplemobiletools.commons.helpers.SORT_BY_CUSTOM
+import com.simplemobiletools.commons.helpers.SORT_DESCENDING
+import com.simplemobiletools.commons.helpers.SORT_BY_NAME
+import com.simplemobiletools.commons.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
 
