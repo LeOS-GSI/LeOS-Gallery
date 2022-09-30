@@ -9,7 +9,17 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogResizeImageWithPathBin
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.getParentPath
+import com.simplemobiletools.commons.extensions.humanizePath
+import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.onTextChangeListener
+import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
+import com.simplemobiletools.commons.extensions.setupDialogStuff
+import com.simplemobiletools.commons.extensions.showKeyboard
+import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.value
+import com.simplemobiletools.commons.extensions.isAValidFilename
+import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 
 @SuppressLint("SetTextI18n", "InflateParams")

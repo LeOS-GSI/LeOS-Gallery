@@ -22,7 +22,12 @@ import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogDirectoryPickerBinding
-import ca.on.sudbury.hojat.smartgallery.extensions.*
+import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.getCachedDirectories
+import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
+import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
+import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 
 @SuppressLint("InflateParams")
