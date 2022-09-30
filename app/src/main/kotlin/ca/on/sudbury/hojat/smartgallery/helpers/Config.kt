@@ -6,9 +6,16 @@ import android.os.Environment
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.helpers.BaseConfig
+import com.simplemobiletools.commons.helpers.SORT_DESCENDING
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import com.simplemobiletools.commons.helpers.PROTECTION_PATTERN
+import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
-import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
+import java.util.Locale
+
 
 class Config(context: Context) : BaseConfig(context) {
     companion object {
@@ -23,12 +30,12 @@ class Config(context: Context) : BaseConfig(context) {
         if (path.isEmpty()) {
             groupBy = value
         } else {
-            prefs.edit().putInt(GROUP_FOLDER_PREFIX + path.toLowerCase(), value).apply()
+            prefs.edit().putInt(GROUP_FOLDER_PREFIX + path.lowercase(Locale.ROOT), value).apply()
         }
     }
 
     fun getFolderGrouping(path: String): Int {
-        var groupBy = prefs.getInt(GROUP_FOLDER_PREFIX + path.toLowerCase(), groupBy)
+        var groupBy = prefs.getInt(GROUP_FOLDER_PREFIX + path.toLowerCase(Locale.ROOT), groupBy)
         if (path != SHOW_ALL && groupBy and GROUP_BY_FOLDER != 0) {
             groupBy -= GROUP_BY_FOLDER + 1
         }
@@ -36,26 +43,26 @@ class Config(context: Context) : BaseConfig(context) {
     }
 
     fun removeFolderGrouping(path: String) {
-        prefs.edit().remove(GROUP_FOLDER_PREFIX + path.toLowerCase()).apply()
+        prefs.edit().remove(GROUP_FOLDER_PREFIX + path.toLowerCase(Locale.ROOT)).apply()
     }
 
-    fun hasCustomGrouping(path: String) = prefs.contains(GROUP_FOLDER_PREFIX + path.toLowerCase())
+    fun hasCustomGrouping(path: String) = prefs.contains(GROUP_FOLDER_PREFIX + path.toLowerCase(Locale.ROOT))
 
     fun saveFolderViewType(path: String, value: Int) {
         if (path.isEmpty()) {
             viewTypeFiles = value
         } else {
-            prefs.edit().putInt(VIEW_TYPE_PREFIX + path.toLowerCase(), value).apply()
+            prefs.edit().putInt(VIEW_TYPE_PREFIX + path.lowercase(Locale.ROOT), value).apply()
         }
     }
 
-    fun getFolderViewType(path: String) = prefs.getInt(VIEW_TYPE_PREFIX + path.toLowerCase(), viewTypeFiles)
+    fun getFolderViewType(path: String) = prefs.getInt(VIEW_TYPE_PREFIX + path.lowercase(Locale.ROOT), viewTypeFiles)
 
     fun removeFolderViewType(path: String) {
-        prefs.edit().remove(VIEW_TYPE_PREFIX + path.toLowerCase()).apply()
+        prefs.edit().remove(VIEW_TYPE_PREFIX + path.lowercase(Locale.ROOT)).apply()
     }
 
-    fun hasCustomViewType(path: String) = prefs.contains(VIEW_TYPE_PREFIX + path.toLowerCase())
+    fun hasCustomViewType(path: String) = prefs.contains(VIEW_TYPE_PREFIX + path.lowercase(Locale.ROOT))
 
     var wasHideFolderTooltipShown: Boolean
         get() = prefs.getBoolean(HIDE_FOLDER_TOOLTIP_SHOWN, false)

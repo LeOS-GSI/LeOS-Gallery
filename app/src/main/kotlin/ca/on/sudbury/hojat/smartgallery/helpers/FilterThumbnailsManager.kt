@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.helpers
 
 import android.graphics.Bitmap
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
-import java.util.*
 
 class FilterThumbnailsManager {
     private var filterThumbnails = ArrayList<FilterItem>(10)
