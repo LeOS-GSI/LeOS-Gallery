@@ -14,7 +14,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.getFileKey
 import kotlinx.android.synthetic.main.portrait_photo_item.view.*
-import java.util.*
 
 class PortraitPhotosAdapter(val context: Context, val photos: ArrayList<String>, val sideElementWidth: Int, val itemClick: (Int, Int) -> Unit) :
     RecyclerView.Adapter<PortraitPhotosAdapter.ViewHolder>() {

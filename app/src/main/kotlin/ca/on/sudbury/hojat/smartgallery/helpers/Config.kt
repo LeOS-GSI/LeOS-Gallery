@@ -393,16 +393,21 @@ class Config(context: Context) : BaseConfig(context) {
         set(bottomActions) = prefs.edit().putBoolean(BOTTOM_ACTIONS, bottomActions).apply()
 
     fun removeLastVideoPosition(path: String) {
-        prefs.edit().remove("$LAST_VIDEO_POSITION_PREFIX${path.toLowerCase()}").apply()
+        prefs.edit().remove("$LAST_VIDEO_POSITION_PREFIX${path.lowercase(Locale.getDefault())}").apply()
     }
 
     fun saveLastVideoPosition(path: String, value: Int) {
         if (path.isNotEmpty()) {
-            prefs.edit().putInt("$LAST_VIDEO_POSITION_PREFIX${path.toLowerCase()}", value).apply()
+            prefs.edit().putInt("$LAST_VIDEO_POSITION_PREFIX${path.lowercase(Locale.getDefault())}", value).apply()
         }
     }
 
-    fun getLastVideoPosition(path: String) = prefs.getInt("$LAST_VIDEO_POSITION_PREFIX${path.toLowerCase()}", 0)
+    fun getLastVideoPosition(path: String) = prefs.getInt(
+        "$LAST_VIDEO_POSITION_PREFIX${
+            path.lowercase(
+                Locale.getDefault()
+            )
+        }", 0)
 
     private fun getAllLastVideoPositions() = prefs.all.filterKeys {
         it.startsWith(LAST_VIDEO_POSITION_PREFIX)

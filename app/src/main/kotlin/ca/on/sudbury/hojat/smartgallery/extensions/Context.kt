@@ -26,14 +26,79 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
+import com.simplemobiletools.commons.extensions.humanizePath
+import com.simplemobiletools.commons.extensions.normalizeString
+import com.simplemobiletools.commons.extensions.getStringValue
+import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
+import com.simplemobiletools.commons.extensions.internalStoragePath
+import com.simplemobiletools.commons.extensions.sdCardPath
+import com.simplemobiletools.commons.extensions.otgPath
+import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.isPng
+import com.simplemobiletools.commons.extensions.isPathOnSD
+import com.simplemobiletools.commons.extensions.isPathOnOTG
+import com.simplemobiletools.commons.extensions.recycleBinPath
+import com.simplemobiletools.commons.extensions.getParentPath
+import com.simplemobiletools.commons.extensions.getDocumentFile
+import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.isVideoFast
+import com.simplemobiletools.commons.extensions.isGif
+import com.simplemobiletools.commons.extensions.isRawFast
+import com.simplemobiletools.commons.extensions.isSvg
+import com.simplemobiletools.commons.extensions.isPortrait
+import com.simplemobiletools.commons.extensions.getDuration
+import com.simplemobiletools.commons.extensions.getOTGPublicPath
+import com.simplemobiletools.commons.extensions.getLongValue
+import com.simplemobiletools.commons.helpers.FAVORITES
+import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import com.simplemobiletools.commons.helpers.NOMEDIA
+import com.simplemobiletools.commons.helpers.SORT_BY_NAME
+import com.simplemobiletools.commons.helpers.SORT_BY_PATH
+import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_TAKEN
+import com.simplemobiletools.commons.helpers.sumByLong
+import com.simplemobiletools.commons.helpers.SORT_BY_CUSTOM
+import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
+import com.simplemobiletools.commons.helpers.SORT_USE_NUMERIC_VALUE
+import com.simplemobiletools.commons.helpers.AlphanumericComparator
+import com.simplemobiletools.commons.helpers.SORT_DESCENDING
 import com.simplemobiletools.commons.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
-import ca.on.sudbury.hojat.smartgallery.database.*
-import ca.on.sudbury.hojat.smartgallery.helpers.*
+import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
+import ca.on.sudbury.hojat.smartgallery.database.MediumDao
+import ca.on.sudbury.hojat.smartgallery.database.DirectoryDao
+import ca.on.sudbury.hojat.smartgallery.database.FavoritesDao
+import ca.on.sudbury.hojat.smartgallery.database.DateTakensDao
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
+import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
+import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
+import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
+import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
+import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
+import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
+import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
+import ca.on.sudbury.hojat.smartgallery.helpers.PicassoRoundedCornersTransformation
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
+import ca.on.sudbury.hojat.smartgallery.helpers.IsoTypeReader
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.Config
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
-import ca.on.sudbury.hojat.smartgallery.models.*
+import ca.on.sudbury.hojat.smartgallery.models.Directory
+import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
+import ca.on.sudbury.hojat.smartgallery.models.Favorite
+import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
@@ -41,6 +106,11 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
+import java.util.Locale
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
+import kotlin.collections.LinkedHashSet
 import kotlin.collections.set
 
 val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -116,42 +186,48 @@ fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Direct
         return newDirsOrdered
     }
 
-    dirs.sortWith(Comparator { o1, o2 ->
+    dirs.sortWith { o1, o2 ->
         o1 as Directory
         o2 as Directory
 
         var result = when {
             sorting and SORT_BY_NAME != 0 -> {
                 if (o1.sortValue.isEmpty()) {
-                    o1.sortValue = o1.name.toLowerCase()
+                    o1.sortValue = o1.name.lowercase(Locale.getDefault())
                 }
 
                 if (o2.sortValue.isEmpty()) {
-                    o2.sortValue = o2.name.toLowerCase()
+                    o2.sortValue = o2.name.lowercase(Locale.getDefault())
                 }
 
                 if (sorting and SORT_USE_NUMERIC_VALUE != 0) {
-                    AlphanumericComparator().compare(o1.sortValue.normalizeString().toLowerCase(), o2.sortValue.normalizeString().toLowerCase())
+                    AlphanumericComparator().compare(
+                        o1.sortValue.normalizeString().lowercase(Locale.ROOT),
+                        o2.sortValue.normalizeString().lowercase(Locale.getDefault())
+                    )
                 } else {
-                    o1.sortValue.normalizeString().toLowerCase().compareTo(o2.sortValue.normalizeString().toLowerCase())
+                    o1.sortValue.normalizeString().toLowerCase(Locale.ROOT).compareTo(o2.sortValue.normalizeString().toLowerCase(Locale.ROOT))
                 }
             }
             sorting and SORT_BY_PATH != 0 -> {
                 if (o1.sortValue.isEmpty()) {
-                    o1.sortValue = o1.path.toLowerCase()
+                    o1.sortValue = o1.path.lowercase(Locale.ROOT)
                 }
 
                 if (o2.sortValue.isEmpty()) {
-                    o2.sortValue = o2.path.toLowerCase()
+                    o2.sortValue = o2.path.lowercase(Locale.ROOT)
                 }
 
                 if (sorting and SORT_USE_NUMERIC_VALUE != 0) {
-                    AlphanumericComparator().compare(o1.sortValue.toLowerCase(), o2.sortValue.toLowerCase())
+                    AlphanumericComparator().compare(o1.sortValue.lowercase(Locale.getDefault()), o2.sortValue.lowercase(Locale.getDefault()))
                 } else {
-                    o1.sortValue.toLowerCase().compareTo(o2.sortValue.toLowerCase())
+                    o1.sortValue.lowercase(Locale.getDefault()).compareTo(o2.sortValue.lowercase(Locale.getDefault()))
                 }
             }
-            sorting and SORT_BY_PATH != 0 -> AlphanumericComparator().compare(o1.sortValue.toLowerCase(), o2.sortValue.toLowerCase())
+            sorting and SORT_BY_PATH != 0 -> AlphanumericComparator().compare(
+                o1.sortValue.lowercase(Locale.getDefault()),
+                o2.sortValue.lowercase(Locale.getDefault())
+            )
             sorting and SORT_BY_SIZE != 0 -> (o1.sortValue.toLongOrNull() ?: 0).compareTo(o2.sortValue.toLongOrNull() ?: 0)
             sorting and SORT_BY_DATE_MODIFIED != 0 -> (o1.sortValue.toLongOrNull() ?: 0).compareTo(o2.sortValue.toLongOrNull() ?: 0)
             else -> (o1.sortValue.toLongOrNull() ?: 0).compareTo(o2.sortValue.toLongOrNull() ?: 0)
@@ -161,7 +237,7 @@ fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Direct
             result *= -1
         }
         result
-    })
+    }
 
     return movePinnedDirectoriesToFront(dirs)
 }
@@ -940,7 +1016,7 @@ fun Context.parseFileChannel(path: String, fc: FileChannel, level: Int, start: L
                     }
                 }
 
-                val xmlString = sb.toString().toLowerCase()
+                val xmlString = sb.toString().lowercase(Locale.getDefault())
                 if (xmlString.contains("gspherical:projectiontype>equirectangular") || xmlString.contains("gspherical:projectiontype=\"equirectangular\"")) {
                     callback.invoke()
                 }
