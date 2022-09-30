@@ -1,6 +1,11 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
-import ca.on.sudbury.hojat.smartgallery.helpers.*
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 
 fun ArrayList<Medium>.getDirMediaTypes(): Int {

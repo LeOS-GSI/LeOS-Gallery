@@ -6,7 +6,7 @@ import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.isRPlus
 import java.io.File
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 import kotlin.collections.HashMap
 
 fun String.isThisOrParentIncluded(includedPaths: MutableSet<String>) =
@@ -68,7 +68,7 @@ fun String.shouldFolderBeVisible(
                         break
                     }
                 } else {
-                    val noMediaExists = folderNoMediaStatuses.getOrElse(pathToCheck, { false }) || File(pathToCheck).exists()
+                    val noMediaExists = folderNoMediaStatuses.getOrElse(pathToCheck) { false } || File(pathToCheck).exists()
                     callback(pathToCheck, noMediaExists)
                     if (noMediaExists) {
                         containsNoMediaOrDot = true
