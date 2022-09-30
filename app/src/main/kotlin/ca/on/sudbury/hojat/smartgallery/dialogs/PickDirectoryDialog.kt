@@ -8,7 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.extensions.*
+import com.simplemobiletools.commons.extensions.getProperPrimaryColor
+import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
+import com.simplemobiletools.commons.extensions.setupDialogStuff
+import com.simplemobiletools.commons.extensions.beVisibleIf
+import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
+import com.simplemobiletools.commons.extensions.beGone
+import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
+import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
+import com.simplemobiletools.commons.extensions.isInDownloadDir
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter

@@ -6,7 +6,16 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.*
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_PATH
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_RESOLUTION
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_LAST_MODIFIED
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_DATE_TAKEN
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_CAMERA_MODEL
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_EXIF_PROPERTIES
+import ca.on.sudbury.hojat.smartgallery.helpers.EXT_GPS
+
 
 class ManageExtendedDetailsDialog(
     val activity: BaseSimpleActivity,

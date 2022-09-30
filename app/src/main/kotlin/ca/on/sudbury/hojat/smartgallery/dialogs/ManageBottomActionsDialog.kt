@@ -6,7 +6,22 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.*
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_TOGGLE_FAVORITE
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_EDIT
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHARE
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_DELETE
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_ROTATE
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_PROPERTIES
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_CHANGE_ORIENTATION
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SLIDESHOW
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHOW_ON_MAP
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_TOGGLE_VISIBILITY
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_RENAME
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SET_AS
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_COPY
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_MOVE
+import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_RESIZE
+
 
 class ManageBottomActionsDialog(
     val activity: BaseSimpleActivity,
