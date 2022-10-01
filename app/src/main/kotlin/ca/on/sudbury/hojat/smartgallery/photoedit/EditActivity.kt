@@ -40,7 +40,7 @@ import com.simplemobiletools.commons.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.internalStoragePath

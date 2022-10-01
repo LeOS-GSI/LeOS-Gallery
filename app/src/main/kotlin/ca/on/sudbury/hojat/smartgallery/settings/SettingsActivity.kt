@@ -15,7 +15,7 @@ import com.simplemobiletools.commons.dialogs.ChangeDateTimeFormatDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.isExternalStorageManager

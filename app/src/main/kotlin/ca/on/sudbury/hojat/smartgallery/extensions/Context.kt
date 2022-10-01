@@ -39,8 +39,6 @@ import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.isPathOnSD
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getBasePath
@@ -134,6 +132,8 @@ fun Context.humanizePath(path: String): String {
 }
 
 val Context.config: Config get() = Config.newInstance(applicationContext)
+
+fun Context.isPathOnSD(path: String) = sdCardPath.isNotEmpty() && path.startsWith(sdCardPath)
 
 val Context.widgetsDB: WidgetsDao get() = GalleryDatabase.getInstance(applicationContext).WidgetsDao()
 

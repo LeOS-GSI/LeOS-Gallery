@@ -4,7 +4,7 @@ import android.content.DialogInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeSortingBinding
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible

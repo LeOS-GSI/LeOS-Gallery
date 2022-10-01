@@ -3,6 +3,7 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
+import com.simplemobiletools.commons.extensions.beGone
 
 fun View.beGone() {
     visibility = View.GONE
@@ -15,6 +16,8 @@ fun View.beInvisible() {
 fun View.beVisible() {
     visibility = View.VISIBLE
 }
+
+fun View.beVisibleIf(beVisible: Boolean) = if (beVisible) beVisible() else beGone()
 
 fun View.isGone() = visibility == View.GONE
 

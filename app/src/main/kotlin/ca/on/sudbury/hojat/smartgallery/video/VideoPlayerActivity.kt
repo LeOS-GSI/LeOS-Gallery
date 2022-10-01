@@ -47,7 +47,7 @@ import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.extensions.navigationBarHeight
 import com.simplemobiletools.commons.extensions.getFormattedDuration
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone

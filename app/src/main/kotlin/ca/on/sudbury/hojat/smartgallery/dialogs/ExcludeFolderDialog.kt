@@ -7,7 +7,7 @@ import android.widget.RadioGroup
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogExcludeFolderBinding
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.setupDialogStuff

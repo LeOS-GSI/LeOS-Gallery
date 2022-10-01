@@ -92,7 +92,7 @@ import com.simplemobiletools.commons.extensions.areSystemAnimationsEnabled
 import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getLatestMediaByDateId
 import com.simplemobiletools.commons.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory

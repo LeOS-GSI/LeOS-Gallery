@@ -140,7 +140,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_NONE
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_DEFAULT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.toast

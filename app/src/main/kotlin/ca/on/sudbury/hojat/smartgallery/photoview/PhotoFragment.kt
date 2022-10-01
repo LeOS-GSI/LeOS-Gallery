@@ -50,7 +50,7 @@ import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.onGlobalLayout
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import com.simplemobiletools.commons.extensions.realScreenSize

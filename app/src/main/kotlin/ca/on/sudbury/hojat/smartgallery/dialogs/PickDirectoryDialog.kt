@@ -11,7 +11,7 @@ import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening

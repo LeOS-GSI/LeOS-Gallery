@@ -39,7 +39,7 @@ import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.upstream.FileDataSource
 import com.simplemobiletools.commons.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.updateTextColors
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone

@@ -119,7 +119,7 @@ import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.underlineText
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif

@@ -2,7 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getProperTextColor
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener

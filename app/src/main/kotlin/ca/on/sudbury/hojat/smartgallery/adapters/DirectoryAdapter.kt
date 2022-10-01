@@ -37,7 +37,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor

@@ -29,7 +29,7 @@ import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.convertToBitmap
 import com.simplemobiletools.commons.extensions.formatSize
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
-import com.simplemobiletools.commons.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.applyColorFilter
