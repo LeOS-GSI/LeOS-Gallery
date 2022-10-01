@@ -146,9 +146,9 @@ import com.simplemobiletools.commons.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
-import com.simplemobiletools.commons.extensions.beVisible
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.navigationBarHeight
-import com.simplemobiletools.commons.extensions.beGone
+import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.portrait
 import com.simplemobiletools.commons.extensions.navigationBarRight
 import com.simplemobiletools.commons.extensions.navigationBarWidth
