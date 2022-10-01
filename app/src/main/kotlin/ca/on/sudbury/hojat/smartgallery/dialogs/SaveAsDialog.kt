@@ -14,7 +14,7 @@ import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
 import com.simplemobiletools.commons.extensions.isInDownloadDir
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
-import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
+import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.showKeyboard
 import com.simplemobiletools.commons.extensions.value

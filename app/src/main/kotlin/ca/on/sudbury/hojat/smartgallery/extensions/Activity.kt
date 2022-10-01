@@ -24,6 +24,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
@@ -97,6 +98,8 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -106,6 +109,12 @@ import java.io.IOException
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+fun Activity.getAlertDialogBuilder() = if (baseConfig.isUsingSystemTheme) {
+    MaterialAlertDialogBuilder(this)
+} else {
+    AlertDialog.Builder(this)
+}
 
 fun Activity.hideKeyboardSync() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
