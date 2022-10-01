@@ -121,11 +121,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.underlineText
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import com.simplemobiletools.commons.extensions.isImageFast
-import com.simplemobiletools.commons.extensions.isGif
+import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import com.simplemobiletools.commons.extensions.isRawFast
 import com.simplemobiletools.commons.extensions.isSvg
-import com.simplemobiletools.commons.extensions.isMediaFile
+import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
 import com.simplemobiletools.commons.extensions.hasPermission

@@ -3,8 +3,14 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.os.Environment
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import com.simplemobiletools.commons.extensions.isGif
+import com.simplemobiletools.commons.extensions.isPortrait
+import com.simplemobiletools.commons.extensions.isRawFast
+import com.simplemobiletools.commons.extensions.isSvg
+import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.isRPlus
+import com.simplemobiletools.commons.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.videoExtensions
 import java.io.File
 import java.io.IOException
@@ -14,14 +20,29 @@ import kotlin.collections.HashMap
 fun String.getParentPath() = removeSuffix("/${getFilenameFromPath()}")
 
 fun String.isThisOrParentIncluded(includedPaths: MutableSet<String>) =
-    includedPaths.any { equals(it, true) } || includedPaths.any { "$this/".startsWith("$it/", true) }
+    includedPaths.any { equals(it, true) } || includedPaths.any {
+        "$this/".startsWith(
+            "$it/",
+            true
+        )
+    }
 
 fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
-    excludedPaths.any { equals(it, true) } || excludedPaths.any { "$this/".startsWith("$it/", true) }
+    excludedPaths.any { equals(it, true) } || excludedPaths.any {
+        "$this/".startsWith(
+            "$it/",
+            true
+        )
+    }
 
 fun String.isApng() = endsWith(".apng", true)
 
 fun String.isGif() = endsWith(".gif", true)
+
+fun String.isMediaFile() =
+    isImageFast() || isVideoFast() || isGif() || isRawFast() || isSvg() || isPortrait()
+
+fun String.isImageFast() = photoExtensions.any { endsWith(it, true) }
 
 fun String.isJpg() = endsWith(".jpg", true) or endsWith(".jpeg", true)
 
@@ -33,8 +54,11 @@ fun String.isWebP() = endsWith(".webp", true)
 
 // cache which folders contain .nomedia files to avoid checking them over and over again
 fun String.shouldFolderBeVisible(
-    excludedPaths: MutableSet<String>, includedPaths: MutableSet<String>, showHidden: Boolean,
-    folderNoMediaStatuses: HashMap<String, Boolean>, callback: (path: String, hasNoMedia: Boolean) -> Unit
+    excludedPaths: MutableSet<String>,
+    includedPaths: MutableSet<String>,
+    showHidden: Boolean,
+    folderNoMediaStatuses: HashMap<String, Boolean>,
+    callback: (path: String, hasNoMedia: Boolean) -> Unit
 ): Boolean {
     if (isEmpty()) {
         return false
@@ -60,7 +84,10 @@ fun String.shouldFolderBeVisible(
     val containsNoMedia = if (showHidden) {
         false
     } else {
-        folderNoMediaStatuses.getOrElse("$this/$NOMEDIA") { false } || ((!isRPlus() || isExternalStorageManager()) && File(this, NOMEDIA).exists())
+        folderNoMediaStatuses.getOrElse("$this/$NOMEDIA") { false } || ((!isRPlus() || isExternalStorageManager()) && File(
+            this,
+            NOMEDIA
+        ).exists())
     }
 
     return if (!showHidden && containsNoMedia) {
@@ -84,7 +111,8 @@ fun String.shouldFolderBeVisible(
                         break
                     }
                 } else {
-                    val noMediaExists = folderNoMediaStatuses.getOrElse(pathToCheck) { false } || File(pathToCheck).exists()
+                    val noMediaExists =
+                        folderNoMediaStatuses.getOrElse(pathToCheck) { false } || File(pathToCheck).exists()
                     callback(pathToCheck, noMediaExists)
                     if (noMediaExists) {
                         containsNoMediaOrDot = true
@@ -108,7 +136,9 @@ fun String.getDistinctPath(): String {
     }
 }
 
-fun String.isDownloadsFolder() = equals(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), true)
+fun String.isDownloadsFolder() = equals(
+    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), true
+)
 
 // fast extension checks, not guaranteed to be accurate
 fun String.isVideoFast() = videoExtensions.any { endsWith(it, true) }

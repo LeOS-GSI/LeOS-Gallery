@@ -23,7 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.isImageFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import com.simplemobiletools.commons.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg

@@ -19,7 +19,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
-import com.simplemobiletools.commons.extensions.isMediaFile
+import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.deleteFiles
 import com.simplemobiletools.commons.helpers.NavigationIcon

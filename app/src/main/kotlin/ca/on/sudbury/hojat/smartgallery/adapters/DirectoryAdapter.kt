@@ -29,9 +29,9 @@ import com.simplemobiletools.commons.dialogs.FolderLockingNoticeDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.PropertiesDialog
 import com.simplemobiletools.commons.dialogs.RenameItemsDialog
-import com.simplemobiletools.commons.extensions.isImageFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import com.simplemobiletools.commons.extensions.isVideoFast
-import com.simplemobiletools.commons.extensions.isGif
+import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import com.simplemobiletools.commons.extensions.isRawFast
 import com.simplemobiletools.commons.extensions.isSvg
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
@@ -45,7 +45,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
-import com.simplemobiletools.commons.extensions.isMediaFile
+import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.getContrastColor
 import com.simplemobiletools.commons.extensions.isAStorageRootFolder
 import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
