@@ -45,7 +45,6 @@ import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getFileInputStreamSync
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.rescanPaths
-import com.simplemobiletools.commons.extensions.isJpg
 import com.simplemobiletools.commons.extensions.saveExifRotation
 import com.simplemobiletools.commons.extensions.saveImageRotation
 import com.simplemobiletools.commons.extensions.updateLastModified

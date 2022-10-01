@@ -52,7 +52,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import com.simplemobiletools.commons.extensions.isWebP
+import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import com.simplemobiletools.commons.extensions.realScreenSize
 import com.simplemobiletools.commons.extensions.navigationBarHeight
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor

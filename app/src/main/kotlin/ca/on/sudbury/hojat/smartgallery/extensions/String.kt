@@ -19,6 +19,18 @@ fun String.isThisOrParentIncluded(includedPaths: MutableSet<String>) =
 fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
     excludedPaths.any { equals(it, true) } || excludedPaths.any { "$this/".startsWith("$it/", true) }
 
+fun String.isApng() = endsWith(".apng", true)
+
+fun String.isGif() = endsWith(".gif", true)
+
+fun String.isJpg() = endsWith(".jpg", true) or endsWith(".jpeg", true)
+
+fun String.isPng() = endsWith(".png", true)
+
+fun String.isSvg() = endsWith(".svg", true)
+
+fun String.isWebP() = endsWith(".webp", true)
+
 // cache which folders contain .nomedia files to avoid checking them over and over again
 fun String.shouldFolderBeVisible(
     excludedPaths: MutableSet<String>, includedPaths: MutableSet<String>, showHidden: Boolean,

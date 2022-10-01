@@ -24,9 +24,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.isImageFast
-import com.simplemobiletools.commons.extensions.isGif
+import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import com.simplemobiletools.commons.extensions.isRawFast
-import com.simplemobiletools.commons.extensions.isSvg
+import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import com.simplemobiletools.commons.extensions.getDuration
 import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getStringValue

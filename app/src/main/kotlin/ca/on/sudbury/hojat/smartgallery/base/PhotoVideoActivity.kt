@@ -32,10 +32,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.isImageFast
-import com.simplemobiletools.commons.extensions.isGif
+import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isRawFast
-import com.simplemobiletools.commons.extensions.isSvg
+import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
