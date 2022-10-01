@@ -37,7 +37,7 @@ import com.google.android.exoplayer2.upstream.ContentDataSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.upstream.FileDataSource
-import com.simplemobiletools.commons.extensions.beGoneIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
@@ -51,7 +51,7 @@ import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.getFormattedDuration
 import com.simplemobiletools.commons.extensions.getDuration
 import com.simplemobiletools.commons.extensions.getVideoResolution
-import com.simplemobiletools.commons.extensions.beInvisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beInvisibleIf
 import com.simplemobiletools.commons.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread

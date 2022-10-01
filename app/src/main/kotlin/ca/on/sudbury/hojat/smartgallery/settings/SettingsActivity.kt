@@ -17,14 +17,14 @@ import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import com.simplemobiletools.commons.extensions.beGoneIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.recycleBinPath
-import com.simplemobiletools.commons.extensions.formatSize
+import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import com.simplemobiletools.commons.extensions.getProperSize
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.updateTextColors

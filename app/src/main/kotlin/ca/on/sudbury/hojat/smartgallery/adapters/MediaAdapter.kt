@@ -27,7 +27,7 @@ import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.convertToBitmap
-import com.simplemobiletools.commons.extensions.formatSize
+import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible

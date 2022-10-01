@@ -4,23 +4,23 @@ import android.content.Context
 import android.text.format.DateFormat
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.getTimeFormat
-import com.simplemobiletools.commons.helpers.SORT_DESCENDING
 import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Locale
 
-fun Int.formatDate(
+fun Long.formatDate(
     context: Context,
     dateFormat: String? = null,
-    timeFormat: String? = null): String {
+    timeFormat: String? = null
+): String {
     val useDateFormat = dateFormat ?: context.baseConfig.dateFormat
     val useTimeFormat = timeFormat ?: context.getTimeFormat()
     val cal = Calendar.getInstance(Locale.ENGLISH)
-    cal.timeInMillis = this * 1000L
+    cal.timeInMillis = this
     return DateFormat.format("$useDateFormat, $useTimeFormat", cal).toString()
 }
 
-fun Int.formatSize(): String {
+fun Long.formatSize(): String {
     if (this <= 0) {
         return "0 B"
     }
@@ -36,5 +36,3 @@ fun Int.formatSize(): String {
         )
     } ${units[digitGroups]}"
 }
-
-fun Int.isSortingAscending() = this and SORT_DESCENDING == 0

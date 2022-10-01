@@ -22,8 +22,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import ca.on.sudbury.hojat.smartgallery.extensions.isApng
-import com.simplemobiletools.commons.extensions.formatSize
-import com.simplemobiletools.commons.extensions.formatDate
+import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
+import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import com.simplemobiletools.commons.extensions.getFilenameExtension
 import com.simplemobiletools.commons.helpers.SORT_BY_NAME
 import com.simplemobiletools.commons.helpers.SORT_BY_PATH

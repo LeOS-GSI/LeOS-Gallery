@@ -163,7 +163,7 @@ import com.simplemobiletools.commons.extensions.isAStorageRootFolder
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getDoesFilePathExist
-import com.simplemobiletools.commons.extensions.formatSize
+import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions

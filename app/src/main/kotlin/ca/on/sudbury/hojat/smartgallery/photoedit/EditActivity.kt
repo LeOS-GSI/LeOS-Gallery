@@ -53,7 +53,7 @@ import com.simplemobiletools.commons.extensions.getCompressionFormat
 import com.simplemobiletools.commons.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getRealPathFromURI
-import com.simplemobiletools.commons.extensions.beGoneIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.checkAppSideloading
