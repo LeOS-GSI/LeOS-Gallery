@@ -173,7 +173,7 @@ import com.simplemobiletools.commons.extensions.getUriMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.tryGenericMimeType
 import com.simplemobiletools.commons.extensions.getFinalUriFromPath
-import com.simplemobiletools.commons.extensions.getResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isGif
 import com.simplemobiletools.commons.extensions.isSvg

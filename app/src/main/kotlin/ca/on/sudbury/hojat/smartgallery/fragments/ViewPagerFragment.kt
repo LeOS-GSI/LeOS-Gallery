@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.formatSize
-import com.simplemobiletools.commons.extensions.getResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import com.simplemobiletools.commons.extensions.formatAsResolution
 import com.simplemobiletools.commons.extensions.getExifDateTaken
 import com.simplemobiletools.commons.extensions.getExifCameraModel

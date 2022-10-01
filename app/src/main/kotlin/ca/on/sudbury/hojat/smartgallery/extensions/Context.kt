@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
 import android.media.AudioManager
 import android.os.Handler
@@ -104,8 +105,14 @@ import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
+import com.simplemobiletools.commons.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
+import com.simplemobiletools.commons.extensions.getVideoResolution
+import com.simplemobiletools.commons.extensions.isImageFast
+import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
+import com.simplemobiletools.commons.extensions.isVideoFast
+import com.simplemobiletools.commons.extensions.isVideoSlow
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
@@ -1001,6 +1008,16 @@ fun Context.getIsPathDirectory(path: String): Boolean {
         isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(path)?.isDirectory ?: false
         isPathOnOTG(path) -> getOTGFastDocumentFile(path)?.isDirectory ?: false
         else -> File(path).isDirectory
+    }
+}
+
+fun Context.getResolution(path: String): Point? {
+    return if (path.isImageFast() || path.isImageSlow()) {
+        getImageResolution(path)
+    } else if (path.isVideoFast() || path.isVideoSlow()) {
+        getVideoResolution(path)
+    } else {
+        null
     }
 }
 
