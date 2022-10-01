@@ -110,7 +110,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import com.simplemobiletools.commons.extensions.handleAppPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.deleteFiles
-import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getFilePublicUri

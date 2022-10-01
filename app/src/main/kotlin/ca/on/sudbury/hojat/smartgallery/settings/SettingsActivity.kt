@@ -35,7 +35,7 @@ import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.getAppIconColors
 import com.simplemobiletools.commons.extensions.checkAppIconColor
 import com.simplemobiletools.commons.extensions.toStringSet
-import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
 import com.simplemobiletools.commons.helpers.PROTECTION_FINGERPRINT
 import com.simplemobiletools.commons.helpers.isRPlus

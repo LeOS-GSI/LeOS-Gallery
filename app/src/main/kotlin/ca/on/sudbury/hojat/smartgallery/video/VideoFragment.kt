@@ -49,8 +49,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.getFormattedDuration
-import com.simplemobiletools.commons.extensions.getDuration
-import com.simplemobiletools.commons.extensions.getVideoResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
+import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisibleIf
 import com.simplemobiletools.commons.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible

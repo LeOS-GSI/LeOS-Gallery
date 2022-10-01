@@ -48,7 +48,7 @@ import com.simplemobiletools.commons.extensions.navigationBarWidth
 import com.simplemobiletools.commons.extensions.getUriMimeType
 import com.simplemobiletools.commons.extensions.getFinalUriFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.getFilenameFromPath

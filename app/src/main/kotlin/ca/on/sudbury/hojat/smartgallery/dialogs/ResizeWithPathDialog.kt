@@ -18,7 +18,7 @@ import com.simplemobiletools.commons.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.value
 import com.simplemobiletools.commons.extensions.isAValidFilename
-import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 
