@@ -108,7 +108,7 @@ import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import com.simplemobiletools.commons.extensions.handleAppPasswordProtection
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.deleteFiles
 import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.toFileDirItem

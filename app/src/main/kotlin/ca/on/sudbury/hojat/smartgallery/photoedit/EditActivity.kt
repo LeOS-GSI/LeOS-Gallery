@@ -33,7 +33,7 @@ import com.simplemobiletools.commons.extensions.beGone
 import com.simplemobiletools.commons.extensions.beVisible
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.getFileOutputStream
 import com.simplemobiletools.commons.extensions.getFilenameFromContentUri
 import com.simplemobiletools.commons.extensions.sharePathIntent
