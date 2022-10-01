@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
+import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
@@ -8,10 +9,13 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.drawable.PictureDrawable
 import android.media.AudioManager
+import android.os.Handler
+import android.os.Looper
 import android.os.Process
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.widget.ImageView
+import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -100,6 +104,7 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
+import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File
@@ -947,6 +952,34 @@ fun Context.updateFavorite(path: String, isFavorite: Boolean) {
         toast(R.string.unknown_error_occurred)
     }
 }
+
+fun Context.toast(id: Int, length: Int = Toast.LENGTH_SHORT) {
+    toast(getString(id), length)
+}
+
+fun Context.toast(msg: String, length: Int = Toast.LENGTH_SHORT) {
+    try {
+        if (isOnMainThread()) {
+            doToast(this, msg, length)
+        } else {
+            Handler(Looper.getMainLooper()).post {
+                doToast(this, msg, length)
+            }
+        }
+    } catch (_: Exception) {
+    }
+}
+
+private fun doToast(context: Context, message: String, length: Int) {
+    if (context is Activity) {
+        if (!context.isFinishing && !context.isDestroyed) {
+            Toast.makeText(context, message, length).show()
+        }
+    } else {
+        Toast.makeText(context, message, length).show()
+    }
+}
+
 
 // remove the "recycle_bin" from the file path prefix, replace it with real bin path /data/user...
 fun Context.getUpdatedDeletedMedia(): ArrayList<Medium> {

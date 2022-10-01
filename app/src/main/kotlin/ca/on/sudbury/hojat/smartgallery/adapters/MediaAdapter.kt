@@ -24,7 +24,7 @@ import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.convertToBitmap
 import com.simplemobiletools.commons.extensions.formatSize

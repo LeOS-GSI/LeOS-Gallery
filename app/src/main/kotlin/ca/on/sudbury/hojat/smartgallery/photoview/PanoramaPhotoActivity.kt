@@ -13,7 +13,7 @@ import android.widget.RelativeLayout
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener
 import com.google.vr.sdk.widgets.pano.VrPanoramaView
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.beVisible
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.navigationBarHeight

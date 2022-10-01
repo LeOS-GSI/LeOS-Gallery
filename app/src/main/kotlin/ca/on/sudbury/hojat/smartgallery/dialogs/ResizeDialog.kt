@@ -11,7 +11,7 @@ import com.simplemobiletools.commons.extensions.onTextChangeListener
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.showKeyboard
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.value
 
 @SuppressLint("InflateParams")

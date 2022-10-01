@@ -20,7 +20,7 @@ import com.simplemobiletools.commons.extensions.beGone
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isMediaFile
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.deleteFiles
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID

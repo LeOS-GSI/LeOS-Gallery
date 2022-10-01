@@ -47,7 +47,7 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.getRealPathFromURI
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.beGone
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.beVisibleIf

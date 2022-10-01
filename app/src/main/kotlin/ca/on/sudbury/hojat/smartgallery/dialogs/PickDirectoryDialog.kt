@@ -15,7 +15,7 @@ import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
 import com.simplemobiletools.commons.extensions.beGone
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
-import com.simplemobiletools.commons.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
 import com.simplemobiletools.commons.extensions.isInDownloadDir
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
