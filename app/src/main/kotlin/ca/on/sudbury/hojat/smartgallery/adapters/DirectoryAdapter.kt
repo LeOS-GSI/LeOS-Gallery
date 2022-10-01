@@ -42,7 +42,7 @@ import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
 import com.simplemobiletools.commons.extensions.beGone
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.beVisible
-import com.simplemobiletools.commons.extensions.isVisible
+import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import com.simplemobiletools.commons.extensions.isMediaFile

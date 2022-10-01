@@ -11,3 +11,5 @@ fun View.sendFakeClick(x: Float, y: Float) {
     event.action = MotionEvent.ACTION_UP
     dispatchTouchEvent(event)
 }
+
+fun View.isVisible() = visibility == View.VISIBLE

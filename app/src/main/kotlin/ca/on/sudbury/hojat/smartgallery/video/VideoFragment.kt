@@ -53,7 +53,7 @@ import com.simplemobiletools.commons.extensions.getDuration
 import com.simplemobiletools.commons.extensions.getVideoResolution
 import com.simplemobiletools.commons.extensions.beInvisibleIf
 import com.simplemobiletools.commons.extensions.realScreenSize
-import com.simplemobiletools.commons.extensions.isVisible
+import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.activities.PanoramaVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerVideoItemBinding
