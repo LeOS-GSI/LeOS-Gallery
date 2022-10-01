@@ -56,7 +56,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import com.simplemobiletools.commons.extensions.realScreenSize
 import com.simplemobiletools.commons.extensions.navigationBarHeight
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
-import com.simplemobiletools.commons.extensions.isPathOnOTG
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread

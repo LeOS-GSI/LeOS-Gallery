@@ -37,7 +37,7 @@ import com.simplemobiletools.commons.extensions.normalizeString
 import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.areDigitsOnly
-import com.simplemobiletools.commons.extensions.isPathOnOTG
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.hasOTGConnected
 import com.simplemobiletools.commons.helpers.SORT_BY_PATH
 import com.simplemobiletools.commons.helpers.SORT_USE_NUMERIC_VALUE

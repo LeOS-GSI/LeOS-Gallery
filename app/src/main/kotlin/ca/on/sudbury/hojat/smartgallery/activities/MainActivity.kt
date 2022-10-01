@@ -134,7 +134,7 @@ import com.simplemobiletools.commons.extensions.getStorageDirectories
 import com.simplemobiletools.commons.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.isPathOnOTG
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getLatestMediaId
 import com.simplemobiletools.commons.extensions.getLatestMediaByDateId
 import com.simplemobiletools.commons.extensions.areSystemAnimationsEnabled

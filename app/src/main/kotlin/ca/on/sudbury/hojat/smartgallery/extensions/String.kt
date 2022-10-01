@@ -5,7 +5,6 @@ import android.provider.MediaStore
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -45,6 +44,13 @@ fun String.isMediaFile() =
     isImageFast() || isVideoFast() || isGif() || isRawFast() || isSvg() || isPortrait()
 
 fun String.isImageFast() = photoExtensions.any { endsWith(it, true) }
+
+fun String.isPortrait() = getFilenameFromPath().contains(
+    "portrait",
+    true
+) && File(this).parentFile?.name?.startsWith("img_", true) == true
+
+fun String.isImageSlow() = isImageFast() || getMimeType().startsWith("image") || startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
 
 fun String.isJpg() = endsWith(".jpg", true) or endsWith(".jpeg", true)
 

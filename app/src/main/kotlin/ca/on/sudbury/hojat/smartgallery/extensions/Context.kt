@@ -40,12 +40,11 @@ import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.isPathOnSD
-import com.simplemobiletools.commons.extensions.isPathOnOTG
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
-import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.extensions.getDuration
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import com.simplemobiletools.commons.extensions.getLongValue
@@ -103,7 +102,6 @@ import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getVideoResolution
-import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
@@ -146,6 +144,8 @@ val Context.directoryDao: DirectoryDao get() = GalleryDatabase.getInstance(appli
 val Context.favoritesDB: FavoritesDao get() = GalleryDatabase.getInstance(applicationContext).FavoritesDao()
 
 val Context.dateTakensDB: DateTakensDao get() = GalleryDatabase.getInstance(applicationContext).DateTakensDao()
+
+fun Context.isPathOnOTG(path: String) = otgPath.isNotEmpty() && path.startsWith(otgPath)
 
 val Context.recycleBin: File get() = filesDir
 

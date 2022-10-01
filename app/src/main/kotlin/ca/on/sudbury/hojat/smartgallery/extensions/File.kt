@@ -5,7 +5,6 @@ import com.simplemobiletools.commons.extensions.getAndroidSAFDirectChildrenCount
 import com.simplemobiletools.commons.extensions.getDigest
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getMimeType
-import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.helpers.MD5
 import com.simplemobiletools.commons.helpers.NOMEDIA
