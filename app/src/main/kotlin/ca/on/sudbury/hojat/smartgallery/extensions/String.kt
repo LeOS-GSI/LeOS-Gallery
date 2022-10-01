@@ -1,14 +1,15 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.os.Environment
+import android.provider.MediaStore
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.isGif
 import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.extensions.isRawFast
-import com.simplemobiletools.commons.extensions.isSvg
 import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.helpers.NOMEDIA
+import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.videoExtensions
@@ -37,6 +38,8 @@ fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
 
 fun String.isApng() = endsWith(".apng", true)
 
+fun String.isAudioFast() = audioExtensions.any { endsWith(it, true) }
+
 fun String.isGif() = endsWith(".gif", true)
 
 fun String.isMediaFile() =
@@ -49,6 +52,9 @@ fun String.isJpg() = endsWith(".jpg", true) or endsWith(".jpeg", true)
 fun String.isPng() = endsWith(".png", true)
 
 fun String.isSvg() = endsWith(".svg", true)
+fun String.isVideoSlow() = isVideoFast() || getMimeType().startsWith("video") || startsWith(
+    MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString()
+)
 
 fun String.isWebP() = endsWith(".webp", true)
 

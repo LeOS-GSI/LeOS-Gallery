@@ -107,7 +107,7 @@ import com.simplemobiletools.commons.extensions.getVideoResolution
 import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.isVideoFast
-import com.simplemobiletools.commons.extensions.isVideoSlow
+import ca.on.sudbury.hojat.smartgallery.extensions.isVideoSlow
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
