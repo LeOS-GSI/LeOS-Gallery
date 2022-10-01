@@ -43,7 +43,6 @@ import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
-import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isGif
 import com.simplemobiletools.commons.extensions.isRawFast
 import com.simplemobiletools.commons.extensions.isSvg

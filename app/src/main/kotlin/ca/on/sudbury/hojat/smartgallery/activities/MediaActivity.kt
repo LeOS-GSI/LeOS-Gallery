@@ -43,6 +43,7 @@ import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeGroupingDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialog
+import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.database.MediaOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediaBinding
@@ -97,7 +98,6 @@ import com.simplemobiletools.commons.extensions.getLatestMediaId
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.recycleBinPath
-import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isVisible
 import com.simplemobiletools.commons.extensions.deleteFiles
 import com.simplemobiletools.commons.extensions.getTimeFormat

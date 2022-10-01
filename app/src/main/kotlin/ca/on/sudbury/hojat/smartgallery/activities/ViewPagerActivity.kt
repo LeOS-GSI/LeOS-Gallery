@@ -174,7 +174,7 @@ import com.simplemobiletools.commons.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.tryGenericMimeType
 import com.simplemobiletools.commons.extensions.getFinalUriFromPath
 import com.simplemobiletools.commons.extensions.getResolution
-import com.simplemobiletools.commons.extensions.isVideoFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isGif
 import com.simplemobiletools.commons.extensions.isSvg
 import com.simplemobiletools.commons.extensions.isRawFast

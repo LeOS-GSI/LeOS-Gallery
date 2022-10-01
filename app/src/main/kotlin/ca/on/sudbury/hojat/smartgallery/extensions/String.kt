@@ -4,6 +4,7 @@ import android.os.Environment
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.isRPlus
+import com.simplemobiletools.commons.helpers.videoExtensions
 import java.io.File
 import java.io.IOException
 import java.util.Locale
@@ -93,3 +94,6 @@ fun String.getDistinctPath(): String {
 }
 
 fun String.isDownloadsFolder() = equals(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString(), true)
+
+// fast extension checks, not guaranteed to be accurate
+fun String.isVideoFast() = videoExtensions.any { endsWith(it, true) }

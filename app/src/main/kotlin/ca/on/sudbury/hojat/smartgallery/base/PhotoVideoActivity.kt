@@ -32,8 +32,8 @@ import com.simplemobiletools.commons.extensions.beVisible
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.beGone
 import com.simplemobiletools.commons.extensions.isImageFast
-import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isGif
+import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isRawFast
 import com.simplemobiletools.commons.extensions.isSvg
 import com.simplemobiletools.commons.extensions.isPortrait
