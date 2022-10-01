@@ -35,7 +35,6 @@ import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
-import com.simplemobiletools.commons.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
 import com.simplemobiletools.commons.extensions.recycleBinPath

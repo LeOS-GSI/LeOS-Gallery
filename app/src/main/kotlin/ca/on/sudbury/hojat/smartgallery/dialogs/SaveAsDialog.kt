@@ -8,7 +8,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
 import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
 import com.simplemobiletools.commons.extensions.isInDownloadDir

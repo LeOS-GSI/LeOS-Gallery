@@ -38,7 +38,7 @@ import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.isAStorageRootFolder
-import com.simplemobiletools.commons.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getTimeFormat
 import com.simplemobiletools.commons.extensions.hasOTGConnected

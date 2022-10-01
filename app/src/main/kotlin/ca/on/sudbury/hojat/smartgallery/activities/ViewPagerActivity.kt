@@ -145,7 +145,7 @@ import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
-import com.simplemobiletools.commons.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.beVisible
 import com.simplemobiletools.commons.extensions.navigationBarHeight
 import com.simplemobiletools.commons.extensions.beGone

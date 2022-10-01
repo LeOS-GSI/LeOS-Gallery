@@ -42,7 +42,7 @@ import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
-import com.simplemobiletools.commons.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getCurrentFormattedDateTime
 import com.simplemobiletools.commons.extensions.getFilenameExtension

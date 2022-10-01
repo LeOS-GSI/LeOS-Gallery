@@ -21,7 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.dateTakensDB
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
-import com.simplemobiletools.commons.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.isImageFast
 import com.simplemobiletools.commons.extensions.isGif

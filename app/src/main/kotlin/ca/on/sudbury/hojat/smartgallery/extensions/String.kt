@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.os.Environment
+import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -9,6 +10,8 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.collections.HashMap
+
+fun String.getParentPath() = removeSuffix("/${getFilenameFromPath()}")
 
 fun String.isThisOrParentIncluded(includedPaths: MutableSet<String>) =
     includedPaths.any { equals(it, true) } || includedPaths.any { "$this/".startsWith("$it/", true) }

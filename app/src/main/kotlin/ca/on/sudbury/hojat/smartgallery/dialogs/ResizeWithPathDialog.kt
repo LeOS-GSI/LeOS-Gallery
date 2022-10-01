@@ -9,7 +9,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogResizeImageWithPathBin
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.onTextChangeListener
 import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
