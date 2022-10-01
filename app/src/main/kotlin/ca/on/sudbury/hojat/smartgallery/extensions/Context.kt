@@ -103,6 +103,9 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
+import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
+import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
+import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
@@ -979,7 +982,6 @@ private fun doToast(context: Context, message: String, length: Int) {
     }
 }
 
-
 // remove the "recycle_bin" from the file path prefix, replace it with real bin path /data/user...
 fun Context.getUpdatedDeletedMedia(): ArrayList<Medium> {
     val media = try {
@@ -992,6 +994,14 @@ fun Context.getUpdatedDeletedMedia(): ArrayList<Medium> {
         it.path = File(recycleBinPath, it.path.removePrefix(RECYCLE_BIN)).toString()
     }
     return media
+}
+
+fun Context.getIsPathDirectory(path: String): Boolean {
+    return when {
+        isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(path)?.isDirectory ?: false
+        isPathOnOTG(path) -> getOTGFastDocumentFile(path)?.isDirectory ?: false
+        else -> File(path).isDirectory
+    }
 }
 
 fun Context.deleteDBPath(path: String) {

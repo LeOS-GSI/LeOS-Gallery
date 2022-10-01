@@ -164,7 +164,7 @@ import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.formatSize
-import com.simplemobiletools.commons.extensions.getIsPathDirectory
+import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.convertToBitmap
