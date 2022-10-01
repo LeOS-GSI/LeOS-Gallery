@@ -6,12 +6,11 @@ import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.isPortrait
-import com.simplemobiletools.commons.extensions.isRawFast
-import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.photoExtensions
+import com.simplemobiletools.commons.helpers.rawExtensions
 import com.simplemobiletools.commons.helpers.videoExtensions
 import java.io.File
 import java.io.IOException
@@ -50,6 +49,8 @@ fun String.isImageFast() = photoExtensions.any { endsWith(it, true) }
 fun String.isJpg() = endsWith(".jpg", true) or endsWith(".jpeg", true)
 
 fun String.isPng() = endsWith(".png", true)
+
+fun String.isRawFast() = rawExtensions.any { endsWith(it, true) }
 
 fun String.isSvg() = endsWith(".svg", true)
 fun String.isVideoSlow() = isVideoFast() || getMimeType().startsWith("video") || startsWith(

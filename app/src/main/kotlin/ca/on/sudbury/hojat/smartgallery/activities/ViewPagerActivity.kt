@@ -177,7 +177,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
-import com.simplemobiletools.commons.extensions.isRawFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import com.simplemobiletools.commons.extensions.scanPathRecursively
 import com.simplemobiletools.commons.extensions.statusBarHeight
 import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor

@@ -30,9 +30,9 @@ import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.PropertiesDialog
 import com.simplemobiletools.commons.dialogs.RenameItemsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
-import com.simplemobiletools.commons.extensions.isVideoFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
-import com.simplemobiletools.commons.extensions.isRawFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.rescanPaths

@@ -34,7 +34,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
-import com.simplemobiletools.commons.extensions.isRawFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.extensions.navigationBarHeight

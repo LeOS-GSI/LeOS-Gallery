@@ -7,7 +7,6 @@ import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
-import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.helpers.MD5
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions

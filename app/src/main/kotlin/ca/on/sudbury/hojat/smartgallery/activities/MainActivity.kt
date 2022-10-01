@@ -123,7 +123,7 @@ import com.simplemobiletools.commons.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
-import com.simplemobiletools.commons.extensions.isRawFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.showErrorToast
