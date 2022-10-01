@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ContentProviderOperation
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -21,6 +22,7 @@ import android.provider.MediaStore.Images
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
@@ -95,7 +97,6 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
-import com.simplemobiletools.commons.extensions.hideKeyboardSync
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -105,6 +106,13 @@ import java.io.IOException
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+fun Activity.hideKeyboardSync() {
+    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow((currentFocus ?: View(this)).windowToken, 0)
+    window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+    currentFocus?.clearFocus()
+}
 
 fun Activity.sharePath(path: String) {
     sharePathIntent(path, BuildConfig.APPLICATION_ID)
@@ -126,7 +134,11 @@ fun Activity.setAs(path: String) {
     setAsIntent(path, BuildConfig.APPLICATION_ID)
 }
 
-fun Activity.openPath(path: String, forceChooser: Boolean, extras: HashMap<String, Boolean> = HashMap()) {
+fun Activity.openPath(
+    path: String,
+    forceChooser: Boolean,
+    extras: HashMap<String, Boolean> = HashMap()
+) {
     openPathIntent(path, forceChooser, BuildConfig.APPLICATION_ID, extras = extras)
 }
 
@@ -161,9 +173,10 @@ fun SimpleActivity.launchSettings() {
 }
 
 fun SimpleActivity.launchAbout() {
-    val licenses = LICENSE_GLIDE or LICENSE_CROPPER or LICENSE_RTL or LICENSE_SUBSAMPLING or LICENSE_PATTERN or LICENSE_REPRINT or LICENSE_GIF_DRAWABLE or
-        LICENSE_PICASSO or LICENSE_EXOPLAYER or LICENSE_PANORAMA_VIEW or LICENSE_SANSELAN or LICENSE_FILTERS or LICENSE_GESTURE_VIEWS or
-        LICENSE_APNG
+    val licenses =
+        LICENSE_GLIDE or LICENSE_CROPPER or LICENSE_RTL or LICENSE_SUBSAMPLING or LICENSE_PATTERN or LICENSE_REPRINT or LICENSE_GIF_DRAWABLE or
+                LICENSE_PICASSO or LICENSE_EXOPLAYER or LICENSE_PANORAMA_VIEW or LICENSE_SANSELAN or LICENSE_FILTERS or LICENSE_GESTURE_VIEWS or
+                LICENSE_APNG
 
     val faqItems = arrayListOf(
         FAQItem(R.string.faq_3_title, R.string.faq_3_text),
@@ -237,7 +250,8 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
             }
         }
     } else if (isSPlus() && !MediaStore.canManageMedia(this) && !isExternalStorageManager()) {
-        val message = "${getString(R.string.media_management_prompt)}\n\n${getString(R.string.media_management_note)}"
+        val message =
+            "${getString(R.string.media_management_prompt)}\n\n${getString(R.string.media_management_note)}"
         ConfirmationDialog(this, message, 0, R.string.ok, 0) {
             launchMediaManagementIntent(callback)
         }
@@ -248,18 +262,18 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
 
 fun AppCompatActivity.showSystemUI(toggleActionBarVisibility: Boolean) {
     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 }
 
 fun AppCompatActivity.hideSystemUI(toggleActionBarVisibility: Boolean) {
     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-        View.SYSTEM_UI_FLAG_LOW_PROFILE or
-        View.SYSTEM_UI_FLAG_FULLSCREEN or
-        View.SYSTEM_UI_FLAG_IMMERSIVE
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_LOW_PROFILE or
+            View.SYSTEM_UI_FLAG_FULLSCREEN or
+            View.SYSTEM_UI_FLAG_IMMERSIVE
 }
 
 fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
@@ -328,7 +342,11 @@ fun BaseSimpleActivity.removeNoMedia(path: String, callback: (() -> Unit)? = nul
     }
 }
 
-fun BaseSimpleActivity.toggleFileVisibility(oldPath: String, hide: Boolean, callback: ((newPath: String) -> Unit)? = null) {
+fun BaseSimpleActivity.toggleFileVisibility(
+    oldPath: String,
+    hide: Boolean,
+    callback: ((newPath: String) -> Unit)? = null
+) {
     val path = oldPath.getParentPath()
     var filename = oldPath.getFilenameFromPath()
     if ((hide && filename.startsWith('.')) || (!hide && !filename.startsWith('.'))) {
@@ -354,7 +372,11 @@ fun BaseSimpleActivity.toggleFileVisibility(oldPath: String, hide: Boolean, call
     }
 }
 
-fun BaseSimpleActivity.tryCopyMoveFilesTo(fileDirItems: ArrayList<FileDirItem>, isCopyOperation: Boolean, callback: (destinationPath: String) -> Unit) {
+fun BaseSimpleActivity.tryCopyMoveFilesTo(
+    fileDirItems: ArrayList<FileDirItem>,
+    isCopyOperation: Boolean,
+    callback: (destinationPath: String) -> Unit
+) {
     if (fileDirItems.isEmpty()) {
         toast(R.string.unknown_error_occurred)
         return
@@ -372,7 +394,15 @@ fun BaseSimpleActivity.tryCopyMoveFilesTo(fileDirItems: ArrayList<FileDirItem>, 
         val destination = it
         handleSAFDialog(source) {
             if (it) {
-                copyMoveFilesTo(fileDirItems, source.trimEnd('/'), destination, isCopyOperation, true, config.shouldShowHidden, callback)
+                copyMoveFilesTo(
+                    fileDirItems,
+                    source.trimEnd('/'),
+                    destination,
+                    isCopyOperation,
+                    true,
+                    config.shouldShowHidden,
+                    callback
+                )
             }
         }
     }
@@ -396,7 +426,10 @@ fun BaseSimpleActivity.tryDeleteFileDirItem(
     }
 }
 
-fun BaseSimpleActivity.movePathsInRecycleBin(paths: ArrayList<String>, callback: ((wasSuccess: Boolean) -> Unit)?) {
+fun BaseSimpleActivity.movePathsInRecycleBin(
+    paths: ArrayList<String>,
+    callback: ((wasSuccess: Boolean) -> Unit)?
+) {
     ensureBackgroundThread {
         var pathsCnt = paths.size
         val OTGPath = config.OTGPath
@@ -408,7 +441,8 @@ fun BaseSimpleActivity.movePathsInRecycleBin(paths: ArrayList<String>, callback:
                 try {
                     val destination = "$recycleBinPath/$source"
                     val fileDocument = getSomeDocumentFile(source)
-                    inputStream = applicationContext.contentResolver.openInputStream(fileDocument?.uri!!)
+                    inputStream =
+                        applicationContext.contentResolver.openInputStream(fileDocument?.uri!!)
                     out = getFileOutputStreamSync(destination, source.getMimeType())
 
                     var copiedSize = 0L
@@ -422,8 +456,15 @@ fun BaseSimpleActivity.movePathsInRecycleBin(paths: ArrayList<String>, callback:
 
                     out?.flush()
 
-                    if (fileDocument.getItemSize(true) == copiedSize && getDoesFilePathExist(destination)) {
-                        mediaDB.updateDeleted("$RECYCLE_BIN$source", System.currentTimeMillis(), source)
+                    if (fileDocument.getItemSize(true) == copiedSize && getDoesFilePathExist(
+                            destination
+                        )
+                    ) {
+                        mediaDB.updateDeleted(
+                            "$RECYCLE_BIN$source",
+                            System.currentTimeMillis(),
+                            source
+                        )
                         pathsCnt--
                     }
                 } catch (e: Exception) {
@@ -439,7 +480,11 @@ fun BaseSimpleActivity.movePathsInRecycleBin(paths: ArrayList<String>, callback:
                 val lastModified = file.lastModified()
                 try {
                     if (file.copyRecursively(internalFile, true)) {
-                        mediaDB.updateDeleted("$RECYCLE_BIN$source", System.currentTimeMillis(), source)
+                        mediaDB.updateDeleted(
+                            "$RECYCLE_BIN$source",
+                            System.currentTimeMillis(),
+                            source
+                        )
                         pathsCnt--
 
                         if (config.keepLastModified && lastModified != 0L) {
@@ -513,7 +558,11 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
                 out?.flush()
 
                 if (File(source).length() == copiedSize) {
-                    mediaDB.updateDeleted(destination.removePrefix(recycleBinPath), 0, "$RECYCLE_BIN${source.removePrefix(recycleBinPath)}")
+                    mediaDB.updateDeleted(
+                        destination.removePrefix(recycleBinPath),
+                        0,
+                        "$RECYCLE_BIN${source.removePrefix(recycleBinPath)}"
+                    )
                 }
                 newPaths.add(destination)
 
@@ -562,12 +611,21 @@ fun BaseSimpleActivity.emptyAndDisableTheRecycleBin(callback: () -> Unit) {
 }
 
 fun BaseSimpleActivity.showRecycleBinEmptyingDialog(callback: () -> Unit) {
-    ConfirmationDialog(this, "", R.string.empty_recycle_bin_confirmation, R.string.yes, R.string.no) {
+    ConfirmationDialog(
+        this,
+        "",
+        R.string.empty_recycle_bin_confirmation,
+        R.string.yes,
+        R.string.no
+    ) {
         callback()
     }
 }
 
-fun BaseSimpleActivity.updateFavoritePaths(fileDirItems: ArrayList<FileDirItem>, destination: String) {
+fun BaseSimpleActivity.updateFavoritePaths(
+    fileDirItems: ArrayList<FileDirItem>,
+    destination: String
+) {
     ensureBackgroundThread {
         fileDirItems.forEach {
             val newPath = "$destination/${it.name}"
@@ -609,8 +667,10 @@ fun AppCompatActivity.fixDateTaken(
 
             for (path in paths) {
                 try {
-                    val dateTime: String = ExifInterface(path).getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
-                        ?: ExifInterface(path).getAttribute(ExifInterface.TAG_DATETIME) ?: continue
+                    val dateTime: String =
+                        ExifInterface(path).getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
+                            ?: ExifInterface(path).getAttribute(ExifInterface.TAG_DATETIME)
+                            ?: continue
 
                     // some formats contain a "T" in the middle, some don't
                     // sample dates: 2015-07-26T14:55:23, 2018:09:05 15:09:05
@@ -696,7 +756,13 @@ fun AppCompatActivity.fixDateTaken(
     }
 }
 
-fun BaseSimpleActivity.saveRotatedImageToFile(oldPath: String, newPath: String, degrees: Int, showToasts: Boolean, callback: () -> Unit) {
+fun BaseSimpleActivity.saveRotatedImageToFile(
+    oldPath: String,
+    newPath: String,
+    degrees: Int,
+    showToasts: Boolean,
+    callback: () -> Unit
+) {
     var newDegrees = degrees
     if (newDegrees < 0) {
         newDegrees += 360
@@ -751,7 +817,12 @@ fun BaseSimpleActivity.saveRotatedImageToFile(oldPath: String, newPath: String, 
 }
 
 @TargetApi(Build.VERSION_CODES.N)
-fun Activity.tryRotateByExif(path: String, degrees: Int, showToasts: Boolean, callback: () -> Unit): Boolean {
+fun Activity.tryRotateByExif(
+    path: String,
+    degrees: Int,
+    showToasts: Boolean,
+    callback: () -> Unit
+): Boolean {
     return try {
         val file = File(path)
         val oldLastModified = file.lastModified()
@@ -861,7 +932,11 @@ fun Activity.showFileOnMap(path: String) {
 
 fun Activity.handleExcludedFolderPasswordProtection(callback: () -> Unit) {
     if (config.isExcludedPasswordProtectionOn) {
-        SecurityDialog(this, config.excludedPasswordHash, config.excludedProtectionType) { _, _, success ->
+        SecurityDialog(
+            this,
+            config.excludedPasswordHash,
+            config.excludedProtectionType
+        ) { _, _, success ->
             if (success) {
                 callback()
             }
