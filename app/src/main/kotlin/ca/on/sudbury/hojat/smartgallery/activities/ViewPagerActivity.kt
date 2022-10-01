@@ -170,7 +170,7 @@ import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.convertToBitmap
 import com.simplemobiletools.commons.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getUriMimeType
-import com.simplemobiletools.commons.extensions.hideKeyboard
+import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.tryGenericMimeType
 import com.simplemobiletools.commons.extensions.getFinalUriFromPath
 import com.simplemobiletools.commons.extensions.getResolution

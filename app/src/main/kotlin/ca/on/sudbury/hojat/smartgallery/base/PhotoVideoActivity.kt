@@ -38,7 +38,7 @@ import com.simplemobiletools.commons.extensions.isRawFast
 import com.simplemobiletools.commons.extensions.isSvg
 import com.simplemobiletools.commons.extensions.isPortrait
 import com.simplemobiletools.commons.extensions.navigationBarHeight
-import com.simplemobiletools.commons.extensions.hideKeyboard
+import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.rescanPath
 import com.simplemobiletools.commons.extensions.statusBarHeight
 import com.simplemobiletools.commons.extensions.actionBarHeight

@@ -13,12 +13,15 @@ import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
@@ -64,7 +67,6 @@ import com.simplemobiletools.commons.extensions.renameFile
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
 import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent
-import com.simplemobiletools.commons.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.launchActivityIntent
 import com.simplemobiletools.commons.extensions.canManageMedia
 import com.simplemobiletools.commons.extensions.getItemSize
@@ -95,6 +97,8 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
+import com.simplemobiletools.commons.extensions.hideKeyboardSync
+import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.OutputStream
@@ -136,6 +140,21 @@ fun Activity.openEditor(path: String, forceChooser: Boolean = false) {
 fun Activity.launchCamera() {
     val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
     launchActivityIntent(intent)
+}
+
+fun Activity.hideKeyboard() {
+    if (isOnMainThread()) {
+        hideKeyboardSync()
+    } else {
+        Handler(Looper.getMainLooper()).post {
+            hideKeyboardSync()
+        }
+    }
+}
+
+fun Activity.hideKeyboard(view: View) {
+    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
 fun SimpleActivity.launchSettings() {
