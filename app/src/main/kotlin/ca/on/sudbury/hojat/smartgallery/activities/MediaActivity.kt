@@ -91,7 +91,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.areSystemAnimationsEnabled
 import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
-import com.simplemobiletools.commons.extensions.isGone
+import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.getLatestMediaByDateId
 import com.simplemobiletools.commons.extensions.getLatestMediaId
@@ -703,7 +703,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                                 mediaDB.deleteMediumPath(it.path)
                             }
                         }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }
         }
@@ -987,7 +987,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             Thread {
                 try {
                     mediaDB.insertAll(mediaToInsert)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
             }.start()
         }

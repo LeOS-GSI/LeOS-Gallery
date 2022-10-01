@@ -37,7 +37,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.getFileOutputStream
 import com.simplemobiletools.commons.extensions.getFilenameFromContentUri
 import com.simplemobiletools.commons.extensions.sharePathIntent
-import com.simplemobiletools.commons.extensions.isGone
+import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.beVisibleIf

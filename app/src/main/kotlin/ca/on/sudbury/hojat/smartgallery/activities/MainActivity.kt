@@ -120,7 +120,7 @@ import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.underlineText
 import com.simplemobiletools.commons.extensions.beVisibleIf
-import com.simplemobiletools.commons.extensions.isGone
+import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.isImageFast
 import com.simplemobiletools.commons.extensions.isGif
 import com.simplemobiletools.commons.extensions.isRawFast
