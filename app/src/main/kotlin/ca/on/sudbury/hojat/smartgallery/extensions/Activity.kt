@@ -38,7 +38,6 @@ import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.isInDownloadDir
 import com.simplemobiletools.commons.extensions.toast
-import com.simplemobiletools.commons.extensions.humanizePath
 import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.getFileOutputStreamSync
 import com.simplemobiletools.commons.extensions.getMimeType

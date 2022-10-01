@@ -13,12 +13,7 @@ import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.text.format.DateFormat
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.getUpdatedDeletedMedia
-import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
-import ca.on.sudbury.hojat.smartgallery.extensions.shouldFolderBeVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.dateTakensDB
-import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
+import ca.on.sudbury.hojat.smartgallery.extensions.*
 import com.simplemobiletools.commons.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.isImageFast
@@ -35,7 +30,6 @@ import com.simplemobiletools.commons.extensions.queryCursor
 import com.simplemobiletools.commons.extensions.normalizeString
 import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getIntValue
-import com.simplemobiletools.commons.extensions.humanizePath
 import com.simplemobiletools.commons.extensions.areDigitsOnly
 import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.hasOTGConnected
