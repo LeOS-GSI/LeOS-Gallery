@@ -14,6 +14,7 @@ import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
 import android.media.AudioManager
 import android.media.MediaMetadataRetriever
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Environment
 import android.os.Handler
@@ -47,7 +48,6 @@ import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
-import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import com.simplemobiletools.commons.helpers.FAVORITES
@@ -176,6 +176,11 @@ private fun Context.queryCursorDesc(
         contentResolver.query(uri, projection, null, null, sortOrder)
     }
 }
+
+private const val ANDROID_DATA_DIR = "/Android/data/"
+private const val ANDROID_OBB_DIR = "/Android/obb/"
+val DIRS_ACCESSIBLE_ONLY_WITH_SAF = listOf(ANDROID_DATA_DIR, ANDROID_OBB_DIR)
+val Context.recycleBinPath: String get() = filesDir.absolutePath
 
 val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -1823,4 +1828,26 @@ fun Context.getFileDateTaken(path: String): Long {
     }
 
     return 0L
+}
+
+// avoid calling this multiple times in row, it can delete whole folder contents
+fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
+    if (paths.isEmpty()) {
+        callback?.invoke()
+        return
+    }
+
+    for (path in paths) {
+        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).apply {
+            data = Uri.fromFile(File(path))
+            sendBroadcast(this)
+        }
+    }
+
+    var cnt = paths.size
+    MediaScannerConnection.scanFile(applicationContext, paths.toTypedArray(), null) { _, _ ->
+        if (--cnt == 0) {
+            callback?.invoke()
+        }
+    }
 }

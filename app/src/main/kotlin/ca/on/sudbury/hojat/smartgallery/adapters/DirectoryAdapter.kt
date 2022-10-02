@@ -35,7 +35,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.rescanPaths
+import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening

@@ -39,13 +39,11 @@ import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
 import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
-import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.isInDownloadDir
 import com.simplemobiletools.commons.extensions.getFileOutputStreamSync
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getFileInputStreamSync
 import com.simplemobiletools.commons.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.saveExifRotation
 import com.simplemobiletools.commons.extensions.saveImageRotation
 import com.simplemobiletools.commons.extensions.updateLastModified
@@ -234,6 +232,10 @@ fun Activity.hideKeyboardSync() {
     inputMethodManager.hideSoftInputFromWindow((currentFocus ?: View(this)).windowToken, 0)
     window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     currentFocus?.clearFocus()
+}
+
+fun Activity.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
+    applicationContext.rescanPaths(paths, callback)
 }
 
 fun Activity.sharePath(path: String) {

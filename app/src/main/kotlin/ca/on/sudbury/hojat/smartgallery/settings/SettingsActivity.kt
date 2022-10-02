@@ -23,7 +23,7 @@ import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtec
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
-import com.simplemobiletools.commons.extensions.recycleBinPath
+import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor

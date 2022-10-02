@@ -141,7 +141,7 @@ import com.simplemobiletools.commons.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import com.simplemobiletools.commons.extensions.recycleBinPath
+import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getTimeFormat
 import com.simplemobiletools.commons.extensions.appLaunched
 import com.simplemobiletools.commons.extensions.isPackageInstalled

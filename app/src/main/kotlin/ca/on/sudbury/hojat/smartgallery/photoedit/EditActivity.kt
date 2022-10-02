@@ -50,7 +50,7 @@ import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getCompressionFormat
-import com.simplemobiletools.commons.extensions.rescanPaths
+import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf

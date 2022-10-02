@@ -22,10 +22,10 @@ import com.simplemobiletools.commons.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
-import com.simplemobiletools.commons.extensions.recycleBinPath
+import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import com.simplemobiletools.commons.extensions.rescanPaths
+import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.convertToBitmap
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30

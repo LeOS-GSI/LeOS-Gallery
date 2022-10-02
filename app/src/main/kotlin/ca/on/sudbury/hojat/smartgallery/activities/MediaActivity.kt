@@ -97,7 +97,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
-import com.simplemobiletools.commons.extensions.recycleBinPath
+import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.deleteFiles
 import com.simplemobiletools.commons.extensions.getTimeFormat

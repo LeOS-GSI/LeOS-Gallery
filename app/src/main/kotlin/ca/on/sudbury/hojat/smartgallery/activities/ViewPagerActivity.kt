@@ -141,7 +141,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_DEFAULT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import com.simplemobiletools.commons.extensions.recycleBinPath
+import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
@@ -157,7 +157,7 @@ import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.updateLastModified
-import com.simplemobiletools.commons.extensions.rescanPaths
+import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
 import com.simplemobiletools.commons.extensions.isAStorageRootFolder
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
