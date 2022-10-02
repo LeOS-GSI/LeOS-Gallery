@@ -55,7 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
-import com.simplemobiletools.commons.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.checkAppSideloading
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread

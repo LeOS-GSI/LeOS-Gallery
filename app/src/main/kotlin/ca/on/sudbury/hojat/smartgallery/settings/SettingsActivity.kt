@@ -25,7 +25,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
-import com.simplemobiletools.commons.extensions.getProperSize
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.extensions.getContrastColor

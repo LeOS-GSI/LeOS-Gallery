@@ -11,9 +11,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.formatAsResolution
-import com.simplemobiletools.commons.extensions.getExifDateTaken
-import com.simplemobiletools.commons.extensions.getExifCameraModel
-import com.simplemobiletools.commons.extensions.getExifProperties
+import ca.on.sudbury.hojat.smartgallery.extensions.getExifDateTaken
+import ca.on.sudbury.hojat.smartgallery.extensions.getExifCameraModel
+import ca.on.sudbury.hojat.smartgallery.extensions.getExifProperties
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue

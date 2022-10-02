@@ -1,9 +1,15 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
+import android.content.Context
 import android.os.Environment
 import android.provider.MediaStore
 import com.simplemobiletools.commons.extensions.getMimeType
+import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import com.simplemobiletools.commons.extensions.isPathOnOTG
+import com.simplemobiletools.commons.extensions.isPathOnSD
+import com.simplemobiletools.commons.extensions.otgPath
+import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -141,6 +147,15 @@ fun String.shouldFolderBeVisible(
         !containsNoMediaOrDot
     } else {
         true
+    }
+}
+
+fun String.getBasePath(context: Context): String {
+    return when {
+        startsWith(context.internalStoragePath) -> context.internalStoragePath
+        context.isPathOnSD(this) -> context.sdCardPath
+        context.isPathOnOTG(this) -> context.otgPath
+        else -> "/"
     }
 }
 

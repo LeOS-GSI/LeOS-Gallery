@@ -101,7 +101,7 @@ import com.simplemobiletools.commons.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.deleteFiles
 import com.simplemobiletools.commons.extensions.getTimeFormat
-import com.simplemobiletools.commons.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone

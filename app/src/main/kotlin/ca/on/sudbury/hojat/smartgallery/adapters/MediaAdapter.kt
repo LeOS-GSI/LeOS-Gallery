@@ -20,7 +20,7 @@ import com.simplemobiletools.commons.dialogs.PropertiesDialog
 import com.simplemobiletools.commons.dialogs.RenameDialog
 import com.simplemobiletools.commons.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
-import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
+import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath

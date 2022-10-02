@@ -59,7 +59,6 @@ import com.simplemobiletools.commons.extensions.deleteFile
 import com.simplemobiletools.commons.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.renameFile
 import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent

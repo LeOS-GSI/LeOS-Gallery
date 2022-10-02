@@ -166,7 +166,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
-import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
+import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.convertToBitmap
 import com.simplemobiletools.commons.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getUriMimeType

@@ -46,7 +46,6 @@ import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.recycleBinPath
-import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import com.simplemobiletools.commons.helpers.FAVORITES
@@ -112,10 +111,10 @@ import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.isAudioSlow
 import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isPathOnOTG
+import com.simplemobiletools.commons.extensions.isPathOnSD
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
+import com.simplemobiletools.commons.extensions.isSDCardSetAsDefaultStorage
 import com.simplemobiletools.commons.extensions.isVideoSlow
-import com.simplemobiletools.commons.extensions.navigationBarBottom
-import com.simplemobiletools.commons.extensions.navigationBarSize
 import com.simplemobiletools.commons.extensions.realScreenSize
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.usableScreenSize
@@ -341,11 +340,33 @@ val Context.widgetsDB: WidgetsDao
 
 val Context.mediaDB: MediumDao get() = GalleryDatabase.getInstance(applicationContext).MediumDao()
 
+val Context.navigationBarBottom: Boolean get() = usableScreenSize.y < realScreenSize.y
+
 val Context.navigationBarHeight: Int get() = if (navigationBarBottom && navigationBarSize.y != usableScreenSize.y) navigationBarSize.y else 0
 
 val Context.navigationBarRight: Boolean get() = usableScreenSize.x < realScreenSize.x && usableScreenSize.x > usableScreenSize.y
 
+val Context.navigationBarSize: Point
+    get() = when {
+        navigationBarRight -> Point(newNavigationBarHeight, usableScreenSize.y)
+        navigationBarBottom -> Point(usableScreenSize.x, newNavigationBarHeight)
+        else -> Point()
+    }
+
 val Context.navigationBarWidth: Int get() = if (navigationBarRight) navigationBarSize.x else 0
+
+// no need to use DocumentFile if an SD card is set as the default storage
+fun Context.needsStupidWritePermissions(path: String) = !isRPlus() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
+
+val Context.newNavigationBarHeight: Int
+    get() {
+        var navigationBarHeight = 0
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            navigationBarHeight = resources.getDimensionPixelSize(resourceId)
+        }
+        return navigationBarHeight
+    }
 
 val Context.directoryDao: DirectoryDao
     get() = GalleryDatabase.getInstance(applicationContext).DirectoryDao()
@@ -1668,6 +1689,13 @@ fun Context.getDuration(path: String): Int? {
     } catch (ignored: Exception) {
         null
     }
+}
+
+// handle system default theme (Material You) specially as the color is taken from the system, not hardcoded by us
+fun Context.getProperTextColor() = if (baseConfig.isUsingSystemTheme) {
+    resources.getColor(R.color.you_neutral_text_color, theme)
+} else {
+    baseConfig.textColor
 }
 
 fun Context.updateDirectoryPath(path: String) {

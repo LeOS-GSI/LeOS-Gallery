@@ -138,7 +138,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
 import com.simplemobiletools.commons.extensions.areSystemAnimationsEnabled
-import com.simplemobiletools.commons.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.recycleBinPath
@@ -146,7 +146,7 @@ import com.simplemobiletools.commons.extensions.getTimeFormat
 import com.simplemobiletools.commons.extensions.appLaunched
 import com.simplemobiletools.commons.extensions.isPackageInstalled
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
-import com.simplemobiletools.commons.extensions.getProperSize
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import com.simplemobiletools.commons.extensions.checkWhatsNew
 import java.io.File
 import java.io.InputStream

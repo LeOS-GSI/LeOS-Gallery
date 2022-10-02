@@ -13,7 +13,7 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.R
-import com.simplemobiletools.commons.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone

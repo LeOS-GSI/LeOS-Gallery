@@ -13,7 +13,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import com.simplemobiletools.commons.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_SQUARE
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_LINE

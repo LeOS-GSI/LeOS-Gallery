@@ -4,7 +4,7 @@ import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import com.simplemobiletools.commons.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.helpers.NavigationIcon
