@@ -24,7 +24,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.isInSubFolderInDownloadDir
 import com.simplemobiletools.commons.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.helpers.isRPlus
 import java.io.File
 

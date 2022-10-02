@@ -21,6 +21,7 @@ import android.provider.BaseColumns
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
+import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.Toast
@@ -40,7 +41,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.extensions.normalizeString
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.sdCardPath
@@ -104,17 +104,25 @@ import com.simplemobiletools.commons.extensions.getAndroidSAFUri
 import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
-import com.simplemobiletools.commons.extensions.getFileUri
-import com.simplemobiletools.commons.extensions.getFilenameFromContentUri
 import com.simplemobiletools.commons.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
+import com.simplemobiletools.commons.extensions.getStringValue
+import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
+import com.simplemobiletools.commons.extensions.isAudioSlow
+import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
+import com.simplemobiletools.commons.extensions.isVideoSlow
+import com.simplemobiletools.commons.extensions.navigationBarBottom
+import com.simplemobiletools.commons.extensions.navigationBarSize
+import com.simplemobiletools.commons.extensions.realScreenSize
 import com.simplemobiletools.commons.extensions.toInt
+import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.helpers.isRPlus
+import com.simplemobiletools.commons.models.FileDirItem
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File
@@ -199,12 +207,47 @@ fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Bo
     }
 }
 
+fun Context.getFilenameFromContentUri(uri: Uri): String? {
+    val projection = arrayOf(
+        OpenableColumns.DISPLAY_NAME
+    )
+
+    try {
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getStringValue(OpenableColumns.DISPLAY_NAME)
+            }
+        }
+    } catch (_: Exception) {
+    }
+    return null
+}
+
 fun Context.getFilenameFromUri(uri: Uri): String {
     return if (uri.scheme == "file") {
         File(uri.toString()).name
     } else {
         getFilenameFromContentUri(uri) ?: uri.lastPathSegment ?: ""
     }
+}
+
+fun Context.getFileUri(path: String) = when {
+    path.isImageSlow() -> Images.Media.EXTERNAL_CONTENT_URI
+    path.isVideoSlow() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+    path.isAudioSlow() -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    else -> Files.getContentUri("external")
+}
+
+fun Context.getFileUrisFromFileDirItems(fileDirItems: List<FileDirItem>): List<Uri> {
+    val fileUris = getUrisPathsFromFileDirItems(fileDirItems).second
+    if (fileUris.isEmpty()) {
+        fileDirItems.map { fileDirItem ->
+            fileUris.add(fileDirItem.assembleContentUri())
+        }
+    }
+
+    return fileUris
 }
 
 fun Context.getHumanizedFilename(path: String): String {
@@ -297,6 +340,12 @@ val Context.widgetsDB: WidgetsDao
     get() = GalleryDatabase.getInstance(applicationContext).WidgetsDao()
 
 val Context.mediaDB: MediumDao get() = GalleryDatabase.getInstance(applicationContext).MediumDao()
+
+val Context.navigationBarHeight: Int get() = if (navigationBarBottom && navigationBarSize.y != usableScreenSize.y) navigationBarSize.y else 0
+
+val Context.navigationBarRight: Boolean get() = usableScreenSize.x < realScreenSize.x && usableScreenSize.x > usableScreenSize.y
+
+val Context.navigationBarWidth: Int get() = if (navigationBarRight) navigationBarSize.x else 0
 
 val Context.directoryDao: DirectoryDao
     get() = GalleryDatabase.getInstance(applicationContext).DirectoryDao()

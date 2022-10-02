@@ -38,7 +38,6 @@ import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.isInDownloadDir
@@ -53,7 +52,6 @@ import com.simplemobiletools.commons.extensions.updateLastModified
 import com.simplemobiletools.commons.extensions.getFileKey
 import com.simplemobiletools.commons.extensions.getCompressionFormat
 import com.simplemobiletools.commons.extensions.showLocationOnMap
-import com.simplemobiletools.commons.extensions.getFileUri
 import com.simplemobiletools.commons.extensions.getFileOutputStream
 import com.simplemobiletools.commons.extensions.sharePathIntent
 import com.simplemobiletools.commons.extensions.sharePathsIntent
@@ -97,9 +95,20 @@ import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.createAndroidSAFFile
+import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
+import com.simplemobiletools.commons.extensions.createSAFFileSdk30
+import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getDocumentFile
+import com.simplemobiletools.commons.extensions.getDoesFilePathExist
+import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
+import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
+import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
+import com.simplemobiletools.commons.extensions.showFileCreateError
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.squareup.picasso.Picasso
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.OutputStream
 import java.io.InputStream
 import java.io.IOException
@@ -107,11 +116,122 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+
+private fun createCasualFileOutputStream(
+    activity: BaseSimpleActivity,
+    targetFile: File
+): OutputStream? {
+    if (targetFile.parentFile?.exists() == false) {
+        targetFile.parentFile?.mkdirs()
+    }
+
+    return try {
+        FileOutputStream(targetFile)
+    } catch (e: Exception) {
+        activity.showErrorToast(e)
+        null
+    }
+}
+
+
 fun Activity.getAlertDialogBuilder() = if (baseConfig.isUsingSystemTheme) {
     MaterialAlertDialogBuilder(this)
 } else {
     AlertDialog.Builder(this)
 }
+
+fun BaseSimpleActivity.getFileOutputStream(
+    fileDirItem: FileDirItem,
+    allowCreatingNewFile: Boolean = false,
+    callback: (outputStream: OutputStream?) -> Unit
+) {
+    val targetFile = File(fileDirItem.path)
+    when {
+        isRestrictedSAFOnlyRoot(fileDirItem.path) -> {
+            handleAndroidSAFDialog(fileDirItem.path) {
+                if (!it) {
+                    return@handleAndroidSAFDialog
+                }
+
+                val uri = getAndroidSAFUri(fileDirItem.path)
+                if (!getDoesFilePathExist(fileDirItem.path)) {
+                    createAndroidSAFFile(fileDirItem.path)
+                }
+                callback.invoke(applicationContext.contentResolver.openOutputStream(uri))
+            }
+        }
+        needsStupidWritePermissions(fileDirItem.path) -> {
+            handleSAFDialog(fileDirItem.path) {
+                if (!it) {
+                    return@handleSAFDialog
+                }
+
+                var document = getDocumentFile(fileDirItem.path)
+                if (document == null && allowCreatingNewFile) {
+                    document = getDocumentFile(fileDirItem.getParentPath())
+                }
+
+                if (document == null) {
+                    showFileCreateError(fileDirItem.path)
+                    callback(null)
+                    return@handleSAFDialog
+                }
+
+                if (!getDoesFilePathExist(fileDirItem.path)) {
+                    document = getDocumentFile(fileDirItem.path) ?: document.createFile(
+                        "",
+                        fileDirItem.name
+                    )
+                }
+
+                if (document?.exists() == true) {
+                    try {
+                        callback(applicationContext.contentResolver.openOutputStream(document.uri))
+                    } catch (e: FileNotFoundException) {
+                        showErrorToast(e)
+                        callback(null)
+                    }
+                } else {
+                    showFileCreateError(fileDirItem.path)
+                    callback(null)
+                }
+            }
+        }
+        isAccessibleWithSAFSdk30(fileDirItem.path) -> {
+            handleSAFDialogSdk30(fileDirItem.path) {
+                if (!it) {
+                    return@handleSAFDialogSdk30
+                }
+
+                callback.invoke(
+                    try {
+                        val uri = createDocumentUriUsingFirstParentTreeUri(fileDirItem.path)
+                        if (!getDoesFilePathExist(fileDirItem.path)) {
+                            createSAFFileSdk30(fileDirItem.path)
+                        }
+                        applicationContext.contentResolver.openOutputStream(uri)
+                    } catch (e: Exception) {
+                        null
+                    } ?: createCasualFileOutputStream(this, targetFile)
+                )
+            }
+        }
+        isRestrictedWithSAFSdk30(fileDirItem.path) -> {
+            callback.invoke(
+                try {
+                    val fileUri = getFileUrisFromFileDirItems(arrayListOf(fileDirItem))
+                    applicationContext.contentResolver.openOutputStream(fileUri.first())
+                } catch (e: Exception) {
+                    null
+                } ?: createCasualFileOutputStream(this, targetFile)
+            )
+        }
+        else -> {
+            callback.invoke(createCasualFileOutputStream(this, targetFile))
+        }
+    }
+}
+
 
 fun Activity.hideKeyboardSync() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -37,14 +37,14 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
-import com.simplemobiletools.commons.extensions.navigationBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.rescanPath
 import com.simplemobiletools.commons.extensions.statusBarHeight
 import com.simplemobiletools.commons.extensions.actionBarHeight
 import com.simplemobiletools.commons.extensions.portrait
-import com.simplemobiletools.commons.extensions.navigationBarRight
-import com.simplemobiletools.commons.extensions.navigationBarWidth
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import com.simplemobiletools.commons.extensions.getUriMimeType
 import com.simplemobiletools.commons.extensions.getFinalUriFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast

@@ -41,9 +41,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import com.simplemobiletools.commons.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import com.simplemobiletools.commons.extensions.navigationBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
-import com.simplemobiletools.commons.extensions.navigationBarWidth
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible

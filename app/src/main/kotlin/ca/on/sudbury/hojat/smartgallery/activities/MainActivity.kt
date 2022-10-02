@@ -145,7 +145,7 @@ import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getTimeFormat
 import com.simplemobiletools.commons.extensions.appLaunched
 import com.simplemobiletools.commons.extensions.isPackageInstalled
-import com.simplemobiletools.commons.extensions.getFileCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import com.simplemobiletools.commons.extensions.getProperSize
 import com.simplemobiletools.commons.extensions.checkWhatsNew
 import java.io.File

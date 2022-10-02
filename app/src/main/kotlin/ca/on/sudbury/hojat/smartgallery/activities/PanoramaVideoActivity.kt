@@ -14,8 +14,8 @@ import android.widget.SeekBar
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.vr.sdk.widgets.video.VrVideoEventListener
 import com.google.vr.sdk.widgets.video.VrVideoView
-import com.simplemobiletools.commons.extensions.navigationBarHeight
-import com.simplemobiletools.commons.extensions.navigationBarWidth
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.toast

@@ -7,13 +7,17 @@ import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
+import com.simplemobiletools.commons.helpers.normalizeRegex
 import com.simplemobiletools.commons.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions
 import com.simplemobiletools.commons.helpers.videoExtensions
 import java.io.File
 import java.io.IOException
+import java.text.Normalizer
 import java.util.Locale
 import kotlin.collections.HashMap
+
+fun String.getFilenameExtension() = substring(lastIndexOf(".") + 1)
 
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
 
@@ -72,8 +76,7 @@ fun String.shouldFolderBeVisible(
     includedPaths: MutableSet<String>,
     showHidden: Boolean,
     folderNoMediaStatuses: HashMap<String, Boolean>,
-    callback: (path: String, hasNoMedia: Boolean) -> Unit
-): Boolean {
+    callback: (path: String, hasNoMedia: Boolean) -> Unit): Boolean {
     if (isEmpty()) {
         return false
     }
@@ -156,3 +159,8 @@ fun String.isDownloadsFolder() = equals(
 
 // fast extension checks, not guaranteed to be accurate
 fun String.isVideoFast() = videoExtensions.any { endsWith(it, true) }
+
+// remove diacritics, for example č -> c
+fun String.normalizeString() = Normalizer.normalize(this, Normalizer.Form.NFD).replace(
+    normalizeRegex, ""
+)

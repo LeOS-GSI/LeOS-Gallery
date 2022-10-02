@@ -34,8 +34,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import com.simplemobiletools.commons.extensions.getFileOutputStream
-import com.simplemobiletools.commons.extensions.getFilenameFromContentUri
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
 import com.simplemobiletools.commons.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.applyColorFilter
@@ -45,7 +45,7 @@ import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getCurrentFormattedDateTime
-import com.simplemobiletools.commons.extensions.getFilenameExtension
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath

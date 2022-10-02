@@ -16,8 +16,8 @@ import com.google.vr.sdk.widgets.pano.VrPanoramaView
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.navigationBarHeight
-import com.simplemobiletools.commons.extensions.navigationBarWidth
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isRPlus

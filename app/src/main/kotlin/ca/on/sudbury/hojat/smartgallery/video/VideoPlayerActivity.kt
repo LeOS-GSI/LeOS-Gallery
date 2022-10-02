@@ -40,12 +40,12 @@ import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.video.VideoListener
 import com.simplemobiletools.commons.extensions.actionBarHeight
 import com.simplemobiletools.commons.extensions.statusBarHeight
-import com.simplemobiletools.commons.extensions.navigationBarWidth
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import com.simplemobiletools.commons.extensions.portrait
-import com.simplemobiletools.commons.extensions.navigationBarRight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.updateTextColors
-import com.simplemobiletools.commons.extensions.navigationBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import com.simplemobiletools.commons.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
