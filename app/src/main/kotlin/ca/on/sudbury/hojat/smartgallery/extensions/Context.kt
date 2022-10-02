@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
 import android.media.AudioManager
@@ -103,10 +104,7 @@ import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
-import com.simplemobiletools.commons.extensions.getImageResolution
-import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
-import com.simplemobiletools.commons.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.isAudioSlow
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
@@ -120,6 +118,8 @@ import com.simplemobiletools.commons.extensions.isWhiteTheme
 import com.simplemobiletools.commons.extensions.realScreenSize
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.usableScreenSize
+import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
+import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -257,6 +257,28 @@ fun Context.getHumanizedFilename(path: String): String {
     return humanized.substring(humanized.lastIndexOf("/") + 1)
 }
 
+fun Context.getImageResolution(path: String): Point? {
+    val options = BitmapFactory.Options()
+    options.inJustDecodeBounds = true
+    if (isRestrictedSAFOnlyRoot(path)) {
+        BitmapFactory.decodeStream(
+            contentResolver.openInputStream(getAndroidSAFUri(path)),
+            null,
+            options
+        )
+    } else {
+        BitmapFactory.decodeFile(path, options)
+    }
+
+    val width = options.outWidth
+    val height = options.outHeight
+    return if (width > 0 && height > 0) {
+        Point(options.outWidth, options.outHeight)
+    } else {
+        null
+    }
+}
+
 fun Context.getLatestMediaByDateId(uri: Uri = Files.getContentUri("external")): Long {
     val projection = arrayOf(
         BaseColumns._ID
@@ -288,6 +310,8 @@ fun Context.getLatestMediaId(uri: Uri = Files.getContentUri("external")): Long {
     }
     return 0
 }
+
+fun Context.getTimeFormat() = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
 
 fun Context.getVideoResolution(path: String): Point? {
     var point = try {

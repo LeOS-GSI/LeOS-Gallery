@@ -64,7 +64,6 @@ import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent
 import com.simplemobiletools.commons.extensions.launchActivityIntent
 import com.simplemobiletools.commons.extensions.canManageMedia
-import com.simplemobiletools.commons.extensions.getItemSize
 import com.simplemobiletools.commons.extensions.setAsIntent
 import com.simplemobiletools.commons.helpers.LICENSE_GLIDE
 import com.simplemobiletools.commons.helpers.LICENSE_CROPPER

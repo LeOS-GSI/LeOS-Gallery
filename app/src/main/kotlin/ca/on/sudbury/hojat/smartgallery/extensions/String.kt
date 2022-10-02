@@ -1,13 +1,17 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
+import com.simplemobiletools.commons.extensions.getAndroidSAFUri
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isPathOnSD
+import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.helpers.NOMEDIA
@@ -26,6 +30,24 @@ import kotlin.collections.HashMap
 fun String.getFilenameExtension() = substring(lastIndexOf(".") + 1)
 
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
+
+fun String.getImageResolution(context: Context): Point? {
+    val options = BitmapFactory.Options()
+    options.inJustDecodeBounds = true
+    if (context.isRestrictedSAFOnlyRoot(this)) {
+        BitmapFactory.decodeStream(context.contentResolver.openInputStream(context.getAndroidSAFUri(this)), null, options)
+    } else {
+        BitmapFactory.decodeFile(this, options)
+    }
+
+    val width = options.outWidth
+    val height = options.outHeight
+    return if (width > 0 && height > 0) {
+        Point(options.outWidth, options.outHeight)
+    } else {
+        null
+    }
+}
 
 fun String.getParentPath() = removeSuffix("/${getFilenameFromPath()}")
 
