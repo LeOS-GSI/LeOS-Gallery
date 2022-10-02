@@ -96,6 +96,7 @@ import com.simplemobiletools.commons.extensions.createAndroidSAFFile
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.createSAFFileSdk30
 import com.simplemobiletools.commons.extensions.createTempFile
+import com.simplemobiletools.commons.extensions.deleteFilesBg
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
 import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
@@ -451,6 +452,66 @@ fun Activity.launchCamera() {
     launchActivityIntent(intent)
 }
 
+fun Activity.handleAppPasswordProtection(callback: (success: Boolean) -> Unit) {
+    if (baseConfig.isAppPasswordProtectionOn) {
+        SecurityDialog(
+            this,
+            baseConfig.appPasswordHash,
+            baseConfig.appProtectionType
+        ) { _, _, success ->
+            callback(success)
+        }
+    } else {
+        callback(true)
+    }
+}
+
+fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
+    if (baseConfig.isDeletePasswordProtectionOn) {
+        SecurityDialog(
+            this,
+            baseConfig.deletePasswordHash,
+            baseConfig.deleteProtectionType
+        ) { _, _, success ->
+            if (success) {
+                callback()
+            }
+        }
+    } else {
+        callback()
+    }
+}
+
+fun Activity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
+    if (baseConfig.isHiddenPasswordProtectionOn) {
+        SecurityDialog(
+            this,
+            baseConfig.hiddenPasswordHash,
+            baseConfig.hiddenProtectionType
+        ) { _, _, success ->
+            if (success) {
+                callback()
+            }
+        }
+    } else {
+        callback()
+    }
+}
+
+fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean) -> Unit) {
+    if (baseConfig.isFolderProtected(path)) {
+        SecurityDialog(
+            this,
+            baseConfig.getFolderProtectionHash(path),
+            baseConfig.getFolderProtectionType(path)
+        ) { _, _, success ->
+            callback(success)
+        }
+    } else {
+        callback(true)
+    }
+}
+
 fun Activity.hideKeyboard() {
     if (isOnMainThread()) {
         hideKeyboardSync()
@@ -624,6 +685,24 @@ fun BaseSimpleActivity.addNoMediaIntoMediaStore(path: String) {
         contentResolver.insert(Files.getContentUri("external"), content)
     } catch (e: Exception) {
         showErrorToast(e)
+    }
+}
+
+fun BaseSimpleActivity.deleteFile(
+    file: FileDirItem,
+    allowDeleteFolder: Boolean = false,
+    callback: ((wasSuccess: Boolean) -> Unit)? = null
+) {
+    deleteFiles(arrayListOf(file), allowDeleteFolder, callback)
+}
+
+fun BaseSimpleActivity.deleteFiles(
+    files: List<FileDirItem>,
+    allowDeleteFolder: Boolean = false,
+    callback: ((wasSuccess: Boolean) -> Unit)? = null
+) {
+    ensureBackgroundThread {
+        deleteFilesBg(files, allowDeleteFolder, callback)
     }
 }
 

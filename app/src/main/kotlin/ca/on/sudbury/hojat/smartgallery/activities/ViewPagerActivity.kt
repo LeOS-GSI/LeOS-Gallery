@@ -144,7 +144,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
+import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
@@ -158,7 +158,7 @@ import com.simplemobiletools.commons.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
-import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
+import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import com.simplemobiletools.commons.extensions.isAStorageRootFolder
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.internalStoragePath
@@ -182,7 +182,7 @@ import com.simplemobiletools.commons.extensions.scanPathRecursively
 import com.simplemobiletools.commons.extensions.statusBarHeight
 import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor
 import com.simplemobiletools.commons.extensions.onGlobalLayout
-import com.simplemobiletools.commons.extensions.hasPermission
+import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor

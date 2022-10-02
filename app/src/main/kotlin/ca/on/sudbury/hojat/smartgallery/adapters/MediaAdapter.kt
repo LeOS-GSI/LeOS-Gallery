@@ -21,7 +21,7 @@ import com.simplemobiletools.commons.dialogs.RenameDialog
 import com.simplemobiletools.commons.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
-import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
+import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
@@ -41,7 +41,7 @@ import com.simplemobiletools.commons.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getTimeFormat
-import com.simplemobiletools.commons.extensions.hasOTGConnected
+import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread

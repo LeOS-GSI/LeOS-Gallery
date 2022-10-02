@@ -7,11 +7,14 @@ import android.content.ComponentName
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
+import android.hardware.usb.UsbConstants
+import android.hardware.usb.UsbManager
 import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
@@ -29,6 +32,7 @@ import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
@@ -111,6 +115,7 @@ import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
+import com.simplemobiletools.commons.extensions.getPermissionString
 import com.simplemobiletools.commons.extensions.getSAFDocumentId
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.isAudioSlow
@@ -1837,6 +1842,21 @@ fun Context.getFileDateTaken(path: String): Long {
 
     return 0L
 }
+
+fun Context.hasOTGConnected(): Boolean {
+    return try {
+        (getSystemService(Context.USB_SERVICE) as UsbManager).deviceList.any {
+            it.value.getInterface(0).interfaceClass == UsbConstants.USB_CLASS_MASS_STORAGE
+        }
+    } catch (e: Exception) {
+        false
+    }
+}
+
+fun Context.hasPermission(permId: Int) = ContextCompat.checkSelfPermission(
+    this,
+    getPermissionString(permId)
+) == PackageManager.PERMISSION_GRANTED
 
 val Context.realScreenSize: Point
     get() {
