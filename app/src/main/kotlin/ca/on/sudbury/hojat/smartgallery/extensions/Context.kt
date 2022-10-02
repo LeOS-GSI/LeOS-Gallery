@@ -21,6 +21,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Process
 import android.provider.BaseColumns
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
@@ -28,6 +29,7 @@ import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
 import ca.on.sudbury.hojat.smartgallery.R
@@ -101,10 +103,15 @@ import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
+import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getAndroidTreeUri
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
+import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
+import com.simplemobiletools.commons.extensions.getSAFDocumentId
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.isAudioSlow
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
@@ -115,9 +122,10 @@ import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.isSDCardSetAsDefaultStorage
 import com.simplemobiletools.commons.extensions.isVideoSlow
 import com.simplemobiletools.commons.extensions.isWhiteTheme
-import com.simplemobiletools.commons.extensions.realScreenSize
+import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.usableScreenSize
+import com.simplemobiletools.commons.extensions.windowManager
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
@@ -1828,6 +1836,49 @@ fun Context.getFileDateTaken(path: String): Long {
     }
 
     return 0L
+}
+
+val Context.realScreenSize: Point
+    get() {
+        val size = Point()
+        windowManager.defaultDisplay.getRealSize(size)
+        return size
+    }
+
+fun Context.renameAndroidSAFDocument(oldPath: String, newPath: String): Boolean {
+    return try {
+        val treeUri = getAndroidTreeUri(oldPath).toUri()
+        val documentId = createAndroidSAFDocumentId(oldPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.renameDocument(
+            contentResolver,
+            parentUri,
+            newPath.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        showErrorToast(e)
+        false
+    }
+}
+
+fun Context.renameDocumentSdk30(oldPath: String, newPath: String): Boolean {
+    return try {
+        val treeUri = createFirstParentTreeUri(oldPath)
+        val documentId = getSAFDocumentId(oldPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.renameDocument(
+            contentResolver,
+            parentUri,
+            newPath.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        showErrorToast(e)
+        false
+    }
+}
+
+fun Context.rescanPath(path: String, callback: (() -> Unit)? = null) {
+    rescanPaths(arrayListOf(path), callback)
 }
 
 // avoid calling this multiple times in row, it can delete whole folder contents

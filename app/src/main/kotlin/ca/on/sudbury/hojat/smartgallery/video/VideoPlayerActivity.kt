@@ -513,7 +513,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
     private fun fullscreenToggled(isFullScreen: Boolean) {
         mIsFullscreen = isFullScreen
         if (isFullScreen) {
-            hideSystemUI(true)
+            hideSystemUI()
         } else {
             showSystemUI(true)
         }

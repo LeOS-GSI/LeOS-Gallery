@@ -39,7 +39,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
-import com.simplemobiletools.commons.extensions.rescanPath
+import ca.on.sudbury.hojat.smartgallery.extensions.rescanPath
 import com.simplemobiletools.commons.extensions.statusBarHeight
 import com.simplemobiletools.commons.extensions.actionBarHeight
 import com.simplemobiletools.commons.extensions.portrait
@@ -485,7 +485,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
     override fun fragmentClicked() {
         mIsFullScreen = !mIsFullScreen
         if (mIsFullScreen) {
-            hideSystemUI(true)
+            hideSystemUI()
         } else {
             showSystemUI(true)
         }

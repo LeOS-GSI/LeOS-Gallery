@@ -8,7 +8,7 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.showKeyboard
-import com.simplemobiletools.commons.extensions.value
+import ca.on.sudbury.hojat.smartgallery.extensions.value
 
 class CustomAspectRatioDialog(
     val activity: BaseSimpleActivity,

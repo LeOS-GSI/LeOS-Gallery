@@ -9,7 +9,7 @@ import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.setupDialogStuff
-import com.simplemobiletools.commons.extensions.value
+import ca.on.sudbury.hojat.smartgallery.extensions.value
 import com.simplemobiletools.commons.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_FADE

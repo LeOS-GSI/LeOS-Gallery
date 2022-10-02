@@ -679,7 +679,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         binding.viewPager.setPageTransformer(false, FadePageTransformer())
                     }
 
-                    hideSystemUI(true)
+                    hideSystemUI()
                     mSlideshowInterval = config.slideshowInterval
                     mSlideshowMoveBackwards = config.slideshowMoveBackwards
                     mIsSlideshowActive = true
@@ -1648,7 +1648,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun checkSystemUI() {
         if (mIsFullScreen) {
-            hideSystemUI(true)
+            hideSystemUI()
         } else {
             stopSlideshow()
             showSystemUI(true)

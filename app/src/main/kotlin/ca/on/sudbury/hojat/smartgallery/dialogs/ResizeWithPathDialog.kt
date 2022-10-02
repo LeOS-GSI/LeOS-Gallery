@@ -16,7 +16,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import com.simplemobiletools.commons.extensions.value
+import ca.on.sudbury.hojat.smartgallery.extensions.value
 import com.simplemobiletools.commons.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.config
