@@ -48,7 +48,7 @@ import com.simplemobiletools.commons.extensions.getCurrentFormattedDateTime
 import com.simplemobiletools.commons.extensions.getFilenameExtension
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.launchViewIntent
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getCompressionFormat
 import com.simplemobiletools.commons.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG

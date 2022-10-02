@@ -38,11 +38,10 @@ import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.isInDownloadDir
-import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.getFileOutputStreamSync
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getFileInputStreamSync

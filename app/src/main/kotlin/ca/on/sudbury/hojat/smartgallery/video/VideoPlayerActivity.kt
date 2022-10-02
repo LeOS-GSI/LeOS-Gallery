@@ -51,7 +51,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
-import com.simplemobiletools.commons.extensions.getFilenameFromUri
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity

@@ -23,7 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.handleDeletePasswordProtection
 import com.simplemobiletools.commons.extensions.recycleBinPath
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.convertToBitmap

@@ -133,7 +133,7 @@ import com.simplemobiletools.commons.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
 import com.simplemobiletools.commons.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId

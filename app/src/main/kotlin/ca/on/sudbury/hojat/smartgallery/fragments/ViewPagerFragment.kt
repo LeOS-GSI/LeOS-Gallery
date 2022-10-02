@@ -16,7 +16,7 @@ import com.simplemobiletools.commons.extensions.getExifCameraModel
 import com.simplemobiletools.commons.extensions.getExifProperties
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
-import com.simplemobiletools.commons.extensions.getLongValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_GPS

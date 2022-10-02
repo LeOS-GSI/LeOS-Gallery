@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.os.Environment
 import android.provider.MediaStore
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.helpers.NOMEDIA
@@ -15,6 +14,8 @@ import java.io.File
 import java.io.IOException
 import java.util.Locale
 import kotlin.collections.HashMap
+
+fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
 
 fun String.getParentPath() = removeSuffix("/${getFilenameFromPath()}")
 

@@ -45,12 +45,10 @@ import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
-import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.helpers.FAVORITES
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.NOMEDIA
@@ -107,6 +105,7 @@ import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
 import com.simplemobiletools.commons.extensions.getFileUri
+import com.simplemobiletools.commons.extensions.getFilenameFromContentUri
 import com.simplemobiletools.commons.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
@@ -152,7 +151,7 @@ private val physicalPaths = arrayListOf(
 private fun Context.queryCursorDesc(
     uri: Uri,
     projection: Array<String>,
-    sortColumn:String,
+    sortColumn: String,
     limit: Int,
 ): Cursor? {
     return if (isRPlus()) {
@@ -197,6 +196,14 @@ fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Bo
         otgPath.isNotEmpty() && path.startsWith(otgPath) -> getOTGFastDocumentFile(path)?.exists()
             ?: false
         else -> File(path).exists()
+    }
+}
+
+fun Context.getFilenameFromUri(uri: Uri): String {
+    return if (uri.scheme == "file") {
+        File(uri.toString()).name
+    } else {
+        getFilenameFromContentUri(uri) ?: uri.lastPathSegment ?: ""
     }
 }
 
@@ -458,7 +465,8 @@ fun Context.getStorageDirectories(): Array<String> {
     }
 
     if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
-        val rawSecondaryStorages = rawSecondaryStoragesStr!!.split(File.pathSeparator.toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
+        val rawSecondaryStorages = rawSecondaryStoragesStr!!.split(File.pathSeparator.toRegex())
+            .dropLastWhile(String::isEmpty).toTypedArray()
         Collections.addAll(paths, *rawSecondaryStorages)
     }
     return paths.map { it.trimEnd('/') }.toTypedArray()
