@@ -3,6 +3,7 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -12,6 +13,7 @@ import android.graphics.drawable.PictureDrawable
 import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.Process
@@ -19,8 +21,11 @@ import android.provider.BaseColumns
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
+import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.documentfile.provider.DocumentFile
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -36,14 +41,12 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.normalizeString
-import com.simplemobiletools.commons.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.recycleBinPath
-import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
@@ -100,28 +103,92 @@ import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
+import com.simplemobiletools.commons.extensions.getFastDocumentFile
 import com.simplemobiletools.commons.extensions.getFileUri
 import com.simplemobiletools.commons.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
+import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.toInt
+import com.simplemobiletools.commons.helpers.isMarshmallowPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
+import com.simplemobiletools.commons.helpers.isRPlus
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
+import java.util.Collections
 import java.util.Locale
+import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashSet
 import kotlin.collections.set
 
+// avoid these being set as SD card paths
+private val physicalPaths = arrayListOf(
+    "/storage/sdcard1", // Motorola Xoom
+    "/storage/extsdcard", // Samsung SGS3
+    "/storage/sdcard0/external_sdcard", // User request
+    "/mnt/extsdcard", "/mnt/sdcard/external_sd", // Samsung galaxy family
+    "/mnt/external_sd", "/mnt/media_rw/sdcard1", // 4.4.2 on CyanogenMod S3
+    "/removable/microsd", // Asus transformer prime
+    "/mnt/emmc", "/storage/external_SD", // LG
+    "/storage/ext_sd", // HTC One Max
+    "/storage/removable/sdcard1", // Sony Xperia Z1
+    "/data/sdext", "/data/sdext2", "/data/sdext3", "/data/sdext4", "/sdcard1", // Sony Xperia Z
+    "/sdcard2", // HTC One M8s
+    "/storage/usbdisk0",
+    "/storage/usbdisk1",
+    "/storage/usbdisk2"
+)
+
+private fun Context.queryCursorDesc(
+    uri: Uri,
+    projection: Array<String>,
+    sortColumn:String,
+    limit: Int,
+): Cursor? {
+    return if (isRPlus()) {
+        val queryArgs = bundleOf(
+            ContentResolver.QUERY_ARG_LIMIT to limit,
+            ContentResolver.QUERY_ARG_SORT_DIRECTION to ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
+            ContentResolver.QUERY_ARG_SORT_COLUMNS to arrayOf(sortColumn),
+        )
+        contentResolver.query(uri, projection, queryArgs, null)
+    } else {
+        val sortOrder = "$sortColumn DESC LIMIT $limit"
+        contentResolver.query(uri, projection, null, null, sortOrder)
+    }
+}
+
 val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+fun Context.getDocumentFile(path: String): DocumentFile? {
+    val isOTG = isPathOnOTG(path)
+    var relativePath = path.substring(if (isOTG) otgPath.length else sdCardPath.length)
+    if (relativePath.startsWith(File.separator)) {
+        relativePath = relativePath.substring(1)
+    }
+
+    return try {
+        val treeUri = Uri.parse(if (isOTG) baseConfig.OTGTreeUri else baseConfig.sdTreeUri)
+        var document = DocumentFile.fromTreeUri(applicationContext, treeUri)
+        val parts = relativePath.split("/").filter { it.isNotEmpty() }
+        for (part in parts) {
+            document = document?.findFile(part)
+        }
+        document
+    } catch (ignored: Exception) {
+        null
+    }
+}
 
 fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Boolean {
     val otgPath = otgPathToUse ?: baseConfig.OTGPath
@@ -136,6 +203,38 @@ fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Bo
 fun Context.getHumanizedFilename(path: String): String {
     val humanized = humanizePath(path)
     return humanized.substring(humanized.lastIndexOf("/") + 1)
+}
+
+fun Context.getLatestMediaByDateId(uri: Uri = Files.getContentUri("external")): Long {
+    val projection = arrayOf(
+        BaseColumns._ID
+    )
+    try {
+        val cursor = queryCursorDesc(uri, projection, Images.ImageColumns.DATE_TAKEN, 1)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getLongValue(BaseColumns._ID)
+            }
+        }
+    } catch (ignored: Exception) {
+    }
+    return 0
+}
+
+fun Context.getLatestMediaId(uri: Uri = Files.getContentUri("external")): Long {
+    val projection = arrayOf(
+        BaseColumns._ID
+    )
+    try {
+        val cursor = queryCursorDesc(uri, projection, BaseColumns._ID, 1)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getLongValue(BaseColumns._ID)
+            }
+        }
+    } catch (ignored: Exception) {
+    }
+    return 0
 }
 
 fun Context.getVideoResolution(path: String): Point? {
@@ -235,6 +334,8 @@ fun Context.movePinnedDirectoriesToFront(dirs: ArrayList<Directory>): ArrayList<
     return dirs
 }
 
+fun Context.getSomeDocumentFile(path: String) = getFastDocumentFile(path) ?: getDocumentFile(path)
+
 @Suppress("UNCHECKED_CAST")
 fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Directory> {
     val sorting = config.directorySorting
@@ -319,6 +420,48 @@ fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Direct
     }
 
     return movePinnedDirectoriesToFront(dirs)
+}
+
+fun Context.getStorageDirectories(): Array<String> {
+    val paths = java.util.HashSet<String>()
+    val rawExternalStorage = System.getenv("EXTERNAL_STORAGE")
+    val rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE")
+    val rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET")
+    if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
+        if (isMarshmallowPlus()) {
+            getExternalFilesDirs(null).filterNotNull().map { it.absolutePath }
+                .mapTo(paths) { it.substring(0, it.indexOf("Android/data")) }
+        } else {
+            if (TextUtils.isEmpty(rawExternalStorage)) {
+                paths.addAll(physicalPaths)
+            } else {
+                paths.add(rawExternalStorage!!)
+            }
+        }
+    } else {
+        val path = Environment.getExternalStorageDirectory().absolutePath
+        val folders = Pattern.compile("/").split(path)
+        val lastFolder = folders[folders.size - 1]
+        var isDigit = false
+        try {
+            Integer.valueOf(lastFolder)
+            isDigit = true
+        } catch (ignored: NumberFormatException) {
+        }
+
+        val rawUserId = if (isDigit) lastFolder else ""
+        if (TextUtils.isEmpty(rawUserId)) {
+            paths.add(rawEmulatedStorageTarget!!)
+        } else {
+            paths.add(rawEmulatedStorageTarget + File.separator + rawUserId)
+        }
+    }
+
+    if (!TextUtils.isEmpty(rawSecondaryStoragesStr)) {
+        val rawSecondaryStorages = rawSecondaryStoragesStr!!.split(File.pathSeparator.toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
+        Collections.addAll(paths, *rawSecondaryStorages)
+    }
+    return paths.map { it.trimEnd('/') }.toTypedArray()
 }
 
 fun Context.getDirsToShow(

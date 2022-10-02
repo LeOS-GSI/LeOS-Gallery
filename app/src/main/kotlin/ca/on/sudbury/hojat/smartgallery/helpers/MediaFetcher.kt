@@ -28,8 +28,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
-import com.simplemobiletools.commons.extensions.getDocumentFile
-import com.simplemobiletools.commons.extensions.getStringValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
+import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.queryCursor

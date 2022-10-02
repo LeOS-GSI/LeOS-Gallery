@@ -130,13 +130,13 @@ import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtection
 import com.simplemobiletools.commons.extensions.hasPermission
 import com.simplemobiletools.commons.extensions.hasOTGConnected
-import com.simplemobiletools.commons.extensions.getStorageDirectories
+import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
 import com.simplemobiletools.commons.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
-import com.simplemobiletools.commons.extensions.getLatestMediaId
-import com.simplemobiletools.commons.extensions.getLatestMediaByDateId
+import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
+import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
 import com.simplemobiletools.commons.extensions.areSystemAnimationsEnabled
 import com.simplemobiletools.commons.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor

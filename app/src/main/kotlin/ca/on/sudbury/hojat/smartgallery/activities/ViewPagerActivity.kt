@@ -184,7 +184,7 @@ import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
-import com.simplemobiletools.commons.extensions.getStringValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.actionBarHeight
 import java.io.File

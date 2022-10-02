@@ -93,8 +93,8 @@ import com.simplemobiletools.commons.extensions.handleHiddenFolderPasswordProtec
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import com.simplemobiletools.commons.extensions.getLatestMediaByDateId
-import com.simplemobiletools.commons.extensions.getLatestMediaId
+import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
+import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.recycleBinPath
