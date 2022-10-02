@@ -39,7 +39,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
 import com.simplemobiletools.commons.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import com.simplemobiletools.commons.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.getProperPrimaryColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
@@ -54,7 +54,7 @@ import com.simplemobiletools.commons.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
-import com.simplemobiletools.commons.extensions.getProperBackgroundColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.checkAppSideloading
 import com.simplemobiletools.commons.helpers.isNougatPlus

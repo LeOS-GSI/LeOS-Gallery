@@ -40,7 +40,7 @@ import com.simplemobiletools.commons.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
-import com.simplemobiletools.commons.extensions.getProperBackgroundColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import com.simplemobiletools.commons.extensions.isExternalStorageManager

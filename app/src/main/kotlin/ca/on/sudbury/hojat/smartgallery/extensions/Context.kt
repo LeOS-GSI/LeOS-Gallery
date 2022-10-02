@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
@@ -100,7 +101,6 @@ import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
-import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
 import com.simplemobiletools.commons.extensions.getImageResolution
@@ -109,18 +109,21 @@ import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.isAudioSlow
+import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isPathOnSD
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.isSDCardSetAsDefaultStorage
 import com.simplemobiletools.commons.extensions.isVideoSlow
+import com.simplemobiletools.commons.extensions.isWhiteTheme
 import com.simplemobiletools.commons.extensions.realScreenSize
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.helpers.isRPlus
+import com.simplemobiletools.commons.helpers.isSPlus
 import com.simplemobiletools.commons.models.FileDirItem
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
@@ -356,7 +359,8 @@ val Context.navigationBarSize: Point
 val Context.navigationBarWidth: Int get() = if (navigationBarRight) navigationBarSize.x else 0
 
 // no need to use DocumentFile if an SD card is set as the default storage
-fun Context.needsStupidWritePermissions(path: String) = !isRPlus() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
+fun Context.needsStupidWritePermissions(path: String) =
+    !isRPlus() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
 
 val Context.newNavigationBarHeight: Int
     get() {
@@ -1691,7 +1695,32 @@ fun Context.getDuration(path: String): Int? {
     }
 }
 
+fun Context.getPopupMenuTheme(): Int {
+    return if (isSPlus() && baseConfig.isUsingSystemTheme) {
+        R.style.AppTheme_YouPopupMenuStyle
+    } else if (isWhiteTheme()) {
+        R.style.AppTheme_PopupMenuLightStyle
+    } else {
+        R.style.AppTheme_PopupMenuDarkStyle
+    }
+}
+
+@SuppressLint("NewApi")
+fun Context.getProperBackgroundColor() = if (baseConfig.isUsingSystemTheme) {
+    resources.getColor(R.color.you_background_color, theme)
+} else {
+    baseConfig.backgroundColor
+}
+
+@SuppressLint("NewApi")
+fun Context.getProperPrimaryColor() = when {
+    baseConfig.isUsingSystemTheme -> resources.getColor(R.color.you_primary_color, theme)
+    isWhiteTheme() || isBlackAndWhiteTheme() -> baseConfig.accentColor
+    else -> baseConfig.primaryColor
+}
+
 // handle system default theme (Material You) specially as the color is taken from the system, not hardcoded by us
+@SuppressLint("NewApi")
 fun Context.getProperTextColor() = if (baseConfig.isUsingSystemTheme) {
     resources.getColor(R.color.you_neutral_text_color, theme)
 } else {

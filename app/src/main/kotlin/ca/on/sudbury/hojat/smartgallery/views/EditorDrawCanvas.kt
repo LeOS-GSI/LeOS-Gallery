@@ -11,7 +11,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import ca.on.sudbury.hojat.smartgallery.R
-import com.simplemobiletools.commons.extensions.getProperPrimaryColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.models.PaintOptions
 
 class EditorDrawCanvas(context: Context, attrs: AttributeSet) : View(context, attrs) {

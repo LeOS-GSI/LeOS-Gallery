@@ -98,8 +98,6 @@ import com.simplemobiletools.commons.extensions.createAndroidSAFFile
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.createSAFFileSdk30
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
-import com.simplemobiletools.commons.extensions.getDocumentFile
-import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot

@@ -9,7 +9,7 @@ import android.widget.PopupMenu
 import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
-import com.simplemobiletools.commons.extensions.getPopupMenuTheme
+import ca.on.sudbury.hojat.smartgallery.extensions.getPopupMenuTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.views.MyRecyclerView

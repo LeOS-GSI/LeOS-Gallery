@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
 import com.simplemobiletools.commons.extensions.getAndroidSAFDirectChildrenCount
-import com.simplemobiletools.commons.extensions.getDigest
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
