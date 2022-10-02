@@ -23,8 +23,11 @@ import android.provider.MediaStore.Images
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
@@ -54,7 +57,6 @@ import com.simplemobiletools.commons.extensions.showLocationOnMap
 import com.simplemobiletools.commons.extensions.getFileOutputStream
 import com.simplemobiletools.commons.extensions.sharePathIntent
 import com.simplemobiletools.commons.extensions.sharePathsIntent
-import com.simplemobiletools.commons.extensions.deleteFile
 import com.simplemobiletools.commons.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
@@ -96,22 +98,38 @@ import com.simplemobiletools.commons.extensions.createAndroidSAFFile
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.createSAFFileSdk30
 import com.simplemobiletools.commons.extensions.createTempFile
+import com.simplemobiletools.commons.extensions.deleteAndroidSAFDirectory
+import com.simplemobiletools.commons.extensions.deleteDocumentWithSAFSdk30
+import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor
 import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.getIsPathDirectory
+import com.simplemobiletools.commons.extensions.getProperBackgroundColor
+import com.simplemobiletools.commons.extensions.getProperPrimaryColor
+import com.simplemobiletools.commons.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
+import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
+import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.isPathOnInternalStorage
+import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
+import com.simplemobiletools.commons.extensions.rescanAndDeletePath
 import com.simplemobiletools.commons.extensions.scanPathRecursively
 import com.simplemobiletools.commons.extensions.scanPathsRecursively
 import com.simplemobiletools.commons.extensions.showFileCreateError
+import com.simplemobiletools.commons.extensions.trySAFFileDelete
 import com.simplemobiletools.commons.extensions.updateInMediaStore
+import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.models.Android30RenameFormat
+import com.simplemobiletools.commons.views.MyTextView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_title.view.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
@@ -297,6 +315,29 @@ private fun createCasualFileOutputStream(
         activity.showErrorToast(e)
         null
     }
+}
+
+private fun BaseSimpleActivity.deleteSdk30(
+    fileDirItem: FileDirItem,
+    callback: ((wasSuccess: Boolean) -> Unit)?
+) {
+    val fileUris = getFileUrisFromFileDirItems(arrayListOf(fileDirItem))
+    deleteSDK30Uris(fileUris) { success ->
+        runOnUiThread {
+            callback?.invoke(success)
+        }
+    }
+}
+
+private fun deleteRecursively(file: File): Boolean {
+    if (file.isDirectory) {
+        val files = file.listFiles() ?: return file.delete()
+        for (child in files) {
+            deleteRecursively(child)
+        }
+    }
+
+    return file.delete()
 }
 
 
@@ -694,6 +735,81 @@ fun BaseSimpleActivity.deleteFile(
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
     deleteFiles(arrayListOf(file), allowDeleteFolder, callback)
+}
+
+fun BaseSimpleActivity.deleteFile(
+    fileDirItem: FileDirItem,
+    allowDeleteFolder: Boolean = false,
+    isDeletingMultipleFiles: Boolean,
+    callback: ((wasSuccess: Boolean) -> Unit)? = null
+) {
+    ensureBackgroundThread {
+        deleteFileBg(fileDirItem, allowDeleteFolder, isDeletingMultipleFiles, callback)
+    }
+}
+
+fun BaseSimpleActivity.deleteFileBg(
+    fileDirItem: FileDirItem,
+    allowDeleteFolder: Boolean = false,
+    isDeletingMultipleFiles: Boolean,
+    callback: ((wasSuccess: Boolean) -> Unit)? = null,
+) {
+    val path = fileDirItem.path
+    if (isRestrictedSAFOnlyRoot(path)) {
+        deleteAndroidSAFDirectory(path, allowDeleteFolder, callback)
+    } else {
+        val file = File(path)
+        if (!isRPlus() && file.absolutePath.startsWith(internalStoragePath) && !file.canWrite()) {
+            callback?.invoke(false)
+            return
+        }
+
+        var fileDeleted =
+            !isPathOnOTG(path) && ((!file.exists() && file.length() == 0L) || file.delete())
+        if (fileDeleted) {
+            deleteFromMediaStore(path) { needsRescan ->
+                if (needsRescan) {
+                    rescanAndDeletePath(path) {
+                        runOnUiThread {
+                            callback?.invoke(true)
+                        }
+                    }
+                } else {
+                    runOnUiThread {
+                        callback?.invoke(true)
+                    }
+                }
+            }
+        } else {
+            if (getIsPathDirectory(file.absolutePath) && allowDeleteFolder) {
+                fileDeleted = deleteRecursively(file)
+            }
+
+            if (!fileDeleted) {
+                if (needsStupidWritePermissions(path)) {
+                    handleSAFDialog(path) {
+                        if (it) {
+                            trySAFFileDelete(fileDirItem, allowDeleteFolder, callback)
+                        }
+                    }
+                } else if (isAccessibleWithSAFSdk30(path)) {
+                    if (canManageMedia()) {
+                        deleteSdk30(fileDirItem, callback)
+                    } else {
+                        handleSAFDialogSdk30(path) {
+                            if (it) {
+                                deleteDocumentWithSAFSdk30(fileDirItem, allowDeleteFolder, callback)
+                            }
+                        }
+                    }
+                } else if (isRPlus() && !isDeletingMultipleFiles) {
+                    deleteSdk30(fileDirItem, callback)
+                } else {
+                    callback?.invoke(false)
+                }
+            }
+        }
+    }
 }
 
 fun BaseSimpleActivity.deleteFiles(
@@ -1405,6 +1521,83 @@ fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> U
 
         runOnUiThread {
             callback()
+        }
+    }
+}
+
+fun Activity.setupDialogStuff(
+    view: View,
+    dialog: AlertDialog.Builder,
+    titleId: Int = 0,
+    titleText: String = "",
+    cancelOnTouchOutside: Boolean = true,
+    callback: ((alertDialog: AlertDialog) -> Unit)? = null
+) {
+    if (isDestroyed || isFinishing) {
+        return
+    }
+
+    val textColor = getProperTextColor()
+    val backgroundColor = getProperBackgroundColor()
+    val primaryColor = getProperPrimaryColor()
+    if (view is ViewGroup) {
+        updateTextColors(view)
+    } else if (view is MyTextView) {
+        view.setColors(textColor, primaryColor, backgroundColor)
+    }
+
+    if (dialog is MaterialAlertDialogBuilder) {
+        dialog.create().apply {
+            if (titleId != 0) {
+                setTitle(titleId)
+            } else if (titleText.isNotEmpty()) {
+                setTitle(titleText)
+            }
+
+            setView(view)
+            setCancelable(cancelOnTouchOutside)
+            show()
+            callback?.invoke(this)
+        }
+    } else {
+        var title: TextView? = null
+        if (titleId != 0 || titleText.isNotEmpty()) {
+            title = layoutInflater.inflate(R.layout.dialog_title, null) as TextView
+            title.dialog_title_textview.apply {
+                if (titleText.isNotEmpty()) {
+                    text = titleText
+                } else {
+                    setText(titleId)
+                }
+                setTextColor(textColor)
+            }
+        }
+
+        // if we use the same primary and background color, use the text color for dialog confirmation buttons
+        val dialogButtonColor = if (primaryColor == baseConfig.backgroundColor) {
+            textColor
+        } else {
+            primaryColor
+        }
+
+        dialog.create().apply {
+            setView(view)
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setCustomTitle(title)
+            setCanceledOnTouchOutside(cancelOnTouchOutside)
+            show()
+            getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(dialogButtonColor)
+            getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(dialogButtonColor)
+            getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(dialogButtonColor)
+
+            val bgDrawable = when {
+                isBlackAndWhiteTheme() -> resources.getDrawable(R.drawable.black_dialog_background, theme)
+                baseConfig.isUsingSystemTheme -> resources.getDrawable(R.drawable.dialog_you_background, theme)
+                else -> resources.getColoredDrawableWithColor(R.drawable.dialog_bg, baseConfig.backgroundColor)
+            }
+
+            window?.setBackgroundDrawable(bgDrawable)
+            callback?.invoke(this)
         }
     }
 }

@@ -131,7 +131,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordPro
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
-import com.simplemobiletools.commons.extensions.sdCardPath
+import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG

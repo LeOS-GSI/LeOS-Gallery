@@ -13,7 +13,6 @@ import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isPathOnSD
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.otgPath
-import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus

@@ -52,7 +52,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import com.simplemobiletools.commons.extensions.internalStoragePath
-import com.simplemobiletools.commons.extensions.sdCardPath
+import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
@@ -1922,3 +1922,5 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
         }
     }
 }
+
+val Context.sdCardPath: String get() = baseConfig.sdCardPath
