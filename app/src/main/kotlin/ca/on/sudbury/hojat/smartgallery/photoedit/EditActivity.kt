@@ -31,7 +31,7 @@ import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import com.simplemobiletools.commons.extensions.onGlobalLayout
+import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
@@ -43,7 +43,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
-import com.simplemobiletools.commons.extensions.internalStoragePath
+import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getCurrentFormattedDateTime
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import com.simplemobiletools.commons.extensions.baseConfig

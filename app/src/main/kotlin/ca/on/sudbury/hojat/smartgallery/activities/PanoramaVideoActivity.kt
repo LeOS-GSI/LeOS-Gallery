@@ -16,7 +16,7 @@ import com.google.vr.sdk.widgets.video.VrVideoEventListener
 import com.google.vr.sdk.widgets.video.VrVideoView
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
-import com.simplemobiletools.commons.extensions.onGlobalLayout
+import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.showErrorToast

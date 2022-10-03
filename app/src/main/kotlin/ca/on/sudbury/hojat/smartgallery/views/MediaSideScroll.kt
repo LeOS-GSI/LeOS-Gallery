@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import ca.on.sudbury.hojat.smartgallery.R
-import com.simplemobiletools.commons.extensions.onGlobalLayout
+import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.audioManager
 import ca.on.sudbury.hojat.smartgallery.helpers.DRAG_THRESHOLD
 import kotlin.math.abs

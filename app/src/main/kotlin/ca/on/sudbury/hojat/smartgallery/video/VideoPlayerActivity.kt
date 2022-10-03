@@ -41,9 +41,9 @@ import com.google.android.exoplayer2.video.VideoListener
 import com.simplemobiletools.commons.extensions.actionBarHeight
 import com.simplemobiletools.commons.extensions.statusBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
-import com.simplemobiletools.commons.extensions.portrait
+import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
-import com.simplemobiletools.commons.extensions.onGlobalLayout
+import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import com.simplemobiletools.commons.extensions.getFormattedDuration

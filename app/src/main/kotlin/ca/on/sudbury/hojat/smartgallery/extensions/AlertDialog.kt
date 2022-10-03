@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
-import com.simplemobiletools.commons.extensions.onGlobalLayout
 
 
 // in dialogs, lets use findViewById, because while some dialogs use MyEditText, material theme dialogs use TextInputEditText so the system takes care of it

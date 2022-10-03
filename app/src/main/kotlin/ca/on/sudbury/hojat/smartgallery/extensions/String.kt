@@ -7,8 +7,6 @@ import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
 import com.simplemobiletools.commons.extensions.getMimeType
-import com.simplemobiletools.commons.extensions.internalStoragePath
-import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -91,6 +89,16 @@ fun String.isAudioFast() = audioExtensions.any { endsWith(it, true) }
 
 fun String.isAudioSlow() =
     isAudioFast() || getMimeType().startsWith("audio") || startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())
+
+fun String.isAValidFilename(): Boolean {
+    val ILLEGAL_CHARACTERS =
+        charArrayOf('/', '\n', '\r', '\t', '\u0000', '`', '?', '*', '\\', '<', '>', '|', '\"', ':')
+    ILLEGAL_CHARACTERS.forEach {
+        if (contains(it))
+            return false
+    }
+    return true
+}
 
 fun String.isGif() = endsWith(".gif", true)
 

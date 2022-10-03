@@ -112,7 +112,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.toFileDirItem
-import com.simplemobiletools.commons.extensions.internalStoragePath
+import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getFilePublicUri
 import com.simplemobiletools.commons.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening

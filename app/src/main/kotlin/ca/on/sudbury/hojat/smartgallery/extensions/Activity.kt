@@ -112,7 +112,7 @@ import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
-import com.simplemobiletools.commons.extensions.internalStoragePath
+import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.rescanAndDeletePath
 import com.simplemobiletools.commons.extensions.scanPathRecursively

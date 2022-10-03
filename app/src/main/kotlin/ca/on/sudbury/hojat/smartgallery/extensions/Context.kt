@@ -8,6 +8,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -52,8 +53,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
-import com.simplemobiletools.commons.extensions.internalStoragePath
-import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import com.simplemobiletools.commons.helpers.FAVORITES
@@ -119,19 +118,16 @@ import com.simplemobiletools.commons.extensions.getFirstParentPath
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getPermissionString
 import com.simplemobiletools.commons.extensions.getSAFDocumentId
+import com.simplemobiletools.commons.extensions.getSAFOnlyDirs
 import com.simplemobiletools.commons.extensions.getStorageRootIdForAndroidDir
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
-import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.isSAFOnlyRoot
-import com.simplemobiletools.commons.extensions.isSDCardSetAsDefaultStorage
-import com.simplemobiletools.commons.extensions.isVideoSlow
-import com.simplemobiletools.commons.extensions.isWhiteTheme
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.extensions.windowManager
+import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
@@ -417,6 +413,8 @@ fun Context.humanizePath(path: String): String {
 
 val Context.config: Config get() = Config.newInstance(applicationContext)
 
+val Context.internalStoragePath: String get() = baseConfig.internalStoragePath
+
 fun Context.isAccessibleWithSAFSdk30(path: String): Boolean {
     if (path.startsWith(recycleBinPath) || isExternalStorageManager()) {
         return false
@@ -448,6 +446,15 @@ fun Context.isPathOnInternalStorage(path: String) =
     internalStoragePath.isNotEmpty() && path.startsWith(internalStoragePath)
 
 fun Context.isPathOnSD(path: String) = sdCardPath.isNotEmpty() && path.startsWith(sdCardPath)
+
+fun Context.isSDCardSetAsDefaultStorage() =
+    sdCardPath.isNotEmpty() && Environment.getExternalStorageDirectory().absolutePath.equals(
+        sdCardPath,
+        true
+    )
+
+fun Context.isWhiteTheme() =
+    baseConfig.textColor == DARK_GREY && baseConfig.primaryColor == Color.WHITE && baseConfig.backgroundColor == Color.WHITE
 
 val Context.widgetsDB: WidgetsDao
     get() = GalleryDatabase.getInstance(applicationContext).WidgetsDao()
@@ -482,6 +489,8 @@ val Context.newNavigationBarHeight: Int
         }
         return navigationBarHeight
     }
+
+val Context.otgPath: String get() = baseConfig.OTGPath
 
 val Context.directoryDao: DirectoryDao
     get() = GalleryDatabase.getInstance(applicationContext).DirectoryDao()
@@ -552,6 +561,10 @@ fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
             )
         }
     return isRPlus() && (isInvalidName || (isDirectory && isARestrictedDirectory))
+}
+
+fun Context.isSAFOnlyRoot(path: String): Boolean {
+    return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
 val Context.recycleBin: File get() = filesDir
@@ -1539,6 +1552,8 @@ fun Context.getFavoritePaths(): ArrayList<String> {
 
 fun Context.getFavoriteFromPath(path: String) =
     Favorite(null, path, path.getFilenameFromPath(), path.getParentPath())
+
+val Context.portrait get() = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
 fun Context.updateFavorite(path: String, isFavorite: Boolean) {
     try {
