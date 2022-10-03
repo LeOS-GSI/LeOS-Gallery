@@ -29,7 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.extensions.getContrastColor
-import com.simplemobiletools.commons.extensions.showErrorToast
+import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toBoolean
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.getAppIconColors

@@ -123,8 +123,9 @@ import com.simplemobiletools.commons.extensions.getStorageRootIdForAndroidDir
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.sdCardPath
-import com.simplemobiletools.commons.extensions.showErrorToast
+import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toInt
+import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.extensions.windowManager
 import com.simplemobiletools.commons.helpers.DARK_GREY
@@ -2068,6 +2069,14 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
 }
 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath
+
+fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
+    toast(String.format(getString(R.string.error), msg), length)
+}
+
+fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
+    showErrorToast(exception.toString(), length)
+}
 
 fun isAndroidDataDir(path: String): Boolean {
     val resolvedPath = "${path.trimEnd('/')}/"

@@ -7,7 +7,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogCustomAspectRatioBindi
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import com.simplemobiletools.commons.extensions.showKeyboard
+import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 
 class CustomAspectRatioDialog(

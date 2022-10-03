@@ -46,16 +46,13 @@ import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getFileInputStreamSync
-import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.saveExifRotation
 import com.simplemobiletools.commons.extensions.saveImageRotation
 import com.simplemobiletools.commons.extensions.updateLastModified
-import com.simplemobiletools.commons.extensions.showLocationOnMap
 import com.simplemobiletools.commons.extensions.sharePathIntent
 import com.simplemobiletools.commons.extensions.sharePathsIntent
 import com.simplemobiletools.commons.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
-import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent
 import com.simplemobiletools.commons.extensions.launchActivityIntent
@@ -88,7 +85,9 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.simplemobiletools.commons.dialogs.DonateDialog
 import com.simplemobiletools.commons.dialogs.RateStarsDialog
+import com.simplemobiletools.commons.dialogs.UpgradeToProDialog
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.checkAppIconColor
 import com.simplemobiletools.commons.extensions.copySingleFileSdk30
@@ -102,6 +101,7 @@ import com.simplemobiletools.commons.extensions.deleteDocumentWithSAFSdk30
 import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getCanAppBeUpgraded
 import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
@@ -110,15 +110,12 @@ import com.simplemobiletools.commons.extensions.getInternalStoragePath
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
-import com.simplemobiletools.commons.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
-import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
+import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.rescanAndDeletePath
 import com.simplemobiletools.commons.extensions.scanPathRecursively
 import com.simplemobiletools.commons.extensions.scanPathsRecursively
-import com.simplemobiletools.commons.extensions.showDonateOrUpgradeDialog
-import com.simplemobiletools.commons.extensions.showFileCreateError
 import com.simplemobiletools.commons.extensions.toggleAppIconColor
 import com.simplemobiletools.commons.extensions.trySAFFileDelete
 import com.simplemobiletools.commons.extensions.updateInMediaStore
@@ -1739,6 +1736,20 @@ fun Activity.setupDialogStuff(
     }
 }
 
+fun Activity.showDonateOrUpgradeDialog() {
+    if (getCanAppBeUpgraded()) {
+        UpgradeToProDialog(this)
+    } else if (!isOrWasThankYouInstalled()) {
+        DonateDialog(this)
+    }
+}
+
+fun BaseSimpleActivity.showFileCreateError(path: String) {
+    val error = String.format(getString(R.string.could_not_create_file), path)
+    baseConfig.sdTreeUri = ""
+    showErrorToast(error)
+}
+
 @TargetApi(Build.VERSION_CODES.N)
 fun Activity.showFileOnMap(path: String) {
     val exif = try {
@@ -1758,6 +1769,14 @@ fun Activity.showFileOnMap(path: String) {
     } else {
         toast(R.string.unknown_location)
     }
+}
+
+fun Activity.showLocationOnMap(coordinates: String) {
+    val uriBegin = "geo:${coordinates.replace(" ", "")}"
+    val encodedQuery = Uri.encode(coordinates)
+    val uriString = "$uriBegin?q=$encodedQuery&z=16"
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uriString))
+    launchActivityIntent(intent)
 }
 
 fun Activity.handleExcludedFolderPasswordProtection(callback: () -> Unit) {
