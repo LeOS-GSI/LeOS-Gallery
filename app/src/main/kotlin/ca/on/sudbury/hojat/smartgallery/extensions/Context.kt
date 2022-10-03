@@ -21,6 +21,7 @@ import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
@@ -34,10 +35,12 @@ import android.provider.OpenableColumns
 import android.text.TextUtils
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
+import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -108,6 +111,7 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
 import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
+import com.simplemobiletools.commons.extensions.degreesFromOrientation
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getDirectChildrenCount
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
@@ -116,14 +120,18 @@ import com.simplemobiletools.commons.extensions.getFirstParentDirName
 import com.simplemobiletools.commons.extensions.getFirstParentLevel
 import com.simplemobiletools.commons.extensions.getFirstParentPath
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
+import com.simplemobiletools.commons.extensions.getPaths
 import com.simplemobiletools.commons.extensions.getPermissionString
 import com.simplemobiletools.commons.extensions.getSAFDocumentId
 import com.simplemobiletools.commons.extensions.getSAFOnlyDirs
 import com.simplemobiletools.commons.extensions.getStorageRootIdForAndroidDir
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.recycleBinPath
-import com.simplemobiletools.commons.extensions.sdCardPath
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
+import com.simplemobiletools.commons.extensions.getSomeDocumentFile
+import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
+import com.simplemobiletools.commons.extensions.orientationFromDegrees
+import com.simplemobiletools.commons.extensions.rescanPaths
+import com.simplemobiletools.commons.extensions.scanPathsRecursively
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.extensions.usableScreenSize
@@ -132,6 +140,7 @@ import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
+import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.isSPlus
@@ -2066,6 +2075,43 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
             callback?.invoke()
         }
     }
+}
+
+fun Context.saveExifRotation(exif: ExifInterface, degrees: Int) {
+    val orientation =
+        exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+    val orientationDegrees = (orientation.degreesFromOrientation() + degrees) % 360
+    exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientationDegrees.orientationFromDegrees())
+    exif.saveAttributes()
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+fun Context.saveImageRotation(path: String, degrees: Int): Boolean {
+    if (!needsStupidWritePermissions(path)) {
+        saveExifRotation(ExifInterface(path), degrees)
+        return true
+    } else if (isNougatPlus()) {
+        val documentFile = getSomeDocumentFile(path)
+        if (documentFile != null) {
+            val parcelFileDescriptor = contentResolver.openFileDescriptor(documentFile.uri, "rw")
+            val fileDescriptor = parcelFileDescriptor!!.fileDescriptor
+            saveExifRotation(ExifInterface(fileDescriptor), degrees)
+            return true
+        }
+    }
+    return false
+}
+
+fun Context.scanPathRecursively(path: String, callback: (() -> Unit)? = null) {
+    scanPathsRecursively(arrayListOf(path), callback)
+}
+
+fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = null) {
+    val allPaths = java.util.ArrayList<String>()
+    for (path in paths) {
+        allPaths.addAll(getPaths(File(path)))
+    }
+    rescanPaths(allPaths, callback)
 }
 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath

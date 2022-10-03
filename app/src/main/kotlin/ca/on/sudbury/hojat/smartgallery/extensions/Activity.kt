@@ -2,6 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.ContentProviderOperation
 import android.content.ContentValues
@@ -18,6 +19,7 @@ import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.os.TransactionTooLargeException
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
@@ -46,18 +48,13 @@ import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getFileInputStreamSync
-import com.simplemobiletools.commons.extensions.saveExifRotation
-import com.simplemobiletools.commons.extensions.saveImageRotation
 import com.simplemobiletools.commons.extensions.updateLastModified
-import com.simplemobiletools.commons.extensions.sharePathIntent
-import com.simplemobiletools.commons.extensions.sharePathsIntent
 import com.simplemobiletools.commons.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
 import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent
 import com.simplemobiletools.commons.extensions.launchActivityIntent
 import com.simplemobiletools.commons.extensions.canManageMedia
-import com.simplemobiletools.commons.extensions.setAsIntent
 import com.simplemobiletools.commons.helpers.LICENSE_GLIDE
 import com.simplemobiletools.commons.helpers.LICENSE_CROPPER
 import com.simplemobiletools.commons.helpers.LICENSE_RTL
@@ -106,22 +103,23 @@ import com.simplemobiletools.commons.extensions.getDocumentFile
 import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.getFinalUriFromPath
 import com.simplemobiletools.commons.extensions.getInternalStoragePath
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
+import com.simplemobiletools.commons.extensions.getUriMimeType
 import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.rescanAndDeletePath
-import com.simplemobiletools.commons.extensions.scanPathRecursively
-import com.simplemobiletools.commons.extensions.scanPathsRecursively
 import com.simplemobiletools.commons.extensions.toggleAppIconColor
 import com.simplemobiletools.commons.extensions.trySAFFileDelete
 import com.simplemobiletools.commons.extensions.updateInMediaStore
 import com.simplemobiletools.commons.extensions.updateSDCardPath
 import com.simplemobiletools.commons.extensions.updateTextColors
 import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
+import com.simplemobiletools.commons.helpers.REQUEST_SET_AS
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.models.Android30RenameFormat
 import com.simplemobiletools.commons.views.MyTextView
@@ -584,8 +582,75 @@ fun Activity.sharePath(path: String) {
     sharePathIntent(path, BuildConfig.APPLICATION_ID)
 }
 
+fun Activity.sharePathIntent(path: String, applicationId: String) {
+    ensureBackgroundThread {
+        val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, newUri)
+            type = getUriMimeType(path, newUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+            try {
+                startActivity(Intent.createChooser(this, getString(R.string.share_via)))
+            } catch (e: ActivityNotFoundException) {
+                toast(R.string.no_app_found)
+            } catch (e: RuntimeException) {
+                if (e.cause is TransactionTooLargeException) {
+                    toast(R.string.maximum_share_reached)
+                } else {
+                    showErrorToast(e)
+                }
+            } catch (e: Exception) {
+                showErrorToast(e)
+            }
+        }
+    }
+}
+
 fun Activity.sharePaths(paths: ArrayList<String>) {
     sharePathsIntent(paths, BuildConfig.APPLICATION_ID)
+}
+
+fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
+    ensureBackgroundThread {
+        if (paths.size == 1) {
+            sharePathIntent(paths.first(), applicationId)
+        } else {
+            val uriPaths = java.util.ArrayList<String>()
+            val newUris = paths.map {
+                val uri = getFinalUriFromPath(it, applicationId) ?: return@ensureBackgroundThread
+                uriPaths.add(uri.path!!)
+                uri
+            } as java.util.ArrayList<Uri>
+
+            var mimeType = uriPaths.getMimeType()
+            if (mimeType.isEmpty() || mimeType == "*/*") {
+                mimeType = paths.getMimeType()
+            }
+
+            Intent().apply {
+                action = Intent.ACTION_SEND_MULTIPLE
+                type = mimeType
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                putParcelableArrayListExtra(Intent.EXTRA_STREAM, newUris)
+
+                try {
+                    startActivity(Intent.createChooser(this, getString(R.string.share_via)))
+                } catch (e: ActivityNotFoundException) {
+                    toast(R.string.no_app_found)
+                } catch (e: RuntimeException) {
+                    if (e.cause is TransactionTooLargeException) {
+                        toast(R.string.maximum_share_reached)
+                    } else {
+                        showErrorToast(e)
+                    }
+                } catch (e: Exception) {
+                    showErrorToast(e)
+                }
+            }
+        }
+    }
 }
 
 fun Activity.shareMediumPath(path: String) {
@@ -1646,6 +1711,34 @@ fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> U
 
         runOnUiThread {
             callback()
+        }
+    }
+}
+
+fun Activity.scanPathRecursively(path: String, callback: (() -> Unit)? = null) {
+    applicationContext.scanPathRecursively(path, callback)
+}
+
+fun Activity.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = null) {
+    applicationContext.scanPathsRecursively(paths, callback)
+}
+
+fun Activity.setAsIntent(path: String, applicationId: String) {
+    ensureBackgroundThread {
+        val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
+        Intent().apply {
+            action = Intent.ACTION_ATTACH_DATA
+            setDataAndType(newUri, getUriMimeType(path, newUri))
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val chooser = Intent.createChooser(this, getString(R.string.set_as))
+
+            try {
+                startActivityForResult(chooser, REQUEST_SET_AS)
+            } catch (e: ActivityNotFoundException) {
+                toast(R.string.no_app_found)
+            } catch (e: Exception) {
+                showErrorToast(e)
+            }
         }
     }
 }
