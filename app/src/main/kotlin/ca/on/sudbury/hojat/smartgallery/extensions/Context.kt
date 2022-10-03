@@ -56,7 +56,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
-import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import com.simplemobiletools.commons.helpers.FAVORITES
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
@@ -128,8 +127,10 @@ import com.simplemobiletools.commons.extensions.getStorageRootIdForAndroidDir
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
+import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.orientationFromDegrees
+import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.scanPathsRecursively
 import com.simplemobiletools.commons.extensions.toInt
@@ -144,6 +145,7 @@ import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.isSPlus
+import com.simplemobiletools.commons.helpers.proPackages
 import com.simplemobiletools.commons.models.FileDirItem
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
@@ -151,8 +153,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
-import java.util.Collections
-import java.util.Locale
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -237,6 +239,15 @@ fun Context.getAndroidTreeUri(path: String): String {
 fun Context.getAppIconColors() =
     resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
 
+fun Context.getCanAppBeUpgraded() = proPackages.contains(
+    baseConfig.appId.removeSuffix(".debug").removePrefix("com.simplemobiletools.")
+)
+
+fun Context.getCurrentFormattedDateTime(): String {
+    val simpleDateFormat = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
+    return simpleDateFormat.format(Date(System.currentTimeMillis()))
+}
+
 fun Context.getDocumentFile(path: String): DocumentFile? {
     val isOTG = isPathOnOTG(path)
     var relativePath = path.substring(if (isOTG) otgPath.length else sdCardPath.length)
@@ -313,6 +324,17 @@ fun Context.getFileUrisFromFileDirItems(fileDirItems: List<FileDirItem>): List<U
 fun Context.getHumanizedFilename(path: String): String {
     val humanized = humanizePath(path)
     return humanized.substring(humanized.lastIndexOf("/") + 1)
+}
+
+fun Context.getHumanReadablePath(path: String): String {
+    return getString(
+        when (path) {
+            "/" -> R.string.root
+            internalStoragePath -> R.string.internal
+            otgPath -> R.string.usb
+            else -> R.string.sd_card
+        }
+    )
 }
 
 fun Context.getImageResolution(path: String): Point? {

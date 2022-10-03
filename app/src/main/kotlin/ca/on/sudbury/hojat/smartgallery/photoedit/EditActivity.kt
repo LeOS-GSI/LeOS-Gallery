@@ -44,12 +44,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
-import com.simplemobiletools.commons.extensions.getCurrentFormattedDateTime
+import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.getCompressionFormat
+import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getRealPathFromURI

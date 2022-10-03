@@ -46,12 +46,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
-import com.simplemobiletools.commons.extensions.getContrastColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import com.simplemobiletools.commons.extensions.containsNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.getTimeFormat
+import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import com.simplemobiletools.commons.extensions.convertToBitmap
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.helpers.FAVORITES
