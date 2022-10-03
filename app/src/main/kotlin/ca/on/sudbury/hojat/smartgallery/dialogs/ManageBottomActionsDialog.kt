@@ -4,7 +4,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogManageBottomActionsBinding
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import com.simplemobiletools.commons.extensions.setupDialogStuff
+import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_TOGGLE_FAVORITE
 import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_EDIT

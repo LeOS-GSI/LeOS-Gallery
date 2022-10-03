@@ -14,10 +14,10 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.simplemobiletools.commons.extensions.applyColorFilter
+import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getFileSignature
-import com.simplemobiletools.commons.extensions.setText
-import com.simplemobiletools.commons.extensions.setVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.setText
+import ca.on.sudbury.hojat.smartgallery.extensions.setVisibleIf
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -33,13 +33,22 @@ class MyWidgetProvider : AppWidgetProvider() {
             putExtra(DIRECTORY, widget.folderPath)
         }
 
-        val pendingIntent = PendingIntent.getActivity(context, widget.widgetId, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            widget.widgetId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         views.setOnClickPendingIntent(id, pendingIntent)
     }
 
     @SuppressLint("CheckResult")
     @RequiresApi(Build.VERSION_CODES.M)
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         ensureBackgroundThread {
             val config = context.config
@@ -51,7 +60,8 @@ class MyWidgetProvider : AppWidgetProvider() {
                     setText(R.id.widget_folder_name, context.getFolderNameFromPath(it.folderPath))
                 }
 
-                val path = context.directoryDao.getDirectoryThumbnail(it.folderPath) ?: return@forEach
+                val path =
+                    context.directoryDao.getDirectoryThumbnail(it.folderPath) ?: return@forEach
                 val options = RequestOptions()
                     .signature(path.getFileSignature())
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -90,7 +100,12 @@ class MyWidgetProvider : AppWidgetProvider() {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle) {
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle
+    ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
         onUpdate(context, appWidgetManager, intArrayOf(appWidgetId))
     }

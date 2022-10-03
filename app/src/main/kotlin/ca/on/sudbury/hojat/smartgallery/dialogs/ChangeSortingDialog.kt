@@ -6,7 +6,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeSortingBinding
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import com.simplemobiletools.commons.extensions.setupDialogStuff
+import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import com.simplemobiletools.commons.helpers.SORT_BY_PATH

@@ -6,7 +6,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeGroupingBinding
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import com.simplemobiletools.commons.extensions.setupDialogStuff
+import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_SHOW_FILE_COUNT

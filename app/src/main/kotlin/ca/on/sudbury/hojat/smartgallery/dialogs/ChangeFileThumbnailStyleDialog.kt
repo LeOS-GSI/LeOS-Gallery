@@ -7,7 +7,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeFileThumbnailSty
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import com.simplemobiletools.commons.extensions.setupDialogStuff
+import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import com.simplemobiletools.commons.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 

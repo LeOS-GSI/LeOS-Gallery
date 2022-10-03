@@ -32,7 +32,7 @@ import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
-import com.simplemobiletools.commons.extensions.applyColorFilter
+import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.getOTGPublicPath

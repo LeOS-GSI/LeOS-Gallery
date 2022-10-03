@@ -5,7 +5,7 @@ import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogDeleteWithRememberBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import com.simplemobiletools.commons.extensions.setupDialogStuff
+import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 
 class DeleteWithRememberDialog(val activity: Activity, message: String, val callback: (remember: Boolean) -> Unit) {
 
