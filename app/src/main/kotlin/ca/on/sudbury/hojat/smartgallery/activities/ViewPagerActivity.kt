@@ -159,8 +159,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
-import com.simplemobiletools.commons.extensions.isAStorageRootFolder
-import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
+import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize

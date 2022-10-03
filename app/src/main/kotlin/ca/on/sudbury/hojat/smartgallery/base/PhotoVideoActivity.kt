@@ -50,7 +50,7 @@ import com.simplemobiletools.commons.extensions.getFinalUriFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
-import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
 import android.hardware.usb.UsbConstants
@@ -112,21 +113,21 @@ import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getDirectChildrenCount
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
+import com.simplemobiletools.commons.extensions.getFirstParentDirName
+import com.simplemobiletools.commons.extensions.getFirstParentLevel
+import com.simplemobiletools.commons.extensions.getFirstParentPath
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getPermissionString
 import com.simplemobiletools.commons.extensions.getSAFDocumentId
 import com.simplemobiletools.commons.extensions.getStorageRootIdForAndroidDir
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
-import com.simplemobiletools.commons.extensions.isAndroidDataDir
-import com.simplemobiletools.commons.extensions.isAudioSlow
-import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
-import com.simplemobiletools.commons.extensions.isImageSlow
-import com.simplemobiletools.commons.extensions.isPathOnOTG
-import com.simplemobiletools.commons.extensions.isPathOnSD
-import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
+import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
+import com.simplemobiletools.commons.extensions.isSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.isSDCardSetAsDefaultStorage
 import com.simplemobiletools.commons.extensions.isVideoSlow
 import com.simplemobiletools.commons.extensions.isWhiteTheme
+import com.simplemobiletools.commons.extensions.recycleBinPath
+import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toInt
 import com.simplemobiletools.commons.extensions.usableScreenSize
@@ -152,6 +153,11 @@ import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 import kotlin.collections.LinkedHashSet
 import kotlin.collections.set
+
+private const val DOWNLOAD_DIR = "Download"
+private const val ANDROID_DIR = "Android"
+private val DIRS_INACCESSIBLE_WITH_SAF_SDK_30 = listOf(DOWNLOAD_DIR, ANDROID_DIR)
+
 
 // avoid these being set as SD card paths
 private val physicalPaths = arrayListOf(
@@ -411,6 +417,36 @@ fun Context.humanizePath(path: String): String {
 
 val Context.config: Config get() = Config.newInstance(applicationContext)
 
+fun Context.isAccessibleWithSAFSdk30(path: String): Boolean {
+    if (path.startsWith(recycleBinPath) || isExternalStorageManager()) {
+        return false
+    }
+
+    val level = getFirstParentLevel(path)
+    val firstParentDir = path.getFirstParentDirName(this, level)
+    val firstParentPath = path.getFirstParentPath(this, level)
+
+    val isValidName = firstParentDir != null
+    val isDirectory = File(firstParentPath).isDirectory
+    val isAnAccessibleDirectory =
+        DIRS_INACCESSIBLE_WITH_SAF_SDK_30.all { !firstParentDir.equals(it, true) }
+    return isRPlus() && isValidName && isDirectory && isAnAccessibleDirectory
+}
+
+fun Context.isAStorageRootFolder(path: String): Boolean {
+    val trimmed = path.trimEnd('/')
+    return trimmed.isEmpty() || trimmed.equals(internalStoragePath, true) || trimmed.equals(
+        sdCardPath,
+        true
+    ) || trimmed.equals(otgPath, true)
+}
+
+fun Context.isBlackAndWhiteTheme() =
+    baseConfig.textColor == Color.WHITE && baseConfig.primaryColor == Color.BLACK && baseConfig.backgroundColor == Color.BLACK
+
+fun Context.isPathOnInternalStorage(path: String) =
+    internalStoragePath.isNotEmpty() && path.startsWith(internalStoragePath)
+
 fun Context.isPathOnSD(path: String) = sdCardPath.isNotEmpty() && path.startsWith(sdCardPath)
 
 val Context.widgetsDB: WidgetsDao
@@ -456,7 +492,67 @@ val Context.favoritesDB: FavoritesDao
 val Context.dateTakensDB: DateTakensDao
     get() = GalleryDatabase.getInstance(applicationContext).DateTakensDao()
 
+fun Context.isAProApp() = true
+
+fun Context.isInDownloadDir(path: String): Boolean {
+    if (path.startsWith(recycleBinPath)) {
+        return false
+    }
+    val firstParentDir = path.getFirstParentDirName(this, 0)
+    return firstParentDir.equals(DOWNLOAD_DIR, true)
+}
+
+fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
+    if (path.startsWith(recycleBinPath)) {
+        return false
+    }
+    val firstParentDir = path.getFirstParentDirName(this, 1)
+    return if (firstParentDir == null) {
+        false
+    } else {
+        val startsWithDownloadDir =
+            firstParentDir.startsWith(DOWNLOAD_DIR, true)
+        val hasAtLeast1PathSegment = firstParentDir.split("/").filter { it.isNotEmpty() }.size > 1
+        val firstParentPath = path.getFirstParentPath(this, 1)
+        startsWithDownloadDir && hasAtLeast1PathSegment && File(firstParentPath).isDirectory
+    }
+}
+
+fun Context.isPackageInstalled(pkgName: String): Boolean {
+    return try {
+        packageManager.getPackageInfo(pkgName, 0)
+        true
+    } catch (e: Exception) {
+        false
+    }
+}
+
 fun Context.isPathOnOTG(path: String) = otgPath.isNotEmpty() && path.startsWith(otgPath)
+
+fun Context.isRestrictedSAFOnlyRoot(path: String): Boolean {
+    return isRPlus() && isSAFOnlyRoot(path)
+}
+
+fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
+    if (path.startsWith(recycleBinPath) || isExternalStorageManager()) {
+        return false
+    }
+
+    val level = getFirstParentLevel(path)
+    val firstParentDir = path.getFirstParentDirName(this, level)
+    val firstParentPath = path.getFirstParentPath(this, level)
+
+    val isInvalidName = firstParentDir == null
+    val isDirectory = File(firstParentPath).isDirectory
+    val isARestrictedDirectory =
+        DIRS_INACCESSIBLE_WITH_SAF_SDK_30.any {
+            firstParentDir.equals(
+                it,
+                true
+            )
+        }
+    return isRPlus() && (isInvalidName || (isDirectory && isARestrictedDirectory))
+}
 
 val Context.recycleBin: File get() = filesDir
 
@@ -1957,3 +2053,12 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
 }
 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath
+
+fun isAndroidDataDir(path: String): Boolean {
+    val resolvedPath = "${path.trimEnd('/')}/"
+    return resolvedPath.contains(ANDROID_DATA_DIR)
+}
+
+fun isExternalStorageManager(): Boolean {
+    return isRPlus() && Environment.isExternalStorageManager()
+}

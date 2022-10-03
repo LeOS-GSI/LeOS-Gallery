@@ -16,8 +16,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordPro
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
-import com.simplemobiletools.commons.extensions.isInDownloadDir
+import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
+import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter

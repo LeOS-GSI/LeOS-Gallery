@@ -10,8 +10,8 @@ import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
-import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
-import com.simplemobiletools.commons.extensions.isInDownloadDir
+import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
+import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
@@ -21,9 +21,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import com.simplemobiletools.commons.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import com.simplemobiletools.commons.extensions.isInSubFolderInDownloadDir
+import ca.on.sudbury.hojat.smartgallery.extensions.isInSubFolderInDownloadDir
 import com.simplemobiletools.commons.extensions.toFileDirItem
-import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.helpers.isRPlus
 import java.io.File

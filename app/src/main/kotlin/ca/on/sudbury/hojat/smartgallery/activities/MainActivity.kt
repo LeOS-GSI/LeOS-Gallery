@@ -116,7 +116,7 @@ import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.getFilePublicUri
 import com.simplemobiletools.commons.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
-import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import com.simplemobiletools.commons.extensions.underlineText
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
@@ -144,7 +144,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.appLaunched
-import com.simplemobiletools.commons.extensions.isPackageInstalled
+import ca.on.sudbury.hojat.smartgallery.extensions.isPackageInstalled
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import com.simplemobiletools.commons.extensions.checkWhatsNew

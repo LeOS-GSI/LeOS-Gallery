@@ -43,11 +43,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
-import com.simplemobiletools.commons.extensions.isExternalStorageManager
+import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.getContrastColor
-import com.simplemobiletools.commons.extensions.isAStorageRootFolder
+import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import com.simplemobiletools.commons.extensions.containsNoMedia
 import com.simplemobiletools.commons.extensions.showErrorToast

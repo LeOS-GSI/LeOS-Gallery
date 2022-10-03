@@ -8,10 +8,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.internalStoragePath
-import com.simplemobiletools.commons.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.isPathOnOTG
-import com.simplemobiletools.commons.extensions.isPathOnSD
-import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
@@ -92,6 +88,9 @@ fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
 fun String.isApng() = endsWith(".apng", true)
 
 fun String.isAudioFast() = audioExtensions.any { endsWith(it, true) }
+
+fun String.isAudioSlow() =
+    isAudioFast() || getMimeType().startsWith("audio") || startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())
 
 fun String.isGif() = endsWith(".gif", true)
 
