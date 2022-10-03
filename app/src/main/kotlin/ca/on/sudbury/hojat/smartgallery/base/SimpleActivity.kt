@@ -9,7 +9,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
-import com.simplemobiletools.commons.extensions.getRealPathFromURI
+import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import com.simplemobiletools.commons.extensions.scanPathRecursively
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isPiePlus

@@ -35,7 +35,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.queryCursor
 import ca.on.sudbury.hojat.smartgallery.extensions.normalizeString
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
-import com.simplemobiletools.commons.extensions.getIntValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.areDigitsOnly
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected

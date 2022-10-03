@@ -32,7 +32,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toBoolean
 import ca.on.sudbury.hojat.smartgallery.extensions.toInt
-import com.simplemobiletools.commons.extensions.getAppIconColors
+import ca.on.sudbury.hojat.smartgallery.extensions.getAppIconColors
 import com.simplemobiletools.commons.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist

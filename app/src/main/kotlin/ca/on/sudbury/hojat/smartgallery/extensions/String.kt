@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
+import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileKey
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -40,6 +42,8 @@ fun String.getFileKey(lastModified: Long? = null): String {
 fun String.getFilenameExtension() = substring(lastIndexOf(".") + 1)
 
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
+
+fun String.getFileSignature(lastModified: Long? = null) = ObjectKey(getFileKey(lastModified))
 
 fun String.getImageResolution(context: Context): Point? {
     val options = BitmapFactory.Options()

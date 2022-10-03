@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.getFileSignature
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileSignature
 import ca.on.sudbury.hojat.smartgallery.extensions.setText
 import ca.on.sudbury.hojat.smartgallery.extensions.setVisibleIf
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread

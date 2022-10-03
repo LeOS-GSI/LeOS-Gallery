@@ -5,6 +5,7 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -106,24 +107,21 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
+import com.simplemobiletools.commons.extensions.areDigitsOnly
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
 import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.degreesFromOrientation
-import com.simplemobiletools.commons.extensions.getAndroidTreeUri
-import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
-import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getDataColumn
 import com.simplemobiletools.commons.extensions.getFirstParentDirName
 import com.simplemobiletools.commons.extensions.getFirstParentLevel
 import com.simplemobiletools.commons.extensions.getFirstParentPath
 import com.simplemobiletools.commons.extensions.getPaths
 import com.simplemobiletools.commons.extensions.getPermissionString
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
-import com.simplemobiletools.commons.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.internalStoragePath
@@ -136,7 +134,6 @@ import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.scanPathsRecursively
 import com.simplemobiletools.commons.extensions.sdCardPath
-import ca.on.sudbury.hojat.smartgallery.extensions.toInt
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.extensions.updateOTGPathFromPartition
 import com.simplemobiletools.commons.extensions.usableScreenSize
@@ -209,6 +206,11 @@ private fun Context.queryCursorDesc(
         contentResolver.query(uri, projection, null, null, sortOrder)
     }
 }
+
+private fun isDownloadsDocument(uri: Uri) = uri.authority == "com.android.providers.downloads.documents"
+private fun isExternalStorageDocument(uri: Uri) = uri.authority == "com.android.externalstorage.documents"
+private fun isMediaDocument(uri: Uri) = uri.authority == "com.android.providers.media.documents"
+
 
 private const val ANDROID_DATA_DIR = "/Android/data/"
 private const val ANDROID_OBB_DIR = "/Android/obb/"
@@ -2125,6 +2127,49 @@ fun Context.getFileDateTaken(path: String): Long {
     }
 
     return 0L
+}
+
+// some helper functions were taken from https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
+fun Context.getRealPathFromURI(uri: Uri): String? {
+    if (uri.scheme == "file") {
+        return uri.path
+    }
+
+    if (isDownloadsDocument(uri)) {
+        val id = DocumentsContract.getDocumentId(uri)
+        if (id.areDigitsOnly()) {
+            val newUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), id.toLong())
+            val path = getDataColumn(newUri)
+            if (path != null) {
+                return path
+            }
+        }
+    } else if (isExternalStorageDocument(uri)) {
+        val documentId = DocumentsContract.getDocumentId(uri)
+        val parts = documentId.split(":")
+        if (parts[0].equals("primary", true)) {
+            return "${Environment.getExternalStorageDirectory().absolutePath}/${parts[1]}"
+        }
+    } else if (isMediaDocument(uri)) {
+        val documentId = DocumentsContract.getDocumentId(uri)
+        val split = documentId.split(":").dropLastWhile { it.isEmpty() }.toTypedArray()
+        val type = split[0]
+
+        val contentUri = when (type) {
+            "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            else -> Images.Media.EXTERNAL_CONTENT_URI
+        }
+
+        val selection = "_id=?"
+        val selectionArgs = arrayOf(split[1])
+        val path = getDataColumn(contentUri, selection, selectionArgs)
+        if (path != null) {
+            return path
+        }
+    }
+
+    return getDataColumn(uri)
 }
 
 fun Context.hasOTGConnected(): Boolean {

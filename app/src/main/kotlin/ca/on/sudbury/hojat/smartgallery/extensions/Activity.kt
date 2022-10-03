@@ -96,7 +96,6 @@ import com.simplemobiletools.commons.extensions.deleteDocumentWithSAFSdk30
 import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
 import com.simplemobiletools.commons.extensions.ensurePublicUri
-import com.simplemobiletools.commons.extensions.getAndroidSAFUri
 import com.simplemobiletools.commons.extensions.getInternalStoragePath
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor

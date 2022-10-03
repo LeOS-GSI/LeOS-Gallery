@@ -168,7 +168,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.convertToBitmap
-import com.simplemobiletools.commons.extensions.getImageResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
 import com.simplemobiletools.commons.extensions.getUriMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.tryGenericMimeType
