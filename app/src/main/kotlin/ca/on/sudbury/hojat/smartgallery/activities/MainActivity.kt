@@ -111,9 +111,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleAppPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import com.simplemobiletools.commons.extensions.toFileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
-import com.simplemobiletools.commons.extensions.getFilePublicUri
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilePublicUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager

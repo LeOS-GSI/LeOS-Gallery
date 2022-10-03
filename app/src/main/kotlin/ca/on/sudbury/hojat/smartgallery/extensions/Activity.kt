@@ -47,7 +47,7 @@ import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.updateLastModified
-import com.simplemobiletools.commons.extensions.toFileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
 import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent
@@ -100,7 +100,7 @@ import com.simplemobiletools.commons.extensions.getInternalStoragePath
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
-import com.simplemobiletools.commons.extensions.getUriMimeType
+import ca.on.sudbury.hojat.smartgallery.extensions.getUriMimeType
 import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.rescanAndDeletePath

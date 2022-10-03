@@ -154,7 +154,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.getFileOutputStream
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
@@ -169,10 +169,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.convertToBitmap
 import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
-import com.simplemobiletools.commons.extensions.getUriMimeType
+import ca.on.sudbury.hojat.smartgallery.extensions.getUriMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.tryGenericMimeType
-import com.simplemobiletools.commons.extensions.getFinalUriFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getFinalUriFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif

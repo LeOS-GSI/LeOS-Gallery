@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
@@ -38,6 +39,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
@@ -113,19 +115,22 @@ import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
 import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.degreesFromOrientation
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
-import com.simplemobiletools.commons.extensions.getFastDocumentFile
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
-import com.simplemobiletools.commons.extensions.getDataColumn
-import com.simplemobiletools.commons.extensions.getFirstParentDirName
-import com.simplemobiletools.commons.extensions.getFirstParentLevel
-import com.simplemobiletools.commons.extensions.getFirstParentPath
-import com.simplemobiletools.commons.extensions.getPaths
-import com.simplemobiletools.commons.extensions.getPermissionString
+import com.simplemobiletools.commons.extensions.getFileUri
+import com.simplemobiletools.commons.extensions.getMediaContent
+import com.simplemobiletools.commons.extensions.getMediaContentUri
+import com.simplemobiletools.commons.extensions.getMediaStoreIds
+import com.simplemobiletools.commons.extensions.getMimeType
+import com.simplemobiletools.commons.extensions.getMimeTypeFromUri
+import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
-import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
+import com.simplemobiletools.commons.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
+import com.simplemobiletools.commons.extensions.isInAndroidDir
+import com.simplemobiletools.commons.extensions.isInSubFolderInDownloadDir
+import com.simplemobiletools.commons.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
@@ -140,11 +145,28 @@ import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.extensions.windowManager
 import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.ExternalStorageProviderHack
+import com.simplemobiletools.commons.helpers.PERMISSION_CALL_PHONE
+import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
+import com.simplemobiletools.commons.helpers.PERMISSION_GET_ACCOUNTS
+import com.simplemobiletools.commons.helpers.PERMISSION_MEDIA_LOCATION
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALENDAR
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CALL_LOG
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CONTACTS
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_PHONE_STATE
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_SMS
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
+import com.simplemobiletools.commons.helpers.PERMISSION_RECORD_AUDIO
+import com.simplemobiletools.commons.helpers.PERMISSION_SEND_SMS
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALL_LOG
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CONTACTS
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
+import com.simplemobiletools.commons.helpers.isQPlus
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.isSPlus
 import com.simplemobiletools.commons.helpers.proPackages
@@ -207,14 +229,30 @@ private fun Context.queryCursorDesc(
     }
 }
 
-private fun isDownloadsDocument(uri: Uri) = uri.authority == "com.android.providers.downloads.documents"
-private fun isExternalStorageDocument(uri: Uri) = uri.authority == "com.android.externalstorage.documents"
+private fun isDownloadsDocument(uri: Uri) =
+    uri.authority == "com.android.providers.downloads.documents"
+
+private fun isExternalStorageDocument(uri: Uri) =
+    uri.authority == "com.android.externalstorage.documents"
+
 private fun isMediaDocument(uri: Uri) = uri.authority == "com.android.providers.media.documents"
 
 
 private const val ANDROID_DATA_DIR = "/Android/data/"
 private const val ANDROID_OBB_DIR = "/Android/obb/"
 val DIRS_ACCESSIBLE_ONLY_WITH_SAF = listOf(ANDROID_DATA_DIR, ANDROID_OBB_DIR)
+
+fun getPaths(file: File): java.util.ArrayList<String> {
+    val paths = arrayListOf<String>(file.absolutePath)
+    if (file.isDirectory) {
+        val files = file.listFiles() ?: return paths
+        for (curFile in files) {
+            paths.addAll(getPaths(curFile))
+        }
+    }
+    return paths
+}
+
 val Context.recycleBinPath: String get() = filesDir.absolutePath
 
 val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -364,6 +402,22 @@ fun Context.getFilenameFromUri(uri: Uri): String {
     }
 }
 
+fun Context.getFilePublicUri(file: File, applicationId: String): Uri {
+    // for images/videos/gifs try getting a media content uri first, like content://media/external/images/media/438
+    // if media content uri is null, get our custom uri like content://com.simplemobiletools.gallery.provider/external_files/emulated/0/DCIM/IMG_20171104_233915.jpg
+    var uri = if (file.isMediaFile()) {
+        getMediaContentUri(file.absolutePath)
+    } else {
+        getMediaContent(file.absolutePath, Files.getContentUri("external"))
+    }
+
+    if (uri == null) {
+        uri = FileProvider.getUriForFile(this, "$applicationId.provider", file)
+    }
+
+    return uri!!
+}
+
 fun Context.getFileUri(path: String) = when {
     path.isImageSlow() -> Images.Media.EXTERNAL_CONTENT_URI
     path.isVideoSlow() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
@@ -380,6 +434,13 @@ fun Context.getFileUrisFromFileDirItems(fileDirItems: List<FileDirItem>): List<U
     }
 
     return fileUris
+}
+
+fun Context.getFirstParentLevel(path: String): Int {
+    return when {
+        isRPlus() && (isInAndroidDir(path) || isInSubFolderInDownloadDir(path)) -> 1
+        else -> 0
+    }
 }
 
 fun Context.getHumanizedFilename(path: String): String {
@@ -452,6 +513,26 @@ fun Context.getLatestMediaId(uri: Uri = Files.getContentUri("external")): Long {
     return 0
 }
 
+fun Context.getPermissionString(id: Int) = when (id) {
+    PERMISSION_READ_STORAGE -> Manifest.permission.READ_EXTERNAL_STORAGE
+    PERMISSION_WRITE_STORAGE -> Manifest.permission.WRITE_EXTERNAL_STORAGE
+    PERMISSION_CAMERA -> Manifest.permission.CAMERA
+    PERMISSION_RECORD_AUDIO -> Manifest.permission.RECORD_AUDIO
+    PERMISSION_READ_CONTACTS -> Manifest.permission.READ_CONTACTS
+    PERMISSION_WRITE_CONTACTS -> Manifest.permission.WRITE_CONTACTS
+    PERMISSION_READ_CALENDAR -> Manifest.permission.READ_CALENDAR
+    PERMISSION_WRITE_CALENDAR -> Manifest.permission.WRITE_CALENDAR
+    PERMISSION_CALL_PHONE -> Manifest.permission.CALL_PHONE
+    PERMISSION_READ_CALL_LOG -> Manifest.permission.READ_CALL_LOG
+    PERMISSION_WRITE_CALL_LOG -> Manifest.permission.WRITE_CALL_LOG
+    PERMISSION_GET_ACCOUNTS -> Manifest.permission.GET_ACCOUNTS
+    PERMISSION_READ_SMS -> Manifest.permission.READ_SMS
+    PERMISSION_SEND_SMS -> Manifest.permission.SEND_SMS
+    PERMISSION_READ_PHONE_STATE -> Manifest.permission.READ_PHONE_STATE
+    PERMISSION_MEDIA_LOCATION -> if (isQPlus()) Manifest.permission.ACCESS_MEDIA_LOCATION else ""
+    else -> ""
+}
+
 fun Context.getPicturesDirectoryPath(fullPath: String): String {
     val basePath = fullPath.getBasePath(this)
     return File(basePath, Environment.DIRECTORY_PICTURES).absolutePath
@@ -481,8 +562,15 @@ fun Context.getStorageRootIdForAndroidDir(path: String) =
         ) "%3AAndroid%2Fdata" else "%3AAndroid%2Fobb"
     ).substringAfterLast('/').trimEnd('/')
 
-
 fun Context.getTimeFormat() = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
+
+fun Context.getUriMimeType(path: String, newUri: Uri): String {
+    var mimeType = path.getMimeType()
+    if (mimeType.isEmpty()) {
+        mimeType = getMimeTypeFromUri(newUri)
+    }
+    return mimeType
+}
 
 fun Context.getVideoResolution(path: String): Point? {
     var point = try {
@@ -1007,6 +1095,22 @@ fun Context.getDirectParentSubfolders(
     } else {
         dirsToShow
     }
+}
+
+fun Context.getFastDocumentFile(path: String): DocumentFile? {
+    if (isPathOnOTG(path)) {
+        return getOTGFastDocumentFile(path)
+    }
+
+    if (baseConfig.sdCardPath.isEmpty()) {
+        return null
+    }
+
+    val relativePath = Uri.encode(path.substring(baseConfig.sdCardPath.length).trim('/'))
+    val externalPathPart =
+        baseConfig.sdCardPath.split("/").lastOrNull(String::isNotEmpty)?.trim('/') ?: return null
+    val fullUri = "${baseConfig.sdTreeUri}/document/$externalPathPart%3A$relativePath"
+    return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
 }
 
 fun Context.updateSubfolderCounts(
@@ -1688,6 +1792,28 @@ fun Context.getFavoritePaths(): ArrayList<String> {
 fun Context.getFavoriteFromPath(path: String) =
     Favorite(null, path, path.getFilenameFromPath(), path.getParentPath())
 
+// Convert paths like /storage/emulated/0/Pictures/Screenshots/first.jpg to content://media/external/images/media/131799
+// so that we can refer to the file in the MediaStore.
+// If we found no mediastore uri for a given file, do not return its path either to avoid some mismatching
+fun Context.getUrisPathsFromFileDirItems(fileDirItems: List<FileDirItem>): Pair<java.util.ArrayList<String>, java.util.ArrayList<Uri>> {
+    val fileUris = java.util.ArrayList<Uri>()
+    val successfulFilePaths = java.util.ArrayList<String>()
+    val allIds = getMediaStoreIds(this)
+    val filePaths = fileDirItems.map { it.path }
+    filePaths.forEach { path ->
+        for ((filePath, mediaStoreId) in allIds) {
+            if (filePath.lowercase() == path.lowercase()) {
+                val baseUri = getFileUri(filePath)
+                val uri = ContentUris.withAppendedId(baseUri, mediaStoreId)
+                fileUris.add(uri)
+                successfulFilePaths.add(path)
+            }
+        }
+    }
+
+    return Pair(successfulFilePaths, fileUris)
+}
+
 val Context.portrait get() = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
 fun Context.updateFavorite(path: String, isFavorite: Boolean) {
@@ -1951,6 +2077,27 @@ fun Context.createDirectoryFromMedia(
     )
 }
 
+fun Context.getDataColumn(
+    uri: Uri,
+    selection: String? = null,
+    selectionArgs: Array<String>? = null
+): String? {
+    try {
+        val projection = arrayOf(Files.FileColumns.DATA)
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                val data = cursor.getStringValue(Files.FileColumns.DATA)
+                if (data != "null") {
+                    return data
+                }
+            }
+        }
+    } catch (e: Exception) {
+    }
+    return null
+}
+
 fun Context.getDirectorySortingValue(
     media: ArrayList<Medium>,
     path: String,
@@ -2138,7 +2285,10 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
     if (isDownloadsDocument(uri)) {
         val id = DocumentsContract.getDocumentId(uri)
         if (id.areDigitsOnly()) {
-            val newUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), id.toLong())
+            val newUri = ContentUris.withAppendedId(
+                Uri.parse("content://downloads/public_downloads"),
+                id.toLong()
+            )
             val path = getDataColumn(newUri)
             if (path != null) {
                 return path

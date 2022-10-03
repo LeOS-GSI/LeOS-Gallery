@@ -8,7 +8,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.getFileKey
+import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -44,6 +44,39 @@ fun String.getFilenameExtension() = substring(lastIndexOf(".") + 1)
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
 
 fun String.getFileSignature(lastModified: Long? = null) = ObjectKey(getFileKey(lastModified))
+
+fun String.getFirstParentDirName(context: Context, level: Int): String? {
+    val basePath = getBasePath(context)
+    val startIndex = basePath.length + 1
+    return if (length > startIndex) {
+        val pathWithoutBasePath = substring(startIndex)
+        val pathSegments = pathWithoutBasePath.split("/")
+        if (level < pathSegments.size) {
+            pathSegments.slice(0..level).joinToString("/")
+        } else {
+            null
+        }
+    } else {
+        null
+    }
+}
+
+fun String.getFirstParentPath(context: Context, level: Int): String {
+    val basePath = getBasePath(context)
+    val startIndex = basePath.length + 1
+    return if (length > startIndex) {
+        val pathWithoutBasePath = substring(basePath.length + 1)
+        val pathSegments = pathWithoutBasePath.split("/")
+        val firstParentPath = if (level < pathSegments.size) {
+            pathSegments.slice(0..level).joinToString("/")
+        } else {
+            pathWithoutBasePath
+        }
+        "$basePath/$firstParentPath"
+    } else {
+        basePath
+    }
+}
 
 fun String.getImageResolution(context: Context): Point? {
     val options = BitmapFactory.Options()

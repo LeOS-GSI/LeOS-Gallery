@@ -9,7 +9,7 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
-import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getPicturesDirectoryPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -22,7 +22,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.isInSubFolderInDownloadDir
-import com.simplemobiletools.commons.extensions.toFileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.helpers.isRPlus

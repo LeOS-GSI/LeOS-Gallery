@@ -45,8 +45,8 @@ import com.simplemobiletools.commons.extensions.actionBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
-import com.simplemobiletools.commons.extensions.getUriMimeType
-import com.simplemobiletools.commons.extensions.getFinalUriFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getUriMimeType
+import ca.on.sudbury.hojat.smartgallery.extensions.getFinalUriFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
