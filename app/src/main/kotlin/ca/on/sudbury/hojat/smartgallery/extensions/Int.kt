@@ -1,17 +1,28 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
+import android.graphics.Color
 import android.text.format.DateFormat
 import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.SORT_DESCENDING
 import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Locale
 
+fun Int.adjustAlpha(factor: Float): Int {
+    val alpha = Math.round(Color.alpha(this) * factor)
+    val red = Color.red(this)
+    val green = Color.green(this)
+    val blue = Color.blue(this)
+    return Color.argb(alpha, red, green, blue)
+}
+
 fun Int.formatDate(
     context: Context,
     dateFormat: String? = null,
-    timeFormat: String? = null): String {
+    timeFormat: String? = null
+): String {
     val useDateFormat = dateFormat ?: context.baseConfig.dateFormat
     val useTimeFormat = timeFormat ?: context.getTimeFormat()
     val cal = Calendar.getInstance(Locale.ENGLISH)
@@ -34,6 +45,11 @@ fun Int.formatSize(): String {
             )
         )
     } ${units[digitGroups]}"
+}
+
+fun Int.getContrastColor(): Int {
+    val y = (299 * Color.red(this) + 587 * Color.green(this) + 114 * Color.blue(this)) / 1000
+    return if (y >= 149 && this != Color.BLACK) DARK_GREY else Color.WHITE
 }
 
 fun Int.isSortingAscending() = this and SORT_DESCENDING == 0

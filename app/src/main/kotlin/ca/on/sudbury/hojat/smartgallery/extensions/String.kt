@@ -1,11 +1,12 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
-import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getFilenameExtension
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
@@ -26,6 +27,12 @@ import java.text.Normalizer
 import java.util.Locale
 import kotlin.collections.HashMap
 
+fun String.getCompressionFormat() = when (getFilenameExtension().toLowerCase()) {
+    "png" -> Bitmap.CompressFormat.PNG
+    "webp" -> Bitmap.CompressFormat.WEBP
+    else -> Bitmap.CompressFormat.JPEG
+}
+
 fun String.getFilenameExtension() = substring(lastIndexOf(".") + 1)
 
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
@@ -34,7 +41,13 @@ fun String.getImageResolution(context: Context): Point? {
     val options = BitmapFactory.Options()
     options.inJustDecodeBounds = true
     if (context.isRestrictedSAFOnlyRoot(this)) {
-        BitmapFactory.decodeStream(context.contentResolver.openInputStream(context.getAndroidSAFUri(this)), null, options)
+        BitmapFactory.decodeStream(
+            context.contentResolver.openInputStream(
+                context.getAndroidSAFUri(
+                    this
+                )
+            ), null, options
+        )
     } else {
         BitmapFactory.decodeFile(this, options)
     }
@@ -82,7 +95,8 @@ fun String.isPortrait() = getFilenameFromPath().contains(
     true
 ) && File(this).parentFile?.name?.startsWith("img_", true) == true
 
-fun String.isImageSlow() = isImageFast() || getMimeType().startsWith("image") || startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
+fun String.isImageSlow() =
+    isImageFast() || getMimeType().startsWith("image") || startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
 
 fun String.isJpg() = endsWith(".jpg", true) or endsWith(".jpeg", true)
 
@@ -103,7 +117,8 @@ fun String.shouldFolderBeVisible(
     includedPaths: MutableSet<String>,
     showHidden: Boolean,
     folderNoMediaStatuses: HashMap<String, Boolean>,
-    callback: (path: String, hasNoMedia: Boolean) -> Unit): Boolean {
+    callback: (path: String, hasNoMedia: Boolean) -> Unit
+): Boolean {
     if (isEmpty()) {
         return false
     }

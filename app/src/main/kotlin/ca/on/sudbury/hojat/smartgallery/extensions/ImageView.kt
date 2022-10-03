@@ -3,8 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.graphics.PorterDuff
 import android.graphics.drawable.GradientDrawable
 import android.widget.ImageView
-import com.simplemobiletools.commons.extensions.adjustAlpha
-import com.simplemobiletools.commons.extensions.getContrastColor
 
 
 fun ImageView.setFillWithStroke(

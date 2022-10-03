@@ -14,7 +14,7 @@ import com.simplemobiletools.commons.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.setFillWithStroke
 import com.simplemobiletools.commons.extensions.getContrastColor
-import com.simplemobiletools.commons.extensions.adjustAlpha
+import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
@@ -57,7 +57,8 @@ class WidgetConfigureActivity : SimpleActivity() {
         setContentView(binding.root)
         initVariables()
 
-        mWidgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+        mWidgetId = intent.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
+            ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
         if (mWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
@@ -99,7 +100,8 @@ class WidgetConfigureActivity : SimpleActivity() {
         mBgColor = config.widgetBgColor
         mBgAlpha = Color.alpha(mBgColor) / 255f
 
-        mBgColorWithoutTransparency = Color.rgb(Color.red(mBgColor), Color.green(mBgColor), Color.blue(mBgColor))
+        mBgColorWithoutTransparency =
+            Color.rgb(Color.red(mBgColor), Color.green(mBgColor), Color.blue(mBgColor))
         binding.configBgSeekbar.apply {
             progress = (mBgAlpha * 100).toInt()
 
@@ -142,7 +144,12 @@ class WidgetConfigureActivity : SimpleActivity() {
     }
 
     private fun requestWidgetUpdate() {
-        Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE, null, this, MyWidgetProvider::class.java).apply {
+        Intent(
+            AppWidgetManager.ACTION_APPWIDGET_UPDATE,
+            null,
+            this,
+            MyWidgetProvider::class.java
+        ).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(mWidgetId))
             sendBroadcast(this)
         }
@@ -204,7 +211,13 @@ class WidgetConfigureActivity : SimpleActivity() {
             if (path != null) {
                 runOnUiThread {
                     val signature = ObjectKey(System.currentTimeMillis().toString())
-                    loadJpg(path, binding.configImage, config.cropThumbnails, ROUNDED_CORNERS_NONE, signature)
+                    loadJpg(
+                        path,
+                        binding.configImage,
+                        config.cropThumbnails,
+                        ROUNDED_CORNERS_NONE,
+                        signature
+                    )
                 }
             }
         }

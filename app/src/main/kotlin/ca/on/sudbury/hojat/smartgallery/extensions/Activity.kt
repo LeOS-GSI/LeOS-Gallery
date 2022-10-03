@@ -2,10 +2,12 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.ComponentName
 import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
@@ -52,7 +54,6 @@ import com.simplemobiletools.commons.extensions.saveExifRotation
 import com.simplemobiletools.commons.extensions.saveImageRotation
 import com.simplemobiletools.commons.extensions.updateLastModified
 import com.simplemobiletools.commons.extensions.getFileKey
-import com.simplemobiletools.commons.extensions.getCompressionFormat
 import com.simplemobiletools.commons.extensions.showLocationOnMap
 import com.simplemobiletools.commons.extensions.getFileOutputStream
 import com.simplemobiletools.commons.extensions.sharePathIntent
@@ -92,7 +93,9 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.simplemobiletools.commons.dialogs.RateStarsDialog
 import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.checkAppIconColor
 import com.simplemobiletools.commons.extensions.copySingleFileSdk30
 import com.simplemobiletools.commons.extensions.createAndroidSAFFile
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
@@ -102,16 +105,17 @@ import com.simplemobiletools.commons.extensions.deleteAndroidSAFDirectory
 import com.simplemobiletools.commons.extensions.deleteDocumentWithSAFSdk30
 import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
-import com.simplemobiletools.commons.extensions.getAndroidSAFUri
-import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor
+import com.simplemobiletools.commons.extensions.getAppIconColors
 import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.getInternalStoragePath
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.getProperTextColor
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
 import com.simplemobiletools.commons.extensions.internalStoragePath
+import com.simplemobiletools.commons.extensions.isAProApp
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.isPathOnInternalStorage
@@ -121,10 +125,14 @@ import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.rescanAndDeletePath
 import com.simplemobiletools.commons.extensions.scanPathRecursively
 import com.simplemobiletools.commons.extensions.scanPathsRecursively
+import com.simplemobiletools.commons.extensions.showDonateOrUpgradeDialog
 import com.simplemobiletools.commons.extensions.showFileCreateError
+import com.simplemobiletools.commons.extensions.toggleAppIconColor
 import com.simplemobiletools.commons.extensions.trySAFFileDelete
 import com.simplemobiletools.commons.extensions.updateInMediaStore
+import com.simplemobiletools.commons.extensions.updateSDCardPath
 import com.simplemobiletools.commons.extensions.updateTextColors
+import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
 import com.simplemobiletools.commons.helpers.isOnMainThread
 import com.simplemobiletools.commons.models.Android30RenameFormat
 import com.simplemobiletools.commons.views.MyTextView
@@ -340,6 +348,61 @@ private fun deleteRecursively(file: File): Boolean {
     return file.delete()
 }
 
+
+fun Activity.appLaunched(appId: String) {
+    baseConfig.internalStoragePath = getInternalStoragePath()
+    updateSDCardPath()
+    baseConfig.appId = appId
+    if (baseConfig.appRunCount == 0) {
+        baseConfig.wasOrangeIconChecked = true
+        checkAppIconColor()
+    } else if (!baseConfig.wasOrangeIconChecked) {
+        baseConfig.wasOrangeIconChecked = true
+        val primaryColor = resources.getColor(R.color.color_primary)
+        if (baseConfig.appIconColor != primaryColor) {
+            getAppIconColors().forEachIndexed { index, color ->
+                toggleAppIconColor(appId, index, color, false)
+            }
+
+            val defaultClassName =
+                "${baseConfig.appId.removeSuffix(".debug")}.activities.SplashActivity"
+            packageManager.setComponentEnabledSetting(
+                ComponentName(baseConfig.appId, defaultClassName),
+                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+                PackageManager.DONT_KILL_APP
+            )
+
+            val orangeClassName =
+                "${baseConfig.appId.removeSuffix(".debug")}.activities.SplashActivity.Orange"
+            packageManager.setComponentEnabledSetting(
+                ComponentName(baseConfig.appId, orangeClassName),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+            )
+
+            baseConfig.appIconColor = primaryColor
+            baseConfig.lastIconColor = primaryColor
+        }
+    }
+
+    baseConfig.appRunCount++
+    if (baseConfig.appRunCount % 30 == 0 && !isAProApp()) {
+        if (!resources.getBoolean(R.bool.hide_google_relations)) {
+            showDonateOrUpgradeDialog()
+        }
+    }
+
+    if (baseConfig.appRunCount % 40 == 0 && !baseConfig.wasAppRated) {
+        if (!resources.getBoolean(R.bool.hide_google_relations)) {
+            RateStarsDialog(this)
+        }
+    }
+
+    if (baseConfig.navigationBarColor == INVALID_NAVIGATION_BAR_COLOR && (window.attributes.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN == 0)) {
+        baseConfig.defaultNavigationBarColor = window.navigationBarColor
+        baseConfig.navigationBarColor = window.navigationBarColor
+    }
+}
 
 fun Activity.getAlertDialogBuilder() = if (baseConfig.isUsingSystemTheme) {
     MaterialAlertDialogBuilder(this)
@@ -1591,9 +1654,18 @@ fun Activity.setupDialogStuff(
             getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(dialogButtonColor)
 
             val bgDrawable = when {
-                isBlackAndWhiteTheme() -> resources.getDrawable(R.drawable.black_dialog_background, theme)
-                baseConfig.isUsingSystemTheme -> resources.getDrawable(R.drawable.dialog_you_background, theme)
-                else -> resources.getColoredDrawableWithColor(R.drawable.dialog_bg, baseConfig.backgroundColor)
+                isBlackAndWhiteTheme() -> resources.getDrawable(
+                    R.drawable.black_dialog_background,
+                    theme
+                )
+                baseConfig.isUsingSystemTheme -> resources.getDrawable(
+                    R.drawable.dialog_you_background,
+                    theme
+                )
+                else -> resources.getColoredDrawableWithColor(
+                    R.drawable.dialog_bg,
+                    baseConfig.backgroundColor
+                )
             }
 
             window?.setBackgroundDrawable(bgDrawable)

@@ -143,7 +143,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.getTimeFormat
-import com.simplemobiletools.commons.extensions.appLaunched
+import ca.on.sudbury.hojat.smartgallery.extensions.appLaunched
 import com.simplemobiletools.commons.extensions.isPackageInstalled
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize

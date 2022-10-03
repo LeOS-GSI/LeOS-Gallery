@@ -52,7 +52,6 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
 import com.simplemobiletools.commons.extensions.internalStoragePath
-import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.getHumanReadablePath
 import com.simplemobiletools.commons.extensions.getOTGPublicPath
@@ -109,7 +108,6 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
 import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
-import com.simplemobiletools.commons.extensions.getAndroidSAFUri
 import com.simplemobiletools.commons.extensions.getAndroidTreeUri
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
@@ -196,6 +194,12 @@ val DIRS_ACCESSIBLE_ONLY_WITH_SAF = listOf(ANDROID_DATA_DIR, ANDROID_OBB_DIR)
 val Context.recycleBinPath: String get() = filesDir.absolutePath
 
 val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+fun Context.getAndroidSAFUri(path: String): Uri {
+    val treeUri = getAndroidTreeUri(path).toUri()
+    val documentId = createAndroidSAFDocumentId(path)
+    return DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+}
 
 fun Context.getDocumentFile(path: String): DocumentFile? {
     val isOTG = isPathOnOTG(path)
