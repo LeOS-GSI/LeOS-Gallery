@@ -32,6 +32,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
@@ -44,18 +45,14 @@ import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.isRestrictedWithSAFSdk30
-import com.simplemobiletools.commons.extensions.getPicturesDirectoryPath
 import com.simplemobiletools.commons.extensions.isInDownloadDir
-import com.simplemobiletools.commons.extensions.getFileOutputStreamSync
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getFileInputStreamSync
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.saveExifRotation
 import com.simplemobiletools.commons.extensions.saveImageRotation
 import com.simplemobiletools.commons.extensions.updateLastModified
-import com.simplemobiletools.commons.extensions.getFileKey
 import com.simplemobiletools.commons.extensions.showLocationOnMap
-import com.simplemobiletools.commons.extensions.getFileOutputStream
 import com.simplemobiletools.commons.extensions.sharePathIntent
 import com.simplemobiletools.commons.extensions.sharePathsIntent
 import com.simplemobiletools.commons.extensions.toFileDirItem
@@ -98,6 +95,7 @@ import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.checkAppIconColor
 import com.simplemobiletools.commons.extensions.copySingleFileSdk30
 import com.simplemobiletools.commons.extensions.createAndroidSAFFile
+import com.simplemobiletools.commons.extensions.createDocumentUriFromRootTree
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.createSAFFileSdk30
 import com.simplemobiletools.commons.extensions.createTempFile
@@ -105,7 +103,9 @@ import com.simplemobiletools.commons.extensions.deleteAndroidSAFDirectory
 import com.simplemobiletools.commons.extensions.deleteDocumentWithSAFSdk30
 import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
-import com.simplemobiletools.commons.extensions.getAppIconColors
+import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getDocumentFile
+import com.simplemobiletools.commons.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getInternalStoragePath
@@ -502,6 +502,79 @@ fun BaseSimpleActivity.getFileOutputStream(
     }
 }
 
+fun BaseSimpleActivity.getFileOutputStreamSync(
+    path: String,
+    mimeType: String,
+    parentDocumentFile: DocumentFile? = null
+): OutputStream? {
+    val targetFile = File(path)
+
+    return when {
+        isRestrictedSAFOnlyRoot(path) -> {
+            val uri = getAndroidSAFUri(path)
+            if (!getDoesFilePathExist(path)) {
+                createAndroidSAFFile(path)
+            }
+            applicationContext.contentResolver.openOutputStream(uri)
+        }
+        needsStupidWritePermissions(path) -> {
+            var documentFile = parentDocumentFile
+            if (documentFile == null) {
+                if (getDoesFilePathExist(targetFile.parentFile.absolutePath)) {
+                    documentFile = getDocumentFile(targetFile.parent)
+                } else {
+                    documentFile = getDocumentFile(targetFile.parentFile.parent)
+                    documentFile = documentFile!!.createDirectory(targetFile.parentFile.name)
+                        ?: getDocumentFile(targetFile.parentFile.absolutePath)
+                }
+            }
+
+            if (documentFile == null) {
+                val casualOutputStream =
+                    createCasualFileOutputStream(
+                        this,
+                        targetFile
+                    )
+                return if (casualOutputStream == null) {
+                    showFileCreateError(targetFile.parent)
+                    null
+                } else {
+                    casualOutputStream
+                }
+            }
+
+            try {
+                val uri = if (getDoesFilePathExist(path)) {
+                    createDocumentUriFromRootTree(path)
+                } else {
+                    documentFile.createFile(mimeType, path.getFilenameFromPath())!!.uri
+                }
+                applicationContext.contentResolver.openOutputStream(uri)
+            } catch (e: Exception) {
+                showErrorToast(e)
+                null
+            }
+        }
+        isAccessibleWithSAFSdk30(path) -> {
+            try {
+                val uri = createDocumentUriUsingFirstParentTreeUri(path)
+                if (!getDoesFilePathExist(path)) {
+                    createSAFFileSdk30(path)
+                }
+                applicationContext.contentResolver.openOutputStream(uri)
+            } catch (e: Exception) {
+                null
+            } ?: createCasualFileOutputStream(
+                this,
+                targetFile
+            )
+        }
+        else -> return createCasualFileOutputStream(
+            this,
+            targetFile
+        )
+    }
+}
 
 fun Activity.hideKeyboardSync() {
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

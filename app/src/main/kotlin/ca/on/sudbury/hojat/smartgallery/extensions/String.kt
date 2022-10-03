@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
-import com.simplemobiletools.commons.extensions.getFilenameExtension
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isExternalStorageManager
@@ -31,6 +30,17 @@ fun String.getCompressionFormat() = when (getFilenameExtension().toLowerCase()) 
     "png" -> Bitmap.CompressFormat.PNG
     "webp" -> Bitmap.CompressFormat.WEBP
     else -> Bitmap.CompressFormat.JPEG
+}
+
+fun String.getFileKey(lastModified: Long? = null): String {
+    val file = File(this)
+    val modified = if (lastModified != null && lastModified > 0) {
+        lastModified
+    } else {
+        file.lastModified()
+    }
+
+    return "${file.absolutePath}$modified"
 }
 
 fun String.getFilenameExtension() = substring(lastIndexOf(".") + 1)

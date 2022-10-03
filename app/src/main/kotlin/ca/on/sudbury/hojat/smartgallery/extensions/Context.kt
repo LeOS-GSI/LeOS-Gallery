@@ -108,14 +108,16 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
 import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
-import com.simplemobiletools.commons.extensions.getAndroidTreeUri
+import com.simplemobiletools.commons.extensions.getBasePath
+import com.simplemobiletools.commons.extensions.getDirectChildrenCount
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getPermissionString
 import com.simplemobiletools.commons.extensions.getSAFDocumentId
+import com.simplemobiletools.commons.extensions.getStorageRootIdForAndroidDir
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
+import com.simplemobiletools.commons.extensions.isAndroidDataDir
 import com.simplemobiletools.commons.extensions.isAudioSlow
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.isImageSlow
@@ -195,11 +197,33 @@ val Context.recycleBinPath: String get() = filesDir.absolutePath
 
 val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
+fun Context.getAndroidSAFDirectChildrenCount(path: String, countHidden: Boolean): Int {
+    val treeUri = getAndroidTreeUri(path).toUri()
+    if (treeUri == Uri.EMPTY) {
+        return 0
+    }
+
+    val documentId = createAndroidSAFDocumentId(path)
+    val rootDocId = getStorageRootIdForAndroidDir(path)
+    return getDirectChildrenCount(rootDocId, treeUri, documentId, countHidden)
+}
+
 fun Context.getAndroidSAFUri(path: String): Uri {
     val treeUri = getAndroidTreeUri(path).toUri()
     val documentId = createAndroidSAFDocumentId(path)
     return DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
 }
+
+fun Context.getAndroidTreeUri(path: String): String {
+    return when {
+        isPathOnOTG(path) -> if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri else baseConfig.otgAndroidObbTreeUri
+        isPathOnSD(path) -> if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri else baseConfig.sdAndroidObbTreeUri
+        else -> if (isAndroidDataDir(path)) baseConfig.primaryAndroidDataTreeUri else baseConfig.primaryAndroidObbTreeUri
+    }
+}
+
+fun Context.getAppIconColors() =
+    resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
 
 fun Context.getDocumentFile(path: String): DocumentFile? {
     val isOTG = isPathOnOTG(path)
@@ -331,6 +355,11 @@ fun Context.getLatestMediaId(uri: Uri = Files.getContentUri("external")): Long {
     } catch (ignored: Exception) {
     }
     return 0
+}
+
+fun Context.getPicturesDirectoryPath(fullPath: String): String {
+    val basePath = fullPath.getBasePath(this)
+    return File(basePath, Environment.DIRECTORY_PICTURES).absolutePath
 }
 
 fun Context.getTimeFormat() = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
