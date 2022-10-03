@@ -35,7 +35,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
-import com.simplemobiletools.commons.extensions.getOTGPublicPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath

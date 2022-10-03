@@ -46,8 +46,6 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
-import com.simplemobiletools.commons.extensions.getMimeType
-import com.simplemobiletools.commons.extensions.getFileInputStreamSync
 import com.simplemobiletools.commons.extensions.updateLastModified
 import com.simplemobiletools.commons.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
@@ -97,21 +95,17 @@ import com.simplemobiletools.commons.extensions.deleteAndroidSAFDirectory
 import com.simplemobiletools.commons.extensions.deleteDocumentWithSAFSdk30
 import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
+import com.simplemobiletools.commons.extensions.ensurePublicUri
 import com.simplemobiletools.commons.extensions.getAndroidSAFUri
-import com.simplemobiletools.commons.extensions.getDocumentFile
-import com.simplemobiletools.commons.extensions.getDoesFilePathExist
-import com.simplemobiletools.commons.extensions.getFileUrisFromFileDirItems
-import com.simplemobiletools.commons.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.getFinalUriFromPath
 import com.simplemobiletools.commons.extensions.getInternalStoragePath
 import com.simplemobiletools.commons.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.extensions.getProperBackgroundColor
 import com.simplemobiletools.commons.extensions.getProperPrimaryColor
-import com.simplemobiletools.commons.extensions.getSomeDocumentFile
 import com.simplemobiletools.commons.extensions.getUriMimeType
 import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.rescanAndDeletePath
+import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toggleAppIconColor
 import com.simplemobiletools.commons.extensions.trySAFFileDelete
 import com.simplemobiletools.commons.extensions.updateInMediaStore
@@ -680,6 +674,22 @@ fun Activity.openEditor(path: String, forceChooser: Boolean = false) {
 fun Activity.launchCamera() {
     val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
     launchActivityIntent(intent)
+}
+
+fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
+    val uri = try {
+        ensurePublicUri(path, applicationId)
+    } catch (e: Exception) {
+        showErrorToast(e)
+        return null
+    }
+
+    if (uri == null) {
+        toast(R.string.unknown_error_occurred)
+        return null
+    }
+
+    return uri
 }
 
 fun Activity.handleAppPasswordProtection(callback: (success: Boolean) -> Unit) {

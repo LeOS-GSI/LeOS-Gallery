@@ -30,11 +30,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import com.simplemobiletools.commons.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.toBoolean
-import com.simplemobiletools.commons.extensions.toInt
+import ca.on.sudbury.hojat.smartgallery.extensions.toBoolean
+import ca.on.sudbury.hojat.smartgallery.extensions.toInt
 import com.simplemobiletools.commons.extensions.getAppIconColors
 import com.simplemobiletools.commons.extensions.checkAppIconColor
-import com.simplemobiletools.commons.extensions.toStringSet
+import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
 import com.simplemobiletools.commons.helpers.PROTECTION_FINGERPRINT

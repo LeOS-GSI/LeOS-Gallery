@@ -4,11 +4,10 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.os.Build
 import androidx.exifinterface.media.ExifInterface
-import com.simplemobiletools.commons.extensions.formatDate
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 fun ExifInterface.copyNonDimensionAttributesTo(destination: ExifInterface) {
     val attributes = ExifInterfaceAttributes.AllNonDimensionAttributes

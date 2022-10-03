@@ -3,7 +3,9 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.content.Context
 import android.graphics.Color
 import android.text.format.DateFormat
+import android.text.format.DateUtils
 import com.simplemobiletools.commons.extensions.baseConfig
+import com.simplemobiletools.commons.extensions.isThisYear
 import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.SORT_DESCENDING
 import java.text.DecimalFormat
@@ -28,6 +30,31 @@ fun Int.formatDate(
     val cal = Calendar.getInstance(Locale.ENGLISH)
     cal.timeInMillis = this * 1000L
     return DateFormat.format("$useDateFormat, $useTimeFormat", cal).toString()
+}
+
+// if the given date is today, we show only the time. Else we show the date and optionally the time too
+fun Int.formatDateOrTime(
+    context: Context,
+    hideTimeAtOtherDays: Boolean,
+    showYearEvenIfCurrent: Boolean
+): String {
+    val cal = Calendar.getInstance(Locale.ENGLISH)
+    cal.timeInMillis = this * 1000L
+
+    return if (DateUtils.isToday(this * 1000L)) {
+        DateFormat.format(context.getTimeFormat(), cal).toString()
+    } else {
+        var format = context.baseConfig.dateFormat
+        if (!showYearEvenIfCurrent && isThisYear()) {
+            format = format.replace("y", "").trim().trim('-').trim('.').trim('/')
+        }
+
+        if (!hideTimeAtOtherDays) {
+            format += ", ${context.getTimeFormat()}"
+        }
+
+        DateFormat.format(format, cal).toString()
+    }
 }
 
 fun Int.formatSize(): String {
@@ -70,3 +97,5 @@ fun Int.getFormattedDuration(forceShowHours: Boolean = false): String {
 }
 
 fun Int.isSortingAscending() = this and SORT_DESCENDING == 0
+
+fun Int.toHex() = String.format("#%06X", 0xFFFFFF and this).toUpperCase()

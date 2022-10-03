@@ -56,7 +56,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
-import com.simplemobiletools.commons.extensions.getOTGPublicPath
 import com.simplemobiletools.commons.helpers.FAVORITES
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.NOMEDIA
@@ -111,33 +110,39 @@ import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
 import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.degreesFromOrientation
+import com.simplemobiletools.commons.extensions.getAndroidTreeUri
 import com.simplemobiletools.commons.extensions.getBasePath
-import com.simplemobiletools.commons.extensions.getDirectChildrenCount
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.getFastDocumentFile
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
+import com.simplemobiletools.commons.extensions.getAndroidSAFUri
 import com.simplemobiletools.commons.extensions.getFirstParentDirName
 import com.simplemobiletools.commons.extensions.getFirstParentLevel
 import com.simplemobiletools.commons.extensions.getFirstParentPath
-import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getPaths
 import com.simplemobiletools.commons.extensions.getPermissionString
-import com.simplemobiletools.commons.extensions.getSAFDocumentId
-import com.simplemobiletools.commons.extensions.getSAFOnlyDirs
-import com.simplemobiletools.commons.extensions.getStorageRootIdForAndroidDir
+import com.simplemobiletools.commons.extensions.getSomeDocumentFile
+import com.simplemobiletools.commons.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.getUrisPathsFromFileDirItems
 import com.simplemobiletools.commons.extensions.recycleBinPath
-import com.simplemobiletools.commons.extensions.getSomeDocumentFile
 import com.simplemobiletools.commons.extensions.internalStoragePath
+import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
+import com.simplemobiletools.commons.extensions.isPathOnOTG
+import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.orientationFromDegrees
 import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.scanPathsRecursively
-import com.simplemobiletools.commons.extensions.toInt
+import com.simplemobiletools.commons.extensions.sdCardPath
+import ca.on.sudbury.hojat.smartgallery.extensions.toInt
 import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.updateOTGPathFromPartition
 import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.extensions.windowManager
 import com.simplemobiletools.commons.helpers.DARK_GREY
+import com.simplemobiletools.commons.helpers.ExternalStorageProviderHack
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
@@ -151,6 +156,7 @@ import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File
 import java.io.FileInputStream
+import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
@@ -248,6 +254,37 @@ fun Context.getCurrentFormattedDateTime(): String {
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
 }
 
+fun Context.getDirectChildrenCount(
+    rootDocId: String,
+    treeUri: Uri,
+    documentId: String,
+    shouldShowHidden: Boolean
+): Int {
+    return try {
+        val projection = arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID)
+        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+        val rawCursor = contentResolver.query(childrenUri, projection, null, null, null)!!
+        val cursor =
+            ExternalStorageProviderHack.transformQueryResult(rootDocId, childrenUri, rawCursor)
+        if (shouldShowHidden) {
+            cursor.count
+        } else {
+            var count = 0
+            cursor.use {
+                while (cursor.moveToNext()) {
+                    val docId = cursor.getStringValue(DocumentsContract.Document.COLUMN_DOCUMENT_ID)
+                    if (!docId.getFilenameFromPath().startsWith('.') || shouldShowHidden) {
+                        count++
+                    }
+                }
+            }
+            count
+        }
+    } catch (e: Exception) {
+        0
+    }
+}
+
 fun Context.getDocumentFile(path: String): DocumentFile? {
     val isOTG = isPathOnOTG(path)
     var relativePath = path.substring(if (isOTG) otgPath.length else sdCardPath.length)
@@ -275,6 +312,28 @@ fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Bo
         otgPath.isNotEmpty() && path.startsWith(otgPath) -> getOTGFastDocumentFile(path)?.exists()
             ?: false
         else -> File(path).exists()
+    }
+}
+
+fun Context.getFileInputStreamSync(path: String): InputStream? {
+    return when {
+        isRestrictedSAFOnlyRoot(path) -> {
+            val uri = getAndroidSAFUri(path)
+            applicationContext.contentResolver.openInputStream(uri)
+        }
+        isAccessibleWithSAFSdk30(path) -> {
+            try {
+                FileInputStream(File(path))
+            } catch (e: Exception) {
+                val uri = createDocumentUriUsingFirstParentTreeUri(path)
+                applicationContext.contentResolver.openInputStream(uri)
+            }
+        }
+        isPathOnOTG(path) -> {
+            val fileDocument = getSomeDocumentFile(path)
+            applicationContext.contentResolver.openInputStream(fileDocument?.uri!!)
+        }
+        else -> FileInputStream(File(path))
     }
 }
 
@@ -395,6 +454,31 @@ fun Context.getPicturesDirectoryPath(fullPath: String): String {
     val basePath = fullPath.getBasePath(this)
     return File(basePath, Environment.DIRECTORY_PICTURES).absolutePath
 }
+
+fun Context.getSAFOnlyDirs(): List<String> {
+    return com.simplemobiletools.commons.extensions.DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$internalStoragePath$it" } +
+            com.simplemobiletools.commons.extensions.DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$sdCardPath$it" }
+}
+
+fun Context.getSAFStorageId(fullPath: String): String {
+    return if (fullPath.startsWith('/')) {
+        when {
+            fullPath.startsWith(internalStoragePath) -> "primary"
+            else -> fullPath.substringAfter("/storage/", "").substringBefore('/')
+        }
+    } else {
+        fullPath.substringBefore(':', "").substringAfterLast('/')
+    }
+}
+
+fun Context.getStorageRootIdForAndroidDir(path: String) =
+    getAndroidTreeUri(path).removeSuffix(
+        if (com.simplemobiletools.commons.extensions.isAndroidDataDir(
+                path
+            )
+        ) "%3AAndroid%2Fdata" else "%3AAndroid%2Fobb"
+    ).substringAfterLast('/').trimEnd('/')
+
 
 fun Context.getTimeFormat() = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
 
@@ -1569,6 +1653,23 @@ fun Context.updateDBDirectory(directory: Directory) {
     }
 }
 
+fun Context.getOTGFastDocumentFile(path: String, otgPathToUse: String? = null): DocumentFile? {
+    if (baseConfig.OTGTreeUri.isEmpty()) {
+        return null
+    }
+
+    val otgPath = otgPathToUse ?: baseConfig.OTGPath
+    if (baseConfig.OTGPartition.isEmpty()) {
+        baseConfig.OTGPartition =
+            baseConfig.OTGTreeUri.removeSuffix("%3A").substringAfterLast('/').trimEnd('/')
+        updateOTGPathFromPartition()
+    }
+
+    val relativePath = Uri.encode(path.substring(otgPath.length).trim('/'))
+    val fullUri = "${baseConfig.OTGTreeUri}/document/${baseConfig.OTGPartition}%3A$relativePath"
+    return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
+}
+
 fun Context.getOTGFolderChildren(path: String) = getDocumentFile(path)?.listFiles()
 
 fun Context.getOTGFolderChildrenNames(path: String) =
@@ -1943,6 +2044,13 @@ fun Context.getProperTextColor() = if (baseConfig.isUsingSystemTheme) {
     resources.getColor(R.color.you_neutral_text_color, theme)
 } else {
     baseConfig.textColor
+}
+
+fun Context.getSAFDocumentId(path: String): String {
+    val basePath = path.getBasePath(this)
+    val relativePath = path.substring(basePath.length).trim('/')
+    val storageId = getSAFStorageId(path)
+    return "$storageId:$relativePath"
 }
 
 fun Context.updateDirectoryPath(path: String) {

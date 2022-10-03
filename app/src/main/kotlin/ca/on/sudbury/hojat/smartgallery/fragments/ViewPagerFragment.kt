@@ -15,7 +15,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getExifDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifCameraModel
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifProperties
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
-import com.simplemobiletools.commons.extensions.getOTGPublicPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.config
