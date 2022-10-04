@@ -40,8 +40,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPath
-import com.simplemobiletools.commons.extensions.statusBarHeight
-import com.simplemobiletools.commons.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth

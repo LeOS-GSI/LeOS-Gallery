@@ -38,13 +38,13 @@ import com.google.android.exoplayer2.upstream.ContentDataSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.video.VideoListener
-import com.simplemobiletools.commons.extensions.actionBarHeight
-import com.simplemobiletools.commons.extensions.statusBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import com.simplemobiletools.commons.extensions.updateTextColors
+import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf

@@ -46,11 +46,8 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
-import com.simplemobiletools.commons.extensions.updateLastModified
-import com.simplemobiletools.commons.extensions.deleteFromMediaStore
 import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent
-import com.simplemobiletools.commons.extensions.launchActivityIntent
 import com.simplemobiletools.commons.helpers.LICENSE_GLIDE
 import com.simplemobiletools.commons.helpers.LICENSE_CROPPER
 import com.simplemobiletools.commons.helpers.LICENSE_RTL
@@ -81,22 +78,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.simplemobiletools.commons.dialogs.DonateDialog
 import com.simplemobiletools.commons.dialogs.RateStarsDialog
 import com.simplemobiletools.commons.dialogs.UpgradeToProDialog
-import com.simplemobiletools.commons.extensions.checkAppIconColor
 import com.simplemobiletools.commons.extensions.copySingleFileSdk30
-import com.simplemobiletools.commons.extensions.createAndroidSAFFile
-import com.simplemobiletools.commons.extensions.createDocumentUriFromRootTree
 import com.simplemobiletools.commons.extensions.createTempFile
-import com.simplemobiletools.commons.extensions.deleteAndroidSAFDirectory
 import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
 import com.simplemobiletools.commons.extensions.ensurePublicUri
 import com.simplemobiletools.commons.extensions.getGenericMimeType
-import com.simplemobiletools.commons.extensions.getInternalStoragePath
-import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
-import com.simplemobiletools.commons.extensions.rescanAndDeletePath
-import com.simplemobiletools.commons.extensions.updateInMediaStore
-import com.simplemobiletools.commons.extensions.updateSDCardPath
-import com.simplemobiletools.commons.extensions.updateTextColors
+import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
 import com.simplemobiletools.commons.helpers.REQUEST_SET_AS
 import com.simplemobiletools.commons.helpers.isOnMainThread
@@ -316,7 +304,7 @@ private fun deleteRecursively(file: File): Boolean {
 
 
 fun Activity.appLaunched(appId: String) {
-    baseConfig.internalStoragePath = getInternalStoragePath()
+    baseConfig.internalStoragePath = getRealInternalStoragePath()
     updateSDCardPath()
     baseConfig.appId = appId
     if (baseConfig.appRunCount == 0) {

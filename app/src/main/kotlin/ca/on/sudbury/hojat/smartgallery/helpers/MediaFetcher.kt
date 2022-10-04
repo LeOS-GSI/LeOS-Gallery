@@ -32,7 +32,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import com.simplemobiletools.commons.extensions.queryCursor
+import ca.on.sudbury.hojat.smartgallery.extensions.queryCursor
 import ca.on.sudbury.hojat.smartgallery.extensions.normalizeString
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue

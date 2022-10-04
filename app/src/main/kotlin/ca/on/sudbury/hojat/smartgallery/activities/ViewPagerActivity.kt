@@ -156,7 +156,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.updateLastModified
+import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
@@ -179,14 +179,14 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathRecursively
-import com.simplemobiletools.commons.extensions.statusBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
-import com.simplemobiletools.commons.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
 import java.io.File
 import java.io.OutputStream
 import kotlin.math.min

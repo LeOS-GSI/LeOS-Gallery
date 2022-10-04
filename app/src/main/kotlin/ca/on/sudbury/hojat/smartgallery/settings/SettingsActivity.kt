@@ -27,13 +27,13 @@ import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
-import com.simplemobiletools.commons.extensions.updateTextColors
+import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toBoolean
 import ca.on.sudbury.hojat.smartgallery.extensions.toInt
 import ca.on.sudbury.hojat.smartgallery.extensions.getAppIconColors
-import com.simplemobiletools.commons.extensions.checkAppIconColor
+import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS

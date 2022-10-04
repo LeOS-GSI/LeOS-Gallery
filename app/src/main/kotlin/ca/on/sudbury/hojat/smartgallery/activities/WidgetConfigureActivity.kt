@@ -19,7 +19,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
-import com.simplemobiletools.commons.extensions.updateTextColors
+import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity

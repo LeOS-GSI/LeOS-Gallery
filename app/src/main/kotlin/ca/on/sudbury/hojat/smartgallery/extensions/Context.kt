@@ -145,39 +145,19 @@ import com.simplemobiletools.commons.extensions.getIntValueOrNull
 import com.simplemobiletools.commons.extensions.getItemSize
 import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getMimeType
-import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getParentPath
 import com.simplemobiletools.commons.extensions.getStringValue
 import com.simplemobiletools.commons.extensions.isAudioSlow
 import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isMediaFile
-import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
-import com.simplemobiletools.commons.extensions.isPathOnOTG
-import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
-import com.simplemobiletools.commons.extensions.isThankYouInstalled
-import com.simplemobiletools.commons.extensions.isUsingSystemDarkTheme
 import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isVideoSlow
-import com.simplemobiletools.commons.extensions.isWhiteTheme
 import com.simplemobiletools.commons.extensions.lightenColor
 import com.simplemobiletools.commons.extensions.moveLastItemToFront
-import com.simplemobiletools.commons.extensions.navigationBarBottom
-import com.simplemobiletools.commons.extensions.navigationBarRight
-import com.simplemobiletools.commons.extensions.navigationBarSize
 import com.simplemobiletools.commons.extensions.orientationFromDegrees
-import com.simplemobiletools.commons.extensions.otgPath
-import com.simplemobiletools.commons.extensions.queryCursor
-import com.simplemobiletools.commons.extensions.realScreenSize
-import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.storeAndroidTreeUri
-import com.simplemobiletools.commons.extensions.telecomManager
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.extensions.trimToComparableNumber
-import com.simplemobiletools.commons.extensions.tryFastDocumentDelete
-import com.simplemobiletools.commons.extensions.updateOTGPathFromPartition
-import com.simplemobiletools.commons.extensions.usableScreenSize
-import com.simplemobiletools.commons.extensions.windowManager
 import com.simplemobiletools.commons.helpers.BaseConfig
 import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.DAY_SECONDS
@@ -4163,3 +4143,8 @@ fun Context.scanFilesRecursively(files: List<File>, callback: (() -> Unit)? = nu
     }
     rescanPaths(allPaths, callback)
 }
+
+fun Context.getRealInternalStoragePath() =
+    if (File("/storage/emulated/0").exists()) "/storage/emulated/0" else Environment.getExternalStorageDirectory().absolutePath.trimEnd(
+        '/'
+    )
