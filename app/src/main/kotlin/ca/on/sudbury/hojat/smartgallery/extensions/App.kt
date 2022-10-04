@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.app.Application
-import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import java.util.Locale
 

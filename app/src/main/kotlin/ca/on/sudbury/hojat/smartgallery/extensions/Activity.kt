@@ -47,7 +47,6 @@ import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
 import com.simplemobiletools.commons.extensions.updateLastModified
-import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
 import com.simplemobiletools.commons.extensions.openEditorIntent
 import com.simplemobiletools.commons.extensions.openPathIntent
@@ -83,7 +82,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.simplemobiletools.commons.dialogs.DonateDialog
 import com.simplemobiletools.commons.dialogs.RateStarsDialog
 import com.simplemobiletools.commons.dialogs.UpgradeToProDialog
-import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.checkAppIconColor
 import com.simplemobiletools.commons.extensions.copySingleFileSdk30
 import com.simplemobiletools.commons.extensions.createAndroidSAFFile
@@ -96,17 +94,12 @@ import com.simplemobiletools.commons.extensions.deleteDocumentWithSAFSdk30
 import com.simplemobiletools.commons.extensions.deleteFileBg
 import com.simplemobiletools.commons.extensions.deleteFilesBg
 import com.simplemobiletools.commons.extensions.ensurePublicUri
+import com.simplemobiletools.commons.extensions.getGenericMimeType
 import com.simplemobiletools.commons.extensions.getInternalStoragePath
-import com.simplemobiletools.commons.extensions.getIsPathDirectory
-import com.simplemobiletools.commons.extensions.getProperBackgroundColor
-import com.simplemobiletools.commons.extensions.getProperPrimaryColor
-import ca.on.sudbury.hojat.smartgallery.extensions.getUriMimeType
 import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
 import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
 import com.simplemobiletools.commons.extensions.rescanAndDeletePath
 import com.simplemobiletools.commons.extensions.showErrorToast
-import com.simplemobiletools.commons.extensions.toggleAppIconColor
-import com.simplemobiletools.commons.extensions.trySAFFileDelete
 import com.simplemobiletools.commons.extensions.updateInMediaStore
 import com.simplemobiletools.commons.extensions.updateSDCardPath
 import com.simplemobiletools.commons.extensions.updateTextColors
@@ -1878,6 +1871,22 @@ fun Activity.showLocationOnMap(coordinates: String) {
     val uriString = "$uriBegin?q=$encodedQuery&z=16"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uriString))
     launchActivityIntent(intent)
+}
+
+fun Activity.tryGenericMimeType(intent: Intent, mimeType: String, uri: Uri): Boolean {
+    var genericMimeType = mimeType.getGenericMimeType()
+    if (genericMimeType.isEmpty()) {
+        genericMimeType = "*/*"
+    }
+
+    intent.setDataAndType(uri, genericMimeType)
+
+    return try {
+        startActivity(intent)
+        true
+    } catch (e: Exception) {
+        false
+    }
 }
 
 fun Activity.handleExcludedFolderPasswordProtection(callback: () -> Unit) {

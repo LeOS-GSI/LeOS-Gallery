@@ -36,7 +36,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
-import com.simplemobiletools.commons.extensions.sharePathIntent
+import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -46,7 +46,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
-import com.simplemobiletools.commons.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat

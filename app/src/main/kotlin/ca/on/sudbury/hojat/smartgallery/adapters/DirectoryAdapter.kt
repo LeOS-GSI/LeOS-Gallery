@@ -52,7 +52,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtectio
 import com.simplemobiletools.commons.extensions.containsNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
-import com.simplemobiletools.commons.extensions.convertToBitmap
+import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.helpers.FAVORITES
 import com.simplemobiletools.commons.helpers.isRPlus

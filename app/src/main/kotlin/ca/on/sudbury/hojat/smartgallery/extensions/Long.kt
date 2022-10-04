@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
 import android.text.format.DateFormat
-import com.simplemobiletools.commons.extensions.baseConfig
 import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Locale

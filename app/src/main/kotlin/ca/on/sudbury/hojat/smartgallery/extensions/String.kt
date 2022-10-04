@@ -7,7 +7,6 @@ import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions

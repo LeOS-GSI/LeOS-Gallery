@@ -110,13 +110,14 @@ import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.simplemobiletools.commons.extensions.areDigitsOnly
-import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
 import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.degreesFromOrientation
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
 import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
-import com.simplemobiletools.commons.extensions.getFileUri
+import com.simplemobiletools.commons.extensions.deleteFromMediaStore
+import com.simplemobiletools.commons.extensions.getFastDocumentFile
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileUri
 import com.simplemobiletools.commons.extensions.getMediaContent
 import com.simplemobiletools.commons.extensions.getMediaContentUri
 import com.simplemobiletools.commons.extensions.getMediaStoreIds
@@ -125,7 +126,6 @@ import com.simplemobiletools.commons.extensions.getMimeTypeFromUri
 import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getSomeDocumentFile
 import com.simplemobiletools.commons.extensions.getStringValue
-import com.simplemobiletools.commons.extensions.recycleBinPath
 import com.simplemobiletools.commons.extensions.internalStoragePath
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
 import com.simplemobiletools.commons.extensions.isInAndroidDir
@@ -139,10 +139,10 @@ import com.simplemobiletools.commons.extensions.otgPath
 import com.simplemobiletools.commons.extensions.rescanPaths
 import com.simplemobiletools.commons.extensions.scanPathsRecursively
 import com.simplemobiletools.commons.extensions.sdCardPath
-import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.extensions.updateOTGPathFromPartition
 import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.extensions.windowManager
+import com.simplemobiletools.commons.helpers.BaseConfig
 import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.ExternalStorageProviderHack
 import com.simplemobiletools.commons.helpers.PERMISSION_CALL_PHONE
@@ -163,6 +163,7 @@ import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CONTACTS
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
+import com.simplemobiletools.commons.helpers.appIconColorStrings
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.isOnMainThread
@@ -252,6 +253,8 @@ fun getPaths(file: File): java.util.ArrayList<String> {
     }
     return paths
 }
+
+val Context.baseConfig: BaseConfig get() = BaseConfig.newInstance(this)
 
 val Context.recycleBinPath: String get() = filesDir.absolutePath
 
@@ -539,8 +542,8 @@ fun Context.getPicturesDirectoryPath(fullPath: String): String {
 }
 
 fun Context.getSAFOnlyDirs(): List<String> {
-    return com.simplemobiletools.commons.extensions.DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$internalStoragePath$it" } +
-            com.simplemobiletools.commons.extensions.DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$sdCardPath$it" }
+    return DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$internalStoragePath$it" } +
+            DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$sdCardPath$it" }
 }
 
 fun Context.getSAFStorageId(fullPath: String): String {
@@ -1733,6 +1736,47 @@ fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
     }
 }
 
+fun Context.tryFastDocumentDelete(path: String, allowDeleteFolder: Boolean): Boolean {
+    val document = getFastDocumentFile(path)
+    return if (document?.isFile == true || allowDeleteFolder) {
+        try {
+            DocumentsContract.deleteDocument(contentResolver, document?.uri!!)
+        } catch (e: Exception) {
+            false
+        }
+    } else {
+        false
+    }
+}
+
+fun Context.trySAFFileDelete(
+    fileDirItem: FileDirItem,
+    allowDeleteFolder: Boolean = false,
+    callback: ((wasSuccess: Boolean) -> Unit)? = null
+) {
+    var fileDeleted = tryFastDocumentDelete(fileDirItem.path, allowDeleteFolder)
+    if (!fileDeleted) {
+        val document = getDocumentFile(fileDirItem.path)
+        if (document != null && (fileDirItem.isDirectory == document.isDirectory)) {
+            try {
+                fileDeleted =
+                    (document.isFile || allowDeleteFolder) && DocumentsContract.deleteDocument(
+                        applicationContext.contentResolver,
+                        document.uri
+                    )
+            } catch (ignored: Exception) {
+                baseConfig.sdTreeUri = ""
+                baseConfig.sdCardPath = ""
+            }
+        }
+    }
+
+    if (fileDeleted) {
+        deleteFromMediaStore(fileDirItem.path)
+        callback?.invoke(true)
+    }
+}
+
 fun Context.updateDBMediaPath(oldPath: String, newPath: String) {
     val newFilename = newPath.getFilenameFromPath()
     val newParentPath = newPath.getParentPath()
@@ -2447,6 +2491,24 @@ fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
 
 fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
     showErrorToast(exception.toString(), length)
+}
+
+fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
+    val className =
+        "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
+    val state =
+        if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+    try {
+        packageManager.setComponentEnabledSetting(
+            ComponentName(appId, className),
+            state,
+            PackageManager.DONT_KILL_APP
+        )
+        if (enable) {
+            baseConfig.lastIconColor = color
+        }
+    } catch (e: Exception) {
+    }
 }
 
 fun isAndroidDataDir(path: String): Boolean {

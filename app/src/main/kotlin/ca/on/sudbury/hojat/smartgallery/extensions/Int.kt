@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.text.format.DateFormat
 import android.text.format.DateUtils
-import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isThisYear
 import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.SORT_DESCENDING
