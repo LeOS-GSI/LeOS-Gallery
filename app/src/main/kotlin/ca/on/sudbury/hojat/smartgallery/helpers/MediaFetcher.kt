@@ -36,7 +36,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.queryCursor
 import ca.on.sudbury.hojat.smartgallery.extensions.normalizeString
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
-import com.simplemobiletools.commons.extensions.areDigitsOnly
+import ca.on.sudbury.hojat.smartgallery.extensions.areDigitsOnly
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import com.simplemobiletools.commons.helpers.SORT_BY_PATH
