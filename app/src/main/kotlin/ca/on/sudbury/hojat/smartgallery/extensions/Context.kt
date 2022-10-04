@@ -2,15 +2,22 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.Activity
+import android.app.NotificationManager
+import android.app.role.RoleManager
 import android.appwidget.AppWidgetManager
 import android.content.ActivityNotFoundException
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ComponentName
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ShortcutManager
 import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -18,7 +25,6 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
-import android.hardware.biometrics.BiometricManager
 import android.hardware.usb.UsbConstants
 import android.hardware.usb.UsbManager
 import android.media.AudioManager
@@ -32,16 +38,22 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Process
 import android.provider.BaseColumns
+import android.provider.BlockedNumberContract
+import android.provider.ContactsContract
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.provider.OpenableColumns
 import android.provider.Settings
+import android.telecom.TelecomManager
+import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -119,54 +131,50 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.github.ajalt.reprint.core.Reprint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.simplemobiletools.commons.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.areDigitsOnly
-import com.simplemobiletools.commons.extensions.baseConfig
-import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
-import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.degreesFromOrientation
-import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
-import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
-import com.simplemobiletools.commons.extensions.deleteFromMediaStore
-import com.simplemobiletools.commons.extensions.formatSecondsToTimeString
-import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.extensions.getContrastColor
-import com.simplemobiletools.commons.extensions.getDefaultAlarmTitle
-import com.simplemobiletools.commons.extensions.getDocumentFile
-import com.simplemobiletools.commons.extensions.getFilePublicUri
+import com.simplemobiletools.commons.extensions.getDirectChildrenCount
 import com.simplemobiletools.commons.extensions.getFilenameFromPath
-import com.simplemobiletools.commons.extensions.getFilenameFromUri
 import com.simplemobiletools.commons.extensions.getFirstParentDirName
 import com.simplemobiletools.commons.extensions.getFirstParentPath
-import com.simplemobiletools.commons.extensions.getFormattedSeconds
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getIntValueOrNull
+import com.simplemobiletools.commons.extensions.getItemSize
 import com.simplemobiletools.commons.extensions.getLongValue
-import com.simplemobiletools.commons.extensions.getMediaStoreIds
 import com.simplemobiletools.commons.extensions.getMimeType
-import com.simplemobiletools.commons.extensions.getMimeTypeFromUri
-import com.simplemobiletools.commons.extensions.getMyContentProviderCursorLoader
+import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
 import com.simplemobiletools.commons.extensions.getParentPath
-import com.simplemobiletools.commons.extensions.getProperPrimaryColor
-import com.simplemobiletools.commons.extensions.getProperTextColor
-import com.simplemobiletools.commons.extensions.getSDCardPath
-import com.simplemobiletools.commons.extensions.getSharedThemeSync
-import com.simplemobiletools.commons.extensions.hasProperStoredAndroidTreeUri
-import com.simplemobiletools.commons.extensions.hasProperStoredDocumentUriSdk30
-import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
-import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
+import com.simplemobiletools.commons.extensions.getStringValue
+import com.simplemobiletools.commons.extensions.isAudioSlow
+import com.simplemobiletools.commons.extensions.isImageSlow
 import com.simplemobiletools.commons.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
-import com.simplemobiletools.commons.extensions.isPackageInstalled
 import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
 import com.simplemobiletools.commons.extensions.isThankYouInstalled
 import com.simplemobiletools.commons.extensions.isUsingSystemDarkTheme
 import com.simplemobiletools.commons.extensions.isVideoFast
+import com.simplemobiletools.commons.extensions.isVideoSlow
 import com.simplemobiletools.commons.extensions.isWhiteTheme
 import com.simplemobiletools.commons.extensions.lightenColor
 import com.simplemobiletools.commons.extensions.moveLastItemToFront
+import com.simplemobiletools.commons.extensions.navigationBarBottom
+import com.simplemobiletools.commons.extensions.navigationBarRight
+import com.simplemobiletools.commons.extensions.navigationBarSize
 import com.simplemobiletools.commons.extensions.orientationFromDegrees
+import com.simplemobiletools.commons.extensions.otgPath
+import com.simplemobiletools.commons.extensions.queryCursor
+import com.simplemobiletools.commons.extensions.realScreenSize
+import com.simplemobiletools.commons.extensions.sdCardPath
 import com.simplemobiletools.commons.extensions.showErrorToast
+import com.simplemobiletools.commons.extensions.storeAndroidTreeUri
+import com.simplemobiletools.commons.extensions.telecomManager
+import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.extensions.trimToComparableNumber
+import com.simplemobiletools.commons.extensions.tryFastDocumentDelete
 import com.simplemobiletools.commons.extensions.updateOTGPathFromPartition
 import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.extensions.windowManager
@@ -175,6 +183,9 @@ import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.DAY_SECONDS
 import com.simplemobiletools.commons.helpers.EXTERNAL_STORAGE_PROVIDER_AUTHORITY
 import com.simplemobiletools.commons.helpers.ExternalStorageProviderHack
+import com.simplemobiletools.commons.helpers.FONT_SIZE_LARGE
+import com.simplemobiletools.commons.helpers.FONT_SIZE_MEDIUM
+import com.simplemobiletools.commons.helpers.FONT_SIZE_SMALL
 import com.simplemobiletools.commons.helpers.FRIDAY_BIT
 import com.simplemobiletools.commons.helpers.HOUR_SECONDS
 import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
@@ -201,6 +212,8 @@ import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CONTACTS
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.helpers.PREFS_KEY
 import com.simplemobiletools.commons.helpers.SATURDAY_BIT
+import com.simplemobiletools.commons.helpers.SD_OTG_PATTERN
+import com.simplemobiletools.commons.helpers.SD_OTG_SHORT
 import com.simplemobiletools.commons.helpers.SUNDAY_BIT
 import com.simplemobiletools.commons.helpers.THURSDAY_BIT
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
@@ -219,6 +232,7 @@ import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.isSPlus
 import com.simplemobiletools.commons.helpers.proPackages
 import com.simplemobiletools.commons.models.AlarmSound
+import com.simplemobiletools.commons.models.BlockedNumber
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.models.SharedTheme
 import com.simplemobiletools.commons.views.MyAppCompatCheckbox
@@ -237,6 +251,7 @@ import pl.droidsonroids.gif.GifDrawable
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
+import java.net.URLDecoder
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
@@ -278,6 +293,17 @@ val Context.areSystemAnimationsEnabled: Boolean
         Settings.Global.ANIMATOR_DURATION_SCALE,
         0f
     ) > 0f
+
+fun Context.createFirstParentTreeUri(fullPath: String): Uri {
+    val storageId = getSAFStorageId(fullPath)
+    val level = getFirstParentLevel(fullPath)
+    val rootParentDirName = fullPath.getFirstParentDirName(this, level)
+    val firstParentId = "$storageId:$rootParentDirName"
+    return DocumentsContract.buildTreeDocumentUri(
+        EXTERNAL_STORAGE_PROVIDER_AUTHORITY,
+        firstParentId
+    )
+}
 
 // is the app a Media Management App on Android 12+?
 fun Context.canManageMedia(): Boolean {
@@ -401,6 +427,8 @@ fun Context.getMyContentProviderCursorLoader() =
     CursorLoader(this, MyContentProvider.MY_CONTENT_URI, null, null, null, null)
 
 fun Context.getSharedPrefs() = getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
+
+fun Context.getStringsPackageName() = getString(R.string.package_name)
 
 fun Context.queryCursor(
     uri: Uri,
@@ -1500,6 +1528,15 @@ fun Context.getFastDocumentFile(path: String): DocumentFile? {
     return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
 }
 
+fun Context.getFontSizeText() = getString(
+    when (baseConfig.fontSize) {
+        FONT_SIZE_SMALL -> R.string.small
+        FONT_SIZE_MEDIUM -> R.string.medium
+        FONT_SIZE_LARGE -> R.string.large
+        else -> R.string.extra_large
+    }
+)
+
 fun Context.updateSDCardPath() {
     ensureBackgroundThread {
         val oldPath = baseConfig.sdCardPath
@@ -2200,7 +2237,6 @@ fun Context.getFormattedSeconds(seconds: Int, showBefore: Boolean = true) = when
     }
 }
 
-
 fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
     val dirsToCheck = dirs ?: directoryDao.getAll()
     val OTGPath = config.OTGPath
@@ -2361,6 +2397,8 @@ fun Context.getUrisPathsFromFileDirItems(fileDirItems: List<FileDirItem>): Pair<
 
     return Pair(successfulFilePaths, fileUris)
 }
+
+val Context.notificationManager: NotificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 val Context.portrait get() = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
@@ -2805,6 +2843,43 @@ fun Context.getProperStatusBarColor() = when {
 fun Context.getStoreUrl() =
     "https://play.google.com/store/apps/details?id=${packageName.removeSuffix(".debug")}"
 
+fun Context.getTitle(path: String): String? {
+    val projection = arrayOf(
+        MediaStore.MediaColumns.TITLE
+    )
+
+    val uri = getFileUri(path)
+    val selection =
+        if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
+    val selectionArgs =
+        if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(path)
+
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getStringValue(MediaStore.MediaColumns.TITLE)
+            }
+        }
+    } catch (ignored: Exception) {
+    }
+
+    return try {
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(path)
+        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+    } catch (ignored: Exception) {
+        null
+    }
+}
+
+fun Context.getTextSize() = when (baseConfig.fontSize) {
+    FONT_SIZE_SMALL -> resources.getDimension(R.dimen.smaller_text_size)
+    FONT_SIZE_MEDIUM -> resources.getDimension(R.dimen.bigger_text_size)
+    FONT_SIZE_LARGE -> resources.getDimension(R.dimen.big_text_size)
+    else -> resources.getDimension(R.dimen.extra_big_text_size)
+}
+
 fun Context.updateDirectoryPath(path: String) {
     val mediaFetcher = MediaFetcher(applicationContext)
     val getImagesOnly = false
@@ -2885,6 +2960,66 @@ fun Context.updateTextColors(viewGroup: ViewGroup) {
             is MyTextInputLayout -> it.setColors(textColor, accentColor, backgroundColor)
             is ViewGroup -> updateTextColors(it)
         }
+    }
+}
+
+fun Context.getAlbum(path: String): String? {
+    val projection = arrayOf(
+        MediaStore.Audio.Media.ALBUM
+    )
+
+    val uri = getFileUri(path)
+    val selection =
+        if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
+    val selectionArgs =
+        if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(path)
+
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getStringValue(MediaStore.Audio.Media.ALBUM)
+            }
+        }
+    } catch (ignored: Exception) {
+    }
+
+    return try {
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(path)
+        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
+    } catch (ignored: Exception) {
+        null
+    }
+}
+
+fun Context.getArtist(path: String): String? {
+    val projection = arrayOf(
+        MediaStore.Audio.Media.ARTIST
+    )
+
+    val uri = getFileUri(path)
+    val selection =
+        if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
+    val selectionArgs =
+        if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(path)
+
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getStringValue(MediaStore.Audio.Media.ARTIST)
+            }
+        }
+    } catch (ignored: Exception) {
+    }
+
+    return try {
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(path)
+        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+    } catch (ignored: Exception) {
+        null
     }
 }
 
@@ -3013,6 +3148,27 @@ fun Context.getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
     return null
 }
 
+fun Context.getMediaStoreLastModified(path: String): Long {
+    val projection = arrayOf(
+        MediaStore.MediaColumns.DATE_MODIFIED
+    )
+
+    val uri = getFileUri(path)
+    val selection = "${BaseColumns._ID} = ?"
+    val selectionArgs = arrayOf(path.substringAfterLast("/"))
+
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getLongValue(MediaStore.MediaColumns.DATE_MODIFIED) * 1000
+            }
+        }
+    } catch (ignored: Exception) {
+    }
+    return 0
+}
+
 fun Context.grantReadUriPermission(uriString: String) {
     try {
         // ensure custom reminder sounds play well
@@ -3024,7 +3180,6 @@ fun Context.grantReadUriPermission(uriString: String) {
     } catch (ignored: Exception) {
     }
 }
-
 
 fun Context.hasOTGConnected(): Boolean {
     return try {
@@ -3129,6 +3284,7 @@ fun Context.saveExifRotation(exif: ExifInterface, degrees: Int) {
     exif.saveAttributes()
 }
 
+@SuppressLint("Recycle")
 @RequiresApi(Build.VERSION_CODES.N)
 fun Context.saveImageRotation(path: String, degrees: Int): Boolean {
     if (!needsStupidWritePermissions(path)) {
@@ -3159,6 +3315,10 @@ fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = 
 }
 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath
+
+val Context.shortcutManager: ShortcutManager
+    @SuppressLint("NewApi")
+    get() = getSystemService(ShortcutManager::class.java) as ShortcutManager
 
 fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
     toast(String.format(getString(R.string.error), msg), length)
@@ -3194,6 +3354,8 @@ fun Context.storeNewYourAlarmSound(resultData: Intent): AlarmSound {
     return newAlarmSound
 }
 
+val Context.telecomManager: TelecomManager get() = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+
 fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
     val className =
         "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
@@ -3208,9 +3370,11 @@ fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enabl
         if (enable) {
             baseConfig.lastIconColor = color
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
     }
 }
+
+val Context.windowManager: WindowManager get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
 fun isAndroidDataDir(path: String): Boolean {
     val resolvedPath = "${path.trimEnd('/')}/"
@@ -3238,4 +3402,764 @@ fun Context.checkAppIconColor() {
             }
         }
     }
+}
+
+val Context.statusBarHeight: Int
+    get() {
+        var statusBarHeight = 0
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) {
+            statusBarHeight = resources.getDimensionPixelSize(resourceId)
+        }
+        return statusBarHeight
+    }
+
+val Context.actionBarHeight: Int
+    get() {
+        val styledAttributes =
+            theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+        val actionBarHeight = styledAttributes.getDimension(0, 0f)
+        styledAttributes.recycle()
+        return actionBarHeight.toInt()
+    }
+
+val Context.usableScreenSize: Point
+    get() {
+        val size = Point()
+        windowManager.defaultDisplay.getSize(size)
+        return size
+    }
+
+fun Context.getCornerRadius() = resources.getDimension(R.dimen.rounded_corner_radius_small)
+
+// we need the Default Dialer functionality only in Simple Dialer and in Simple Contacts for now
+@TargetApi(Build.VERSION_CODES.M)
+fun Context.isDefaultDialer(): Boolean {
+    return if (!packageName.startsWith("com.simplemobiletools.contacts") && !packageName.startsWith(
+            "com.simplemobiletools.dialer"
+        )
+    ) {
+        true
+    } else if ((packageName.startsWith("com.simplemobiletools.contacts") || packageName.startsWith("com.simplemobiletools.dialer")) && isQPlus()) {
+        val roleManager = getSystemService(RoleManager::class.java)
+        roleManager!!.isRoleAvailable(RoleManager.ROLE_DIALER) && roleManager.isRoleHeld(RoleManager.ROLE_DIALER)
+    } else {
+        isMarshmallowPlus() && telecomManager.defaultDialerPackage == packageName
+    }
+}
+
+@TargetApi(Build.VERSION_CODES.N)
+fun Context.getBlockedNumbers(): java.util.ArrayList<BlockedNumber> {
+    val blockedNumbers = java.util.ArrayList<BlockedNumber>()
+    if (!isNougatPlus() || !isDefaultDialer()) {
+        return blockedNumbers
+    }
+
+    val uri = BlockedNumberContract.BlockedNumbers.CONTENT_URI
+    val projection = arrayOf(
+        BlockedNumberContract.BlockedNumbers.COLUMN_ID,
+        BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER,
+        BlockedNumberContract.BlockedNumbers.COLUMN_E164_NUMBER
+    )
+
+    queryCursor(uri, projection) { cursor ->
+        val id = cursor.getLongValue(BlockedNumberContract.BlockedNumbers.COLUMN_ID)
+        val number =
+            cursor.getStringValue(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER) ?: ""
+        val normalizedNumber =
+            cursor.getStringValue(BlockedNumberContract.BlockedNumbers.COLUMN_E164_NUMBER) ?: number
+        val comparableNumber = normalizedNumber.trimToComparableNumber()
+        val blockedNumber = BlockedNumber(id, number, normalizedNumber, comparableNumber)
+        blockedNumbers.add(blockedNumber)
+    }
+
+    return blockedNumbers
+}
+
+@TargetApi(Build.VERSION_CODES.N)
+fun Context.addBlockedNumber(number: String) {
+    ContentValues().apply {
+        put(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER, number)
+        put(
+            BlockedNumberContract.BlockedNumbers.COLUMN_E164_NUMBER,
+            PhoneNumberUtils.normalizeNumber(number)
+        )
+        try {
+            contentResolver.insert(BlockedNumberContract.BlockedNumbers.CONTENT_URI, this)
+        } catch (e: Exception) {
+            showErrorToast(e)
+        }
+    }
+}
+
+@TargetApi(Build.VERSION_CODES.N)
+fun Context.deleteBlockedNumber(number: String) {
+    val selection = "${BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER} = ?"
+    val selectionArgs = arrayOf(number)
+    contentResolver.delete(
+        BlockedNumberContract.BlockedNumbers.CONTENT_URI,
+        selection,
+        selectionArgs
+    )
+}
+
+fun Context.isNumberBlocked(
+    number: String,
+    blockedNumbers: java.util.ArrayList<BlockedNumber> = getBlockedNumbers()
+): Boolean {
+    if (!isNougatPlus()) {
+        return false
+    }
+
+    val numberToCompare = number.trimToComparableNumber()
+    return blockedNumbers.map { it.numberToCompare }
+        .contains(numberToCompare) || blockedNumbers.map { it.number }.contains(numberToCompare)
+}
+
+fun Context.copyToClipboard(text: String) {
+    val clip = ClipData.newPlainText(getString(R.string.simple_commons), text)
+    (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(clip)
+    val toastText = String.format(getString(R.string.value_copied_to_clipboard_show), text)
+    toast(toastText)
+}
+
+fun Context.getPhoneNumberTypeText(type: Int, label: String): String {
+    return if (type == ContactsContract.CommonDataKinds.BaseTypes.TYPE_CUSTOM) {
+        label
+    } else {
+        getString(
+            when (type) {
+                ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE -> R.string.mobile
+                ContactsContract.CommonDataKinds.Phone.TYPE_HOME -> R.string.home
+                ContactsContract.CommonDataKinds.Phone.TYPE_WORK -> R.string.work
+                ContactsContract.CommonDataKinds.Phone.TYPE_MAIN -> R.string.main_number
+                ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK -> R.string.work_fax
+                ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME -> R.string.home_fax
+                ContactsContract.CommonDataKinds.Phone.TYPE_PAGER -> R.string.pager
+                else -> R.string.other
+            }
+        )
+    }
+}
+
+fun Context.updateBottomTabItemColors(view: View?, isActive: Boolean) {
+    val color = if (isActive) {
+        getProperPrimaryColor()
+    } else {
+        getProperTextColor()
+    }
+
+    view?.findViewById<ImageView>(R.id.tab_item_icon)?.applyColorFilter(color)
+    view?.findViewById<TextView>(R.id.tab_item_label)?.setTextColor(color)
+}
+
+fun Context.getFolderLastModifieds(folder: String): java.util.HashMap<String, Long> {
+    val lastModifieds = java.util.HashMap<String, Long>()
+    val projection = arrayOf(
+        Images.Media.DISPLAY_NAME,
+        Images.Media.DATE_MODIFIED
+    )
+
+    val uri = Files.getContentUri("external")
+    val selection =
+        "${Images.Media.DATA} LIKE ? AND ${Images.Media.DATA} NOT LIKE ? AND ${Images.Media.MIME_TYPE} IS NOT NULL" // avoid selecting folders
+    val selectionArgs = arrayOf("$folder/%", "$folder/%/%")
+
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                do {
+                    try {
+                        val lastModified = cursor.getLongValue(Images.Media.DATE_MODIFIED) * 1000
+                        if (lastModified != 0L) {
+                            val name = cursor.getStringValue(Images.Media.DISPLAY_NAME)
+                            lastModifieds["$folder/$name"] = lastModified
+                        }
+                    } catch (e: Exception) {
+                    }
+                } while (cursor.moveToNext())
+            }
+        }
+    } catch (e: Exception) {
+    }
+
+    return lastModifieds
+}
+
+fun getMediaStoreIds(context: Context): java.util.HashMap<String, Long> {
+    val ids = java.util.HashMap<String, Long>()
+    val projection = arrayOf(
+        Images.Media.DATA,
+        Images.Media._ID
+    )
+
+    val uri = Files.getContentUri("external")
+
+    try {
+        context.queryCursor(uri, projection) { cursor ->
+            try {
+                val id = cursor.getLongValue(Images.Media._ID)
+                if (id != 0L) {
+                    val path = cursor.getStringValue(Images.Media.DATA)
+                    ids[path] = id
+                }
+            } catch (e: Exception) {
+            }
+        }
+    } catch (e: Exception) {
+    }
+
+    return ids
+}
+
+fun Context.getAndroidSAFFileSize(path: String): Long {
+    val treeUri = getAndroidTreeUri(path).toUri()
+    val documentId = createAndroidSAFDocumentId(path)
+    return getFileSize(treeUri, documentId)
+}
+
+fun Context.getAndroidSAFFileCount(path: String, countHidden: Boolean): Int {
+    val treeUri = getAndroidTreeUri(path).toUri()
+    if (treeUri == Uri.EMPTY) {
+        return 0
+    }
+
+    val documentId = createAndroidSAFDocumentId(path)
+    val rootDocId = getStorageRootIdForAndroidDir(path)
+    return getProperChildrenCount(rootDocId, treeUri, documentId, countHidden)
+}
+
+fun Context.getAndroidSAFLastModified(path: String): Long {
+    val treeUri = getAndroidTreeUri(path).toUri()
+    if (treeUri == Uri.EMPTY) {
+        return 0L
+    }
+
+    val documentId = createAndroidSAFDocumentId(path)
+    val projection = arrayOf(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
+    val documentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+    return contentResolver.query(documentUri, projection, null, null, null)?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            cursor.getLongValue(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
+        } else {
+            0L
+        }
+    } ?: 0L
+}
+
+fun Context.deleteAndroidSAFDirectory(
+    path: String,
+    allowDeleteFolder: Boolean = false,
+    callback: ((wasSuccess: Boolean) -> Unit)? = null
+) {
+    val treeUri = getAndroidTreeUri(path).toUri()
+    val documentId = createAndroidSAFDocumentId(path)
+    try {
+        val uri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        val document = DocumentFile.fromSingleUri(this, uri)
+        val fileDeleted =
+            (document!!.isFile || allowDeleteFolder) && DocumentsContract.deleteDocument(
+                applicationContext.contentResolver,
+                document.uri
+            )
+        callback?.invoke(fileDeleted)
+    } catch (e: Exception) {
+        showErrorToast(e)
+        callback?.invoke(false)
+        storeAndroidTreeUri(path, "")
+    }
+}
+
+fun Context.updateOTGPathFromPartition() {
+    val otgPath = "/storage/${baseConfig.OTGPartition}"
+    baseConfig.OTGPath = if (getOTGFastDocumentFile(otgPath, otgPath)?.exists() == true) {
+        "/storage/${baseConfig.OTGPartition}"
+    } else {
+        "/mnt/media_rw/${baseConfig.OTGPartition}"
+    }
+}
+
+// these functions update the mediastore instantly, MediaScannerConnection.scanFileRecursively takes some time to really get applied
+fun Context.deleteFromMediaStore(path: String, callback: ((needsRescan: Boolean) -> Unit)? = null) {
+    if (getIsPathDirectory(path)) {
+        callback?.invoke(false)
+        return
+    }
+
+    ensureBackgroundThread {
+        try {
+            val where = "${MediaStore.MediaColumns.DATA} = ?"
+            val args = arrayOf(path)
+            val needsRescan = contentResolver.delete(getFileUri(path), where, args) != 1
+            callback?.invoke(needsRescan)
+        } catch (ignored: Exception) {
+        }
+        callback?.invoke(true)
+    }
+}
+
+fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
+    val SCAN_FILE_MAX_DURATION = 1000L
+    val scanFileHandler = Handler(Looper.getMainLooper())
+    scanFileHandler.postDelayed({
+        callback()
+    }, SCAN_FILE_MAX_DURATION)
+
+    MediaScannerConnection.scanFile(applicationContext, arrayOf(path), null) { path, uri ->
+        scanFileHandler.removeCallbacksAndMessages(null)
+        try {
+            applicationContext.contentResolver.delete(uri, null, null)
+        } catch (e: Exception) {
+        }
+        callback()
+    }
+}
+
+fun Context.updateInMediaStore(oldPath: String, newPath: String) {
+    ensureBackgroundThread {
+        val values = ContentValues().apply {
+            put(MediaStore.MediaColumns.DATA, newPath)
+            put(MediaStore.MediaColumns.DISPLAY_NAME, newPath.getFilenameFromPath())
+            put(MediaStore.MediaColumns.TITLE, newPath.getFilenameFromPath())
+        }
+        val uri = getFileUri(oldPath)
+        val selection = "${MediaStore.MediaColumns.DATA} = ?"
+        val selectionArgs = arrayOf(oldPath)
+
+        try {
+            contentResolver.update(uri, values, selection, selectionArgs)
+        } catch (ignored: Exception) {
+        }
+    }
+}
+
+fun Context.updateLastModified(path: String, lastModified: Long) {
+    val values = ContentValues().apply {
+        put(MediaStore.MediaColumns.DATE_MODIFIED, lastModified / 1000)
+    }
+    File(path).setLastModified(lastModified)
+    val uri = getFileUri(path)
+    val selection = "${MediaStore.MediaColumns.DATA} = ?"
+    val selectionArgs = arrayOf(path)
+
+    try {
+        contentResolver.update(uri, values, selection, selectionArgs)
+    } catch (ignored: Exception) {
+    }
+}
+
+fun Context.getOTGItems(
+    path: String,
+    shouldShowHidden: Boolean,
+    getProperFileSize: Boolean,
+    callback: (java.util.ArrayList<FileDirItem>) -> Unit
+) {
+    val items = java.util.ArrayList<FileDirItem>()
+    val OTGTreeUri = baseConfig.OTGTreeUri
+    var rootUri = try {
+        DocumentFile.fromTreeUri(applicationContext, Uri.parse(OTGTreeUri))
+    } catch (e: Exception) {
+        showErrorToast(e)
+        baseConfig.OTGPath = ""
+        baseConfig.OTGTreeUri = ""
+        baseConfig.OTGPartition = ""
+        null
+    }
+
+    if (rootUri == null) {
+        callback(items)
+        return
+    }
+
+    val parts = path.split("/").dropLastWhile { it.isEmpty() }
+    for (part in parts) {
+        if (path == otgPath) {
+            break
+        }
+
+        if (part == "otg:" || part == "") {
+            continue
+        }
+
+        val file = rootUri!!.findFile(part)
+        if (file != null) {
+            rootUri = file
+        }
+    }
+
+    val files = rootUri!!.listFiles().filter { it.exists() }
+
+    val basePath = "${baseConfig.OTGTreeUri}/document/${baseConfig.OTGPartition}%3A"
+    for (file in files) {
+        val name = file.name ?: continue
+        if (!shouldShowHidden && name.startsWith(".")) {
+            continue
+        }
+
+        val isDirectory = file.isDirectory
+        val filePath = file.uri.toString().substring(basePath.length)
+        val decodedPath = otgPath + "/" + URLDecoder.decode(filePath, "UTF-8")
+        val fileSize = when {
+            getProperFileSize -> file.getItemSize(shouldShowHidden)
+            isDirectory -> 0L
+            else -> file.length()
+        }
+
+        val childrenCount = if (isDirectory) {
+            file.listFiles().size
+        } else {
+            0
+        }
+
+        val lastModified = file.lastModified()
+        val fileDirItem =
+            FileDirItem(decodedPath, name, isDirectory, childrenCount, fileSize, lastModified)
+        items.add(fileDirItem)
+    }
+
+    callback(items)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun Context.getAndroidSAFFileItems(
+    path: String,
+    shouldShowHidden: Boolean,
+    getProperFileSize: Boolean = true,
+    callback: (java.util.ArrayList<FileDirItem>) -> Unit
+) {
+    val items = java.util.ArrayList<FileDirItem>()
+    val rootDocId = getStorageRootIdForAndroidDir(path)
+    val treeUri = getAndroidTreeUri(path).toUri()
+    val documentId = createAndroidSAFDocumentId(path)
+    val childrenUri = try {
+        DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+    } catch (e: Exception) {
+        showErrorToast(e)
+        storeAndroidTreeUri(path, "")
+        null
+    }
+
+    if (childrenUri == null) {
+        callback(items)
+        return
+    }
+
+    val projection = arrayOf(
+        DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+        DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+        DocumentsContract.Document.COLUMN_MIME_TYPE,
+        DocumentsContract.Document.COLUMN_LAST_MODIFIED
+    )
+    try {
+        val rawCursor = contentResolver.query(childrenUri, projection, null, null)!!
+        val cursor =
+            ExternalStorageProviderHack.transformQueryResult(rootDocId, childrenUri, rawCursor)
+        cursor.use {
+            if (cursor.moveToFirst()) {
+                do {
+                    val docId = cursor.getStringValue(DocumentsContract.Document.COLUMN_DOCUMENT_ID)
+                    val name = cursor.getStringValue(DocumentsContract.Document.COLUMN_DISPLAY_NAME)
+                    val mimeType =
+                        cursor.getStringValue(DocumentsContract.Document.COLUMN_MIME_TYPE)
+                    val lastModified =
+                        cursor.getLongValue(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
+                    val isDirectory = mimeType == DocumentsContract.Document.MIME_TYPE_DIR
+                    val filePath = docId.substring("${getStorageRootIdForAndroidDir(path)}:".length)
+                    if (!shouldShowHidden && name.startsWith(".")) {
+                        continue
+                    }
+
+                    val decodedPath =
+                        path.getBasePath(this) + "/" + URLDecoder.decode(filePath, "UTF-8")
+                    val fileSize = when {
+                        getProperFileSize -> getFileSize(treeUri, docId)
+                        isDirectory -> 0L
+                        else -> getFileSize(treeUri, docId)
+                    }
+
+                    val childrenCount = if (isDirectory) {
+                        getDirectChildrenCount(rootDocId, treeUri, docId, shouldShowHidden)
+                    } else {
+                        0
+                    }
+
+                    val fileDirItem = FileDirItem(
+                        decodedPath,
+                        name,
+                        isDirectory,
+                        childrenCount,
+                        fileSize,
+                        lastModified
+                    )
+                    items.add(fileDirItem)
+                } while (cursor.moveToNext())
+            }
+        }
+    } catch (e: Exception) {
+        showErrorToast(e)
+    }
+    callback(items)
+}
+
+fun Context.getProperChildrenCount(
+    rootDocId: String,
+    treeUri: Uri,
+    documentId: String,
+    shouldShowHidden: Boolean
+): Int {
+    val projection = arrayOf(
+        DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+        DocumentsContract.Document.COLUMN_MIME_TYPE
+    )
+    val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+    val rawCursor = contentResolver.query(childrenUri, projection, null, null, null)!!
+    val cursor = ExternalStorageProviderHack.transformQueryResult(rootDocId, childrenUri, rawCursor)
+    return if (cursor.count > 0) {
+        var count = 0
+        cursor.use {
+            while (cursor.moveToNext()) {
+                val docId = cursor.getStringValue(DocumentsContract.Document.COLUMN_DOCUMENT_ID)
+                val mimeType = cursor.getStringValue(DocumentsContract.Document.COLUMN_MIME_TYPE)
+                if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
+                    count++
+                    count += getProperChildrenCount(rootDocId, treeUri, docId, shouldShowHidden)
+                } else if (!docId.getFilenameFromPath().startsWith('.') || shouldShowHidden) {
+                    count++
+                }
+            }
+        }
+        count
+    } else {
+        1
+    }
+}
+
+fun Context.getFileSize(treeUri: Uri, documentId: String): Long {
+    val projection = arrayOf(DocumentsContract.Document.COLUMN_SIZE)
+    val documentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+    return contentResolver.query(documentUri, projection, null, null, null)?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            cursor.getLongValue(DocumentsContract.Document.COLUMN_SIZE)
+        } else {
+            0L
+        }
+    } ?: 0L
+}
+
+fun Context.createAndroidSAFDocumentId(path: String): String {
+    val basePath = path.getBasePath(this)
+    val relativePath = path.substring(basePath.length).trim('/')
+    val storageId = getStorageRootIdForAndroidDir(path)
+    return "$storageId:$relativePath"
+}
+
+fun Context.getAndroidSAFDocument(path: String): DocumentFile? {
+    val basePath = path.getBasePath(this)
+    val androidPath = File(basePath, "Android").path
+    var relativePath = path.substring(androidPath.length)
+    if (relativePath.startsWith(File.separator)) {
+        relativePath = relativePath.substring(1)
+    }
+
+    return try {
+        val treeUri = getAndroidTreeUri(path).toUri()
+        var document = DocumentFile.fromTreeUri(applicationContext, treeUri)
+        val parts = relativePath.split("/").filter { it.isNotEmpty() }
+        for (part in parts) {
+            document = document?.findFile(part)
+        }
+        document
+    } catch (ignored: Exception) {
+        null
+    }
+}
+
+fun Context.getSomeAndroidSAFDocument(path: String): DocumentFile? =
+    getFastAndroidSAFDocument(path) ?: getAndroidSAFDocument(path)
+
+fun Context.getFastAndroidSAFDocument(path: String): DocumentFile? {
+    val treeUri = getAndroidTreeUri(path)
+    if (treeUri.isEmpty()) {
+        return null
+    }
+
+    val uri = getAndroidSAFUri(path)
+    return DocumentFile.fromSingleUri(this, uri)
+}
+
+fun Context.getAndroidSAFChildrenUri(path: String): Uri {
+    val treeUri = getAndroidTreeUri(path).toUri()
+    val documentId = createAndroidSAFDocumentId(path)
+    return DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
+}
+
+fun Context.createAndroidSAFDirectory(path: String): Boolean {
+    return try {
+        val treeUri = getAndroidTreeUri(path).toUri()
+        val parentPath = path.getParentPath()
+        if (!getDoesFilePathExist(parentPath)) {
+            createAndroidSAFDirectory(parentPath)
+        }
+        val documentId = createAndroidSAFDocumentId(parentPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.createDocument(
+            contentResolver,
+            parentUri,
+            DocumentsContract.Document.MIME_TYPE_DIR,
+            path.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        showErrorToast(e)
+        false
+    }
+}
+
+fun Context.createAndroidSAFFile(path: String): Boolean {
+    return try {
+        val treeUri = getAndroidTreeUri(path).toUri()
+        val parentPath = path.getParentPath()
+        if (!getDoesFilePathExist(parentPath)) {
+            createAndroidSAFDirectory(parentPath)
+        }
+
+        val documentId = createAndroidSAFDocumentId(path.getParentPath())
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.createDocument(
+            contentResolver,
+            parentUri,
+            path.getMimeType(),
+            path.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        showErrorToast(e)
+        false
+    }
+}
+
+// http://stackoverflow.com/a/40582634/1967672
+fun Context.getSDCardPath(): String {
+    val directories = getStorageDirectories().filter {
+        !it.equals(internalStoragePath) && !it.equals(
+            "/storage/emulated/0",
+            true
+        ) && (baseConfig.OTGPartition.isEmpty() || !it.endsWith(baseConfig.OTGPartition))
+    }
+
+    val fullSDpattern = Pattern.compile(SD_OTG_PATTERN)
+    var sdCardPath = directories.firstOrNull { fullSDpattern.matcher(it).matches() }
+        ?: directories.firstOrNull {
+            !physicalPaths.contains(
+                it.toLowerCase()
+            )
+        } ?: ""
+
+    // on some devices no method retrieved any SD card path, so test if its not sdcard1 by any chance. It happened on an Android 5.1
+    if (sdCardPath.trimEnd('/').isEmpty()) {
+        val file = File("/storage/sdcard1")
+        if (file.exists()) {
+            return file.absolutePath
+        }
+
+        sdCardPath = directories.firstOrNull() ?: ""
+    }
+
+    if (sdCardPath.isEmpty()) {
+        val SDpattern = Pattern.compile(SD_OTG_SHORT)
+        try {
+            File("/storage").listFiles()?.forEach {
+                if (SDpattern.matcher(it.name).matches()) {
+                    sdCardPath = "/storage/${it.name}"
+                }
+            }
+        } catch (e: Exception) {
+        }
+    }
+
+    val finalPath = sdCardPath.trimEnd('/')
+    baseConfig.sdCardPath = finalPath
+    return finalPath
+}
+
+fun Context.hasExternalSDCard() = sdCardPath.isNotEmpty()
+
+fun Context.hasProperStoredTreeUri(isOTG: Boolean): Boolean {
+    val uri = if (isOTG) baseConfig.OTGTreeUri else baseConfig.sdTreeUri
+    val hasProperUri = contentResolver.persistedUriPermissions.any { it.uri.toString() == uri }
+    if (!hasProperUri) {
+        if (isOTG) {
+            baseConfig.OTGTreeUri = ""
+        } else {
+            baseConfig.sdTreeUri = ""
+        }
+    }
+    return hasProperUri
+}
+
+fun Context.hasProperStoredAndroidTreeUri(path: String): Boolean {
+    val uri = getAndroidTreeUri(path)
+    val hasProperUri = contentResolver.persistedUriPermissions.any { it.uri.toString() == uri }
+    if (!hasProperUri) {
+        storeAndroidTreeUri(path, "")
+    }
+    return hasProperUri
+}
+
+fun Context.storeAndroidTreeUri(path: String, treeUri: String) {
+    return when {
+        isPathOnOTG(path) -> if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri =
+            treeUri else baseConfig.otgAndroidObbTreeUri = treeUri
+        isPathOnSD(path) -> if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri =
+            treeUri else baseConfig.sdAndroidObbTreeUri = treeUri
+        else -> if (isAndroidDataDir(path)) baseConfig.primaryAndroidDataTreeUri =
+            treeUri else baseConfig.primaryAndroidObbTreeUri = treeUri
+    }
+}
+
+fun Context.createDocumentUriFromRootTree(fullPath: String): Uri {
+    val storageId = getSAFStorageId(fullPath)
+
+    val relativePath = when {
+        fullPath.startsWith(internalStoragePath) -> fullPath.substring(internalStoragePath.length)
+            .trim('/')
+        else -> fullPath.substringAfter(storageId).trim('/')
+    }
+
+    val treeUri =
+        DocumentsContract.buildTreeDocumentUri(EXTERNAL_STORAGE_PROVIDER_AUTHORITY, "$storageId:")
+    val documentId = "${storageId}:$relativePath"
+    return DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+}
+
+fun Context.createAndroidDataOrObbPath(fullPath: String): String {
+    return if (isAndroidDataDir(fullPath)) {
+        fullPath.getBasePath(this).trimEnd('/').plus(ANDROID_DATA_DIR)
+    } else {
+        fullPath.getBasePath(this).trimEnd('/').plus(ANDROID_OBB_DIR)
+    }
+}
+
+fun Context.createAndroidDataOrObbUri(fullPath: String): Uri {
+    val path = createAndroidDataOrObbPath(fullPath)
+    return createDocumentUriFromRootTree(path)
+}
+
+fun Context.getMyFileUri(file: File): Uri {
+    return if (isNougatPlus()) {
+        FileProvider.getUriForFile(this, "$packageName.provider", file)
+    } else {
+        Uri.fromFile(file)
+    }
+}
+
+fun Context.scanFileRecursively(file: File, callback: (() -> Unit)? = null) {
+    scanFilesRecursively(arrayListOf(file), callback)
+}
+
+fun Context.scanFilesRecursively(files: List<File>, callback: (() -> Unit)? = null) {
+    val allPaths = java.util.ArrayList<String>()
+    for (file in files) {
+        allPaths.addAll(getPaths(file))
+    }
+    rescanPaths(allPaths, callback)
 }
