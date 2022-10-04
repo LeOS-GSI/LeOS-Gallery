@@ -16,7 +16,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
+import ca.on.sudbury.hojat.smartgallery.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors

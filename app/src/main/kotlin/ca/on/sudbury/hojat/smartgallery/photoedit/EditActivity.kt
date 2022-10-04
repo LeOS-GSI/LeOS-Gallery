@@ -41,7 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import com.simplemobiletools.commons.extensions.onSeekBarChangeListener
+import ca.on.sudbury.hojat.smartgallery.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
