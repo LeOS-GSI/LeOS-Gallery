@@ -90,7 +90,6 @@ import com.simplemobiletools.commons.dialogs.RateStarsDialog
 import com.simplemobiletools.commons.dialogs.UpgradeToProDialog
 import com.simplemobiletools.commons.dialogs.WhatsNewDialog
 import com.simplemobiletools.commons.dialogs.WritePermissionDialog
-import com.simplemobiletools.commons.extensions.ensurePublicUri
 import com.simplemobiletools.commons.extensions.getColoredDrawableWithColor
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getLongValue
@@ -98,16 +97,7 @@ import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.hideKeyboard
 import com.simplemobiletools.commons.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.isRecycleBinPath
-import com.simplemobiletools.commons.extensions.launchViewIntent
-import com.simplemobiletools.commons.extensions.rescanPath
-import com.simplemobiletools.commons.extensions.rescanPaths
-import com.simplemobiletools.commons.extensions.scanFileRecursively
-import com.simplemobiletools.commons.extensions.scanFilesRecursively
-import com.simplemobiletools.commons.extensions.scanPathRecursively
-import com.simplemobiletools.commons.extensions.scanPathsRecursively
-import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toFileDirItem
-import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.CREATE_DOCUMENT_SDK_30
 import com.simplemobiletools.commons.helpers.EXTRA_SHOW_ADVANCED
 import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR

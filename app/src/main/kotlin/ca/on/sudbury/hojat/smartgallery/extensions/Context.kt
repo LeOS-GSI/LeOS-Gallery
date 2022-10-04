@@ -131,13 +131,11 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.github.ajalt.reprint.core.Reprint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.degreesFromOrientation
 import com.simplemobiletools.commons.extensions.getContrastColor
 import com.simplemobiletools.commons.extensions.getDirectChildrenCount
 import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getIntValueOrNull
-import com.simplemobiletools.commons.extensions.getItemSize
 import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getStringValue
@@ -147,7 +145,6 @@ import com.simplemobiletools.commons.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.extensions.isVideoSlow
 import com.simplemobiletools.commons.extensions.lightenColor
-import com.simplemobiletools.commons.extensions.moveLastItemToFront
 import com.simplemobiletools.commons.extensions.orientationFromDegrees
 import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.toast
