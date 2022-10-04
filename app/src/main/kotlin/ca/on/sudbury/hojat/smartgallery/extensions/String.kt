@@ -7,7 +7,6 @@ import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.extensions.getBasePath
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.isRPlus
@@ -21,7 +20,7 @@ import java.text.Normalizer
 import java.util.Locale
 import kotlin.collections.HashMap
 
-fun String.getCompressionFormat() = when (getFilenameExtension().toLowerCase()) {
+fun String.getCompressionFormat() = when (getFilenameExtension().lowercase(Locale.getDefault())) {
     "png" -> Bitmap.CompressFormat.PNG
     "webp" -> Bitmap.CompressFormat.WEBP
     else -> Bitmap.CompressFormat.JPEG

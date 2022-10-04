@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.appwidget.AppWidgetManager
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -17,11 +18,13 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
+import android.hardware.biometrics.BiometricManager
 import android.hardware.usb.UsbConstants
 import android.hardware.usb.UsbManager
 import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
+import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -34,7 +37,10 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.provider.OpenableColumns
+import android.provider.Settings
 import android.text.TextUtils
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -44,6 +50,7 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
+import androidx.loader.content.CursorLoader
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -109,42 +116,73 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
+import com.github.ajalt.reprint.core.Reprint
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.simplemobiletools.commons.extensions.areDigitsOnly
+import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.createAndroidSAFDocumentId
-import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
+import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.degreesFromOrientation
 import com.simplemobiletools.commons.extensions.getFastAndroidSAFDocument
-import com.simplemobiletools.commons.extensions.createDocumentUriUsingFirstParentTreeUri
+import com.simplemobiletools.commons.extensions.createFirstParentTreeUri
 import com.simplemobiletools.commons.extensions.deleteFromMediaStore
-import com.simplemobiletools.commons.extensions.getFastDocumentFile
-import ca.on.sudbury.hojat.smartgallery.extensions.getFileUri
-import com.simplemobiletools.commons.extensions.getMediaContent
-import com.simplemobiletools.commons.extensions.getMediaContentUri
+import com.simplemobiletools.commons.extensions.formatSecondsToTimeString
+import com.simplemobiletools.commons.extensions.getAndroidSAFUri
+import com.simplemobiletools.commons.extensions.getContrastColor
+import com.simplemobiletools.commons.extensions.getDefaultAlarmTitle
+import com.simplemobiletools.commons.extensions.getDocumentFile
+import com.simplemobiletools.commons.extensions.getFilePublicUri
+import com.simplemobiletools.commons.extensions.getFilenameFromPath
+import com.simplemobiletools.commons.extensions.getFilenameFromUri
+import com.simplemobiletools.commons.extensions.getFirstParentDirName
+import com.simplemobiletools.commons.extensions.getFirstParentPath
+import com.simplemobiletools.commons.extensions.getFormattedSeconds
+import com.simplemobiletools.commons.extensions.getIntValue
+import com.simplemobiletools.commons.extensions.getIntValueOrNull
+import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getMediaStoreIds
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.getMimeTypeFromUri
-import com.simplemobiletools.commons.extensions.getOTGFastDocumentFile
-import com.simplemobiletools.commons.extensions.getSomeDocumentFile
-import com.simplemobiletools.commons.extensions.getStringValue
-import com.simplemobiletools.commons.extensions.internalStoragePath
+import com.simplemobiletools.commons.extensions.getMyContentProviderCursorLoader
+import com.simplemobiletools.commons.extensions.getParentPath
+import com.simplemobiletools.commons.extensions.getProperPrimaryColor
+import com.simplemobiletools.commons.extensions.getProperTextColor
+import com.simplemobiletools.commons.extensions.getSDCardPath
+import com.simplemobiletools.commons.extensions.getSharedThemeSync
+import com.simplemobiletools.commons.extensions.hasProperStoredAndroidTreeUri
+import com.simplemobiletools.commons.extensions.hasProperStoredDocumentUriSdk30
 import com.simplemobiletools.commons.extensions.isAccessibleWithSAFSdk30
-import com.simplemobiletools.commons.extensions.isInAndroidDir
-import com.simplemobiletools.commons.extensions.isInSubFolderInDownloadDir
+import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.extensions.isMediaFile
+import com.simplemobiletools.commons.extensions.isOrWasThankYouInstalled
+import com.simplemobiletools.commons.extensions.isPackageInstalled
 import com.simplemobiletools.commons.extensions.isPathOnOTG
 import com.simplemobiletools.commons.extensions.isRestrictedSAFOnlyRoot
-import com.simplemobiletools.commons.extensions.needsStupidWritePermissions
+import com.simplemobiletools.commons.extensions.isThankYouInstalled
+import com.simplemobiletools.commons.extensions.isUsingSystemDarkTheme
+import com.simplemobiletools.commons.extensions.isVideoFast
+import com.simplemobiletools.commons.extensions.isWhiteTheme
+import com.simplemobiletools.commons.extensions.lightenColor
+import com.simplemobiletools.commons.extensions.moveLastItemToFront
 import com.simplemobiletools.commons.extensions.orientationFromDegrees
-import com.simplemobiletools.commons.extensions.otgPath
-import com.simplemobiletools.commons.extensions.rescanPaths
-import com.simplemobiletools.commons.extensions.scanPathsRecursively
-import com.simplemobiletools.commons.extensions.sdCardPath
+import com.simplemobiletools.commons.extensions.showErrorToast
 import com.simplemobiletools.commons.extensions.updateOTGPathFromPartition
 import com.simplemobiletools.commons.extensions.usableScreenSize
 import com.simplemobiletools.commons.extensions.windowManager
 import com.simplemobiletools.commons.helpers.BaseConfig
 import com.simplemobiletools.commons.helpers.DARK_GREY
+import com.simplemobiletools.commons.helpers.DAY_SECONDS
+import com.simplemobiletools.commons.helpers.EXTERNAL_STORAGE_PROVIDER_AUTHORITY
 import com.simplemobiletools.commons.helpers.ExternalStorageProviderHack
+import com.simplemobiletools.commons.helpers.FRIDAY_BIT
+import com.simplemobiletools.commons.helpers.HOUR_SECONDS
+import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
+import com.simplemobiletools.commons.helpers.MINUTE_SECONDS
+import com.simplemobiletools.commons.helpers.MONDAY_BIT
+import com.simplemobiletools.commons.helpers.MONTH_SECONDS
+import com.simplemobiletools.commons.helpers.MyContactsContentProvider
+import com.simplemobiletools.commons.helpers.MyContentProvider
 import com.simplemobiletools.commons.helpers.PERMISSION_CALL_PHONE
 import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
 import com.simplemobiletools.commons.helpers.PERMISSION_GET_ACCOUNTS
@@ -161,8 +199,17 @@ import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALENDAR
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CALL_LOG
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_CONTACTS
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
+import com.simplemobiletools.commons.helpers.PREFS_KEY
+import com.simplemobiletools.commons.helpers.SATURDAY_BIT
+import com.simplemobiletools.commons.helpers.SUNDAY_BIT
+import com.simplemobiletools.commons.helpers.THURSDAY_BIT
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
+import com.simplemobiletools.commons.helpers.TUESDAY_BIT
+import com.simplemobiletools.commons.helpers.WEDNESDAY_BIT
+import com.simplemobiletools.commons.helpers.WEEK_SECONDS
+import com.simplemobiletools.commons.helpers.YEAR_SECONDS
+import com.simplemobiletools.commons.helpers.YOUR_ALARM_SOUNDS_MIN_ID
 import com.simplemobiletools.commons.helpers.appIconColorStrings
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
 import com.simplemobiletools.commons.helpers.isNougatPlus
@@ -171,7 +218,20 @@ import com.simplemobiletools.commons.helpers.isQPlus
 import com.simplemobiletools.commons.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.isSPlus
 import com.simplemobiletools.commons.helpers.proPackages
+import com.simplemobiletools.commons.models.AlarmSound
 import com.simplemobiletools.commons.models.FileDirItem
+import com.simplemobiletools.commons.models.SharedTheme
+import com.simplemobiletools.commons.views.MyAppCompatCheckbox
+import com.simplemobiletools.commons.views.MyAppCompatSpinner
+import com.simplemobiletools.commons.views.MyAutoCompleteTextView
+import com.simplemobiletools.commons.views.MyButton
+import com.simplemobiletools.commons.views.MyCompatRadioButton
+import com.simplemobiletools.commons.views.MyEditText
+import com.simplemobiletools.commons.views.MyFloatingActionButton
+import com.simplemobiletools.commons.views.MySeekBar
+import com.simplemobiletools.commons.views.MySwitchCompat
+import com.simplemobiletools.commons.views.MyTextInputLayout
+import com.simplemobiletools.commons.views.MyTextView
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File
@@ -194,6 +254,7 @@ private val DIRS_INACCESSIBLE_WITH_SAF_SDK_30 = listOf(DOWNLOAD_DIR, ANDROID_DIR
 
 
 // avoid these being set as SD card paths
+@SuppressLint("SdCardPath")
 private val physicalPaths = arrayListOf(
     "/storage/sdcard1", // Motorola Xoom
     "/storage/extsdcard", // Samsung SGS3
@@ -210,6 +271,161 @@ private val physicalPaths = arrayListOf(
     "/storage/usbdisk1",
     "/storage/usbdisk2"
 )
+
+val Context.areSystemAnimationsEnabled: Boolean
+    get() = Settings.Global.getFloat(
+        contentResolver,
+        Settings.Global.ANIMATOR_DURATION_SCALE,
+        0f
+    ) > 0f
+
+// is the app a Media Management App on Android 12+?
+fun Context.canManageMedia(): Boolean {
+    return isSPlus() && MediaStore.canManageMedia(this)
+}
+
+fun Context.createDocumentUriUsingFirstParentTreeUri(fullPath: String): Uri {
+    val storageId = getSAFStorageId(fullPath)
+    val relativePath = when {
+        fullPath.startsWith(internalStoragePath) -> fullPath.substring(internalStoragePath.length)
+            .trim('/')
+        else -> fullPath.substringAfter(storageId).trim('/')
+    }
+    val treeUri = createFirstParentTreeUri(fullPath)
+    val documentId = "${storageId}:$relativePath"
+    return DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+}
+
+fun Context.createSAFDirectorySdk30(path: String): Boolean {
+    return try {
+        val treeUri = createFirstParentTreeUri(path)
+        val parentPath = path.getParentPath()
+        if (!getDoesFilePathExistSdk30(parentPath)) {
+            createSAFDirectorySdk30(parentPath)
+        }
+
+        val documentId = getSAFDocumentId(parentPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.createDocument(
+            contentResolver,
+            parentUri,
+            DocumentsContract.Document.MIME_TYPE_DIR,
+            path.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        showErrorToast(e)
+        false
+    }
+}
+
+fun Context.createSAFFileSdk30(path: String): Boolean {
+    return try {
+        val treeUri = createFirstParentTreeUri(path)
+        val parentPath = path.getParentPath()
+        if (!getDoesFilePathExistSdk30(parentPath)) {
+            createSAFDirectorySdk30(parentPath)
+        }
+
+        val documentId = getSAFDocumentId(parentPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.createDocument(
+            contentResolver,
+            parentUri,
+            path.getMimeType(),
+            path.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        showErrorToast(e)
+        false
+    }
+}
+
+fun Context.ensurePublicUri(path: String, applicationId: String): Uri? {
+    return when {
+        hasProperStoredAndroidTreeUri(path) && isRestrictedSAFOnlyRoot(path) -> {
+            getAndroidSAFUri(path)
+        }
+        hasProperStoredDocumentUriSdk30(path) && isAccessibleWithSAFSdk30(path) -> {
+            createDocumentUriUsingFirstParentTreeUri(path)
+        }
+        isPathOnOTG(path) -> {
+            getDocumentFile(path)?.uri
+        }
+        else -> {
+            val uri = Uri.parse(path)
+            if (uri.scheme == "content") {
+                uri
+            } else {
+                val newPath = if (uri.toString().startsWith("/")) uri.toString() else uri.path
+                val file = File(newPath)
+                getFilePublicUri(file, applicationId)
+            }
+        }
+    }
+}
+
+fun Context.ensurePublicUri(uri: Uri, applicationId: String): Uri {
+    return if (uri.scheme == "content") {
+        uri
+    } else {
+        val file = File(uri.path)
+        getFilePublicUri(file, applicationId)
+    }
+}
+
+fun Context.getDoesFilePathExistSdk30(path: String): Boolean {
+    return when {
+        isAccessibleWithSAFSdk30(path) -> getFastDocumentSdk30(path)?.exists() ?: false
+        else -> File(path).exists()
+    }
+}
+
+fun Context.getMediaContent(path: String, uri: Uri): Uri? {
+    val projection = arrayOf(Images.Media._ID)
+    val selection = Images.Media.DATA + "= ?"
+    val selectionArgs = arrayOf(path)
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                val id = cursor.getIntValue(Images.Media._ID).toString()
+                return Uri.withAppendedPath(uri, id)
+            }
+        }
+    } catch (_: Exception) {
+    }
+    return null
+}
+
+fun Context.getMyContentProviderCursorLoader() =
+    CursorLoader(this, MyContentProvider.MY_CONTENT_URI, null, null, null, null)
+
+fun Context.getSharedPrefs() = getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
+
+fun Context.queryCursor(
+    uri: Uri,
+    projection: Array<String>,
+    selection: String? = null,
+    selectionArgs: Array<String>? = null,
+    sortOrder: String? = null,
+    showErrors: Boolean = false,
+    callback: (cursor: Cursor) -> Unit
+) {
+    try {
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, sortOrder)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                do {
+                    callback(cursor)
+                } while (cursor.moveToNext())
+            }
+        }
+    } catch (e: Exception) {
+        if (showErrors) {
+            showErrorToast(e)
+        }
+    }
+}
 
 private fun Context.queryCursorDesc(
     uri: Uri,
@@ -288,6 +504,17 @@ fun Context.getAndroidTreeUri(path: String): String {
 fun Context.getAppIconColors() =
     resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
 
+@SuppressLint("NewApi")
+fun Context.getBottomNavigationBackgroundColor(): Int {
+    val baseColor = baseConfig.backgroundColor
+    val bottomColor = when {
+        baseConfig.isUsingSystemTheme -> resources.getColor(R.color.you_status_bar_color, theme)
+        baseColor == Color.WHITE -> resources.getColor(R.color.bottom_tabs_light_background)
+        else -> baseConfig.backgroundColor.lightenColor(4)
+    }
+    return bottomColor
+}
+
 fun Context.getCanAppBeUpgraded() = proPackages.contains(
     baseConfig.appId.removeSuffix(".debug").removePrefix("com.simplemobiletools.")
 )
@@ -295,6 +522,16 @@ fun Context.getCanAppBeUpgraded() = proPackages.contains(
 fun Context.getCurrentFormattedDateTime(): String {
     val simpleDateFormat = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
+}
+
+fun Context.getCustomizeColorsString(): String {
+    val textId = if (isOrWasThankYouInstalled()) {
+        R.string.customize_colors
+    } else {
+        R.string.customize_colors_locked
+    }
+
+    return getString(textId)
 }
 
 fun Context.getDirectChildrenCount(
@@ -348,6 +585,27 @@ fun Context.getDocumentFile(path: String): DocumentFile? {
     }
 }
 
+fun Context.getDocumentSdk30(path: String): DocumentFile? {
+    val level = getFirstParentLevel(path)
+    val firstParentPath = path.getFirstParentPath(this, level)
+    var relativePath = path.substring(firstParentPath.length)
+    if (relativePath.startsWith(File.separator)) {
+        relativePath = relativePath.substring(1)
+    }
+
+    return try {
+        val treeUri = createFirstParentTreeUri(path)
+        var document = DocumentFile.fromTreeUri(applicationContext, treeUri)
+        val parts = relativePath.split("/").filter { it.isNotEmpty() }
+        for (part in parts) {
+            document = document?.findFile(part)
+        }
+        document
+    } catch (ignored: Exception) {
+        null
+    }
+}
+
 fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Boolean {
     val otgPath = otgPathToUse ?: baseConfig.OTGPath
     return when {
@@ -356,6 +614,11 @@ fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Bo
             ?: false
         else -> File(path).exists()
     }
+}
+
+fun Context.getFastDocumentSdk30(path: String): DocumentFile? {
+    val uri = createDocumentUriUsingFirstParentTreeUri(path)
+    return DocumentFile.fromSingleUri(this, uri)
 }
 
 fun Context.getFileInputStreamSync(path: String): InputStream? {
@@ -516,6 +779,26 @@ fun Context.getLatestMediaId(uri: Uri = Files.getContentUri("external")): Long {
     return 0
 }
 
+fun Context.getLaunchIntent() = packageManager.getLaunchIntentForPackage(baseConfig.appId)
+
+fun Context.getLinkTextColor(): Int {
+    return if (baseConfig.primaryColor == resources.getColor(R.color.color_primary)) {
+        baseConfig.primaryColor
+    } else {
+        baseConfig.textColor
+    }
+}
+
+fun Context.getMediaContentUri(path: String): Uri? {
+    val uri = when {
+        path.isImageFast() -> Images.Media.EXTERNAL_CONTENT_URI
+        path.isVideoFast() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        else -> Files.getContentUri("external")
+    }
+
+    return getMediaContent(path, uri)
+}
+
 fun Context.getPermissionString(id: Int) = when (id) {
     PERMISSION_READ_STORAGE -> Manifest.permission.READ_EXTERNAL_STORAGE
     PERMISSION_WRITE_STORAGE -> Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -557,9 +840,26 @@ fun Context.getSAFStorageId(fullPath: String): String {
     }
 }
 
+fun Context.getSizeFromContentUri(uri: Uri): Long {
+    val projection = arrayOf(OpenableColumns.SIZE)
+    try {
+        val cursor = contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getLongValue(OpenableColumns.SIZE)
+            }
+        }
+    } catch (e: Exception) {
+    }
+    return 0L
+}
+
+fun Context.getSomeDocumentSdk30(path: String): DocumentFile? =
+    getFastDocumentSdk30(path) ?: getDocumentSdk30(path)
+
 fun Context.getStorageRootIdForAndroidDir(path: String) =
     getAndroidTreeUri(path).removeSuffix(
-        if (com.simplemobiletools.commons.extensions.isAndroidDataDir(
+        if (isAndroidDataDir(
                 path
             )
         ) "%3AAndroid%2Fdata" else "%3AAndroid%2Fobb"
@@ -575,6 +875,28 @@ fun Context.getUriMimeType(path: String, newUri: Uri): String {
     return mimeType
 }
 
+fun Context.getMimeTypeFromUri(uri: Uri): String {
+    var mimetype = uri.path?.getMimeType() ?: ""
+    if (mimetype.isEmpty()) {
+        try {
+            mimetype = contentResolver.getType(uri) ?: ""
+        } catch (_: IllegalStateException) {
+        }
+    }
+    return mimetype
+}
+
+fun Context.getTimePickerDialogTheme() = when {
+    baseConfig.isUsingSystemTheme -> if (isUsingSystemDarkTheme()) {
+        R.style.MyTimePickerMaterialTheme_Dark
+    } else {
+        R.style.MyDateTimePickerMaterialTheme
+    }
+    baseConfig.backgroundColor.getContrastColor() == Color.WHITE -> R.style.MyDialogTheme_Dark
+    else -> R.style.MyDialogTheme
+}
+
+@SuppressLint("Recycle")
 fun Context.getVideoResolution(path: String): Point? {
     var point = try {
         val retriever = MediaMetadataRetriever()
@@ -650,6 +972,14 @@ fun Context.isAStorageRootFolder(path: String): Boolean {
 
 fun Context.isBlackAndWhiteTheme() =
     baseConfig.textColor == Color.WHITE && baseConfig.primaryColor == Color.BLACK && baseConfig.backgroundColor == Color.BLACK
+
+fun Context.isInAndroidDir(path: String): Boolean {
+    if (path.startsWith(recycleBinPath)) {
+        return false
+    }
+    val firstParentDir = path.getFirstParentDirName(this, 0)
+    return firstParentDir.equals(ANDROID_DIR, true)
+}
 
 fun Context.isPathOnInternalStorage(path: String) =
     internalStoragePath.isNotEmpty() && path.startsWith(internalStoragePath)
@@ -772,11 +1102,37 @@ fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
     return isRPlus() && (isInvalidName || (isDirectory && isARestrictedDirectory))
 }
 
+val Context.isRTLLayout: Boolean get() = resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+
 fun Context.isSAFOnlyRoot(path: String): Boolean {
     return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
+fun Context.isThankYouInstalled() = true
+
+fun Context.isOrWasThankYouInstalled(): Boolean {
+    return when {
+        resources.getBoolean(R.bool.pretend_thank_you_installed) -> true
+        baseConfig.hadThankYouInstalled -> true
+        isThankYouInstalled() -> {
+            baseConfig.hadThankYouInstalled = true
+            true
+        }
+        else -> false
+    }
+}
+
 val Context.recycleBin: File get() = filesDir
+
+fun Context.launchActivityIntent(intent: Intent) {
+    try {
+        startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        toast(R.string.no_app_found)
+    } catch (e: Exception) {
+        showErrorToast(e)
+    }
+}
 
 fun Context.movePinnedDirectoriesToFront(dirs: ArrayList<Directory>): ArrayList<Directory> {
     val foundFolders = ArrayList<Directory>()
@@ -806,6 +1162,34 @@ fun Context.movePinnedDirectoriesToFront(dirs: ArrayList<Directory>): ArrayList<
         }
     }
     return dirs
+}
+
+// format day bits to strings like "Mon, Tue, Wed"
+fun Context.getSelectedDaysString(bitMask: Int): String {
+    val dayBits = arrayListOf(
+        MONDAY_BIT,
+        TUESDAY_BIT,
+        WEDNESDAY_BIT,
+        THURSDAY_BIT,
+        FRIDAY_BIT,
+        SATURDAY_BIT,
+        SUNDAY_BIT
+    )
+    val weekDays =
+        resources.getStringArray(R.array.week_days_short).toList() as java.util.ArrayList<String>
+
+    if (baseConfig.isSundayFirst) {
+        dayBits.moveLastItemToFront()
+        weekDays.moveLastItemToFront()
+    }
+
+    var days = ""
+    dayBits.forEachIndexed { index, bit ->
+        if (bitMask and bit != 0) {
+            days += "${weekDays[index]}, "
+        }
+    }
+    return days.trim().trimEnd(',')
 }
 
 fun Context.getSomeDocumentFile(path: String) = getFastDocumentFile(path) ?: getDocumentFile(path)
@@ -1114,6 +1498,16 @@ fun Context.getFastDocumentFile(path: String): DocumentFile? {
         baseConfig.sdCardPath.split("/").lastOrNull(String::isNotEmpty)?.trim('/') ?: return null
     val fullUri = "${baseConfig.sdTreeUri}/document/$externalPathPart%3A$relativePath"
     return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
+}
+
+fun Context.updateSDCardPath() {
+    ensureBackgroundThread {
+        val oldPath = baseConfig.sdCardPath
+        baseConfig.sdCardPath = getSDCardPath()
+        if (oldPath != baseConfig.sdCardPath) {
+            baseConfig.sdTreeUri = ""
+        }
+    }
 }
 
 fun Context.updateSubfolderCounts(
@@ -1540,6 +1934,44 @@ fun Context.tryLoadingWithPicasso(
     }
 }
 
+fun Context.formatMinutesToTimeString(totalMinutes: Int) =
+    formatSecondsToTimeString(totalMinutes * 60)
+
+fun Context.formatSecondsToTimeString(totalSeconds: Int): String {
+    val days = totalSeconds / DAY_SECONDS
+    val hours = (totalSeconds % DAY_SECONDS) / HOUR_SECONDS
+    val minutes = (totalSeconds % HOUR_SECONDS) / MINUTE_SECONDS
+    val seconds = totalSeconds % MINUTE_SECONDS
+    val timesString = StringBuilder()
+    if (days > 0) {
+        val daysString = String.format(resources.getQuantityString(R.plurals.days, days, days))
+        timesString.append("$daysString, ")
+    }
+
+    if (hours > 0) {
+        val hoursString = String.format(resources.getQuantityString(R.plurals.hours, hours, hours))
+        timesString.append("$hoursString, ")
+    }
+
+    if (minutes > 0) {
+        val minutesString =
+            String.format(resources.getQuantityString(R.plurals.minutes, minutes, minutes))
+        timesString.append("$minutesString, ")
+    }
+
+    if (seconds > 0) {
+        val secondsString =
+            String.format(resources.getQuantityString(R.plurals.seconds, seconds, seconds))
+        timesString.append(secondsString)
+    }
+
+    var result = timesString.toString().trim().trimEnd(',')
+    if (result.isEmpty()) {
+        result = String.format(resources.getQuantityString(R.plurals.minutes, 0, 0))
+    }
+    return result
+}
+
 fun Context.getCachedDirectories(
     getVideosOnly: Boolean = false,
     getImagesOnly: Boolean = false,
@@ -1720,6 +2152,55 @@ fun Context.getCachedMedia(
     }
 }
 
+fun Context.getFormattedMinutes(minutes: Int, showBefore: Boolean = true) =
+    getFormattedSeconds(if (minutes == -1) minutes else minutes * 60, showBefore)
+
+fun Context.getFormattedSeconds(seconds: Int, showBefore: Boolean = true) = when (seconds) {
+    -1 -> getString(R.string.no_reminder)
+    0 -> getString(R.string.at_start)
+    else -> {
+        when {
+            seconds < 0 && seconds > -60 * 60 * 24 -> {
+                val minutes = -seconds / 60
+                getString(R.string.during_day_at).format(minutes / 60, minutes % 60)
+            }
+            seconds % YEAR_SECONDS == 0 -> {
+                val base = if (showBefore) R.plurals.years_before else R.plurals.by_years
+                resources.getQuantityString(base, seconds / YEAR_SECONDS, seconds / YEAR_SECONDS)
+            }
+            seconds % MONTH_SECONDS == 0 -> {
+                val base = if (showBefore) R.plurals.months_before else R.plurals.by_months
+                resources.getQuantityString(base, seconds / MONTH_SECONDS, seconds / MONTH_SECONDS)
+            }
+            seconds % WEEK_SECONDS == 0 -> {
+                val base = if (showBefore) R.plurals.weeks_before else R.plurals.by_weeks
+                resources.getQuantityString(base, seconds / WEEK_SECONDS, seconds / WEEK_SECONDS)
+            }
+            seconds % DAY_SECONDS == 0 -> {
+                val base = if (showBefore) R.plurals.days_before else R.plurals.by_days
+                resources.getQuantityString(base, seconds / DAY_SECONDS, seconds / DAY_SECONDS)
+            }
+            seconds % HOUR_SECONDS == 0 -> {
+                val base = if (showBefore) R.plurals.hours_before else R.plurals.by_hours
+                resources.getQuantityString(base, seconds / HOUR_SECONDS, seconds / HOUR_SECONDS)
+            }
+            seconds % MINUTE_SECONDS == 0 -> {
+                val base = if (showBefore) R.plurals.minutes_before else R.plurals.by_minutes
+                resources.getQuantityString(
+                    base,
+                    seconds / MINUTE_SECONDS,
+                    seconds / MINUTE_SECONDS
+                )
+            }
+            else -> {
+                val base = if (showBefore) R.plurals.seconds_before else R.plurals.by_seconds
+                resources.getQuantityString(base, seconds, seconds)
+            }
+        }
+    }
+}
+
+
 fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
     val dirsToCheck = dirs ?: directoryDao.getAll()
     val OTGPath = config.OTGPath
@@ -1800,6 +2281,29 @@ fun Context.updateDBDirectory(directory: Directory) {
             directory.sortValue
         )
     } catch (ignored: Exception) {
+    }
+}
+
+fun Context.deleteDocumentWithSAFSdk30(
+    fileDirItem: FileDirItem,
+    allowDeleteFolder: Boolean,
+    callback: ((wasSuccess: Boolean) -> Unit)?
+) {
+    try {
+        var fileDeleted = false
+        if (fileDirItem.isDirectory.not() || allowDeleteFolder) {
+            val fileUri = createDocumentUriUsingFirstParentTreeUri(fileDirItem.path)
+            fileDeleted = DocumentsContract.deleteDocument(contentResolver, fileUri)
+        }
+
+        if (fileDeleted) {
+            deleteFromMediaStore(fileDirItem.path)
+            callback?.invoke(true)
+        }
+
+    } catch (e: Exception) {
+        callback?.invoke(false)
+        showErrorToast(e)
     }
 }
 
@@ -2061,6 +2565,19 @@ fun Context.addPathToDB(path: String) {
     }
 }
 
+fun Context.buildDocumentUriSdk30(fullPath: String): Uri {
+    val storageId = getSAFStorageId(fullPath)
+
+    val relativePath = when {
+        fullPath.startsWith(internalStoragePath) -> fullPath.substring(internalStoragePath.length)
+            .trim('/')
+        else -> fullPath.substringAfter(storageId).trim('/')
+    }
+
+    val documentId = "${storageId}:$relativePath"
+    return DocumentsContract.buildDocumentUri(EXTERNAL_STORAGE_PROVIDER_AUTHORITY, documentId)
+}
+
 fun Context.createDirectoryFromMedia(
     path: String,
     curMedia: ArrayList<Medium>,
@@ -2121,6 +2638,17 @@ fun Context.createDirectoryFromMedia(
     )
 }
 
+fun Context.createFirstParentTreeUriUsingRootTree(fullPath: String): Uri {
+    val storageId = getSAFStorageId(fullPath)
+    val level = getFirstParentLevel(fullPath)
+    val rootParentDirName = fullPath.getFirstParentDirName(this, level)
+    val treeUri =
+        DocumentsContract.buildTreeDocumentUri(EXTERNAL_STORAGE_PROVIDER_AUTHORITY, "$storageId:")
+    val documentId = "${storageId}:$rootParentDirName"
+    return DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+}
+
+
 fun Context.getDataColumn(
     uri: Uri,
     selection: String? = null,
@@ -2140,6 +2668,25 @@ fun Context.getDataColumn(
     } catch (e: Exception) {
     }
     return null
+}
+
+fun Context.getDatePickerDialogTheme() = when {
+    baseConfig.isUsingSystemTheme -> R.style.MyDateTimePickerMaterialTheme
+    baseConfig.backgroundColor.getContrastColor() == Color.WHITE -> R.style.MyDialogTheme_Dark
+    else -> R.style.MyDialogTheme
+}
+
+fun Context.getDefaultAlarmSound(type: Int) =
+    AlarmSound(0, getDefaultAlarmTitle(type), RingtoneManager.getDefaultUri(type).toString())
+
+fun Context.getDefaultAlarmTitle(type: Int): String {
+    val alarmString = getString(R.string.alarm)
+    return try {
+        RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(type))?.getTitle(this)
+            ?: alarmString
+    } catch (e: Exception) {
+        alarmString
+    }
 }
 
 fun Context.getDirectorySortingValue(
@@ -2239,12 +2786,24 @@ fun Context.getProperTextColor() = if (baseConfig.isUsingSystemTheme) {
     baseConfig.textColor
 }
 
+fun Context.getProUrl() =
+    "https://play.google.com/store/apps/details?id=${baseConfig.appId.removeSuffix(".debug")}.pro"
+
 fun Context.getSAFDocumentId(path: String): String {
     val basePath = path.getBasePath(this)
     val relativePath = path.substring(basePath.length).trim('/')
     val storageId = getSAFStorageId(path)
     return "$storageId:$relativePath"
 }
+
+@SuppressLint("NewApi")
+fun Context.getProperStatusBarColor() = when {
+    baseConfig.isUsingSystemTheme -> resources.getColor(R.color.you_status_bar_color, theme)
+    else -> baseConfig.primaryColor
+}
+
+fun Context.getStoreUrl() =
+    "https://play.google.com/store/apps/details?id=${packageName.removeSuffix(".debug")}"
 
 fun Context.updateDirectoryPath(path: String) {
     val mediaFetcher = MediaFetcher(applicationContext)
@@ -2298,6 +2857,37 @@ fun Context.updateDirectoryPath(path: String) {
     updateDBDirectory(directory)
 }
 
+fun Context.updateTextColors(viewGroup: ViewGroup) {
+    val textColor = when {
+        baseConfig.isUsingSystemTheme -> getProperTextColor()
+        else -> baseConfig.textColor
+    }
+
+    val backgroundColor = baseConfig.backgroundColor
+    val accentColor = when {
+        isWhiteTheme() || isBlackAndWhiteTheme() -> baseConfig.accentColor
+        else -> getProperPrimaryColor()
+    }
+
+    val cnt = viewGroup.childCount
+    (0 until cnt).map { viewGroup.getChildAt(it) }.forEach {
+        when (it) {
+            is MyTextView -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyAppCompatSpinner -> it.setColors(textColor, accentColor, backgroundColor)
+            is MySwitchCompat -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyEditText -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyAutoCompleteTextView -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyFloatingActionButton -> it.setColors(textColor, accentColor, backgroundColor)
+            is MySeekBar -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyTextInputLayout -> it.setColors(textColor, accentColor, backgroundColor)
+            is ViewGroup -> updateTextColors(it)
+        }
+    }
+}
+
 fun Context.getFileDateTaken(path: String): Long {
     val projection = arrayOf(
         Images.Media.DATE_TAKEN
@@ -2318,6 +2908,22 @@ fun Context.getFileDateTaken(path: String): Long {
     }
 
     return 0L
+}
+
+fun Context.getMyContactsCursor(favoritesOnly: Boolean, withPhoneNumbersOnly: Boolean) = try {
+    val getFavoritesOnly = if (favoritesOnly) "1" else "0"
+    val getWithPhoneNumbersOnly = if (withPhoneNumbersOnly) "1" else "0"
+    val args = arrayOf(getFavoritesOnly, getWithPhoneNumbersOnly)
+    CursorLoader(
+        this,
+        MyContactsContentProvider.CONTACTS_CONTENT_URI,
+        null,
+        null,
+        args,
+        null
+    ).loadInBackground()
+} catch (e: Exception) {
+    null
 }
 
 // some helper functions were taken from https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
@@ -2366,6 +2972,60 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
     return getDataColumn(uri)
 }
 
+fun Context.getSharedTheme(callback: (sharedTheme: SharedTheme?) -> Unit) {
+    if (!isThankYouInstalled()) {
+        callback(null)
+    } else {
+        val cursorLoader = getMyContentProviderCursorLoader()
+        ensureBackgroundThread {
+            callback(getSharedThemeSync(cursorLoader))
+        }
+    }
+}
+
+fun Context.getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
+    val cursor = cursorLoader.loadInBackground()
+    cursor?.use {
+        if (cursor.moveToFirst()) {
+            try {
+                val textColor = cursor.getIntValue(MyContentProvider.COL_TEXT_COLOR)
+                val backgroundColor = cursor.getIntValue(MyContentProvider.COL_BACKGROUND_COLOR)
+                val primaryColor = cursor.getIntValue(MyContentProvider.COL_PRIMARY_COLOR)
+                val accentColor = cursor.getIntValue(MyContentProvider.COL_ACCENT_COLOR)
+                val appIconColor = cursor.getIntValue(MyContentProvider.COL_APP_ICON_COLOR)
+                val navigationBarColor =
+                    cursor.getIntValueOrNull(MyContentProvider.COL_NAVIGATION_BAR_COLOR)
+                        ?: INVALID_NAVIGATION_BAR_COLOR
+                val lastUpdatedTS = cursor.getIntValue(MyContentProvider.COL_LAST_UPDATED_TS)
+                return SharedTheme(
+                    textColor,
+                    backgroundColor,
+                    primaryColor,
+                    appIconColor,
+                    navigationBarColor,
+                    lastUpdatedTS,
+                    accentColor
+                )
+            } catch (e: Exception) {
+            }
+        }
+    }
+    return null
+}
+
+fun Context.grantReadUriPermission(uriString: String) {
+    try {
+        // ensure custom reminder sounds play well
+        grantUriPermission(
+            "com.android.systemui",
+            Uri.parse(uriString),
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+    } catch (ignored: Exception) {
+    }
+}
+
+
 fun Context.hasOTGConnected(): Boolean {
     return try {
         (getSystemService(Context.USB_SERVICE) as UsbManager).deviceList.any {
@@ -2380,6 +3040,21 @@ fun Context.hasPermission(permId: Int) = ContextCompat.checkSelfPermission(
     this,
     getPermissionString(permId)
 ) == PackageManager.PERMISSION_GRANTED
+
+fun Context.hasProperStoredDocumentUriSdk30(path: String): Boolean {
+    val documentUri = buildDocumentUriSdk30(path)
+    return contentResolver.persistedUriPermissions.any { it.uri.toString() == documentUri.toString() }
+}
+
+fun Context.hasProperStoredFirstParentUri(path: String): Boolean {
+    val firstParentUri = createFirstParentTreeUri(path)
+    return contentResolver.persistedUriPermissions.any { it.uri.toString() == firstParentUri.toString() }
+}
+
+fun Context.isFingerPrintSensorAvailable() = isMarshmallowPlus() && Reprint.isHardwarePresent()
+
+fun Context.isUsingSystemDarkTheme() =
+    resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES != 0
 
 val Context.realScreenSize: Point
     get() {
@@ -2493,6 +3168,32 @@ fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG
     showErrorToast(exception.toString(), length)
 }
 
+fun Context.storeNewYourAlarmSound(resultData: Intent): AlarmSound {
+    val uri = resultData.data
+    var filename = getFilenameFromUri(uri!!)
+    if (filename.isEmpty()) {
+        filename = getString(R.string.alarm)
+    }
+
+    val token = object : TypeToken<java.util.ArrayList<AlarmSound>>() {}.type
+    val yourAlarmSounds =
+        Gson().fromJson<java.util.ArrayList<AlarmSound>>(baseConfig.yourAlarmSounds, token)
+            ?: java.util.ArrayList()
+    val newAlarmSoundId =
+        (yourAlarmSounds.maxByOrNull { it.id }?.id ?: YOUR_ALARM_SOUNDS_MIN_ID) + 1
+    val newAlarmSound = AlarmSound(newAlarmSoundId, filename, uri.toString())
+    if (yourAlarmSounds.firstOrNull { it.uri == uri.toString() } == null) {
+        yourAlarmSounds.add(newAlarmSound)
+    }
+
+    baseConfig.yourAlarmSounds = Gson().toJson(yourAlarmSounds)
+
+    val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+    contentResolver.takePersistableUriPermission(uri, takeFlags)
+
+    return newAlarmSound
+}
+
 fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
     val className =
         "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
@@ -2518,4 +3219,23 @@ fun isAndroidDataDir(path: String): Boolean {
 
 fun isExternalStorageManager(): Boolean {
     return isRPlus() && Environment.isExternalStorageManager()
+}
+
+fun isNotExternalStorageManager(): Boolean {
+    return isRPlus() && !Environment.isExternalStorageManager()
+}
+
+fun Context.checkAppIconColor() {
+    val appId = baseConfig.appId
+    if (appId.isNotEmpty() && baseConfig.lastIconColor != baseConfig.appIconColor) {
+        getAppIconColors().forEachIndexed { index, color ->
+            toggleAppIconColor(appId, index, color, false)
+        }
+
+        getAppIconColors().forEachIndexed { index, color ->
+            if (baseConfig.appIconColor == color) {
+                toggleAppIconColor(appId, index, color, true)
+            }
+        }
+    }
 }
