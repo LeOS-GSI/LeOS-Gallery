@@ -62,7 +62,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.helpers.REAL_FILE_PATH
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.IS_FROM_GALLERY
+import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.photoview.PhotoFragment
 import ca.on.sudbury.hojat.smartgallery.video.VideoFragment

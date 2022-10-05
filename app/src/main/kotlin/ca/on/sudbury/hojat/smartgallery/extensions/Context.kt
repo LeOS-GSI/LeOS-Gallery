@@ -182,11 +182,11 @@ import com.simplemobiletools.commons.helpers.YEAR_SECONDS
 import com.simplemobiletools.commons.helpers.YOUR_ALARM_SOUNDS_MIN_ID
 import com.simplemobiletools.commons.helpers.appIconColorStrings
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
-import com.simplemobiletools.commons.helpers.isNougatPlus
-import com.simplemobiletools.commons.helpers.isOnMainThread
+import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import com.simplemobiletools.commons.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.isSPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.proPackages
 import com.simplemobiletools.commons.models.AlarmSound
 import com.simplemobiletools.commons.models.BlockedNumber

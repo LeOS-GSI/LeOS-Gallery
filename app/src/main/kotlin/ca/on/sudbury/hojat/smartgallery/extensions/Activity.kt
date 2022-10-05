@@ -72,8 +72,8 @@ import com.simplemobiletools.commons.helpers.LICENSE_APNG
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
-import com.simplemobiletools.commons.helpers.isNougatPlus
-import com.simplemobiletools.commons.helpers.isSPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
@@ -93,7 +93,7 @@ import com.simplemobiletools.commons.dialogs.WritePermissionDialog
 import com.simplemobiletools.commons.helpers.CREATE_DOCUMENT_SDK_30
 import com.simplemobiletools.commons.helpers.EXTRA_SHOW_ADVANCED
 import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
-import com.simplemobiletools.commons.helpers.IS_FROM_GALLERY
+import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import com.simplemobiletools.commons.helpers.MINUTE_SECONDS
 import com.simplemobiletools.commons.helpers.MyContentProvider
 import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
@@ -109,7 +109,7 @@ import com.simplemobiletools.commons.helpers.SIDELOADING_FALSE
 import com.simplemobiletools.commons.helpers.SIDELOADING_TRUE
 import com.simplemobiletools.commons.helpers.SILENT
 import com.simplemobiletools.commons.helpers.isMarshmallowPlus
-import com.simplemobiletools.commons.helpers.isOnMainThread
+import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import com.simplemobiletools.commons.models.AlarmSound
 import com.simplemobiletools.commons.models.Android30RenameFormat
 import com.simplemobiletools.commons.models.RadioItem

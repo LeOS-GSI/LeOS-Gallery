@@ -32,7 +32,7 @@ import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
-import com.simplemobiletools.commons.helpers.isNougatPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.helpers.DAY_SECONDS

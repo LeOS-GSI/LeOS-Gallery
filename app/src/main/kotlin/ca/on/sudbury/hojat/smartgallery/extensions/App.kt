@@ -1,7 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.app.Application
-import com.simplemobiletools.commons.helpers.isNougatPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import java.util.Locale
 
 fun Application.checkUseEnglish() {

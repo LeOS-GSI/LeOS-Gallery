@@ -39,12 +39,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.isPiePlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isPiePlus
 import com.simplemobiletools.commons.helpers.isQPlus
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.sumByLong
-import com.simplemobiletools.commons.helpers.IS_USING_SHARED_THEME
+import ca.on.sudbury.hojat.smartgallery.helpers.IS_USING_SHARED_THEME
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.PRIMARY_COLOR
