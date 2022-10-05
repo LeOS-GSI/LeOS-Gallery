@@ -142,11 +142,27 @@ const val MD5 = "MD5"
 const val SHORT_ANIMATION_DURATION = 150L
 val DARK_GREY = 0xFF333333.toInt()
 
+const val LOWER_ALPHA = 0.25f
+const val MEDIUM_ALPHA = 0.5f
+const val HIGHER_ALPHA = 0.75f
+
+const val HOUR_MINUTES = 60
+const val DAY_MINUTES = 24 * HOUR_MINUTES
+const val WEEK_MINUTES = DAY_MINUTES * 7
+const val MONTH_MINUTES = DAY_MINUTES * 30
+const val YEAR_MINUTES = DAY_MINUTES * 365
+
+const val MINUTE_SECONDS = 60
+const val HOUR_SECONDS = HOUR_MINUTES * 60
+const val DAY_SECONDS = DAY_MINUTES * 60
+const val WEEK_SECONDS = WEEK_MINUTES * 60
+const val MONTH_SECONDS = MONTH_MINUTES * 60
+const val YEAR_SECONDS = YEAR_MINUTES * 60
+
 /////////////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////////////
-
 
 // slideshow animations
 const val SLIDESHOW_ANIMATION_NONE = 0
