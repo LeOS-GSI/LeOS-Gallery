@@ -8,7 +8,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.ChecksSdkIntAtLeast
 import com.simplemobiletools.commons.R
-import com.simplemobiletools.commons.helpers.MONTH_SECONDS
+import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_SECONDS
 import com.simplemobiletools.commons.overloads.times
 import java.util.HashMap
 import java.util.LinkedHashMap
@@ -277,33 +277,33 @@ internal const val COLOR_PICKER_RECENT_COLORS = "color_picker_recent_colors"
 // licenses
 internal const val LICENSE_KOTLIN = 1
 const val LICENSE_SUBSAMPLING = 2L
-const val LICENSE_GLIDE = 4
-const val LICENSE_CROPPER = 8
-const val LICENSE_FILTERS = 16
-const val LICENSE_RTL = 32
+const val LICENSE_GLIDE = 4L
+const val LICENSE_CROPPER = 8L
+const val LICENSE_FILTERS = 16L
+const val LICENSE_RTL = 32L
 const val LICENSE_JODA = 64
 const val LICENSE_STETHO = 128
 const val LICENSE_OTTO = 256
 const val LICENSE_PHOTOVIEW = 512
-const val LICENSE_PICASSO = 1024
-const val LICENSE_PATTERN = 2048
-const val LICENSE_REPRINT = 4096
-const val LICENSE_GIF_DRAWABLE = 8192
+const val LICENSE_PICASSO = 1024L
+const val LICENSE_PATTERN = 2048L
+const val LICENSE_REPRINT = 4096L
+const val LICENSE_GIF_DRAWABLE = 8192L
 const val LICENSE_AUTOFITTEXTVIEW = 16384
 const val LICENSE_ROBOLECTRIC = 32768
 const val LICENSE_ESPRESSO = 65536
 const val LICENSE_GSON = 131072
 const val LICENSE_LEAK_CANARY = 262144
 const val LICENSE_NUMBER_PICKER = 524288
-const val LICENSE_EXOPLAYER = 1048576
-const val LICENSE_PANORAMA_VIEW = 2097152
-const val LICENSE_SANSELAN = 4194304
-const val LICENSE_GESTURE_VIEWS = 8388608
+const val LICENSE_EXOPLAYER = 1048576L
+const val LICENSE_PANORAMA_VIEW = 2097152L
+const val LICENSE_SANSELAN = 4194304L
+const val LICENSE_GESTURE_VIEWS = 8388608L
 const val LICENSE_INDICATOR_FAST_SCROLL = 16777216
 const val LICENSE_EVENT_BUS = 33554432
 const val LICENSE_AUDIO_RECORD_VIEW = 67108864
 const val LICENSE_SMS_MMS = 134217728
-const val LICENSE_APNG = 268435456
+const val LICENSE_APNG = 268435456L
 const val LICENSE_PDF_VIEWER = 536870912
 
 // global intents

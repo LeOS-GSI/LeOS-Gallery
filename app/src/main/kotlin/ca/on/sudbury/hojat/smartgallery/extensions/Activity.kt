@@ -55,20 +55,20 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.SecurityDialog
-import com.simplemobiletools.commons.helpers.LICENSE_GLIDE
-import com.simplemobiletools.commons.helpers.LICENSE_CROPPER
-import com.simplemobiletools.commons.helpers.LICENSE_RTL
-import com.simplemobiletools.commons.helpers.LICENSE_SUBSAMPLING
-import com.simplemobiletools.commons.helpers.LICENSE_PATTERN
-import com.simplemobiletools.commons.helpers.LICENSE_REPRINT
-import com.simplemobiletools.commons.helpers.LICENSE_GIF_DRAWABLE
-import com.simplemobiletools.commons.helpers.LICENSE_PICASSO
-import com.simplemobiletools.commons.helpers.LICENSE_EXOPLAYER
-import com.simplemobiletools.commons.helpers.LICENSE_PANORAMA_VIEW
-import com.simplemobiletools.commons.helpers.LICENSE_SANSELAN
-import com.simplemobiletools.commons.helpers.LICENSE_FILTERS
-import com.simplemobiletools.commons.helpers.LICENSE_GESTURE_VIEWS
-import com.simplemobiletools.commons.helpers.LICENSE_APNG
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GLIDE
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_CROPPER
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_RTL
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SUBSAMPLING
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PATTERN
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_REPRINT
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GIF_DRAWABLE
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PICASSO
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_EXOPLAYER
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PANORAMA_VIEW
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SANSELAN
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_FILTERS
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GESTURE_VIEWS
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_APNG
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
@@ -90,16 +90,16 @@ import com.simplemobiletools.commons.dialogs.RateStarsDialog
 import com.simplemobiletools.commons.dialogs.UpgradeToProDialog
 import com.simplemobiletools.commons.dialogs.WhatsNewDialog
 import com.simplemobiletools.commons.dialogs.WritePermissionDialog
-import com.simplemobiletools.commons.helpers.CREATE_DOCUMENT_SDK_30
+import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
-import com.simplemobiletools.commons.helpers.MINUTE_SECONDS
+import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS
 import com.simplemobiletools.commons.helpers.MyContentProvider
-import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
-import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
-import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_OTG
-import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_SD
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_OTG
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
@@ -776,9 +776,13 @@ fun SimpleActivity.launchSettings() {
 
 fun SimpleActivity.launchAbout() {
     val licenses =
-        LICENSE_GLIDE or LICENSE_CROPPER or LICENSE_RTL or LICENSE_SUBSAMPLING or LICENSE_PATTERN or LICENSE_REPRINT or LICENSE_GIF_DRAWABLE or
-                LICENSE_PICASSO or LICENSE_EXOPLAYER or LICENSE_PANORAMA_VIEW or LICENSE_SANSELAN or LICENSE_FILTERS or LICENSE_GESTURE_VIEWS or
-                LICENSE_APNG
+        LICENSE_GLIDE or LICENSE_CROPPER or
+                LICENSE_RTL or LICENSE_SUBSAMPLING or
+                LICENSE_PATTERN or LICENSE_REPRINT or
+                LICENSE_GIF_DRAWABLE or LICENSE_PICASSO or
+                LICENSE_EXOPLAYER or LICENSE_PANORAMA_VIEW or
+                LICENSE_SANSELAN or LICENSE_FILTERS or
+                LICENSE_GESTURE_VIEWS or LICENSE_APNG
 
     val faqItems = arrayListOf(
         FAQItem(R.string.faq_3_title, R.string.faq_3_text),

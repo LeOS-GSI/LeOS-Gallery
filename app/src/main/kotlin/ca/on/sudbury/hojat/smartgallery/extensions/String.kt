@@ -15,13 +15,13 @@ import android.text.style.ForegroundColorSpan
 import android.widget.TextView
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import com.simplemobiletools.commons.helpers.audioExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
-import com.simplemobiletools.commons.helpers.getDateFormats
+import ca.on.sudbury.hojat.smartgallery.helpers.getDateFormats
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.normalizeRegex
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
-import com.simplemobiletools.commons.helpers.rawExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import org.joda.time.DateTime
 import org.joda.time.Years

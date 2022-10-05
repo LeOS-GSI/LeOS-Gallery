@@ -5,7 +5,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
-import com.simplemobiletools.commons.helpers.SHORT_ANIMATION_DURATION
+import ca.on.sudbury.hojat.smartgallery.helpers.SHORT_ANIMATION_DURATION
 
 fun View.beGone() {
     visibility = View.GONE

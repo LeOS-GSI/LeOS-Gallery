@@ -1,6 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
-import com.simplemobiletools.commons.helpers.MD5
+import ca.on.sudbury.hojat.smartgallery.helpers.MD5
 import java.io.InputStream
 import java.security.MessageDigest
 
