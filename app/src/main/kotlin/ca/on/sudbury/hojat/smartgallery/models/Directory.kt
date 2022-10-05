@@ -14,7 +14,7 @@ import com.simplemobiletools.commons.helpers.SORT_BY_PATH
 import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
 import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
-import com.simplemobiletools.commons.helpers.FAVORITES
+import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 
 @Entity(tableName = "directories", indices = [Index(value = ["path"], unique = true)])

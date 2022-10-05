@@ -24,14 +24,14 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
 import com.simplemobiletools.commons.dialogs.FilePickerDialog
-import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
+import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.helpers.WAS_PROTECTION_HANDLED
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_TAKEN
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.FAVORITES
+import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
