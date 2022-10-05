@@ -59,8 +59,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import com.simplemobiletools.commons.helpers.REAL_FILE_PATH
-import com.simplemobiletools.commons.helpers.NOMEDIA
+import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
+import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread

@@ -79,7 +79,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
-import com.simplemobiletools.commons.helpers.NOMEDIA
+import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
@@ -171,8 +171,8 @@ import com.simplemobiletools.commons.helpers.THURSDAY_BIT
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_12
 import com.simplemobiletools.commons.helpers.TIME_FORMAT_24
 import com.simplemobiletools.commons.helpers.TUESDAY_BIT
-import com.simplemobiletools.commons.helpers.WEDNESDAY_BIT
-import com.simplemobiletools.commons.helpers.WEEK_SECONDS
+import ca.on.sudbury.hojat.smartgallery.helpers.WEDNESDAY_BIT
+import ca.on.sudbury.hojat.smartgallery.helpers.WEEK_SECONDS
 import com.simplemobiletools.commons.helpers.YEAR_SECONDS
 import com.simplemobiletools.commons.helpers.YOUR_ALARM_SOUNDS_MIN_ID
 import com.simplemobiletools.commons.helpers.appIconColorStrings

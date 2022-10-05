@@ -14,12 +14,12 @@ import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
 import android.widget.TextView
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.helpers.NOMEDIA
+import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
 import com.simplemobiletools.commons.helpers.getDateFormats
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.normalizeRegex
+import ca.on.sudbury.hojat.smartgallery.helpers.normalizeRegex
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions

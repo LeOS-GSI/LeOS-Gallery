@@ -2,7 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
 import com.simplemobiletools.commons.helpers.MD5
-import com.simplemobiletools.commons.helpers.NOMEDIA
+import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions

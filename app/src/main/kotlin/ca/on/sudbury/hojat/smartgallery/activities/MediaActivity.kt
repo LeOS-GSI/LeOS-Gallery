@@ -31,7 +31,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import com.simplemobiletools.commons.helpers.REQUEST_EDIT_IMAGE
+import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.views.MyGridLayoutManager

@@ -276,7 +276,7 @@ internal const val COLOR_PICKER_RECENT_COLORS = "color_picker_recent_colors"
 
 // licenses
 internal const val LICENSE_KOTLIN = 1
-const val LICENSE_SUBSAMPLING = 2
+const val LICENSE_SUBSAMPLING = 2L
 const val LICENSE_GLIDE = 4
 const val LICENSE_CROPPER = 8
 const val LICENSE_FILTERS = 16

@@ -70,7 +70,7 @@ import com.simplemobiletools.commons.helpers.LICENSE_FILTERS
 import com.simplemobiletools.commons.helpers.LICENSE_GESTURE_VIEWS
 import com.simplemobiletools.commons.helpers.LICENSE_APNG
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.NOMEDIA
+import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
@@ -102,9 +102,9 @@ import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_OTG
 import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
-import com.simplemobiletools.commons.helpers.REAL_FILE_PATH
-import com.simplemobiletools.commons.helpers.REQUEST_EDIT_IMAGE
-import com.simplemobiletools.commons.helpers.REQUEST_SET_AS
+import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
+import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
+import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_SET_AS
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
 import ca.on.sudbury.hojat.smartgallery.helpers.SILENT

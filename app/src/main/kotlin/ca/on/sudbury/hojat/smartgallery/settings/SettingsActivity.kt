@@ -53,7 +53,7 @@ import com.simplemobiletools.commons.helpers.APP_ICON_COLOR
 import com.simplemobiletools.commons.helpers.USE_ENGLISH
 import ca.on.sudbury.hojat.smartgallery.helpers.WAS_USE_ENGLISH_TOGGLED
 import ca.on.sudbury.hojat.smartgallery.helpers.WIDGET_BG_COLOR
-import com.simplemobiletools.commons.helpers.WIDGET_TEXT_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.WIDGET_TEXT_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT
 import com.simplemobiletools.commons.helpers.USE_24_HOUR_FORMAT
 import com.simplemobiletools.commons.helpers.SCROLL_HORIZONTALLY
