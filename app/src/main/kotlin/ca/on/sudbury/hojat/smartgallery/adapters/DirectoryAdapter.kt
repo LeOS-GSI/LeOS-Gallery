@@ -56,10 +56,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap
 import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.SORT_BY_CUSTOM
-import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import com.simplemobiletools.commons.interfaces.ItemMoveCallback
 import com.simplemobiletools.commons.interfaces.ItemTouchHelperContract
 import com.simplemobiletools.commons.interfaces.StartReorderDragListener

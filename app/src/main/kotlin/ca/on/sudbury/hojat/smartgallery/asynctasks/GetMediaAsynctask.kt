@@ -3,8 +3,8 @@ package ca.on.sudbury.hojat.smartgallery.asynctasks
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.AsyncTask
-import com.simplemobiletools.commons.helpers.SORT_BY_DATE_TAKEN
-import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.extensions.config

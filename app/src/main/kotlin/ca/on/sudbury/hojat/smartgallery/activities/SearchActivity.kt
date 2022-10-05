@@ -23,8 +23,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import com.simplemobiletools.commons.helpers.NavigationIcon
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter

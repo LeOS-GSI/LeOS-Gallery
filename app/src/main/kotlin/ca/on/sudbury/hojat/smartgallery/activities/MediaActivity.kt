@@ -24,10 +24,10 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
-import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE

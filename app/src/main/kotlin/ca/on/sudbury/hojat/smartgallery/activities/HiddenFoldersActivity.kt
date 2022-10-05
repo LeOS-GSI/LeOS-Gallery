@@ -6,7 +6,7 @@ import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.helpers.NavigationIcon
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.adapters.ManageHiddenFoldersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity

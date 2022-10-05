@@ -42,12 +42,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
-import com.simplemobiletools.commons.helpers.sumByLong
+import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import com.simplemobiletools.commons.models.FileDirItem
 import com.simplemobiletools.commons.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity

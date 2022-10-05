@@ -16,13 +16,13 @@ import android.widget.TextView
 import com.bumptech.glide.signature.ObjectKey
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
-import com.simplemobiletools.commons.helpers.extensionsSupportingEXIF
+import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
 import com.simplemobiletools.commons.helpers.getDateFormats
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.normalizeRegex
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions
-import com.simplemobiletools.commons.helpers.videoExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import org.joda.time.DateTime
 import org.joda.time.Years
 import org.joda.time.format.DateTimeFormat

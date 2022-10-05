@@ -18,7 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import com.simplemobiletools.commons.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogDirectoryPickerBinding

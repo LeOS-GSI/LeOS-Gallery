@@ -18,7 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileSignature
 import ca.on.sudbury.hojat.smartgallery.extensions.setText
 import ca.on.sudbury.hojat.smartgallery.extensions.setVisibleIf
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao

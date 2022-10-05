@@ -58,7 +58,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import com.simplemobiletools.commons.helpers.REAL_FILE_PATH

@@ -59,7 +59,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.PortraitPhotosAdapter

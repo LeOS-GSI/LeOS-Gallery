@@ -17,7 +17,7 @@ import android.provider.MediaStore.Images
 import android.provider.MediaStore.Video
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.extensions.addPathToDB
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDirectoryPath
 

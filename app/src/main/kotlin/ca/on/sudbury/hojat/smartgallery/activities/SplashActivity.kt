@@ -2,7 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.content.Intent
 import com.simplemobiletools.commons.activities.BaseSplashActivity
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoriteFromPath

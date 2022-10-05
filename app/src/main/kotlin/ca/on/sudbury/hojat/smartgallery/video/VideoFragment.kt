@@ -54,7 +54,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.activities.PanoramaVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerVideoItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config

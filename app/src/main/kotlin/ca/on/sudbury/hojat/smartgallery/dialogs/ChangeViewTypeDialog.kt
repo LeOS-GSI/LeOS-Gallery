@@ -6,8 +6,8 @@ import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_GRID
-import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
 

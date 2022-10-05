@@ -21,7 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityWidgetConfigBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog

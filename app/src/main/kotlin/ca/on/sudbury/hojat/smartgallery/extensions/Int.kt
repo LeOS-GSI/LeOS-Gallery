@@ -7,8 +7,8 @@ import android.media.ExifInterface
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import android.text.format.Time
-import com.simplemobiletools.commons.helpers.DARK_GREY
-import com.simplemobiletools.commons.helpers.SORT_DESCENDING
+import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import java.text.DecimalFormat
 import java.util.*
 

@@ -9,11 +9,11 @@ import androidx.room.Ignore
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
-import com.simplemobiletools.commons.helpers.SORT_BY_NAME
-import com.simplemobiletools.commons.helpers.SORT_BY_PATH
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
-import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
-import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 

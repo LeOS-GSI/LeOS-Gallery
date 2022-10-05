@@ -43,9 +43,9 @@ import com.simplemobiletools.commons.dialogs.PropertiesDialog
 import com.simplemobiletools.commons.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import com.simplemobiletools.commons.helpers.NOMEDIA
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
-import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import com.simplemobiletools.commons.helpers.REAL_FILE_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus

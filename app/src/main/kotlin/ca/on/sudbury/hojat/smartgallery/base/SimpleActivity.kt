@@ -11,7 +11,7 @@ import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathRecursively
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isPiePlus
 import ca.on.sudbury.hojat.smartgallery.extensions.addPathToDB
 import ca.on.sudbury.hojat.smartgallery.extensions.config

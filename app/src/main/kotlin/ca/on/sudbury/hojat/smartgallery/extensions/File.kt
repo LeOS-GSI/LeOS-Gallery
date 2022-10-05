@@ -6,7 +6,7 @@ import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions
-import com.simplemobiletools.commons.helpers.videoExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import com.simplemobiletools.commons.models.FileDirItem
 import java.io.File
 import java.util.HashMap

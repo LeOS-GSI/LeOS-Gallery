@@ -71,7 +71,7 @@ import com.simplemobiletools.commons.helpers.LICENSE_GESTURE_VIEWS
 import com.simplemobiletools.commons.helpers.LICENSE_APNG
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.NOMEDIA
-import com.simplemobiletools.commons.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import com.simplemobiletools.commons.models.FAQItem
@@ -91,7 +91,7 @@ import com.simplemobiletools.commons.dialogs.UpgradeToProDialog
 import com.simplemobiletools.commons.dialogs.WhatsNewDialog
 import com.simplemobiletools.commons.dialogs.WritePermissionDialog
 import com.simplemobiletools.commons.helpers.CREATE_DOCUMENT_SDK_30
-import com.simplemobiletools.commons.helpers.EXTRA_SHOW_ADVANCED
+import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import com.simplemobiletools.commons.helpers.MINUTE_SECONDS
@@ -105,9 +105,9 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.helpers.REAL_FILE_PATH
 import com.simplemobiletools.commons.helpers.REQUEST_EDIT_IMAGE
 import com.simplemobiletools.commons.helpers.REQUEST_SET_AS
-import com.simplemobiletools.commons.helpers.SIDELOADING_FALSE
-import com.simplemobiletools.commons.helpers.SIDELOADING_TRUE
-import com.simplemobiletools.commons.helpers.SILENT
+import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
+import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
+import ca.on.sudbury.hojat.smartgallery.helpers.SILENT
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import com.simplemobiletools.commons.models.AlarmSound
