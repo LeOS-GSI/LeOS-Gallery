@@ -14,11 +14,6 @@ import android.text.TextUtils
 import android.text.style.ForegroundColorSpan
 import android.widget.TextView
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.extensions.containsNoMedia
-import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
-import com.simplemobiletools.commons.extensions.isImageFast
-import com.simplemobiletools.commons.extensions.isRawFast
-import com.simplemobiletools.commons.extensions.isVideoFast
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.extensionsSupportingEXIF

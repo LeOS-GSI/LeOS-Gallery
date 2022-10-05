@@ -44,12 +44,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
-import com.simplemobiletools.commons.extensions.doesThisOrParentHaveNoMedia
+import ca.on.sudbury.hojat.smartgallery.extensions.doesThisOrParentHaveNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
-import com.simplemobiletools.commons.extensions.containsNoMedia
+import ca.on.sudbury.hojat.smartgallery.extensions.containsNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap

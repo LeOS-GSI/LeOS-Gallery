@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
-import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import com.simplemobiletools.commons.helpers.MD5
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions

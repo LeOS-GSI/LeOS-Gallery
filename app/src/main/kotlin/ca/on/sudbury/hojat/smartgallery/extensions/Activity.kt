@@ -95,9 +95,9 @@ import com.simplemobiletools.commons.extensions.getIntValue
 import com.simplemobiletools.commons.extensions.getLongValue
 import com.simplemobiletools.commons.extensions.getMimeType
 import com.simplemobiletools.commons.extensions.hideKeyboard
-import com.simplemobiletools.commons.extensions.isMediaFile
+import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import com.simplemobiletools.commons.extensions.isRecycleBinPath
-import com.simplemobiletools.commons.extensions.toFileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import com.simplemobiletools.commons.helpers.CREATE_DOCUMENT_SDK_30
 import com.simplemobiletools.commons.helpers.EXTRA_SHOW_ADVANCED
 import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR

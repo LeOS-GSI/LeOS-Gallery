@@ -47,7 +47,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import com.simplemobiletools.commons.extensions.launchViewIntent
+import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
