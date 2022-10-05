@@ -82,7 +82,7 @@ import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.SORT_BY_NAME
 import com.simplemobiletools.commons.helpers.SORT_BY_PATH
-import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_TAKEN
 import com.simplemobiletools.commons.helpers.sumByLong
@@ -130,11 +130,6 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.github.ajalt.reprint.core.Reprint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
-import ca.on.sudbury.hojat.smartgallery.extensions.getIntValueOrNull
-import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
-import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
-import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import com.simplemobiletools.commons.helpers.BaseConfig
 import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.DAY_SECONDS
@@ -145,7 +140,7 @@ import com.simplemobiletools.commons.helpers.FONT_SIZE_MEDIUM
 import com.simplemobiletools.commons.helpers.FONT_SIZE_SMALL
 import com.simplemobiletools.commons.helpers.FRIDAY_BIT
 import com.simplemobiletools.commons.helpers.HOUR_SECONDS
-import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import com.simplemobiletools.commons.helpers.MINUTE_SECONDS
 import com.simplemobiletools.commons.helpers.MONDAY_BIT
 import com.simplemobiletools.commons.helpers.MONTH_SECONDS
@@ -181,10 +176,10 @@ import com.simplemobiletools.commons.helpers.WEEK_SECONDS
 import com.simplemobiletools.commons.helpers.YEAR_SECONDS
 import com.simplemobiletools.commons.helpers.YOUR_ALARM_SOUNDS_MIN_ID
 import com.simplemobiletools.commons.helpers.appIconColorStrings
-import com.simplemobiletools.commons.helpers.isMarshmallowPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
-import com.simplemobiletools.commons.helpers.isQPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.proPackages

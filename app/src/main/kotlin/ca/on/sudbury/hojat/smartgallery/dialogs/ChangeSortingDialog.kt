@@ -10,7 +10,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import com.simplemobiletools.commons.helpers.SORT_BY_PATH
-import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_TAKEN
 import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM

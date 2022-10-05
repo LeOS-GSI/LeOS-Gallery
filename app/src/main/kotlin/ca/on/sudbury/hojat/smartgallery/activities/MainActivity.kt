@@ -36,7 +36,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.helpers.DAY_SECONDS
-import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import com.simplemobiletools.commons.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_MEDIA_LOCATION
 import com.simplemobiletools.commons.models.FileDirItem

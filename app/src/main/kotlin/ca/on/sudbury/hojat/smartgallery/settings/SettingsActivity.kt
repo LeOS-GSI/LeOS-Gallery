@@ -40,7 +40,7 @@ import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isPiePlus
-import com.simplemobiletools.commons.helpers.isQPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.sumByLong

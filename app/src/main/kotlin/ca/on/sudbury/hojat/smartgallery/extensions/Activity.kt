@@ -92,7 +92,7 @@ import com.simplemobiletools.commons.dialogs.WhatsNewDialog
 import com.simplemobiletools.commons.dialogs.WritePermissionDialog
 import com.simplemobiletools.commons.helpers.CREATE_DOCUMENT_SDK_30
 import com.simplemobiletools.commons.helpers.EXTRA_SHOW_ADVANCED
-import com.simplemobiletools.commons.helpers.INVALID_NAVIGATION_BAR_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import com.simplemobiletools.commons.helpers.MINUTE_SECONDS
 import com.simplemobiletools.commons.helpers.MyContentProvider
@@ -108,7 +108,7 @@ import com.simplemobiletools.commons.helpers.REQUEST_SET_AS
 import com.simplemobiletools.commons.helpers.SIDELOADING_FALSE
 import com.simplemobiletools.commons.helpers.SIDELOADING_TRUE
 import com.simplemobiletools.commons.helpers.SILENT
-import com.simplemobiletools.commons.helpers.isMarshmallowPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import com.simplemobiletools.commons.models.AlarmSound
 import com.simplemobiletools.commons.models.Android30RenameFormat

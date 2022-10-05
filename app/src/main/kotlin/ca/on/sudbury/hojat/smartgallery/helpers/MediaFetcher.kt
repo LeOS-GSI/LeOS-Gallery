@@ -41,13 +41,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import com.simplemobiletools.commons.helpers.SORT_BY_PATH
 import com.simplemobiletools.commons.helpers.SORT_USE_NUMERIC_VALUE
-import com.simplemobiletools.commons.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
 import com.simplemobiletools.commons.helpers.SORT_DESCENDING
 import com.simplemobiletools.commons.helpers.AlphanumericComparator
 import com.simplemobiletools.commons.helpers.videoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
 import com.simplemobiletools.commons.helpers.SORT_BY_NAME
