@@ -1,7 +1,17 @@
 package ca.on.sudbury.hojat.smartgallery.helpers
 
+import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.os.Looper
+import android.util.Log
+import androidx.annotation.ChecksSdkIntAtLeast
+import com.simplemobiletools.commons.R
 import com.simplemobiletools.commons.helpers.MONTH_SECONDS
+import com.simplemobiletools.commons.overloads.times
+import java.util.HashMap
+import java.util.LinkedHashMap
 
 // shared preferences
 const val DIRECTORY_SORT_ORDER = "directory_sort_order"
@@ -263,6 +273,344 @@ const val SHOW_CALL_CONFIRMATION = "show_call_confirmation"
 internal const val COLOR_PICKER_RECENT_COLORS = "color_picker_recent_colors"
 
 /////////////////////////////////////////////////////////////////////////////////////
+
+// licenses
+internal const val LICENSE_KOTLIN = 1
+const val LICENSE_SUBSAMPLING = 2
+const val LICENSE_GLIDE = 4
+const val LICENSE_CROPPER = 8
+const val LICENSE_FILTERS = 16
+const val LICENSE_RTL = 32
+const val LICENSE_JODA = 64
+const val LICENSE_STETHO = 128
+const val LICENSE_OTTO = 256
+const val LICENSE_PHOTOVIEW = 512
+const val LICENSE_PICASSO = 1024
+const val LICENSE_PATTERN = 2048
+const val LICENSE_REPRINT = 4096
+const val LICENSE_GIF_DRAWABLE = 8192
+const val LICENSE_AUTOFITTEXTVIEW = 16384
+const val LICENSE_ROBOLECTRIC = 32768
+const val LICENSE_ESPRESSO = 65536
+const val LICENSE_GSON = 131072
+const val LICENSE_LEAK_CANARY = 262144
+const val LICENSE_NUMBER_PICKER = 524288
+const val LICENSE_EXOPLAYER = 1048576
+const val LICENSE_PANORAMA_VIEW = 2097152
+const val LICENSE_SANSELAN = 4194304
+const val LICENSE_GESTURE_VIEWS = 8388608
+const val LICENSE_INDICATOR_FAST_SCROLL = 16777216
+const val LICENSE_EVENT_BUS = 33554432
+const val LICENSE_AUDIO_RECORD_VIEW = 67108864
+const val LICENSE_SMS_MMS = 134217728
+const val LICENSE_APNG = 268435456
+const val LICENSE_PDF_VIEWER = 536870912
+
+// global intents
+const val OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB = 1000
+const val OPEN_DOCUMENT_TREE_OTG = 1001
+const val OPEN_DOCUMENT_TREE_SD = 1002
+const val OPEN_DOCUMENT_TREE_FOR_SDK_30 = 1003
+const val REQUEST_SET_AS = 1004
+const val REQUEST_EDIT_IMAGE = 1005
+const val SELECT_EXPORT_SETTINGS_FILE_INTENT = 1006
+const val REQUEST_CODE_SET_DEFAULT_DIALER = 1007
+const val CREATE_DOCUMENT_SDK_30 = 1008
+
+// sorting
+const val SORT_ORDER = "sort_order"
+const val SORT_FOLDER_PREFIX =
+    "sort_folder_"       // storing folder specific values at using "Use for this folder only"
+const val SORT_BY_NAME = 1
+const val SORT_BY_DATE_MODIFIED = 2
+const val SORT_BY_SIZE = 4
+const val SORT_BY_DATE_TAKEN = 8
+const val SORT_BY_EXTENSION = 16
+const val SORT_BY_PATH = 32
+const val SORT_BY_NUMBER = 64
+const val SORT_BY_FIRST_NAME = 128
+const val SORT_BY_MIDDLE_NAME = 256
+const val SORT_BY_SURNAME = 512
+const val SORT_DESCENDING = 1024
+const val SORT_BY_TITLE = 2048
+const val SORT_BY_ARTIST = 4096
+const val SORT_BY_DURATION = 8192
+const val SORT_BY_RANDOM = 16384
+const val SORT_USE_NUMERIC_VALUE = 32768
+const val SORT_BY_FULL_NAME = 65536
+const val SORT_BY_CUSTOM = 131072
+const val SORT_BY_DATE_CREATED = 262144
+
+// security
+const val WAS_PROTECTION_HANDLED = "was_protection_handled"
+const val PROTECTION_NONE = -1
+const val PROTECTION_PATTERN = 0
+const val PROTECTION_PIN = 1
+const val PROTECTION_FINGERPRINT = 2
+
+// renaming
+const val RENAME_SIMPLE = 0
+const val RENAME_PATTERN = 1
+
+const val SHOW_ALL_TABS = -1
+const val SHOW_PATTERN = 0
+const val SHOW_PIN = 1
+const val SHOW_FINGERPRINT = 2
+
+// permissions
+const val PERMISSION_READ_STORAGE = 1
+const val PERMISSION_WRITE_STORAGE = 2
+const val PERMISSION_CAMERA = 3
+const val PERMISSION_RECORD_AUDIO = 4
+const val PERMISSION_READ_CONTACTS = 5
+const val PERMISSION_WRITE_CONTACTS = 6
+const val PERMISSION_READ_CALENDAR = 7
+const val PERMISSION_WRITE_CALENDAR = 8
+const val PERMISSION_CALL_PHONE = 9
+const val PERMISSION_READ_CALL_LOG = 10
+const val PERMISSION_WRITE_CALL_LOG = 11
+const val PERMISSION_GET_ACCOUNTS = 12
+const val PERMISSION_READ_SMS = 13
+const val PERMISSION_SEND_SMS = 14
+const val PERMISSION_READ_PHONE_STATE = 15
+const val PERMISSION_MEDIA_LOCATION = 16
+
+// conflict resolving
+const val CONFLICT_SKIP = 1
+const val CONFLICT_OVERWRITE = 2
+const val CONFLICT_MERGE = 3
+const val CONFLICT_KEEP_BOTH = 4
+
+// font sizes
+const val FONT_SIZE_SMALL = 0
+const val FONT_SIZE_MEDIUM = 1
+const val FONT_SIZE_LARGE = 2
+const val FONT_SIZE_EXTRA_LARGE = 3
+
+const val MONDAY_BIT = 1
+const val TUESDAY_BIT = 2
+const val WEDNESDAY_BIT = 4
+const val THURSDAY_BIT = 8
+const val FRIDAY_BIT = 16
+const val SATURDAY_BIT = 32
+const val SUNDAY_BIT = 64
+const val EVERY_DAY_BIT =
+    MONDAY_BIT or TUESDAY_BIT or WEDNESDAY_BIT or THURSDAY_BIT or FRIDAY_BIT or SATURDAY_BIT or SUNDAY_BIT
+const val WEEK_DAYS_BIT = MONDAY_BIT or TUESDAY_BIT or WEDNESDAY_BIT or THURSDAY_BIT or FRIDAY_BIT
+const val WEEKENDS_BIT = SATURDAY_BIT or SUNDAY_BIT
+
+const val SIDELOADING_UNCHECKED = 0
+const val SIDELOADING_TRUE = 1
+const val SIDELOADING_FALSE = 2
+
+// default tabs
+const val TAB_LAST_USED = 0
+const val TAB_CONTACTS = 1
+const val TAB_FAVORITES = 2
+const val TAB_CALL_HISTORY = 4
+const val TAB_GROUPS = 8
+const val TAB_FILES = 16
+const val TAB_RECENT_FILES = 32
+const val TAB_STORAGE_ANALYSIS = 64
+
+val extensionsSupportingEXIF: Array<String>
+    get() = arrayOf(
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp",
+        ".dng"
+    )
+
+const val DATE_FORMAT_ONE = "dd.MM.yyyy"
+const val DATE_FORMAT_TWO = "dd/MM/yyyy"
+const val DATE_FORMAT_THREE = "MM/dd/yyyy"
+const val DATE_FORMAT_FOUR = "yyyy-MM-dd"
+const val DATE_FORMAT_FIVE = "d MMMM yyyy"
+const val DATE_FORMAT_SIX = "MMMM d yyyy"
+const val DATE_FORMAT_SEVEN = "MM-dd-yyyy"
+const val DATE_FORMAT_EIGHT = "dd-MM-yyyy"
+const val DATE_FORMAT_NINE = "yyyyMMdd"
+const val DATE_FORMAT_TEN = "yyyy.MM.dd"
+const val DATE_FORMAT_ELEVEN = "yy-MM-dd"
+const val DATE_FORMAT_TWELVE = "yyMMdd"
+const val DATE_FORMAT_THIRTEEN = "yy.MM.dd"
+const val DATE_FORMAT_FOURTEEN = "yy/MM/dd"
+
+const val TIME_FORMAT_12 = "hh:mm a"
+const val TIME_FORMAT_24 = "HH:mm"
+
+val appIconColorStrings = arrayListOf(
+    ".Red",
+    ".Pink",
+    ".Purple",
+    ".Deep_purple",
+    ".Indigo",
+    ".Blue",
+    ".Light_blue",
+    ".Cyan",
+    ".Teal",
+    ".Green",
+    ".Light_green",
+    ".Lime",
+    ".Yellow",
+    ".Amber",
+    ".Orange",
+    ".Deep_orange",
+    ".Brown",
+    ".Blue_grey",
+    ".Grey_black"
+)
+
+// most app icon colors from md_app_icon_colors with reduced alpha
+// used at showing contact placeholders without image
+val letterBackgroundColors = arrayListOf(
+    0xCCD32F2F,
+    0xCCC2185B,
+    0xCC1976D2,
+    0xCC0288D1,
+    0xCC0097A7,
+    0xCC00796B,
+    0xCC388E3C,
+    0xCC689F38,
+    0xCCF57C00,
+    0xCCE64A19
+)
+
+// view types
+const val VIEW_TYPE_GRID = 1
+const val VIEW_TYPE_LIST = 2
+
+fun isOnMainThread() = Looper.myLooper() == Looper.getMainLooper()
+
+fun ensureBackgroundThread(callback: () -> Unit) {
+    if (isOnMainThread()) {
+        Thread {
+            callback()
+        }.start()
+    } else {
+        callback()
+    }
+}
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.M)
+fun isMarshmallowPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N)
+fun isNougatPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N_MR1)
+fun isNougatMR1Plus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
+fun isOreoPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O_MR1)
+fun isOreoMr1Plus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.P)
+fun isPiePlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
+fun isQPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
+fun isRPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+fun isSPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
+fun getDateFormats() = arrayListOf(
+    "--MM-dd",
+    "yyyy-MM-dd",
+    "yyyyMMdd",
+    "yyyy.MM.dd",
+    "yy-MM-dd",
+    "yyMMdd",
+    "yy.MM.dd",
+    "yy/MM/dd",
+    "MM-dd",
+    "MMdd",
+    "MM/dd",
+    "MM.dd"
+)
+
+fun getDateFormatsWithYear() = arrayListOf(
+    DATE_FORMAT_FOUR,
+    DATE_FORMAT_NINE,
+    DATE_FORMAT_TEN,
+    DATE_FORMAT_ELEVEN,
+    DATE_FORMAT_TWELVE,
+    DATE_FORMAT_THIRTEEN,
+    DATE_FORMAT_FOURTEEN,
+)
+
+val normalizeRegex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+
+fun getConflictResolution(resolutions: LinkedHashMap<String, Int>, path: String): Int {
+    return if (resolutions.size == 1 && resolutions.containsKey("")) {
+        resolutions[""]!!
+    } else if (resolutions.containsKey(path)) {
+        resolutions[path]!!
+    } else {
+        CONFLICT_SKIP
+    }
+}
+
+val proPackages = arrayListOf("draw", "gallery", "filemanager", "contacts", "notes", "calendar")
+
+fun mydebug(message: String) = Log.e("DEBUG", message)
+
+fun getQuestionMarks(size: Int) = ("?," * size).trimEnd(',')
+
+fun getFilePlaceholderDrawables(context: Context): HashMap<String, Drawable> {
+    val fileDrawables = HashMap<String, Drawable>()
+    hashMapOf<String, Int>().apply {
+        put("aep", R.drawable.ic_file_aep)
+        put("ai", R.drawable.ic_file_ai)
+        put("avi", R.drawable.ic_file_avi)
+        put("css", R.drawable.ic_file_css)
+        put("csv", R.drawable.ic_file_csv)
+        put("dbf", R.drawable.ic_file_dbf)
+        put("doc", R.drawable.ic_file_doc)
+        put("docx", R.drawable.ic_file_doc)
+        put("dwg", R.drawable.ic_file_dwg)
+        put("exe", R.drawable.ic_file_exe)
+        put("fla", R.drawable.ic_file_fla)
+        put("flv", R.drawable.ic_file_flv)
+        put("htm", R.drawable.ic_file_html)
+        put("html", R.drawable.ic_file_html)
+        put("ics", R.drawable.ic_file_ics)
+        put("indd", R.drawable.ic_file_indd)
+        put("iso", R.drawable.ic_file_iso)
+        put("jpg", R.drawable.ic_file_jpg)
+        put("jpeg", R.drawable.ic_file_jpg)
+        put("js", R.drawable.ic_file_js)
+        put("json", R.drawable.ic_file_json)
+        put("m4a", R.drawable.ic_file_m4a)
+        put("mp3", R.drawable.ic_file_mp3)
+        put("mp4", R.drawable.ic_file_mp4)
+        put("ogg", R.drawable.ic_file_ogg)
+        put("pdf", R.drawable.ic_file_pdf)
+        put("plproj", R.drawable.ic_file_plproj)
+        put("prproj", R.drawable.ic_file_prproj)
+        put("psd", R.drawable.ic_file_psd)
+        put("rtf", R.drawable.ic_file_rtf)
+        put("sesx", R.drawable.ic_file_sesx)
+        put("sql", R.drawable.ic_file_sql)
+        put("svg", R.drawable.ic_file_svg)
+        put("txt", R.drawable.ic_file_txt)
+        put("vcf", R.drawable.ic_file_vcf)
+        put("wav", R.drawable.ic_file_wav)
+        put("wmv", R.drawable.ic_file_wmv)
+        put("xls", R.drawable.ic_file_xls)
+        put("xml", R.drawable.ic_file_xml)
+        put("zip", R.drawable.ic_file_zip)
+    }.forEach { (key, value) ->
+        fileDrawables[key] = context.resources.getDrawable(value)
+    }
+    return fileDrawables
+}
 
 
 /////////////////////////////////////////////////////////////////////////////////////
