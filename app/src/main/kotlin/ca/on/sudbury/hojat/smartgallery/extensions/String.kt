@@ -18,9 +18,9 @@ import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.audioExtensions
 import com.simplemobiletools.commons.helpers.extensionsSupportingEXIF
 import com.simplemobiletools.commons.helpers.getDateFormats
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.normalizeRegex
-import com.simplemobiletools.commons.helpers.photoExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions
 import com.simplemobiletools.commons.helpers.videoExtensions
 import org.joda.time.DateTime

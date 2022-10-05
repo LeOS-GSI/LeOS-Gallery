@@ -69,7 +69,7 @@ import com.simplemobiletools.commons.helpers.LICENSE_SANSELAN
 import com.simplemobiletools.commons.helpers.LICENSE_FILTERS
 import com.simplemobiletools.commons.helpers.LICENSE_GESTURE_VIEWS
 import com.simplemobiletools.commons.helpers.LICENSE_APNG
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.NOMEDIA
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isNougatPlus
@@ -100,8 +100,8 @@ import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA
 import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
 import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_OTG
 import com.simplemobiletools.commons.helpers.OPEN_DOCUMENT_TREE_SD
-import com.simplemobiletools.commons.helpers.PERMISSION_CALL_PHONE
-import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
+import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
+import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.helpers.REAL_FILE_PATH
 import com.simplemobiletools.commons.helpers.REQUEST_EDIT_IMAGE
 import com.simplemobiletools.commons.helpers.REQUEST_SET_AS

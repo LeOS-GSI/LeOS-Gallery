@@ -43,7 +43,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import com.simplemobiletools.commons.helpers.VIEW_TYPE_LIST
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES

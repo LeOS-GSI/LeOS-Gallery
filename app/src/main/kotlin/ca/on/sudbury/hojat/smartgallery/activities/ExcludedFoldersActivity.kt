@@ -8,7 +8,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import com.simplemobiletools.commons.helpers.NavigationIcon
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.adapters.ManageFoldersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity

@@ -48,7 +48,7 @@ import com.simplemobiletools.commons.helpers.isNougatPlus
 import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
 import com.simplemobiletools.commons.helpers.IS_FROM_GALLERY
 import com.simplemobiletools.commons.helpers.REAL_FILE_PATH
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import com.simplemobiletools.commons.helpers.REQUEST_EDIT_IMAGE
 import com.simplemobiletools.commons.helpers.REQUEST_SET_AS

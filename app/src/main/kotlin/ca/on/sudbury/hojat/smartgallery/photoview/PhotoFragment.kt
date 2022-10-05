@@ -60,7 +60,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.PortraitPhotosAdapter
 import ca.on.sudbury.hojat.smartgallery.base.PhotoVideoActivity

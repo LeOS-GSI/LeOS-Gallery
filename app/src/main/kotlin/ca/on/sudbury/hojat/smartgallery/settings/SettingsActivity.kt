@@ -37,8 +37,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
-import com.simplemobiletools.commons.helpers.PROTECTION_FINGERPRINT
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.isPiePlus
 import com.simplemobiletools.commons.helpers.isQPlus
 import com.simplemobiletools.commons.helpers.NavigationIcon
@@ -47,7 +47,7 @@ import com.simplemobiletools.commons.helpers.sumByLong
 import com.simplemobiletools.commons.helpers.IS_USING_SHARED_THEME
 import com.simplemobiletools.commons.helpers.TEXT_COLOR
 import com.simplemobiletools.commons.helpers.BACKGROUND_COLOR
-import com.simplemobiletools.commons.helpers.PRIMARY_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.PRIMARY_COLOR
 import com.simplemobiletools.commons.helpers.ACCENT_COLOR
 import com.simplemobiletools.commons.helpers.APP_ICON_COLOR
 import com.simplemobiletools.commons.helpers.USE_ENGLISH
@@ -63,7 +63,7 @@ import com.simplemobiletools.commons.helpers.SKIP_DELETE_CONFIRMATION
 import com.simplemobiletools.commons.helpers.SORT_ORDER
 import com.simplemobiletools.commons.helpers.LAST_CONFLICT_RESOLUTION
 import com.simplemobiletools.commons.helpers.LAST_CONFLICT_APPLY_TO_ALL
-import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
+import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.ExcludedFoldersActivity
 import ca.on.sudbury.hojat.smartgallery.activities.HiddenFoldersActivity

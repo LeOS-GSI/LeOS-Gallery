@@ -25,7 +25,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isInSubFolderInDownloadDir
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import java.io.File
 
 // TODO: this dialog should be replaced by DialogFragment.

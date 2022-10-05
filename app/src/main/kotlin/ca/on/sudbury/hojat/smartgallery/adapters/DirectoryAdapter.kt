@@ -55,7 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap
 import com.simplemobiletools.commons.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.SORT_BY_CUSTOM
 import com.simplemobiletools.commons.helpers.SHOW_ALL_TABS
 import com.simplemobiletools.commons.helpers.ensureBackgroundThread

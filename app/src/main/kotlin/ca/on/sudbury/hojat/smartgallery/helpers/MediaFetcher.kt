@@ -47,9 +47,8 @@ import com.simplemobiletools.commons.helpers.SORT_DESCENDING
 import com.simplemobiletools.commons.helpers.AlphanumericComparator
 import com.simplemobiletools.commons.helpers.videoExtensions
 import com.simplemobiletools.commons.helpers.rawExtensions
-import com.simplemobiletools.commons.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.helpers.NOMEDIA
-import com.simplemobiletools.commons.helpers.photoExtensions
 import com.simplemobiletools.commons.helpers.SORT_BY_RANDOM
 import com.simplemobiletools.commons.helpers.SORT_BY_NAME
 import com.simplemobiletools.commons.helpers.DAY_SECONDS
