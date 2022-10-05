@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.helpers
 
+import android.graphics.Color
 import com.simplemobiletools.commons.helpers.MONTH_SECONDS
 
 // shared preferences
@@ -35,7 +36,8 @@ const val MEDIA_COLUMN_CNT = "media_column_cnt"
 const val MEDIA_LANDSCAPE_COLUMN_CNT = "media_landscape_column_cnt"
 const val MEDIA_HORIZONTAL_COLUMN_CNT = "media_horizontal_column_cnt"
 const val MEDIA_LANDSCAPE_HORIZONTAL_COLUMN_CNT = "media_landscape_horizontal_column_cnt"
-const val SHOW_ALL = "show_all"                           // display images and videos from all folders together
+const val SHOW_ALL =
+    "show_all"                           // display images and videos from all folders together
 const val HIDE_FOLDER_TOOLTIP_SHOWN = "hide_folder_tooltip_shown"
 const val EXCLUDED_FOLDERS = "excluded_folders"
 const val INCLUDED_FOLDERS = "included_folders"
@@ -106,6 +108,45 @@ const val SLIDESHOW_DEFAULT_INTERVAL = 5
 const val SLIDESHOW_SLIDE_DURATION = 500L
 const val SLIDESHOW_FADE_DURATION = 1500L
 const val SLIDESHOW_START_ON_ENTER = "slideshow_start_on_enter"
+
+const val EXTERNAL_STORAGE_PROVIDER_AUTHORITY = "com.android.externalstorage.documents"
+const val EXTRA_SHOW_ADVANCED = "android.content.extra.SHOW_ADVANCED"
+
+const val APP_NAME = "app_name"
+const val APP_LICENSES = "app_licenses"
+const val APP_FAQ = "app_faq"
+const val APP_VERSION_NAME = "app_version_name"
+const val APP_ICON_IDS = "app_icon_ids"
+const val APP_ID = "app_id"
+const val APP_LAUNCHER_NAME = "app_launcher_name"
+const val REAL_FILE_PATH = "real_file_path_2"
+const val IS_FROM_GALLERY = "is_from_gallery"
+const val BROADCAST_REFRESH_MEDIA = "com.simplemobiletools.REFRESH_MEDIA"
+const val REFRESH_PATH = "refresh_path"
+const val IS_CUSTOMIZING_COLORS = "is_customizing_colors"
+const val BLOCKED_NUMBERS_EXPORT_DELIMITER = ","
+const val BLOCKED_NUMBERS_EXPORT_EXTENSION = ".txt"
+const val NOMEDIA = ".nomedia"
+const val YOUR_ALARM_SOUNDS_MIN_ID = 1000
+const val SHOW_FAQ_BEFORE_MAIL = "show_faq_before_mail"
+const val INVALID_NAVIGATION_BAR_COLOR = -1
+const val CHOPPED_LIST_DEFAULT_SIZE = 50
+const val SAVE_DISCARD_PROMPT_INTERVAL = 1000L
+val DEFAULT_WIDGET_BG_COLOR = Color.parseColor("#AA000000")
+const val SD_OTG_PATTERN = "^/storage/[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$"
+const val SD_OTG_SHORT = "^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$"
+const val KEY_PHONE = "phone"
+const val CONTACT_ID = "contact_id"
+const val IS_PRIVATE = "is_private"
+const val MD5 = "MD5"
+const val SHORT_ANIMATION_DURATION = 150L
+val DARK_GREY = 0xFF333333.toInt()
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
 
 // slideshow animations
 const val SLIDESHOW_ANIMATION_NONE = 0
@@ -211,7 +252,8 @@ const val BOTTOM_ACTION_COPY = 4096
 const val BOTTOM_ACTION_MOVE = 8192
 const val BOTTOM_ACTION_RESIZE = 16384
 
-const val DEFAULT_BOTTOM_ACTIONS = BOTTOM_ACTION_TOGGLE_FAVORITE or BOTTOM_ACTION_EDIT or BOTTOM_ACTION_SHARE or BOTTOM_ACTION_DELETE
+const val DEFAULT_BOTTOM_ACTIONS =
+    BOTTOM_ACTION_TOGGLE_FAVORITE or BOTTOM_ACTION_EDIT or BOTTOM_ACTION_SHARE or BOTTOM_ACTION_DELETE
 
 // aspect ratios used at the editor for cropping
 const val ASPECT_RATIO_FREE = 0
