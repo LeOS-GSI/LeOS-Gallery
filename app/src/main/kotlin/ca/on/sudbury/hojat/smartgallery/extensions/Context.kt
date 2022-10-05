@@ -130,11 +130,11 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.github.ajalt.reprint.core.Reprint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.simplemobiletools.commons.extensions.getIntValue
-import com.simplemobiletools.commons.extensions.getIntValueOrNull
-import com.simplemobiletools.commons.extensions.getLongValue
-import com.simplemobiletools.commons.extensions.getMimeType
-import com.simplemobiletools.commons.extensions.getStringValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getIntValueOrNull
+import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
+import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import com.simplemobiletools.commons.helpers.BaseConfig
 import com.simplemobiletools.commons.helpers.DARK_GREY
 import com.simplemobiletools.commons.helpers.DAY_SECONDS
