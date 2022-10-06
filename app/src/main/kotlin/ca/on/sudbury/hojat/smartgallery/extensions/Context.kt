@@ -130,7 +130,7 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import com.github.ajalt.reprint.core.Reprint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.simplemobiletools.commons.helpers.BaseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.BaseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.DAY_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTERNAL_STORAGE_PROVIDER_AUTHORITY

@@ -121,6 +121,8 @@ const val SLIDESHOW_START_ON_ENTER = "slideshow_start_on_enter"
 const val EXTERNAL_STORAGE_PROVIDER_AUTHORITY = "com.android.externalstorage.documents"
 const val EXTRA_SHOW_ADVANCED = "android.content.extra.SHOW_ADVANCED"
 
+const val BLOCK_UNKNOWN_NUMBERS = "block_unknown_numbers"
+
 const val APP_NAME = "app_name"
 const val APP_LICENSES = "app_licenses"
 const val APP_FAQ = "app_faq"

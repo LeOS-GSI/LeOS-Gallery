@@ -6,8 +6,6 @@ import android.os.Environment
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.simplemobiletools.commons.helpers.BaseConfig
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
