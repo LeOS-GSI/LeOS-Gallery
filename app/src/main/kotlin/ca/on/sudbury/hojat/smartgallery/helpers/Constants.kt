@@ -8,7 +8,6 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.ChecksSdkIntAtLeast
 import com.simplemobiletools.commons.R
-import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_SECONDS
 import com.simplemobiletools.commons.overloads.times
 import java.util.HashMap
 import java.util.LinkedHashMap
@@ -798,3 +797,11 @@ val rawExtensions: Array<String>
         ".cr2",
         ".cr3"
     )
+
+
+// possible icons at the top left corner
+enum class NavigationIcon {
+    Cross,
+    Arrow,
+    None
+}

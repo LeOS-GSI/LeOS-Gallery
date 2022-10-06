@@ -39,7 +39,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
 import ca.on.sudbury.hojat.smartgallery.extensions.areDigitsOnly
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
-import com.simplemobiletools.commons.helpers.AlphanumericComparator
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection

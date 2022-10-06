@@ -89,7 +89,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import com.simplemobiletools.commons.helpers.AlphanumericComparator
+import ca.on.sudbury.hojat.smartgallery.helpers.AlphanumericComparator
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import com.simplemobiletools.commons.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
@@ -144,8 +144,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MONDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_SECONDS
-import com.simplemobiletools.commons.helpers.MyContactsContentProvider
-import com.simplemobiletools.commons.helpers.MyContentProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.MyContactsContentProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CAMERA
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_GET_ACCOUNTS
