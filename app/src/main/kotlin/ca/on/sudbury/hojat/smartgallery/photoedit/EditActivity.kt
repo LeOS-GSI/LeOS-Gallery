@@ -60,7 +60,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import com.simplemobiletools.commons.helpers.NavigationIcon
+import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
 import com.simplemobiletools.commons.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.FiltersAdapter

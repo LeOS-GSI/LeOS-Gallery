@@ -117,7 +117,7 @@ import com.simplemobiletools.commons.extensions.getThemeId
 import com.simplemobiletools.commons.extensions.writeLn
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 import com.simplemobiletools.commons.helpers.MyContextWrapper
-import com.simplemobiletools.commons.helpers.NavigationIcon
+import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import com.simplemobiletools.commons.interfaces.CopyMoveListener
 import com.simplemobiletools.commons.models.FAQItem
 import com.simplemobiletools.commons.models.FileDirItem

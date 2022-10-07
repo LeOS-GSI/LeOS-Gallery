@@ -41,7 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isPiePlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
-import com.simplemobiletools.commons.helpers.NavigationIcon
+import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_USING_SHARED_THEME
