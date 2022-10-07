@@ -61,7 +61,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.interfaces.ItemMoveCallback
 import ca.on.sudbury.hojat.smartgallery.interfaces.ItemTouchHelperContract
-import com.simplemobiletools.commons.interfaces.StartReorderDragListener
+import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import com.simplemobiletools.commons.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity

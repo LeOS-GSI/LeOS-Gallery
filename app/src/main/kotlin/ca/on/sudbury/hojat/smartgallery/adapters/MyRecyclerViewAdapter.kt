@@ -21,7 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.interfaces.MyActionModeCallback
+import ca.on.sudbury.hojat.smartgallery.interfaces.MyActionModeCallback
 import com.simplemobiletools.commons.views.MyRecyclerView
 
 abstract class MyRecyclerViewAdapter(
