@@ -42,7 +42,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_KEEP_BOTH
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_SKIP
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
 import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
-import com.simplemobiletools.commons.interfaces.CopyMoveListener
+import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File
 import java.io.InputStream

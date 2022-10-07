@@ -118,7 +118,7 @@ import com.simplemobiletools.commons.extensions.writeLn
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 import com.simplemobiletools.commons.helpers.MyContextWrapper
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
-import com.simplemobiletools.commons.interfaces.CopyMoveListener
+import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File

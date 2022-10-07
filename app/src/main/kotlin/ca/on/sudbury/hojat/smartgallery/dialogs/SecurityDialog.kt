@@ -21,11 +21,11 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import com.simplemobiletools.commons.R
-import com.simplemobiletools.commons.adapters.PasswordTypesAdapter
+import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
 import com.simplemobiletools.commons.extensions.isBiometricIdAvailable
 import com.simplemobiletools.commons.extensions.onPageChangeListener
 import com.simplemobiletools.commons.extensions.onTabSelectionChanged
-import com.simplemobiletools.commons.interfaces.HashListener
+import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import com.simplemobiletools.commons.views.MyDialogViewPager
 import kotlinx.android.synthetic.main.dialog_security.view.*
 
