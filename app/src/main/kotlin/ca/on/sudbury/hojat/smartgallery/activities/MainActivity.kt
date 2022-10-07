@@ -41,7 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_MEDIA_LOCATION
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Release
-import com.simplemobiletools.commons.views.MyGridLayoutManager
+import ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity

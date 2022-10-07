@@ -26,7 +26,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import com.simplemobiletools.commons.views.MyGridLayoutManager
+import ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity

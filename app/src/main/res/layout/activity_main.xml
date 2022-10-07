@@ -81,7 +81,7 @@
                     android:layout_height="match_parent"
                     android:layoutAnimation="@anim/layout_animation"
                     android:scrollbars="none"
-                    app:layoutManager="com.simplemobiletools.commons.views.MyGridLayoutManager"
+                    app:layoutManager="ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager"
                     app:spanCount="@integer/directory_columns_vertical_scroll" />
 
             </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
