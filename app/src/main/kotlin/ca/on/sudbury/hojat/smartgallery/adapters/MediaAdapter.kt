@@ -14,11 +14,10 @@ import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
+import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.PropertiesDialog
-import com.simplemobiletools.commons.dialogs.RenameDialog
-import com.simplemobiletools.commons.dialogs.RenameItemDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RenameDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection

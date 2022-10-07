@@ -6,7 +6,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogExcludeFolderBinding
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getBasePath
@@ -36,12 +36,21 @@ class ExcludeFolderDialog(
         }
 
         alternativePaths.forEachIndexed { index, _ ->
-            val radioButton = (activity.layoutInflater.inflate(R.layout.radio_button, null) as RadioButton).apply {
+            val radioButton = (activity.layoutInflater.inflate(
+                R.layout.radio_button,
+                null
+            ) as RadioButton).apply {
                 text = alternativePaths[index]
                 isChecked = index == 0
                 id = index
             }
-            radioGroup!!.addView(radioButton, RadioGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
+            radioGroup!!.addView(
+                radioButton,
+                RadioGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            )
         }
 
         activity.getAlertDialogBuilder()
@@ -53,7 +62,8 @@ class ExcludeFolderDialog(
     }
 
     private fun dialogConfirmed() {
-        val path = if (alternativePaths.isEmpty()) selectedPaths[0] else alternativePaths[radioGroup!!.checkedRadioButtonId]
+        val path =
+            if (alternativePaths.isEmpty()) selectedPaths[0] else alternativePaths[radioGroup!!.checkedRadioButtonId]
         activity.config.addExcludedFolder(path)
         callback()
     }

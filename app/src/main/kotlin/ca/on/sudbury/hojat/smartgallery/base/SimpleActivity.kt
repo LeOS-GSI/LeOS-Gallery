@@ -6,8 +6,8 @@ import android.provider.MediaStore.Images
 import android.provider.MediaStore.Video
 import android.view.WindowManager
 import ca.on.sudbury.hojat.smartgallery.R
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.dialogs.FilePickerDialog
+import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathRecursively

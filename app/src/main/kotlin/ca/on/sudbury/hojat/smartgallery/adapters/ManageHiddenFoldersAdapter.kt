@@ -4,11 +4,10 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import ca.on.sudbury.hojat.smartgallery.R
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.adapters.MyRecyclerViewAdapter
+import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
-import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
+import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import com.simplemobiletools.commons.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
 import kotlinx.android.synthetic.main.item_manage_folder.view.*

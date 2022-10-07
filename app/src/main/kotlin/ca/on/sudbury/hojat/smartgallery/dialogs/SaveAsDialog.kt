@@ -5,9 +5,8 @@ import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogSaveAsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
-import com.simplemobiletools.commons.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getPicturesDirectoryPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30

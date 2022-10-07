@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import com.simplemobiletools.commons.dialogs.ConfirmationDialog
-import com.simplemobiletools.commons.dialogs.CreateNewFolderDialog
-import com.simplemobiletools.commons.dialogs.FilePickerDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.WAS_PROTECTION_HANDLED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED

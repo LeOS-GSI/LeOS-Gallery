@@ -2,12 +2,12 @@ package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
-import com.simplemobiletools.commons.dialogs.FilePickerDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import com.simplemobiletools.commons.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
-import com.simplemobiletools.commons.interfaces.RefreshRecyclerViewListener
+import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.adapters.ManageHiddenFoldersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
@@ -42,7 +42,8 @@ class HiddenFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
                     setTextColor(getProperTextColor())
                 }
 
-                val adapter = ManageHiddenFoldersAdapter(this, it, this, binding.manageFoldersList) {}
+                val adapter =
+                    ManageHiddenFoldersAdapter(this, it, this, binding.manageFoldersList) {}
                 binding.manageFoldersList.adapter = adapter
             }
         }
@@ -63,7 +64,14 @@ class HiddenFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun addFolder() {
-        FilePickerDialog(this, config.lastFilepickerPath, false, config.shouldShowHidden, showFAB = false, canAddShowHiddenButton = true) {
+        FilePickerDialog(
+            this,
+            config.lastFilepickerPath,
+            false,
+            config.shouldShowHidden,
+            showFAB = false,
+            canAddShowHiddenButton = true
+        ) {
             config.lastFilepickerPath = it
             ensureBackgroundThread {
                 addNoMedia(it) {
