@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.simplemobiletools.commons.views.MyTextView
+        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
             android:id="@+id/search_empty_text_placeholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.simplemobiletools.commons.views.MyRecyclerView
+            <ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
                 android:id="@+id/search_grid"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

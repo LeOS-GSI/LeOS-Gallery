@@ -12,7 +12,7 @@
     tools:ignore="RtlSymmetry,UnusedAttribute"
     tools:targetApi="m">
 
-    <com.simplemobiletools.commons.views.MyTextView
+    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
         android:id="@+id/manage_folder_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

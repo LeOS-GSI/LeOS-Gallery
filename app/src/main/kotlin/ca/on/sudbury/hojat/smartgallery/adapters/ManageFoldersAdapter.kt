@@ -11,7 +11,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getPopupMenuTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
-import com.simplemobiletools.commons.views.MyRecyclerView
+import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
 

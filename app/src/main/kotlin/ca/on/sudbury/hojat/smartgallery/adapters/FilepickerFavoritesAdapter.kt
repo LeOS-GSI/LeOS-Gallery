@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getTextSize
-import com.simplemobiletools.commons.views.MyRecyclerView
+import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import kotlinx.android.synthetic.main.filepicker_favorite.view.*
 
 class FilepickerFavoritesAdapter(

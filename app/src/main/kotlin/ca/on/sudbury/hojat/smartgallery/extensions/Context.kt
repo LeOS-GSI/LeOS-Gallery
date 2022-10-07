@@ -196,8 +196,8 @@ import com.simplemobiletools.commons.views.MyEditText
 import com.simplemobiletools.commons.views.MyFloatingActionButton
 import com.simplemobiletools.commons.views.MySeekBar
 import com.simplemobiletools.commons.views.MySwitchCompat
-import com.simplemobiletools.commons.views.MyTextInputLayout
-import com.simplemobiletools.commons.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
+import ca.on.sudbury.hojat.smartgallery.views.MyTextView
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File

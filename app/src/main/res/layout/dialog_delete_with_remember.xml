@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/big_margin"
     android:paddingRight="@dimen/big_margin">
 
-    <com.simplemobiletools.commons.views.MyTextView
+    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
         android:id="@+id/delete_remember_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

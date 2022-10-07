@@ -22,7 +22,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.interfaces.MyActionModeCallback
-import com.simplemobiletools.commons.views.MyRecyclerView
+import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 
 abstract class MyRecyclerViewAdapter(
     val activity: BaseSimpleActivity,

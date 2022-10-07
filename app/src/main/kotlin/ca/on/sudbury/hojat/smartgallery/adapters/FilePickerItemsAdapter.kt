@@ -28,7 +28,7 @@ import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.getFilePlaceholderDrawables
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import com.simplemobiletools.commons.views.MyRecyclerView
+import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import kotlinx.android.synthetic.main.item_filepicker_list.view.*
 import java.util.Locale
 import kotlin.collections.HashMap

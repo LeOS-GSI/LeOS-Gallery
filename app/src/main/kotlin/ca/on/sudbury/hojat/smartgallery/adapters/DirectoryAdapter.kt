@@ -63,7 +63,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.ItemMoveCallback
 import ca.on.sudbury.hojat.smartgallery.interfaces.ItemTouchHelperContract
 import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import com.simplemobiletools.commons.views.MyRecyclerView
+import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmDeleteFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExcludeFolderDialog

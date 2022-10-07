@@ -7,7 +7,7 @@
     android:layout_height="@dimen/bottom_filters_height"
     android:paddingTop="@dimen/medium_margin">
 
-    <com.simplemobiletools.commons.views.MyRecyclerView
+    <ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
         android:id="@+id/bottom_actions_filter_list"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_filters_height"

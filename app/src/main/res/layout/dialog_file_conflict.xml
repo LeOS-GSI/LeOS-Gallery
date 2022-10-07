@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_margin"
     android:paddingRight="@dimen/activity_margin">
 
-    <com.simplemobiletools.commons.views.MyTextView
+    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
         android:id="@+id/conflict_dialog_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

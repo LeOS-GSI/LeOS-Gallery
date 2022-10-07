@@ -1,14 +1,10 @@
 package ca.on.sudbury.hojat.smartgallery.views
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 
-
-
-@SuppressLint("AppCompatCustomView")
-class MyTextView : TextView {
+class MyTextView : AppCompatTextView {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

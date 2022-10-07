@@ -116,7 +116,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
-import com.simplemobiletools.commons.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.views.MyTextView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_title.view.*
 import java.io.File

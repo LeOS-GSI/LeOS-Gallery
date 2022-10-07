@@ -48,7 +48,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import com.simplemobiletools.commons.views.MyRecyclerView
+import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialog
 import ca.on.sudbury.hojat.smartgallery.database.MediaOperationsListener

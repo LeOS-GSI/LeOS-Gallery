@@ -25,7 +25,7 @@
                 android:paddingEnd="@dimen/small_margin"
                 android:paddingBottom="@dimen/small_margin" />
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                 android:id="@+id/filepicker_placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/filepicker_breadcrumbs">
 
-                <com.simplemobiletools.commons.views.MyRecyclerView
+                <ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
                     android:id="@+id/filepicker_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                 android:id="@+id/filepicker_favorites_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 android:text="@string/favorites"
                 android:textSize="@dimen/bigger_text_size" />
 
-            <com.simplemobiletools.commons.views.MyRecyclerView
+            <ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
                 android:id="@+id/filepicker_favorites_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

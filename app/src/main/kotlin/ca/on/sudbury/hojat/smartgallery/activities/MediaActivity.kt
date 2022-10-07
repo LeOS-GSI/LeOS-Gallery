@@ -35,7 +35,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import com.simplemobiletools.commons.views.MyGridLayoutManager
-import com.simplemobiletools.commons.views.MyRecyclerView
+import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity

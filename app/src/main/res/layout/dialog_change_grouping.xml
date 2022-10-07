@@ -111,7 +111,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/use_for_this_folder" />
 
-        <com.simplemobiletools.commons.views.MyTextView
+        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
             android:id="@+id/grouping_dialog_bottom_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

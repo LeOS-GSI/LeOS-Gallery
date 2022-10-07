@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_all_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_customize_colors_label"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_background">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_change_date_time_format"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -119,14 +119,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_background">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_file_loading_priority_label"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/file_loading_priority" />
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_file_loading_priority"
                         style="@style/SettingsTextValueStyle"
                         android:layout_width="match_parent"
@@ -143,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_background">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_manage_included_folders"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -159,7 +159,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_background">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_manage_excluded_folders"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -175,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_background">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_manage_hidden_folders"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -335,7 +335,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_background">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_file_thumbnail_style_label"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -351,14 +351,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_bottom_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_folder_thumbnail_style_label"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/folder_thumbnail_style" />
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_folder_thumbnail_style"
                         style="@style/SettingsTextValueStyle"
                         android:layout_width="match_parent"
@@ -551,14 +551,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_bottom_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_screen_rotation_label"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/screen_rotation_by" />
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_screen_rotation"
                         style="@style/SettingsTextValueStyle"
                         android:layout_width="match_parent"
@@ -703,7 +703,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_bottom_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_manage_extended_details"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -895,7 +895,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_bottom_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_manage_bottom_actions"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -975,14 +975,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_bottom_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_empty_recycle_bin_label"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/empty_recycle_bin" />
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_empty_recycle_bin_size"
                         style="@style/SettingsTextValueStyle"
                         android:layout_width="match_parent"
@@ -1015,14 +1015,14 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_top_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_clear_cache_label"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/clear_cache" />
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_clear_cache_size"
                         style="@style/SettingsTextValueStyle"
                         android:layout_width="match_parent"
@@ -1039,7 +1039,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_background">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_export"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"
@@ -1055,7 +1055,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/ripple_bottom_corners">
 
-                    <com.simplemobiletools.commons.views.MyTextView
+                    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                         android:id="@+id/settings_import"
                         style="@style/SettingsTextLabelStyle"
                         android:layout_width="wrap_content"

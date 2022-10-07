@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.simplemobiletools.commons.views.MyTextView
+        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
             android:id="@+id/interval_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:text="@string/interval"
             tools:ignore="RelativeOverlap,RtlSymmetry" />
 
-        <com.simplemobiletools.commons.views.MyTextInputLayout
+        <ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
             android:id="@+id/interval_hint"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/bigger_text_size" />
 
-        </com.simplemobiletools.commons.views.MyTextInputLayout>
+        </ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout>
 
         <RelativeLayout
             android:id="@+id/animation_holder"
@@ -58,7 +58,7 @@
             android:paddingEnd="@dimen/activity_margin"
             android:paddingBottom="@dimen/bigger_margin">
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                 android:id="@+id/animation_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:paddingRight="@dimen/medium_margin"
                 android:text="@string/animation" />
 
-            <com.simplemobiletools.commons.views.MyTextView
+            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
                 android:id="@+id/animation_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
