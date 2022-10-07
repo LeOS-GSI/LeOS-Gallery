@@ -24,9 +24,9 @@ import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
-import com.simplemobiletools.commons.dialogs.FolderLockingNoticeDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import com.simplemobiletools.commons.dialogs.PropertiesDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast

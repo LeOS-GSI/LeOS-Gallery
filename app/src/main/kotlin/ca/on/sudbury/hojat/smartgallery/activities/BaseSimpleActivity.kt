@@ -108,9 +108,9 @@ import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialog
 import com.google.android.material.appbar.MaterialToolbar
-import com.simplemobiletools.commons.dialogs.FileConflictDialog
-import com.simplemobiletools.commons.dialogs.WritePermissionDialog
-import com.simplemobiletools.commons.dialogs.WritePermissionDialog.Mode
+import ca.on.sudbury.hojat.smartgallery.dialogs.FileConflictDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog.Mode
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import com.simplemobiletools.commons.extensions.getThemeId

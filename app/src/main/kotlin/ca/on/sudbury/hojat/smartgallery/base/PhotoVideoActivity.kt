@@ -26,7 +26,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.showSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
 import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
-import com.simplemobiletools.commons.dialogs.PropertiesDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
