@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import com.simplemobiletools.commons.models.Release
+import ca.on.sudbury.hojat.smartgallery.models.Release
 import kotlinx.android.synthetic.main.dialog_whats_new.view.*
 
 class WhatsNewDialog(val activity: Activity, val releases: List<Release>) {

@@ -1,6 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.database
 
-import com.simplemobiletools.commons.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 
 interface MediaOperationsListener {

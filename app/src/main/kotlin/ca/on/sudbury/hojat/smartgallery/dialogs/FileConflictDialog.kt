@@ -14,7 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_KEEP_BOTH
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_MERGE
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_OVERWRITE
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_SKIP
-import com.simplemobiletools.commons.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import kotlinx.android.synthetic.main.dialog_file_conflict.view.*
 
 class FileConflictDialog(

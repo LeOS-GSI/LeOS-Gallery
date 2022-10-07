@@ -183,10 +183,10 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.proPackages
-import com.simplemobiletools.commons.models.AlarmSound
-import com.simplemobiletools.commons.models.BlockedNumber
-import com.simplemobiletools.commons.models.FileDirItem
-import com.simplemobiletools.commons.models.SharedTheme
+import ca.on.sudbury.hojat.smartgallery.models.AlarmSound
+import ca.on.sudbury.hojat.smartgallery.models.BlockedNumber
+import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import com.simplemobiletools.commons.views.MyAppCompatCheckbox
 import com.simplemobiletools.commons.views.MyAppCompatSpinner
 import com.simplemobiletools.commons.views.MyAutoCompleteTextView

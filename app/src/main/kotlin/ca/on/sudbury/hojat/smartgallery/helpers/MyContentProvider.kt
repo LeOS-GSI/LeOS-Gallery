@@ -2,7 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.helpers
 
 import android.content.ContentValues
 import android.net.Uri
-import com.simplemobiletools.commons.models.SharedTheme
+import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 
 class MyContentProvider {
     companion object {

@@ -7,8 +7,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
-import com.simplemobiletools.commons.models.PhoneNumber
-import com.simplemobiletools.commons.models.SimpleContact
+import ca.on.sudbury.hojat.smartgallery.models.PhoneNumber
+import ca.on.sudbury.hojat.smartgallery.models.SimpleContact
 
 // used for sharing privately stored contacts in Simple Contacts
 // with Simple Dialer, Simple SMS Messenger and Simple Calendar Pro

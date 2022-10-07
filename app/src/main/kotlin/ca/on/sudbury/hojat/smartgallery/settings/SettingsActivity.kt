@@ -64,7 +64,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_ORDER
 import ca.on.sudbury.hojat.smartgallery.helpers.LAST_CONFLICT_RESOLUTION
 import ca.on.sudbury.hojat.smartgallery.helpers.LAST_CONFLICT_APPLY_TO_ALL
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
-import com.simplemobiletools.commons.models.RadioItem
+import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.ExcludedFoldersActivity
 import ca.on.sudbury.hojat.smartgallery.activities.HiddenFoldersActivity
 import ca.on.sudbury.hojat.smartgallery.activities.IncludedFoldersActivity

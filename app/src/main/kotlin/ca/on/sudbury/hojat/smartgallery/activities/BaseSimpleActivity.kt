@@ -119,8 +119,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 import com.simplemobiletools.commons.helpers.MyContextWrapper
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import com.simplemobiletools.commons.interfaces.CopyMoveListener
-import com.simplemobiletools.commons.models.FAQItem
-import com.simplemobiletools.commons.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.FaqItem
+import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File
 import java.io.OutputStream
 import java.util.regex.Pattern
@@ -569,7 +569,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         appNameId: Int,
         licenseMask: Long,
         versionName: String,
-        faqItems: ArrayList<FAQItem>,
+        faqItems: ArrayList<FaqItem>,
         showFAQBeforeMail: Boolean
     ) {
         hideKeyboard()

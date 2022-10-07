@@ -75,8 +75,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
-import com.simplemobiletools.commons.models.FAQItem
-import com.simplemobiletools.commons.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.FaqItem
+import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
@@ -111,11 +111,11 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
 import ca.on.sudbury.hojat.smartgallery.helpers.SILENT
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
-import com.simplemobiletools.commons.models.AlarmSound
-import com.simplemobiletools.commons.models.Android30RenameFormat
-import com.simplemobiletools.commons.models.RadioItem
-import com.simplemobiletools.commons.models.Release
-import com.simplemobiletools.commons.models.SharedTheme
+import ca.on.sudbury.hojat.smartgallery.models.AlarmSound
+import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
+import ca.on.sudbury.hojat.smartgallery.models.RadioItem
+import ca.on.sudbury.hojat.smartgallery.models.Release
+import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import com.simplemobiletools.commons.views.MyTextView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_title.view.*
@@ -785,42 +785,42 @@ fun SimpleActivity.launchAbout() {
                 LICENSE_SANSELAN or LICENSE_FILTERS or
                 LICENSE_GESTURE_VIEWS or LICENSE_APNG
 
-    val faqItems = arrayListOf(
-        FAQItem(R.string.faq_3_title, R.string.faq_3_text),
-        FAQItem(R.string.faq_12_title, R.string.faq_12_text),
-        FAQItem(R.string.faq_7_title, R.string.faq_7_text),
-        FAQItem(R.string.faq_14_title, R.string.faq_14_text),
-        FAQItem(R.string.faq_1_title, R.string.faq_1_text),
-        FAQItem(R.string.faq_5_title_commons, R.string.faq_5_text_commons),
-        FAQItem(R.string.faq_5_title, R.string.faq_5_text),
-        FAQItem(R.string.faq_4_title, R.string.faq_4_text),
-        FAQItem(R.string.faq_6_title, R.string.faq_6_text),
-        FAQItem(R.string.faq_8_title, R.string.faq_8_text),
-        FAQItem(R.string.faq_10_title, R.string.faq_10_text),
-        FAQItem(R.string.faq_11_title, R.string.faq_11_text),
-        FAQItem(R.string.faq_13_title, R.string.faq_13_text),
-        FAQItem(R.string.faq_15_title, R.string.faq_15_text),
-        FAQItem(R.string.faq_2_title, R.string.faq_2_text),
-        FAQItem(R.string.faq_18_title, R.string.faq_18_text),
-        FAQItem(R.string.faq_9_title_commons, R.string.faq_9_text_commons),
+    val FaqItems = arrayListOf(
+        FaqItem(R.string.faq_3_title, R.string.faq_3_text),
+        FaqItem(R.string.faq_12_title, R.string.faq_12_text),
+        FaqItem(R.string.faq_7_title, R.string.faq_7_text),
+        FaqItem(R.string.faq_14_title, R.string.faq_14_text),
+        FaqItem(R.string.faq_1_title, R.string.faq_1_text),
+        FaqItem(R.string.faq_5_title_commons, R.string.faq_5_text_commons),
+        FaqItem(R.string.faq_5_title, R.string.faq_5_text),
+        FaqItem(R.string.faq_4_title, R.string.faq_4_text),
+        FaqItem(R.string.faq_6_title, R.string.faq_6_text),
+        FaqItem(R.string.faq_8_title, R.string.faq_8_text),
+        FaqItem(R.string.faq_10_title, R.string.faq_10_text),
+        FaqItem(R.string.faq_11_title, R.string.faq_11_text),
+        FaqItem(R.string.faq_13_title, R.string.faq_13_text),
+        FaqItem(R.string.faq_15_title, R.string.faq_15_text),
+        FaqItem(R.string.faq_2_title, R.string.faq_2_text),
+        FaqItem(R.string.faq_18_title, R.string.faq_18_text),
+        FaqItem(R.string.faq_9_title_commons, R.string.faq_9_text_commons),
     )
 
     if (!resources.getBoolean(R.bool.hide_google_relations)) {
-        faqItems.add(FAQItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons))
-        faqItems.add(FAQItem(R.string.faq_6_title_commons, R.string.faq_6_text_commons))
-        faqItems.add(FAQItem(R.string.faq_7_title_commons, R.string.faq_7_text_commons))
-        faqItems.add(FAQItem(R.string.faq_10_title_commons, R.string.faq_10_text_commons))
+        FaqItems.add(FaqItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons))
+        FaqItems.add(FaqItem(R.string.faq_6_title_commons, R.string.faq_6_text_commons))
+        FaqItems.add(FaqItem(R.string.faq_7_title_commons, R.string.faq_7_text_commons))
+        FaqItems.add(FaqItem(R.string.faq_10_title_commons, R.string.faq_10_text_commons))
     }
 
     if (isRPlus() && !isExternalStorageManager()) {
-        faqItems.add(0, FAQItem(R.string.faq_16_title, R.string.faq_16_text))
-        faqItems.add(1, FAQItem(R.string.faq_17_title, R.string.faq_17_text))
-        faqItems.removeIf { it.text == R.string.faq_7_text }
-        faqItems.removeIf { it.text == R.string.faq_14_text }
-        faqItems.removeIf { it.text == R.string.faq_8_text }
+        FaqItems.add(0, FaqItem(R.string.faq_16_title, R.string.faq_16_text))
+        FaqItems.add(1, FaqItem(R.string.faq_17_title, R.string.faq_17_text))
+        FaqItems.removeIf { it.text == R.string.faq_7_text }
+        FaqItems.removeIf { it.text == R.string.faq_14_text }
+        FaqItems.removeIf { it.text == R.string.faq_8_text }
     }
 
-    startAboutActivity(R.string.app_name, licenses, BuildConfig.VERSION_NAME, faqItems, true)
+    startAboutActivity(R.string.app_name, licenses, BuildConfig.VERSION_NAME, FaqItems, true)
 }
 
 fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {

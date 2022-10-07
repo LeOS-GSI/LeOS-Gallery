@@ -7,7 +7,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
-import com.simplemobiletools.commons.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File
 import java.util.HashMap
 

@@ -12,7 +12,7 @@ import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import com.simplemobiletools.commons.models.RadioItem
+import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import kotlinx.android.synthetic.main.dialog_radio_group.view.*
 
 @SuppressLint("InflateParams")
