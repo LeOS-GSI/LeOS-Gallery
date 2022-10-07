@@ -15,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.dialogs.ConfirmationDialog
 import kotlinx.android.synthetic.main.dialog_export_settings.view.*
 
 @SuppressLint("InflateParams")

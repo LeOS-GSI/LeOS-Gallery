@@ -54,8 +54,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
-import com.simplemobiletools.commons.dialogs.ConfirmationDialog
-import com.simplemobiletools.commons.dialogs.SecurityDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GLIDE
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_CROPPER
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_RTL
@@ -86,8 +86,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.simplemobiletools.commons.dialogs.AppSideloadedDialog
 import com.simplemobiletools.commons.dialogs.CustomIntervalPickerDialog
 import com.simplemobiletools.commons.dialogs.DonateDialog
-import com.simplemobiletools.commons.dialogs.RadioGroupDialog
-import com.simplemobiletools.commons.dialogs.RateStarsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import com.simplemobiletools.commons.dialogs.UpgradeToProDialog
 import com.simplemobiletools.commons.dialogs.WhatsNewDialog
 import com.simplemobiletools.commons.dialogs.WritePermissionDialog

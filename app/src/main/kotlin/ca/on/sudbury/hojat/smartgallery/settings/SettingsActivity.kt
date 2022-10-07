@@ -8,10 +8,10 @@ import android.text.TextUtils
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.simplemobiletools.commons.dialogs.ConfirmationDialog
-import com.simplemobiletools.commons.dialogs.SecurityDialog
-import com.simplemobiletools.commons.dialogs.RadioGroupDialog
-import com.simplemobiletools.commons.dialogs.ChangeDateTimeFormatDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor

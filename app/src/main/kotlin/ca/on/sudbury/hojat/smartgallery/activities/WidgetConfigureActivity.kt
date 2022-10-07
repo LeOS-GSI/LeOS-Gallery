@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.dialogs.ColorPickerDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor

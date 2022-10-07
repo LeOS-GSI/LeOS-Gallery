@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeFileThumbnailStyleBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import com.simplemobiletools.commons.models.RadioItem

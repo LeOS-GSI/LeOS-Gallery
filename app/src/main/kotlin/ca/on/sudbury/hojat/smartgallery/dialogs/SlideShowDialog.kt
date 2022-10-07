@@ -5,7 +5,6 @@ import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogSlideshowBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff

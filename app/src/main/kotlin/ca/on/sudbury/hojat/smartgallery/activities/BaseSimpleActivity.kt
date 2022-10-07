@@ -105,7 +105,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
-import com.simplemobiletools.commons.dialogs.ConfirmationDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialog
 import com.google.android.material.appbar.MaterialToolbar
 import com.simplemobiletools.commons.dialogs.FileConflictDialog

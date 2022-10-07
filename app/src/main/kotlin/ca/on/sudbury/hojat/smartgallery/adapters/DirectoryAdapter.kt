@@ -23,9 +23,9 @@ import com.google.gson.Gson
 import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
-import com.simplemobiletools.commons.dialogs.SecurityDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import com.simplemobiletools.commons.dialogs.FolderLockingNoticeDialog
-import com.simplemobiletools.commons.dialogs.ConfirmationDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import com.simplemobiletools.commons.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
