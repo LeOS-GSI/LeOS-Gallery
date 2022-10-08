@@ -629,18 +629,6 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     mWasDefaultFolderChecked = true
                 }
 
-                if (!config.wasUpgradedFromFreeShown && isPackageInstalled("ca.on.sudbury.hojat.smartgallery")) {
-                    ConfirmationDialog(
-                        this,
-                        "",
-                        R.string.upgraded_from_free,
-                        R.string.ok,
-                        0,
-                        false
-                    ) {}
-                    config.wasUpgradedFromFreeShown = true
-                }
-
                 checkOTGPath()
                 checkDefaultSpamFolders()
 
