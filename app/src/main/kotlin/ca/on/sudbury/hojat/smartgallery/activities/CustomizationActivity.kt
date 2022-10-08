@@ -39,11 +39,12 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.SAVE_DISCARD_PROMPT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
-import com.simplemobiletools.commons.models.MyTheme
+import ca.on.sudbury.hojat.smartgallery.models.MyTheme
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.views.MyTextView
 import kotlinx.android.synthetic.main.activity_customization.*
+import kotlin.math.abs
 
 class CustomizationActivity : BaseSimpleActivity() {
     private val THEME_LIGHT = 0
@@ -554,7 +555,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
     }
 
-    private fun hasColorChanged(old: Int, new: Int) = Math.abs(old - new) > 1
+    private fun hasColorChanged(old: Int, new: Int) = abs(old - new) > 1
 
     private fun colorChanged() {
         hasUnsavedChanges = true
@@ -685,17 +686,18 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun pickNavigationBarColor() {
-        ColorPickerDialog(this, curNavigationBarColor, true, true, currentColorCallback = {
-            updateNavigationBarColor(it)
-        }, callback = { wasPositivePressed, color ->
-            if (wasPositivePressed) {
-                setCurrentNavigationBarColor(color)
-                colorChanged()
-                updateColorTheme(getUpdatedTheme())
-            } else {
-                updateNavigationBarColor(curNavigationBarColor)
-            }
-        })
+        ColorPickerDialog(this, curNavigationBarColor, true,
+            showUseDefaultButton = true, currentColorCallback = {
+                updateNavigationBarColor(it)
+            }, callback = { wasPositivePressed, color ->
+                if (wasPositivePressed) {
+                    setCurrentNavigationBarColor(color)
+                    colorChanged()
+                    updateColorTheme(getUpdatedTheme())
+                } else {
+                    updateNavigationBarColor(curNavigationBarColor)
+                }
+            })
     }
 
     private fun pickAppIconColor() {
