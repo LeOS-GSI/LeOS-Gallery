@@ -37,7 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFCreateDocumentDia
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialogSdk30
 import com.simplemobiletools.commons.R
-import ca.on.sudbury.hojat.smartgallery.activities.CustomizationActivity
 import ca.on.sudbury.hojat.smartgallery.asynctasks.CopyMoveTask
 import ca.on.sudbury.hojat.smartgallery.extensions.addBit
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
@@ -612,10 +611,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     // synchronous return value determines only if we are showing the SAF dialog, callback result tells if the SD or OTG permission has been granted
     fun handleSAFDialog(path: String, callback: (success: Boolean) -> Unit): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("com.simplemobiletools")) {
-            callback(true)
-            false
-        } else if (isShowingSAFDialog(path) || isShowingOTGDialog(path)) {
+        return if (isShowingSAFDialog(path) || isShowingOTGDialog(path)) {
             funAfterSAFPermission = callback
             true
         } else {
@@ -626,10 +622,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     fun handleSAFDialogSdk30(path: String, callback: (success: Boolean) -> Unit): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("com.simplemobiletools")) {
-            callback(true)
-            false
-        } else if (isShowingSAFDialogSdk30(path)) {
+        return if (isShowingSAFDialogSdk30(path)) {
             funAfterSdk30Action = callback
             true
         } else {
@@ -656,10 +649,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         callback: (success: Boolean) -> Unit
     ): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("com.simplemobiletools")) {
-            callback(true)
-            false
-        } else if (isShowingSAFCreateDocumentDialogSdk30(path)) {
+        return if (isShowingSAFCreateDocumentDialogSdk30(path)) {
             funAfterSdk30Action = callback
             true
         } else {
@@ -670,10 +660,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     fun handleAndroidSAFDialog(path: String, callback: (success: Boolean) -> Unit): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("com.simplemobiletools")) {
-            callback(true)
-            false
-        } else if (isShowingAndroidSAFDialog(path)) {
+        return if (isShowingAndroidSAFDialog(path)) {
             funAfterSAFPermission = callback
             true
         } else {
@@ -1117,8 +1104,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     private fun getExportSettingsFilename(): String {
-        val appName = baseConfig.appId.removeSuffix(".debug").removeSuffix(".pro")
-            .removePrefix("com.simplemobiletools.")
+        val appName = "smartgallery"
         return "$appName-settings_${getCurrentFormattedDateTime()}.txt"
     }
 
