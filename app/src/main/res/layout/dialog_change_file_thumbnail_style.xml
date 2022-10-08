@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/dialog_file_style_rounded_corners"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/dialog_file_style_animate_gifs"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/dialog_file_style_show_thumbnail_video_duration"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/dialog_file_style_show_thumbnail_file_types"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/dialog_file_style_mark_favorite_items"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"

@@ -61,7 +61,7 @@
 
     </ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout>
 
-    <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+    <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
         android:id="@+id/keep_aspect_ratio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

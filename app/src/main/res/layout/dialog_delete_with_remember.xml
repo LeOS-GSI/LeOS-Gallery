@@ -18,7 +18,7 @@
         android:textSize="@dimen/bigger_text_size"
         tools:ignore="RtlSymmetry" />
 
-    <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+    <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
         android:id="@+id/delete_remember_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

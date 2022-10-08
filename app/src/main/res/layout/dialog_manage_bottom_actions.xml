@@ -13,7 +13,7 @@
         android:paddingTop="@dimen/medium_margin"
         android:paddingRight="@dimen/activity_margin">
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_toggle_favorite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/toggle_favorite" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/edit" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_share"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/share" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +45,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/delete" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_rotate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/rotate" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_properties"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/properties" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_change_orientation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/change_orientation" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_slideshow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/slideshow" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_show_on_map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/show_on_map" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_toggle_visibility"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/toggle_file_visibility" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_rename"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/rename" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_set_as"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,7 +109,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/set_as" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_copy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/copy" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_move"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/move" />
 
-        <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
             android:id="@+id/manage_bottom_actions_resize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground">
 
-                <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+                <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                     android:id="@+id/folder_picker_show_folder_name"
                     style="@style/SettingsCheckboxStyle"
                     android:layout_width="match_parent"
@@ -123,7 +123,7 @@
             android:layout_toEndOf="@+id/config_bg_color"
             android:background="@drawable/widget_config_seekbar_background">
 
-            <com.simplemobiletools.commons.views.MySeekBar
+            <ca.on.sudbury.hojat.smartgallery.views.MySeekBar
                 android:id="@+id/config_bg_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

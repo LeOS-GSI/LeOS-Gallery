@@ -88,7 +88,7 @@
             android:layout_below="@+id/animation_holder"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/include_videos"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
             android:layout_below="@+id/include_videos_holder"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/include_gifs"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -122,7 +122,7 @@
             android:layout_below="@+id/include_gifs_holder"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/random_order"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -139,7 +139,7 @@
             android:layout_below="@+id/random_order_holder"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/move_backwards"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
@@ -156,7 +156,7 @@
             android:layout_below="@+id/move_backwards_holder"
             android:background="?attr/selectableItemBackground">
 
-            <com.simplemobiletools.commons.views.MyAppCompatCheckbox
+            <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
                 android:id="@+id/loop_slideshow"
                 style="@style/SettingsCheckboxStyle"
                 android:layout_width="match_parent"
