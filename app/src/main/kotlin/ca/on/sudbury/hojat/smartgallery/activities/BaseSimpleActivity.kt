@@ -37,7 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFCreateDocumentDia
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialogSdk30
 import com.simplemobiletools.commons.R
-import com.simplemobiletools.commons.activities.AboutActivity
 import com.simplemobiletools.commons.activities.CustomizationActivity
 import ca.on.sudbury.hojat.smartgallery.asynctasks.CopyMoveTask
 import ca.on.sudbury.hojat.smartgallery.extensions.addBit

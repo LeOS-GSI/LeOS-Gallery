@@ -135,7 +135,7 @@
         </activity>
 
         <activity
-            android:name="com.simplemobiletools.commons.activities.AboutActivity"
+            android:name="ca.on.sudbury.hojat.smartgallery.activities.AboutActivity"
             android:exported="false"
             android:label="@string/about"
             android:parentActivityName=".activities.MainActivity" />
