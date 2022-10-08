@@ -48,7 +48,7 @@ import ca.on.sudbury.hojat.smartgallery.adapters.FilepickerFavoritesAdapter
 import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import com.simplemobiletools.commons.views.Breadcrumbs
+import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
 import kotlinx.android.synthetic.main.dialog_filepicker.view.*
 import java.io.File
 

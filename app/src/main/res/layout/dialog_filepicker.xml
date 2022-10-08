@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <com.simplemobiletools.commons.views.Breadcrumbs
+            <ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
                 android:id="@+id/filepicker_breadcrumbs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -42,7 +42,7 @@
             android:layout_below="@+id/recent_colors"
             android:gravity="center_horizontal">
 
-            <com.simplemobiletools.commons.views.ColorPickerSquare
+            <ca.on.sudbury.hojat.smartgallery.views.ColorPickerSquare
                 android:id="@+id/color_picker_square"
                 android:layout_width="@dimen/colorpicker_size"
                 android:layout_height="@dimen/colorpicker_size"

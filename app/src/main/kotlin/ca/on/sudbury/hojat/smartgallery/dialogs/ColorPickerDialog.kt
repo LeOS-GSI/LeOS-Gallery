@@ -25,7 +25,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
-import com.simplemobiletools.commons.views.ColorPickerSquare
+import ca.on.sudbury.hojat.smartgallery.views.ColorPickerSquare
 import kotlinx.android.synthetic.main.dialog_color_picker.view.*
 import java.util.LinkedList
 
