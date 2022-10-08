@@ -305,7 +305,7 @@
             android:permission="TODO"
             tools:ignore="ExportedReceiver">
             <intent-filter>
-                <action android:name="com.simplemobiletools.REFRESH_MEDIA" />
+                <action android:name="ca.on.sudbury.hojat.smartgallery.REFRESH_MEDIA" />
             </intent-filter>
         </receiver>
 

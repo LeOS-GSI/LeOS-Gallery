@@ -629,7 +629,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     mWasDefaultFolderChecked = true
                 }
 
-                if (!config.wasUpgradedFromFreeShown && isPackageInstalled("com.simplemobiletools.ca.on.sudbury.hojat.smartgallery")) {
+                if (!config.wasUpgradedFromFreeShown && isPackageInstalled("ca.on.sudbury.hojat.smartgallery")) {
                     ConfirmationDialog(
                         this,
                         "",
