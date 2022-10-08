@@ -15,8 +15,8 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.RenameAdapter
 import ca.on.sudbury.hojat.smartgallery.extensions.onPageChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
-import com.simplemobiletools.commons.helpers.RENAME_PATTERN
-import com.simplemobiletools.commons.helpers.RENAME_SIMPLE
+import ca.on.sudbury.hojat.smartgallery.helpers.RENAME_PATTERN
+import ca.on.sudbury.hojat.smartgallery.helpers.RENAME_SIMPLE
 import ca.on.sudbury.hojat.smartgallery.views.MyViewPager
 import kotlinx.android.synthetic.main.dialog_rename.view.*
 

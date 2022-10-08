@@ -116,7 +116,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.writeLn
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
-import com.simplemobiletools.commons.helpers.MyContextWrapper
+import ca.on.sudbury.hojat.smartgallery.helpers.MyContextWrapper
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
@@ -1204,7 +1204,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 setHintTextColor(contrastColor.adjustAlpha(MEDIUM_ALPHA))
                 hint = "${getString(R.string.search)}…"
 
-                if (com.simplemobiletools.commons.helpers.isQPlus()) {
+                if (isQPlus()) {
                     textCursorDrawable = null
                 }
             }
