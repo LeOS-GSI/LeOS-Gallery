@@ -14,7 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
-import com.simplemobiletools.commons.views.MyScrollView
+import ca.on.sudbury.hojat.smartgallery.views.MyScrollView
 
 class PasswordTypesAdapter(
     private val context: Context,

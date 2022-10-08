@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/title">
 
-        <com.simplemobiletools.commons.views.MyEditText
+        <ca.on.sudbury.hojat.smartgallery.views.MyEditText
             android:id="@+id/rename_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/extension">
 
-        <com.simplemobiletools.commons.views.MyEditText
+        <ca.on.sudbury.hojat.smartgallery.views.MyEditText
             android:id="@+id/rename_item_extension"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

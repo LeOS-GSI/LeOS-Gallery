@@ -190,9 +190,9 @@ import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import com.simplemobiletools.commons.views.MyAppCompatCheckbox
 import com.simplemobiletools.commons.views.MyAppCompatSpinner
 import com.simplemobiletools.commons.views.MyAutoCompleteTextView
-import com.simplemobiletools.commons.views.MyButton
-import com.simplemobiletools.commons.views.MyCompatRadioButton
-import com.simplemobiletools.commons.views.MyEditText
+import ca.on.sudbury.hojat.smartgallery.views.MyButton
+import ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+import ca.on.sudbury.hojat.smartgallery.views.MyEditText
 import com.simplemobiletools.commons.views.MyFloatingActionButton
 import com.simplemobiletools.commons.views.MySeekBar
 import com.simplemobiletools.commons.views.MySwitchCompat
@@ -207,7 +207,9 @@ import java.net.URLDecoder
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.Date
+import java.util.Collections
 import java.util.regex.Pattern
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap

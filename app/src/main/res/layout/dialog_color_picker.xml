@@ -112,7 +112,7 @@
                 android:text="#"
                 android:textSize="@dimen/normal_text_size" />
 
-            <com.simplemobiletools.commons.views.MyEditText
+            <ca.on.sudbury.hojat.smartgallery.views.MyEditText
                 android:id="@+id/color_picker_new_hex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

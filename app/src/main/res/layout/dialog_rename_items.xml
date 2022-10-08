@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/string_to_add">
 
-        <com.simplemobiletools.commons.views.MyEditText
+        <ca.on.sudbury.hojat.smartgallery.views.MyEditText
             android:id="@+id/rename_items_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rename_items_hint">
 
-        <com.simplemobiletools.commons.views.MyCompatRadioButton
+        <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
             android:id="@+id/rename_items_radio_append"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:paddingBottom="@dimen/normal_margin"
             android:text="@string/append_filenames" />
 
-        <com.simplemobiletools.commons.views.MyCompatRadioButton
+        <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
             android:id="@+id/rename_items_radio_prepend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
