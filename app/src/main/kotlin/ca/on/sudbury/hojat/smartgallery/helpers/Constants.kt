@@ -8,7 +8,7 @@ import android.os.Looper
 import android.util.Log
 import androidx.annotation.ChecksSdkIntAtLeast
 import com.simplemobiletools.commons.R
-import com.simplemobiletools.commons.overloads.times
+import ca.on.sudbury.hojat.smartgallery.extensions.times
 import java.util.HashMap
 import java.util.LinkedHashMap
 
