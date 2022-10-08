@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.content.Intent
-import com.simplemobiletools.commons.activities.BaseSplashActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
@@ -23,7 +22,8 @@ class SplashActivity : BaseSplashActivity() {
                 config.wereFavoritesMigrated = true
                 ensureBackgroundThread {
                     val favorites = ArrayList<Favorite>()
-                    val favoritePaths = mediaDB.getFavorites().map { it.path }.toMutableList() as ArrayList<String>
+                    val favoritePaths =
+                        mediaDB.getFavorites().map { it.path }.toMutableList() as ArrayList<String>
                     favoritePaths.forEach {
                         favorites.add(getFavoriteFromPath(it))
                     }
