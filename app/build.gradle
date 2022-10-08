@@ -40,14 +40,6 @@ android {
             // we cannot change the original package name, else PhotoEditorSDK won't work
             //applicationIdSuffix ".debug"
         }
-        release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            if (keystorePropertiesFile.exists()) {
-                signingConfig signingConfigs.release
-            }
-        }
     }
 
     buildFeatures {
