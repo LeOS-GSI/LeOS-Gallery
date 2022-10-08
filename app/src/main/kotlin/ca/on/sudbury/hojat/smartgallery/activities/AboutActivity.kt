@@ -1,24 +1,49 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
 
+import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.Intent.*
+import android.content.Intent.ACTION_SEND
+import android.content.Intent.ACTION_SENDTO
+import android.content.Intent.EXTRA_EMAIL
+import android.content.Intent.EXTRA_SUBJECT
+import android.content.Intent.EXTRA_TEXT
+import android.content.Intent.createChooser
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import androidx.core.net.toUri
+import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
+import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.extensions.beGone
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getStoreUrl
+import ca.on.sudbury.hojat.smartgallery.extensions.isGone
+import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
+import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
+import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
+import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
+import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
+import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.APP_LICENSES
+import ca.on.sudbury.hojat.smartgallery.helpers.APP_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.APP_VERSION_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
+import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import com.simplemobiletools.commons.R
-import com.simplemobiletools.commons.activities.BaseSimpleActivity
 import com.simplemobiletools.commons.activities.ContributorsActivity
-import com.simplemobiletools.commons.activities.FAQActivity
 import com.simplemobiletools.commons.activities.LicenseActivity
-import com.simplemobiletools.commons.dialogs.ConfirmationAdvancedDialog
-import com.simplemobiletools.commons.dialogs.RateStarsDialog
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
-import com.simplemobiletools.commons.models.FAQItem
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import kotlinx.android.synthetic.main.activity_about.*
 
 class AboutActivity : BaseSimpleActivity() {
@@ -62,7 +87,12 @@ class AboutActivity : BaseSimpleActivity() {
             it.setTextColor(primaryColor)
         }
 
-        arrayOf(about_support_holder, about_help_us_holder, about_social_holder, about_other_holder).forEach {
+        arrayOf(
+            about_support_holder,
+            about_help_us_holder,
+            about_social_holder,
+            about_other_holder
+        ).forEach {
             it.background.applyColorFilter(backgroundColor.getContrastColor())
         }
     }
@@ -92,7 +122,7 @@ class AboutActivity : BaseSimpleActivity() {
     }
 
     private fun setupFAQ() {
-        val faqItems = intent.getSerializableExtra(APP_FAQ) as ArrayList<FAQItem>
+        val faqItems = intent.getSerializableExtra(APP_FAQ) as ArrayList<FaqItem>
         about_faq_holder.beVisibleIf(faqItems.isNotEmpty())
         about_faq_holder.setOnClickListener {
             Intent(applicationContext, FAQActivity::class.java).apply {
@@ -104,9 +134,11 @@ class AboutActivity : BaseSimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupEmail() {
         if (about_faq_holder.isGone()) {
-            about_email_holder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+            about_email_holder.background =
+                resources.getDrawable(R.drawable.ripple_all_corners, theme)
         }
 
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
@@ -116,15 +148,27 @@ class AboutActivity : BaseSimpleActivity() {
                 about_support.beGone()
                 about_support_holder.beGone()
             } else {
-                about_faq_holder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+                about_faq_holder.background =
+                    resources.getDrawable(R.drawable.ripple_all_corners, theme)
             }
         }
 
         about_email_holder.setOnClickListener {
-            val msg = "${getString(R.string.before_asking_question_read_faq)}\n\n${getString(R.string.make_sure_latest)}"
-            if (intent.getBooleanExtra(SHOW_FAQ_BEFORE_MAIL, false) && !baseConfig.wasBeforeAskingShown) {
+            val msg =
+                "${getString(R.string.before_asking_question_read_faq)}\n\n${getString(R.string.make_sure_latest)}"
+            if (intent.getBooleanExtra(
+                    SHOW_FAQ_BEFORE_MAIL,
+                    false
+                ) && !baseConfig.wasBeforeAskingShown
+            ) {
                 baseConfig.wasBeforeAskingShown = true
-                ConfirmationAdvancedDialog(this, msg, 0, R.string.read_faq, R.string.skip) { success ->
+                ConfirmationAdvancedDialog(
+                    this,
+                    msg,
+                    0,
+                    R.string.read_faq,
+                    R.string.skip
+                ) { success ->
                     if (success) {
                         about_faq_holder.performClick()
                     } else {
@@ -132,7 +176,12 @@ class AboutActivity : BaseSimpleActivity() {
                     }
                 }
             } else {
-                val appVersion = String.format(getString(R.string.app_version, intent.getStringExtra(APP_VERSION_NAME)))
+                val appVersion = String.format(
+                    getString(
+                        R.string.app_version,
+                        intent.getStringExtra(APP_VERSION_NAME)
+                    )
+                )
                 val deviceOS = String.format(getString(R.string.device_os), Build.VERSION.RELEASE)
                 val newline = "\n"
                 val separator = "------------------------------"
@@ -173,8 +222,15 @@ class AboutActivity : BaseSimpleActivity() {
                 }
             } else {
                 baseConfig.wasBeforeRateShown = true
-                val msg = "${getString(R.string.before_rate_read_faq)}\n\n${getString(R.string.make_sure_latest)}"
-                ConfirmationAdvancedDialog(this, msg, 0, R.string.read_faq, R.string.skip) { success ->
+                val msg =
+                    "${getString(R.string.before_rate_read_faq)}\n\n${getString(R.string.make_sure_latest)}"
+                ConfirmationAdvancedDialog(
+                    this,
+                    msg,
+                    0,
+                    R.string.read_faq,
+                    R.string.skip
+                ) { success ->
                     if (success) {
                         about_faq_holder.performClick()
                     } else {
@@ -185,11 +241,13 @@ class AboutActivity : BaseSimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupInvite() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
             about_invite_holder.beGone()
         } else if (about_rate_us_holder.isGone()) {
-            about_invite_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+            about_invite_holder.background =
+                resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }
 
         about_invite_holder.setOnClickListener {
@@ -204,9 +262,11 @@ class AboutActivity : BaseSimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupContributors() {
         if (about_rate_us_holder.isGone() && about_invite_holder.isGone()) {
-            about_contributors_holder.background = resources.getDrawable(R.drawable.ripple_all_corners, theme)
+            about_contributors_holder.background =
+                resources.getDrawable(R.drawable.ripple_all_corners, theme)
         }
 
         about_contributors_holder.setOnClickListener {
@@ -215,15 +275,17 @@ class AboutActivity : BaseSimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupDonate() {
         if (resources.getBoolean(R.bool.show_donate_in_about) && !resources.getBoolean(R.bool.hide_all_external_links)) {
             about_donate_holder.beVisible()
 
-            val contributorsBg = if (about_rate_us_holder.isGone() && about_invite_holder.isGone()) {
-                R.drawable.ripple_top_corners
-            } else {
-                R.drawable.ripple_background
-            }
+            val contributorsBg =
+                if (about_rate_us_holder.isGone() && about_invite_holder.isGone()) {
+                    R.drawable.ripple_top_corners
+                } else {
+                    R.drawable.ripple_background
+                }
 
             about_contributors_holder.background = resources.getDrawable(contributorsBg, theme)
             about_donate_holder.setOnClickListener {
@@ -268,10 +330,12 @@ class AboutActivity : BaseSimpleActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupWebsite() {
         if (resources.getBoolean(R.bool.show_donate_in_about) && !resources.getBoolean(R.bool.hide_all_external_links)) {
             if (about_more_apps_holder.isGone()) {
-                about_website_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+                about_website_holder.background =
+                    resources.getDrawable(R.drawable.ripple_top_corners, theme)
             }
 
             about_website_holder.beVisible()
@@ -289,15 +353,18 @@ class AboutActivity : BaseSimpleActivity() {
         }
 
         about_privacy_policy_holder.setOnClickListener {
-            val appId = baseConfig.appId.removeSuffix(".debug").removeSuffix(".pro").removePrefix("com.simplemobiletools.")
+            val appId = baseConfig.appId.removeSuffix(".debug").removeSuffix(".pro")
+                .removePrefix("com.simplemobiletools.")
             val url = "https://simplemobiletools.com/privacy/$appId.txt"
             launchViewIntent(url)
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupLicense() {
         if (about_website_holder.isGone() && about_more_apps_holder.isGone() && about_privacy_policy_holder.isGone()) {
-            about_licenses_holder.background = resources.getDrawable(R.drawable.ripple_top_corners, theme)
+            about_licenses_holder.background =
+                resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }
 
         about_licenses_holder.setOnClickListener {
