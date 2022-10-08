@@ -1,13 +1,49 @@
 package ca.on.sudbury.hojat.smartgallery.models
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
+import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
+import ca.on.sudbury.hojat.smartgallery.extensions.getAlbum
+import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFDirectChildrenCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileSize
+import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFLastModified
+import ca.on.sudbury.hojat.smartgallery.extensions.getArtist
+import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
+import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
+import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentFile
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
+import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.getItemSize
+import ca.on.sudbury.hojat.smartgallery.extensions.getMediaStoreLastModified
+import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
+import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.getSizeFromContentUri
+import ca.on.sudbury.hojat.smartgallery.extensions.getTitle
+import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
+import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
+import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
+import ca.on.sudbury.hojat.smartgallery.extensions.normalizeString
+import ca.on.sudbury.hojat.smartgallery.helpers.AlphanumericComparator
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_EXTENSION
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
+import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import com.bumptech.glide.signature.ObjectKey
-import com.simplemobiletools.commons.extensions.*
-import com.simplemobiletools.commons.helpers.*
 import java.io.File
+import java.util.*
 
 open class FileDirItem(
     val path: String,
@@ -36,9 +72,13 @@ open class FileDirItem(
             when {
                 sorting and SORT_BY_NAME != 0 -> {
                     result = if (sorting and SORT_USE_NUMERIC_VALUE != 0) {
-                        AlphanumericComparator().compare(name.normalizeString().toLowerCase(), other.name.normalizeString().toLowerCase())
+                        AlphanumericComparator().compare(
+                            name.normalizeString().lowercase(Locale.ROOT),
+                            other.name.normalizeString().lowercase(Locale.ROOT)
+                        )
                     } else {
-                        name.normalizeString().toLowerCase().compareTo(other.name.normalizeString().toLowerCase())
+                        name.normalizeString().lowercase(Locale.ROOT)
+                            .compareTo(other.name.normalizeString().lowercase(Locale.ROOT))
                     }
                 }
                 sorting and SORT_BY_SIZE != 0 -> result = when {
@@ -54,7 +94,9 @@ open class FileDirItem(
                     }
                 }
                 else -> {
-                    result = getExtension().toLowerCase().compareTo(other.getExtension().toLowerCase())
+                    result =
+                        getExtension().lowercase(Locale.ROOT)
+                            .compareTo(other.getExtension().lowercase(Locale.ROOT))
                 }
             }
 
@@ -67,20 +109,28 @@ open class FileDirItem(
 
     fun getExtension() = if (isDirectory) name else path.substringAfterLast('.', "")
 
-    fun getBubbleText(context: Context, dateFormat: String? = null, timeFormat: String? = null) = when {
-        sorting and SORT_BY_SIZE != 0 -> size.formatSize()
-        sorting and SORT_BY_DATE_MODIFIED != 0 -> modified.formatDate(context, dateFormat, timeFormat)
-        sorting and SORT_BY_EXTENSION != 0 -> getExtension().toLowerCase()
-        else -> name
-    }
+    fun getBubbleText(context: Context, dateFormat: String? = null, timeFormat: String? = null) =
+        when {
+            sorting and SORT_BY_SIZE != 0 -> size.formatSize()
+            sorting and SORT_BY_DATE_MODIFIED != 0 -> modified.formatDate(
+                context,
+                dateFormat,
+                timeFormat
+            )
+            sorting and SORT_BY_EXTENSION != 0 -> getExtension().lowercase(Locale.ROOT)
+            else -> name
+        }
 
+    @SuppressLint("Recycle")
     fun getProperSize(context: Context, countHidden: Boolean): Long {
         return when {
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileSize(path)
-            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.getItemSize(countHidden) ?: 0
+            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.getItemSize(countHidden)
+                ?: 0
             isNougatPlus() && path.startsWith("content://") -> {
                 try {
-                    context.contentResolver.openInputStream(Uri.parse(path))?.available()?.toLong() ?: 0L
+                    context.contentResolver.openInputStream(Uri.parse(path))?.available()?.toLong()
+                        ?: 0L
                 } catch (e: Exception) {
                     context.getSizeFromContentUri(Uri.parse(path))
                 }
@@ -91,16 +141,24 @@ open class FileDirItem(
 
     fun getProperFileCount(context: Context, countHidden: Boolean): Int {
         return when {
-            context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileCount(path, countHidden)
-            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.getFileCount(countHidden) ?: 0
+            context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileCount(
+                path,
+                countHidden
+            )
+            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.getFileCount(countHidden)
+                ?: 0
             else -> File(path).getFileCount(countHidden)
         }
     }
 
     fun getDirectChildrenCount(context: Context, countHiddenItems: Boolean): Int {
         return when {
-            context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFDirectChildrenCount(path, countHiddenItems)
-            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.listFiles()?.filter { if (countHiddenItems) true else !it.name!!.startsWith(".") }?.size
+            context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFDirectChildrenCount(
+                path,
+                countHiddenItems
+            )
+            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.listFiles()
+                ?.filter { if (countHiddenItems) true else !it.name!!.startsWith(".") }?.size
                 ?: 0
             else -> File(path).getDirectChildrenCount(context, countHiddenItems)
         }
@@ -110,7 +168,9 @@ open class FileDirItem(
         return when {
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFLastModified(path)
             context.isPathOnOTG(path) -> context.getFastDocumentFile(path)?.lastModified() ?: 0L
-            isNougatPlus() && path.startsWith("content://") -> context.getMediaStoreLastModified(path)
+            isNougatPlus() && path.startsWith("content://") -> context.getMediaStoreLastModified(
+                path
+            )
             else -> File(path).lastModified()
         }
     }

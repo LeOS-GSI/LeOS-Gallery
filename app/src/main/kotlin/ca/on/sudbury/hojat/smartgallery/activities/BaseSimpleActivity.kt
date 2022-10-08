@@ -113,8 +113,8 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog.Mode
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
-import com.simplemobiletools.commons.extensions.getThemeId
-import com.simplemobiletools.commons.extensions.writeLn
+import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
+import ca.on.sudbury.hojat.smartgallery.extensions.writeLn
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 import com.simplemobiletools.commons.helpers.MyContextWrapper
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon

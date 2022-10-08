@@ -20,9 +20,9 @@ import com.simplemobiletools.commons.R.id.change_date_time_dialog_radio_four
 import com.simplemobiletools.commons.R.id.change_date_time_dialog_radio_five
 import com.simplemobiletools.commons.R.id.change_date_time_dialog_radio_six
 import com.simplemobiletools.commons.R.id.change_date_time_dialog_radio_seven
-import com.simplemobiletools.commons.extensions.baseConfig
-import com.simplemobiletools.commons.extensions.getAlertDialogBuilder
-import com.simplemobiletools.commons.extensions.setupDialogStuff
+import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
+import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import kotlinx.android.synthetic.main.dialog_change_date_time_format.view.*
 import java.util.Calendar
 import java.util.Locale

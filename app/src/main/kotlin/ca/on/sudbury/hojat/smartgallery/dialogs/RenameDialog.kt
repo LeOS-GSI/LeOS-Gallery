@@ -13,8 +13,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import com.simplemobiletools.commons.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.RenameAdapter
-import com.simplemobiletools.commons.extensions.onPageChangeListener
-import com.simplemobiletools.commons.extensions.onTabSelectionChanged
+import ca.on.sudbury.hojat.smartgallery.extensions.onPageChangeListener
+import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import com.simplemobiletools.commons.helpers.RENAME_PATTERN
 import com.simplemobiletools.commons.helpers.RENAME_SIMPLE
 import ca.on.sudbury.hojat.smartgallery.views.MyViewPager

@@ -53,7 +53,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
-import com.simplemobiletools.commons.extensions.removeValues
+import ca.on.sudbury.hojat.smartgallery.extensions.removeValues
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*

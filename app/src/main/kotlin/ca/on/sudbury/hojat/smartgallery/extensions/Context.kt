@@ -56,6 +56,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -4122,3 +4123,11 @@ fun Context.getRealInternalStoragePath() =
     if (File("/storage/emulated/0").exists()) "/storage/emulated/0" else Environment.getExternalStorageDirectory().absolutePath.trimEnd(
         '/'
     )
+
+@SuppressLint("WrongConstant")
+fun Context.isBiometricIdAvailable(): Boolean = when (BiometricManager.from(this).canAuthenticate(
+    BiometricManager.Authenticators.BIOMETRIC_WEAK
+)) {
+    BiometricManager.BIOMETRIC_SUCCESS, BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> true
+    else -> false
+}
