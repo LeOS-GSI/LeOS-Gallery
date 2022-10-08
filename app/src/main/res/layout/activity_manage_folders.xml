@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:scrollbars="vertical"
-            app:layoutManager="com.simplemobiletools.commons.views.MyLinearLayoutManager" />
+            app:layoutManager="ca.on.sudbury.hojat.smartgallery.views.MyLinearLayoutManager" />
 
         <ca.on.sudbury.hojat.smartgallery.views.MyTextView
             android:id="@+id/manage_folders_placeholder"

@@ -27,7 +27,7 @@
         </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
     </RelativeLayout>
 
-    <com.simplemobiletools.commons.views.MyFloatingActionButton
+    <ca.on.sudbury.hojat.smartgallery.views.MyFloatingActionButton
         android:id="@+id/directories_show_hidden"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -91,7 +91,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.helpers.AlphanumericComparator
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
-import com.simplemobiletools.commons.views.MySquareImageView
+import ca.on.sudbury.hojat.smartgallery.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
 import ca.on.sudbury.hojat.smartgallery.database.MediumDao
@@ -188,14 +188,14 @@ import ca.on.sudbury.hojat.smartgallery.models.BlockedNumber
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
-import com.simplemobiletools.commons.views.MyAppCompatSpinner
-import com.simplemobiletools.commons.views.MyAutoCompleteTextView
+import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatSpinner
+import ca.on.sudbury.hojat.smartgallery.views.MyAutoCompleteTextView
 import ca.on.sudbury.hojat.smartgallery.views.MyButton
 import ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
 import ca.on.sudbury.hojat.smartgallery.views.MyEditText
-import com.simplemobiletools.commons.views.MyFloatingActionButton
+import ca.on.sudbury.hojat.smartgallery.views.MyFloatingActionButton
 import ca.on.sudbury.hojat.smartgallery.views.MySeekBar
-import com.simplemobiletools.commons.views.MySwitchCompat
+import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.sudbury.hojat.smartgallery.views.MyTextView
 import com.squareup.picasso.Picasso

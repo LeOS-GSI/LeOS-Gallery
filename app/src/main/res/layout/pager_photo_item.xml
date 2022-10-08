@@ -92,7 +92,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:overScrollMode="never"
-            app:layoutManager="com.simplemobiletools.commons.views.MyLinearLayoutManager" />
+            app:layoutManager="ca.on.sudbury.hojat.smartgallery.views.MyLinearLayoutManager" />
 
     </RelativeLayout>
 

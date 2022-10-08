@@ -28,7 +28,7 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-        <com.simplemobiletools.commons.views.MyViewPager
+        <ca.on.sudbury.hojat.smartgallery.views.MyViewPager
             android:id="@+id/dialog_tab_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

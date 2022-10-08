@@ -17,7 +17,7 @@ import com.simplemobiletools.commons.extensions.onPageChangeListener
 import com.simplemobiletools.commons.extensions.onTabSelectionChanged
 import com.simplemobiletools.commons.helpers.RENAME_PATTERN
 import com.simplemobiletools.commons.helpers.RENAME_SIMPLE
-import com.simplemobiletools.commons.views.MyViewPager
+import ca.on.sudbury.hojat.smartgallery.views.MyViewPager
 import kotlinx.android.synthetic.main.dialog_rename.view.*
 
 class RenameDialog(

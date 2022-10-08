@@ -26,7 +26,7 @@ import com.simplemobiletools.commons.extensions.isBiometricIdAvailable
 import com.simplemobiletools.commons.extensions.onPageChangeListener
 import com.simplemobiletools.commons.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
-import com.simplemobiletools.commons.views.MyDialogViewPager
+import ca.on.sudbury.hojat.smartgallery.views.MyDialogViewPager
 import kotlinx.android.synthetic.main.dialog_security.view.*
 
 class SecurityDialog(
