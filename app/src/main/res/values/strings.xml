@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="fingerprint_error_hw_not_available">Fingerprint hardware not available.</string>
+    <string name="fingerprint_error_unable_to_process">Try again.</string>
 
     <string name="biometrics">Biometrics</string>
     <string name="fingerprint">Fingerprint</string>

@@ -144,7 +144,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.appLaunched
-import ca.on.sudbury.hojat.smartgallery.extensions.isPackageInstalled
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
