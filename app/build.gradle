@@ -88,7 +88,6 @@ dependencies {
 
 
     api 'com.github.tibbi:RecyclerView-FastScroller:e7d3e150c4'
-    api 'com.github.tibbi:reprint:2cb206415d'
     implementation 'com.andrognito.patternlockview:patternlockview:1.0.0'
     api 'com.google.android.material:material:1.4.0'
 
