@@ -16,9 +16,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
-import com.github.ajalt.reprint.core.AuthenticationFailureReason
-import com.github.ajalt.reprint.core.AuthenticationListener
-import com.github.ajalt.reprint.core.Reprint
+import ca.on.sudbury.hojat.smartgallery.reprint.core.AuthenticationFailureReason
+import ca.on.sudbury.hojat.smartgallery.reprint.core.AuthenticationListener
+import ca.on.sudbury.hojat.smartgallery.reprint.core.Reprint
 import kotlinx.android.synthetic.main.tab_fingerprint.view.*
 
 class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),

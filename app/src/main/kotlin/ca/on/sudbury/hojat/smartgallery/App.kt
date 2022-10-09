@@ -2,7 +2,7 @@ package ca.on.sudbury.hojat.smartgallery
 
 import android.app.Application
 import ca.on.sudbury.hojat.smartgallery.extensions.checkUseEnglish
-import com.github.ajalt.reprint.core.Reprint
+import ca.on.sudbury.hojat.smartgallery.reprint.core.Reprint
 import com.squareup.picasso.Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.Request

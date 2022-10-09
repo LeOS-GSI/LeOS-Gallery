@@ -128,7 +128,6 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
-import com.github.ajalt.reprint.core.Reprint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ca.on.sudbury.hojat.smartgallery.helpers.BaseConfig
@@ -188,6 +187,7 @@ import ca.on.sudbury.hojat.smartgallery.models.AlarmSound
 import ca.on.sudbury.hojat.smartgallery.models.BlockedNumber
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
+import ca.on.sudbury.hojat.smartgallery.reprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatSpinner
 import ca.on.sudbury.hojat.smartgallery.views.MyAutoCompleteTextView
