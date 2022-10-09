@@ -20,7 +20,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/cab_unpin"
-        android:icon="@drawable/ic_unpin"
+        android:icon="@drawable/ic_pin"
         android:title="@string/unpin_folder"
         app:showAsAction="ifRoom" />
     <item

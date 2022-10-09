@@ -37,9 +37,10 @@ class ChangeSortingDialog(
     private var pathToUse = if (!isDirectorySorting && path.isEmpty()) SHOW_ALL else path
 
     init {
-        currSorting = if (isDirectorySorting) config.directorySorting else config.getFolderSorting(pathToUse)
+        currSorting =
+            if (isDirectorySorting) config.directorySorting else config.getFolderSorting(pathToUse)
         binding.apply {
-            useForThisFolderDivider.beVisibleIf(showFolderCheckbox || (currSorting and SORT_BY_NAME != 0 || currSorting and SORT_BY_PATH != 0))
+            useForThisFolderDivider.root.beVisibleIf(showFolderCheckbox || (currSorting and SORT_BY_NAME != 0 || currSorting and SORT_BY_PATH != 0))
 
             sortingDialogNumericSorting.beVisibleIf(showFolderCheckbox && (currSorting and SORT_BY_NAME != 0 || currSorting and SORT_BY_PATH != 0))
             sortingDialogNumericSorting.isChecked = currSorting and SORT_USE_NUMERIC_VALUE != 0
@@ -63,13 +64,15 @@ class ChangeSortingDialog(
 
     private fun setupSortRadio() {
         binding.sortingDialogRadioSorting.setOnCheckedChangeListener { _, checkedId ->
-            val isSortingByNameOrPath = checkedId == binding.sortingDialogRadioName.id || checkedId == binding.sortingDialogRadioPath.id
+            val isSortingByNameOrPath =
+                checkedId == binding.sortingDialogRadioName.id || checkedId == binding.sortingDialogRadioPath.id
             binding.sortingDialogNumericSorting.beVisibleIf(isSortingByNameOrPath)
-            binding.useForThisFolderDivider.beVisibleIf(binding.sortingDialogNumericSorting.isVisible() || binding.sortingDialogUseForThisFolder.isVisible())
+            binding.useForThisFolderDivider.root.beVisibleIf(binding.sortingDialogNumericSorting.isVisible() || binding.sortingDialogUseForThisFolder.isVisible())
 
-            val hideSortOrder = checkedId == binding.sortingDialogRadioCustom.id || checkedId == binding.sortingDialogRadioRandom.id
+            val hideSortOrder =
+                checkedId == binding.sortingDialogRadioCustom.id || checkedId == binding.sortingDialogRadioRandom.id
             binding.sortingDialogRadioOrder.beGoneIf(hideSortOrder)
-            binding.sortingDialogOrderDivider.beGoneIf(hideSortOrder)
+            binding.sortingDialogOrderDivider.root.beGoneIf(hideSortOrder)
         }
 
         val sortBtn = when {

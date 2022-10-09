@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contributors_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -48,7 +49,8 @@
                 android:paddingEnd="@dimen/normal_margin"
                 android:paddingBottom="@dimen/normal_margin"
                 android:text="@string/contributors_developers"
-                android:textSize="@dimen/bigger_text_size" />
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
         </RelativeLayout>
 
@@ -101,8 +103,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_arabic_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_arabic"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_azerbaijani_icon"
@@ -137,7 +140,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_azerbaijani_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_azerbaijani"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -173,7 +176,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_bengali_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_bengali"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -209,7 +212,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_catalan_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_catalan"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -245,7 +248,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_czech_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_czech"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -281,7 +284,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_welsh_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_welsh"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -317,7 +320,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_danish_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_danish"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -353,7 +356,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_german_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_german"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -389,7 +392,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_greek_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_greek"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -425,7 +428,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_spanish_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_spanish"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -461,7 +464,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_basque_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_basque"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -497,7 +500,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_persian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_persian"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -533,7 +536,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_finnish_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_finnish"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -569,7 +572,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_french_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_french"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -605,7 +608,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_galician_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_galician"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -641,7 +644,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_hindi_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_hindi"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -677,7 +680,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_croatian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_croatian"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -713,7 +716,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_hungarian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_hungarian"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -749,7 +752,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_indonesian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_indonesian"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -785,7 +788,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_italian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_italian"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -821,7 +824,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_hebrew_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_hebrew"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -857,7 +860,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_japanese_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_japanese"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -893,7 +896,7 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_korean_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_korean"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -928,7 +931,7 @@
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_lithuanian_icon"
-                android:text="@string/translators_lithuanian"
+                android:text="@string/translators"
                 android:textSize="@dimen/bigger_text_size" />
 
             <ImageView
@@ -964,8 +967,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_nepali_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_nepali"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_norwegian_icon"
@@ -1000,8 +1004,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_norwegian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_norwegian"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_dutch_icon"
@@ -1036,8 +1041,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_dutch_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_dutch"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_polish_icon"
@@ -1072,8 +1078,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_polish_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_polish"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_portuguese_icon"
@@ -1108,8 +1115,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_portuguese_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_portuguese"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_romanian_icon"
@@ -1144,8 +1152,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_romanian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_romanian"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_russian_icon"
@@ -1180,8 +1189,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_russian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_russian"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_slovak_icon"
@@ -1216,8 +1226,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_slovak_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_slovak"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_slovenian_icon"
@@ -1252,8 +1263,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_slovenian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_slovenian"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_swedish_icon"
@@ -1288,8 +1300,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_swedish_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_swedish"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_tamil_icon"
@@ -1324,8 +1337,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_tamil_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_tamil"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_turkish_icon"
@@ -1360,8 +1374,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_turkish_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_turkish"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_ukrainian_icon"
@@ -1396,8 +1411,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_ukrainian_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_ukrainian"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_chinese_hk_icon"
@@ -1432,8 +1448,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_chinese_hk_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_chinese_hk"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_chinese_cn_icon"
@@ -1468,8 +1485,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_chinese_cn_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_chinese_cn"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_chinese_tw_icon"
@@ -1504,8 +1522,9 @@
                 android:layout_marginEnd="@dimen/normal_margin"
                 android:layout_toEndOf="@+id/contributors_chinese_tw_icon"
                 android:paddingEnd="@dimen/medium_margin"
-                android:text="@string/translators_chinese_tw"
-                android:textSize="@dimen/bigger_text_size" />
+                android:text="@string/translators"
+                android:textSize="@dimen/bigger_text_size"
+                tools:ignore="RtlSymmetry" />
 
             <ImageView
                 android:id="@+id/contributors_footer_icon"
@@ -1530,7 +1549,8 @@
                 android:paddingEnd="@dimen/normal_margin"
                 android:text="@string/contributors_label"
                 android:textSize="@dimen/normal_text_size"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                tools:ignore="RtlSymmetry" />
 
         </RelativeLayout>
     </LinearLayout>

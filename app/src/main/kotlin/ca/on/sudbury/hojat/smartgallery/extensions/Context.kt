@@ -3497,17 +3497,6 @@ fun Context.getPhoneNumberTypeText(type: Int, label: String): String {
     }
 }
 
-fun Context.updateBottomTabItemColors(view: View?, isActive: Boolean) {
-    val color = if (isActive) {
-        getProperPrimaryColor()
-    } else {
-        getProperTextColor()
-    }
-
-    view?.findViewById<ImageView>(R.id.tab_item_icon)?.applyColorFilter(color)
-    view?.findViewById<TextView>(R.id.tab_item_label)?.setTextColor(color)
-}
-
 fun Context.getFolderLastModifieds(folder: String): java.util.HashMap<String, Long> {
     val lastModifieds = java.util.HashMap<String, Long>()
     val projection = arrayOf(
@@ -4130,4 +4119,26 @@ fun Context.isBiometricIdAvailable(): Boolean = when (BiometricManager.from(this
 )) {
     BiometricManager.BIOMETRIC_SUCCESS, BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> true
     else -> false
+}
+
+// Convert paths like /storage/emulated/0/Pictures/Screenshots/first.jpg to content://media/external/images/media/131799
+// so that we can refer to the file in the MediaStore.
+// If we found no mediastore uri for a given file, do not return its path either to avoid some mismatching
+fun Context.getFileUrisFromFileDirItemsTuple(fileDirItems: List<FileDirItem>): Pair<java.util.ArrayList<String>, java.util.ArrayList<Uri>> {
+    val fileUris = java.util.ArrayList<Uri>()
+    val successfulFilePaths = java.util.ArrayList<String>()
+    val allIds = getMediaStoreIds(this)
+    val filePaths = fileDirItems.map { it.path }
+    filePaths.forEach { path ->
+        for ((filePath, mediaStoreId) in allIds) {
+            if (filePath.lowercase() == path.lowercase()) {
+                val baseUri = getFileUri(filePath)
+                val uri = ContentUris.withAppendedId(baseUri, mediaStoreId)
+                fileUris.add(uri)
+                successfulFilePaths.add(path)
+            }
+        }
+    }
+
+    return Pair(successfulFilePaths, fileUris)
 }

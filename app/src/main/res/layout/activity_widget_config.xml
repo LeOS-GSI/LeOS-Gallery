@@ -142,12 +142,19 @@
 
         <Button
             android:id="@+id/config_save"
-            style="@style/MyWidgetConfigSaveStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:text="@string/ok" />
+            android:background="@drawable/widget_config_seekbar_background"
+            android:fontFamily="sans-serif-light"
+            android:paddingLeft="@dimen/activity_margin"
+            android:paddingRight="@dimen/activity_margin"
+            android:text="@string/ok"
+            android:textColor="@color/dark_grey"
+            android:textFontWeight="400"
+            android:textSize="@dimen/big_text_size"
+            tools:ignore="RelativeOverlap,UnusedAttribute" />
 
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

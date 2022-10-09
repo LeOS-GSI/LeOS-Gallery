@@ -445,6 +445,7 @@
     <color name="md_yellow_700_dark">#FBB504</color>
     <color name="md_yellow_800_dark">#EF9606</color>
     <color name="md_yellow_900_dark">#DA6B09</color>
+    <color name="bottom_tabs_light_background">#F1EEE8</color>
 
 
 </resources>

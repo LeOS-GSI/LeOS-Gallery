@@ -45,8 +45,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricPrompt
+import androidx.biometric.auth.AuthPromptCallback
+import androidx.biometric.auth.AuthPromptHost
+import androidx.biometric.auth.Class2BiometricAuthPrompt
 import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
+import androidx.fragment.app.FragmentActivity
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
@@ -119,6 +124,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
+import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_title.view.*
 import java.io.File
@@ -3309,3 +3315,32 @@ fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop
             }
         }
     }
+
+fun Activity.showBiometricPrompt(
+    successCallback: ((String, Int) -> Unit)? = null,
+    failureCallback: (() -> Unit)? = null
+) {
+    Class2BiometricAuthPrompt.Builder(getText(R.string.authenticate), getText(R.string.cancel))
+        .build()
+        .startAuthentication(
+            AuthPromptHost(this as FragmentActivity),
+            object : AuthPromptCallback() {
+                override fun onAuthenticationSucceeded(activity: FragmentActivity?, result: BiometricPrompt.AuthenticationResult) {
+                    successCallback?.invoke("", PROTECTION_FINGERPRINT)
+                }
+
+                override fun onAuthenticationError(activity: FragmentActivity?, errorCode: Int, errString: CharSequence) {
+                    val isCanceledByUser = errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON || errorCode == BiometricPrompt.ERROR_USER_CANCELED
+                    if (!isCanceledByUser) {
+                        toast(errString.toString())
+                    }
+                    failureCallback?.invoke()
+                }
+
+                override fun onAuthenticationFailed(activity: FragmentActivity?) {
+                    toast(R.string.authentication_failed)
+                    failureCallback?.invoke()
+                }
+            }
+        )
+}

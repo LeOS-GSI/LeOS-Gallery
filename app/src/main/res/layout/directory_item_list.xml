@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dir_holder"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -9,7 +10,8 @@
     android:foreground="@drawable/selector"
     android:paddingStart="@dimen/medium_margin"
     android:paddingTop="@dimen/small_margin"
-    android:paddingBottom="@dimen/small_margin">
+    android:paddingBottom="@dimen/small_margin"
+    tools:ignore="RtlSymmetry,UnusedAttribute">
 
     <ca.on.sudbury.hojat.smartgallery.views.MySquareImageView
         android:id="@+id/dir_thumbnail"
