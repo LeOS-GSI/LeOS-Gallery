@@ -4,7 +4,7 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getTextSize
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView

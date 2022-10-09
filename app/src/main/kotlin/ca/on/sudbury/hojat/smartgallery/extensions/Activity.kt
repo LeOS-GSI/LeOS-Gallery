@@ -1724,7 +1724,7 @@ fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> U
 
         try {
             (drawable as LayerDrawable).setDrawableByLayerId(R.id.shortcut_image, builder.get())
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
 
         runOnUiThread {
@@ -1848,6 +1848,7 @@ fun Activity.setupDialogStuff(
     }
 }
 
+@SuppressLint("InflateParams", "UseCompatLoadingForDrawables")
 fun Activity.setupDialogStuff(
     view: View,
     dialog: AlertDialog,
@@ -1872,7 +1873,7 @@ fun Activity.setupDialogStuff(
     var title: TextView? = null
     if (titleId != 0 || titleText.isNotEmpty()) {
         title = layoutInflater.inflate(
-            com.simplemobiletools.commons.R.layout.dialog_title,
+            R.layout.dialog_title,
             null
         ) as TextView
         title.dialog_title_textview.apply {
@@ -1904,15 +1905,15 @@ fun Activity.setupDialogStuff(
 
         val bgDrawable = when {
             isBlackAndWhiteTheme() -> resources.getDrawable(
-                com.simplemobiletools.commons.R.drawable.black_dialog_background,
+                R.drawable.black_dialog_background,
                 theme
             )
             baseConfig.isUsingSystemTheme -> resources.getDrawable(
-                com.simplemobiletools.commons.R.drawable.dialog_you_background,
+                R.drawable.dialog_you_background,
                 theme
             )
             else -> resources.getColoredDrawableWithColor(
-                com.simplemobiletools.commons.R.drawable.dialog_bg,
+                R.drawable.dialog_bg,
                 baseConfig.backgroundColor
             )
         }
@@ -2598,7 +2599,7 @@ fun Activity.createTempFile(file: File): File? {
         if (isRPlus()) {
             // this can throw FileSystemException, lets catch and handle it at the place calling this function
             kotlin.io.path.createTempFile(
-                file.parentFile.toPath(),
+                file.parentFile?.toPath(),
                 "temp",
                 "${System.currentTimeMillis()}"
             ).toFile()
@@ -2798,6 +2799,7 @@ fun Activity.checkAppSideloading(): Boolean {
     return isSideloaded
 }
 
+@SuppressLint("UseCompatLoadingForDrawables")
 fun Activity.isAppSideloaded(): Boolean {
     return try {
         getDrawable(R.drawable.ic_camera_vector)

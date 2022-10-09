@@ -39,7 +39,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_VERSION_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import kotlinx.android.synthetic.main.activity_about.*

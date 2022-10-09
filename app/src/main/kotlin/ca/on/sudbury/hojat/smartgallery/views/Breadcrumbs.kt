@@ -20,7 +20,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import kotlinx.android.synthetic.main.item_breadcrumb.view.*
 

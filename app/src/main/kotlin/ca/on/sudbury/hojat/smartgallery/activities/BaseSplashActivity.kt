@@ -11,7 +11,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getSharedTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.isThankYouInstalled
 import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.showSideloadingDialog
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_UNCHECKED
 

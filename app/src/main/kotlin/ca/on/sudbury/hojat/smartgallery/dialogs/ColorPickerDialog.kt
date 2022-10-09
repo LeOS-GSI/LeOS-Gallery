@@ -23,7 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.extensions.value
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.views.ColorPickerSquare
 import kotlinx.android.synthetic.main.dialog_color_picker.view.*

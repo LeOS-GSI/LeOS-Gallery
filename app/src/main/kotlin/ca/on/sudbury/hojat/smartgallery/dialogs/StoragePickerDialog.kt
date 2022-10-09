@@ -14,7 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.otgPath
 import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import kotlinx.android.synthetic.main.dialog_radio_group.view.*
 

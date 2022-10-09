@@ -28,7 +28,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.dialogs.PurchaseThankYouDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.updateSharedTheme
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS

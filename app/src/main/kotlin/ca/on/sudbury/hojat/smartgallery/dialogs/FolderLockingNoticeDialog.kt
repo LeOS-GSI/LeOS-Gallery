@@ -3,7 +3,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff

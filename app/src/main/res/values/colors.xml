@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="you_status_bar_color">#FFE0F3FF</color>
+    <color name="you_contextual_status_bar_color">#FF219BCC</color>
+    <color name="you_background_color">#FFFCFCFF</color>
+    <color name="you_neutral_text_color">#FF001E2C</color>
+    <color name="you_primary_color">#FF219BCC</color>
+    <color name="you_primary_dark_color">#FF00668B</color>
+    <color name="you_dialog_background_color">#FFE0F3FF</color>
+
     <color name="actionbar_menu_icon">#454545</color>
     <color name="crop_image_view_background">#BB000000</color>
     <color name="circle_black_background">#66000000</color>

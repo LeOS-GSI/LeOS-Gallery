@@ -4,7 +4,7 @@ import android.app.Activity
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AlertDialog
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.launchPurchaseThankYouIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.removeUnderlines

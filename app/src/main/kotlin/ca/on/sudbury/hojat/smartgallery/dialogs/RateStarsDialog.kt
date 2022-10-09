@@ -11,7 +11,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import kotlinx.android.synthetic.main.dialog_rate_stars.view.*
 
 @SuppressLint("InflateParams")

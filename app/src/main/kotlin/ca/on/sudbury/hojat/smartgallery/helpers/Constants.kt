@@ -7,7 +7,7 @@ import android.os.Build
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.ChecksSdkIntAtLeast
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.times
 import java.util.HashMap
 import java.util.LinkedHashMap

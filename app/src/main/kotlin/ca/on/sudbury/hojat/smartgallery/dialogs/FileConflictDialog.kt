@@ -2,10 +2,10 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import com.simplemobiletools.commons.R
-import com.simplemobiletools.commons.R.id.conflict_dialog_radio_keep_both
-import com.simplemobiletools.commons.R.id.conflict_dialog_radio_merge
-import com.simplemobiletools.commons.R.id.conflict_dialog_radio_skip
+import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.R.id.conflict_dialog_radio_keep_both
+import ca.on.sudbury.hojat.smartgallery.R.id.conflict_dialog_radio_merge
+import ca.on.sudbury.hojat.smartgallery.R.id.conflict_dialog_radio_skip
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder

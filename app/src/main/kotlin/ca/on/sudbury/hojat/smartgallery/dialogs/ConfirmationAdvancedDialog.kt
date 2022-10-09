@@ -4,7 +4,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import kotlinx.android.synthetic.main.dialog_message.view.*

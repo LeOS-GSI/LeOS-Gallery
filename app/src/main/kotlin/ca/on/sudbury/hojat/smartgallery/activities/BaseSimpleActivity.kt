@@ -36,7 +36,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isShowingOTGDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFCreateDocumentDialogSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialogSdk30
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.CopyMoveTask
 import ca.on.sudbury.hojat.smartgallery.extensions.addBit
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig

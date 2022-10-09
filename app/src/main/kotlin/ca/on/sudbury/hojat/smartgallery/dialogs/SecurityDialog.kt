@@ -20,7 +20,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
 import ca.on.sudbury.hojat.smartgallery.extensions.isBiometricIdAvailable
 import ca.on.sudbury.hojat.smartgallery.extensions.onPageChangeListener

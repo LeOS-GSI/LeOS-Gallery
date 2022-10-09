@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatSpinner
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.MyArrayAdapter
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 

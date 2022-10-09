@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="biometrics">Biometrics</string>
+    <string name="fingerprint">Fingerprint</string>
+
     <string name="app_name">Smart Gallery</string>
     <string name="app_launcher_name">Smart Gallery</string>
     <string name="edit">Edit</string>

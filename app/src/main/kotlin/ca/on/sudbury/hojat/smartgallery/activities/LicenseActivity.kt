@@ -46,7 +46,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SANSELAN
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SMS_MMS
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_STETHO
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SUBSAMPLING
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.models.License
 import kotlinx.android.synthetic.main.activity_license.*
 import kotlinx.android.synthetic.main.item_license.view.*

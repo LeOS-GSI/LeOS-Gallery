@@ -13,7 +13,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.value
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.helpers.DAY_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.HOUR_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS

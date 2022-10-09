@@ -2,7 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.simplemobiletools.commons.R
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
