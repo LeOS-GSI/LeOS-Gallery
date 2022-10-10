@@ -6,12 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.alexvasilkov.gestures.GestureImageView
+    <ca.on.sudbury.hojat.smartgallery.gestures.GestureImageView
         android:id="@+id/gestures_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.alexvasilkov.gestures.GestureFrameLayout
+    <ca.on.sudbury.hojat.smartgallery.gestures.GestureFrameLayout
         android:id="@+id/gif_view_frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitCenter" />
 
-    </com.alexvasilkov.gestures.GestureFrameLayout>
+    </ca.on.sudbury.hojat.smartgallery.gestures.GestureFrameLayout>
 
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/subsampling_view"

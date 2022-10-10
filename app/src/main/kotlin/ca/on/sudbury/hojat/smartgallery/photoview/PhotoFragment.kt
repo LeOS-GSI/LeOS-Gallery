@@ -25,8 +25,8 @@ import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
 import androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION
 import androidx.fragment.app.viewModels
 import ca.on.sudbury.hojat.smartgallery.R
-import com.alexvasilkov.gestures.GestureController
-import com.alexvasilkov.gestures.State
+import ca.on.sudbury.hojat.smartgallery.gestures.GestureController
+import ca.on.sudbury.hojat.smartgallery.gestures.State
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource

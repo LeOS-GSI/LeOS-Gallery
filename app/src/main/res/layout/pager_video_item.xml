@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.alexvasilkov.gestures.GestureFrameLayout
+    <ca.on.sudbury.hojat.smartgallery.gestures.GestureFrameLayout
         android:id="@+id/video_surface_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
 
-    </com.alexvasilkov.gestures.GestureFrameLayout>
+    </ca.on.sudbury.hojat.smartgallery.gestures.GestureFrameLayout>
 
     <ca.on.sudbury.hojat.smartgallery.views.MediaSideScroll
         android:id="@+id/video_volume_controller"
