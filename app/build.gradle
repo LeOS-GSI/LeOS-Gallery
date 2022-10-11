@@ -112,7 +112,10 @@ dependencies {
     implementation 'com.google.vr:sdk-videowidget:1.180.0'
     implementation 'org.apache.sanselan:sanselan:0.97-incubator'
     implementation 'info.androidhive:imagefilters:1.0.7'
-    implementation 'com.github.tibbi:subsampling-scale-image-view:b51482b3fa'
+
+    // for deep zooming into pictures
+    implementation 'com.github.tibbi:subsampling-scale-image-view:b51482b3fa' //TODO : to be removed
+
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.github.penfeizhou.android.animation:awebp:2.17.0'
     implementation 'com.github.penfeizhou.android.animation:apng:2.17.0'

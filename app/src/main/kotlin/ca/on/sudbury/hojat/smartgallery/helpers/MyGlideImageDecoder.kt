@@ -8,7 +8,7 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-import com.davemorrissey.labs.subscaleview.ImageDecoder
+import ca.on.sudbury.hojat.smartgallery.subscaleview.ImageDecoder
 
 class MyGlideImageDecoder(private val degrees: Int, val signature: ObjectKey) : ImageDecoder {
 
