@@ -65,6 +65,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.FiltersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityEditBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialog
@@ -80,7 +81,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_FREE
 import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_OTHER
 import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
-import com.theartofdev.edmodo.cropper.CropImageView
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
 import java.io.File

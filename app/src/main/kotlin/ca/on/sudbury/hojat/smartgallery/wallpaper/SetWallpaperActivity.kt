@@ -16,8 +16,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.MainActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySetWallpaperBinding
-import com.theartofdev.edmodo.cropper.CropImageView
 
 private const val RATIO_PORTRAIT = 0
 private const val RATIO_LANDSCAPE = 1
