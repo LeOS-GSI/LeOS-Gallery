@@ -23,11 +23,11 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.request.RequestOptions
-import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.getFilePlaceholderDrawables
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import kotlinx.android.synthetic.main.item_filepicker_list.view.*
 import java.util.Locale
@@ -61,7 +61,10 @@ class FilePickerItemsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val fileDirItem = fileDirItems[position]
-        holder.bindView(fileDirItem, true, false) { itemView, adapterPosition ->
+        holder.bindView(fileDirItem,
+            allowSingleClick = true,
+            allowLongClick = false
+        ) { itemView, _ ->
             setupView(itemView, fileDirItem)
         }
         bindViewHolder(holder)

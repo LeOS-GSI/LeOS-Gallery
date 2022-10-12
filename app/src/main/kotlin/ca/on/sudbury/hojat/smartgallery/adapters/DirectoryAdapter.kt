@@ -20,7 +20,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
@@ -103,6 +102,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.recyclerviewfastscroller.RecyclerViewFastScroller
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.dir_check
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.dir_location

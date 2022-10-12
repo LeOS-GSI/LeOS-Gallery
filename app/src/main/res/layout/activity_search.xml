@@ -41,7 +41,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
+        <ca.on.sudbury.hojat.smartgallery.recyclerviewfastscroller.RecyclerViewFastScroller
             android:id="@+id/search_fastscroller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -54,6 +54,6 @@
                 app:layoutManager="ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager"
                 app:spanCount="@integer/media_columns_vertical_scroll" />
 
-        </com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller>
+        </ca.on.sudbury.hojat.smartgallery.recyclerviewfastscroller.RecyclerViewFastScroller>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
