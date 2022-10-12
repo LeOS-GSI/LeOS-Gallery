@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--    fast scroller recyclerview-->
+    <dimen name="corner_radius">24dp</dimen>
+    <dimen name="default_handle_width">26dp</dimen>
+    <dimen name="default_handle_height">40dp</dimen>
+    <dimen name="default_popup_padding">16dp</dimen>
+    <dimen name="default_handle_right_padding">4dp</dimen>
+    <dimen name="default_handle_left_padding">12dp</dimen>
+
     <dimen name="dir_tmb_size">150dp</dimen>
     <dimen name="medium_tmb_size">100dp</dimen>
     <dimen name="sd_card_icon_size">20dp</dimen>
@@ -26,9 +35,6 @@
     <dimen name="full_brush_size">40dp</dimen>
     <dimen name="lock_padding">30dp</dimen>
     <dimen name="sample_thumbnail_size">180dp</dimen>
-
-
-
 
 
     <dimen name="one_dp">1dp</dimen>
