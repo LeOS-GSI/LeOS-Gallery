@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
 import android.app.Activity
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
@@ -75,7 +74,7 @@ class WritePermissionDialog(activity: Activity, val mode: Mode, val callback: ()
         }
 
         activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
             .setOnCancelListener {
                 BaseSimpleActivity.funAfterSAFPermission?.invoke(false)
                 BaseSimpleActivity.funAfterSAFPermission = null

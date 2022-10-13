@@ -17,7 +17,7 @@ class ConfirmationAdvancedDialog(
     messageId: Int = R.string.proceed_with_deletion,
     positive: Int = R.string.yes,
     negative: Int = R.string.no,
-    val cancelOnTouchOutside: Boolean = true,
+    private val cancelOnTouchOutside: Boolean = true,
     val callback: (result: Boolean) -> Unit
 ) {
     private var dialog: AlertDialog? = null
@@ -27,10 +27,10 @@ class ConfirmationAdvancedDialog(
         view.message.text = message.ifEmpty { activity.resources.getString(messageId) }
 
         val builder = activity.getAlertDialogBuilder()
-            .setPositiveButton(positive) { dialog, which -> positivePressed() }
+            .setPositiveButton(positive) { _, _ -> positivePressed() }
 
         if (negative != 0) {
-            builder.setNegativeButton(negative) { dialog, which -> negativePressed() }
+            builder.setNegativeButton(negative) { _, _ -> negativePressed() }
         }
 
         if (!cancelOnTouchOutside) {

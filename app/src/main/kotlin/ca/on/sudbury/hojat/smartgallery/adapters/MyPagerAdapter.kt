@@ -15,7 +15,11 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOULD_INIT_FRAGMENT
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 
-class MyPagerAdapter(val activity: ViewPagerActivity, fm: FragmentManager, val media: MutableList<Medium>) : FragmentStatePagerAdapter(fm) {
+class MyPagerAdapter(
+    val activity: ViewPagerActivity,
+    fm: FragmentManager,
+    val media: MutableList<Medium>
+) : FragmentStatePagerAdapter(fm) {
     private val fragments = HashMap<Int, ViewPagerFragment>()
     var shouldInitFragment = true
 

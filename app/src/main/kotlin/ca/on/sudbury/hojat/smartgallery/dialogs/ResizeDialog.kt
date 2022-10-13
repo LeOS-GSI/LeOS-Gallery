@@ -61,7 +61,11 @@ class ResizeDialog(
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(binding.root, this, R.string.resize_and_save) { alertDialog ->
+                activity.setupDialogStuff(
+                    binding.root,
+                    this,
+                    R.string.resize_and_save
+                ) { alertDialog ->
                     alertDialog.showKeyboard(binding.resizeImageWidth)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         val width = getViewValue(binding.resizeImageWidth)
@@ -71,7 +75,10 @@ class ResizeDialog(
                             return@setOnClickListener
                         }
 
-                        val newSize = Point(getViewValue(binding.resizeImageWidth), getViewValue(binding.resizeImageHeight))
+                        val newSize = Point(
+                            getViewValue(binding.resizeImageWidth),
+                            getViewValue(binding.resizeImageHeight)
+                        )
                         callback(newSize)
                         alertDialog.dismiss()
                     }

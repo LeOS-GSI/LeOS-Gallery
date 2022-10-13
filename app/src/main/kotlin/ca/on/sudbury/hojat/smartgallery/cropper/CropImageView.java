@@ -135,7 +135,7 @@ public class CropImageView extends FrameLayout {
      * if auto-zoom functionality is enabled.<br>
      * default: true.
      */
-    private boolean mAutoZoomEnabled = true;
+    private boolean mAutoZoomEnabled;
 
     /**
      * The max zoom allowed during cropping
@@ -381,18 +381,15 @@ public class CropImageView extends FrameLayout {
 
         mCropOverlayView = v.findViewById(R.id.CropOverlayView);
         mCropOverlayView.setCropWindowChangeListener(
-                new CropOverlayView.CropWindowChangeListener() {
-                    @Override
-                    public void onCropWindowChanged(boolean inProgress) {
-                        handleCropWindowChanged(inProgress, true);
-                        CropImageView.OnSetCropOverlayReleasedListener listener = mOnCropOverlayReleasedListener;
-                        if (listener != null && !inProgress) {
-                            listener.onCropOverlayReleased(getCropRect());
-                        }
-                        CropImageView.OnSetCropOverlayMovedListener movedListener = mOnSetCropOverlayMovedListener;
-                        if (movedListener != null && inProgress) {
-                            movedListener.onCropOverlayMoved(getCropRect());
-                        }
+                inProgress -> {
+                    handleCropWindowChanged(inProgress, true);
+                    CropImageView.OnSetCropOverlayReleasedListener listener = mOnCropOverlayReleasedListener;
+                    if (listener != null && !inProgress) {
+                        listener.onCropOverlayReleased(getCropRect());
+                    }
+                    ca.on.sudbury.hojat.smartgallery.cropper.CropImageView.OnSetCropOverlayMovedListener movedListener = mOnSetCropOverlayMovedListener;
+                    if (movedListener != null && inProgress) {
+                        movedListener.onCropOverlayMoved(getCropRect());
                     }
                 });
         mCropOverlayView.setInitialAttributeValues(options);

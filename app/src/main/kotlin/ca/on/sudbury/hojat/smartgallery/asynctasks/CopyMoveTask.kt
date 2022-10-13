@@ -51,11 +51,11 @@ import java.lang.ref.WeakReference
 
 class CopyMoveTask(
     @SuppressLint("StaticFieldLeak") val activity: BaseSimpleActivity,
-    val copyOnly: Boolean,
-    val copyMediaOnly: Boolean,
-    val conflictResolutions: LinkedHashMap<String, Int>,
+    private val copyOnly: Boolean,
+    private val copyMediaOnly: Boolean,
+    private val conflictResolutions: LinkedHashMap<String, Int>,
     listener: CopyMoveListener,
-    val copyHidden: Boolean
+    private val copyHidden: Boolean
 ) : AsyncTask<Pair<ArrayList<FileDirItem>, String>, Void, Boolean>() {
     private val INITIAL_PROGRESS_DELAY = 3000L
     private val PROGRESS_RECHECK_INTERVAL = 500L
@@ -83,6 +83,7 @@ class CopyMoveTask(
         mNotificationBuilder = NotificationCompat.Builder(activity)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun doInBackground(vararg params: Pair<ArrayList<FileDirItem>, String>): Boolean {
         if (params.isEmpty()) {
             return false
@@ -142,6 +143,7 @@ class CopyMoveTask(
         return true
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onPostExecute(success: Boolean) {
         if (activity.isFinishing || activity.isDestroyed) {
             return
@@ -268,7 +270,7 @@ class CopyMoveTask(
             mTransferredFiles.add(source)
         } else {
             val children = File(source.path).list()
-            for (child in children) {
+            for (child in children!!) {
                 val newPath = "$destinationPath/$child"
                 if (activity.getDoesFilePathExist(newPath)) {
                     continue

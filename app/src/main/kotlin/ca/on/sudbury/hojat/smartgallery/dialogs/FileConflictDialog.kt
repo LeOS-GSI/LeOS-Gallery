@@ -18,7 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import kotlinx.android.synthetic.main.dialog_file_conflict.view.*
 
 class FileConflictDialog(
-    val activity: Activity, val fileDirItem: FileDirItem, val showApplyToAllCheckbox: Boolean,
+    val activity: Activity, val fileDirItem: FileDirItem, private val showApplyToAllCheckbox: Boolean,
     val callback: (resolution: Int, applyForAll: Boolean) -> Unit
 ) {
     @SuppressLint("InflateParams")

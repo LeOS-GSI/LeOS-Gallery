@@ -26,7 +26,8 @@ class SlideShowDialog(
 
     init {
         binding.apply {
-            intervalHint.hint = activity.getString(R.string.seconds_raw).replaceFirstChar { it.uppercaseChar() }
+            intervalHint.hint =
+                activity.getString(R.string.seconds_raw).replaceFirstChar { it.uppercaseChar() }
             intervalValue.setOnClickListener {
                 intervalValue.selectAll()
             }

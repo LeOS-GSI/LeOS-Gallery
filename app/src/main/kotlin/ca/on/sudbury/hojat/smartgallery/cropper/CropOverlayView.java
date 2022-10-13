@@ -73,7 +73,7 @@ public class CropOverlayView extends View {
     /**
      * Used for oval crop window shape or non-straight rotation drawing.
      */
-    private Path mPath = new Path();
+    private final Path mPath = new Path();
 
     /**
      * The bounding box around the Bitmap that we are cropping.

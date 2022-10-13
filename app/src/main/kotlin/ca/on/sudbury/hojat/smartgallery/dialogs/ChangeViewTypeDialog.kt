@@ -62,15 +62,17 @@ class ChangeViewTypeDialog(
     }
 
     private fun dialogConfirmed() {
-        val viewType = if (binding.changeViewTypeDialogRadio.checkedRadioButtonId == binding.changeViewTypeDialogRadioGrid.id) {
-            VIEW_TYPE_GRID
-        } else {
-            VIEW_TYPE_LIST
-        }
+        val viewType =
+            if (binding.changeViewTypeDialogRadio.checkedRadioButtonId == binding.changeViewTypeDialogRadioGrid.id) {
+                VIEW_TYPE_GRID
+            } else {
+                VIEW_TYPE_LIST
+            }
 
         if (fromFoldersView) {
             config.viewTypeFolders = viewType
-            config.groupDirectSubfolders = binding.changeViewTypeDialogGroupDirectSubfolders.isChecked
+            config.groupDirectSubfolders =
+                binding.changeViewTypeDialogGroupDirectSubfolders.isChecked
         } else {
             if (binding.changeViewTypeDialogUseForThisFolder.isChecked) {
                 config.saveFolderViewType(pathToUse, viewType)

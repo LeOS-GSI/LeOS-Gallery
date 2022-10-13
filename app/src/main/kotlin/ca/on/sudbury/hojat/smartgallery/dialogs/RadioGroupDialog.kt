@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.dialog_radio_group.view.*
 class RadioGroupDialog(
     val activity: Activity,
     val items: ArrayList<RadioItem>,
-    val checkedItemId: Int = -1,
+    private val checkedItemId: Int = -1,
     val titleId: Int = 0,
     showOKButton: Boolean = false,
     val cancelCallback: (() -> Unit)? = null,

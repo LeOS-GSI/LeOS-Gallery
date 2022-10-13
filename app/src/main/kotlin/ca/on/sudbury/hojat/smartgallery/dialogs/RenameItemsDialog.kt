@@ -99,7 +99,7 @@ class RenameItemsDialog(
                                     path,
                                     newPath,
                                     true
-                                ) { success, useAndroid30Way ->
+                                ) { success, _ ->
                                     if (success) {
                                         pathsCnt--
                                         if (pathsCnt == 0) {

@@ -66,7 +66,14 @@ class SaveAsDialog(
             binding.filenameValue.setText(name)
             binding.folderValue.setOnClickListener {
                 activity.hideKeyboard(binding.folderValue)
-                FilePickerDialog(activity, realPath, pickFile = false, showHidden = false, showFAB = true, canAddShowHiddenButton = true) {
+                FilePickerDialog(
+                    activity,
+                    realPath,
+                    pickFile = false,
+                    showHidden = false,
+                    showFAB = true,
+                    canAddShowHiddenButton = true
+                ) {
                     binding.folderValue.setText(activity.humanizePath(it))
                     realPath = it
                 }
@@ -102,13 +109,18 @@ class SaveAsDialog(
                         }
 
                         if (activity.getDoesFilePathExist(newPath)) {
-                            val title = String.format(activity.getString(R.string.file_already_exists_overwrite), newFilename)
+                            val title = String.format(
+                                activity.getString(R.string.file_already_exists_overwrite),
+                                newFilename
+                            )
                             ConfirmationDialog(activity, title) {
                                 val newFile = File(newPath)
                                 val isInDownloadDir = activity.isInDownloadDir(newPath)
-                                val isInSubFolderInDownloadDir = activity.isInSubFolderInDownloadDir(newPath)
+                                val isInSubFolderInDownloadDir =
+                                    activity.isInSubFolderInDownloadDir(newPath)
                                 if ((isRPlus() && !isExternalStorageManager()) && isInDownloadDir && !isInSubFolderInDownloadDir && !newFile.canWrite()) {
-                                    val fileDirItem = arrayListOf(File(newPath).toFileDirItem(activity))
+                                    val fileDirItem =
+                                        arrayListOf(File(newPath).toFileDirItem(activity))
                                     val fileUris = activity.getFileUrisFromFileDirItems(fileDirItem)
                                     activity.updateSDK30Uris(fileUris) { success ->
                                         if (success) {

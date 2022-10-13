@@ -54,7 +54,8 @@ class PickDirectoryDialog(
 
     init {
         (binding.directoriesGrid.layoutManager as MyGridLayoutManager).apply {
-            orientation = if (activity.config.scrollHorizontally && isGridViewType) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
+            orientation =
+                if (activity.config.scrollHorizontally && isGridViewType) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
             spanCount = if (isGridViewType) activity.config.dirColumnCnt else 1
         }
 
@@ -75,7 +76,11 @@ class PickDirectoryDialog(
         }
 
         builder.apply {
-            activity.setupDialogStuff(binding.root, this, R.string.select_destination) { alertDialog ->
+            activity.setupDialogStuff(
+                binding.root,
+                this,
+                R.string.select_destination
+            ) { alertDialog ->
                 dialog = alertDialog
                 binding.directoriesShowHidden.beVisibleIf(!context.config.shouldShowHidden)
                 binding.directoriesShowHidden.setOnClickListener {
@@ -127,23 +132,35 @@ class PickDirectoryDialog(
             allDirectories = newDirs.clone() as ArrayList<Directory>
         }
 
-        val distinctDirs = newDirs.filter { showFavoritesBin || (!it.isRecycleBin() && !it.areFavorites()) }.distinctBy { it.path.getDistinctPath() }
-            .toMutableList() as ArrayList<Directory>
+        val distinctDirs =
+            newDirs.filter { showFavoritesBin || (!it.isRecycleBin() && !it.areFavorites()) }
+                .distinctBy { it.path.getDistinctPath() }
+                .toMutableList() as ArrayList<Directory>
         val sortedDirs = activity.getSortedDirectories(distinctDirs)
-        val dirs = activity.getDirsToShow(sortedDirs, allDirectories, currentPathPrefix).clone() as ArrayList<Directory>
+        val dirs = activity.getDirsToShow(sortedDirs, allDirectories, currentPathPrefix)
+            .clone() as ArrayList<Directory>
         if (dirs.hashCode() == shownDirectories.hashCode()) {
             return
         }
 
         shownDirectories = dirs
-        val adapter = DirectoryAdapter(activity, dirs.clone() as ArrayList<Directory>, null, binding.directoriesGrid, true) {
+        val adapter = DirectoryAdapter(
+            activity,
+            dirs.clone() as ArrayList<Directory>,
+            null,
+            binding.directoriesGrid,
+            true
+        ) {
             val clickedDir = it as Directory
             val path = clickedDir.path
             if (clickedDir.subfoldersCount == 1 || !activity.config.groupDirectSubfolders) {
                 if (isPickingCopyMoveDestination && path.trimEnd('/') == sourcePath) {
                     activity.toast(R.string.source_and_destination_same)
                     return@DirectoryAdapter
-                } else if (isPickingCopyMoveDestination && activity.isRestrictedWithSAFSdk30(path) && !activity.isInDownloadDir(path)) {
+                } else if (isPickingCopyMoveDestination && activity.isRestrictedWithSAFSdk30(path) && !activity.isInDownloadDir(
+                        path
+                    )
+                ) {
                     activity.toast(R.string.system_folder_copy_restriction, Toast.LENGTH_LONG)
                     return@DirectoryAdapter
                 } else {

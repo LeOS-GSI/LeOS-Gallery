@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -11,6 +12,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.removeUnderlines
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import kotlinx.android.synthetic.main.dialog_purchase_thank_you.view.*
 
+@SuppressLint("InflateParams")
 class PurchaseThankYouDialog(val activity: Activity) {
     init {
         val view = activity.layoutInflater.inflate(R.layout.dialog_purchase_thank_you, null).apply {
@@ -25,7 +27,7 @@ class PurchaseThankYouDialog(val activity: Activity) {
         }
 
         AlertDialog.Builder(activity)
-            .setPositiveButton(R.string.purchase) { dialog, which -> activity.launchPurchaseThankYouIntent() }
+            .setPositiveButton(R.string.purchase) { _, _ -> activity.launchPurchaseThankYouIntent() }
             .setNegativeButton(R.string.cancel, null)
             .create().apply {
                 activity.setupDialogStuff(view, this, cancelOnTouchOutside = false)

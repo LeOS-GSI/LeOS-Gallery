@@ -10,8 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -19,8 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.interfaces.MyActionModeCallback
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 
@@ -168,7 +167,7 @@ abstract class MyRecyclerViewAdapter(
 
     private fun updateTitle() {
         val selectableItemCount = getSelectableItemCount()
-        val selectedCount = Math.min(selectedKeys.size, selectableItemCount)
+        val selectedCount = selectedKeys.size.coerceAtMost(selectableItemCount)
         val oldTitle = actBarTextView?.text
         val newTitle = "$selectedCount / $selectableItemCount"
         if (oldTitle != newTitle) {
@@ -182,8 +181,8 @@ abstract class MyRecyclerViewAdapter(
         lastLongPressedItem = if (lastLongPressedItem == -1) {
             position
         } else {
-            val min = Math.min(lastLongPressedItem, position)
-            val max = Math.max(lastLongPressedItem, position)
+            val min = lastLongPressedItem.coerceAtMost(position)
+            val max = lastLongPressedItem.coerceAtLeast(position)
             for (i in min..max) {
                 toggleItemSelection(true, i, false)
             }
@@ -232,8 +231,8 @@ abstract class MyRecyclerViewAdapter(
                 ) {
                     selectItemRange(
                         initialSelection,
-                        Math.max(0, lastDraggedIndex - positionOffset),
-                        Math.max(0, minReached - positionOffset),
+                        0.coerceAtLeast(lastDraggedIndex - positionOffset),
+                        0.coerceAtLeast(minReached - positionOffset),
                         maxReached - positionOffset
                     )
                     if (minReached != maxReached) {
@@ -288,20 +287,6 @@ abstract class MyRecyclerViewAdapter(
         recyclerView.setupZoomListener(zoomListener)
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    fun addVerticalDividers(add: Boolean) {
-        if (recyclerView.itemDecorationCount > 0) {
-            recyclerView.removeItemDecorationAt(0)
-        }
-
-        if (add) {
-            DividerItemDecoration(activity, DividerItemDecoration.VERTICAL).apply {
-                setDrawable(resources.getDrawable(R.drawable.divider))
-                recyclerView.addItemDecoration(this)
-            }
-        }
-    }
-
     fun finishActMode() {
         actMode?.finish()
     }
@@ -315,10 +300,6 @@ abstract class MyRecyclerViewAdapter(
     fun updatePrimaryColor() {
         properPrimaryColor = activity.getProperPrimaryColor()
         contrastColor = properPrimaryColor.getContrastColor()
-    }
-
-    fun updateBackgroundColor(backgroundColor: Int) {
-        this.backgroundColor = backgroundColor
     }
 
     protected fun createViewHolder(layoutType: Int, parent: ViewGroup?): ViewHolder {
@@ -361,7 +342,7 @@ abstract class MyRecyclerViewAdapter(
             }
         }
 
-        fun viewClicked(any: Any) {
+        private fun viewClicked(any: Any) {
             if (actModeCallback.isSelectable) {
                 val currentPosition = adapterPosition - positionOffset
                 val isSelected = selectedKeys.contains(getItemSelectionKey(currentPosition))
@@ -372,7 +353,7 @@ abstract class MyRecyclerViewAdapter(
             lastLongPressedItem = -1
         }
 
-        fun viewLongClicked() {
+        private fun viewLongClicked() {
             val currentPosition = adapterPosition - positionOffset
             if (!actModeCallback.isSelectable) {
                 activity.startActionMode(actModeCallback)

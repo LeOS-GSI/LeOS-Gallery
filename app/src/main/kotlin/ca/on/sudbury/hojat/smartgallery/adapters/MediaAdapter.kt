@@ -245,7 +245,7 @@ class MediaAdapter(
         }
     }
 
-    override fun getSelectableItemCount() = media.filter { it is Medium }.size
+    override fun getSelectableItemCount() = media.filterIsInstance<Medium>().size
 
     override fun getIsItemSelectable(position: Int) = !isASectionTitle(position)
 

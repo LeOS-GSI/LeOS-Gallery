@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
-
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
@@ -17,7 +16,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import kotlinx.android.synthetic.main.activity_contributors.*
-
 
 class ContributorsActivity : BaseSimpleActivity() {
     override fun getAppIconIDs() = intent.getIntegerArrayListExtra(APP_ICON_IDS) ?: ArrayList()

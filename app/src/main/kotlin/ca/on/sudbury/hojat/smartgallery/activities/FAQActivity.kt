@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Html
@@ -21,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import kotlinx.android.synthetic.main.activity_faq.*
 import kotlinx.android.synthetic.main.item_faq.view.*
-
 
 class FAQActivity : BaseSimpleActivity() {
     override fun getAppIconIDs() = intent.getIntegerArrayListExtra(APP_ICON_IDS) ?: ArrayList()
@@ -45,12 +43,14 @@ class FAQActivity : BaseSimpleActivity() {
             inflater.inflate(R.layout.item_faq, null).apply {
                 background.applyColorFilter(backgroundColor.getContrastColor())
                 faq_title.apply {
-                    text = if (faqItem.title is Int) getString(faqItem.title) else faqItem.title as String
+                    text =
+                        if (faqItem.title is Int) getString(faqItem.title) else faqItem.title as String
                     setTextColor(titleColor)
                 }
 
                 faq_text.apply {
-                    text = if (faqItem.text is Int) Html.fromHtml(getString(faqItem.text)) else faqItem.text as String
+                    text =
+                        if (faqItem.text is Int) Html.fromHtml(getString(faqItem.text)) else faqItem.text as String
                     setTextColor(textColor)
                     setLinkTextColor(titleColor)
 

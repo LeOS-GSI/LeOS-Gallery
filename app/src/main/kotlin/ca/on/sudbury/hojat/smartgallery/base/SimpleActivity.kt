@@ -74,8 +74,16 @@ open class SimpleActivity : BaseSimpleActivity() {
 
     protected fun registerFileUpdateListener() {
         try {
-            contentResolver.registerContentObserver(Images.Media.EXTERNAL_CONTENT_URI, true, observer)
-            contentResolver.registerContentObserver(Video.Media.EXTERNAL_CONTENT_URI, true, observer)
+            contentResolver.registerContentObserver(
+                Images.Media.EXTERNAL_CONTENT_URI,
+                true,
+                observer
+            )
+            contentResolver.registerContentObserver(
+                Video.Media.EXTERNAL_CONTENT_URI,
+                true,
+                observer
+            )
         } catch (ignored: Exception) {
         }
     }

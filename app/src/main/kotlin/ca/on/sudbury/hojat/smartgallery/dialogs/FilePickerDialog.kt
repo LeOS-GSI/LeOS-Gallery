@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 
+import android.annotation.SuppressLint
 import android.os.Environment
 import android.os.Parcelable
 import android.view.KeyEvent
@@ -51,6 +52,9 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
 import kotlinx.android.synthetic.main.dialog_filepicker.view.*
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * The only filepicker constructor with a couple optional parameters
@@ -62,6 +66,7 @@ import java.io.File
  * @param showFAB toggle the displaying of a Floating Action Button for creating new folders
  * @param callback the callback used for returning the selected file/folder
  */
+@SuppressLint("SetTextI18n")
 class FilePickerDialog(
     val activity: BaseSimpleActivity,
     var currPath: String = Environment.getExternalStorageDirectory().toString(),
@@ -69,8 +74,8 @@ class FilePickerDialog(
     var showHidden: Boolean = false,
     val showFAB: Boolean = false,
     val canAddShowHiddenButton: Boolean = false,
-    val forceShowRoot: Boolean = false,
-    val showFavoritesButton: Boolean = false,
+    private val forceShowRoot: Boolean = false,
+    private val showFavoritesButton: Boolean = false,
     private val enforceStorageRestrictions: Boolean = true,
     val callback: (pickedPath: String) -> Unit
 ) : Breadcrumbs.BreadcrumbsListener {
@@ -80,6 +85,7 @@ class FilePickerDialog(
     private var mScrollStates = HashMap<String, Parcelable>()
 
     private var mDialog: AlertDialog? = null
+    @SuppressLint("InflateParams")
     private var mDialogView = activity.layoutInflater.inflate(R.layout.dialog_filepicker, null)
 
     init {
@@ -107,7 +113,7 @@ class FilePickerDialog(
 
         val builder = activity.getAlertDialogBuilder()
             .setNegativeButton(R.string.cancel, null)
-            .setOnKeyListener { dialogInterface, i, keyEvent ->
+            .setOnKeyListener { _, i, keyEvent ->
                 if (keyEvent.action == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK) {
                     val breadcrumbs = mDialogView.filepicker_breadcrumbs
                     if (breadcrumbs.getItemCount() > 1) {
@@ -204,7 +210,7 @@ class FilePickerDialog(
         }
 
         val sortedItems =
-            items.sortedWith(compareBy({ !it.isDirectory }, { it.name.toLowerCase() }))
+            items.sortedWith(compareBy({ !it.isDirectory }, { it.name.lowercase(Locale.ROOT) }))
         val adapter = FilePickerItemsAdapter(activity, sortedItems, mDialogView.filepicker_list) {
             if ((it as FileDirItem).isDirectory) {
                 activity.handleLockedFolderOpening(it.path) { success ->

@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.adapters
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
@@ -61,7 +62,8 @@ class FilePickerItemsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val fileDirItem = fileDirItems[position]
-        holder.bindView(fileDirItem,
+        holder.bindView(
+            fileDirItem,
             allowSingleClick = true,
             allowLongClick = false
         ) { itemView, _ ->
@@ -112,8 +114,8 @@ class FilePickerItemsAdapter(
                 list_item_details.text = fileDirItem.size.formatSize()
                 val path = fileDirItem.path
                 val placeholder = fileDrawables.getOrElse(
-                    fileDirItem.name.substringAfterLast(".").toLowerCase(Locale.getDefault()),
-                    { fileDrawable })
+                    fileDirItem.name.substringAfterLast(".").lowercase(Locale.getDefault())
+                ) { fileDrawable }
                 val options = RequestOptions()
                     .signature(fileDirItem.getKey())
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -168,6 +170,7 @@ class FilePickerItemsAdapter(
         return activity.resources.getQuantityString(R.plurals.items, children, children)
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun initDrawables() {
         folderDrawable =
             resources.getColoredDrawableWithColor(R.drawable.ic_folder_vector, textColor)

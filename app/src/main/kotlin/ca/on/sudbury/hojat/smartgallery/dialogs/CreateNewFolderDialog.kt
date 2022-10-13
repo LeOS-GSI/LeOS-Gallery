@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
@@ -25,6 +26,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import kotlinx.android.synthetic.main.dialog_create_new_folder.view.*
 import java.io.File
 
+@SuppressLint("SetTextI18n", "InflateParams")
 class CreateNewFolderDialog(
     val activity: BaseSimpleActivity,
     val path: String,
@@ -32,7 +34,7 @@ class CreateNewFolderDialog(
 ) {
     init {
         val view = activity.layoutInflater.inflate(R.layout.dialog_create_new_folder, null)
-        view.folder_path.setText("${activity.humanizePath(path).trimEnd('/')}/")
+        view.folder_path.text = "${activity.humanizePath(path).trimEnd('/')}/"
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)

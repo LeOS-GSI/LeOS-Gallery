@@ -569,7 +569,12 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun showSortingDialog() {
-        ChangeSortingDialog(this, false, true, mPath) {
+        ChangeSortingDialog(
+            this,
+            isDirectorySorting = false,
+            showFolderCheckbox = true,
+            path = mPath
+        ) {
             mLoadedInitialPhotos = false
             binding.mediaGrid.adapter = null
             getMedia()
@@ -646,7 +651,11 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             if (!fileDirItem.isDownloadsFolder() && fileDirItem.isDirectory) {
                 ensureBackgroundThread {
                     if (fileDirItem.getProperFileCount(this, true) == 0) {
-                        tryDeleteFileDirItem(fileDirItem, true, true)
+                        tryDeleteFileDirItem(
+                            fileDirItem,
+                            allowDeleteFolder = true,
+                            deleteFromDatabase = true
+                        )
                     }
                 }
             }

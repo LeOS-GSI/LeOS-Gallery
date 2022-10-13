@@ -89,21 +89,23 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     private fun setupSearch(menu: Menu) {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         mSearchMenuItem = menu.findItem(R.id.search)
-        MenuItemCompat.setOnActionExpandListener(mSearchMenuItem, object : MenuItemCompat.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                mIsSearchOpen = true
-                return true
-            }
-
-            // this triggers on device rotation too, avoid doing anything
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                if (mIsSearchOpen) {
-                    mIsSearchOpen = false
-                    mLastSearchedText = ""
+        MenuItemCompat.setOnActionExpandListener(
+            mSearchMenuItem,
+            object : MenuItemCompat.OnActionExpandListener {
+                override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                    mIsSearchOpen = true
+                    return true
                 }
-                return true
-            }
-        })
+
+                // this triggers on device rotation too, avoid doing anything
+                override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                    if (mIsSearchOpen) {
+                        mIsSearchOpen = false
+                        mLastSearchedText = ""
+                    }
+                    return true
+                }
+            })
         mSearchMenuItem?.expandActionView()
 
         (mSearchMenuItem?.actionView as? SearchView)?.apply {
@@ -126,9 +128,11 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     private fun textChanged(text: String) {
         ensureBackgroundThread {
             try {
-                val filtered = mAllMedia.filter { it is Medium && it.name.contains(text, true) } as ArrayList
+                val filtered =
+                    mAllMedia.filter { it is Medium && it.name.contains(text, true) } as ArrayList
                 filtered.sortBy { it is Medium && !it.name.startsWith(text, true) }
-                val grouped = MediaFetcher(applicationContext).groupMedia(filtered as ArrayList<Medium>, "")
+                val grouped =
+                    MediaFetcher(applicationContext).groupMedia(filtered as ArrayList<Medium>, "")
                 runOnUiThread {
                     if (grouped.isEmpty()) {
                         binding.searchEmptyTextPlaceholder.text = getString(R.string.no_items_found)
@@ -148,7 +152,15 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     private fun setupAdapter() {
         val currAdapter = binding.searchGrid.adapter
         if (currAdapter == null) {
-            MediaAdapter(activity = this, ArrayList(), listener = this, isAGetIntent = false, allowMultiplePicks = false, path = "", binding.searchGrid) {
+            MediaAdapter(
+                activity = this,
+                ArrayList(),
+                listener = this,
+                isAGetIntent = false,
+                allowMultiplePicks = false,
+                path = "",
+                binding.searchGrid
+            ) {
                 if (it is Medium) {
                     itemClicked(it.path)
                 }
@@ -176,7 +188,14 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
 
             val spanCount = config.mediaColumnCnt
             val spacing = config.thumbnailSpacing
-            val decoration = GridSpacingItemDecoration(spanCount, spacing, config.scrollHorizontally, config.fileRoundedCorners, media, true)
+            val decoration = GridSpacingItemDecoration(
+                spanCount,
+                spacing,
+                config.scrollHorizontally,
+                config.fileRoundedCorners,
+                media,
+                true
+            )
             binding.searchGrid.addItemDecoration(decoration)
         }
     }
@@ -214,10 +233,16 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
         val layoutManager = binding.searchGrid.layoutManager as MyGridLayoutManager
         if (config.scrollHorizontally) {
             layoutManager.orientation = RecyclerView.HORIZONTAL
-            binding.searchGrid.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            binding.searchGrid.layoutParams = RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
         } else {
             layoutManager.orientation = RecyclerView.VERTICAL
-            binding.searchGrid.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            binding.searchGrid.layoutParams = RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
         }
 
         layoutManager.spanCount = config.mediaColumnCnt
@@ -274,13 +299,18 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     override fun tryDeleteFiles(fileDirItems: ArrayList<FileDirItem>) {
-        val filtered = fileDirItems.filter { File(it.path).isFile && it.path.isMediaFile() } as ArrayList
+        val filtered =
+            fileDirItems.filter { File(it.path).isFile && it.path.isMediaFile() } as ArrayList
         if (filtered.isEmpty()) {
             return
         }
 
         if (config.useRecycleBin && !filtered.first().path.startsWith(recycleBinPath)) {
-            val movingItems = resources.getQuantityString(R.plurals.moving_items_into_bin, filtered.size, filtered.size)
+            val movingItems = resources.getQuantityString(
+                R.plurals.moving_items_into_bin,
+                filtered.size,
+                filtered.size
+            )
             toast(movingItems)
 
             movePathsInRecycleBin(filtered.map { it.path } as ArrayList<String>) {
@@ -291,7 +321,8 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
                 }
             }
         } else {
-            val deletingItems = resources.getQuantityString(R.plurals.deleting_items, filtered.size, filtered.size)
+            val deletingItems =
+                resources.getQuantityString(R.plurals.deleting_items, filtered.size, filtered.size)
             toast(deletingItems)
             deleteFilteredFiles(filtered)
         }

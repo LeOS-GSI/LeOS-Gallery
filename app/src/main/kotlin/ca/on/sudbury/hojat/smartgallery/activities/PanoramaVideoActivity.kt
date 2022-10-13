@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
@@ -60,7 +61,10 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
         checkIntent()
 
         if (isRPlus()) {
-            window.insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance(
+                0,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
         }
     }
 
@@ -246,6 +250,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
         pauseVideo()
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupButtons() {
         var right = 0
         var bottom = 0
@@ -260,11 +265,14 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
         }
 
         binding.rlVideoController.videoTimeHolder.setPadding(0, 0, right, bottom)
-        binding.rlVideoController.videoTimeHolder.background = resources.getDrawable(R.drawable.gradient_background)
+        binding.rlVideoController.videoTimeHolder.background =
+            resources.getDrawable(R.drawable.gradient_background)
         binding.rlVideoController.videoTimeHolder.onGlobalLayout {
-            val newBottomMargin = binding.rlVideoController.videoTimeHolder.height - resources.getDimension(R.dimen.video_player_play_pause_size)
-                .toInt() - resources.getDimension(R.dimen.activity_margin).toInt()
-            (binding.explore.layoutParams as RelativeLayout.LayoutParams).bottomMargin = newBottomMargin
+            val newBottomMargin =
+                binding.rlVideoController.videoTimeHolder.height - resources.getDimension(R.dimen.video_player_play_pause_size)
+                    .toInt() - resources.getDimension(R.dimen.activity_margin).toInt()
+            (binding.explore.layoutParams as RelativeLayout.LayoutParams).bottomMargin =
+                newBottomMargin
 
             (binding.cardboard.layoutParams as RelativeLayout.LayoutParams).apply {
                 bottomMargin = newBottomMargin
@@ -324,7 +332,8 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
         val twoPercents = Math.max((binding.vrVideoView.duration / 50).toInt(), MIN_SKIP_LENGTH)
         val newProgress = if (forward) curr + twoPercents else curr - twoPercents
         val roundProgress = Math.round(newProgress / 1000f)
-        val limitedProgress = Math.max(Math.min(binding.vrVideoView.duration.toInt(), roundProgress), 0)
+        val limitedProgress =
+            Math.max(Math.min(binding.vrVideoView.duration.toInt(), roundProgress), 0)
         setVideoProgress(limitedProgress)
         if (!mIsPlaying) {
             togglePlayPause()

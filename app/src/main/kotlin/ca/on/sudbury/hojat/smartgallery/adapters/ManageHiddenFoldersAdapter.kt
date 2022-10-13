@@ -45,7 +45,8 @@ class ManageHiddenFoldersAdapter(
 
     override fun onActionModeDestroyed() {}
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = createViewHolder(R.layout.item_manage_folder, parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        createViewHolder(R.layout.item_manage_folder, parent)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val folder = folders[position]
@@ -57,7 +58,8 @@ class ManageHiddenFoldersAdapter(
 
     override fun getItemCount() = folders.size
 
-    private fun getSelectedItems() = folders.filter { selectedKeys.contains(it.hashCode()) } as ArrayList<String>
+    private fun getSelectedItems() =
+        folders.filter { selectedKeys.contains(it.hashCode()) } as ArrayList<String>
 
     private fun setupView(view: View, folder: String) {
         view.apply {

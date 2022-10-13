@@ -142,20 +142,27 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         val visibleBottomActions = if (config.bottomActions) config.visibleBottomActions else 0
 
         binding.fragmentViewerToolbar.menu.apply {
-            findItem(R.id.menu_set_as).isVisible = mMedium?.isImage() == true && visibleBottomActions and BOTTOM_ACTION_SET_AS == 0
-            findItem(R.id.menu_edit).isVisible = mMedium?.isImage() == true && mUri?.scheme == "file" && visibleBottomActions and BOTTOM_ACTION_EDIT == 0
-            findItem(R.id.menu_properties).isVisible = mUri?.scheme == "file" && visibleBottomActions and BOTTOM_ACTION_PROPERTIES == 0
+            findItem(R.id.menu_set_as).isVisible =
+                mMedium?.isImage() == true && visibleBottomActions and BOTTOM_ACTION_SET_AS == 0
+            findItem(R.id.menu_edit).isVisible =
+                mMedium?.isImage() == true && mUri?.scheme == "file" && visibleBottomActions and BOTTOM_ACTION_EDIT == 0
+            findItem(R.id.menu_properties).isVisible =
+                mUri?.scheme == "file" && visibleBottomActions and BOTTOM_ACTION_PROPERTIES == 0
             findItem(R.id.menu_share).isVisible = visibleBottomActions and BOTTOM_ACTION_SHARE == 0
-            findItem(R.id.menu_show_on_map).isVisible = visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP == 0
+            findItem(R.id.menu_show_on_map).isVisible =
+                visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP == 0
         }
     }
 
     private fun setupOptionsMenu() {
-        (binding.fragmentViewerAppbar.layoutParams as RelativeLayout.LayoutParams).topMargin = statusBarHeight
+        (binding.fragmentViewerAppbar.layoutParams as RelativeLayout.LayoutParams).topMargin =
+            statusBarHeight
         binding.fragmentViewerToolbar.apply {
             setTitleTextColor(Color.WHITE)
-            overflowIcon = resources.getColoredDrawableWithColor(R.drawable.ic_three_dots_vector, Color.WHITE)
-            navigationIcon = resources.getColoredDrawableWithColor(R.drawable.ic_arrow_left_vector, Color.WHITE)
+            overflowIcon =
+                resources.getColoredDrawableWithColor(R.drawable.ic_three_dots_vector, Color.WHITE)
+            navigationIcon =
+                resources.getColoredDrawableWithColor(R.drawable.ic_arrow_left_vector, Color.WHITE)
         }
 
         updateMenuItemColors(binding.fragmentViewerToolbar.menu, forceWhiteIcons = true)
@@ -191,7 +198,11 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
         mUri = intent.data ?: return
         val uri = mUri.toString()
-        if (uri.startsWith("content:/") && uri.contains("/storage/") && !intent.getBooleanExtra(IS_IN_RECYCLE_BIN, false)) {
+        if (uri.startsWith("content:/") && uri.contains("/storage/") && !intent.getBooleanExtra(
+                IS_IN_RECYCLE_BIN,
+                false
+            )
+        ) {
             val guessedPath = uri.substring(uri.indexOf("/storage/"))
             if (getDoesFilePathExist(guessedPath)) {
                 val extras = intent.extras ?: Bundle()
@@ -212,8 +223,12 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         if (intent.extras?.containsKey(REAL_FILE_PATH) == true) {
             val realPath = intent.extras!!.getString(REAL_FILE_PATH)
             if (realPath != null && getDoesFilePathExist(realPath)) {
-                val isFileFolderHidden = (File(realPath).isHidden || File(realPath.getParentPath(), NOMEDIA).exists() || realPath.contains("/."))
-                val preventShowingHiddenFile = (isRPlus() && !isExternalStorageManager()) && isFileFolderHidden
+                val isFileFolderHidden = (File(realPath).isHidden || File(
+                    realPath.getParentPath(),
+                    NOMEDIA
+                ).exists() || realPath.contains("/."))
+                val preventShowingHiddenFile =
+                    (isRPlus() && !isExternalStorageManager()) && isFileFolderHidden
                 if (!preventShowingHiddenFile) {
                     if (realPath.getFilenameFromPath().contains('.') || filename.contains('.')) {
                         if (isFileTypeVisible(realPath)) {
@@ -239,10 +254,17 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             return
         } else {
             val realPath = applicationContext.getRealPathFromURI(mUri!!) ?: ""
-            val isFileFolderHidden = (File(realPath).isHidden || File(realPath.getParentPath(), NOMEDIA).exists() || realPath.contains("/."))
-            val preventShowingHiddenFile = (isRPlus() && !isExternalStorageManager()) && isFileFolderHidden
+            val isFileFolderHidden = (File(realPath).isHidden || File(
+                realPath.getParentPath(),
+                NOMEDIA
+            ).exists() || realPath.contains("/."))
+            val preventShowingHiddenFile =
+                (isRPlus() && !isExternalStorageManager()) && isFileFolderHidden
             if (!preventShowingHiddenFile) {
-                if (realPath != mUri.toString() && realPath.isNotEmpty() && mUri!!.authority != "mms" && filename.contains('.') && getDoesFilePathExist(realPath)) {
+                if (realPath != mUri.toString() && realPath.isNotEmpty() && mUri!!.authority != "mms" && filename.contains(
+                        '.'
+                    ) && getDoesFilePathExist(realPath)
+                ) {
                     if (isFileTypeVisible(realPath)) {
                         binding.bottomActions.root.beGone()
                         rescanPaths(arrayListOf(mUri!!.path!!))
@@ -276,15 +298,30 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         }
 
         mIsVideo = type == TYPE_VIDEOS
-        mMedium = Medium(null, filename, mUri.toString(), mUri!!.path!!.getParentPath(), 0, 0, file.length(), type, 0, false, 0L, 0)
-        binding.fragmentViewerToolbar.title = Html.fromHtml("<font color='${Color.WHITE.toHex()}'>${mMedium!!.name}</font>")
+        mMedium = Medium(
+            null,
+            filename,
+            mUri.toString(),
+            mUri!!.path!!.getParentPath(),
+            0,
+            0,
+            file.length(),
+            type,
+            0,
+            false,
+            0L,
+            0
+        )
+        binding.fragmentViewerToolbar.title =
+            Html.fromHtml("<font color='${Color.WHITE.toHex()}'>${mMedium!!.name}</font>")
         bundle.putSerializable(MEDIUM, mMedium)
 
         if (savedInstanceState == null) {
             mFragment = if (mIsVideo) VideoFragment() else PhotoFragment()
             mFragment!!.listener = this
             mFragment!!.arguments = bundle
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_placeholder, mFragment!!).commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_placeholder, mFragment!!).commit()
         }
 
         if (config.blackBackground) {
@@ -351,7 +388,8 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         initBottomActionsLayout()
 
         binding.topShadow.layoutParams.height = statusBarHeight + actionBarHeight
-        (binding.fragmentViewerAppbar.layoutParams as RelativeLayout.LayoutParams).topMargin = statusBarHeight
+        (binding.fragmentViewerAppbar.layoutParams as RelativeLayout.LayoutParams).topMargin =
+            statusBarHeight
         if (!portrait && navigationBarRight && navigationBarWidth > 0) {
             binding.fragmentViewerToolbar.setPadding(0, 0, navigationBarWidth, 0)
         } else {
@@ -417,11 +455,11 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
     private fun isFileTypeVisible(path: String): Boolean {
         val filter = config.filterMedia
         return !(path.isImageFast() && filter and TYPE_IMAGES == 0 ||
-            path.isVideoFast() && filter and TYPE_VIDEOS == 0 ||
-            path.isGif() && filter and TYPE_GIFS == 0 ||
-            path.isRawFast() && filter and TYPE_RAWS == 0 ||
-            path.isSvg() && filter and TYPE_SVGS == 0 ||
-            path.isPortrait() && filter and TYPE_PORTRAITS == 0)
+                path.isVideoFast() && filter and TYPE_VIDEOS == 0 ||
+                path.isGif() && filter and TYPE_GIFS == 0 ||
+                path.isRawFast() && filter and TYPE_RAWS == 0 ||
+                path.isSvg() && filter and TYPE_SVGS == 0 ||
+                path.isPortrait() && filter and TYPE_PORTRAITS == 0)
     }
 
     private fun initBottomActions() {
@@ -430,7 +468,8 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
     }
 
     private fun initBottomActionsLayout() {
-        binding.bottomActions.root.layoutParams.height = resources.getDimension(R.dimen.bottom_actions_height).toInt() + navigationBarHeight
+        binding.bottomActions.root.layoutParams.height =
+            resources.getDimension(R.dimen.bottom_actions_height).toInt() + navigationBarHeight
         if (config.bottomActions) {
             binding.bottomActions.root.beVisible()
         } else {

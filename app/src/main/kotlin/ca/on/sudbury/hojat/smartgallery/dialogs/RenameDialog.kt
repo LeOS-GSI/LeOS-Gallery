@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
@@ -23,11 +24,13 @@ import kotlinx.android.synthetic.main.dialog_rename.view.*
 class RenameDialog(
     val activity: BaseSimpleActivity,
     val paths: ArrayList<String>,
-    val useMediaFileExtension: Boolean,
+    private val useMediaFileExtension: Boolean,
     val callback: () -> Unit
 ) {
     var dialog: AlertDialog? = null
-    val view = LayoutInflater.from(activity).inflate(R.layout.dialog_rename, null)
+
+    @SuppressLint("InflateParams")
+    val view = LayoutInflater.from(activity).inflate(R.layout.dialog_rename, null)!!
     var tabsAdapter: RenameAdapter
     var viewPager: MyViewPager
 
@@ -68,7 +71,7 @@ class RenameDialog(
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
-            .setNegativeButton(R.string.cancel) { dialog, which -> dismissDialog() }
+            .setNegativeButton(R.string.cancel) { _, _ -> dismissDialog() }
             .apply {
                 activity.setupDialogStuff(view, this) { alertDialog ->
                     dialog = alertDialog

@@ -67,7 +67,8 @@ class ChangeFileThumbnailStyleDialog(
     override fun onClick(dialog: DialogInterface, which: Int) {
         config.fileRoundedCorners = binding.dialogFileStyleRoundedCorners.isChecked
         config.animateGifs = binding.dialogFileStyleAnimateGifs.isChecked
-        config.showThumbnailVideoDuration = binding.dialogFileStyleShowThumbnailVideoDuration.isChecked
+        config.showThumbnailVideoDuration =
+            binding.dialogFileStyleShowThumbnailVideoDuration.isChecked
         config.showThumbnailFileTypes = binding.dialogFileStyleShowThumbnailFileTypes.isChecked
         config.markFavoriteItems = binding.dialogFileStyleMarkFavoriteItems.isChecked
         config.thumbnailSpacing = thumbnailSpacing

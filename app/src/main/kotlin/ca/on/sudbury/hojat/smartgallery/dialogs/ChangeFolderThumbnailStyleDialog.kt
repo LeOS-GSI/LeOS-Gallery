@@ -31,9 +31,10 @@ class ChangeFolderThumbnailStyleDialog(
 
     private var config = activity.config
 
-    private var view = activity.layoutInflater.inflate(R.layout.dialog_change_folder_thumbnail_style, null).apply {
-        dialog_folder_limit_title.isChecked = config.limitFolderTitle
-    }
+    private var view =
+        activity.layoutInflater.inflate(R.layout.dialog_change_folder_thumbnail_style, null).apply {
+            dialog_folder_limit_title.isChecked = config.limitFolderTitle
+        }
 
     init {
         activity.getAlertDialogBuilder()
@@ -82,14 +83,17 @@ class ChangeFolderThumbnailStyleDialog(
         val photoCount = 36
         val folderName = "Camera"
         view.apply {
-            val useRoundedCornersLayout = dialog_radio_folder_style.checkedRadioButtonId == R.id.dialog_radio_folder_rounded_corners
+            val useRoundedCornersLayout =
+                dialog_radio_folder_style.checkedRadioButtonId == R.id.dialog_radio_folder_rounded_corners
             dialog_folder_sample_holder.removeAllViews()
 
-            val layout = if (useRoundedCornersLayout) R.layout.directory_item_grid_rounded_corners else R.layout.directory_item_grid_square
+            val layout =
+                if (useRoundedCornersLayout) R.layout.directory_item_grid_rounded_corners else R.layout.directory_item_grid_square
             val sampleView = activity.layoutInflater.inflate(layout, null)
             dialog_folder_sample_holder.addView(sampleView)
 
-            sampleView.layoutParams.width = activity.resources.getDimension(R.dimen.sample_thumbnail_size).toInt()
+            sampleView.layoutParams.width =
+                activity.resources.getDimension(R.dimen.sample_thumbnail_size).toInt()
             (sampleView.layoutParams as RelativeLayout.LayoutParams).addRule(RelativeLayout.CENTER_HORIZONTAL)
 
             when (dialog_radio_folder_count_holder.checkedRadioButtonId) {

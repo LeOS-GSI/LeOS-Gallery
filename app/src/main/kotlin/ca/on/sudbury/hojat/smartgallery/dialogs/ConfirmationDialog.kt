@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
@@ -17,13 +18,14 @@ import kotlinx.android.synthetic.main.dialog_message.view.*
  * @param negative negative buttons text ID (optional)
  * @param callback an anonymous function
  */
+@SuppressLint("InflateParams")
 class ConfirmationDialog(
     activity: Activity,
     message: String = "",
     messageId: Int = R.string.proceed_with_deletion,
     positive: Int = R.string.yes,
     negative: Int = R.string.no,
-    val cancelOnTouchOutside: Boolean = true,
+    private val cancelOnTouchOutside: Boolean = true,
     val callback: () -> Unit
 ) {
     private var dialog: AlertDialog? = null
@@ -31,10 +33,10 @@ class ConfirmationDialog(
     init {
         val view = activity.layoutInflater.inflate(R.layout.dialog_message, null)
         view.message.text =
-            if (message.isEmpty()) activity.resources.getString(messageId) else message
+            message.ifEmpty { activity.resources.getString(messageId) }
 
         val builder = activity.getAlertDialogBuilder()
-            .setPositiveButton(positive) { dialog, which -> dialogConfirmed() }
+            .setPositiveButton(positive) { _, _ -> dialogConfirmed() }
 
         if (negative != 0) {
             builder.setNegativeButton(negative, null)

@@ -1001,16 +1001,16 @@ public final class CropImage {
                     sampleSize);
         }
 
-        protected ActivityResult(Parcel in) {
+        private ActivityResult(Parcel in) {
             super(
                     null,
-                    (android.net.Uri) in.readParcelable(android.net.Uri.class.getClassLoader()),
+                    in.readParcelable(android.net.Uri.class.getClassLoader()),
                     null,
-                    (android.net.Uri) in.readParcelable(android.net.Uri.class.getClassLoader()),
+                    in.readParcelable(android.net.Uri.class.getClassLoader()),
                     (Exception) in.readSerializable(),
                     in.createFloatArray(),
-                    (Rect) in.readParcelable(Rect.class.getClassLoader()),
-                    (Rect) in.readParcelable(Rect.class.getClassLoader()),
+                    in.readParcelable(android.graphics.Rect.class.getClassLoader()),
+                    in.readParcelable(android.graphics.Rect.class.getClassLoader()),
                     in.readInt(),
                     in.readInt());
         }

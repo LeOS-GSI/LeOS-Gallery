@@ -17,7 +17,10 @@ import ca.on.sudbury.hojat.smartgallery.models.Widget
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
 
-@Database(entities = [Directory::class, Medium::class, Widget::class, DateTaken::class, Favorite::class], version = 10)
+@Database(
+    entities = [Directory::class, Medium::class, Widget::class, DateTaken::class, Favorite::class],
+    version = 10
+)
 abstract class GalleryDatabase : RoomDatabase() {
 
     abstract fun DirectoryDao(): DirectoryDao
@@ -37,7 +40,11 @@ abstract class GalleryDatabase : RoomDatabase() {
             if (db == null) {
                 synchronized(GalleryDatabase::class) {
                     if (db == null) {
-                        db = Room.databaseBuilder(context.applicationContext, GalleryDatabase::class.java, "ca.on.sudbury.hojat.smartgallery.db")
+                        db = Room.databaseBuilder(
+                            context.applicationContext,
+                            GalleryDatabase::class.java,
+                            "ca.on.sudbury.hojat.smartgallery.db"
+                        )
                             .fallbackToDestructiveMigration()
                             .addMigrations(MIGRATION_4_5)
                             .addMigrations(MIGRATION_5_6)

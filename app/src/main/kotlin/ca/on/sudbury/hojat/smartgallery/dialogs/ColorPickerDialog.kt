@@ -32,22 +32,22 @@ import java.util.LinkedList
 private const val RECENT_COLORS_NUMBER = 5
 
 // forked from https://github.com/yukuku/ambilwarna
-@SuppressLint("ClickableViewAccessibility")
+@SuppressLint("ClickableViewAccessibility", "InflateParams", "SetTextI18n")
 class ColorPickerDialog(
     val activity: Activity,
     color: Int,
-    val removeDimmedBackground: Boolean = false,
+    private val removeDimmedBackground: Boolean = false,
     showUseDefaultButton: Boolean = false,
     val currentColorCallback: ((color: Int) -> Unit)? = null,
     val callback: (wasPositivePressed: Boolean, color: Int) -> Unit
 ) {
-    var viewHue: View
-    var viewSatVal: ColorPickerSquare
-    var viewCursor: ImageView
-    var viewNewColor: ImageView
-    var viewTarget: ImageView
-    var newHexField: EditText
-    var viewContainer: ViewGroup
+    private var viewHue: View
+    private var viewSatVal: ColorPickerSquare
+    private var viewCursor: ImageView
+    private var viewNewColor: ImageView
+    private var viewTarget: ImageView
+    private var newHexField: EditText
+    private var viewContainer: ViewGroup
     private val baseConfig = activity.baseConfig
     private val currentColorHsv = FloatArray(3)
     private val backgroundColor = baseConfig.backgroundColor
@@ -87,7 +87,7 @@ class ColorPickerDialog(
             setupRecentColors()
         }
 
-        viewHue.setOnTouchListener(OnTouchListener { v, event ->
+        viewHue.setOnTouchListener(OnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 isHueBeingDragged = true
             }
@@ -117,7 +117,7 @@ class ColorPickerDialog(
             false
         })
 
-        viewSatVal.setOnTouchListener(OnTouchListener { v, event ->
+        viewSatVal.setOnTouchListener(OnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_MOVE || event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
                 var x = event.x
                 var y = event.y
@@ -156,12 +156,12 @@ class ColorPickerDialog(
 
         val textColor = activity.getProperTextColor()
         val builder = activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { dialog, which -> confirmNewColor() }
-            .setNegativeButton(R.string.cancel) { dialog, which -> dialogDismissed() }
+            .setPositiveButton(R.string.ok) { _, _ -> confirmNewColor() }
+            .setNegativeButton(R.string.cancel) { _, _ -> dialogDismissed() }
             .setOnCancelListener { dialogDismissed() }
 
         if (showUseDefaultButton) {
-            builder.setNeutralButton(R.string.use_default) { dialog, which -> useDefault() }
+            builder.setNeutralButton(R.string.use_default) { _, _ -> useDefault() }
         }
 
         builder.apply {

@@ -1,6 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
-
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.LayerDrawable
@@ -49,7 +49,6 @@ import kotlin.math.abs
 class CustomizationActivity : BaseSimpleActivity() {
     private val THEME_LIGHT = 0
     private val THEME_DARK = 1
-    private val THEME_SOLARIZED = 2
     private val THEME_DARK_RED = 3
     private val THEME_BLACK_WHITE = 4
     private val THEME_CUSTOM = 5
@@ -579,6 +578,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         updateApplyToAllColors(color)
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateApplyToAllColors(newColor: Int) {
         if (newColor == baseConfig.primaryColor && !baseConfig.isUsingSystemTheme) {
             apply_to_all.setBackgroundResource(R.drawable.button_background_rounded)

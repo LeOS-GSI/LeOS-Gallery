@@ -39,7 +39,8 @@ class PickMediumDialog(
 
     init {
         (binding.mediaGrid.layoutManager as MyGridLayoutManager).apply {
-            orientation = if (config.scrollHorizontally && isGridViewType) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
+            orientation =
+                if (config.scrollHorizontally && isGridViewType) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
             spanCount = if (isGridViewType) config.mediaColumnCnt else 1
         }
 
@@ -50,7 +51,11 @@ class PickMediumDialog(
             .setNegativeButton(R.string.cancel, null)
             .setNeutralButton(R.string.other_folder) { _, _ -> showOtherFolder() }
             .apply {
-                activity.setupDialogStuff(binding.root, this, R.string.select_photo) { alertDialog ->
+                activity.setupDialogStuff(
+                    binding.root,
+                    this,
+                    R.string.select_photo
+                ) { alertDialog ->
                     dialog = alertDialog
                 }
             }
@@ -64,7 +69,13 @@ class PickMediumDialog(
             }
         }
 
-        GetMediaAsynctask(activity, path, isPickImage = false, isPickVideo = false, showAll = false) {
+        GetMediaAsynctask(
+            activity,
+            path,
+            isPickImage = false,
+            isPickVideo = false,
+            showAll = false
+        ) {
             gotMedia(it)
         }.execute()
     }
@@ -119,11 +130,19 @@ class PickMediumDialog(
 
             var currentGridDecoration: GridSpacingItemDecoration? = null
             if (binding.mediaGrid.itemDecorationCount > 0) {
-                currentGridDecoration = binding.mediaGrid.getItemDecorationAt(0) as GridSpacingItemDecoration
+                currentGridDecoration =
+                    binding.mediaGrid.getItemDecorationAt(0) as GridSpacingItemDecoration
                 currentGridDecoration.items = media
             }
 
-            val newGridDecoration = GridSpacingItemDecoration(spanCount, spacing, config.scrollHorizontally, config.fileRoundedCorners, media, useGridPosition)
+            val newGridDecoration = GridSpacingItemDecoration(
+                spanCount,
+                spacing,
+                config.scrollHorizontally,
+                config.fileRoundedCorners,
+                media,
+                useGridPosition
+            )
             if (currentGridDecoration.toString() != newGridDecoration.toString()) {
                 if (currentGridDecoration != null) {
                     binding.mediaGrid.removeItemDecoration(currentGridDecoration)

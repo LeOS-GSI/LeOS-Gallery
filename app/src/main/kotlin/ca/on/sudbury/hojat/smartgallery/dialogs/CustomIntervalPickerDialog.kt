@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.dialog_custom_interval_picker.view.*
 
 class CustomIntervalPickerDialog(
     val activity: Activity,
-    val selectedSeconds: Int = 0,
+    private val selectedSeconds: Int = 0,
     val showSeconds: Boolean = false,
     val callback: (minutes: Int) -> Unit
 ) {

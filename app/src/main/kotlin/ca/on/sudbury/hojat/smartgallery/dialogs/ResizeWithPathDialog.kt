@@ -129,7 +129,10 @@ class ResizeWithPathDialog(
                         }
 
                         if (activity.getDoesFilePathExist(newPath)) {
-                            val title = String.format(activity.getString(R.string.file_already_exists_overwrite), newFilename)
+                            val title = String.format(
+                                activity.getString(R.string.file_already_exists_overwrite),
+                                newFilename
+                            )
                             ConfirmationDialog(activity, title) {
                                 callback(newSize, newPath)
                                 alertDialog.dismiss()

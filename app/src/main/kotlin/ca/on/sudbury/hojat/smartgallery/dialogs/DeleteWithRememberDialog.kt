@@ -7,7 +7,11 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogDeleteWithRememberBind
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 
-class DeleteWithRememberDialog(val activity: Activity, message: String, val callback: (remember: Boolean) -> Unit) {
+class DeleteWithRememberDialog(
+    val activity: Activity,
+    message: String,
+    val callback: (remember: Boolean) -> Unit
+) {
 
     // we create the binding by referencing the owner Activity
     var binding = DialogDeleteWithRememberBinding.inflate(activity.layoutInflater)

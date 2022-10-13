@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.adapters
 
-
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import androidx.viewpager.widget.PagerAdapter
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.interfaces.RenameTab
-
 
 class RenameAdapter(val activity: BaseSimpleActivity, val paths: ArrayList<String>) :
     PagerAdapter() {

@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
-
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent

@@ -21,138 +21,136 @@ import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
+import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
+import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
+import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
+import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
+import ca.on.sudbury.hojat.smartgallery.extensions.appLaunched
+import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
+import ca.on.sudbury.hojat.smartgallery.extensions.beGone
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
+import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.createDirectoryFromMedia
+import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
+import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
+import ca.on.sudbury.hojat.smartgallery.extensions.getCachedDirectories
+import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
+import ca.on.sudbury.hojat.smartgallery.extensions.getDirectorySortingValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
+import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
+import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilePublicUri
+import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
+import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
+import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
+import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
+import ca.on.sudbury.hojat.smartgallery.extensions.getOTGFolderChildrenNames
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
+import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
+import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
+import ca.on.sudbury.hojat.smartgallery.extensions.handleAppPasswordProtection
+import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
+import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
+import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
+import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
+import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
+import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
+import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
+import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
+import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
+import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
+import ca.on.sudbury.hojat.smartgallery.extensions.isGif
+import ca.on.sudbury.hojat.smartgallery.extensions.isGone
+import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
+import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
+import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
+import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
+import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
+import ca.on.sudbury.hojat.smartgallery.extensions.launchCamera
+import ca.on.sudbury.hojat.smartgallery.extensions.launchSettings
+import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
+import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
+import ca.on.sudbury.hojat.smartgallery.extensions.movePinnedDirectoriesToFront
+import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
+import ca.on.sudbury.hojat.smartgallery.extensions.removeInvalidDBDirectories
+import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
+import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
+import ca.on.sudbury.hojat.smartgallery.extensions.storeDirectoryItems
+import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.toast
+import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.underlineText
+import ca.on.sudbury.hojat.smartgallery.extensions.updateDBDirectory
+import ca.on.sudbury.hojat.smartgallery.extensions.updateWidgets
+import ca.on.sudbury.hojat.smartgallery.helpers.DAY_SECONDS
+import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
+import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
+import ca.on.sudbury.hojat.smartgallery.helpers.GET_ANY_INTENT
+import ca.on.sudbury.hojat.smartgallery.helpers.GET_IMAGE_INTENT
+import ca.on.sudbury.hojat.smartgallery.helpers.GET_VIDEO_INTENT
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_DESCENDING
+import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
+import ca.on.sudbury.hojat.smartgallery.helpers.MAX_COLUMN_COUNT
+import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_MILLISECONDS
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
+import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_MEDIA_LOCATION
+import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import ca.on.sudbury.hojat.smartgallery.helpers.WAS_PROTECTION_HANDLED
+import ca.on.sudbury.hojat.smartgallery.helpers.PICKED_PATHS
+import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
+import ca.on.sudbury.hojat.smartgallery.helpers.SET_WALLPAPER_INTENT
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_TEMP_HIDDEN_DURATION
+import ca.on.sudbury.hojat.smartgallery.helpers.SKIP_AUTHENTICATION
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
-import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
-import ca.on.sudbury.hojat.smartgallery.helpers.DAY_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_MEDIA_LOCATION
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
+import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
+import ca.on.sudbury.hojat.smartgallery.helpers.WAS_PROTECTION_HANDLED
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
+import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
+import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
+import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
+import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
-import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
-import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
-import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
-import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
-import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
-import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
-import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
-import ca.on.sudbury.hojat.smartgallery.extensions.updateDBDirectory
-import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
-import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
-import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
-import ca.on.sudbury.hojat.smartgallery.extensions.removeInvalidDBDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
-import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
-import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
-import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
-import ca.on.sudbury.hojat.smartgallery.extensions.launchSettings
-import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
-import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
-import ca.on.sudbury.hojat.smartgallery.extensions.movePinnedDirectoriesToFront
-import ca.on.sudbury.hojat.smartgallery.extensions.launchCamera
-import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
-import ca.on.sudbury.hojat.smartgallery.extensions.updateWidgets
-import ca.on.sudbury.hojat.smartgallery.extensions.createDirectoryFromMedia
-import ca.on.sudbury.hojat.smartgallery.extensions.getOTGFolderChildrenNames
-import ca.on.sudbury.hojat.smartgallery.extensions.storeDirectoryItems
-import ca.on.sudbury.hojat.smartgallery.extensions.getDirectorySortingValue
-import ca.on.sudbury.hojat.smartgallery.extensions.getCachedDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
-import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
-import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
-import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
-import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_DESCENDING
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GET_VIDEO_INTENT
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.GET_ANY_INTENT
-import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_MILLISECONDS
-import ca.on.sudbury.hojat.smartgallery.helpers.MAX_COLUMN_COUNT
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.SKIP_AUTHENTICATION
-import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.GET_IMAGE_INTENT
-import ca.on.sudbury.hojat.smartgallery.helpers.PICKED_PATHS
-import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_TEMP_HIDDEN_DURATION
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.SET_WALLPAPER_INTENT
-import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
-import ca.on.sudbury.hojat.smartgallery.models.Directory
-import ca.on.sudbury.hojat.smartgallery.models.Medium
-import ca.on.sudbury.hojat.smartgallery.extensions.handleAppPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
-import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
-import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilePublicUri
-import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
-import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
-import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
-import ca.on.sudbury.hojat.smartgallery.extensions.underlineText
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
-import ca.on.sudbury.hojat.smartgallery.extensions.isGif
-import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
-import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
-import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
-import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
-import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
-import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
-import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
-import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
-import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
-import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
-import ca.on.sudbury.hojat.smartgallery.extensions.appLaunched
-import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
-import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
 import java.io.File
-import java.io.InputStream
 import java.io.FileInputStream
-import java.io.OutputStream
 import java.io.FileNotFoundException
-
+import java.io.InputStream
+import java.io.OutputStream
 
 class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
@@ -603,9 +601,9 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 "/storage/emulated/0/Android/data/com.facebook.orca/files/stickers"
             )
 
-            val OTGPath = config.OTGPath
+            val otgPath = config.OTGPath
             spamFolders.forEach {
-                if (getDoesFilePathExist(it, OTGPath)) {
+                if (getDoesFilePathExist(it, otgPath)) {
                     config.addExcludedFolder(it)
                 }
             }
@@ -814,14 +812,14 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         fileDirItems: ArrayList<FileDirItem>,
         folders: ArrayList<File>
     ) {
-        val OTGPath = config.OTGPath
+        val otgPath = config.OTGPath
         deleteFiles(fileDirItems) {
             runOnUiThread {
                 refreshItems()
             }
 
             ensureBackgroundThread {
-                folders.filter { !getDoesFilePathExist(it.absolutePath, OTGPath) }.forEach {
+                folders.filter { !getDoesFilePathExist(it.absolutePath, otgPath) }.forEach {
                     directoryDao.deleteDirPath(it.absolutePath)
                 }
 
@@ -832,7 +830,11 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                         ).getProperFileCount(this, true) == 0
                     }
                         .forEach {
-                            tryDeleteFileDirItem(it.toFileDirItem(this), true, true)
+                            tryDeleteFileDirItem(
+                                it.toFileDirItem(this),
+                                allowDeleteFolder = true,
+                                deleteFromDatabase = true
+                            )
                         }
                 }
             }
@@ -1534,9 +1536,9 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     private fun checkInvalidDirectories(dirs: ArrayList<Directory>) {
         val invalidDirs = ArrayList<Directory>()
-        val OTGPath = config.OTGPath
+        val otgPath = config.OTGPath
         dirs.filter { !it.areFavorites() && !it.isRecycleBin() }.forEach { it ->
-            if (!getDoesFilePathExist(it.path, OTGPath)) {
+            if (!getDoesFilePathExist(it.path, otgPath)) {
                 invalidDirs.add(it)
             } else if (it.path != config.tempFolderPath && (!isRPlus() || isExternalStorageManager())) {
                 // avoid calling file.list() or listfiles() on Android 11+, it became way too slow
@@ -1635,7 +1637,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                                 mediaDB.deleteMediumPath(it.path)
                             }
                         }
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                     }
                 }
             }, 3000L)
@@ -1683,7 +1685,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                         config.addExcludedFolder(file.absolutePath)
                     }
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
     }

@@ -424,7 +424,6 @@ final class CropWindowMoveHandler {
      *
      * @param right      the position that the right edge is dragged to
      * @param bounds     the bounding box of the image that is being cropped
-     * @param viewWidth
      * @param snapMargin the snap distance to the image edge (in pixels)
      */
     private void adjustRight(
@@ -599,7 +598,6 @@ final class CropWindowMoveHandler {
      *
      * @param bottom     the position that the bottom edge is dragged to
      * @param bounds     the bounding box of the image that is being cropped
-     * @param viewHeight
      * @param snapMargin the snap distance to the image edge (in pixels)
      */
     private void adjustBottom(

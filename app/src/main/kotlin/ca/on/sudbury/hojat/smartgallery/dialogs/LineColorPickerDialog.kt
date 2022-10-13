@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 
+import android.annotation.SuppressLint
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
@@ -22,7 +23,7 @@ class LineColorPickerDialog(
     val activity: BaseSimpleActivity,
     val color: Int,
     val isPrimaryColorPicker: Boolean,
-    val primaryColors: Int = R.array.md_primary_colors,
+    private val primaryColors: Int = R.array.md_primary_colors,
     val appIconIDs: ArrayList<Int>? = null,
     val menu: Menu? = null,
     val callback: (wasPositivePressed: Boolean, color: Int) -> Unit
@@ -35,6 +36,8 @@ class LineColorPickerDialog(
 
     private var wasDimmedBackgroundRemoved = false
     private var dialog: AlertDialog? = null
+
+    @SuppressLint("InflateParams")
     private var view: View =
         activity.layoutInflater.inflate(R.layout.dialog_line_color_picker, null)
 
@@ -80,8 +83,8 @@ class LineColorPickerDialog(
         }
 
         dialog = AlertDialog.Builder(activity)
-            .setPositiveButton(R.string.ok) { dialog, which -> dialogConfirmed() }
-            .setNegativeButton(R.string.cancel) { dialog, which -> dialogDismissed() }
+            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
+            .setNegativeButton(R.string.cancel) { _, _ -> dialogDismissed() }
             .setOnCancelListener { dialogDismissed() }
             .create().apply {
                 activity.setupDialogStuff(view, this)

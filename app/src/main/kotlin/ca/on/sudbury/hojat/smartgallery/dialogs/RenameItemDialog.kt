@@ -17,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import kotlinx.android.synthetic.main.dialog_rename_item.view.*
 
-
 @SuppressLint("InflateParams")
 class RenameItemDialog(
     val activity: BaseSimpleActivity,
@@ -68,7 +67,7 @@ class RenameItemDialog(
 
                         val updatedPaths = ArrayList<String>()
                         updatedPaths.add(path)
-                        if (!newExtension.isEmpty()) {
+                        if (newExtension.isNotEmpty()) {
                             newName += ".$newExtension"
                         }
 
@@ -100,7 +99,7 @@ class RenameItemDialog(
 
                         updatedPaths.add(newPath)
                         ignoreClicks = true
-                        activity.renameFile(path, newPath, false) { success, useAndroid30Way ->
+                        activity.renameFile(path, newPath, false) { success, _ ->
                             ignoreClicks = false
                             if (success) {
                                 callback(newPath)

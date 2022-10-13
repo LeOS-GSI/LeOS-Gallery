@@ -933,7 +933,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    fun checkConflicts(
+    private fun checkConflicts(
         files: ArrayList<FileDirItem>,
         destinationPath: String,
         index: Int,
@@ -997,7 +997,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
     }
 
-    val copyMoveListener = object : CopyMoveListener {
+    private val copyMoveListener = object : CopyMoveListener {
         override fun copySucceeded(
             copyOnly: Boolean,
             copiedAll: Boolean,
@@ -1066,13 +1066,13 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 }
             }
         } else {
-            handlePermission(PERMISSION_WRITE_STORAGE) {
+            handlePermission(PERMISSION_WRITE_STORAGE) { it ->
                 if (it) {
                     ExportSettingsDialog(
                         this,
                         getExportSettingsFilename(),
                         false
-                    ) { path, filename ->
+                    ) { path, _ ->
                         val file = File(path)
                         getFileOutputStream(file.toFileDirItem(this), true) {
                             exportSettingsTo(it, configItems)
