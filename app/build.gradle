@@ -98,7 +98,7 @@ dependencies {
     implementation 'androidx.fragment:fragment-ktx:1.5.2'
     implementation 'androidx.biometric:biometric:1.0.1'
 
-    implementation 'it.sephiroth.android.exif:library:1.0.1'
+    implementation 'it.sephiroth.android.exif:library:1.0.1' // TODO : to be removed
 
     // Gif viewer
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
