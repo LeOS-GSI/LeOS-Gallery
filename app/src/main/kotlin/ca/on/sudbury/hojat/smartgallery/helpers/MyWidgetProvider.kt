@@ -11,20 +11,19 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
+import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
+import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileSignature
+import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.setText
+import ca.on.sudbury.hojat.smartgallery.extensions.setVisibleIf
+import ca.on.sudbury.hojat.smartgallery.extensions.widgetsDB
+import ca.on.sudbury.hojat.smartgallery.models.Widget
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
-import ca.on.sudbury.hojat.smartgallery.extensions.getFileSignature
-import ca.on.sudbury.hojat.smartgallery.extensions.setText
-import ca.on.sudbury.hojat.smartgallery.extensions.setVisibleIf
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
-import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
-import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.widgetsDB
-import ca.on.sudbury.hojat.smartgallery.models.Widget
 
 class MyWidgetProvider : AppWidgetProvider() {
     @RequiresApi(Build.VERSION_CODES.M)
@@ -86,7 +85,7 @@ class MyWidgetProvider : AppWidgetProvider() {
                         .submit(widgetSize, widgetSize)
                         .get()
                     views.setImageViewBitmap(R.id.widget_imageview, image)
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                 }
 
                 setupAppOpenIntent(context, views, R.id.widget_holder, it)

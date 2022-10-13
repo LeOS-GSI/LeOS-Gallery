@@ -78,16 +78,22 @@ data class Medium(
 
     fun isHidden() = name.startsWith('.')
 
-    fun isHeic() = name.lowercase(Locale.ROOT).endsWith(".heic") || name.lowercase(Locale.ROOT).endsWith(".heif")
+    fun isHeic() = name.lowercase(Locale.ROOT).endsWith(".heic") || name.lowercase(Locale.ROOT)
+        .endsWith(".heif")
 
-    fun getBubbleText(sorting: Int, context: Context, dateFormat: String, timeFormat: String) = when {
-        sorting and SORT_BY_NAME != 0 -> name
-        sorting and SORT_BY_PATH != 0 -> path
-        sorting and SORT_BY_SIZE != 0 -> size.formatSize()
-        sorting and SORT_BY_DATE_MODIFIED != 0 -> modified.formatDate(context, dateFormat, timeFormat)
-        sorting and SORT_BY_RANDOM != 0 -> name
-        else -> taken.formatDate(context)
-    }
+    fun getBubbleText(sorting: Int, context: Context, dateFormat: String, timeFormat: String) =
+        when {
+            sorting and SORT_BY_NAME != 0 -> name
+            sorting and SORT_BY_PATH != 0 -> path
+            sorting and SORT_BY_SIZE != 0 -> size.formatSize()
+            sorting and SORT_BY_DATE_MODIFIED != 0 -> modified.formatDate(
+                context,
+                dateFormat,
+                timeFormat
+            )
+            sorting and SORT_BY_RANDOM != 0 -> name
+            else -> taken.formatDate(context)
+        }
 
     fun getGroupingKey(groupBy: Int): String {
         return when {
@@ -96,7 +102,8 @@ data class Medium(
             groupBy and GROUP_BY_DATE_TAKEN_DAILY != 0 -> getDayStartTS(taken, false)
             groupBy and GROUP_BY_DATE_TAKEN_MONTHLY != 0 -> getDayStartTS(taken, true)
             groupBy and GROUP_BY_FILE_TYPE != 0 -> type.toString()
-            groupBy and GROUP_BY_EXTENSION != 0 -> name.getFilenameExtension().lowercase(Locale.ROOT)
+            groupBy and GROUP_BY_EXTENSION != 0 -> name.getFilenameExtension()
+                .lowercase(Locale.ROOT)
             groupBy and GROUP_BY_FOLDER != 0 -> parentPath
             else -> ""
         }

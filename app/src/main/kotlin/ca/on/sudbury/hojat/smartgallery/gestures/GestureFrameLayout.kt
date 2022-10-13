@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.gestures
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Matrix
@@ -66,6 +67,7 @@ class GestureFrameLayout @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return if (currentMotionEvent != null) {
             controller.onTouch(this, currentMotionEvent!!)
@@ -97,7 +99,7 @@ class GestureFrameLayout @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     override fun measureChildWithMargins(child: View, parentWidthMeasureSpec: Int, widthUsed: Int, parentHeightMeasureSpec: Int, heightUsed: Int) {
-        val layoutParams = child.layoutParams as ViewGroup.MarginLayoutParams
+        val layoutParams = child.layoutParams as MarginLayoutParams
         val extraW = (paddingLeft + paddingRight + layoutParams.leftMargin + layoutParams.rightMargin + widthUsed)
         val extraH = (paddingTop + paddingBottom + layoutParams.topMargin + layoutParams.bottomMargin + heightUsed)
         child.measure(

@@ -17,7 +17,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.pm.ShortcutManager
 import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -39,7 +38,6 @@ import android.os.Looper
 import android.os.Process
 import android.provider.BaseColumns
 import android.provider.BlockedNumberContract
-import android.provider.ContactsContract
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
@@ -47,7 +45,6 @@ import android.provider.MediaStore.Images
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.telecom.TelecomManager
-import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
@@ -82,7 +79,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_LARGE
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_SMALL
-import ca.on.sudbury.hojat.smartgallery.helpers.FRIDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
@@ -94,10 +90,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS
-import ca.on.sudbury.hojat.smartgallery.helpers.MONDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
-import ca.on.sudbury.hojat.smartgallery.helpers.MyContactsContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
@@ -122,7 +116,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PicassoRoundedCornersTransformat
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
-import ca.on.sudbury.hojat.smartgallery.helpers.SATURDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.SD_OTG_PATTERN
 import ca.on.sudbury.hojat.smartgallery.helpers.SD_OTG_SHORT
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
@@ -135,21 +128,16 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.SUNDAY_BIT
-import ca.on.sudbury.hojat.smartgallery.helpers.THURSDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
-import ca.on.sudbury.hojat.smartgallery.helpers.TUESDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.WEDNESDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.WEEK_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.YEAR_SECONDS
-import ca.on.sudbury.hojat.smartgallery.helpers.YOUR_ALARM_SOUNDS_MIN_ID
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
@@ -160,7 +148,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.proPackages
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
-import ca.on.sudbury.hojat.smartgallery.models.AlarmSound
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.BlockedNumber
 import ca.on.sudbury.hojat.smartgallery.models.Directory
@@ -196,8 +183,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File

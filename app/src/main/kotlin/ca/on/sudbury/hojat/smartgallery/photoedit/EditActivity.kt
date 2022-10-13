@@ -939,7 +939,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     ConfirmationDialog(
                         this,
                         label,
-                        positive = ca.on.sudbury.hojat.smartgallery.R.string.ok,
+                        positive = R.string.ok,
                         negative = 0
                     ) {
                         launchViewIntent("6629852208836920709=di?ved/sppa/erots/moc.elgoog.yalp//:sptth".reversed())

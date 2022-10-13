@@ -105,7 +105,8 @@ class State {
         }
 
         if (updateRotation) {
-            rotation = Math.toDegrees(atan2(matrixValues[3].toDouble(), matrixValues[4].toDouble())).toFloat()
+            rotation = Math.toDegrees(atan2(matrixValues[3].toDouble(), matrixValues[4].toDouble()))
+                .toFloat()
         }
     }
 
@@ -120,7 +121,10 @@ class State {
 
         val state = other as State?
 
-        return equals(state!!.x, x) && equals(state.y, y) && equals(state.zoom, zoom) && equals(state.rotation, rotation)
+        return equals(state!!.x, x) && equals(state.y, y) && equals(state.zoom, zoom) && equals(
+            state.rotation,
+            rotation
+        )
     }
 
     override fun hashCode(): Int {

@@ -4,7 +4,9 @@ package ca.on.sudbury.hojat.smartgallery.models
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlbum
@@ -27,7 +29,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getSizeFromContentUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getTitle
-import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
@@ -177,9 +178,8 @@ open class FileDirItem(
 
     fun getParentPath() = path.getParentPath()
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun getDuration(context: Context) = context.getDuration(path)?.getFormattedDuration()
-
-    fun getFileDurationSeconds(context: Context) = context.getDuration(path)
 
     fun getArtist(context: Context) = context.getArtist(path)
 
@@ -189,13 +189,9 @@ open class FileDirItem(
 
     fun getResolution(context: Context) = context.getResolution(path)
 
-    fun getVideoResolution(context: Context) = context.getVideoResolution(path)
-
     fun getImageResolution(context: Context) = context.getImageResolution(path)
 
-    fun getPublicUri(context: Context) = context.getDocumentFile(path)?.uri ?: ""
-
-    fun getSignature(): String {
+    private fun getSignature(): String {
         val lastModified = if (modified > 1) {
             modified
         } else {

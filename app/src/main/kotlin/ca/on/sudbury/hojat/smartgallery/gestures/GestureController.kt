@@ -88,16 +88,8 @@ class GestureController(private val targetView: View) : View.OnTouchListener {
         maxVelocity = configuration.scaledMaximumFlingVelocity
     }
 
-    fun setOnGesturesListener(listener: OnGestureListener?) {
-        gestureListener = listener
-    }
-
     fun addOnStateChangeListener(listener: OnStateChangeListener) {
         stateListeners.add(listener)
-    }
-
-    fun removeOnStateChangeListener(listener: OnStateChangeListener) {
-        stateListeners.remove(listener)
     }
 
     fun updateState() {
@@ -250,7 +242,8 @@ class GestureController(private val targetView: View) : View.OnTouchListener {
         if (isStateChangedDuringTouch) {
             isStateChangedDuringTouch = false
 
-            stateController.restrictStateBounds(state, prevState, pivotX, pivotY,
+            stateController.restrictStateBounds(
+                state, prevState, pivotX, pivotY,
                 allowOverzoom = true,
                 restrictRotation = false
             )

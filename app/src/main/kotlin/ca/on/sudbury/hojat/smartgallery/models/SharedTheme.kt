@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.models
 
-
 data class SharedTheme(
     val textColor: Int,
     val backgroundColor: Int,

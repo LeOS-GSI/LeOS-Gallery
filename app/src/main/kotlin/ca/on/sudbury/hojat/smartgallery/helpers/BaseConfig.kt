@@ -9,7 +9,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getSharedPrefs
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 open class BaseConfig(val context: Context) {
     protected val prefs = context.getSharedPrefs()
 
@@ -167,13 +166,6 @@ open class BaseConfig(val context: Context) {
         set(defaultNavigationBarColor) = prefs.edit().putInt(
             DEFAULT_NAVIGATION_BAR_COLOR,
             defaultNavigationBarColor
-        ).apply()
-
-    var lastHandledShortcutColor: Int
-        get() = prefs.getInt(LAST_HANDLED_SHORTCUT_COLOR, 1)
-        set(lastHandledShortcutColor) = prefs.edit().putInt(
-            LAST_HANDLED_SHORTCUT_COLOR,
-            lastHandledShortcutColor
         ).apply()
 
     var appIconColor: Int
@@ -453,12 +445,6 @@ open class BaseConfig(val context: Context) {
             wasSharedThemeForced
         ).apply()
 
-    var showInfoBubble: Boolean
-        get() = prefs.getBoolean(SHOW_INFO_BUBBLE, true)
-        set(showInfoBubble) = prefs.edit()
-            .putBoolean(SHOW_INFO_BUBBLE, showInfoBubble)
-            .apply()
-
     var lastConflictApplyToAll: Boolean
         get() = prefs.getBoolean(
             LAST_CONFLICT_APPLY_TO_ALL,
@@ -492,25 +478,25 @@ open class BaseConfig(val context: Context) {
             sorting = value
         } else {
             prefs.edit().putInt(
-                SORT_FOLDER_PREFIX + path.toLowerCase(),
+                SORT_FOLDER_PREFIX + path.lowercase(Locale.getDefault()),
                 value
             ).apply()
         }
     }
 
     fun getFolderSorting(path: String) = prefs.getInt(
-        SORT_FOLDER_PREFIX + path.toLowerCase(),
+        SORT_FOLDER_PREFIX + path.lowercase(Locale.getDefault()),
         sorting
     )
 
     fun removeCustomSorting(path: String) {
         prefs.edit()
-            .remove(SORT_FOLDER_PREFIX + path.toLowerCase())
+            .remove(SORT_FOLDER_PREFIX + path.lowercase(Locale.getDefault()))
             .apply()
     }
 
     fun hasCustomSorting(path: String) =
-        prefs.contains(SORT_FOLDER_PREFIX + path.toLowerCase())
+        prefs.contains(SORT_FOLDER_PREFIX + path.lowercase(Locale.getDefault()))
 
     var hadThankYouInstalled: Boolean
         get() = prefs.getBoolean(
@@ -546,26 +532,6 @@ open class BaseConfig(val context: Context) {
             scrollHorizontally
         ).apply()
 
-    var preventPhoneFromSleeping: Boolean
-        get() = prefs.getBoolean(
-            PREVENT_PHONE_FROM_SLEEPING,
-            true
-        )
-        set(preventPhoneFromSleeping) = prefs.edit().putBoolean(
-            PREVENT_PHONE_FROM_SLEEPING,
-            preventPhoneFromSleeping
-        ).apply()
-
-    var lastUsedViewPagerPage: Int
-        get() = prefs.getInt(
-            LAST_USED_VIEW_PAGER_PAGE,
-            context.resources.getInteger(R.integer.default_viewpager_page)
-        )
-        set(lastUsedViewPagerPage) = prefs.edit().putInt(
-            LAST_USED_VIEW_PAGER_PAGE,
-            lastUsedViewPagerPage
-        ).apply()
-
     var use24HourFormat: Boolean
         get() = prefs.getBoolean(
             USE_24_HOUR_FORMAT,
@@ -573,65 +539,6 @@ open class BaseConfig(val context: Context) {
         )
         set(use24HourFormat) = prefs.edit()
             .putBoolean(USE_24_HOUR_FORMAT, use24HourFormat)
-            .apply()
-
-    var isSundayFirst: Boolean
-        get() {
-            val isSundayFirst =
-                Calendar.getInstance(Locale.getDefault()).firstDayOfWeek == Calendar.SUNDAY
-            return prefs.getBoolean(
-                SUNDAY_FIRST,
-                isSundayFirst
-            )
-        }
-        set(sundayFirst) = prefs.edit()
-            .putBoolean(SUNDAY_FIRST, sundayFirst).apply()
-
-    var wasAlarmWarningShown: Boolean
-        get() = prefs.getBoolean(
-            WAS_ALARM_WARNING_SHOWN,
-            false
-        )
-        set(wasAlarmWarningShown) = prefs.edit().putBoolean(
-            WAS_ALARM_WARNING_SHOWN,
-            wasAlarmWarningShown
-        ).apply()
-
-    var wasReminderWarningShown: Boolean
-        get() = prefs.getBoolean(
-            WAS_REMINDER_WARNING_SHOWN,
-            false
-        )
-        set(wasReminderWarningShown) = prefs.edit().putBoolean(
-            WAS_REMINDER_WARNING_SHOWN,
-            wasReminderWarningShown
-        ).apply()
-
-    var useSameSnooze: Boolean
-        get() = prefs.getBoolean(USE_SAME_SNOOZE, true)
-        set(useSameSnooze) = prefs.edit()
-            .putBoolean(USE_SAME_SNOOZE, useSameSnooze)
-            .apply()
-
-    var snoozeTime: Int
-        get() = prefs.getInt(SNOOZE_TIME, 10)
-        set(snoozeDelay) = prefs.edit()
-            .putInt(SNOOZE_TIME, snoozeDelay).apply()
-
-    var vibrateOnButtonPress: Boolean
-        get() = prefs.getBoolean(
-            VIBRATE_ON_BUTTON_PRESS,
-            context.resources.getBoolean(R.bool.default_vibrate_on_press)
-        )
-        set(vibrateOnButton) = prefs.edit().putBoolean(
-            VIBRATE_ON_BUTTON_PRESS,
-            vibrateOnButton
-        ).apply()
-
-    var yourAlarmSounds: String
-        get() = prefs.getString(YOUR_ALARM_SOUNDS, "")!!
-        set(yourAlarmSounds) = prefs.edit()
-            .putString(YOUR_ALARM_SOUNDS, yourAlarmSounds)
             .apply()
 
     var isUsingModifiedAppIcon: Boolean
@@ -647,19 +554,6 @@ open class BaseConfig(val context: Context) {
     var appId: String
         get() = prefs.getString(APP_ID, "")!!
         set(appId) = prefs.edit().putString(APP_ID, appId)
-            .apply()
-
-    var initialWidgetHeight: Int
-        get() = prefs.getInt(INITIAL_WIDGET_HEIGHT, 0)
-        set(initialWidgetHeight) = prefs.edit().putInt(
-            INITIAL_WIDGET_HEIGHT,
-            initialWidgetHeight
-        ).apply()
-
-    var widgetIdToMeasure: Int
-        get() = prefs.getInt(WIDGET_ID_TO_MEASURE, 0)
-        set(widgetIdToMeasure) = prefs.edit()
-            .putInt(WIDGET_ID_TO_MEASURE, widgetIdToMeasure)
             .apply()
 
     var wasOrangeIconChecked: Boolean
@@ -695,16 +589,6 @@ open class BaseConfig(val context: Context) {
             wasBeforeRateShown
         ).apply()
 
-    var wasInitialUpgradeToProShown: Boolean
-        get() = prefs.getBoolean(
-            WAS_INITIAL_UPGRADE_TO_PRO_SHOWN,
-            false
-        )
-        set(wasInitialUpgradeToProShown) = prefs.edit().putBoolean(
-            WAS_INITIAL_UPGRADE_TO_PRO_SHOWN,
-            wasInitialUpgradeToProShown
-        ).apply()
-
     var wasAppIconCustomizationWarningShown: Boolean
         get() = prefs.getBoolean(
             WAS_APP_ICON_CUSTOMIZATION_WARNING_SHOWN,
@@ -737,7 +621,7 @@ open class BaseConfig(val context: Context) {
     private fun getDefaultDateFormat(): String {
         val format = DateFormat.getDateFormat(context)
         val pattern = (format as SimpleDateFormat).toLocalizedPattern()
-        return when (pattern.toLowerCase().replace(" ", "")) {
+        return when (pattern.lowercase(Locale.getDefault()).replace(" ", "")) {
             "d.M.y" -> DATE_FORMAT_ONE
             "dd/mm/y" -> DATE_FORMAT_TWO
             "mm/dd/y" -> DATE_FORMAT_THREE
@@ -755,26 +639,6 @@ open class BaseConfig(val context: Context) {
         set(wasOTGHandled) = prefs.edit()
             .putBoolean(WAS_OTG_HANDLED, wasOTGHandled)
             .apply()
-
-    var wasUpgradedFromFreeShown: Boolean
-        get() = prefs.getBoolean(
-            WAS_UPGRADED_FROM_FREE_SHOWN,
-            false
-        )
-        set(wasUpgradedFromFreeShown) = prefs.edit().putBoolean(
-            WAS_UPGRADED_FROM_FREE_SHOWN,
-            wasUpgradedFromFreeShown
-        ).apply()
-
-    var wasRateUsPromptShown: Boolean
-        get() = prefs.getBoolean(
-            WAS_RATE_US_PROMPT_SHOWN,
-            false
-        )
-        set(wasRateUsPromptShown) = prefs.edit().putBoolean(
-            WAS_RATE_US_PROMPT_SHOWN,
-            wasRateUsPromptShown
-        ).apply()
 
     var wasAppRated: Boolean
         get() = prefs.getBoolean(WAS_APP_RATED, false)
@@ -829,21 +693,6 @@ open class BaseConfig(val context: Context) {
             lastExportedSettingsFolder
         ).apply()
 
-    var lastBlockedNumbersExportPath: String
-        get() = prefs.getString(
-            LAST_BLOCKED_NUMBERS_EXPORT_PATH,
-            ""
-        )!!
-        set(lastBlockedNumbersExportPath) = prefs.edit().putString(
-            LAST_BLOCKED_NUMBERS_EXPORT_PATH,
-            lastBlockedNumbersExportPath
-        ).apply()
-
-    var blockUnknownNumbers: Boolean
-        get() = prefs.getBoolean(BLOCK_UNKNOWN_NUMBERS, false)
-        set(blockUnknownNumbers) = prefs.edit()
-            .putBoolean(BLOCK_UNKNOWN_NUMBERS, blockUnknownNumbers).apply()
-
     var fontSize: Int
         get() = prefs.getInt(
             FONT_SIZE,
@@ -852,51 +701,12 @@ open class BaseConfig(val context: Context) {
         set(size) = prefs.edit().putInt(FONT_SIZE, size)
             .apply()
 
-    // notify the users about new SMS Messenger and Voice Recorder released
-    var wasMessengerRecorderShown: Boolean
-        get() = prefs.getBoolean(
-            WAS_MESSENGER_RECORDER_SHOWN,
-            false
-        )
-        set(wasMessengerRecorderShown) = prefs.edit().putBoolean(
-            WAS_MESSENGER_RECORDER_SHOWN,
-            wasMessengerRecorderShown
-        ).apply()
-
-    var defaultTab: Int
-        get() = prefs.getInt(
-            DEFAULT_TAB,
-            TAB_LAST_USED
-        )
-        set(defaultTab) = prefs.edit()
-            .putInt(DEFAULT_TAB, defaultTab).apply()
-
-    var startNameWithSurname: Boolean
-        get() = prefs.getBoolean(
-            START_NAME_WITH_SURNAME,
-            false
-        )
-        set(startNameWithSurname) = prefs.edit().putBoolean(
-            START_NAME_WITH_SURNAME,
-            startNameWithSurname
-        ).apply()
-
     var favorites: MutableSet<String>
         get() = prefs.getStringSet(FAVORITES, HashSet())!!
         set(favorites) = prefs.edit().remove(FAVORITES)
             .putStringSet(
                 FAVORITES, favorites
             ).apply()
-
-    var showCallConfirmation: Boolean
-        get() = prefs.getBoolean(
-            SHOW_CALL_CONFIRMATION,
-            false
-        )
-        set(showCallConfirmation) = prefs.edit().putBoolean(
-            SHOW_CALL_CONFIRMATION,
-            showCallConfirmation
-        ).apply()
 
     // color picker last used colors
     internal var colorPickerRecentColors: LinkedList<Int>

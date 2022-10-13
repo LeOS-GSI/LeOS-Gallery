@@ -1,6 +1,8 @@
 package ca.on.sudbury.hojat.smartgallery.gestures
 
 import android.view.MotionEvent
+import kotlin.math.abs
+import kotlin.math.atan2
 
 class RotationGestureDetector(private val listener: OnRotationGestureListener) {
     companion object {
@@ -49,7 +51,7 @@ class RotationGestureDetector(private val listener: OnRotationGestureListener) {
     }
 
     private fun tryStartRotation() {
-        if (isInProgress || Math.abs(initialAngle - currAngle) < ROTATION_SLOP) {
+        if (isInProgress || abs(initialAngle - currAngle) < ROTATION_SLOP) {
             return
         }
 
@@ -72,7 +74,12 @@ class RotationGestureDetector(private val listener: OnRotationGestureListener) {
     private fun processRotation() = isInProgress && isGestureAccepted && listener.onRotate(this)
 
     private fun computeRotation(event: MotionEvent): Float {
-        return Math.toDegrees(Math.atan2((event.getY(1) - event.getY(0)).toDouble(), (event.getX(1) - event.getX(0)).toDouble())).toFloat()
+        return Math.toDegrees(
+            atan2(
+                (event.getY(1) - event.getY(0)).toDouble(),
+                (event.getX(1) - event.getX(0)).toDouble()
+            )
+        ).toFloat()
     }
 
     fun getRotationDelta() = currAngle - prevAngle

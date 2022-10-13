@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.BaseColumns
@@ -12,6 +13,7 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.text.format.DateFormat
+import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getUpdatedDeletedMedia
@@ -51,6 +53,7 @@ class MediaFetcher(val context: Context) {
     var shouldStop = false
 
     // on Android 11 we fetch all files at once from MediaStore and have it split by folder, use it if available
+    @RequiresApi(Build.VERSION_CODES.Q)
     fun getFilesFrom(
         curPath: String,
         isPickImage: Boolean,
@@ -368,6 +371,7 @@ class MediaFetcher(val context: Context) {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun getMediaInFolder(
         folder: String,
         isPickImage: Boolean,
@@ -666,6 +670,7 @@ class MediaFetcher(val context: Context) {
         return media
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun getMediaOnOTG(
         folder: String,
         isPickImage: Boolean,

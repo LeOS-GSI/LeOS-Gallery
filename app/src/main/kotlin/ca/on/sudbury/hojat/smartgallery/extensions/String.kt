@@ -8,32 +8,19 @@ import android.os.Environment
 import android.os.StatFs
 import android.provider.MediaStore
 import android.telephony.PhoneNumberUtils
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
-import android.widget.TextView
-import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
-import ca.on.sudbury.hojat.smartgallery.helpers.getDateFormats
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.normalizeRegex
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
-import org.joda.time.DateTime
-import org.joda.time.Years
-import org.joda.time.format.DateTimeFormat
+import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.io.IOException
-import java.text.DateFormat
 import java.text.Normalizer
-import java.text.SimpleDateFormat
-import java.util.ArrayList
 import java.util.Locale
-import java.util.regex.Pattern
 import kotlin.collections.HashMap
 
 fun String.getCompressionFormat() = when (getFilenameExtension().lowercase(Locale.getDefault())) {
