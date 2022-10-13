@@ -71,16 +71,6 @@ public class MarshmallowReprintModule implements ReprintModule {
     public static final int FINGERPRINT_ERROR_LOCKOUT = 7;
 
     // The following ACQUIRED constants are used with help messages
-    /**
-     * The image acquired was good.
-     */
-    public static final int FINGERPRINT_ACQUIRED_GOOD = 0;
-
-    /**
-     * Only a partial fingerprint image was detected. During enrollment, the user should be informed
-     * on what needs to happen to resolve this problem, e.g. "press firmly on sensor."
-     */
-    public static final int FINGERPRINT_ACQUIRED_PARTIAL = 1;
 
     /**
      * The fingerprint image was too noisy to process due to a detected condition (i.e. dry skin) or
@@ -95,19 +85,6 @@ public class MarshmallowReprintModule implements ReprintModule {
      * to take action to clean the sensor when this is returned.
      */
     public static final int FINGERPRINT_ACQUIRED_IMAGER_DIRTY = 3;
-
-    /**
-     * The fingerprint image was unreadable due to lack of motion. This is most appropriate for
-     * linear array sensors that require a swipe motion.
-     */
-    public static final int FINGERPRINT_ACQUIRED_TOO_SLOW = 4;
-
-    /**
-     * The fingerprint image was incomplete due to quick motion. While mostly appropriate for linear
-     * array sensors,  this could also happen if the finger was moved during acquisition. The user
-     * should be asked to move the finger slower (linear) or leave the finger on the sensor longer.
-     */
-    public static final int FINGERPRINT_ACQUIRED_TOO_FAST = 5;
 
     /**
      * A fingerprint was read that is not registered.

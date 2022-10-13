@@ -3,10 +3,10 @@ package ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils;
 
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
+
 
 import timber.log.Timber;
-
-import androidx.annotation.NonNull;
 
 import ca.on.sudbury.hojat.smartgallery.BuildConfig;
 import ca.on.sudbury.hojat.smartgallery.svg.androidsvg.SVGExternalFileResolver;
@@ -37,10 +37,10 @@ public class CSSParser {
     private static final int SPECIFICITY_ATTRIBUTE_OR_PSEUDOCLASS = 1000;
     private static final int SPECIFICITY_ELEMENT_OR_PSEUDOELEMENT = 1;
 
-    private CSSParser.MediaType deviceMediaType;
-    private CSSParser.Source source;    // Where these rules came from (Parser or RenderOptions)
+    private final CSSParser.MediaType deviceMediaType;
+    private final CSSParser.Source source;    // Where these rules came from (Parser or RenderOptions)
 
-    private SVGExternalFileResolver externalFileResolver;
+    private final SVGExternalFileResolver externalFileResolver;
 
     private boolean inMediaRule = false;
 
@@ -242,10 +242,6 @@ public class CSSParser {
             return this.rules == null || this.rules.isEmpty();
         }
 
-        int ruleCount() {
-            return (this.rules != null) ? this.rules.size() : 0;
-        }
-
         /*
          * Remove all rules that were added from a given Source.
          */
@@ -336,6 +332,7 @@ public class CSSParser {
             specificity += SPECIFICITY_ELEMENT_OR_PSEUDOELEMENT;
         }
 
+        @NonNull
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();
@@ -346,18 +343,9 @@ public class CSSParser {
     }
 
 
-    //===========================================================================================
-
-
-    CSSParser() {
-        this(CSSParser.MediaType.screen, CSSParser.Source.Document, null);
-    }
-
-
     CSSParser(CSSParser.Source source, SVGExternalFileResolver externalFileResolver) {
         this(CSSParser.MediaType.screen, source, externalFileResolver);
     }
-
 
     CSSParser(CSSParser.MediaType rendererMediaType, CSSParser.Source source, SVGExternalFileResolver externalFileResolver) {
         this.deviceMediaType = rendererMediaType;
@@ -374,11 +362,11 @@ public class CSSParser {
     }
 
 
-    static boolean mediaMatches(String mediaListStr, CSSParser.MediaType rendererMediaType) {
+    static boolean mediaMatches(String mediaListStr) {
         CSSTextScanner scan = new CSSTextScanner(mediaListStr);
         scan.skipWhitespace();
         List<CSSParser.MediaType> mediaList = parseMediaList(scan);
-        return mediaMatches(mediaList, rendererMediaType);
+        return mediaMatches(mediaList, ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.CSSParser.MediaType.screen);
     }
 
 
@@ -389,24 +377,6 @@ public class CSSParser {
     private static void warn(Object... args) {
         Timber.tag(TAG).w(String.format("Ignoring @%s rule", args));
     }
-
-
-   /*
-   private static void  error(String format, Object... args)
-   {
-      Log.e(TAG, String.format(format, args));
-   }
-
-
-   private static void  debug(String format, Object... args)
-   {
-      if (LibConfig.DEBUG)
-         Log.d(TAG, String.format(format, args));
-   }
-   */
-
-
-    //==============================================================================
 
 
     // Returns true if 'deviceMediaType' matches one of the media types in 'mediaList'
@@ -905,7 +875,6 @@ public class CSSParser {
     static class PseudoClassEmpty implements CSSParser.PseudoClass {
         @Override
         public boolean matches(CSSParser.RuleMatchContext ruleMatchContext, SVGBase.SvgElementBase obj) {
-            //return (obj.getChildren().length == 0;
 
             // temp implementation
             if (obj instanceof SVGBase.SvgContainer)

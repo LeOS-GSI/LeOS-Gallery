@@ -7,6 +7,7 @@ import android.graphics.Path;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import java.util.regex.Pattern;
@@ -16,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.BuildConfig;
 import ca.on.sudbury.hojat.smartgallery.svg.androidsvg.SVGExternalFileResolver;
 import ca.on.sudbury.hojat.smartgallery.svg.androidsvg.PreserveAspectRatio;
 import timber.log.Timber;
-
 
 /*
  * The rendering part of AndroidSVG.
@@ -69,7 +69,7 @@ public class SVGAndroidRenderer {
 
     private CSSParser.RuleMatchContext ruleMatchContext = null;
 
-    private ca.on.sudbury.hojat.smartgallery.svg.androidsvg.SVGExternalFileResolver externalFileResolver;
+    private final ca.on.sudbury.hojat.smartgallery.svg.androidsvg.SVGExternalFileResolver externalFileResolver;
 
 
     public static class RendererState {
@@ -387,9 +387,6 @@ public class SVGAndroidRenderer {
     }
 
 
-    //==============================================================================
-
-
     private void parentPush(SVGBase.SvgContainer obj) {
         parentStack.push(obj);
         matrixStack.push(canvas.getMatrix());
@@ -400,10 +397,6 @@ public class SVGAndroidRenderer {
         parentStack.pop();
         matrixStack.pop();
     }
-
-
-    //==============================================================================
-
 
     private void updateStyleForElement(ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.RendererState state, SVGBase.SvgElementBase obj) {
         boolean isRootSVG = (obj.parent == null);
@@ -2851,7 +2844,7 @@ public class SVGAndroidRenderer {
     /*
      *  Calculates the positions and orientations of any markers that should be placed on the given path.
      */
-    private class MarkerPositionCalculator implements SVGBase.PathInterface {
+    private static class MarkerPositionCalculator implements SVGBase.PathInterface {
         private final java.util.List<ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector> markers = new java.util.ArrayList<>();
 
         private float startX, startY;
@@ -2990,7 +2983,7 @@ public class SVGAndroidRenderer {
 
         java.util.List<ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector> markers;
         if (obj instanceof SVGBase.Path)
-            markers = (new ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerPositionCalculator(((SVGBase.Path) obj).d)).getMarkers();
+            markers = (new ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerPositionCalculator(((ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGBase.Path) obj).d)).getMarkers();
         else if (obj instanceof SVGBase.Line)
             markers = calculateMarkerPositions((SVGBase.Line) obj);
         else // PolyLine and Polygon
@@ -3015,8 +3008,9 @@ public class SVGAndroidRenderer {
 
             for (int i = 1; i < (markerCount - 1); i++) {
                 ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector nextPos = markers.get(i + 1);
-                if (thisPos.isAmbiguous)
-                    thisPos = realignMarkerMid(lastPos, thisPos, nextPos);
+                if (thisPos.isAmbiguous) {
+                    realignMarkerMid(lastPos, thisPos, nextPos);
+                }
                 renderMarker(_markerMid, thisPos);
                 lastPos = thisPos;
                 thisPos = nextPos;
@@ -3032,7 +3026,7 @@ public class SVGAndroidRenderer {
      * This was one of the ambiguous markers. Try to see if we can find a better direction for
      * it, now that we have more info available on the neighbouring marker positions.
      */
-    private ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector realignMarkerMid(ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector lastPos, ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector thisPos, ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector nextPos) {
+    private SVGAndroidRenderer.MarkerVector realignMarkerMid(SVGAndroidRenderer.MarkerVector lastPos, SVGAndroidRenderer.MarkerVector thisPos, SVGAndroidRenderer.MarkerVector nextPos) {
         // Check the temporary marker vector against the incoming vector
         float dot = dotProduct(thisPos.dx, thisPos.dy, (thisPos.x - lastPos.x), (thisPos.y - lastPos.y));
         if (dot == 0f) {
@@ -3065,7 +3059,7 @@ public class SVGAndroidRenderer {
     /*
      * Render the given marker type at the given position
      */
-    private void renderMarker(SVGBase.Marker marker, ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.SVGAndroidRenderer.MarkerVector pos) {
+    private void renderMarker(SVGBase.Marker marker, SVGAndroidRenderer.MarkerVector pos) {
         float angle = 0f;
         float unitsScale;
 

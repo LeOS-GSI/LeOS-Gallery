@@ -552,24 +552,24 @@ public class Style implements Cloneable {
                 break;
 
             case marker:
-                style.markerStart = SVGParserImpl.parseFunctionalIRI(val, localName);
+                style.markerStart = SVGParserImpl.parseFunctionalIRI(val);
                 style.markerMid = style.markerStart;
                 style.markerEnd = style.markerStart;
                 style.specifiedFlags |= (SPECIFIED_MARKER_START | SPECIFIED_MARKER_MID | SPECIFIED_MARKER_END);
                 break;
 
             case marker_start:
-                style.markerStart = SVGParserImpl.parseFunctionalIRI(val, localName);
+                style.markerStart = SVGParserImpl.parseFunctionalIRI(val);
                 style.specifiedFlags |= SPECIFIED_MARKER_START;
                 break;
 
             case marker_mid:
-                style.markerMid = SVGParserImpl.parseFunctionalIRI(val, localName);
+                style.markerMid = SVGParserImpl.parseFunctionalIRI(val);
                 style.specifiedFlags |= SPECIFIED_MARKER_MID;
                 break;
 
             case marker_end:
-                style.markerEnd = SVGParserImpl.parseFunctionalIRI(val, localName);
+                style.markerEnd = SVGParserImpl.parseFunctionalIRI(val);
                 style.specifiedFlags |= SPECIFIED_MARKER_END;
                 break;
 
@@ -608,7 +608,7 @@ public class Style implements Cloneable {
                 break;
 
             case clip_path:
-                style.clipPath = SVGParserImpl.parseFunctionalIRI(val, localName);
+                style.clipPath = SVGParserImpl.parseFunctionalIRI(val);
                 style.specifiedFlags |= SPECIFIED_CLIP_PATH;
                 break;
 
@@ -618,7 +618,7 @@ public class Style implements Cloneable {
                 break;
 
             case mask:
-                style.mask = SVGParserImpl.parseFunctionalIRI(val, localName);
+                style.mask = SVGParserImpl.parseFunctionalIRI(val);
                 style.specifiedFlags |= SPECIFIED_MASK;
                 break;
 

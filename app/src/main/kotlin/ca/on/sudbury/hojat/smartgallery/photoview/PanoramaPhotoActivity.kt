@@ -28,7 +28,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.showSystemUI
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 
-
 private const val CARDBOARD_DISPLAY_MODE = 3
 
 open class PanoramaPhotoActivity : SimpleActivity() {
@@ -62,7 +61,10 @@ open class PanoramaPhotoActivity : SimpleActivity() {
         checkIntent()
 
         if (isRPlus()) {
-            window.insetsController?.setSystemBarsAppearance(0, WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS)
+            window.insetsController?.setSystemBarsAppearance(
+                0,
+                WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            )
         }
     }
 
@@ -180,10 +182,12 @@ open class PanoramaPhotoActivity : SimpleActivity() {
             rightMargin = navigationBarWidth
         }
 
-        (binding.explore.layoutParams as RelativeLayout.LayoutParams).bottomMargin = navigationBarHeight
+        (binding.explore.layoutParams as RelativeLayout.LayoutParams).bottomMargin =
+            navigationBarHeight
 
         binding.cardboard.onGlobalLayout {
-            binding.panoramaGradientBackground.layoutParams.height = navBarHeight + binding.cardboard.height
+            binding.panoramaGradientBackground.layoutParams.height =
+                navBarHeight + binding.cardboard.height
         }
     }
 

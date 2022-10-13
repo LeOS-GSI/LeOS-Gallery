@@ -2751,7 +2751,7 @@ class SVGParserImpl implements SVGParser {
     /*
      * Parse a preserveAspectRation attribute
      */
-    private static void parsePreserveAspectRatio(SVGBase.SvgPreserveAspectRatioContainer obj, String val) throws SVGParseException {
+    private static void parsePreserveAspectRatio(SVGBase.SvgPreserveAspectRatioContainer obj, String val) {
         obj.preserveAspectRatio = PreserveAspectRatio.of(val);
     }
 
@@ -2796,7 +2796,7 @@ class SVGParserImpl implements SVGParser {
      */
     static Colour parseColour(String val) {
         if (val.charAt(0) == '#') {
-            IntegerParser ip = IntegerParser.parseHex(val, 1, val.length());
+            IntegerParser ip = IntegerParser.parseHex(val, val.length());
             if (ip == null) {
                 return Colour.BLACK;
             }
@@ -2995,7 +2995,6 @@ class SVGParserImpl implements SVGParser {
     static void parseFont(Style style, String val) {
         Float fontWeight = null;
         Style.FontStyle fontStyle = null;
-        String fontVariant = null;
         Float fontStretch = null;
         Boolean fontVariantSmallCaps = null;
 
@@ -3702,7 +3701,7 @@ class SVGParserImpl implements SVGParser {
     }
 
 
-    static String parseFunctionalIRI(String val, String attrName) {
+    static String parseFunctionalIRI(String val) {
         if (val.equals(NONE))
             return null;
         if (!val.startsWith("url("))
@@ -3744,7 +3743,7 @@ class SVGParserImpl implements SVGParser {
             }
         }
 
-        if (isTextCSS && CSSParser.mediaMatches(media, MediaType.screen)) {
+        if (isTextCSS && CSSParser.mediaMatches(media)) {
             inStyleElement = true;
         } else {
             ignoring = true;

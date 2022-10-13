@@ -154,20 +154,6 @@ public class SVGBase {
     /**
      * Read and parse an SVG from the given resource location.
      *
-     * @param context    the Android context of the resource.
-     * @param resourceId the resource identifier of the SVG document.
-     * @return an SVG instance on which you can call one of the render methods.
-     * @throws SVGParseException if there is an error parsing the document.
-     */
-    @SuppressWarnings("WeakerAccess")
-    public static SVGBase getFromResource(android.content.Context context, int resourceId) throws SVGParseException {
-        return getFromResource(context.getResources(), resourceId);
-    }
-
-
-    /**
-     * Read and parse an SVG from the given resource location.
-     *
      * @param resources  the set of Resources in which to locate the file.
      * @param resourceId the resource identifier of the SVG document.
      * @return an SVG instance on which you can call one of the render methods.
@@ -660,7 +646,7 @@ public class SVGBase {
         if (this.rootElement == null)
             throw new IllegalArgumentException("SVG document is empty");
 
-        List<SVGBase.SvgObject> viewElems = getElementsByTagName(SVGBase.View.NODE_NAME);
+        List<SVGBase.SvgObject> viewElems = getElementsByTagName();
 
         Set<String> viewIds = new HashSet<>(viewElems.size());
         for (SVGBase.SvgObject elem : viewElems) {
@@ -1023,11 +1009,6 @@ public class SVGBase {
         static SVGBase.Box fromLimits(float minX, float minY, float maxX, float maxY) {
             return new SVGBase.Box(minX, minY, maxX - minX, maxY - minY);
         }
-
-        //static Box  fromRectF(RectF rect)
-        //{
-        //   return Box.fromLimits(rect.left, rect.top, rect.right, rect.bottom);
-        //}
 
         android.graphics.RectF toRectF() {
             return new android.graphics.RectF(minX, minY, maxX(), maxY());
@@ -2163,11 +2144,11 @@ public class SVGBase {
     }
 
 
-    private List<SVGBase.SvgObject> getElementsByTagName(String nodeName) {
+    private List<SVGBase.SvgObject> getElementsByTagName() {
         List<SVGBase.SvgObject> result = new ArrayList<>();
 
         // Search the object tree for nodes with the give element class
-        getElementsByTagName(result, rootElement, nodeName);
+        getElementsByTagName(result, rootElement, SVGBase.View.NODE_NAME);
         return result;
     }
 

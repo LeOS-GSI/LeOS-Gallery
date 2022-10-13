@@ -31,7 +31,7 @@ public class CSSFontFeatureSettings {
     public static final String FEATURE_KERN = "kern";
 
     // For font-variant-ligatures
-    static CSSFontFeatureSettings LIGATURES_NORMAL = null;
+    static CSSFontFeatureSettings LIGATURES_NORMAL;
     private static CSSFontFeatureSettings LIGATURES_ALL_OFF = null;
 
     private static final String FONT_VARIANT_COMMON_LIGATURES = "common-ligatures";
@@ -50,7 +50,7 @@ public class CSSFontFeatureSettings {
     public static final String FEATURE_CALT = "calt";
 
     // For font-variant-position
-    static CSSFontFeatureSettings POSITION_ALL_OFF = null;
+    static CSSFontFeatureSettings POSITION_ALL_OFF;
 
     private static final String FONT_VARIANT_SUB = "sub";
     private static final String FONT_VARIANT_SUPER = "super";
@@ -59,7 +59,7 @@ public class CSSFontFeatureSettings {
     private static final String FEATURE_SUPS = "sups";
 
     // For font-variant-caps
-    static CSSFontFeatureSettings CAPS_ALL_OFF = null;
+    static CSSFontFeatureSettings CAPS_ALL_OFF;
     private static CSSFontFeatureSettings CAPS_SMALL_CAPS = null;
 
     static final String FONT_VARIANT_SMALL_CAPS = "small-caps";
@@ -77,7 +77,7 @@ public class CSSFontFeatureSettings {
     private static final String FEATURE_TITL = "titl";
 
     // For font-variant-numeric
-    static CSSFontFeatureSettings NUMERIC_ALL_OFF = null;
+    static CSSFontFeatureSettings NUMERIC_ALL_OFF;
 
     private static final String FONT_VARIANT_LINING_NUMS = "lining-nums";
     private static final String FONT_VARIANT_OLDSTYLE_NUMS = "oldstyle-nums";
@@ -98,7 +98,7 @@ public class CSSFontFeatureSettings {
     public static final String FEATURE_ZERO = "zero";
 
     // For font-variant-east-asian
-    static CSSFontFeatureSettings EAST_ASIAN_ALL_OFF = null;
+    static CSSFontFeatureSettings EAST_ASIAN_ALL_OFF;
 
     private static final String FONT_VARIANT_JIS78 = "jis78";
     private static final String FONT_VARIANT_JIS83 = "jis83";
@@ -203,11 +203,6 @@ public class CSSFontFeatureSettings {
             this.settings.put(FEATURE_KERN, VALUE_OFF);
         else
             this.settings.put(FEATURE_KERN, VALUE_ON);
-    }
-
-
-    public boolean hasSettings() {
-        return this.settings.size() > 0;
     }
 
 
@@ -806,7 +801,7 @@ public class CSSFontFeatureSettings {
     //-----------------------------------------------------------------------------------------------
 
 
-    private static final CSSFontFeatureSettings makeDefaultSettings() {
+    private static CSSFontFeatureSettings makeDefaultSettings() {
         // See: https://www.w3.org/TR/css-fonts-3/#default-features
         CSSFontFeatureSettings result = new CSSFontFeatureSettings();
         result.settings.put("rlig", VALUE_ON);
@@ -833,17 +828,6 @@ public class CSSFontFeatureSettings {
         result.settings.put("hlig", VALUE_OFF);
         result.settings.put("calt", VALUE_OFF);
         LIGATURES_ALL_OFF = result;
-    }
-
-
-    private void ensurePositionNormal() {
-        // common and contextual ligatures ON; discretionary  and historical ligatures OFF
-        if (POSITION_ALL_OFF == null) {
-            CSSFontFeatureSettings result = new CSSFontFeatureSettings();
-            result.settings.put(FEATURE_SUBS, VALUE_OFF);
-            result.settings.put(FEATURE_SUPS, VALUE_OFF);
-            this.POSITION_ALL_OFF = result;
-        }
     }
 
 

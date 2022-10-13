@@ -7,7 +7,7 @@ import android.content.Context;
  * Static methods for performing fingerprint authentication.
  * <p/>
  * Call {@link #initialize(Context)} in your application's {@code onCreate}, then call
- *  to perform authentication.
+ * to perform authentication.
  */
 public class Reprint {
     public interface Logger {
@@ -47,22 +47,6 @@ public class Reprint {
      */
     public static void initialize(Context context, Logger logger) {
         ReprintInternal.INSTANCE.initialize(context, logger);
-    }
-
-    /**
-     * Register an individual spass module.
-     * <p/>
-     * This is only necessary if you want to customize which modules are loaded, or the order in
-     * which they're registered. Most use cases should just call {@link #initialize(Context,
-     * Logger)} instead.
-     * <p/>
-     * Registering the same module twice will have no effect. The original module instance will
-     * remain registered.
-     *
-     * @param module The module to register.
-     */
-    public static void registerModule(ReprintModule module) {
-        ReprintInternal.INSTANCE.registerModule(module);
     }
 
     /**
@@ -107,18 +91,6 @@ public class Reprint {
      */
     public static void authenticate(AuthenticationListener listener, Reprint.RestartPredicate restartPredicate) {
         ReprintInternal.INSTANCE.authenticate(listener, restartPredicate);
-    }
-
-    /**
-     * Start a fingerprint authentication request.
-     * <p/>
-     * This variant will not restart the fingerprint reader after any failure, including non-fatal
-     * failures.
-     *
-     * @param listener The listener that will be notified of authentication events.
-     */
-    public static void authenticateWithoutRestart(AuthenticationListener listener) {
-        ReprintInternal.INSTANCE.authenticate(listener, RestartPredicates.neverRestart());
     }
 
     /**

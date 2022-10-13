@@ -9,7 +9,4 @@ public class CSSParseException extends Exception {
         super(msg);
     }
 
-    public CSSParseException(String msg, Exception cause) {
-        super(msg, cause);
-    }
 }

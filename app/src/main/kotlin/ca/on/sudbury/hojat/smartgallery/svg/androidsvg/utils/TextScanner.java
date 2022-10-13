@@ -97,7 +97,7 @@ public class TextScanner {
     }
 
     Integer nextInteger() {
-        IntegerParser ip = IntegerParser.parseInt(input, position, inputLength, false);
+        IntegerParser ip = IntegerParser.parseInt(input, position, inputLength);
         if (ip == null)
             return null;
         position = ip.getEndPos();

@@ -35,26 +35,19 @@ public class CSSFontVariationSettings {
         this.settings = new HashMap<>();
     }
 
-    private CSSFontVariationSettings(HashMap<String, Float> initialMap) {
-        this.settings = initialMap;
-    }
-
     public CSSFontVariationSettings(ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.CSSFontVariationSettings other) {
         this.settings = new HashMap<>(other.settings);
     }
 
-
     public void addSetting(String key, float value) {
         this.settings.put(key, value);
     }
-
 
     public void applySettings(ca.on.sudbury.hojat.smartgallery.svg.androidsvg.utils.CSSFontVariationSettings variationSet) {
         if (variationSet == null)
             return;
         this.settings.putAll(variationSet.settings);
     }
-
 
     @NonNull
     @Override

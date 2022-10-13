@@ -2,6 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.reprint.core;
 
 import android.content.Context;
 import android.os.Build;
+import android.annotation.SuppressLint;
 
 import ca.on.sudbury.hojat.smartgallery.R;
 
@@ -15,11 +16,9 @@ import ca.on.sudbury.hojat.smartgallery.reprint.module.MarshmallowReprintModule;
 
 /**
  * Methods for performing fingerprint authentication.
- *
- * @hide
  */
 enum ReprintInternal {
-    INSTANCE;
+    @SuppressLint("StaticFieldLeak") INSTANCE;
 
     public static final Reprint.Logger NULL_LOGGER = new Reprint.Logger() {
         public void log(String message) {
@@ -30,7 +29,7 @@ enum ReprintInternal {
     };
 
     private static final String REPRINT_SPASS_MODULE = "ca.on.sudbury.hojat.smartgallery.reprint.module.spass.SpassReprintModule";
-    private AtomicReference<CancellationSignal> cancellationSignal = new AtomicReference<>();
+    private final AtomicReference<CancellationSignal> cancellationSignal = new AtomicReference<>();
     private ReprintModule module;
     private android.content.Context context;
 
