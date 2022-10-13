@@ -143,20 +143,6 @@ fun File.doesThisOrParentHaveNoMedia(
     return false
 }
 
-fun File.doesParentHaveNoMedia(): Boolean {
-    var curFile = parentFile
-    while (true) {
-        if (curFile?.containsNoMedia() == true) {
-            return true
-        }
-        curFile = curFile?.parentFile ?: break
-        if (curFile.absolutePath == "/") {
-            break
-        }
-    }
-    return false
-}
-
 fun File.getDigest(algorithm: String): String? {
     return try {
         inputStream().getDigest(algorithm)

@@ -887,7 +887,7 @@ fun String.getMimeType(): String {
         put("zip", "application/zip")
     }
 
-    return typesMap[getFilenameExtension().toLowerCase()] ?: ""
+    return typesMap[getFilenameExtension().lowercase(Locale.ROOT)] ?: ""
 }
 
 fun String.getOTGPublicPath(context: Context) =
@@ -901,8 +901,6 @@ fun String.canModifyEXIF() = extensionsSupportingEXIF.any { endsWith(it, true) }
 
 fun String.areDigitsOnly() = matches(Regex("[0-9]+"))
 
-fun String.areLettersOnly() = matches(Regex("[a-zA-Z]+"))
-
 fun String.getGenericMimeType(): String {
     if (!contains("/"))
         return this
@@ -911,8 +909,6 @@ fun String.getGenericMimeType(): String {
     return "$type/*"
 }
 
-fun String.relativizeWith(path: String) = this.substring(path.length)
-
 fun String.containsNoMedia() = File(this).containsNoMedia()
 
 fun String.doesThisOrParentHaveNoMedia(
@@ -920,97 +916,6 @@ fun String.doesThisOrParentHaveNoMedia(
     callback: ((path: String, hasNoMedia: Boolean) -> Unit)?
 ) =
     File(this).doesThisOrParentHaveNoMedia(folderNoMediaStatuses, callback)
-
-fun String.getPublicUri(context: Context) = context.getDocumentFile(this)?.uri ?: ""
-
-fun String.substringTo(cnt: Int): String {
-    return if (isEmpty()) {
-        ""
-    } else {
-        substring(0, Math.min(length, cnt))
-    }
-}
-
-fun String.highlightTextPart(
-    textToHighlight: String,
-    color: Int,
-    highlightAll: Boolean = false,
-    ignoreCharsBetweenDigits: Boolean = false
-): SpannableString {
-    val spannableString = SpannableString(this)
-    if (textToHighlight.isEmpty()) {
-        return spannableString
-    }
-
-    var startIndex = normalizeString().indexOf(textToHighlight, 0, true)
-    val indexes = ArrayList<Int>()
-    while (startIndex >= 0) {
-        if (startIndex != -1) {
-            indexes.add(startIndex)
-        }
-
-        startIndex =
-            normalizeString().indexOf(textToHighlight, startIndex + textToHighlight.length, true)
-        if (!highlightAll) {
-            break
-        }
-    }
-
-    // handle cases when we search for 643, but in reality the string contains it like 6-43
-    if (ignoreCharsBetweenDigits && indexes.isEmpty()) {
-        try {
-            val regex = TextUtils.join("(\\D*)", textToHighlight.toCharArray().toTypedArray())
-            val pattern = Pattern.compile(regex)
-            val result = pattern.matcher(normalizeString())
-            if (result.find()) {
-                spannableString.setSpan(
-                    ForegroundColorSpan(color),
-                    result.start(),
-                    result.end(),
-                    Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-                )
-            }
-        } catch (ignored: Exception) {
-        }
-
-        return spannableString
-    }
-
-    indexes.forEach {
-        val endIndex = Math.min(it + textToHighlight.length, length)
-        try {
-            spannableString.setSpan(
-                ForegroundColorSpan(color),
-                it,
-                endIndex,
-                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-            )
-        } catch (ignored: IndexOutOfBoundsException) {
-        }
-    }
-
-    return spannableString
-}
-
-fun String.searchMatches(textToHighlight: String): ArrayList<Int> {
-    val indexes = arrayListOf<Int>()
-    var indexOf = indexOf(textToHighlight, 0, true)
-
-    var offset = 0
-    while (offset < length && indexOf != -1) {
-        indexOf = indexOf(textToHighlight, offset, true)
-
-        if (indexOf == -1) {
-            break
-        } else {
-            indexes.add(indexOf)
-        }
-
-        offset = indexOf + 1
-    }
-
-    return indexes
-}
 
 fun String.getAvailableStorageB(): Long {
     return try {
@@ -1025,68 +930,11 @@ fun String.getAvailableStorageB(): Long {
 // if we are comparing phone numbers, compare just the last 9 digits
 fun String.trimToComparableNumber(): String {
     val normalizedNumber = this.normalizeString()
-    val startIndex = Math.max(0, normalizedNumber.length - 9)
+    val startIndex = 0.coerceAtLeast(normalizedNumber.length - 9)
     return normalizedNumber.substring(startIndex)
 }
 
-// get the contact names first letter at showing the placeholder without image
-fun String.getNameLetter() =
-    normalizeString().toCharArray().getOrNull(0)?.toString()?.toUpperCase(Locale.getDefault())
-        ?: "A"
-
 fun String.normalizePhoneNumber() = PhoneNumberUtils.normalizeNumber(this)
-
-fun String.highlightTextFromNumbers(textToHighlight: String, primaryColor: Int): SpannableString {
-    val spannableString = SpannableString(this)
-    val digits = PhoneNumberUtils.convertKeypadLettersToDigits(this)
-    if (digits.contains(textToHighlight)) {
-        val startIndex = digits.indexOf(textToHighlight, 0, true)
-        val endIndex = Math.min(startIndex + textToHighlight.length, length)
-        try {
-            spannableString.setSpan(
-                ForegroundColorSpan(primaryColor),
-                startIndex,
-                endIndex,
-                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
-            )
-        } catch (ignored: IndexOutOfBoundsException) {
-        }
-    }
-
-    return spannableString
-}
-
-fun String.getDateTimeFromDateString(
-    showYearsSince: Boolean,
-    viewToUpdate: TextView? = null
-): DateTime {
-    val dateFormats = getDateFormats()
-    var date = DateTime()
-    for (format in dateFormats) {
-        try {
-            date = DateTime.parse(this, DateTimeFormat.forPattern(format))
-
-            val formatter = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-            var localPattern = (formatter as SimpleDateFormat).toLocalizedPattern()
-
-            val hasYear = format.contains("y")
-            if (!hasYear) {
-                localPattern = localPattern.replace("y", "").replace(",", "").trim()
-                date = date.withYear(DateTime().year)
-            }
-
-            var formattedString = date.toString(localPattern)
-            if (showYearsSince && hasYear) {
-                formattedString += " (${Years.yearsBetween(date, DateTime.now()).years})"
-            }
-
-            viewToUpdate?.text = formattedString
-            break
-        } catch (ignored: Exception) {
-        }
-    }
-    return date
-}
 
 operator fun String.times(x: Int): String {
     val stringBuilder = StringBuilder()

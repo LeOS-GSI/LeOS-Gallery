@@ -53,7 +53,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricManager
@@ -65,87 +64,43 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
 import androidx.loader.content.CursorLoader
 import ca.on.sudbury.hojat.smartgallery.R
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.signature.ObjectKey
-import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
-import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
-import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.AlphanumericComparator
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
-import ca.on.sudbury.hojat.smartgallery.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
-import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
-import ca.on.sudbury.hojat.smartgallery.database.MediumDao
+import ca.on.sudbury.hojat.smartgallery.database.DateTakensDao
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryDao
 import ca.on.sudbury.hojat.smartgallery.database.FavoritesDao
-import ca.on.sudbury.hojat.smartgallery.database.DateTakensDao
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
-import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
-import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
-import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
-import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
-import ca.on.sudbury.hojat.smartgallery.helpers.PicassoRoundedCornersTransformation
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
-import ca.on.sudbury.hojat.smartgallery.helpers.IsoTypeReader
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.Config
+import ca.on.sudbury.hojat.smartgallery.database.MediumDao
+import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
-import ca.on.sudbury.hojat.smartgallery.models.Directory
-import ca.on.sudbury.hojat.smartgallery.models.Medium
-import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
-import ca.on.sudbury.hojat.smartgallery.models.Favorite
-import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
-import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import ca.on.sudbury.hojat.smartgallery.helpers.AlphanumericComparator
 import ca.on.sudbury.hojat.smartgallery.helpers.BaseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.Config
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.DAY_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTERNAL_STORAGE_PROVIDER_AUTHORITY
 import ca.on.sudbury.hojat.smartgallery.helpers.ExternalStorageProviderHack
+import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_LARGE
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_SMALL
 import ca.on.sudbury.hojat.smartgallery.helpers.FRIDAY_BIT
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
+import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
 import ca.on.sudbury.hojat.smartgallery.helpers.HOUR_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.IsoTypeReader
+import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
+import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
+import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MONDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_SECONDS
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContactsContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CAMERA
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_GET_ACCOUNTS
@@ -163,19 +118,40 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_CALL_LOG
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_CONTACTS
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.PREFS_KEY
+import ca.on.sudbury.hojat.smartgallery.helpers.PicassoRoundedCornersTransformation
+import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
+import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
+import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
 import ca.on.sudbury.hojat.smartgallery.helpers.SATURDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.SD_OTG_PATTERN
 import ca.on.sudbury.hojat.smartgallery.helpers.SD_OTG_SHORT
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.helpers.SUNDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.THURSDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.helpers.TUESDAY_BIT
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
+import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.WEDNESDAY_BIT
 import ca.on.sudbury.hojat.smartgallery.helpers.WEEK_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.YEAR_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.YOUR_ALARM_SOUNDS_MIN_ID
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
+import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
@@ -183,11 +159,18 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.proPackages
+import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.AlarmSound
+import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.BlockedNumber
+import ca.on.sudbury.hojat.smartgallery.models.Directory
+import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
+import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.reprint.core.Reprint
+import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatSpinner
 import ca.on.sudbury.hojat.smartgallery.views.MyAutoCompleteTextView
@@ -196,9 +179,25 @@ import ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
 import ca.on.sudbury.hojat.smartgallery.views.MyEditText
 import ca.on.sudbury.hojat.smartgallery.views.MyFloatingActionButton
 import ca.on.sudbury.hojat.smartgallery.views.MySeekBar
+import ca.on.sudbury.hojat.smartgallery.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.sudbury.hojat.smartgallery.views.MyTextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File
@@ -212,11 +211,8 @@ import java.util.Locale
 import java.util.Date
 import java.util.Collections
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
-import kotlin.collections.LinkedHashSet
 import kotlin.collections.set
+import kotlin.math.roundToInt
 
 private const val DOWNLOAD_DIR = "Download"
 private const val ANDROID_DIR = "Android"
@@ -762,16 +758,6 @@ fun Context.getLatestMediaId(uri: Uri = Files.getContentUri("external")): Long {
     return 0
 }
 
-fun Context.getLaunchIntent() = packageManager.getLaunchIntentForPackage(baseConfig.appId)
-
-fun Context.getLinkTextColor(): Int {
-    return if (baseConfig.primaryColor == resources.getColor(R.color.color_primary)) {
-        baseConfig.primaryColor
-    } else {
-        baseConfig.textColor
-    }
-}
-
 fun Context.getMediaContentUri(path: String): Uri? {
     val uri = when {
         path.isImageFast() -> Images.Media.EXTERNAL_CONTENT_URI
@@ -1049,15 +1035,6 @@ fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
     }
 }
 
-fun Context.isPackageInstalled(pkgName: String): Boolean {
-    return try {
-        packageManager.getPackageInfo(pkgName, 0)
-        true
-    } catch (e: Exception) {
-        false
-    }
-}
-
 fun Context.isPathOnOTG(path: String) = otgPath.isNotEmpty() && path.startsWith(otgPath)
 
 fun Context.isRestrictedSAFOnlyRoot(path: String): Boolean {
@@ -1145,34 +1122,6 @@ fun Context.movePinnedDirectoriesToFront(dirs: ArrayList<Directory>): ArrayList<
         }
     }
     return dirs
-}
-
-// format day bits to strings like "Mon, Tue, Wed"
-fun Context.getSelectedDaysString(bitMask: Int): String {
-    val dayBits = arrayListOf(
-        MONDAY_BIT,
-        TUESDAY_BIT,
-        WEDNESDAY_BIT,
-        THURSDAY_BIT,
-        FRIDAY_BIT,
-        SATURDAY_BIT,
-        SUNDAY_BIT
-    )
-    val weekDays =
-        resources.getStringArray(R.array.week_days_short).toList() as java.util.ArrayList<String>
-
-    if (baseConfig.isSundayFirst) {
-        dayBits.moveLastItemToFront()
-        weekDays.moveLastItemToFront()
-    }
-
-    var days = ""
-    dayBits.forEachIndexed { index, bit ->
-        if (bitMask and bit != 0) {
-            days += "${weekDays[index]}, "
-        }
-    }
-    return days.trim().trimEnd(',')
 }
 
 fun Context.getSomeDocumentFile(path: String) = getFastDocumentFile(path) ?: getDocumentFile(path)
@@ -1482,15 +1431,6 @@ fun Context.getFastDocumentFile(path: String): DocumentFile? {
     val fullUri = "${baseConfig.sdTreeUri}/document/$externalPathPart%3A$relativePath"
     return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
 }
-
-fun Context.getFontSizeText() = getString(
-    when (baseConfig.fontSize) {
-        FONT_SIZE_SMALL -> R.string.small
-        FONT_SIZE_MEDIUM -> R.string.medium
-        FONT_SIZE_LARGE -> R.string.large
-        else -> R.string.extra_large
-    }
-)
 
 fun Context.updateSDCardPath() {
     ensureBackgroundThread {
@@ -1926,9 +1866,6 @@ fun Context.tryLoadingWithPicasso(
     }
 }
 
-fun Context.formatMinutesToTimeString(totalMinutes: Int) =
-    formatSecondsToTimeString(totalMinutes * 60)
-
 fun Context.formatSecondsToTimeString(totalSeconds: Int): String {
     val days = totalSeconds / DAY_SECONDS
     val hours = (totalSeconds % DAY_SECONDS) / HOUR_SECONDS
@@ -2143,9 +2080,6 @@ fun Context.getCachedMedia(
         }
     }
 }
-
-fun Context.getFormattedMinutes(minutes: Int, showBefore: Boolean = true) =
-    getFormattedSeconds(if (minutes == -1) minutes else minutes * 60, showBefore)
 
 fun Context.getFormattedSeconds(seconds: Int, showBefore: Boolean = true) = when (seconds) {
     -1 -> getString(R.string.no_reminder)
@@ -2663,15 +2597,6 @@ fun Context.getDataColumn(
     return null
 }
 
-fun Context.getDatePickerDialogTheme() = when {
-    baseConfig.isUsingSystemTheme -> R.style.MyDateTimePickerMaterialTheme
-    baseConfig.backgroundColor.getContrastColor() == Color.WHITE -> R.style.MyDialogTheme_Dark
-    else -> R.style.MyDialogTheme
-}
-
-fun Context.getDefaultAlarmSound(type: Int) =
-    AlarmSound(0, getDefaultAlarmTitle(type), RingtoneManager.getDefaultUri(type).toString())
-
 fun Context.getDefaultAlarmTitle(type: Int): String {
     val alarmString = getString(R.string.alarm)
     return try {
@@ -2713,6 +2638,7 @@ fun Context.getDirectorySortingValue(
     return result.toString()
 }
 
+@RequiresApi(Build.VERSION_CODES.Q)
 fun Context.getDuration(path: String): Int? {
     val projection = arrayOf(
         MediaStore.MediaColumns.DURATION
@@ -2728,7 +2654,7 @@ fun Context.getDuration(path: String): Int? {
         val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
         cursor?.use {
             if (cursor.moveToFirst()) {
-                return Math.round(cursor.getIntValue(MediaStore.MediaColumns.DURATION) / 1000.toDouble())
+                return (cursor.getIntValue(MediaStore.MediaColumns.DURATION) / 1000.toDouble()).roundToInt()
                     .toInt()
             }
         }
@@ -2738,10 +2664,8 @@ fun Context.getDuration(path: String): Int? {
     return try {
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(path)
-        Math.round(
-            retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
-                .toInt() / 1000f
-        )
+        (retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)!!
+            .toInt() / 1000f).roundToInt()
     } catch (ignored: Exception) {
         null
     }
@@ -3000,22 +2924,6 @@ fun Context.getFileDateTaken(path: String): Long {
     return 0L
 }
 
-fun Context.getMyContactsCursor(favoritesOnly: Boolean, withPhoneNumbersOnly: Boolean) = try {
-    val getFavoritesOnly = if (favoritesOnly) "1" else "0"
-    val getWithPhoneNumbersOnly = if (withPhoneNumbersOnly) "1" else "0"
-    val args = arrayOf(getFavoritesOnly, getWithPhoneNumbersOnly)
-    CursorLoader(
-        this,
-        MyContactsContentProvider.CONTACTS_CONTENT_URI,
-        null,
-        null,
-        args,
-        null
-    ).loadInBackground()
-} catch (e: Exception) {
-    null
-}
-
 // some helper functions were taken from https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
 fun Context.getRealPathFromURI(uri: Uri): String? {
     if (uri.scheme == "file") {
@@ -3122,18 +3030,6 @@ fun Context.getMediaStoreLastModified(path: String): Long {
     } catch (ignored: Exception) {
     }
     return 0
-}
-
-fun Context.grantReadUriPermission(uriString: String) {
-    try {
-        // ensure custom reminder sounds play well
-        grantUriPermission(
-            "com.android.systemui",
-            Uri.parse(uriString),
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-        )
-    } catch (ignored: Exception) {
-    }
 }
 
 fun Context.hasOTGConnected(): Boolean {
@@ -3271,42 +3167,12 @@ fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = 
 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath
 
-val Context.shortcutManager: ShortcutManager
-    @SuppressLint("NewApi")
-    get() = getSystemService(ShortcutManager::class.java) as ShortcutManager
-
 fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
     toast(String.format(getString(R.string.error), msg), length)
 }
 
 fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
     showErrorToast(exception.toString(), length)
-}
-
-fun Context.storeNewYourAlarmSound(resultData: Intent): AlarmSound {
-    val uri = resultData.data
-    var filename = getFilenameFromUri(uri!!)
-    if (filename.isEmpty()) {
-        filename = getString(R.string.alarm)
-    }
-
-    val token = object : TypeToken<java.util.ArrayList<AlarmSound>>() {}.type
-    val yourAlarmSounds =
-        Gson().fromJson<java.util.ArrayList<AlarmSound>>(baseConfig.yourAlarmSounds, token)
-            ?: java.util.ArrayList()
-    val newAlarmSoundId =
-        (yourAlarmSounds.maxByOrNull { it.id }?.id ?: YOUR_ALARM_SOUNDS_MIN_ID) + 1
-    val newAlarmSound = AlarmSound(newAlarmSoundId, filename, uri.toString())
-    if (yourAlarmSounds.firstOrNull { it.uri == uri.toString() } == null) {
-        yourAlarmSounds.add(newAlarmSound)
-    }
-
-    baseConfig.yourAlarmSounds = Gson().toJson(yourAlarmSounds)
-
-    val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-    contentResolver.takePersistableUriPermission(uri, takeFlags)
-
-    return newAlarmSound
 }
 
 val Context.telecomManager: TelecomManager get() = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
@@ -3338,10 +3204,6 @@ fun isAndroidDataDir(path: String): Boolean {
 
 fun isExternalStorageManager(): Boolean {
     return isRPlus() && Environment.isExternalStorageManager()
-}
-
-fun isNotExternalStorageManager(): Boolean {
-    return isRPlus() && !Environment.isExternalStorageManager()
 }
 
 fun Context.checkAppIconColor() {
@@ -3384,8 +3246,6 @@ val Context.usableScreenSize: Point
         windowManager.defaultDisplay.getSize(size)
         return size
     }
-
-fun Context.getCornerRadius() = resources.getDimension(R.dimen.rounded_corner_radius_small)
 
 // we need the Default Dialer functionality only in Simple Dialer and in Simple Contacts for now
 @TargetApi(Build.VERSION_CODES.M)
@@ -3431,70 +3291,11 @@ fun Context.getBlockedNumbers(): java.util.ArrayList<BlockedNumber> {
     return blockedNumbers
 }
 
-@TargetApi(Build.VERSION_CODES.N)
-fun Context.addBlockedNumber(number: String) {
-    ContentValues().apply {
-        put(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER, number)
-        put(
-            BlockedNumberContract.BlockedNumbers.COLUMN_E164_NUMBER,
-            PhoneNumberUtils.normalizeNumber(number)
-        )
-        try {
-            contentResolver.insert(BlockedNumberContract.BlockedNumbers.CONTENT_URI, this)
-        } catch (e: Exception) {
-            showErrorToast(e)
-        }
-    }
-}
-
-@TargetApi(Build.VERSION_CODES.N)
-fun Context.deleteBlockedNumber(number: String) {
-    val selection = "${BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER} = ?"
-    val selectionArgs = arrayOf(number)
-    contentResolver.delete(
-        BlockedNumberContract.BlockedNumbers.CONTENT_URI,
-        selection,
-        selectionArgs
-    )
-}
-
-fun Context.isNumberBlocked(
-    number: String,
-    blockedNumbers: java.util.ArrayList<BlockedNumber> = getBlockedNumbers()
-): Boolean {
-    if (!isNougatPlus()) {
-        return false
-    }
-
-    val numberToCompare = number.trimToComparableNumber()
-    return blockedNumbers.map { it.numberToCompare }
-        .contains(numberToCompare) || blockedNumbers.map { it.number }.contains(numberToCompare)
-}
-
 fun Context.copyToClipboard(text: String) {
     val clip = ClipData.newPlainText(getString(R.string.simple_commons), text)
     (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(clip)
     val toastText = String.format(getString(R.string.value_copied_to_clipboard_show), text)
     toast(toastText)
-}
-
-fun Context.getPhoneNumberTypeText(type: Int, label: String): String {
-    return if (type == ContactsContract.CommonDataKinds.BaseTypes.TYPE_CUSTOM) {
-        label
-    } else {
-        getString(
-            when (type) {
-                ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE -> R.string.mobile
-                ContactsContract.CommonDataKinds.Phone.TYPE_HOME -> R.string.home
-                ContactsContract.CommonDataKinds.Phone.TYPE_WORK -> R.string.work
-                ContactsContract.CommonDataKinds.Phone.TYPE_MAIN -> R.string.main_number
-                ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK -> R.string.work_fax
-                ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME -> R.string.home_fax
-                ContactsContract.CommonDataKinds.Phone.TYPE_PAGER -> R.string.pager
-                else -> R.string.other
-            }
-        )
-    }
 }
 
 fun Context.getFolderLastModifieds(folder: String): java.util.HashMap<String, Long> {
@@ -3697,7 +3498,7 @@ fun Context.getOTGItems(
     path: String,
     shouldShowHidden: Boolean,
     getProperFileSize: Boolean,
-    callback: (java.util.ArrayList<FileDirItem>) -> Unit
+    callback: (ArrayList<FileDirItem>) -> Unit
 ) {
     val items = java.util.ArrayList<FileDirItem>()
     val OTGTreeUri = baseConfig.OTGTreeUri
@@ -3770,7 +3571,7 @@ fun Context.getAndroidSAFFileItems(
     path: String,
     shouldShowHidden: Boolean,
     getProperFileSize: Boolean = true,
-    callback: (java.util.ArrayList<FileDirItem>) -> Unit
+    callback: (ArrayList<FileDirItem>) -> Unit
 ) {
     val items = java.util.ArrayList<FileDirItem>()
     val rootDocId = getStorageRootIdForAndroidDir(path)
@@ -4088,18 +3889,6 @@ fun Context.createAndroidDataOrObbUri(fullPath: String): Uri {
     return createDocumentUriFromRootTree(path)
 }
 
-fun Context.getMyFileUri(file: File): Uri {
-    return if (isNougatPlus()) {
-        FileProvider.getUriForFile(this, "$packageName.provider", file)
-    } else {
-        Uri.fromFile(file)
-    }
-}
-
-fun Context.scanFileRecursively(file: File, callback: (() -> Unit)? = null) {
-    scanFilesRecursively(arrayListOf(file), callback)
-}
-
 fun Context.scanFilesRecursively(files: List<File>, callback: (() -> Unit)? = null) {
     val allPaths = java.util.ArrayList<String>()
     for (file in files) {
@@ -4124,7 +3913,7 @@ fun Context.isBiometricIdAvailable(): Boolean = when (BiometricManager.from(this
 // Convert paths like /storage/emulated/0/Pictures/Screenshots/first.jpg to content://media/external/images/media/131799
 // so that we can refer to the file in the MediaStore.
 // If we found no mediastore uri for a given file, do not return its path either to avoid some mismatching
-fun Context.getFileUrisFromFileDirItemsTuple(fileDirItems: List<FileDirItem>): Pair<java.util.ArrayList<String>, java.util.ArrayList<Uri>> {
+fun Context.getFileUrisFromFileDirItemsTuple(fileDirItems: List<FileDirItem>): Pair<ArrayList<String>, ArrayList<Uri>> {
     val fileUris = java.util.ArrayList<Uri>()
     val successfulFilePaths = java.util.ArrayList<String>()
     val allIds = getMediaStoreIds(this)

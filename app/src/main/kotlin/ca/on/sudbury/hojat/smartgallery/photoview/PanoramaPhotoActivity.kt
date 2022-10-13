@@ -200,7 +200,7 @@ open class PanoramaPhotoActivity : SimpleActivity() {
         if (isFullscreen) {
             hideSystemUI()
         } else {
-            showSystemUI(false)
+            showSystemUI()
         }
     }
 }

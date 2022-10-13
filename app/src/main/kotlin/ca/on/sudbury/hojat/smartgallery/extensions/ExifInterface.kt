@@ -8,6 +8,7 @@ import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.math.roundToInt
 
 fun ExifInterface.copyNonDimensionAttributesTo(destination: ExifInterface) {
     val attributes = ExifInterfaceAttributes.AllNonDimensionAttributes
@@ -43,7 +44,7 @@ fun ExifInterface.getExifDateTaken(context: Context): String {
         if (it?.isNotEmpty() == true) {
             try {
                 val simpleDateFormat = SimpleDateFormat("yyyy:MM:dd kk:mm:ss", Locale.ENGLISH)
-                return simpleDateFormat.parse(it).time.formatDate(context).trim()
+                return simpleDateFormat.parse(it)!!.time.formatDate(context).trim()
             } catch (ignored: Exception) {
             }
         }
@@ -74,7 +75,7 @@ fun ExifInterface.getExifProperties(): String {
             exifString += if (exposureValue > 1f) {
                 "${exposureValue}s  "
             } else {
-                "1/${Math.round(1 / exposureValue)}s  "
+                "1/${(1 / exposureValue).roundToInt()}s  "
             }
         }
     }

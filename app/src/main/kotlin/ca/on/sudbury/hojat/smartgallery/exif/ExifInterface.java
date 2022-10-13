@@ -47,7 +47,6 @@ import timber.log.Timber;
  * @see ExifTag
  */
 public class ExifInterface {
-    private static final String TAG = "ExifInterface";
 
     public static final int TAG_NULL = -1;
     public static final int IFD_NULL = -1;

@@ -18,21 +18,17 @@ import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.TransactionTooLargeException
-import android.provider.ContactsContract
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.provider.Settings
-import android.telecom.PhoneAccountHandle
-import android.telecom.TelecomManager
 import android.text.Html
 import android.util.DisplayMetrics
 import android.view.View
@@ -107,17 +103,12 @@ import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_D
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_OTG
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_SD
-import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
-import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_SET_AS
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
-import ca.on.sudbury.hojat.smartgallery.helpers.SILENT
-import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
-import ca.on.sudbury.hojat.smartgallery.models.AlarmSound
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.Release
@@ -134,7 +125,8 @@ import java.io.InputStream
 import java.io.IOException
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.TreeSet
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -793,7 +785,7 @@ fun SimpleActivity.launchAbout() {
                 LICENSE_SANSELAN or LICENSE_FILTERS or
                 LICENSE_GESTURE_VIEWS or LICENSE_APNG
 
-    val FaqItems = arrayListOf(
+    val faqItems = arrayListOf(
         FaqItem(R.string.faq_3_title, R.string.faq_3_text),
         FaqItem(R.string.faq_12_title, R.string.faq_12_text),
         FaqItem(R.string.faq_7_title, R.string.faq_7_text),
@@ -814,21 +806,21 @@ fun SimpleActivity.launchAbout() {
     )
 
     if (!resources.getBoolean(R.bool.hide_google_relations)) {
-        FaqItems.add(FaqItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons))
-        FaqItems.add(FaqItem(R.string.faq_6_title_commons, R.string.faq_6_text_commons))
-        FaqItems.add(FaqItem(R.string.faq_7_title_commons, R.string.faq_7_text_commons))
-        FaqItems.add(FaqItem(R.string.faq_10_title_commons, R.string.faq_10_text_commons))
+        faqItems.add(FaqItem(R.string.faq_2_title_commons, R.string.faq_2_text_commons))
+        faqItems.add(FaqItem(R.string.faq_6_title_commons, R.string.faq_6_text_commons))
+        faqItems.add(FaqItem(R.string.faq_7_title_commons, R.string.faq_7_text_commons))
+        faqItems.add(FaqItem(R.string.faq_10_title_commons, R.string.faq_10_text_commons))
     }
 
     if (isRPlus() && !isExternalStorageManager()) {
-        FaqItems.add(0, FaqItem(R.string.faq_16_title, R.string.faq_16_text))
-        FaqItems.add(1, FaqItem(R.string.faq_17_title, R.string.faq_17_text))
-        FaqItems.removeIf { it.text == R.string.faq_7_text }
-        FaqItems.removeIf { it.text == R.string.faq_14_text }
-        FaqItems.removeIf { it.text == R.string.faq_8_text }
+        faqItems.add(0, FaqItem(R.string.faq_16_title, R.string.faq_16_text))
+        faqItems.add(1, FaqItem(R.string.faq_17_title, R.string.faq_17_text))
+        faqItems.removeIf { it.text == R.string.faq_7_text }
+        faqItems.removeIf { it.text == R.string.faq_14_text }
+        faqItems.removeIf { it.text == R.string.faq_8_text }
     }
 
-    startAboutActivity(R.string.app_name, licenses, BuildConfig.VERSION_NAME, FaqItems, true)
+    startAboutActivity(R.string.app_name, licenses, BuildConfig.VERSION_NAME, faqItems, true)
 }
 
 fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
@@ -875,7 +867,7 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
     }
 }
 
-fun AppCompatActivity.showSystemUI(toggleActionBarVisibility: Boolean) {
+fun AppCompatActivity.showSystemUI() {
     window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -941,14 +933,6 @@ fun BaseSimpleActivity.addNoMediaIntoMediaStore(path: String) {
     } catch (e: Exception) {
         showErrorToast(e)
     }
-}
-
-fun BaseSimpleActivity.deleteFile(
-    file: FileDirItem,
-    allowDeleteFolder: Boolean = false,
-    callback: ((wasSuccess: Boolean) -> Unit)? = null
-) {
-    deleteFiles(arrayListOf(file), allowDeleteFolder, callback)
 }
 
 fun BaseSimpleActivity.deleteFile(
@@ -1191,7 +1175,7 @@ fun BaseSimpleActivity.toggleFileVisibility(
     }
 
     val newPath = "$path/$filename"
-    renameFile(oldPath, newPath, false) { success, useAndroid30Way ->
+    renameFile(oldPath, newPath, false) { _, _ ->
         runOnUiThread {
             callback?.invoke(newPath)
         }
@@ -2271,30 +2255,6 @@ fun Activity.redirectToRateUs() {
     }
 }
 
-fun Activity.shareTextIntent(text: String) {
-    ensureBackgroundThread {
-        Intent().apply {
-            action = Intent.ACTION_SEND
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, text)
-
-            try {
-                startActivity(Intent.createChooser(this, getString(R.string.share_via)))
-            } catch (e: ActivityNotFoundException) {
-                toast(R.string.no_app_found)
-            } catch (e: RuntimeException) {
-                if (e.cause is TransactionTooLargeException) {
-                    toast(R.string.maximum_share_reached)
-                } else {
-                    showErrorToast(e)
-                }
-            } catch (e: Exception) {
-                showErrorToast(e)
-            }
-        }
-    }
-}
-
 fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId: String) {
     ensureBackgroundThread {
         val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
@@ -2355,7 +2315,7 @@ fun Activity.openPathIntent(
     ensureBackgroundThread {
         val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
         val mimeType =
-            if (forceMimeType.isNotEmpty()) forceMimeType else getUriMimeType(path, newUri)
+            forceMimeType.ifEmpty { getUriMimeType(path, newUri) }
         Intent().apply {
             action = Intent.ACTION_VIEW
             setDataAndType(newUri, mimeType)
@@ -2385,36 +2345,6 @@ fun Activity.openPathIntent(
     }
 }
 
-fun Activity.launchViewContactIntent(uri: Uri) {
-    Intent().apply {
-        action = ContactsContract.QuickContact.ACTION_QUICK_CONTACT
-        data = uri
-        launchActivityIntent(this)
-    }
-}
-
-fun BaseSimpleActivity.launchCallIntent(recipient: String, handle: PhoneAccountHandle? = null) {
-    handlePermission(PERMISSION_CALL_PHONE) {
-        val action = if (it) Intent.ACTION_CALL else Intent.ACTION_DIAL
-        Intent(action).apply {
-            data = Uri.fromParts("tel", recipient, null)
-
-            if (isMarshmallowPlus() && handle != null) {
-                putExtra(TelecomManager.EXTRA_PHONE_ACCOUNT_HANDLE, handle)
-            }
-
-            launchActivityIntent(this)
-        }
-    }
-}
-
-fun Activity.launchSendSMSIntent(recipient: String) {
-    Intent(Intent.ACTION_SENDTO).apply {
-        data = Uri.fromParts("smsto", recipient, null)
-        launchActivityIntent(this)
-    }
-}
-
 fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int) {
     if (baseConfig.lastVersion == 0) {
         baseConfig.lastVersion = currVersion
@@ -2429,93 +2359,6 @@ fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int) 
     }
 
     baseConfig.lastVersion = currVersion
-}
-
-fun BaseSimpleActivity.deleteFolders(
-    folders: List<FileDirItem>,
-    deleteMediaOnly: Boolean = true,
-    callback: ((wasSuccess: Boolean) -> Unit)? = null
-) {
-    ensureBackgroundThread {
-        deleteFoldersBg(folders, deleteMediaOnly, callback)
-    }
-}
-
-fun BaseSimpleActivity.deleteFoldersBg(
-    folders: List<FileDirItem>,
-    deleteMediaOnly: Boolean = true,
-    callback: ((wasSuccess: Boolean) -> Unit)? = null
-) {
-    var wasSuccess = false
-    var needPermissionForPath = ""
-    for (folder in folders) {
-        if (needsStupidWritePermissions(folder.path) && baseConfig.sdTreeUri.isEmpty()) {
-            needPermissionForPath = folder.path
-            break
-        }
-    }
-
-    handleSAFDialog(needPermissionForPath) {
-        if (!it) {
-            return@handleSAFDialog
-        }
-
-        folders.forEachIndexed { index, folder ->
-            deleteFolderBg(folder, deleteMediaOnly) {
-                if (it)
-                    wasSuccess = true
-
-                if (index == folders.size - 1) {
-                    runOnUiThread {
-                        callback?.invoke(wasSuccess)
-                    }
-                }
-            }
-        }
-    }
-}
-
-fun BaseSimpleActivity.deleteFolder(
-    folder: FileDirItem,
-    deleteMediaOnly: Boolean = true,
-    callback: ((wasSuccess: Boolean) -> Unit)? = null
-) {
-    ensureBackgroundThread {
-        deleteFolderBg(folder, deleteMediaOnly, callback)
-    }
-}
-
-fun BaseSimpleActivity.deleteFolderBg(
-    fileDirItem: FileDirItem,
-    deleteMediaOnly: Boolean = true,
-    callback: ((wasSuccess: Boolean) -> Unit)? = null
-) {
-    val folder = File(fileDirItem.path)
-    if (folder.exists()) {
-        val filesArr = folder.listFiles()
-        if (filesArr == null) {
-            runOnUiThread {
-                callback?.invoke(true)
-            }
-            return
-        }
-
-        val files = filesArr.toMutableList().filter { !deleteMediaOnly || it.isMediaFile() }
-        for (file in files) {
-            deleteFileBg(
-                file.toFileDirItem(applicationContext),
-                allowDeleteFolder = false,
-                isDeletingMultipleFiles = false
-            ) { }
-        }
-
-        if (folder.listFiles()?.isEmpty() == true) {
-            deleteFileBg(fileDirItem, allowDeleteFolder = true, isDeletingMultipleFiles = false) { }
-        }
-    }
-    runOnUiThread {
-        callback?.invoke(true)
-    }
 }
 
 fun BaseSimpleActivity.deleteFilesBg(
@@ -2590,14 +2433,6 @@ private fun BaseSimpleActivity.deleteFilesCasual(
     }
 }
 
-fun Activity.scanFileRecursively(file: File, callback: (() -> Unit)? = null) {
-    applicationContext.scanFileRecursively(file, callback)
-}
-
-fun Activity.scanFilesRecursively(files: List<File>, callback: (() -> Unit)? = null) {
-    applicationContext.scanFilesRecursively(files, callback)
-}
-
 fun Activity.createTempFile(file: File): File? {
     return if (file.isDirectory) {
         createTempDir("temp", "${System.currentTimeMillis()}", file.parentFile)
@@ -2660,25 +2495,6 @@ fun Activity.updateSharedTheme(sharedTheme: SharedTheme) {
     }
 }
 
-fun Activity.showPickSecondsDialogHelper(
-    curMinutes: Int,
-    isSnoozePicker: Boolean = false,
-    showSecondsAtCustomDialog: Boolean = false,
-    showDuringDayOption: Boolean = false,
-    cancelCallback: (() -> Unit)? = null,
-    callback: (seconds: Int) -> Unit
-) {
-    val seconds = if (curMinutes == -1) curMinutes else curMinutes * 60
-    showPickSecondsDialog(
-        seconds,
-        isSnoozePicker,
-        showSecondsAtCustomDialog,
-        showDuringDayOption,
-        cancelCallback,
-        callback
-    )
-}
-
 fun Activity.showPickSecondsDialog(
     curSeconds: Int,
     isSnoozePicker: Boolean = false,
@@ -2736,56 +2552,13 @@ fun Activity.showPickSecondsDialog(
             -3 -> {
                 TimePickerDialog(
                     this, getTimePickerDialogTheme(),
-                    { view, hourOfDay, minute -> callback(hourOfDay * -3600 + minute * -60) },
+                    { _, hourOfDay, minute -> callback(hourOfDay * -3600 + minute * -60) },
                     curSeconds / 3600, curSeconds % 3600, baseConfig.use24HourFormat
                 ).show()
             }
             else -> {
                 callback(it as Int)
             }
-        }
-    }
-}
-
-fun BaseSimpleActivity.getAlarmSounds(
-    type: Int,
-    callback: (java.util.ArrayList<AlarmSound>) -> Unit
-) {
-    val alarms = java.util.ArrayList<AlarmSound>()
-    val manager = RingtoneManager(this)
-    manager.setType(type)
-
-    try {
-        val cursor = manager.cursor
-        var curId = 1
-        val silentAlarm = AlarmSound(curId++, getString(R.string.no_sound), SILENT)
-        alarms.add(silentAlarm)
-
-        while (cursor.moveToNext()) {
-            val title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX)
-            var uri = cursor.getString(RingtoneManager.URI_COLUMN_INDEX)
-            val id = cursor.getString(RingtoneManager.ID_COLUMN_INDEX)
-            if (!uri.endsWith(id)) {
-                uri += "/$id"
-            }
-
-            val alarmSound = AlarmSound(curId++, title, uri)
-            alarms.add(alarmSound)
-        }
-        callback(alarms)
-    } catch (e: Exception) {
-        if (e is SecurityException) {
-            handlePermission(PERMISSION_READ_STORAGE) {
-                if (it) {
-                    getAlarmSounds(type, callback)
-                } else {
-                    showErrorToast(e)
-                    callback(java.util.ArrayList())
-                }
-            }
-        } else {
-            showErrorToast(e)
-            callback(java.util.ArrayList())
         }
     }
 }
@@ -2819,18 +2592,6 @@ fun Activity.showSideloadingDialog() {
     AppSideloadedDialog(this) {
         finish()
     }
-}
-
-fun BaseSimpleActivity.getTempFile(folderName: String, fileName: String): File? {
-    val folder = File(cacheDir, folderName)
-    if (!folder.exists()) {
-        if (!folder.mkdir()) {
-            toast(R.string.unknown_error_occurred)
-            return null
-        }
-    }
-
-    return File(folder, fileName)
 }
 
 fun BaseSimpleActivity.copySingleFileSdk30(source: FileDirItem, destination: FileDirItem): Boolean {
@@ -2879,8 +2640,8 @@ fun BaseSimpleActivity.copySingleFileSdk30(source: FileDirItem, destination: Fil
 
 fun BaseSimpleActivity.copyOldLastModified(sourcePath: String, destinationPath: String) {
     val projection =
-        arrayOf(MediaStore.Images.Media.DATE_TAKEN, MediaStore.Images.Media.DATE_MODIFIED)
-    val uri = MediaStore.Files.getContentUri("external")
+        arrayOf(Images.Media.DATE_TAKEN, Images.Media.DATE_MODIFIED)
+    val uri = Files.getContentUri("external")
     val selection = "${MediaStore.MediaColumns.DATA} = ?"
     var selectionArgs = arrayOf(sourcePath)
     val cursor =
@@ -2888,12 +2649,12 @@ fun BaseSimpleActivity.copyOldLastModified(sourcePath: String, destinationPath: 
 
     cursor?.use {
         if (cursor.moveToFirst()) {
-            val dateTaken = cursor.getLongValue(MediaStore.Images.Media.DATE_TAKEN)
-            val dateModified = cursor.getIntValue(MediaStore.Images.Media.DATE_MODIFIED)
+            val dateTaken = cursor.getLongValue(Images.Media.DATE_TAKEN)
+            val dateModified = cursor.getIntValue(Images.Media.DATE_MODIFIED)
 
             val values = ContentValues().apply {
-                put(MediaStore.Images.Media.DATE_TAKEN, dateTaken)
-                put(MediaStore.Images.Media.DATE_MODIFIED, dateModified)
+                put(Images.Media.DATE_TAKEN, dateTaken)
+                put(Images.Media.DATE_MODIFIED, dateModified)
             }
 
             selectionArgs = arrayOf(destinationPath)
@@ -3325,12 +3086,20 @@ fun Activity.showBiometricPrompt(
         .startAuthentication(
             AuthPromptHost(this as FragmentActivity),
             object : AuthPromptCallback() {
-                override fun onAuthenticationSucceeded(activity: FragmentActivity?, result: BiometricPrompt.AuthenticationResult) {
+                override fun onAuthenticationSucceeded(
+                    activity: FragmentActivity?,
+                    result: BiometricPrompt.AuthenticationResult
+                ) {
                     successCallback?.invoke("", PROTECTION_FINGERPRINT)
                 }
 
-                override fun onAuthenticationError(activity: FragmentActivity?, errorCode: Int, errString: CharSequence) {
-                    val isCanceledByUser = errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON || errorCode == BiometricPrompt.ERROR_USER_CANCELED
+                override fun onAuthenticationError(
+                    activity: FragmentActivity?,
+                    errorCode: Int,
+                    errString: CharSequence
+                ) {
+                    val isCanceledByUser =
+                        errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON || errorCode == BiometricPrompt.ERROR_USER_CANCELED
                     if (!isCanceledByUser) {
                         toast(errString.toString())
                     }

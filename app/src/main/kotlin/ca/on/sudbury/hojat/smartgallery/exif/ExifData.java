@@ -5,8 +5,11 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import timber.log.Timber;
+
+import java.util.Collections;
 
 /**
  * This class stores the EXIF header in IFDs according to the JPEG
@@ -16,7 +19,6 @@ import timber.log.Timber;
  * @see IfdData
  */
 class ExifData {
-    private static final String TAG = "ExifData";
     private static final byte[] USER_COMMENT_ASCII = {0x41, 0x53, 0x43, 0x49, 0x49, 0x00, 0x00, 0x00};
     private static final byte[] USER_COMMENT_JIS = {0x4A, 0x49, 0x53, 0x00, 0x00, 0x00, 0x00, 0x00};
     private static final byte[] USER_COMMENT_UNICODE = {0x55, 0x4E, 0x49, 0x43, 0x4F, 0x44, 0x45, 0x00};
@@ -25,7 +27,7 @@ class ExifData {
     private final IfdData[] mIfdDatas = new IfdData[IfdId.TYPE_IFD_COUNT];
     private final ByteOrder mByteOrder;
     private byte[] mThumbnail;
-    private ArrayList<byte[]> mStripBytes = new ArrayList<>();
+    private final ArrayList<byte[]> mStripBytes = new ArrayList<>();
     private int qualityGuess = 0;
     private int imageLength = -1, imageWidth = -1;
     private short jpegProcess = 0;
@@ -206,11 +208,11 @@ class ExifData {
 
         try {
             if (Arrays.equals(code, USER_COMMENT_ASCII)) {
-                return new String(buf, 8, buf.length - 8, "US-ASCII");
+                return new String(buf, 8, buf.length - 8, StandardCharsets.US_ASCII);
             } else if (Arrays.equals(code, USER_COMMENT_JIS)) {
                 return new String(buf, 8, buf.length - 8, "EUC-JP");
             } else if (Arrays.equals(code, USER_COMMENT_UNICODE)) {
-                return new String(buf, 8, buf.length - 8, "UTF-16");
+                return new String(buf, 8, buf.length - 8, StandardCharsets.UTF_16);
             } else {
                 return null;
             }
@@ -230,9 +232,7 @@ class ExifData {
             if (d != null) {
                 ExifTag[] tags = d.getAllTags();
                 if (tags != null) {
-                    for (ExifTag t : tags) {
-                        ret.add(t);
-                    }
+                    Collections.addAll(ret, tags);
                 }
             }
         }
@@ -256,9 +256,7 @@ class ExifData {
             return null;
         }
         ArrayList<ExifTag> ret = new ArrayList<>(tags.length);
-        for (ExifTag t : tags) {
-            ret.add(t);
-        }
+        Collections.addAll(ret, tags);
         if (ret.size() == 0) {
             return null;
         }

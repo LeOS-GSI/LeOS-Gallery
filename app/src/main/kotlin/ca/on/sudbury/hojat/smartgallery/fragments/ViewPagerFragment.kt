@@ -86,7 +86,8 @@ abstract class ViewPagerFragment : Fragment() {
         }
 
         if (detailsFlag and EXT_RESOLUTION != 0) {
-            requireContext().getResolution(file.absolutePath)?.formatAsResolution().let { if (it?.isNotEmpty() == true) details.appendLine(it) }
+            requireContext().getResolution(file.absolutePath)?.formatAsResolution()
+                .let { if (it?.isNotEmpty() == true) details.appendLine(it) }
         }
 
         if (detailsFlag and EXT_LAST_MODIFIED != 0) {
@@ -94,7 +95,8 @@ abstract class ViewPagerFragment : Fragment() {
         }
 
         if (detailsFlag and EXT_DATE_TAKEN != 0) {
-            exif.getExifDateTaken(requireContext()).let { if (it.isNotEmpty()) details.appendLine(it) }
+            exif.getExifDateTaken(requireContext())
+                .let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
         if (detailsFlag and EXT_CAMERA_MODEL != 0) {
@@ -111,14 +113,16 @@ abstract class ViewPagerFragment : Fragment() {
         return details.toString().trim()
     }
 
-    fun getPathToLoad(medium: Medium) = if (context?.isPathOnOTG(medium.path) == true) medium.path.getOTGPublicPath(requireContext()) else medium.path
+    fun getPathToLoad(medium: Medium) =
+        if (context?.isPathOnOTG(medium.path) == true) medium.path.getOTGPublicPath(requireContext()) else medium.path
 
     private fun getFileLastModified(file: File): String {
         val projection = arrayOf(Images.Media.DATE_MODIFIED)
         val uri = Files.getContentUri("external")
         val selection = "${MediaStore.MediaColumns.DATA} = ?"
         val selectionArgs = arrayOf(file.absolutePath)
-        val cursor = requireContext().contentResolver.query(uri, projection, selection, selectionArgs, null)
+        val cursor =
+            requireContext().contentResolver.query(uri, projection, selection, selectionArgs, null)
         cursor?.use {
             return if (cursor.moveToFirst()) {
                 val dateModified = cursor.getLongValue(Images.Media.DATE_MODIFIED) * 1000L

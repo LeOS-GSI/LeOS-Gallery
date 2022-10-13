@@ -5,7 +5,6 @@ import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
-import ca.on.sudbury.hojat.smartgallery.helpers.SHORT_ANIMATION_DURATION
 
 fun View.beGone() {
     visibility = View.GONE
@@ -25,18 +24,7 @@ fun View.beVisible() {
 
 fun View.beVisibleIf(beVisible: Boolean) = if (beVisible) beVisible() else beGone()
 
-fun View.fadeIn() {
-    animate().alpha(1f).setDuration(SHORT_ANIMATION_DURATION).withStartAction { beVisible() }
-        .start()
-}
-
-fun View.fadeOut() {
-    animate().alpha(0f).setDuration(SHORT_ANIMATION_DURATION).withEndAction { beGone() }.start()
-}
-
 fun View.isGone() = visibility == View.GONE
-
-fun View.isInvisible() = visibility == View.INVISIBLE
 
 fun View.isVisible() = visibility == View.VISIBLE
 

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.EOFException;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 class CountedDataInputStream extends FilterInputStream {
 
@@ -125,7 +126,7 @@ class CountedDataInputStream extends FilterInputStream {
     public String readString(int n) throws IOException {
         byte[] buf = new byte[n];
         readOrThrow(buf);
-        return new String(buf, "UTF8");
+        return new String(buf, StandardCharsets.UTF_8);
     }
 
     public void readOrThrow(byte[] b) throws IOException {
