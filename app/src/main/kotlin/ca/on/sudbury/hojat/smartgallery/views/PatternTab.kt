@@ -16,9 +16,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
-import com.andrognito.patternlockview.PatternLockView
-import com.andrognito.patternlockview.listener.PatternLockViewListener
-import com.andrognito.patternlockview.utils.PatternLockUtils
+import ca.on.sudbury.hojat.smartgallery.patternlockview.PatternLockView
+import ca.on.sudbury.hojat.smartgallery.patternlockview.listener.PatternLockViewListener
+import ca.on.sudbury.hojat.smartgallery.patternlockview.utils.PatternLockUtils
 import kotlinx.android.synthetic.main.tab_pattern.view.*
 
 class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
@@ -26,7 +26,7 @@ class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context
     private var hash = ""
     private var requiredHash = ""
     private var scrollView: MyScrollView? = null
-    lateinit var hashListener: HashListener
+    private lateinit var hashListener: HashListener
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onFinishInflate() {
