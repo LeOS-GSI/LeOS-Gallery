@@ -40,7 +40,6 @@ import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.provider.OpenableColumns
 import android.provider.Settings
-import android.telecom.TelecomManager
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
@@ -959,7 +958,7 @@ val Context.favoritesDB: FavoritesDao
 val Context.dateTakensDB: DateTakensDao
     get() = GalleryDatabase.getInstance(applicationContext).DateTakensDao()
 
-fun Context.isAProApp() = true
+fun isAProApp() = true
 
 fun Context.isInDownloadDir(path: String): Boolean {
     if (path.startsWith(recycleBinPath)) {
@@ -1642,6 +1641,7 @@ fun Context.getPathLocation(path: String): Int {
     }
 }
 
+@SuppressLint("CheckResult")
 fun Context.loadPng(
     path: String,
     target: MySquareImageView,
@@ -1724,6 +1724,7 @@ fun Context.loadJpg(
     builder.into(target)
 }
 
+@SuppressLint("CheckResult")
 fun Context.loadStaticGIF(
     path: String,
     target: MySquareImageView,
@@ -1812,7 +1813,7 @@ fun Context.tryLoadingWithPicasso(
         }
 
         builder.into(view)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
     }
 }
 
@@ -1997,7 +1998,7 @@ fun Context.getCachedMedia(
             }
         }) as ArrayList<Medium>
 
-        val pathToUse = if (path.isEmpty()) SHOW_ALL else path
+        val pathToUse = path.ifEmpty { SHOW_ALL }
         mediaFetcher.sortMedia(media, config.getFolderSorting(pathToUse))
         val grouped = mediaFetcher.groupMedia(media, pathToUse)
         callback(grouped.clone() as ArrayList<ThumbnailItem>)
@@ -2476,7 +2477,7 @@ fun Context.createDirectoryFromMedia(
     }
 
     if (thumbnail == null) {
-        val sortedMedia = grouped.filter { it is Medium }.toMutableList() as ArrayList<Medium>
+        val sortedMedia = grouped.filterIsInstance<Medium>().toMutableList() as ArrayList<Medium>
         thumbnail = sortedMedia.firstOrNull { getDoesFilePathExist(it.path, OTGPath) }?.path ?: ""
     }
 
@@ -2641,9 +2642,6 @@ fun Context.getProperTextColor() = if (baseConfig.isUsingSystemTheme) {
 } else {
     baseConfig.textColor
 }
-
-fun Context.getProUrl() =
-    "https://play.google.com/store/apps/details?id=${baseConfig.appId.removeSuffix(".debug")}.pro"
 
 fun Context.getSAFDocumentId(path: String): String {
     val basePath = path.getBasePath(this)
@@ -2997,7 +2995,7 @@ fun Context.hasProperStoredFirstParentUri(path: String): Boolean {
     return contentResolver.persistedUriPermissions.any { it.uri.toString() == firstParentUri.toString() }
 }
 
-fun Context.isFingerPrintSensorAvailable() = isMarshmallowPlus() && Reprint.isHardwarePresent()
+fun isFingerPrintSensorAvailable() = isMarshmallowPlus() && Reprint.isHardwarePresent()
 
 fun Context.isUsingSystemDarkTheme() =
     resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES != 0
@@ -3698,10 +3696,10 @@ fun Context.getSDCardPath(): String {
     }
 
     if (sdCardPath.isEmpty()) {
-        val SDpattern = Pattern.compile(SD_OTG_SHORT)
+        val sDPattern = Pattern.compile(SD_OTG_SHORT)
         try {
             File("/storage").listFiles()?.forEach {
-                if (SDpattern.matcher(it.name).matches()) {
+                if (sDPattern.matcher(it.name).matches()) {
                     sdCardPath = "/storage/${it.name}"
                 }
             }
