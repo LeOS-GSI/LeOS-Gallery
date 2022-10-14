@@ -115,7 +115,7 @@ open class BaseConfig(val context: Context) {
         ).apply()
 
     private fun getDefaultInternalPath() =
-        if (prefs.contains(INTERNAL_STORAGE_PATH)) "" else context.getRealInternalStoragePath()
+        if (prefs.contains(INTERNAL_STORAGE_PATH)) "" else getRealInternalStoragePath()
 
     var textColor: Int
         get() = prefs.getInt(

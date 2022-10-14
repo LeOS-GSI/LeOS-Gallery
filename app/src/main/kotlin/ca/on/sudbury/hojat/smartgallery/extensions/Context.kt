@@ -2,10 +2,8 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.Activity
 import android.app.NotificationManager
-import android.app.role.RoleManager
 import android.appwidget.AppWidgetManager
 import android.content.ActivityNotFoundException
 import android.content.ClipData
@@ -29,7 +27,6 @@ import android.hardware.usb.UsbManager
 import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
-import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -2493,14 +2490,13 @@ fun Context.createDirectoryFromMedia(
     val lastItem = curMedia.lastOrNull() ?: defaultMedium
     val dirName = checkAppendingHidden(path, hiddenString, includedFolders, noMediaFolders)
     val lastModified =
-        if (isSortingAscending) Math.min(firstItem.modified, lastItem.modified) else Math.max(
-            firstItem.modified,
+        if (isSortingAscending) firstItem.modified.coerceAtMost(lastItem.modified) else firstItem.modified.coerceAtLeast(
             lastItem.modified
         )
     val dateTaken = if (isSortingAscending) Math.min(
         firstItem.taken,
         lastItem.taken
-    ) else Math.max(firstItem.taken, lastItem.taken)
+    ) else firstItem.taken.coerceAtLeast(lastItem.taken)
     val size = if (getProperFileSize) curMedia.sumByLong { it.size } else 0L
     val mediaTypes = curMedia.getDirMediaTypes()
     val sortValue = getDirectorySortingValue(curMedia, path, dirName, size)
@@ -2546,19 +2542,9 @@ fun Context.getDataColumn(
                 }
             }
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
     }
     return null
-}
-
-fun Context.getDefaultAlarmTitle(type: Int): String {
-    val alarmString = getString(R.string.alarm)
-    return try {
-        RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(type))?.getTitle(this)
-            ?: alarmString
-    } catch (e: Exception) {
-        alarmString
-    }
 }
 
 fun Context.getDirectorySortingValue(
@@ -2609,7 +2595,6 @@ fun Context.getDuration(path: String): Int? {
         cursor?.use {
             if (cursor.moveToFirst()) {
                 return (cursor.getIntValue(MediaStore.MediaColumns.DURATION) / 1000.toDouble()).roundToInt()
-                    .toInt()
             }
         }
     } catch (ignored: Exception) {
@@ -3082,7 +3067,7 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
     }
 }
 
-fun Context.saveExifRotation(exif: ExifInterface, degrees: Int) {
+fun saveExifRotation(exif: ExifInterface, degrees: Int) {
     val orientation =
         exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
     val orientationDegrees = (orientation.degreesFromOrientation() + degrees) % 360
@@ -3129,8 +3114,6 @@ fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
 fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
     showErrorToast(exception.toString(), length)
 }
-
-val Context.telecomManager: TelecomManager get() = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
 
 fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
     val className =
@@ -3202,22 +3185,6 @@ val Context.usableScreenSize: Point
         return size
     }
 
-// we need the Default Dialer functionality only in Simple Dialer and in Simple Contacts for now
-@TargetApi(Build.VERSION_CODES.M)
-fun Context.isDefaultDialer(): Boolean {
-    return if (!packageName.startsWith("com.simplemobiletools.contacts") && !packageName.startsWith(
-            "com.simplemobiletools.dialer"
-        )
-    ) {
-        true
-    } else if ((packageName.startsWith("com.simplemobiletools.contacts") || packageName.startsWith("com.simplemobiletools.dialer")) && isQPlus()) {
-        val roleManager = getSystemService(RoleManager::class.java)
-        roleManager!!.isRoleAvailable(RoleManager.ROLE_DIALER) && roleManager.isRoleHeld(RoleManager.ROLE_DIALER)
-    } else {
-        isMarshmallowPlus() && telecomManager.defaultDialerPackage == packageName
-    }
-}
-
 fun Context.copyToClipboard(text: String) {
     val clip = ClipData.newPlainText(getString(R.string.simple_commons), text)
     (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(clip)
@@ -3248,12 +3215,12 @@ fun Context.getFolderLastModifieds(folder: String): java.util.HashMap<String, Lo
                             val name = cursor.getStringValue(Images.Media.DISPLAY_NAME)
                             lastModifieds["$folder/$name"] = lastModified
                         }
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                     }
                 } while (cursor.moveToNext())
             }
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
     }
 
     return lastModifieds
@@ -3276,10 +3243,10 @@ fun getMediaStoreIds(context: Context): java.util.HashMap<String, Long> {
                     val path = cursor.getStringValue(Images.Media.DATA)
                     ids[path] = id
                 }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
     }
 
     return ids
@@ -3382,7 +3349,7 @@ fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
         scanFileHandler.removeCallbacksAndMessages(null)
         try {
             applicationContext.contentResolver.delete(uri, null, null)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
         callback()
     }
@@ -3706,7 +3673,7 @@ fun Context.createAndroidSAFFile(path: String): Boolean {
 // http://stackoverflow.com/a/40582634/1967672
 fun Context.getSDCardPath(): String {
     val directories = getStorageDirectories().filter {
-        !it.equals(internalStoragePath) && !it.equals(
+        it != internalStoragePath && !it.equals(
             "/storage/emulated/0",
             true
         ) && (baseConfig.OTGPartition.isEmpty() || !it.endsWith(baseConfig.OTGPartition))
@@ -3716,7 +3683,7 @@ fun Context.getSDCardPath(): String {
     var sdCardPath = directories.firstOrNull { fullSDpattern.matcher(it).matches() }
         ?: directories.firstOrNull {
             !physicalPaths.contains(
-                it.toLowerCase()
+                it.lowercase(Locale.getDefault())
             )
         } ?: ""
 
@@ -3738,7 +3705,7 @@ fun Context.getSDCardPath(): String {
                     sdCardPath = "/storage/${it.name}"
                 }
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
         }
     }
 
@@ -3810,7 +3777,7 @@ fun Context.createAndroidDataOrObbUri(fullPath: String): Uri {
     return createDocumentUriFromRootTree(path)
 }
 
-fun Context.getRealInternalStoragePath() =
+fun getRealInternalStoragePath() =
     if (File("/storage/emulated/0").exists()) "/storage/emulated/0" else Environment.getExternalStorageDirectory().absolutePath.trimEnd(
         '/'
     )
