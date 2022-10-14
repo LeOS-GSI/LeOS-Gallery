@@ -37,7 +37,6 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Process
 import android.provider.BaseColumns
-import android.provider.BlockedNumberContract
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
@@ -149,7 +148,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.proPackages
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
-import ca.on.sudbury.hojat.smartgallery.models.BlockedNumber
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
@@ -319,8 +317,8 @@ fun Context.ensurePublicUri(path: String, applicationId: String): Uri? {
                 uri
             } else {
                 val newPath = if (uri.toString().startsWith("/")) uri.toString() else uri.path
-                val file = File(newPath)
-                getFilePublicUri(file, applicationId)
+                val file = newPath?.let { File(it) }
+                file?.let { getFilePublicUri(it, applicationId) }
             }
         }
     }
@@ -463,7 +461,7 @@ fun Context.getCanAppBeUpgraded() = proPackages.contains(
     baseConfig.appId.removeSuffix(".debug").removePrefix("com.simplemobiletools.")
 )
 
-fun Context.getCurrentFormattedDateTime(): String {
+fun getCurrentFormattedDateTime(): String {
     val simpleDateFormat = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
 }
@@ -618,7 +616,7 @@ fun Context.getFilePublicUri(file: File, applicationId: String): Uri {
     return uri!!
 }
 
-fun Context.getFileUri(path: String) = when {
+fun getFileUri(path: String) = when {
     path.isImageSlow() -> Images.Media.EXTERNAL_CONTENT_URI
     path.isVideoSlow() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
     path.isAudioSlow() -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -723,7 +721,7 @@ fun Context.getMediaContentUri(path: String): Uri? {
     return getMediaContent(path, uri)
 }
 
-fun Context.getPermissionString(id: Int) = when (id) {
+fun getPermissionString(id: Int) = when (id) {
     PERMISSION_READ_STORAGE -> Manifest.permission.READ_EXTERNAL_STORAGE
     PERMISSION_WRITE_STORAGE -> Manifest.permission.WRITE_EXTERNAL_STORAGE
     PERMISSION_CAMERA -> Manifest.permission.CAMERA
@@ -773,7 +771,7 @@ fun Context.getSizeFromContentUri(uri: Uri): Long {
                 return cursor.getLongValue(OpenableColumns.SIZE)
             }
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
     }
     return 0L
 }
@@ -1099,7 +1097,7 @@ fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Direct
             }
         }
 
-        dirs.mapTo(newDirsOrdered, { it })
+        dirs.mapTo(newDirsOrdered) { it }
         return newDirsOrdered
     }
 
@@ -1314,7 +1312,7 @@ fun Context.getDirectParentSubfolders(
                         parent,
                         subDirs.first().tmb,
                         getFolderNameFromPath(parent),
-                        subDirs.sumBy { it.mediaCnt },
+                        subDirs.sumOf { it.mediaCnt },
                         lastModified,
                         dateTaken,
                         subDirs.sumByLong { it.size },
