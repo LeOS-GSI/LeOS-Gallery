@@ -326,15 +326,6 @@ fun Context.ensurePublicUri(path: String, applicationId: String): Uri? {
     }
 }
 
-fun Context.ensurePublicUri(uri: Uri, applicationId: String): Uri {
-    return if (uri.scheme == "content") {
-        uri
-    } else {
-        val file = File(uri.path)
-        getFilePublicUri(file, applicationId)
-    }
-}
-
 fun Context.getDoesFilePathExistSdk30(path: String): Boolean {
     return when {
         isAccessibleWithSAFSdk30(path) -> getFastDocumentSdk30(path)?.exists() ?: false
@@ -468,17 +459,6 @@ fun Context.getAndroidTreeUri(path: String): String {
 fun Context.getAppIconColors() =
     resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
 
-@SuppressLint("NewApi")
-fun Context.getBottomNavigationBackgroundColor(): Int {
-    val baseColor = baseConfig.backgroundColor
-    val bottomColor = when {
-        baseConfig.isUsingSystemTheme -> resources.getColor(R.color.you_status_bar_color, theme)
-        baseColor == Color.WHITE -> resources.getColor(R.color.bottom_tabs_light_background)
-        else -> baseConfig.backgroundColor.lightenColor(4)
-    }
-    return bottomColor
-}
-
 fun Context.getCanAppBeUpgraded() = proPackages.contains(
     baseConfig.appId.removeSuffix(".debug").removePrefix("com.simplemobiletools.")
 )
@@ -486,16 +466,6 @@ fun Context.getCanAppBeUpgraded() = proPackages.contains(
 fun Context.getCurrentFormattedDateTime(): String {
     val simpleDateFormat = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
-}
-
-fun Context.getCustomizeColorsString(): String {
-    val textId = if (isOrWasThankYouInstalled()) {
-        R.string.customize_colors
-    } else {
-        R.string.customize_colors_locked
-    }
-
-    return getString(textId)
 }
 
 fun Context.getDirectChildrenCount(
@@ -889,8 +859,7 @@ fun Context.getVideoResolution(path: String): Point? {
 
 fun Context.humanizePath(path: String): String {
     val trimmedPath = path.trimEnd('/')
-    val basePath = path.getBasePath(this)
-    return when (basePath) {
+    return when (val basePath = path.getBasePath(this)) {
         "/" -> "${getHumanReadablePath(basePath)}$trimmedPath"
         else -> trimmedPath.replaceFirst(basePath, getHumanReadablePath(basePath))
     }
@@ -974,6 +943,7 @@ fun Context.needsStupidWritePermissions(path: String) =
     !isRPlus() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
 
 val Context.newNavigationBarHeight: Int
+    @SuppressLint("InternalInsetResource")
     get() {
         var navigationBarHeight = 0
         val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
@@ -2438,6 +2408,7 @@ fun Context.parseFileChannel(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.Q)
 fun Context.addPathToDB(path: String) {
     ensureBackgroundThread {
         if (!getDoesFilePathExist(path)) {
@@ -2744,6 +2715,7 @@ fun Context.getTextSize() = when (baseConfig.fontSize) {
     else -> resources.getDimension(R.dimen.extra_big_text_size)
 }
 
+@RequiresApi(Build.VERSION_CODES.Q)
 fun Context.updateDirectoryPath(path: String) {
     val mediaFetcher = MediaFetcher(applicationContext)
     val getImagesOnly = false
@@ -2989,7 +2961,7 @@ fun Context.getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
                     lastUpdatedTS,
                     accentColor
                 )
-            } catch (e: Exception) {
+            } catch (_: Exception) {
             }
         }
     }
@@ -3246,34 +3218,6 @@ fun Context.isDefaultDialer(): Boolean {
     } else {
         isMarshmallowPlus() && telecomManager.defaultDialerPackage == packageName
     }
-}
-
-@TargetApi(Build.VERSION_CODES.N)
-fun Context.getBlockedNumbers(): java.util.ArrayList<BlockedNumber> {
-    val blockedNumbers = java.util.ArrayList<BlockedNumber>()
-    if (!isNougatPlus() || !isDefaultDialer()) {
-        return blockedNumbers
-    }
-
-    val uri = BlockedNumberContract.BlockedNumbers.CONTENT_URI
-    val projection = arrayOf(
-        BlockedNumberContract.BlockedNumbers.COLUMN_ID,
-        BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER,
-        BlockedNumberContract.BlockedNumbers.COLUMN_E164_NUMBER
-    )
-
-    queryCursor(uri, projection) { cursor ->
-        val id = cursor.getLongValue(BlockedNumberContract.BlockedNumbers.COLUMN_ID)
-        val number =
-            cursor.getStringValue(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER) ?: ""
-        val normalizedNumber =
-            cursor.getStringValue(BlockedNumberContract.BlockedNumbers.COLUMN_E164_NUMBER) ?: number
-        val comparableNumber = normalizedNumber.trimToComparableNumber()
-        val blockedNumber = BlockedNumber(id, number, normalizedNumber, comparableNumber)
-        blockedNumbers.add(blockedNumber)
-    }
-
-    return blockedNumbers
 }
 
 fun Context.copyToClipboard(text: String) {
@@ -3718,12 +3662,6 @@ fun Context.getFastAndroidSAFDocument(path: String): DocumentFile? {
     return DocumentFile.fromSingleUri(this, uri)
 }
 
-fun Context.getAndroidSAFChildrenUri(path: String): Uri {
-    val treeUri = getAndroidTreeUri(path).toUri()
-    val documentId = createAndroidSAFDocumentId(path)
-    return DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
-}
-
 fun Context.createAndroidSAFDirectory(path: String): Boolean {
     return try {
         val treeUri = getAndroidTreeUri(path).toUri()
@@ -3872,14 +3810,6 @@ fun Context.createAndroidDataOrObbPath(fullPath: String): String {
 fun Context.createAndroidDataOrObbUri(fullPath: String): Uri {
     val path = createAndroidDataOrObbPath(fullPath)
     return createDocumentUriFromRootTree(path)
-}
-
-fun Context.scanFilesRecursively(files: List<File>, callback: (() -> Unit)? = null) {
-    val allPaths = java.util.ArrayList<String>()
-    for (file in files) {
-        allPaths.addAll(getPaths(file))
-    }
-    rescanPaths(allPaths, callback)
 }
 
 fun Context.getRealInternalStoragePath() =
