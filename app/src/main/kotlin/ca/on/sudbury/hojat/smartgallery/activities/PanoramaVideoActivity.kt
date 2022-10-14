@@ -32,6 +32,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showSystemUI
 import ca.on.sudbury.hojat.smartgallery.helpers.MIN_SKIP_LENGTH
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import java.io.File
+import kotlin.math.roundToInt
 
 open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListener {
 
@@ -329,9 +330,9 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
         }
 
         val curr = binding.vrVideoView.currentPosition
-        val twoPercents = Math.max((binding.vrVideoView.duration / 50).toInt(), MIN_SKIP_LENGTH)
+        val twoPercents = (binding.vrVideoView.duration / 50).toInt().coerceAtLeast(MIN_SKIP_LENGTH)
         val newProgress = if (forward) curr + twoPercents else curr - twoPercents
-        val roundProgress = Math.round(newProgress / 1000f)
+        val roundProgress = (newProgress / 1000f).roundToInt()
         val limitedProgress =
             Math.max(Math.min(binding.vrVideoView.duration.toInt(), roundProgress), 0)
         setVideoProgress(limitedProgress)
