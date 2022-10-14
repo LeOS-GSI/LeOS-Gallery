@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.res.Resources
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
@@ -73,6 +75,7 @@ class PropertiesDialog() {
      * @param path the file path
      * @param countHiddenItems toggle determining if we will count hidden files themselves and their sizes (reasonable only at directory properties)
      */
+    @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("InflateParams")
     constructor(activity: Activity, path: String, countHiddenItems: Boolean = false) : this() {
         if (!activity.getDoesFilePathExist(path) && !path.startsWith("content://")) {
@@ -117,6 +120,7 @@ class PropertiesDialog() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("Recycle")
     private fun addProperties(path: String) {
         val fileDirItem =
@@ -410,6 +414,7 @@ class PropertiesDialog() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun removeEXIFFromPath(path: String) {
         ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
             try {
