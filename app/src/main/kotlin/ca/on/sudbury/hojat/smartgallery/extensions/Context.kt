@@ -1017,7 +1017,7 @@ fun Context.isSAFOnlyRoot(path: String): Boolean {
     return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
-fun Context.isThankYouInstalled() = true
+fun isThankYouInstalled() = true
 
 fun Context.isOrWasThankYouInstalled(): Boolean {
     return when {
@@ -1117,7 +1117,7 @@ fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Direct
                         o2.sortValue.normalizeString().lowercase(Locale.getDefault())
                     )
                 } else {
-                    o1.sortValue.normalizeString().toLowerCase(Locale.ROOT)
+                    o1.sortValue.normalizeString().lowercase(Locale.ROOT)
                         .compareTo(o2.sortValue.normalizeString().toLowerCase(Locale.ROOT))
                 }
             }
@@ -1391,7 +1391,7 @@ fun Context.updateSDCardPath() {
     }
 }
 
-fun Context.updateSubfolderCounts(
+fun updateSubfolderCounts(
     children: ArrayList<Directory>,
     parentDirs: ArrayList<Directory>
 ) {
@@ -1459,7 +1459,7 @@ fun Context.getNoMediaFoldersSync(): ArrayList<String> {
                         OTGPath
                     ) && noMediaFile.name == NOMEDIA
                 ) {
-                    folders.add(noMediaFile.parent)
+                    noMediaFile.parent?.let { folders.add(it) }
                 }
             } while (cursor.moveToNext())
         }
@@ -1694,6 +1694,7 @@ fun Context.loadPng(
     builder.into(target)
 }
 
+@SuppressLint("CheckResult")
 fun Context.loadJpg(
     path: String,
     target: MySquareImageView,
@@ -2889,9 +2890,8 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
     } else if (isMediaDocument(uri)) {
         val documentId = DocumentsContract.getDocumentId(uri)
         val split = documentId.split(":").dropLastWhile { it.isEmpty() }.toTypedArray()
-        val type = split[0]
 
-        val contentUri = when (type) {
+        val contentUri = when (split[0]) {
             "video" -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
             "audio" -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
             else -> Images.Media.EXTERNAL_CONTENT_URI
