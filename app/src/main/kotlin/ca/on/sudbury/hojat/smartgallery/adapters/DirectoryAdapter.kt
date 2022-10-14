@@ -315,6 +315,7 @@ class DirectoryAdapter(
         notifyDataSetChanged()
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun showProperties() {
         if (selectedKeys.size <= 1) {
             val path = getFirstSelectedItemPath() ?: return
@@ -565,7 +566,7 @@ class DirectoryAdapter(
         val firstPath = paths.first()
         val tabToShow = config.getFolderProtectionType(firstPath)
         val hashToCheck = config.getFolderProtectionHash(firstPath)
-        SecurityDialog(activity, hashToCheck, tabToShow) { hash, type, success ->
+        SecurityDialog(activity, hashToCheck, tabToShow) { _, _, success ->
             if (success) {
                 paths.filter {
                     config.isFolderProtected(it) && config.getFolderProtectionType(it) == tabToShow && config.getFolderProtectionHash(

@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.text.Html

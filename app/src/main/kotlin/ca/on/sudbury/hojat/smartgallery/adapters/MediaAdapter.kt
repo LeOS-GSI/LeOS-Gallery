@@ -5,12 +5,14 @@ import android.content.Intent
 import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -292,6 +294,7 @@ class MediaAdapter(
         listener?.selectedPaths(getSelectedPaths())
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun showProperties() {
         if (selectedKeys.size <= 1) {
             val path = getFirstSelectedItemPath() ?: return
@@ -479,6 +482,7 @@ class MediaAdapter(
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun createShortcut() {
         if (!isOreoPlus()) {
             return

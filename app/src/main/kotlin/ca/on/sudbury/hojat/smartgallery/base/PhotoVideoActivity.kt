@@ -5,11 +5,13 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Html
 import android.view.View
 import android.widget.RelativeLayout
+import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.MainActivity
@@ -448,6 +450,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         return false
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun showProperties() {
         PropertiesDialog(this, mUri!!.path!!)
     }

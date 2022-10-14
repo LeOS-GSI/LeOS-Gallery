@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
-import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.ContentProviderOperation
@@ -86,9 +85,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideloadedDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.CustomIntervalPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.DonateDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.UpgradeToProDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialog
@@ -97,7 +94,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
-import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
@@ -110,7 +106,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
 import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
-import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.views.MyTextView
@@ -126,7 +121,6 @@ import java.io.IOException
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.TreeSet
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
