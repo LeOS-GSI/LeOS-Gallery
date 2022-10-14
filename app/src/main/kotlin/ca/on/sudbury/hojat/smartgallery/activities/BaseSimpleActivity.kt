@@ -330,6 +330,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         )
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         val partition = try {
@@ -1050,7 +1051,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     fun exportSettings(configItems: LinkedHashMap<String, Any>) {
         if (isQPlus()) {
             configItemsToExport = configItems
-            ExportSettingsDialog(this, getExportSettingsFilename(), true) { path, filename ->
+            ExportSettingsDialog(this, getExportSettingsFilename(), true) { _, filename ->
                 Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_TITLE, filename)

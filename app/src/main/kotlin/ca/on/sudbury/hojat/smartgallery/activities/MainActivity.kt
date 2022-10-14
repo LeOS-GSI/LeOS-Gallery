@@ -6,6 +6,7 @@ import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -16,6 +17,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -643,6 +645,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun getDirectories() {
         if (mIsGettingDirs) {
             return
@@ -665,6 +668,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun showSortingDialog() {
         ChangeSortingDialog(this, isDirectorySorting = true, showFolderCheckbox = false) {
             binding.directoriesGrid.adapter = null
@@ -909,6 +913,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun toggleRecycleBin(show: Boolean) {
         config.showRecycleBinAtFolders = show
         refreshMenuItems()
@@ -921,6 +926,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun createNewFolder() {
         FilePickerDialog(
             this,
@@ -1102,6 +1108,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun gotDirectories(newDirs: ArrayList<Directory>) {
         mIsGettingDirs = false
         mShouldStopFetching = false
@@ -1715,6 +1722,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         getDirectories()
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun recheckPinnedFolders() {
         ensureBackgroundThread {
             gotDirectories(movePinnedDirectoriesToFront(getCurrentlyDisplayedDirs()))
