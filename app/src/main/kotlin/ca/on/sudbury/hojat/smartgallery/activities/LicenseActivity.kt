@@ -46,35 +46,38 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SMS_MMS
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_STETHO
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SUBSAMPLING
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.ActivityLicenseBinding
+import ca.on.sudbury.hojat.smartgallery.databinding.ItemLicenseBinding
 import ca.on.sudbury.hojat.smartgallery.models.License
-import kotlinx.android.synthetic.main.activity_license.*
-import kotlinx.android.synthetic.main.item_license.view.*
 
 class LicenseActivity : BaseSimpleActivity() {
-    override fun getAppIconIDs() = intent.getIntegerArrayListExtra(APP_ICON_IDS) ?: ArrayList()
 
+    private lateinit var binding: ActivityLicenseBinding
+
+    override fun getAppIconIDs() = intent.getIntegerArrayListExtra(APP_ICON_IDS) ?: ArrayList()
     override fun getAppLauncherName() = intent.getStringExtra(APP_LAUNCHER_NAME) ?: ""
 
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_license)
+        binding = ActivityLicenseBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val dividerMargin = resources.getDimension(R.dimen.medium_margin).toInt()
         val textColor = getProperTextColor()
         val backgroundColor = getProperBackgroundColor()
         val primaryColor = getProperPrimaryColor()
 
-        updateTextColors(licenses_holder)
+        updateTextColors(binding.licensesHolder)
 
         val inflater = LayoutInflater.from(this)
         val licenses = initLicenses()
         val licenseMask = intent.getIntExtra(APP_LICENSES, 0) or LICENSE_KOTLIN.toInt()
-        licenses.filter { licenseMask and it.id.toInt() != 0 }.forEach {
-            val license = it
-            inflater.inflate(R.layout.item_license, null).apply {
-                background.applyColorFilter(backgroundColor.getContrastColor())
-                license_title.apply {
+        licenses.filter { licenseMask and it.id.toInt() != 0 }.forEach { license ->
+
+            ItemLicenseBinding.inflate(inflater).apply {
+                root.background.applyColorFilter(backgroundColor.getContrastColor())
+                licenseTitle.apply {
                     text = getString(license.titleId)
                     setTextColor(primaryColor)
                     setOnClickListener {
@@ -82,13 +85,13 @@ class LicenseActivity : BaseSimpleActivity() {
                     }
                 }
 
-                license_text.apply {
+                licenseText.apply {
                     text = getString(license.textId)
                     setTextColor(textColor)
                 }
 
-                licenses_holder.addView(this)
-                (layoutParams as LinearLayout.LayoutParams).bottomMargin = dividerMargin
+                binding.licensesHolder.addView(root)
+                (root.layoutParams as LinearLayout.LayoutParams).bottomMargin = dividerMargin
             }
         }
     }
