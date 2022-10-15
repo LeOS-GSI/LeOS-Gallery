@@ -196,6 +196,21 @@
             android:parentActivityName=".settings.SettingsActivity" />
 
         <activity
+            android:name=".activities.LicenseActivity"
+            android:label="@string/third_party_licences"
+            android:parentActivityName=".activities.AboutActivity" />
+
+        <activity
+            android:name=".activities.FAQActivity"
+            android:label="@string/frequently_asked_questions"
+            android:parentActivityName=".activities.AboutActivity" />
+
+        <activity
+            android:name=".activities.ContributorsActivity"
+            android:label="@string/contributors"
+            android:parentActivityName=".activities.AboutActivity" />
+
+        <activity
             android:name=".activities.HiddenFoldersActivity"
             android:exported="false"
             android:label="@string/hidden_folders"
