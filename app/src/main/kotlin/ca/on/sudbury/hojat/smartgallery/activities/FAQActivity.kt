@@ -20,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
-import timber.log.Timber
 
 class FAQActivity : BaseSimpleActivity() {
 
@@ -33,10 +32,7 @@ class FAQActivity : BaseSimpleActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityBinding = ActivityFaqBinding.inflate(layoutInflater)
-
         setContentView(activityBinding.root)
-
-        Timber.d("Hojat Ghasemi : The FAQActivity is called")
 
         val dividerMargin = resources.getDimension(R.dimen.medium_margin).toInt()
         val titleColor = getProperPrimaryColor()
