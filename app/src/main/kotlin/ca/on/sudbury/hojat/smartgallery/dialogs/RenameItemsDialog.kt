@@ -1,7 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
@@ -14,36 +12,37 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
-import kotlinx.android.synthetic.main.dialog_rename_items.*
-import kotlinx.android.synthetic.main.dialog_rename_items.view.*
-import java.util.*
+import timber.log.Timber
 
-// used at renaming folders
-@SuppressLint("InflateParams")
+/**
+ * I couldn't ascertain where exactly this dialog is being used.
+ */
 class RenameItemsDialog(
     val activity: BaseSimpleActivity,
     val paths: ArrayList<String>,
     val callback: () -> Unit
 ) {
     init {
+        Timber.d("Hojat Ghasemi : RenameItemsDialog was called")
         var ignoreClicks = false
-        val view = activity.layoutInflater.inflate(R.layout.dialog_rename_items, null)
+        val binding = DialogRenameItemsBinding.inflate(activity.layoutInflater)
 
         AlertDialog.Builder(activity)
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .create().apply {
-                activity.setupDialogStuff(view, this, R.string.rename) {
-                    showKeyboard(view.rename_items_value)
+                activity.setupDialogStuff(binding.root, this, R.string.rename) {
+                    showKeyboard(binding.renameItemsValue)
                     getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         if (ignoreClicks) {
                             return@setOnClickListener
                         }
 
-                        val valueToAdd = view.rename_items_value.text.toString()
+                        val valueToAdd = binding.renameItemsValue.text.toString()
                         val append =
-                            view.rename_items_radio_group.checkedRadioButtonId == rename_items_radio_append.id
+                            binding.renameItemsRadioGroup.checkedRadioButtonId == binding.renameItemsRadioAppend.id
 
                         if (valueToAdd.isEmpty()) {
                             callback()
