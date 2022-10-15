@@ -39,18 +39,21 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_VERSION_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
-import kotlinx.android.synthetic.main.activity_about.*
+
 
 class AboutActivity : BaseSimpleActivity() {
+
+    private lateinit var binding: ActivityAboutBinding
+
     private var appName = ""
     private var primaryColor = 0
-
     private var firstVersionClickTS = 0L
     private var clicksSinceFirstClick = 0
-    private val EASTER_EGG_TIME_LIMIT = 3000L
-    private val EASTER_EGG_REQUIRED_CLICKS = 7
+    private val easterEggTimeLimit = 3000L
+    private val easterEggRequiredClicks = 7
 
     override fun getAppIconIDs() = intent.getIntegerArrayListExtra(APP_ICON_IDS) ?: ArrayList()
 
@@ -58,45 +61,52 @@ class AboutActivity : BaseSimpleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+        binding = ActivityAboutBinding.inflate(layoutInflater)
+
+        setContentView(binding.root)
         appName = intent.getStringExtra(APP_NAME) ?: ""
         val textColor = getProperTextColor()
         val backgroundColor = getProperBackgroundColor()
         primaryColor = getProperPrimaryColor()
 
         arrayOf(
-            about_faq_icon,
-            about_rate_us_icon,
-            about_donate_icon,
-            about_invite_icon,
-            about_contributors_icon,
-            about_more_apps_icon,
-            about_email_icon,
-            about_privacy_policy_icon,
-            about_licenses_icon,
-            about_website_icon,
-            about_version_icon
-        ).forEach {
-            it.applyColorFilter(textColor)
-        }
-
-        arrayOf(about_support, about_help_us, about_social, about_other).forEach {
-            it.setTextColor(primaryColor)
+            binding.aboutFaqIcon,
+            binding.aboutRateUsIcon,
+            binding.aboutDonateIcon,
+            binding.aboutInviteIcon,
+            binding.aboutContributorsIcon,
+            binding.aboutMoreAppsIcon,
+            binding.aboutEmailIcon,
+            binding.aboutPrivacyPolicyIcon,
+            binding.aboutLicensesIcon,
+            binding.aboutWebsiteIcon,
+            binding.aboutVersionIcon
+        ).forEach { imageview ->
+            imageview.applyColorFilter(textColor)
         }
 
         arrayOf(
-            about_support_holder,
-            about_help_us_holder,
-            about_social_holder,
-            about_other_holder
-        ).forEach {
-            it.background.applyColorFilter(backgroundColor.getContrastColor())
+            binding.aboutSupport,
+            binding.aboutHelpUs,
+            binding.aboutSocial,
+            binding.aboutOther
+        ).forEach { textView ->
+            textView.setTextColor(primaryColor)
+        }
+
+        arrayOf(
+            binding.aboutSupportHolder,
+            binding.aboutHelpUsHolder,
+            binding.aboutSocialHolder,
+            binding.aboutOtherHolder
+        ).forEach { linearLayout ->
+            linearLayout.background.applyColorFilter(backgroundColor.getContrastColor())
         }
     }
 
     override fun onResume() {
         super.onResume()
-        updateTextColors(about_scrollview)
+        updateTextColors(binding.aboutScrollview)
 
         setupFAQ()
         setupEmail()
@@ -120,8 +130,8 @@ class AboutActivity : BaseSimpleActivity() {
 
     private fun setupFAQ() {
         val faqItems = intent.getSerializableExtra(APP_FAQ) as ArrayList<FaqItem>
-        about_faq_holder.beVisibleIf(faqItems.isNotEmpty())
-        about_faq_holder.setOnClickListener {
+        binding.aboutFaqHolder.beVisibleIf(faqItems.isNotEmpty())
+        binding.aboutFaqHolder.setOnClickListener {
             Intent(applicationContext, FAQActivity::class.java).apply {
                 putExtra(APP_ICON_IDS, getAppIconIDs())
                 putExtra(APP_LAUNCHER_NAME, getAppLauncherName())
@@ -133,24 +143,24 @@ class AboutActivity : BaseSimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupEmail() {
-        if (about_faq_holder.isGone()) {
-            about_email_holder.background =
+        if (binding.aboutFaqHolder.isGone()) {
+            binding.aboutEmailHolder.background =
                 resources.getDrawable(R.drawable.ripple_all_corners, theme)
         }
 
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            about_email_holder.beGone()
+            binding.aboutEmailHolder.beGone()
 
-            if (about_faq_holder.isGone()) {
-                about_support.beGone()
-                about_support_holder.beGone()
+            if (binding.aboutFaqHolder.isGone()) {
+                binding.aboutSupport.beGone()
+                binding.aboutSupportHolder.beGone()
             } else {
-                about_faq_holder.background =
+                binding.aboutFaqHolder.background =
                     resources.getDrawable(R.drawable.ripple_all_corners, theme)
             }
         }
 
-        about_email_holder.setOnClickListener {
+        binding.aboutEmailHolder.setOnClickListener {
             val msg =
                 "${getString(R.string.before_asking_question_read_faq)}\n\n${getString(R.string.make_sure_latest)}"
             if (intent.getBooleanExtra(
@@ -167,9 +177,9 @@ class AboutActivity : BaseSimpleActivity() {
                     R.string.skip
                 ) { success ->
                     if (success) {
-                        about_faq_holder.performClick()
+                        binding.aboutFaqHolder.performClick()
                     } else {
-                        about_email_holder.performClick()
+                        binding.aboutEmailHolder.performClick()
                     }
                 }
             } else {
@@ -207,10 +217,10 @@ class AboutActivity : BaseSimpleActivity() {
 
     private fun setupRateUs() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
-            about_rate_us_holder.beGone()
+            binding.aboutRateUsHolder.beGone()
         }
 
-        about_rate_us_holder.setOnClickListener {
+        binding.aboutRateUsHolder.setOnClickListener {
             if (baseConfig.wasBeforeRateShown) {
                 if (baseConfig.wasAppRated) {
                     redirectToRateUs()
@@ -229,9 +239,9 @@ class AboutActivity : BaseSimpleActivity() {
                     R.string.skip
                 ) { success ->
                     if (success) {
-                        about_faq_holder.performClick()
+                        binding.aboutFaqHolder.performClick()
                     } else {
-                        about_rate_us_holder.performClick()
+                        binding.aboutRateUsHolder.performClick()
                     }
                 }
             }
@@ -241,13 +251,13 @@ class AboutActivity : BaseSimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupInvite() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
-            about_invite_holder.beGone()
-        } else if (about_rate_us_holder.isGone()) {
-            about_invite_holder.background =
+            binding.aboutInviteHolder.beGone()
+        } else if (binding.aboutRateUsHolder.isGone()) {
+            binding.aboutInviteHolder.background =
                 resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }
 
-        about_invite_holder.setOnClickListener {
+        binding.aboutInviteHolder.setOnClickListener {
             val text = String.format(getString(R.string.share_text), appName, getStoreUrl())
             Intent().apply {
                 action = ACTION_SEND
@@ -261,12 +271,12 @@ class AboutActivity : BaseSimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupContributors() {
-        if (about_rate_us_holder.isGone() && about_invite_holder.isGone()) {
-            about_contributors_holder.background =
+        if (binding.aboutRateUsHolder.isGone() && binding.aboutInviteHolder.isGone()) {
+            binding.aboutContributorsHolder.background =
                 resources.getDrawable(R.drawable.ripple_all_corners, theme)
         }
 
-        about_contributors_holder.setOnClickListener {
+        binding.aboutContributorsHolder.setOnClickListener {
             val intent = Intent(applicationContext, ContributorsActivity::class.java)
             startActivity(intent)
         }
@@ -275,31 +285,32 @@ class AboutActivity : BaseSimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupDonate() {
         if (resources.getBoolean(R.bool.show_donate_in_about) && !resources.getBoolean(R.bool.hide_all_external_links)) {
-            about_donate_holder.beVisible()
+            binding.aboutDonateHolder.beVisible()
 
             val contributorsBg =
-                if (about_rate_us_holder.isGone() && about_invite_holder.isGone()) {
+                if (binding.aboutRateUsHolder.isGone() && binding.aboutInviteHolder.isGone()) {
                     R.drawable.ripple_top_corners
                 } else {
                     R.drawable.ripple_background
                 }
 
-            about_contributors_holder.background = resources.getDrawable(contributorsBg, theme)
-            about_donate_holder.setOnClickListener {
+            binding.aboutContributorsHolder.background =
+                resources.getDrawable(contributorsBg, theme)
+            binding.aboutDonateHolder.setOnClickListener {
                 launchViewIntent("https://simplemobiletools.com/donate")
             }
         } else {
-            about_donate_holder.beGone()
+            binding.aboutDonateHolder.beGone()
         }
     }
 
     private fun setupFacebook() {
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            about_social.beGone()
-            about_social_holder.beGone()
+            binding.aboutSocial.beGone()
+            binding.aboutSocialHolder.beGone()
         }
 
-        about_facebook_holder.setOnClickListener {
+        binding.aboutFacebookHolder.setOnClickListener {
             var link = "https://www.facebook.com/simplemobiletools"
             try {
                 packageManager.getPackageInfo("com.facebook.katana", 0)
@@ -312,17 +323,17 @@ class AboutActivity : BaseSimpleActivity() {
     }
 
     private fun setupReddit() {
-        about_reddit_holder.setOnClickListener {
+        binding.aboutRedditHolder.setOnClickListener {
             launchViewIntent("https://www.reddit.com/r/SimpleMobileTools")
         }
     }
 
     private fun setupMoreApps() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
-            about_more_apps_holder.beGone()
+            binding.aboutMoreAppsHolder.beGone()
         }
 
-        about_more_apps_holder.setOnClickListener {
+        binding.aboutMoreAppsHolder.setOnClickListener {
             launchViewIntent("https://play.google.com/store/apps/dev?id=9070296388022589266")
         }
     }
@@ -330,26 +341,26 @@ class AboutActivity : BaseSimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupWebsite() {
         if (resources.getBoolean(R.bool.show_donate_in_about) && !resources.getBoolean(R.bool.hide_all_external_links)) {
-            if (about_more_apps_holder.isGone()) {
-                about_website_holder.background =
+            if (binding.aboutMoreAppsHolder.isGone()) {
+                binding.aboutWebsiteHolder.background =
                     resources.getDrawable(R.drawable.ripple_top_corners, theme)
             }
 
-            about_website_holder.beVisible()
-            about_website_holder.setOnClickListener {
+            binding.aboutWebsiteHolder.beVisible()
+            binding.aboutWebsiteHolder.setOnClickListener {
                 launchViewIntent("https://simplemobiletools.com/")
             }
         } else {
-            about_website_holder.beGone()
+            binding.aboutWebsiteHolder.beGone()
         }
     }
 
     private fun setupPrivacyPolicy() {
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            about_privacy_policy_holder.beGone()
+            binding.aboutPrivacyPolicyHolder.beGone()
         }
 
-        about_privacy_policy_holder.setOnClickListener {
+        binding.aboutPrivacyPolicyHolder.setOnClickListener {
             val appId = baseConfig.appId.removeSuffix(".debug").removeSuffix(".pro")
                 .removePrefix("com.simplemobiletools.")
             val url = "https://simplemobiletools.com/privacy/$appId.txt"
@@ -359,12 +370,12 @@ class AboutActivity : BaseSimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupLicense() {
-        if (about_website_holder.isGone() && about_more_apps_holder.isGone() && about_privacy_policy_holder.isGone()) {
-            about_licenses_holder.background =
+        if (binding.aboutWebsiteHolder.isGone() && binding.aboutMoreAppsHolder.isGone() && binding.aboutPrivacyPolicyHolder.isGone()) {
+            binding.aboutLicensesHolder.background =
                 resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }
 
-        about_licenses_holder.setOnClickListener {
+        binding.aboutLicensesHolder.setOnClickListener {
             Intent(applicationContext, LicenseActivity::class.java).apply {
                 putExtra(APP_ICON_IDS, getAppIconIDs())
                 putExtra(APP_LAUNCHER_NAME, getAppLauncherName())
@@ -381,18 +392,18 @@ class AboutActivity : BaseSimpleActivity() {
         val version = intent.getStringExtra(APP_VERSION_NAME) ?: ""
 
         val fullVersion = String.format(getString(R.string.version_placeholder, version))
-        about_version.text = fullVersion
-        about_version_holder.setOnClickListener {
+        binding.aboutVersion.text = fullVersion
+        binding.aboutVersionHolder.setOnClickListener {
             if (firstVersionClickTS == 0L) {
                 firstVersionClickTS = System.currentTimeMillis()
                 Handler().postDelayed({
                     firstVersionClickTS = 0L
                     clicksSinceFirstClick = 0
-                }, EASTER_EGG_TIME_LIMIT)
+                }, easterEggTimeLimit)
             }
 
             clicksSinceFirstClick++
-            if (clicksSinceFirstClick >= EASTER_EGG_REQUIRED_CLICKS) {
+            if (clicksSinceFirstClick >= easterEggRequiredClicks) {
                 toast(R.string.hello)
                 firstVersionClickTS = 0L
                 clicksSinceFirstClick = 0
