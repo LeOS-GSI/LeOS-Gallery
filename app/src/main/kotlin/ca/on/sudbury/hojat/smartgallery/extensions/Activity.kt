@@ -36,7 +36,6 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -80,6 +79,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogTitleBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
@@ -112,7 +112,6 @@ import ca.on.sudbury.hojat.smartgallery.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.dialog_title.view.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
@@ -1745,7 +1744,7 @@ fun Activity.setAsIntent(path: String, applicationId: String) {
     }
 }
 
-@SuppressLint("UseCompatLoadingForDrawables", "InflateParams")
+@SuppressLint("UseCompatLoadingForDrawables")
 fun Activity.setupDialogStuff(
     view: View,
     dialog: AlertDialog.Builder,
@@ -1781,10 +1780,10 @@ fun Activity.setupDialogStuff(
             callback?.invoke(this)
         }
     } else {
-        var title: TextView? = null
+        var title: DialogTitleBinding? = null
         if (titleId != 0 || titleText.isNotEmpty()) {
-            title = layoutInflater.inflate(R.layout.dialog_title, null) as TextView
-            title.dialog_title_textview.apply {
+            title = DialogTitleBinding.inflate(layoutInflater)
+            title.dialogTitleTextview.apply {
                 if (titleText.isNotEmpty()) {
                     text = titleText
                 } else {
@@ -1804,7 +1803,7 @@ fun Activity.setupDialogStuff(
         dialog.create().apply {
             setView(view)
             requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setCustomTitle(title)
+            setCustomTitle(title?.root)
             setCanceledOnTouchOutside(cancelOnTouchOutside)
             show()
             getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(dialogButtonColor)
@@ -1832,7 +1831,7 @@ fun Activity.setupDialogStuff(
     }
 }
 
-@SuppressLint("InflateParams", "UseCompatLoadingForDrawables")
+@SuppressLint("UseCompatLoadingForDrawables")
 fun Activity.setupDialogStuff(
     view: View,
     dialog: AlertDialog,
@@ -1854,13 +1853,11 @@ fun Activity.setupDialogStuff(
         view.setColors(textColor, primaryColor, backgroundColor)
     }
 
-    var title: TextView? = null
+    var title: DialogTitleBinding? = null
     if (titleId != 0 || titleText.isNotEmpty()) {
-        title = layoutInflater.inflate(
-            R.layout.dialog_title,
-            null
-        ) as TextView
-        title.dialog_title_textview.apply {
+        title = DialogTitleBinding.inflate(layoutInflater)
+
+        title.dialogTitleTextview.apply {
             if (titleText.isNotEmpty()) {
                 text = titleText
             } else {
@@ -1880,7 +1877,7 @@ fun Activity.setupDialogStuff(
     dialog.apply {
         setView(view)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setCustomTitle(title)
+        setCustomTitle(title?.root)
         setCanceledOnTouchOutside(cancelOnTouchOutside)
         show()
         getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(dialogButtonColor)
