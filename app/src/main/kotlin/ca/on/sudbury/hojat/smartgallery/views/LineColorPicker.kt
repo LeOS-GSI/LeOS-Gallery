@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.views
 
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
@@ -11,7 +10,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.isRTLLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.interfaces.LineColorPickerListener
-
 
 @SuppressLint("ClickableViewAccessibility")
 class LineColorPicker(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {

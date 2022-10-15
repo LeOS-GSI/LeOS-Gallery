@@ -2766,10 +2766,10 @@ fun Context.updateTextColors(viewGroup: ViewGroup) {
     (0 until cnt).map { viewGroup.getChildAt(it) }.forEach {
         when (it) {
             is MyTextView -> it.setColors(textColor, accentColor, backgroundColor)
-            is MyAppCompatSpinner -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyAppCompatSpinner -> it.setColors(textColor, backgroundColor)
             is MySwitchCompat -> it.setColors(textColor, accentColor, backgroundColor)
             is MyCompatRadioButton -> it.setColors(textColor, accentColor, backgroundColor)
-            is MyAppCompatCheckbox -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyAppCompatCheckbox -> it.setColors(textColor, accentColor)
             is MyEditText -> it.setColors(textColor, accentColor, backgroundColor)
             is MyAutoCompleteTextView -> it.setColors(textColor, accentColor, backgroundColor)
             is MyFloatingActionButton -> it.setColors(textColor, accentColor, backgroundColor)

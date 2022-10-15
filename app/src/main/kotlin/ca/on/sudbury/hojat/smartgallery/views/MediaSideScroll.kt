@@ -42,7 +42,11 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
     private lateinit var singleTap: (Float, Float) -> Unit
 
     fun initialize(
-        activity: Activity, slideInfoView: TextView, isBrightness: Boolean, parentView: ViewGroup?, singleTap: (x: Float, y: Float) -> Unit,
+        activity: Activity,
+        slideInfoView: TextView,
+        isBrightness: Boolean,
+        parentView: ViewGroup?,
+        singleTap: (x: Float, y: Float) -> Unit,
         doubleTap: ((x: Float, y: Float) -> Unit)? = null
     ) {
         this.activity = activity
@@ -51,27 +55,29 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
         this.doubleTap = doubleTap
         mParentView = parentView
         mIsBrightnessScroll = isBrightness
-        mSlideInfoText = activity.getString(if (isBrightness) R.string.brightness else R.string.volume)
+        mSlideInfoText =
+            activity.getString(if (isBrightness) R.string.brightness else R.string.volume)
         onGlobalLayout {
             mViewHeight = height
         }
     }
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-            if (e != null) {
-                singleTap(e.rawX, e.rawY)
+    private val gestureDetector =
+        GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+                if (e != null) {
+                    singleTap(e.rawX, e.rawY)
+                }
+                return true
             }
-            return true
-        }
 
-        override fun onDoubleTap(e: MotionEvent?): Boolean {
-            if (e != null && doubleTap != null) {
-                doubleTap!!.invoke(e.rawX, e.rawY)
+            override fun onDoubleTap(e: MotionEvent?): Boolean {
+                if (e != null && doubleTap != null) {
+                    doubleTap!!.invoke(e.rawX, e.rawY)
+                }
+                return true
             }
-            return true
-        }
-    })
+        })
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (mPassTouches) {
@@ -114,7 +120,8 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
 
                     if ((percent == 100 && event.y > mLastTouchY) || (percent == -100 && event.y < mLastTouchY)) {
                         mTouchDownY = event.y
-                        mTouchDownValue = if (mIsBrightnessScroll) mTempBrightness else getCurrentVolume()
+                        mTouchDownValue =
+                            if (mIsBrightnessScroll) mTempBrightness else getCurrentVolume()
                     }
 
                     percentChanged(percent)
@@ -139,7 +146,8 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
         return true
     }
 
-    private fun getCurrentVolume() = activity?.audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
+    private fun getCurrentVolume() =
+        activity?.audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
 
     private fun getCurrentBrightness(): Int {
         return try {

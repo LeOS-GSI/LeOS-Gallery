@@ -21,12 +21,10 @@ class EditorDrawCanvas(context: Context, attrs: AttributeSet) : View(context, at
     private var mStartY = 0f
     private var mColor = 0
     private var mWasMultitouch = false
-
     private var mPaths = LinkedHashMap<Path, PaintOptions>()
     private var mPaint = Paint()
     private var mPath = Path()
     private var mPaintOptions = PaintOptions()
-
     private var backgroundBitmap: Bitmap? = null
 
     init {
@@ -124,7 +122,8 @@ class EditorDrawCanvas(context: Context, attrs: AttributeSet) : View(context, at
     }
 
     fun updateBrushSize(newBrushSize: Int) {
-        mPaintOptions.strokeWidth = resources.getDimension(R.dimen.full_brush_size) * (newBrushSize / 100f)
+        mPaintOptions.strokeWidth =
+            resources.getDimension(R.dimen.full_brush_size) * (newBrushSize / 100f)
     }
 
     fun updateBackgroundBitmap(bitmap: Bitmap) {

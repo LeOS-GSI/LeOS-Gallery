@@ -19,7 +19,7 @@ class MyAppCompatCheckbox : AppCompatCheckBox {
     )
 
     @SuppressLint("RestrictedApi")
-    fun setColors(textColor: Int, accentColor: Int, backgroundColor: Int) {
+    fun setColors(textColor: Int, accentColor: Int) {
         setTextColor(textColor)
         val colorStateList = ColorStateList(
             arrayOf(
