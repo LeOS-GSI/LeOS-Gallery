@@ -13,28 +13,31 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.removeUnderlines
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.ActivityContributorsBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
-import kotlinx.android.synthetic.main.activity_contributors.*
 
 class ContributorsActivity : BaseSimpleActivity() {
-    override fun getAppIconIDs() = intent.getIntegerArrayListExtra(APP_ICON_IDS) ?: ArrayList()
 
+    private lateinit var binding: ActivityContributorsBinding
+
+    override fun getAppIconIDs() = intent.getIntegerArrayListExtra(APP_ICON_IDS) ?: ArrayList()
     override fun getAppLauncherName() = intent.getStringExtra(APP_LAUNCHER_NAME) ?: ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_contributors)
+        binding = ActivityContributorsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val textColor = getProperTextColor()
         val backgroundColor = getProperBackgroundColor()
         val primaryColor = getProperPrimaryColor()
 
-        updateTextColors(contributors_holder)
-        contributors_development_label.setTextColor(primaryColor)
-        contributors_translation_label.setTextColor(primaryColor)
+        updateTextColors(binding.contributorsHolder)
+        binding.contributorsDevelopmentLabel.setTextColor(primaryColor)
+        binding.contributorsTranslationLabel.setTextColor(primaryColor)
 
-        contributors_label.apply {
+        binding.contributorsLabel.apply {
             setTextColor(textColor)
             text = Html.fromHtml(getString(R.string.contributors_label))
             setLinkTextColor(primaryColor)
@@ -42,16 +45,19 @@ class ContributorsActivity : BaseSimpleActivity() {
             removeUnderlines()
         }
 
-        contributors_development_icon.applyColorFilter(textColor)
-        contributors_footer_icon.applyColorFilter(textColor)
+        binding.contributorsDevelopmentIcon.applyColorFilter(textColor)
+        binding.contributorsFooterIcon.applyColorFilter(textColor)
 
-        arrayOf(contributors_development_holder, contributors_translation_holder).forEach {
+        arrayOf(
+            binding.contributorsDevelopmentHolder,
+            binding.contributorsTranslationHolder
+        ).forEach {
             it.background.applyColorFilter(backgroundColor.getContrastColor())
         }
 
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            contributors_footer_icon.beGone()
-            contributors_label.beGone()
+            binding.contributorsFooterIcon.beGone()
+            binding.contributorsLabel.beGone()
         }
     }
 
