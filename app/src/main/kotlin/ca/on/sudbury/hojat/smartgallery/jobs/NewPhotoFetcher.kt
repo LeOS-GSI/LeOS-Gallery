@@ -15,6 +15,7 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.provider.MediaStore.Video
+import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
@@ -71,6 +72,7 @@ class NewPhotoFetcher : JobService() {
         return jobs.any { it.id == PHOTO_VIDEO_CONTENT_JOB }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartJob(params: JobParameters): Boolean {
         mRunningParams = params
         ensureBackgroundThread {
