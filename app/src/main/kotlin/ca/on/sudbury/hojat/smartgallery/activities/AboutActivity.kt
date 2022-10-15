@@ -43,11 +43,9 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 
-
 class AboutActivity : BaseSimpleActivity() {
 
     private lateinit var binding: ActivityAboutBinding
-
     private var appName = ""
     private var primaryColor = 0
     private var firstVersionClickTS = 0L
