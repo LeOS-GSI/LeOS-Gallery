@@ -99,7 +99,6 @@ private const val PRIMARY_ACTION_NONE = 0
 private const val PRIMARY_ACTION_FILTER = 1
 private const val PRIMARY_ACTION_CROP_ROTATE = 2
 private const val PRIMARY_ACTION_DRAW = 3
-
 private const val CROP_ROTATE_NONE = 0
 private const val CROP_ROTATE_ASPECT_RATIO = 1
 

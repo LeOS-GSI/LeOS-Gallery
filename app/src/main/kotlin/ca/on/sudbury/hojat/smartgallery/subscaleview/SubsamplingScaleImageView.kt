@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.subscaleview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.PointF
@@ -60,7 +61,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
     var maxScale = 2f
     var isOneToOneZoomEnabled = false
     var rotationEnabled = true
-    var eagerLoadingEnabled = false
+    private var eagerLoadingEnabled = false
     var debug = false
     var onImageEventListener: OnImageEventListener? = null
     var doubleTapZoomScale = 1f
@@ -375,6 +376,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
         setMeasuredDimension(width, height)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (anim?.interruptible == false || ignoreTouches) {
             if (event.actionMasked == MotionEvent.ACTION_UP) {
@@ -435,7 +437,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
                 allFingersLifted = true
                 anim = null
                 parent?.requestDisallowInterceptTouchEvent(true)
-                maxTouchCount = Math.max(maxTouchCount, touchCount)
+                maxTouchCount = maxTouchCount.coerceAtLeast(touchCount)
                 if (touchCount >= 2) {
                     scaleStart = scale
                     vDistStart =
@@ -468,11 +470,11 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
                                 (event.getY(0) - event.getY(1)).toDouble(),
                                 (event.getX(0) - event.getX(1)).toDouble()
                             ).toFloat()
-                            if (Math.abs(lastAngle - angle.toDouble()) > FIVE_DEGREES) {
+                            if (abs(lastAngle - angle.toDouble()) > FIVE_DEGREES) {
                                 didRotateInGesture = true
                             }
 
-                            if (Math.abs(lastAngle - angle.toDouble()) > FIFTEEN_DEGREES) {
+                            if (abs(lastAngle - angle.toDouble()) > FIFTEEN_DEGREES) {
                                 if (lastAngle - angle > 0) {
                                     angle += FIFTEEN_DEGREES.toFloat()
                                 } else {
@@ -784,7 +786,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
         }
 
         if (tileMap != null && getIsBaseLayerReady()) {
-            val sampleSize = Math.min(fullImageSampleSize, calculateInSampleSize(scale))
+            val sampleSize = fullImageSampleSize.coerceAtMost(calculateInSampleSize(scale))
             var hasMissingTiles = false
             for ((key, value) in tileMap!!) {
                 if (key == sampleSize) {
@@ -1258,8 +1260,8 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
         }
 
         if (sHeight() > reqHeight || sWidth() > reqWidth) {
-            val heightRatio = Math.round(sHeight().toFloat() / reqHeight.toFloat())
-            val widthRatio = Math.round(sWidth().toFloat() / reqWidth.toFloat())
+            val heightRatio = (sHeight().toFloat() / reqHeight.toFloat()).roundToInt()
+            val widthRatio = (sWidth().toFloat() / reqWidth.toFloat()).roundToInt()
             inSampleSize = if (heightRatio < widthRatio) heightRatio else widthRatio
         }
 
@@ -1447,7 +1449,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
         }
     }
 
-    private class TilesInitTask internal constructor(
+    private class TilesInitTask(
         view: SubsamplingScaleImageView,
         context: Context,
         decoderFactory: DecoderFactory<out ImageRegionDecoder>,
@@ -1481,6 +1483,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
             return null
         }
 
+        @Deprecated("Deprecated in Java")
         override fun onPostExecute(xyo: IntArray?) {
             val view = viewRef.get()
             if (view != null) {
@@ -1534,6 +1537,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
             tile.loading = true
         }
 
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: Void): Bitmap? {
             try {
                 val view = viewRef.get()
@@ -1604,6 +1608,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
         private var bitmap: Bitmap? = null
         private var exception: Exception? = null
 
+        @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg params: Void): Int? {
             try {
                 val context = contextRef.get()

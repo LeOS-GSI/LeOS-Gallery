@@ -57,7 +57,7 @@ import kotlin.math.roundToInt
  *  3. Track Layout: The track layout background can be changed both programmatically with [RecyclerViewFastScroller.trackDrawable] and using the [R.styleable.RecyclerViewFastScroller_trackDrawable] view attrib.
  *  4. Popup [TextView] appearance can be changed both programmatically with [RecyclerViewFastScroller.textStyle] and using the [R.styleable.RecyclerViewFastScroller_popupTextStyle] view attrib.
  *
- *  By default the last item of the [RecyclerView] associated with the fastScroller has an extra padding of the height of the first visible item found, to disable this behaviour set the [R.styleable.RecyclerViewFastScroller_addLastItemPadding] as `false`
+ *  By default the last item of the [RecyclerView] associated with the fastScroller has an extra padding of the height of the first visible item found, to disable this behaviour set the "R.styleable.RecyclerViewFastScroller_addLastItemPadding" as `false`
  *
  *  To disable fastScroll, set the [RecyclerViewFastScroller.isFastScrollEnabled] as `false`, default set is true
  *
@@ -921,7 +921,7 @@ class RecyclerViewFastScroller @JvmOverloads constructor(
      * To re-init the [RecyclerViewFastScroller] call the [detachFastScrollerFromRecyclerView] and then re-call this method.
      *
      * This method adds a [RecyclerView.OnScrollListener] to the [RecyclerView] and also attaches an itemDecorator which adds margin to the last item of the [RecyclerView.Adapter]
-     * this bottom empty margin can be skipped if the [R.styleable.RecyclerViewFastScroller_addLastItemPadding] is set to false during layout creation, this will not add the [RecyclerView.ItemDecoration] as well.
+     * this bottom empty margin can be skipped if the "R.styleable.RecyclerViewFastScroller_addLastItemPadding" is set to false during layout creation, this will not add the [RecyclerView.ItemDecoration] as well.
      *
      * The [RecyclerView.OnScrollListener] is used to compute the position of the Handle during runtime,thus calling [RecyclerView.clearOnScrollListeners] might cause this view to not function properly.
      *
