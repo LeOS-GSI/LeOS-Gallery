@@ -18,7 +18,6 @@ class StateController internal constructor(private val settings: Settings) {
 
     private var isResetRequired = true
     private var zoomPatch = 0f
-
     private val zoomBounds = ZoomBounds(settings)
     private val movBounds = MovementBounds(settings)
 

@@ -130,7 +130,7 @@ class MediaFetcher(val context: Context) {
                             dateTakens.clone() as HashMap<String, Long>
                         )
                     newMedia.forEach { newMedium ->
-                        for ((folder, media) in files) {
+                        for ((_, media) in files) {
                             media.forEach { medium ->
                                 if (medium.path == newMedium.path) {
                                     newMedium.size = medium.size
@@ -659,7 +659,7 @@ class MediaFetcher(val context: Context) {
                 val parent = medium.parentPath.lowercase(Locale.getDefault())
                 val currentFolderMedia = media[parent]
                 if (currentFolderMedia == null) {
-                    media[parent] = ArrayList<Medium>()
+                    media[parent] = ArrayList()
                 }
 
                 media[parent]?.add(medium)

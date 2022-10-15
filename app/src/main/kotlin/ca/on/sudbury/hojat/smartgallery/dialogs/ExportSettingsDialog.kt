@@ -19,7 +19,9 @@ import kotlinx.android.synthetic.main.dialog_export_settings.view.*
 
 @SuppressLint("InflateParams")
 class ExportSettingsDialog(
-    val activity: BaseSimpleActivity, private val defaultFilename: String, private val hidePath: Boolean,
+    val activity: BaseSimpleActivity,
+    private val defaultFilename: String,
+    private val hidePath: Boolean,
     callback: (path: String, filename: String) -> Unit
 ) {
     init {

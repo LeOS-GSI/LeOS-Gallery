@@ -31,7 +31,7 @@ class RenameDialog(
 
     @SuppressLint("InflateParams")
     val view = LayoutInflater.from(activity).inflate(R.layout.dialog_rename, null)!!
-    var tabsAdapter: RenameAdapter
+    private var tabsAdapter: RenameAdapter
     var viewPager: MyViewPager
 
     init {

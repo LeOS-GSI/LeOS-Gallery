@@ -41,8 +41,10 @@ const val MEDIA_COLUMN_CNT = "media_column_cnt"
 const val MEDIA_LANDSCAPE_COLUMN_CNT = "media_landscape_column_cnt"
 const val MEDIA_HORIZONTAL_COLUMN_CNT = "media_horizontal_column_cnt"
 const val MEDIA_LANDSCAPE_HORIZONTAL_COLUMN_CNT = "media_landscape_horizontal_column_cnt"
-const val SHOW_ALL =
-    "show_all"                           // display images and videos from all folders together
+
+// display images and videos from all folders together
+const val SHOW_ALL = "show_all"
+
 const val HIDE_FOLDER_TOOLTIP_SHOWN = "hide_folder_tooltip_shown"
 const val EXCLUDED_FOLDERS = "excluded_folders"
 const val INCLUDED_FOLDERS = "included_folders"
@@ -131,7 +133,7 @@ const val SAVE_DISCARD_PROMPT_INTERVAL = 1000L
 const val SD_OTG_PATTERN = "^/storage/[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$"
 const val SD_OTG_SHORT = "^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$"
 const val MD5 = "MD5"
-val DARK_GREY = 0xFF333333.toInt()
+const val DARK_GREY = 0xFF333333.toInt()
 
 const val MEDIUM_ALPHA = 0.5f
 const val HIGHER_ALPHA = 0.75f
@@ -285,7 +287,6 @@ const val SORT_BY_PATH = 32
 const val SORT_DESCENDING = 1024
 const val SORT_BY_RANDOM = 16384
 const val SORT_USE_NUMERIC_VALUE = 32768
-const val SORT_BY_FULL_NAME = 65536
 const val SORT_BY_CUSTOM = 131072
 
 // security
