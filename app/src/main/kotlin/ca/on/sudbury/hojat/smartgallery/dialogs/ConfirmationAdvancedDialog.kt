@@ -1,16 +1,17 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogMessageBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import kotlinx.android.synthetic.main.dialog_message.view.*
+import timber.log.Timber
 
-// similar fo ConfirmationDialog, but has a callback for negative button too
-@SuppressLint("InflateParams")
+/**
+ * similar fo ConfirmationDialog, but has a callback for negative button too.
+ * Couldn't find the place it's called.
+ */
 class ConfirmationAdvancedDialog(
     activity: Activity,
     message: String = "",
@@ -23,8 +24,9 @@ class ConfirmationAdvancedDialog(
     private var dialog: AlertDialog? = null
 
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_message, null)
-        view.message.text = message.ifEmpty { activity.resources.getString(messageId) }
+        Timber.d("Hojat Ghasemi : ConfirmationAdvancedDialog was called")
+        val binding = DialogMessageBinding.inflate(activity.layoutInflater)
+        binding.message.text = message.ifEmpty { activity.resources.getString(messageId) }
 
         val builder = activity.getAlertDialogBuilder()
             .setPositiveButton(positive) { _, _ -> positivePressed() }
@@ -39,7 +41,7 @@ class ConfirmationAdvancedDialog(
 
         builder.apply {
             activity.setupDialogStuff(
-                view,
+                binding.root,
                 this,
                 cancelOnTouchOutside = cancelOnTouchOutside
             ) { alertDialog ->
