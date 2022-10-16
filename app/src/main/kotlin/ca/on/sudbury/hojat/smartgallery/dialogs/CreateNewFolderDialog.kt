@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogCreateNewFolderBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
@@ -23,28 +24,35 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import kotlinx.android.synthetic.main.dialog_create_new_folder.view.*
+import timber.log.Timber
 import java.io.File
 
-@SuppressLint("SetTextI18n", "InflateParams")
+/**
+ * In the main page, click on 3 dots and choose "Create new folder".
+ */
+@SuppressLint("SetTextI18n")
 class CreateNewFolderDialog(
     val activity: BaseSimpleActivity,
     val path: String,
     val callback: (path: String) -> Unit
 ) {
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_create_new_folder, null)
-        view.folder_path.text = "${activity.humanizePath(path).trimEnd('/')}/"
-
+        Timber.d("Hojat Ghasemi : CreateNewFolderDialog was called")
+        val binding = DialogCreateNewFolderBinding.inflate(activity.layoutInflater)
+        binding.folderPath.text = "${activity.humanizePath(path).trimEnd('/')}/"
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(view, this, R.string.create_new_folder) { alertDialog ->
-                    alertDialog.showKeyboard(view.folder_name)
+                activity.setupDialogStuff(
+                    binding.root,
+                    this,
+                    R.string.create_new_folder
+                ) { alertDialog ->
+                    alertDialog.showKeyboard(binding.folderName)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
                         .setOnClickListener(View.OnClickListener {
-                            val name = view.folder_name.value
+                            val name = binding.folderName.value
                             when {
                                 name.isEmpty() -> activity.toast(R.string.empty_name)
                                 name.isAValidFilename() -> {
