@@ -1,8 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.biometric.auth.AuthPromptHost
 import androidx.fragment.app.FragmentActivity
@@ -22,42 +20,47 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogSecurityBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.isBiometricIdAvailable
 import ca.on.sudbury.hojat.smartgallery.extensions.onPageChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.views.MyDialogViewPager
-import kotlinx.android.synthetic.main.dialog_security.view.*
 
+/**
+ * In the settings page, there's section named "Security" with 3 check boxes.
+ * Any of the dialogs that you'll see after clicking on those checkboxes,
+ * are created by this class.
+ *
+ */
 class SecurityDialog(
     private val activity: Activity,
     private val requiredHash: String,
     private val showTabIndex: Int,
     private val callback: (hash: String, type: Int, success: Boolean) -> Unit
 ) : HashListener {
-    private var dialog: AlertDialog? = null
 
-    @SuppressLint("InflateParams")
-    private val view = LayoutInflater.from(activity).inflate(R.layout.dialog_security, null)
+    private var dialog: AlertDialog? = null
     private var tabsAdapter: PasswordTypesAdapter
     private var viewPager: MyDialogViewPager
 
     init {
-        view.apply {
-            viewPager = findViewById(R.id.dialog_tab_view_pager)
+        val binding = DialogSecurityBinding.inflate(activity.layoutInflater)
+        binding.apply {
+            viewPager = binding.dialogTabViewPager
             viewPager.offscreenPageLimit = 2
             tabsAdapter = PasswordTypesAdapter(
-                context = context,
+                context = root.context,
                 requiredHash = requiredHash,
                 hashListener = this@SecurityDialog,
-                scrollView = dialog_scrollview,
+                scrollView = dialogScrollview,
                 biometricPromptHost = AuthPromptHost(activity as FragmentActivity),
                 showBiometricIdTab = shouldShowBiometricIdTab(),
                 showBiometricAuthentication = showTabIndex == PROTECTION_FINGERPRINT && isRPlus()
             )
             viewPager.adapter = tabsAdapter
             viewPager.onPageChangeListener {
-                dialog_tab_layout.getTabAt(it)?.select()
+                dialogTabLayout.getTabAt(it)?.select()
             }
 
             viewPager.onGlobalLayout {
@@ -65,48 +68,47 @@ class SecurityDialog(
             }
 
             if (showTabIndex == SHOW_ALL_TABS) {
-                val textColor = context.getProperTextColor()
+                val textColor = root.context.getProperTextColor()
 
                 if (shouldShowBiometricIdTab()) {
                     val tabTitle = if (isRPlus()) R.string.biometrics else R.string.fingerprint
-                    dialog_tab_layout.addTab(
-                        dialog_tab_layout.newTab().setText(tabTitle),
+                    dialogTabLayout.addTab(
+                        dialogTabLayout.newTab().setText(tabTitle),
                         PROTECTION_FINGERPRINT
                     )
                 }
 
                 if (activity.baseConfig.isUsingSystemTheme) {
-                    dialog_tab_layout.setBackgroundColor(activity.resources.getColor(R.color.you_dialog_background_color))
+                    dialogTabLayout.setBackgroundColor(activity.resources.getColor(R.color.you_dialog_background_color))
                 } else {
-                    dialog_tab_layout.setBackgroundColor(context.getProperBackgroundColor())
+                    dialogTabLayout.setBackgroundColor(root.context.getProperBackgroundColor())
                 }
 
-                dialog_tab_layout.setTabTextColors(textColor, textColor)
-                dialog_tab_layout.setSelectedTabIndicatorColor(context.getProperPrimaryColor())
-                dialog_tab_layout.onTabSelectionChanged(tabSelectedAction = {
+                dialogTabLayout.setTabTextColors(textColor, textColor)
+                dialogTabLayout.setSelectedTabIndicatorColor(root.context.getProperPrimaryColor())
+                dialogTabLayout.onTabSelectionChanged(tabSelectedAction = {
                     viewPager.currentItem = when {
                         it.text.toString().equals(
-                            resources.getString(R.string.pattern),
+                            root.resources.getString(R.string.pattern),
                             true
                         ) -> PROTECTION_PATTERN
                         it.text.toString()
-                            .equals(resources.getString(R.string.pin), true) -> PROTECTION_PIN
+                            .equals(root.resources.getString(R.string.pin), true) -> PROTECTION_PIN
                         else -> PROTECTION_FINGERPRINT
                     }
                     updateTabVisibility()
                 })
             } else {
-                dialog_tab_layout.beGone()
+                dialogTabLayout.beGone()
                 viewPager.currentItem = showTabIndex
                 viewPager.allowSwiping = false
             }
         }
-
         activity.getAlertDialogBuilder()
             .setOnCancelListener { onCancelFail() }
             .setNegativeButton(R.string.cancel) { _, _ -> onCancelFail() }
             .apply {
-                activity.setupDialogStuff(view, this) { alertDialog ->
+                activity.setupDialogStuff(binding.root, this) { alertDialog ->
                     dialog = alertDialog
                 }
             }
