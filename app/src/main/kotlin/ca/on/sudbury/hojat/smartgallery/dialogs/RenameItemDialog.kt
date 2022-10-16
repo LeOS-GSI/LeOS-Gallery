@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
@@ -14,46 +13,50 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
-import kotlinx.android.synthetic.main.dialog_rename_item.view.*
+import timber.log.Timber
 
-@SuppressLint("InflateParams")
+/**
+ * The dialog for renaming pictures, videos, and folders is created via this class.
+ */
 class RenameItemDialog(
     val activity: BaseSimpleActivity,
     val path: String,
     val callback: (newPath: String) -> Unit
 ) {
     init {
+        Timber.d("Hojat Ghasemi : RenameItemDialog was called")
+
         var ignoreClicks = false
         val fullName = path.getFilenameFromPath()
         val dotAt = fullName.lastIndexOf(".")
         var name = fullName
-
-        val view = activity.layoutInflater.inflate(R.layout.dialog_rename_item, null).apply {
+        val binding = DialogRenameItemBinding.inflate(activity.layoutInflater).apply {
             if (dotAt > 0 && !activity.getIsPathDirectory(path)) {
                 name = fullName.substring(0, dotAt)
                 val extension = fullName.substring(dotAt + 1)
-                rename_item_extension.setText(extension)
+                renameItemExtension.setText(extension)
             } else {
-                rename_item_extension_hint.beGone()
+                renameItemExtensionHint.beGone()
             }
 
-            rename_item_name.setText(name)
+            renameItemName.setText(name)
         }
 
         AlertDialog.Builder(activity)
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .create().apply {
-                activity.setupDialogStuff(view, this, R.string.rename) {
-                    showKeyboard(view.rename_item_name)
+                activity.setupDialogStuff(binding.root, this, R.string.rename) {
+                    showKeyboard(binding.renameItemName)
                     getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         if (ignoreClicks) {
                             return@setOnClickListener
                         }
 
-                        var newName = view.rename_item_name.value
-                        val newExtension = view.rename_item_extension.value
+                        var newName = binding.renameItemName.value
+                        val newExtension = binding.renameItemExtension.value
 
                         if (newName.isEmpty()) {
                             activity.toast(R.string.empty_name)
