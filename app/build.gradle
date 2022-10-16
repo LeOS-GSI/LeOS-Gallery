@@ -80,7 +80,10 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.8'
     api 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
-    api 'com.google.android.material:material:1.4.0'
+
+    // google material library
+    implementation 'com.google.android.material:material:1.6.1'
+
     // Timber logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
     // All the kotlin extensions for Fragment
