@@ -23,7 +23,9 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_NONE
 import kotlinx.android.synthetic.main.dialog_change_folder_thumbnail_style.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 
-@SuppressLint("InflateParams")
+/**
+ * where it's called?
+ */
 class ChangeFolderThumbnailStyleDialog(
     val activity: BaseSimpleActivity,
     val callback: () -> Unit

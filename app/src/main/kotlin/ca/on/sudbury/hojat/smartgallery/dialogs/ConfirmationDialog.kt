@@ -1,15 +1,16 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogMessageBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import kotlinx.android.synthetic.main.dialog_message.view.*
+import timber.log.Timber
 
 /**
  * A simple dialog without any view, just a messageId, a positive button and optionally a negative button
+ * I couldn't find the place this dialog is used in app.
  *
  * @param activity has to be activity context to avoid some Theme.AppCompat issues
  * @param message the dialogs message, can be any String. If empty, messageId is used
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.dialog_message.view.*
  * @param negative negative buttons text ID (optional)
  * @param callback an anonymous function
  */
-@SuppressLint("InflateParams")
+
 class ConfirmationDialog(
     activity: Activity,
     message: String = "",
@@ -31,8 +32,9 @@ class ConfirmationDialog(
     private var dialog: AlertDialog? = null
 
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_message, null)
-        view.message.text =
+        Timber.d("Hojat Ghasemi : ConfirmationDialog was called")
+        val binding = DialogMessageBinding.inflate(activity.layoutInflater)
+        binding.message.text =
             message.ifEmpty { activity.resources.getString(messageId) }
 
         val builder = activity.getAlertDialogBuilder()
@@ -44,7 +46,7 @@ class ConfirmationDialog(
 
         builder.apply {
             activity.setupDialogStuff(
-                view,
+                binding.root,
                 this,
                 cancelOnTouchOutside = cancelOnTouchOutside
             ) { alertDialog ->
