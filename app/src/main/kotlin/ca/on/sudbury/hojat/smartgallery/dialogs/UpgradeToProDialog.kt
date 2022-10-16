@@ -1,21 +1,22 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogUpgradeToProBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.launchUpgradeToProIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import kotlinx.android.synthetic.main.dialog_upgrade_to_pro.view.*
 
-@SuppressLint("InflateParams")
+/**
+ * The dialog for asking user to update the app to pro version (I don't know when it's called)
+ */
 class UpgradeToProDialog(val activity: Activity) {
 
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_upgrade_to_pro, null).apply {
-            upgrade_to_pro.text = activity.getString(R.string.upgrade_to_pro_long)
+        val binding = DialogUpgradeToProBinding.inflate(activity.layoutInflater).apply {
+            upgradeToPro.text = activity.getString(R.string.upgrade_to_pro_long)
         }
 
         activity.getAlertDialogBuilder()
@@ -27,7 +28,7 @@ class UpgradeToProDialog(val activity: Activity) {
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(
-                    view,
+                    binding.root,
                     this,
                     R.string.upgrade_to_pro,
                     cancelOnTouchOutside = false
