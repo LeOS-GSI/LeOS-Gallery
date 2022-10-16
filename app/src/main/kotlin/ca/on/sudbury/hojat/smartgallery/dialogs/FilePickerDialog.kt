@@ -47,17 +47,18 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.FilepickerFavoritesAdapter
 import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogFilepickerBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
-import kotlinx.android.synthetic.main.dialog_filepicker.view.*
+import timber.log.Timber
 import java.io.File
-import java.util.*
+import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 /**
- * The only filepicker constructor with a couple optional parameters
+ * This is the only filepicker constructor with a couple of optional parameters
  *
  * @param activity has to be activity to avoid some Theme.AppCompat issues
  * @param currPath initial path of the dialog, defaults to the external storage
@@ -66,6 +67,7 @@ import kotlin.collections.HashMap
  * @param showFAB toggle the displaying of a Floating Action Button for creating new folders
  * @param callback the callback used for returning the selected file/folder
  */
+
 @SuppressLint("SetTextI18n")
 class FilePickerDialog(
     val activity: BaseSimpleActivity,
@@ -83,39 +85,34 @@ class FilePickerDialog(
     private var mFirstUpdate = true
     private var mPrevPath = ""
     private var mScrollStates = HashMap<String, Parcelable>()
-
     private var mDialog: AlertDialog? = null
-    @SuppressLint("InflateParams")
-    private var mDialogView = activity.layoutInflater.inflate(R.layout.dialog_filepicker, null)
+
+    private var binding = DialogFilepickerBinding.inflate(activity.layoutInflater)
 
     init {
+        Timber.d("Hojat Ghasemi : FilePickerDialog was called")
         if (!activity.getDoesFilePathExist(currPath)) {
             currPath = activity.internalStoragePath
         }
-
         if (!activity.getIsPathDirectory(currPath)) {
             currPath = currPath.getParentPath()
         }
-
         // do not allow copying files in the recycle bin manually
         if (currPath.startsWith(activity.filesDir.absolutePath)) {
             currPath = activity.internalStoragePath
         }
-
-        mDialogView.filepicker_breadcrumbs.apply {
+        binding.filepickerBreadcrumbs.apply {
             listener = this@FilePickerDialog
             updateFontSize(activity.getTextSize(), false)
             isShownInDialog = true
         }
-
         tryUpdateItems()
         setupFavorites()
-
         val builder = activity.getAlertDialogBuilder()
             .setNegativeButton(R.string.cancel, null)
             .setOnKeyListener { _, i, keyEvent ->
                 if (keyEvent.action == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK) {
-                    val breadcrumbs = mDialogView.filepicker_breadcrumbs
+                    val breadcrumbs = binding.filepickerBreadcrumbs
                     if (breadcrumbs.getItemCount() > 1) {
                         breadcrumbs.removeBreadcrumb()
                         currPath = breadcrumbs.getLastItem().path.trimEnd('/')
@@ -126,28 +123,24 @@ class FilePickerDialog(
                 }
                 true
             }
-
         if (!pickFile) {
             builder.setPositiveButton(R.string.ok, null)
         }
-
         if (showFAB) {
-            mDialogView.filepicker_fab.apply {
+            binding.filepickerFab.apply {
                 beVisible()
                 setOnClickListener { createNewFolder() }
             }
         }
-
         val secondaryFabBottomMargin =
             activity.resources.getDimension(if (showFAB) R.dimen.secondary_fab_bottom_margin else R.dimen.activity_margin)
                 .toInt()
-        mDialogView.filepicker_fabs_holder.apply {
+        binding.filepickerFabsHolder.apply {
             (layoutParams as CoordinatorLayout.LayoutParams).bottomMargin = secondaryFabBottomMargin
         }
-
-        mDialogView.filepicker_placeholder.setTextColor(activity.getProperTextColor())
-        mDialogView.filepicker_fastscroller.updateColors(activity.getProperPrimaryColor())
-        mDialogView.filepicker_fab_show_hidden.apply {
+        binding.filepickerPlaceholder.setTextColor(activity.getProperTextColor())
+        binding.filepickerFastscroller.updateColors(activity.getProperPrimaryColor())
+        binding.filepickerFabShowHidden.apply {
             beVisibleIf(!showHidden && canAddShowHiddenButton)
             setOnClickListener {
                 activity.handleHiddenFolderPasswordProtection {
@@ -157,25 +150,22 @@ class FilePickerDialog(
                 }
             }
         }
-
-        mDialogView.filepicker_favorites_label.text = "${activity.getString(R.string.favorites)}:"
-        mDialogView.filepicker_fab_show_favorites.apply {
+        binding.filepickerFavoritesLabel.text = "${activity.getString(R.string.favorites)}:"
+        binding.filepickerFabShowFavorites.apply {
             beVisibleIf(showFavoritesButton && context.baseConfig.favorites.isNotEmpty())
             setOnClickListener {
-                if (mDialogView.filepicker_favorites_holder.isVisible()) {
+                if (binding.filepickerFavoritesHolder.isVisible()) {
                     hideFavorites()
                 } else {
                     showFavorites()
                 }
             }
         }
-
         builder.apply {
-            activity.setupDialogStuff(mDialogView, this, getTitle()) { alertDialog ->
+            activity.setupDialogStuff(binding.root, this, getTitle()) { alertDialog ->
                 mDialog = alertDialog
             }
         }
-
         if (!pickFile) {
             mDialog?.getButton(AlertDialog.BUTTON_POSITIVE)?.setOnClickListener {
                 verifyPath()
@@ -196,7 +186,7 @@ class FilePickerDialog(
         ensureBackgroundThread {
             getItems(currPath) {
                 activity.runOnUiThread {
-                    mDialogView.filepicker_placeholder.beGone()
+                    binding.filepickerPlaceholder.beGone()
                     updateItems(it as ArrayList<FileDirItem>)
                 }
             }
@@ -211,7 +201,7 @@ class FilePickerDialog(
 
         val sortedItems =
             items.sortedWith(compareBy({ !it.isDirectory }, { it.name.lowercase(Locale.ROOT) }))
-        val adapter = FilePickerItemsAdapter(activity, sortedItems, mDialogView.filepicker_list) {
+        val adapter = FilePickerItemsAdapter(activity, sortedItems, binding.filepickerList) {
             if ((it as FileDirItem).isDirectory) {
                 activity.handleLockedFolderOpening(it.path) { success ->
                     if (success) {
@@ -225,15 +215,15 @@ class FilePickerDialog(
             }
         }
 
-        val layoutManager = mDialogView.filepicker_list.layoutManager as LinearLayoutManager
+        val layoutManager = binding.filepickerList.layoutManager as LinearLayoutManager
         mScrollStates[mPrevPath.trimEnd('/')] = layoutManager.onSaveInstanceState()!!
 
-        mDialogView.apply {
-            filepicker_list.adapter = adapter
-            filepicker_breadcrumbs.setBreadcrumb(currPath)
+        binding.apply {
+            filepickerList.adapter = adapter
+            filepickerBreadcrumbs.setBreadcrumb(currPath)
 
-            if (context.areSystemAnimationsEnabled) {
-                filepicker_list.scheduleLayoutAnimation()
+            if (root.context.areSystemAnimationsEnabled) {
+                filepickerList.scheduleLayoutAnimation()
             }
 
             layoutManager.onRestoreInstanceState(mScrollStates[currPath.trimEnd('/')])
@@ -363,36 +353,36 @@ class FilePickerDialog(
         FilepickerFavoritesAdapter(
             activity,
             activity.baseConfig.favorites.toMutableList(),
-            mDialogView.filepicker_favorites_list
+            binding.filepickerFavoritesList
         ) {
             currPath = it as String
             verifyPath()
         }.apply {
-            mDialogView.filepicker_favorites_list.adapter = this
+            binding.filepickerFavoritesList.adapter = this
         }
     }
 
     private fun showFavorites() {
-        mDialogView.apply {
-            filepicker_favorites_holder.beVisible()
-            filepicker_files_holder.beGone()
+        binding.apply {
+            filepickerFavoritesHolder.beVisible()
+            filepickerFilesHolder.beGone()
             val drawable = activity.resources.getColoredDrawableWithColor(
                 R.drawable.ic_folder_vector,
                 activity.getProperPrimaryColor().getContrastColor()
             )
-            filepicker_fab_show_favorites.setImageDrawable(drawable)
+            filepickerFabShowFavorites.setImageDrawable(drawable)
         }
     }
 
     private fun hideFavorites() {
-        mDialogView.apply {
-            filepicker_favorites_holder.beGone()
-            filepicker_files_holder.beVisible()
+        binding.apply {
+            filepickerFavoritesHolder.beGone()
+            filepickerFilesHolder.beVisible()
             val drawable = activity.resources.getColoredDrawableWithColor(
                 R.drawable.ic_star_vector,
                 activity.getProperPrimaryColor().getContrastColor()
             )
-            filepicker_fab_show_favorites.setImageDrawable(drawable)
+            filepickerFabShowFavorites.setImageDrawable(drawable)
         }
     }
 
@@ -403,7 +393,7 @@ class FilePickerDialog(
                 tryUpdateItems()
             }
         } else {
-            val item = mDialogView.filepicker_breadcrumbs.getItem(id)
+            val item = binding.filepickerBreadcrumbs.getItem(id)
             if (currPath != item.path.trimEnd('/')) {
                 currPath = item.path
                 tryUpdateItems()
