@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
@@ -15,9 +14,13 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.dialog_export_settings.view.*
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogExportSettingsBinding
+import timber.log.Timber
 
-@SuppressLint("InflateParams")
+/**
+ * In settings page go to "Migrating" section and click on "Export settings".
+ * The resulting dialog is created by this class.
+ */
 class ExportSettingsDialog(
     val activity: BaseSimpleActivity,
     private val defaultFilename: String,
@@ -25,6 +28,7 @@ class ExportSettingsDialog(
     callback: (path: String, filename: String) -> Unit
 ) {
     init {
+        Timber.d("Hojat Ghasemi : ExportSettingsDialog was called")
         val lastUsedFolder = activity.baseConfig.lastExportedSettingsFolder
         var folder =
             if (lastUsedFolder.isNotEmpty() && activity.getDoesFilePathExist(lastUsedFolder)) {
@@ -33,17 +37,17 @@ class ExportSettingsDialog(
                 activity.internalStoragePath
             }
 
-        val view = activity.layoutInflater.inflate(R.layout.dialog_export_settings, null).apply {
-            export_settings_filename.setText(defaultFilename.removeSuffix(".txt"))
+        val binding = DialogExportSettingsBinding.inflate(activity.layoutInflater).apply {
+            exportSettingsFilename.setText(defaultFilename.removeSuffix(".txt"))
 
             if (hidePath) {
-                export_settings_path_label.beGone()
-                export_settings_path.beGone()
+                exportSettingsPathLabel.beGone()
+                exportSettingsPath.beGone()
             } else {
-                export_settings_path.text = activity.humanizePath(folder)
-                export_settings_path.setOnClickListener {
+                exportSettingsPath.text = activity.humanizePath(folder)
+                exportSettingsPath.setOnClickListener {
                     FilePickerDialog(activity, folder, false, showFAB = true) {
-                        export_settings_path.text = activity.humanizePath(it)
+                        exportSettingsPath.text = activity.humanizePath(it)
                         folder = it
                     }
                 }
@@ -54,9 +58,13 @@ class ExportSettingsDialog(
             .setPositiveButton(R.string.ok, null)
             .setNegativeButton(R.string.cancel, null)
             .apply {
-                activity.setupDialogStuff(view, this, R.string.export_settings) { alertDialog ->
+                activity.setupDialogStuff(
+                    binding.root,
+                    this,
+                    R.string.export_settings
+                ) { alertDialog ->
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        var filename = view.export_settings_filename.value
+                        var filename = binding.exportSettingsFilename.value
                         if (filename.isEmpty()) {
                             activity.toast(R.string.filename_cannot_be_empty)
                             return@setOnClickListener

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/export_settings_wrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -28,7 +29,8 @@
             android:layout_marginBottom="@dimen/small_margin"
             android:paddingStart="@dimen/small_margin"
             android:paddingTop="@dimen/small_margin"
-            android:paddingBottom="@dimen/activity_margin" />
+            android:paddingBottom="@dimen/activity_margin"
+            tools:ignore="RtlSymmetry" />
 
         <ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
             android:id="@+id/export_settings_hint"
