@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
@@ -9,12 +8,16 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogRadioGroupBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
-import kotlinx.android.synthetic.main.dialog_radio_group.view.*
+import timber.log.Timber
 
+/**
+ * I couldn't find the place this class is being used.
+ */
 @SuppressLint("InflateParams")
 class RadioGroupDialog(
     val activity: Activity,
@@ -30,8 +33,9 @@ class RadioGroupDialog(
     private var selectedItemId = -1
 
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_radio_group, null)
-        view.dialog_radio_group.apply {
+        Timber.d("Hojat Ghasemi : RadioGroupDialog was called")
+        val binding = DialogRadioGroupBinding.inflate(activity.layoutInflater)
+        binding.dialogRadioGroup.apply {
             for (i in 0 until items.size) {
                 val radioButton = (activity.layoutInflater.inflate(
                     R.layout.radio_button,
@@ -65,16 +69,16 @@ class RadioGroupDialog(
         }
 
         builder.apply {
-            activity.setupDialogStuff(view, this, titleId) { alertDialog ->
+            activity.setupDialogStuff(binding.root, this, titleId) { alertDialog ->
                 dialog = alertDialog
             }
         }
 
         if (selectedItemId != -1) {
-            view.dialog_radio_holder.apply {
+            binding.dialogRadioHolder.apply {
                 onGlobalLayout {
                     scrollY =
-                        view.dialog_radio_group.findViewById<View>(selectedItemId).bottom - height
+                        binding.dialogRadioGroup.findViewById<View>(selectedItemId).bottom - height
                 }
             }
         }
