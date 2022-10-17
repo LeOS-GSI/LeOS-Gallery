@@ -16,7 +16,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import kotlinx.android.synthetic.main.dialog_radio_group.view.*
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogRadioGroupBinding
+import timber.log.Timber
 
 /**
  * A dialog for choosing between internal, root, SD card (optional) storage
@@ -34,10 +35,10 @@ class StoragePickerDialog(
     pickSingleOption: Boolean,
     val callback: (pickedPath: String) -> Unit
 ) {
-    private val ID_INTERNAL = 1
-    private val ID_SD = 2
-    private val ID_OTG = 3
-    private val ID_ROOT = 4
+    private val idInternal = 1
+    private val idSd = 2
+    private val idOtg = 3
+    private val idRoot = 4
 
     private lateinit var radioGroup: RadioGroup
     private var dialog: AlertDialog? = null
@@ -45,6 +46,7 @@ class StoragePickerDialog(
     private val availableStorages = ArrayList<String>()
 
     init {
+        Timber.d("Hojat Ghasemi : StoragePickerDialog was called")
         availableStorages.add(activity.internalStoragePath)
         when {
             activity.hasExternalSDCard() -> availableStorages.add(activity.sdCardPath)
@@ -67,13 +69,13 @@ class StoragePickerDialog(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        val view = inflater.inflate(R.layout.dialog_radio_group, null)
-        radioGroup = view.dialog_radio_group
+        val binding = DialogRadioGroupBinding.inflate(inflater)
+        radioGroup = binding.dialogRadioGroup
         val basePath = currPath.getBasePath(activity)
 
         val internalButton = inflater.inflate(R.layout.radio_button, null) as RadioButton
         internalButton.apply {
-            id = ID_INTERNAL
+            id = idInternal
             text = resources.getString(R.string.internal)
             isChecked = basePath == context.internalStoragePath
             setOnClickListener { internalPicked() }
@@ -86,7 +88,7 @@ class StoragePickerDialog(
         if (activity.hasExternalSDCard()) {
             val sdButton = inflater.inflate(R.layout.radio_button, null) as RadioButton
             sdButton.apply {
-                id = ID_SD
+                id = idSd
                 text = resources.getString(R.string.sd_card)
                 isChecked = basePath == context.sdCardPath
                 setOnClickListener { sdPicked() }
@@ -100,7 +102,7 @@ class StoragePickerDialog(
         if (activity.hasOTGConnected()) {
             val otgButton = inflater.inflate(R.layout.radio_button, null) as RadioButton
             otgButton.apply {
-                id = ID_OTG
+                id = idOtg
                 text = resources.getString(R.string.usb)
                 isChecked = basePath == context.otgPath
                 setOnClickListener { otgPicked() }
@@ -115,7 +117,7 @@ class StoragePickerDialog(
         if (showRoot) {
             val rootButton = inflater.inflate(R.layout.radio_button, null) as RadioButton
             rootButton.apply {
-                id = ID_ROOT
+                id = idRoot
                 text = resources.getString(R.string.root)
                 isChecked = basePath == "/"
                 setOnClickListener { rootPicked() }
@@ -127,7 +129,7 @@ class StoragePickerDialog(
         }
 
         activity.getAlertDialogBuilder().apply {
-            activity.setupDialogStuff(view, this, R.string.select_storage) { alertDialog ->
+            activity.setupDialogStuff(binding.root, this, R.string.select_storage) { alertDialog ->
                 dialog = alertDialog
             }
         }
