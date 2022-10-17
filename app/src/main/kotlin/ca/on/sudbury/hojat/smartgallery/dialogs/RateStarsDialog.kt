@@ -1,7 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
-import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
@@ -12,24 +10,28 @@ import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.R
-import kotlinx.android.synthetic.main.dialog_rate_stars.view.*
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogRateStarsBinding
+import timber.log.Timber
 
-@SuppressLint("InflateParams")
+/**
+ * In settings page, in the "Help us" section click on "Rate us".
+ */
 class RateStarsDialog(val activity: Activity) {
     private var dialog: AlertDialog? = null
 
     init {
-        val view = activity.layoutInflater.inflate(R.layout.dialog_rate_stars, null).apply {
+        Timber.d("Hojat Ghasemi : RateStarsDialog was called")
+        val binding = DialogRateStarsBinding.inflate(activity.layoutInflater).apply {
             val primaryColor = activity.getProperPrimaryColor()
-            arrayOf(rate_star_1, rate_star_2, rate_star_3, rate_star_4, rate_star_5).forEach {
+            arrayOf(rateStar1, rateStar2, rateStar3, rateStar4, rateStar5).forEach {
                 it.applyColorFilter(primaryColor)
             }
 
-            rate_star_1.setOnClickListener { dialogCancelled(true) }
-            rate_star_2.setOnClickListener { dialogCancelled(true) }
-            rate_star_3.setOnClickListener { dialogCancelled(true) }
-            rate_star_4.setOnClickListener { dialogCancelled(true) }
-            rate_star_5.setOnClickListener {
+            rateStar1.setOnClickListener { dialogCancelled(true) }
+            rateStar2.setOnClickListener { dialogCancelled(true) }
+            rateStar3.setOnClickListener { dialogCancelled(true) }
+            rateStar4.setOnClickListener { dialogCancelled(true) }
+            rateStar5.setOnClickListener {
                 activity.redirectToRateUs()
                 dialogCancelled(true)
             }
@@ -39,7 +41,11 @@ class RateStarsDialog(val activity: Activity) {
             .setNegativeButton(R.string.later) { _, _ -> dialogCancelled(false) }
             .setOnCancelListener { dialogCancelled(false) }
             .apply {
-                activity.setupDialogStuff(view, this, cancelOnTouchOutside = false) { alertDialog ->
+                activity.setupDialogStuff(
+                    binding.root,
+                    this,
+                    cancelOnTouchOutside = false
+                ) { alertDialog ->
                     dialog = alertDialog
                 }
             }

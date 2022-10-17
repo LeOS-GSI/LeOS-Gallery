@@ -1424,4 +1424,9 @@
     <string name="no_browser_found">No suitable browser could be found in this case</string>
     <string name="app_corrupt">The app is corrupted I guess</string>
     <string name="disclaimer">disclaimer notice goes here</string>
+    <string name="one_star_rating_str">One star rating</string>
+    <string name="two_star_rating_str">Two star rating</string>
+    <string name="three_star_rating_str">Three star rating</string>
+    <string name="four_star_rating_str">Four star rating</string>
+    <string name="five_star_rating_str">Five star rating</string>
 </resources>
