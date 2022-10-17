@@ -705,10 +705,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         val oldPosition = binding.viewPager.currentItem
         val animator = ValueAnimator.ofInt(0, binding.viewPager.width)
         animator.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
+            override fun onAnimationRepeat(animation: Animator) {
             }
 
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 if (binding.viewPager.isFakeDragging) {
                     try {
                         binding.viewPager.endFakeDrag()
@@ -722,11 +722,11 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 }
             }
 
-            override fun onAnimationCancel(animation: Animator?) {
+            override fun onAnimationCancel(animation: Animator) {
                 binding.viewPager.endFakeDrag()
             }
 
-            override fun onAnimationStart(animation: Animator?) {
+            override fun onAnimationStart(animation: Animator) {
             }
         })
 

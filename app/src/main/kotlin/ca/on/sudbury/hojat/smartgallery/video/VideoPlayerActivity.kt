@@ -256,11 +256,8 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
 
         val gestureDetector =
             GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent?): Boolean {
-                    if (e != null) {
-                        handleDoubleTap(e.rawX)
-                    }
-
+                override fun onDoubleTap(e: MotionEvent): Boolean {
+                    handleDoubleTap(e.rawX)
                     return true
                 }
             })

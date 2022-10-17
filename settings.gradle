@@ -2,3 +2,4 @@ include ':app'
 rootProject.name='Smart Gallery'
 //include ':commons'
 //project(':commons').projectDir = new File('../Simple-Commons/commons')
+include ':fingerprint'

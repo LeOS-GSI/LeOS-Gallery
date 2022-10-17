@@ -64,15 +64,13 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
 
     private val gestureDetector =
         GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-                if (e != null) {
-                    singleTap(e.rawX, e.rawY)
-                }
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                singleTap(e.rawX, e.rawY)
                 return true
             }
 
-            override fun onDoubleTap(e: MotionEvent?): Boolean {
-                if (e != null && doubleTap != null) {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                if (doubleTap != null) {
                     doubleTap!!.invoke(e.rawX, e.rawY)
                 }
                 return true

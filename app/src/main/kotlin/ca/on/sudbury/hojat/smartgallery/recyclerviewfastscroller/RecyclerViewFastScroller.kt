@@ -643,13 +643,13 @@ class RecyclerViewFastScroller @JvmOverloads constructor(
      * */
     private inline fun ViewPropertyAnimator.onAnimationCancelled(crossinline body: () -> Unit) {
         this.setListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+            override fun onAnimationRepeat(p0: Animator) {}
 
-            override fun onAnimationEnd(p0: Animator?) {}
+            override fun onAnimationEnd(p0: Animator) {}
 
-            override fun onAnimationStart(p0: Animator?) {}
+            override fun onAnimationStart(p0: Animator) {}
 
-            override fun onAnimationCancel(p0: Animator?) {
+            override fun onAnimationCancel(p0: Animator) {
                 body()
             }
         })

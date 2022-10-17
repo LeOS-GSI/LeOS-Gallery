@@ -281,15 +281,14 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
     private fun setGestureDetector(context: Context) {
         detector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onFling(
-                e1: MotionEvent?,
-                e2: MotionEvent?,
+                e1: MotionEvent,
+                e2: MotionEvent,
                 velocityX: Float,
                 velocityY: Float
             ): Boolean {
-                if (isReady && vTranslate != null && !isZooming && e1 != null && e2 != null && (abs(
+                if (isReady && vTranslate != null && !isZooming && (abs(
                         e1.x - e2.x
-                    ) > 50 || abs(e1.y - e2.y) > 50) &&
-                    (abs(velocityX) > 500 || abs(velocityY) > 500)
+                    ) > 50 || abs(e1.y - e2.y) > 50) && (abs(velocityX) > 500 || abs(velocityY) > 500)
                 ) {
                     val vX = (velocityX * cos - velocityY * -sin).toFloat()
                     val vY = (velocityX * -sin + velocityY * cos).toFloat()
@@ -770,7 +769,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
             refreshRequiredTiles(finished)
             if (finished) {
                 anim = null
-                val degrees = Math.toDegrees(imageRotation.toDouble()).roundToInt().toInt()
+                val degrees = Math.toDegrees(imageRotation.toDouble()).roundToInt()
                 if (degrees != prevDegrees) {
                     var diff = degrees - prevDegrees
                     if (diff == 270) {
