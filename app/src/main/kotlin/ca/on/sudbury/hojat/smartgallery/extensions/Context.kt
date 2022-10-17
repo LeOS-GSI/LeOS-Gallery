@@ -55,6 +55,7 @@ import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
 import androidx.loader.content.CursorLoader
+import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.database.DateTakensDao
@@ -150,7 +151,6 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
-import ca.on.sudbury.hojat.smartgallery.reprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatSpinner

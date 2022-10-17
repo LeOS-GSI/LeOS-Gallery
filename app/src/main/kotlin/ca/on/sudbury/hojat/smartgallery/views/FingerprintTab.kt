@@ -7,6 +7,9 @@ import android.provider.Settings
 import android.util.AttributeSet
 import android.widget.RelativeLayout
 import androidx.biometric.auth.AuthPromptHost
+import ca.on.hojat.fingerprint.core.AuthenticationFailureReason
+import ca.on.hojat.fingerprint.core.AuthenticationListener
+import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
@@ -16,14 +19,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
-import ca.on.sudbury.hojat.smartgallery.reprint.core.AuthenticationFailureReason
-import ca.on.sudbury.hojat.smartgallery.reprint.core.AuthenticationListener
-import ca.on.sudbury.hojat.smartgallery.reprint.core.Reprint
 import kotlinx.android.synthetic.main.tab_fingerprint.view.*
 
 class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
     SecurityTab {
-    private val RECHECK_PERIOD = 3000L
+    private val recheckPeriod = 3000L
     private val registerHandler = Handler()
 
     lateinit var hashListener: HashListener
@@ -84,7 +84,7 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
 
         registerHandler.postDelayed({
             checkRegisteredFingerprints()
-        }, RECHECK_PERIOD)
+        }, recheckPeriod)
     }
 
     override fun onDetachedFromWindow() {
