@@ -1,25 +1,26 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogWhatsNewBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.models.Release
-import kotlinx.android.synthetic.main.dialog_whats_new.view.*
 
-@SuppressLint("InflateParams")
-class WhatsNewDialog(val activity: Activity, val releases: List<Release>) {
+class WhatsNewDialog(
+    val activity: Activity,
+    val releases: List<Release>
+) {
     init {
-        val view = LayoutInflater.from(activity).inflate(R.layout.dialog_whats_new, null)
-        view.whats_new_content.text = getNewReleases()
+        val binding = DialogWhatsNewBinding.inflate(LayoutInflater.from(activity))
+        binding.whatsNewContent.text = getNewReleases()
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
             .apply {
                 activity.setupDialogStuff(
-                    view,
+                    binding.root,
                     this,
                     R.string.whats_new,
                     cancelOnTouchOutside = false
@@ -30,10 +31,10 @@ class WhatsNewDialog(val activity: Activity, val releases: List<Release>) {
     private fun getNewReleases(): String {
         val sb = StringBuilder()
 
-        releases.forEach {
-            val parts = activity.getString(it.textId).split("\n").map(String::trim)
-            parts.forEach {
-                sb.append("- $it\n")
+        releases.forEach { release ->
+            val parts = activity.getString(release.textId).split("\n").map(String::trim)
+            parts.forEach { releasePart ->
+                sb.append("- $releasePart\n")
             }
         }
 

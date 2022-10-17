@@ -1429,4 +1429,5 @@
     <string name="three_star_rating_str">Three star rating</string>
     <string name="four_star_rating_str">Four star rating</string>
     <string name="five_star_rating_str">Five star rating</string>
+    <string name="divider">divider</string>
 </resources>
