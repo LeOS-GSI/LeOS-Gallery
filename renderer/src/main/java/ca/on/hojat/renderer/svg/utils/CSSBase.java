@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 /*
     This is just a link to CSSParser class. As CSSParser is package-protected and we don't want it

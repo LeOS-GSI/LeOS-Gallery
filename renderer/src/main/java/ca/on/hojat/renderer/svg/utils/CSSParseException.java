@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 /*
  * Thrown by the CSS parser if a problem is found while parsing a CSS file.

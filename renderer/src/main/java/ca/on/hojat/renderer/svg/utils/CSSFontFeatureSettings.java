@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 import android.annotation.SuppressLint;
 
@@ -16,7 +16,7 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
-import ca.on.hojat.renderer.svg.androidsvg.SVGExternalFileResolver;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
 import ca.on.hojat.renderer.BuildConfig;
 
 /*

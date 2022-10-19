@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg;
+package ca.on.hojat.renderer.svg;
 
 import timber.log.Timber;
 

@@ -1,10 +1,10 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 
 import java.util.HashMap;
 import java.util.Map;
 import androidx.annotation.NonNull;
-import ca.on.hojat.renderer.svg.androidsvg.SVGParseException;
+import ca.on.hojat.renderer.svg.SVGParseException;
 
 public class Style implements Cloneable {
     // Which properties have been explicitly specified by this element

@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg;
+package ca.on.hojat.renderer.svg;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;

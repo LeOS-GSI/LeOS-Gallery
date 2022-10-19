@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 import android.graphics.Canvas;
 import android.graphics.Picture;
@@ -25,12 +25,12 @@ import java.util.Map;
 import java.util.Set;
 
 
-import ca.on.hojat.renderer.svg.androidsvg.SVGExternalFileResolver;
-import ca.on.hojat.renderer.svg.androidsvg.utils.CSSParser.Ruleset;
-import ca.on.hojat.renderer.svg.androidsvg.SVGParseException;
-import ca.on.hojat.renderer.svg.androidsvg.RenderOptions;
-import ca.on.hojat.renderer.svg.androidsvg.PreserveAspectRatio;
-import ca.on.hojat.renderer.svg.androidsvg.utils.CSSParser.Rule;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
+import ca.on.hojat.renderer.svg.utils.CSSParser.Ruleset;
+import ca.on.hojat.renderer.svg.SVGParseException;
+import ca.on.hojat.renderer.svg.RenderOptions;
+import ca.on.hojat.renderer.svg.PreserveAspectRatio;
+import ca.on.hojat.renderer.svg.utils.CSSParser.Rule;
 
 /**
  * AndroidSVG is a library for reading, parsing and rendering SVG documents on Android devices.

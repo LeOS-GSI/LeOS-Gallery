@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 /**
  * Parse a SVG/CSS 'integer' or hex number from a String.

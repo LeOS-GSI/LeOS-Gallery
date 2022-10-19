@@ -1,6 +1,6 @@
-package ca.on.hojat.renderer.svg.androidsvg;
+package ca.on.hojat.renderer.svg;
 
-import ca.on.hojat.renderer.svg.androidsvg.utils.CSSBase;
+import ca.on.hojat.renderer.svg.utils.CSSBase;
 
 /**
  * This is a container for pre-parsed CSS that can be used to avoid parsing raw CSS string on each

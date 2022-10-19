@@ -1,11 +1,11 @@
-package ca.on.hojat.renderer.svg.androidsvg;
+package ca.on.hojat.renderer.svg;
 
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import ca.on.hojat.renderer.svg.androidsvg.utils.TextScanner;
+import ca.on.hojat.renderer.svg.utils.TextScanner;
 
 
 /**

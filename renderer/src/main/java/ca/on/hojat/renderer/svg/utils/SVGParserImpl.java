@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 import android.util.Xml;
 import android.graphics.Matrix;
@@ -31,29 +31,29 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import ca.on.hojat.renderer.svg.androidsvg.SVGExternalFileResolver;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.Length;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.Unit;
-import ca.on.hojat.renderer.svg.androidsvg.SVGParseException;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.SvgObject;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.TextPositionedContainer;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.CSSClipRect;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.TextRoot;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.TextChild;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.GradientSpread;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.SvgElementBase;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.Box;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.SvgPaint;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.PaintReference;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.Colour;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.CurrentColor;
-import ca.on.hojat.renderer.svg.androidsvg.PreserveAspectRatio;
-import ca.on.hojat.renderer.svg.androidsvg.utils.Style.TextDecoration;
-import ca.on.hojat.renderer.svg.androidsvg.utils.CSSParser.MediaType;
-import ca.on.hojat.renderer.svg.androidsvg.utils.Style.RenderQuality;
-import ca.on.hojat.renderer.svg.androidsvg.utils.Style.Isolation;
-import ca.on.hojat.renderer.svg.androidsvg.utils.Style.VectorEffect;
-import ca.on.hojat.renderer.svg.androidsvg.utils.Style.TextDirection;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
+import ca.on.hojat.renderer.svg.utils.SVGBase.Length;
+import ca.on.hojat.renderer.svg.utils.SVGBase.Unit;
+import ca.on.hojat.renderer.svg.SVGParseException;
+import ca.on.hojat.renderer.svg.utils.SVGBase.SvgObject;
+import ca.on.hojat.renderer.svg.utils.SVGBase.TextPositionedContainer;
+import ca.on.hojat.renderer.svg.utils.SVGBase.CSSClipRect;
+import ca.on.hojat.renderer.svg.utils.SVGBase.TextRoot;
+import ca.on.hojat.renderer.svg.utils.SVGBase.TextChild;
+import ca.on.hojat.renderer.svg.utils.SVGBase.GradientSpread;
+import ca.on.hojat.renderer.svg.utils.SVGBase.SvgElementBase;
+import ca.on.hojat.renderer.svg.utils.SVGBase.Box;
+import ca.on.hojat.renderer.svg.utils.SVGBase.SvgPaint;
+import ca.on.hojat.renderer.svg.utils.SVGBase.PaintReference;
+import ca.on.hojat.renderer.svg.utils.SVGBase.Colour;
+import ca.on.hojat.renderer.svg.utils.SVGBase.CurrentColor;
+import ca.on.hojat.renderer.svg.PreserveAspectRatio;
+import ca.on.hojat.renderer.svg.utils.Style.TextDecoration;
+import ca.on.hojat.renderer.svg.utils.CSSParser.MediaType;
+import ca.on.hojat.renderer.svg.utils.Style.RenderQuality;
+import ca.on.hojat.renderer.svg.utils.Style.Isolation;
+import ca.on.hojat.renderer.svg.utils.Style.VectorEffect;
+import ca.on.hojat.renderer.svg.utils.Style.TextDirection;
 /*
  * SVG parser code. Used by SVG class. Should not be called directly.
  */

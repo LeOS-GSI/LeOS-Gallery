@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg;
+package ca.on.hojat.renderer.svg;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

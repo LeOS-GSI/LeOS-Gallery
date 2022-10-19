@@ -1,7 +1,7 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
-import ca.on.hojat.renderer.svg.androidsvg.PreserveAspectRatio;
-import ca.on.hojat.renderer.svg.androidsvg.SVGExternalFileResolver;
+import ca.on.hojat.renderer.svg.PreserveAspectRatio;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
 
 import android.graphics.Canvas;
 import android.graphics.RectF;

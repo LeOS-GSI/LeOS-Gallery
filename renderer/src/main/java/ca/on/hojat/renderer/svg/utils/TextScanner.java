@@ -1,10 +1,9 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.Length;
-import ca.on.hojat.renderer.svg.androidsvg.utils.SVGBase.Unit;
+import ca.on.hojat.renderer.svg.utils.SVGBase.Length;
+import ca.on.hojat.renderer.svg.utils.SVGBase.Unit;
 
 import java.util.Locale;
-
 
 public class TextScanner {
     final String input;

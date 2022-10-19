@@ -1,4 +1,4 @@
-package ca.on.hojat.renderer.svg.androidsvg;
+package ca.on.hojat.renderer.svg;
 
 /**
  * Thrown by the parser if a problem is found in the SVG file.

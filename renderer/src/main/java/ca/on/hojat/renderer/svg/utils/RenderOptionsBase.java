@@ -1,11 +1,11 @@
-package ca.on.hojat.renderer.svg.androidsvg.utils;
+package ca.on.hojat.renderer.svg.utils;
 
 import android.graphics.Canvas;
 
-import ca.on.hojat.renderer.svg.androidsvg.PreserveAspectRatio;
-import ca.on.hojat.renderer.svg.androidsvg.RenderOptions;
-import ca.on.hojat.renderer.svg.androidsvg.SVG;
-import ca.on.hojat.renderer.svg.androidsvg.CSS;
+import ca.on.hojat.renderer.svg.PreserveAspectRatio;
+import ca.on.hojat.renderer.svg.RenderOptions;
+import ca.on.hojat.renderer.svg.SVG;
+import ca.on.hojat.renderer.svg.CSS;
 
 /**
  * A fluent builder class that creates a render configuration object for the
