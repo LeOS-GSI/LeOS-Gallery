@@ -39,7 +39,7 @@
                 android:textSize="@dimen/bigger_text_size"
                 android:textStyle="italic" />
 
-            <ca.on.sudbury.hojat.smartgallery.recyclerviewfastscroller.RecyclerViewFastScroller
+            <ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
                 android:id="@+id/filepicker_fastscroller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                     android:scrollbars="none"
                     app:layoutManager="ca.on.sudbury.hojat.smartgallery.views.MyLinearLayoutManager" />
 
-            </ca.on.sudbury.hojat.smartgallery.recyclerviewfastscroller.RecyclerViewFastScroller>
+            </ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller>
         </RelativeLayout>
 
         <RelativeLayout

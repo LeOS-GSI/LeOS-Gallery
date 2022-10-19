@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--    fast scroller recycler view-->
+    <style name="FastScrollerTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/background</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+</resources>

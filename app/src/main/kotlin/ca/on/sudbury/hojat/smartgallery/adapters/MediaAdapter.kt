@@ -84,7 +84,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
-import ca.on.sudbury.hojat.smartgallery.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import kotlinx.android.synthetic.main.photo_item_grid.view.*
 import kotlinx.android.synthetic.main.thumbnail_section.view.*
 import kotlinx.android.synthetic.main.video_item_grid.view.*
