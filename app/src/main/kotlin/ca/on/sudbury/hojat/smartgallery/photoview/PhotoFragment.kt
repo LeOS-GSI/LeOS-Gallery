@@ -24,6 +24,7 @@ import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
 import androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION
 import androidx.fragment.app.viewModels
+import ca.on.hojat.renderer.exif.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.gestures.GestureController
 import ca.on.sudbury.hojat.smartgallery.gestures.State
@@ -65,7 +66,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.PortraitPhotosAdapter
 import ca.on.sudbury.hojat.smartgallery.base.PhotoVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerPhotoItemBinding
-import ca.on.sudbury.hojat.smartgallery.exif.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.saveRotatedImageToFile
 import ca.on.sudbury.hojat.smartgallery.extensions.sendFakeClick
