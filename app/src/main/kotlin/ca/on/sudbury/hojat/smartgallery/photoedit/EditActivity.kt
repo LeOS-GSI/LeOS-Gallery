@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.widget.RelativeLayout
 import androidx.exifinterface.media.ExifInterface
 import androidx.recyclerview.widget.LinearLayoutManager
+import ca.on.hojat.renderer.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
@@ -65,7 +66,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.FiltersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
-import ca.on.sudbury.hojat.smartgallery.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityEditBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialog

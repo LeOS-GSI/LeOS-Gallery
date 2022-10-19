@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ca.on.sudbury.hojat.smartgallery.cropper.CropImageView
+        <ca.on.hojat.renderer.cropper.CropImageView
             android:id="@+id/crop_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -5,14 +5,7 @@
     <string name="message_pattern_started">Pattern drawing started</string>
     <string name="message_pattern_detected">Pattern drawing completed</string>
     <string name="message_pattern_cleared">Pattern cleared</string>
-
     <string name="handleimage">handleImage</string>
-    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
-    <string name="crop_image_menu_rotate_right">Rotate</string>
-    <string name="crop_image_menu_crop">Crop</string>
-    <string name="crop_image_menu_flip">Flip</string>
-    <string name="pick_image_intent_chooser_title">Select source</string>
-    <string name="crop_image_activity_title">crop image</string>
     <string name="biometrics">Biometrics</string>
     <string name="fingerprint">Fingerprint</string>
     <string name="app_name">Smart Gallery</string>

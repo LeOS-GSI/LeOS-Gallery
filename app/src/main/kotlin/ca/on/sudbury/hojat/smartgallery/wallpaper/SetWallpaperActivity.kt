@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import ca.on.hojat.renderer.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
@@ -16,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.MainActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
-import ca.on.sudbury.hojat.smartgallery.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySetWallpaperBinding
 
 private const val RATIO_PORTRAIT = 0
