@@ -3,12 +3,13 @@ package ca.on.sudbury.hojat.smartgallery.helpers
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import ca.on.hojat.palette.subscaleview.ImageDecoder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
-import ca.on.sudbury.hojat.smartgallery.subscaleview.ImageDecoder
+
 
 class MyGlideImageDecoder(private val degrees: Int, val signature: ObjectKey) : ImageDecoder {
 

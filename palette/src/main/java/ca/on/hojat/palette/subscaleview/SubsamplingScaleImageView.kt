@@ -1,4 +1,4 @@
-package ca.on.sudbury.hojat.smartgallery.subscaleview
+package ca.on.hojat.palette.subscaleview
 
 import android.annotation.SuppressLint
 import android.content.Context

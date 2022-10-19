@@ -38,10 +38,10 @@ import com.bumptech.glide.load.resource.bitmap.Rotate
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import ca.on.sudbury.hojat.smartgallery.subscaleview.DecoderFactory
-import ca.on.sudbury.hojat.smartgallery.subscaleview.ImageDecoder
-import ca.on.sudbury.hojat.smartgallery.subscaleview.ImageRegionDecoder
-import ca.on.sudbury.hojat.smartgallery.subscaleview.SubsamplingScaleImageView
+import ca.on.hojat.palette.subscaleview.DecoderFactory
+import ca.on.hojat.palette.subscaleview.ImageDecoder
+import ca.on.hojat.palette.subscaleview.ImageRegionDecoder
+import ca.on.hojat.palette.subscaleview.SubsamplingScaleImageView
 import com.github.penfeizhou.animation.apng.APNGDrawable
 import com.github.penfeizhou.animation.webp.WebPDrawable
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity

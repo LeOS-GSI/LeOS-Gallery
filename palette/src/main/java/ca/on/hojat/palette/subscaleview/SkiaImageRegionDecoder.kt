@@ -1,4 +1,4 @@
-package ca.on.sudbury.hojat.smartgallery.subscaleview
+package ca.on.hojat.palette.subscaleview
 
 import android.content.Context
 import android.content.res.AssetManager
@@ -8,7 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.BitmapFactory
 import android.net.Uri
-import ca.on.sudbury.hojat.smartgallery.subscaleview.SubsamplingScaleImageView.Companion.ASSET_PREFIX
+import ca.on.hojat.palette.subscaleview.SubsamplingScaleImageView.Companion.ASSET_PREFIX
 import java.io.InputStream
 import java.util.concurrent.locks.ReentrantReadWriteLock
 

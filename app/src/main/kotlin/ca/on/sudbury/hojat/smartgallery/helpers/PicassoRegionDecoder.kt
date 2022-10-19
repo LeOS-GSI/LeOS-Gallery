@@ -8,7 +8,7 @@ import android.graphics.Rect
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import ca.on.sudbury.hojat.smartgallery.subscaleview.ImageRegionDecoder
+import ca.on.hojat.palette.subscaleview.ImageRegionDecoder
 
 class PicassoRegionDecoder(
     private val showHighestQuality: Boolean,
