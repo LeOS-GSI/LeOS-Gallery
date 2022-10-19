@@ -1,7 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.svg
 
 import android.graphics.drawable.PictureDrawable
-import ca.on.sudbury.hojat.smartgallery.svg.androidsvg.SVG
+import ca.on.hojat.renderer.svg.SVG
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.engine.Resource
 import com.bumptech.glide.load.resource.SimpleResource

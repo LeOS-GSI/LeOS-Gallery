@@ -1,7 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.svg
 
-import ca.on.sudbury.hojat.smartgallery.svg.androidsvg.SVG
-import ca.on.sudbury.hojat.smartgallery.svg.androidsvg.SVGParseException
+import ca.on.hojat.renderer.svg.SVG
+import ca.on.hojat.renderer.svg.SVGParseException
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.ResourceDecoder
 import com.bumptech.glide.load.engine.Resource
