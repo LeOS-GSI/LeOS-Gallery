@@ -2,9 +2,6 @@
 <resources>
     <color name="white">#FFFF</color>
     <color name="pomegranate">#f4511e</color>
-    <color name="colorPrimary">#EF5451</color>
-    <color name="background">#ffffff</color>
-
     <color name="you_status_bar_color">#FFE0F3FF</color>
     <color name="you_contextual_status_bar_color">#FF219BCC</color>
     <color name="you_background_color">#FFFCFCFF</color>
