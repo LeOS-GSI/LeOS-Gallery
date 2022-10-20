@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.media.ExifInterface
 import android.text.format.DateFormat
@@ -100,13 +99,3 @@ fun Int.ensureTwoDigits(): String {
     }
 }
 
-fun Int.getColorStateList(): ColorStateList {
-    val states = arrayOf(
-        intArrayOf(android.R.attr.state_enabled),
-        intArrayOf(-android.R.attr.state_enabled),
-        intArrayOf(-android.R.attr.state_checked),
-        intArrayOf(android.R.attr.state_pressed)
-    )
-    val colors = intArrayOf(this, this, this, this)
-    return ColorStateList(states, colors)
-}

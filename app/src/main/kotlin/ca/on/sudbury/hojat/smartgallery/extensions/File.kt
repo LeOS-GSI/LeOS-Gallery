@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.content.Context
 import ca.on.sudbury.hojat.smartgallery.helpers.MD5
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
@@ -13,19 +12,13 @@ import java.util.HashMap
 
 fun File.isMediaFile() = absolutePath.isMediaFile()
 fun File.isGif() = absolutePath.endsWith(".gif", true)
-fun File.isApng() = absolutePath.endsWith(".apng", true)
 fun File.isVideoFast() = videoExtensions.any { absolutePath.endsWith(it, true) }
 fun File.isImageFast() = photoExtensions.any { absolutePath.endsWith(it, true) }
-fun File.isAudioFast() = audioExtensions.any { absolutePath.endsWith(it, true) }
 fun File.isRawFast() = rawExtensions.any { absolutePath.endsWith(it, true) }
 fun File.isSvg() = absolutePath.isSvg()
 fun File.isPortrait() = absolutePath.isPortrait()
 
-fun File.isImageSlow() = absolutePath.isImageFast() || getMimeType().startsWith("image")
-fun File.isVideoSlow() = absolutePath.isVideoFast() || getMimeType().startsWith("video")
-fun File.isAudioSlow() = absolutePath.isAudioFast() || getMimeType().startsWith("audio")
 
-fun File.getMimeType() = absolutePath.getMimeType()
 
 fun File.getProperSize(countHiddenItems: Boolean): Long {
     return if (isDirectory) {

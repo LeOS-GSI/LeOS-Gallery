@@ -499,7 +499,13 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
                 if (targetFile.parentFile?.let { getDoesFilePathExist(it.absolutePath) } == true) {
                     documentFile = targetFile.parent?.let { getDocumentFile(it) }
                 } else {
-                    documentFile = targetFile.parentFile?.let { getDocumentFile(it.parent) }
+                    documentFile = targetFile.parentFile?.let {
+                        it.parent?.let { it1 ->
+                            getDocumentFile(
+                                it1
+                            )
+                        }
+                    }
                     documentFile =
                         targetFile.parentFile?.let { documentFile!!.createDirectory(it.name) }
                             ?: targetFile.parentFile?.let { getDocumentFile(it.absolutePath) }

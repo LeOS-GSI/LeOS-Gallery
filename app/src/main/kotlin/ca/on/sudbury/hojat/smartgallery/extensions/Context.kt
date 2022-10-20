@@ -1807,41 +1807,6 @@ fun Context.tryLoadingWithPicasso(
     }
 }
 
-fun Context.formatSecondsToTimeString(totalSeconds: Int): String {
-    val days = totalSeconds / DAY_SECONDS
-    val hours = (totalSeconds % DAY_SECONDS) / HOUR_SECONDS
-    val minutes = (totalSeconds % HOUR_SECONDS) / MINUTE_SECONDS
-    val seconds = totalSeconds % MINUTE_SECONDS
-    val timesString = StringBuilder()
-    if (days > 0) {
-        val daysString = String.format(resources.getQuantityString(R.plurals.days, days, days))
-        timesString.append("$daysString, ")
-    }
-
-    if (hours > 0) {
-        val hoursString = String.format(resources.getQuantityString(R.plurals.hours, hours, hours))
-        timesString.append("$hoursString, ")
-    }
-
-    if (minutes > 0) {
-        val minutesString =
-            String.format(resources.getQuantityString(R.plurals.minutes, minutes, minutes))
-        timesString.append("$minutesString, ")
-    }
-
-    if (seconds > 0) {
-        val secondsString =
-            String.format(resources.getQuantityString(R.plurals.seconds, seconds, seconds))
-        timesString.append(secondsString)
-    }
-
-    var result = timesString.toString().trim().trimEnd(',')
-    if (result.isEmpty()) {
-        result = String.format(resources.getQuantityString(R.plurals.minutes, 0, 0))
-    }
-    return result
-}
-
 fun Context.getCachedDirectories(
     getVideosOnly: Boolean = false,
     getImagesOnly: Boolean = false,
