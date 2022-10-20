@@ -27,7 +27,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogColorPickerBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
-import ca.on.sudbury.hojat.smartgallery.views.ColorPickerSquare
+import ca.on.hojat.palette.views.ColorPickerSquare
 import java.util.LinkedList
 
 private const val RECENT_COLORS_NUMBER = 5
