@@ -108,7 +108,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
-import ca.on.sudbury.hojat.smartgallery.views.MyTextView
+import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import com.squareup.picasso.Picasso

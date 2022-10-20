@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+    <ca.on.hojat.palette.views.MyTextView
         android:id="@+id/pin_lock_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:paddingBottom="@dimen/small_margin"
         android:text="@string/enter_pin" />
 
-    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+    <ca.on.hojat.palette.views.MyTextView
         android:id="@+id/pin_lock_current_pin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_1"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -48,7 +48,7 @@
                 android:layout_weight="1"
                 android:text="1" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_2"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -56,7 +56,7 @@
                 android:layout_weight="1"
                 android:text="2" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_3"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -71,7 +71,7 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_4"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -79,7 +79,7 @@
                 android:layout_weight="1"
                 android:text="4" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_5"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -87,7 +87,7 @@
                 android:layout_weight="1"
                 android:text="5" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_6"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -102,7 +102,7 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_7"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -110,7 +110,7 @@
                 android:layout_weight="1"
                 android:text="7" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_8"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -118,7 +118,7 @@
                 android:layout_weight="1"
                 android:text="8" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_9"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -133,7 +133,7 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_c"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"
@@ -141,7 +141,7 @@
                 android:layout_weight="1"
                 android:text="C" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/pin_0"
                 style="@style/PinNumberStyle"
                 android:layout_width="0dp"

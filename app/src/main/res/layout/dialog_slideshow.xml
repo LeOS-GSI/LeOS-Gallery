@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+        <ca.on.hojat.palette.views.MyTextView
             android:id="@+id/interval_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             android:paddingEnd="@dimen/activity_margin"
             android:paddingBottom="@dimen/bigger_margin">
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/animation_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 android:paddingRight="@dimen/medium_margin"
                 android:text="@string/animation" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/animation_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

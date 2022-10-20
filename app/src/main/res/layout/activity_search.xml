@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+        <ca.on.hojat.palette.views.MyTextView
             android:id="@+id/search_empty_text_placeholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

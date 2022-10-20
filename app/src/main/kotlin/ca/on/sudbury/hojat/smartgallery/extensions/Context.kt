@@ -163,7 +163,7 @@ import ca.on.sudbury.hojat.smartgallery.views.MySeekBar
 import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
-import ca.on.sudbury.hojat.smartgallery.views.MyTextView
+import ca.on.hojat.palette.views.MyTextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource

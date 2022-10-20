@@ -14,7 +14,7 @@
         android:paddingTop="@dimen/activity_margin"
         android:paddingRight="@dimen/activity_margin">
 
-        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+        <ca.on.hojat.palette.views.MyTextView
             android:id="@+id/export_settings_path_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:text="@string/path"
             android:textSize="@dimen/smaller_text_size" />
 
-        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+        <ca.on.hojat.palette.views.MyTextView
             android:id="@+id/export_settings_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

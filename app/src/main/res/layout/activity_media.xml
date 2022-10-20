@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+        <ca.on.hojat.palette.views.MyTextView
             android:id="@+id/media_empty_text_placeholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             android:textStyle="italic"
             android:visibility="gone" />
 
-        <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+        <ca.on.hojat.palette.views.MyTextView
             android:id="@+id/media_empty_text_placeholder_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

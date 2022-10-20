@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/color_picker_top_holder">
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/color_picker_old_hex"
                 android:layout_width="@dimen/colorpicker_color_width"
                 android:layout_height="match_parent"
@@ -101,7 +101,7 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_arrow_right_vector" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/color_picker_new_hex_label"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/colorpicker_items_height"

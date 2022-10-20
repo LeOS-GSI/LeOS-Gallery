@@ -27,7 +27,7 @@
 
     </ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout>
 
-    <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+    <ca.on.hojat.palette.views.MyTextView
         android:id="@+id/resize_image_colon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

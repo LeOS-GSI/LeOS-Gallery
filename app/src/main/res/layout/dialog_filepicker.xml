@@ -25,7 +25,7 @@
                 android:paddingEnd="@dimen/small_margin"
                 android:paddingBottom="@dimen/small_margin" />
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/filepicker_placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
-            <ca.on.sudbury.hojat.smartgallery.views.MyTextView
+            <ca.on.hojat.palette.views.MyTextView
                 android:id="@+id/filepicker_favorites_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
