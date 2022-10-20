@@ -1239,10 +1239,10 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
 ) {
     ensureBackgroundThread {
         var pathsCnt = paths.size
-        val OTGPath = config.OTGPath
+        val otgPath = config.OTGPath
 
         for (source in paths) {
-            if (OTGPath.isNotEmpty() && source.startsWith(OTGPath)) {
+            if (otgPath.isNotEmpty() && source.startsWith(otgPath)) {
                 var inputStream: InputStream? = null
                 var out: OutputStream? = null
                 try {

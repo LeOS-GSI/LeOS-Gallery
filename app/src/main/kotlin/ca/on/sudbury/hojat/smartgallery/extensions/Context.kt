@@ -14,6 +14,7 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.database.Cursor
@@ -86,7 +87,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS
-import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
@@ -132,8 +132,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.WEEK_SECONDS
-import ca.on.sudbury.hojat.smartgallery.helpers.YEAR_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
@@ -347,7 +345,8 @@ fun Context.getMediaContent(path: String, uri: Uri): Uri? {
 fun Context.getMyContentProviderCursorLoader() =
     CursorLoader(this, MyContentProvider.MY_CONTENT_URI, null, null, null, null)
 
-fun Context.getSharedPrefs() = getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
+fun Context.getSharedPrefs(): SharedPreferences =
+    getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
 
 fun Context.getStringsPackageName() = getString(R.string.package_name)
 
@@ -612,7 +611,7 @@ fun Context.getFilePublicUri(file: File, applicationId: String): Uri {
     return uri!!
 }
 
-fun getFileUri(path: String) = when {
+fun getFileUri(path: String): Uri = when {
     path.isImageSlow() -> Images.Media.EXTERNAL_CONTENT_URI
     path.isVideoSlow() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
     path.isAudioSlow() -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -802,16 +801,6 @@ fun Context.getMimeTypeFromUri(uri: Uri): String {
         }
     }
     return mimetype
-}
-
-fun Context.getTimePickerDialogTheme() = when {
-    baseConfig.isUsingSystemTheme -> if (isUsingSystemDarkTheme()) {
-        R.style.MyTimePickerMaterialTheme_Dark
-    } else {
-        R.style.MyDateTimePickerMaterialTheme
-    }
-    baseConfig.backgroundColor.getContrastColor() == Color.WHITE -> R.style.MyDialogTheme_Dark
-    else -> R.style.MyDialogTheme
 }
 
 @SuppressLint("Recycle")
@@ -2003,13 +1992,13 @@ fun Context.getCachedMedia(
         mediaFetcher.sortMedia(media, config.getFolderSorting(pathToUse))
         val grouped = mediaFetcher.groupMedia(media, pathToUse)
         callback(grouped.clone() as ArrayList<ThumbnailItem>)
-        val OTGPath = config.OTGPath
+        val otgPath = config.OTGPath
 
         try {
             val mediaToDelete = ArrayList<Medium>()
             // creating a new thread intentionally, do not reuse the common background thread
             Thread {
-                media.filter { !getDoesFilePathExist(it.path, OTGPath) }.forEach {
+                media.filter { !getDoesFilePathExist(it.path, otgPath) }.forEach {
                     if (it.path.startsWith(recycleBinPath)) {
                         deleteDBPath(it.path)
                     } else {
@@ -2033,58 +2022,13 @@ fun Context.getCachedMedia(
     }
 }
 
-fun Context.getFormattedSeconds(seconds: Int, showBefore: Boolean = true) = when (seconds) {
-    -1 -> getString(R.string.no_reminder)
-    0 -> getString(R.string.at_start)
-    else -> {
-        when {
-            seconds < 0 && seconds > -60 * 60 * 24 -> {
-                val minutes = -seconds / 60
-                getString(R.string.during_day_at).format(minutes / 60, minutes % 60)
-            }
-            seconds % YEAR_SECONDS == 0 -> {
-                val base = if (showBefore) R.plurals.years_before else R.plurals.by_years
-                resources.getQuantityString(base, seconds / YEAR_SECONDS, seconds / YEAR_SECONDS)
-            }
-            seconds % MONTH_SECONDS == 0 -> {
-                val base = if (showBefore) R.plurals.months_before else R.plurals.by_months
-                resources.getQuantityString(base, seconds / MONTH_SECONDS, seconds / MONTH_SECONDS)
-            }
-            seconds % WEEK_SECONDS == 0 -> {
-                val base = if (showBefore) R.plurals.weeks_before else R.plurals.by_weeks
-                resources.getQuantityString(base, seconds / WEEK_SECONDS, seconds / WEEK_SECONDS)
-            }
-            seconds % DAY_SECONDS == 0 -> {
-                val base = if (showBefore) R.plurals.days_before else R.plurals.by_days
-                resources.getQuantityString(base, seconds / DAY_SECONDS, seconds / DAY_SECONDS)
-            }
-            seconds % HOUR_SECONDS == 0 -> {
-                val base = if (showBefore) R.plurals.hours_before else R.plurals.by_hours
-                resources.getQuantityString(base, seconds / HOUR_SECONDS, seconds / HOUR_SECONDS)
-            }
-            seconds % MINUTE_SECONDS == 0 -> {
-                val base = if (showBefore) R.plurals.minutes_before else R.plurals.by_minutes
-                resources.getQuantityString(
-                    base,
-                    seconds / MINUTE_SECONDS,
-                    seconds / MINUTE_SECONDS
-                )
-            }
-            else -> {
-                val base = if (showBefore) R.plurals.seconds_before else R.plurals.by_seconds
-                resources.getQuantityString(base, seconds, seconds)
-            }
-        }
-    }
-}
-
 fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
     val dirsToCheck = dirs ?: directoryDao.getAll()
-    val OTGPath = config.OTGPath
+    val otgPath = config.OTGPath
     dirsToCheck.filter {
         !it.areFavorites() && !it.isRecycleBin() && !getDoesFilePathExist(
             it.path,
-            OTGPath
+            otgPath
         ) && it.path != config.tempFolderPath
     }.forEach {
         try {
@@ -2347,7 +2291,7 @@ fun Context.parseFileChannel(
     end: Long,
     callback: () -> Unit
 ) {
-    val FILE_CHANNEL_CONTAINERS = arrayListOf("moov", "trak", "mdia", "minf", "udta", "stbl")
+    val fileChannelContainers = arrayListOf("moov", "trak", "mdia", "minf", "udta", "stbl")
     try {
         var iteration = 0
         var currEnd = end
@@ -2395,7 +2339,7 @@ fun Context.parseFileChannel(
                 return
             }
 
-            if (FILE_CHANNEL_CONTAINERS.contains(type)) {
+            if (fileChannelContainers.contains(type)) {
                 parseFileChannel(path, fc, level + 1, begin + 8, newEnd, callback)
             }
 
@@ -2467,19 +2411,19 @@ fun Context.createDirectoryFromMedia(
     getProperFileSize: Boolean,
     noMediaFolders: ArrayList<String>
 ): Directory {
-    val OTGPath = config.OTGPath
+    val otgPath = config.OTGPath
     val grouped = MediaFetcher(this).groupMedia(curMedia, path)
     var thumbnail: String? = null
 
     albumCovers.forEach {
-        if (it.path == path && getDoesFilePathExist(it.tmb, OTGPath)) {
+        if (it.path == path && getDoesFilePathExist(it.tmb, otgPath)) {
             thumbnail = it.tmb
         }
     }
 
     if (thumbnail == null) {
         val sortedMedia = grouped.filterIsInstance<Medium>().toMutableList() as ArrayList<Medium>
-        thumbnail = sortedMedia.firstOrNull { getDoesFilePathExist(it.path, OTGPath) }?.path ?: ""
+        thumbnail = sortedMedia.firstOrNull { getDoesFilePathExist(it.path, otgPath) }?.path ?: ""
     }
 
     if (config.OTGPath.isNotEmpty() && thumbnail!!.startsWith(config.OTGPath)) {
@@ -2495,10 +2439,10 @@ fun Context.createDirectoryFromMedia(
         if (isSortingAscending) firstItem.modified.coerceAtMost(lastItem.modified) else firstItem.modified.coerceAtLeast(
             lastItem.modified
         )
-    val dateTaken = if (isSortingAscending) Math.min(
-        firstItem.taken,
-        lastItem.taken
-    ) else firstItem.taken.coerceAtLeast(lastItem.taken)
+    val dateTaken =
+        if (isSortingAscending) firstItem.taken.coerceAtMost(lastItem.taken) else firstItem.taken.coerceAtLeast(
+            lastItem.taken
+        )
     val size = if (getProperFileSize) curMedia.sumByLong { it.size } else 0L
     val mediaTypes = curMedia.getDirMediaTypes()
     val sortValue = getDirectorySortingValue(curMedia, path, dirName, size)
@@ -2919,7 +2863,7 @@ fun Context.getSharedTheme(callback: (sharedTheme: SharedTheme?) -> Unit) {
     }
 }
 
-fun Context.getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
+fun getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
     val cursor = cursorLoader.loadInBackground()
     cursor?.use {
         if (cursor.moveToFirst()) {
@@ -3337,11 +3281,11 @@ fun Context.deleteFromMediaStore(path: String, callback: ((needsRescan: Boolean)
 }
 
 fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
-    val SCAN_FILE_MAX_DURATION = 1000L
+    val scanFileMaxDuration = 1000L
     val scanFileHandler = Handler(Looper.getMainLooper())
     scanFileHandler.postDelayed({
         callback()
-    }, SCAN_FILE_MAX_DURATION)
+    }, scanFileMaxDuration)
 
     MediaScannerConnection.scanFile(applicationContext, arrayOf(path), null) { path, uri ->
         scanFileHandler.removeCallbacksAndMessages(null)
@@ -3393,9 +3337,9 @@ fun Context.getOTGItems(
     callback: (ArrayList<FileDirItem>) -> Unit
 ) {
     val items = java.util.ArrayList<FileDirItem>()
-    val OTGTreeUri = baseConfig.OTGTreeUri
+    val otgTreeUri = baseConfig.OTGTreeUri
     var rootUri = try {
-        DocumentFile.fromTreeUri(applicationContext, Uri.parse(OTGTreeUri))
+        DocumentFile.fromTreeUri(applicationContext, Uri.parse(otgTreeUri))
     } catch (e: Exception) {
         showErrorToast(e)
         baseConfig.OTGPath = ""
