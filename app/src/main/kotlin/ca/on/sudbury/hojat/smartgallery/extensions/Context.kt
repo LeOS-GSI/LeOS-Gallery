@@ -2145,7 +2145,7 @@ fun Context.getOTGFastDocumentFile(path: String, otgPathToUse: String? = null): 
     return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
 }
 
-fun Context.getOTGFolderChildren(path: String) = getDocumentFile(path)?.listFiles()
+fun Context.getOTGFolderChildren(path: String): Array<DocumentFile>? = getDocumentFile(path)?.listFiles()
 
 fun Context.getOTGFolderChildrenNames(path: String) =
     getOTGFolderChildren(path)?.map { it.name }?.toMutableList()

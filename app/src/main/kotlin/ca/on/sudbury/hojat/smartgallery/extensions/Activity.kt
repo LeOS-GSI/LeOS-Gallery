@@ -496,12 +496,13 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
         needsStupidWritePermissions(path) -> {
             var documentFile = parentDocumentFile
             if (documentFile == null) {
-                if (getDoesFilePathExist(targetFile.parentFile.absolutePath)) {
-                    documentFile = getDocumentFile(targetFile.parent)
+                if (targetFile.parentFile?.let { getDoesFilePathExist(it.absolutePath) } == true) {
+                    documentFile = targetFile.parent?.let { getDocumentFile(it) }
                 } else {
-                    documentFile = getDocumentFile(targetFile.parentFile.parent)
-                    documentFile = documentFile!!.createDirectory(targetFile.parentFile.name)
-                        ?: getDocumentFile(targetFile.parentFile.absolutePath)
+                    documentFile = targetFile.parentFile?.let { getDocumentFile(it.parent) }
+                    documentFile =
+                        targetFile.parentFile?.let { documentFile!!.createDirectory(it.name) }
+                            ?: targetFile.parentFile?.let { getDocumentFile(it.absolutePath) }
                 }
             }
 
@@ -512,7 +513,7 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
                         targetFile
                     )
                 return if (casualOutputStream == null) {
-                    showFileCreateError(targetFile.parent)
+                    targetFile.parent?.let { showFileCreateError(it) }
                     null
                 } else {
                     casualOutputStream
@@ -1459,7 +1460,7 @@ fun AppCompatActivity.fixDateTaken(
     hasRescanned: Boolean = false,
     callback: (() -> Unit)? = null
 ) {
-    val BATCH_SIZE = 50
+    val batchSize = 50
     if (showToasts && !hasRescanned) {
         toast(R.string.fixing)
     }
@@ -1496,7 +1497,7 @@ fun AppCompatActivity.fixDateTaken(
                         operations.add(build())
                     }
 
-                    if (operations.size % BATCH_SIZE == 0) {
+                    if (operations.size % batchSize == 0) {
                         contentResolver.applyBatch(MediaStore.AUTHORITY, operations)
                         operations.clear()
                     }

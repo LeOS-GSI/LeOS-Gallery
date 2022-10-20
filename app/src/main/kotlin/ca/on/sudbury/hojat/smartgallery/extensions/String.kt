@@ -129,9 +129,9 @@ fun String.isAudioSlow() =
     isAudioFast() || getMimeType().startsWith("audio") || startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())
 
 fun String.isAValidFilename(): Boolean {
-    val ILLEGAL_CHARACTERS =
+    val illegalCharacters =
         charArrayOf('/', '\n', '\r', '\t', '\u0000', '`', '?', '*', '\\', '<', '>', '|', '\"', ':')
-    ILLEGAL_CHARACTERS.forEach {
+    illegalCharacters.forEach {
         if (contains(it))
             return false
     }
@@ -913,15 +913,6 @@ fun String.getAvailableStorageB(): Long {
         -1L
     }
 }
-
-// if we are comparing phone numbers, compare just the last 9 digits
-fun String.trimToComparableNumber(): String {
-    val normalizedNumber = this.normalizeString()
-    val startIndex = 0.coerceAtLeast(normalizedNumber.length - 9)
-    return normalizedNumber.substring(startIndex)
-}
-
-fun String.normalizePhoneNumber() = PhoneNumberUtils.normalizeNumber(this)
 
 operator fun String.times(x: Int): String {
     val stringBuilder = StringBuilder()
