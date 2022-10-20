@@ -2,4 +2,7 @@
 <resources>
     <color name="colorPrimary">#EF5451</color>
     <color name="background">#ffffff</color>
+    <color name="white">#FFFF</color>
+    <color name="pomegranate">#f4511e</color>
+
 </resources>
