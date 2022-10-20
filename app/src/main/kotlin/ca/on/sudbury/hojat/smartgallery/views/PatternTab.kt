@@ -11,6 +11,7 @@ import androidx.biometric.auth.AuthPromptHost
 import ca.on.hojat.palette.patternlockview.PatternLockView
 import ca.on.hojat.palette.patternlockview.listener.PatternLockViewListener
 import ca.on.hojat.palette.patternlockview.utils.PatternLockUtils
+import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor

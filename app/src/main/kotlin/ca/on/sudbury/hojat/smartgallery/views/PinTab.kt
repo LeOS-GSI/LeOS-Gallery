@@ -1,10 +1,10 @@
 package ca.on.sudbury.hojat.smartgallery.views
 
-
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.RelativeLayout
 import androidx.biometric.auth.AuthPromptHost
+import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.tab_pin.view.*
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.Locale
-
 
 class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs), SecurityTab {
     private var hash = ""

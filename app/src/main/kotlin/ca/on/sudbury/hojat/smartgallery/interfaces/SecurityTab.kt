@@ -1,7 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.interfaces
 
 import androidx.biometric.auth.AuthPromptHost
-import ca.on.sudbury.hojat.smartgallery.views.MyScrollView
+import ca.on.hojat.palette.views.MyScrollView
 
 interface SecurityTab {
     fun initTab(

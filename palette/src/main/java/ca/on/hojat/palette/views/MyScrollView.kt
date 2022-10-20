@@ -1,4 +1,4 @@
-package ca.on.sudbury.hojat.smartgallery.views
+package ca.on.hojat.palette.views
 
 import android.annotation.SuppressLint
 import android.content.Context

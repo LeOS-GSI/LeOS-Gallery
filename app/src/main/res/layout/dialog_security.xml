@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ca.on.sudbury.hojat.smartgallery.views.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ca.on.hojat.palette.views.MyScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialog_scrollview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -36,4 +36,4 @@
             android:layout_below="@+id/dialog_tab_layout" />
 
     </RelativeLayout>
-</ca.on.sudbury.hojat.smartgallery.views.MyScrollView>
+</ca.on.hojat.palette.views.MyScrollView>

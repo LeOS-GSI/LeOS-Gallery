@@ -10,6 +10,7 @@ import androidx.biometric.auth.AuthPromptHost
 import ca.on.hojat.fingerprint.core.AuthenticationFailureReason
 import ca.on.hojat.fingerprint.core.AuthenticationListener
 import ca.on.hojat.fingerprint.core.Reprint
+import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf

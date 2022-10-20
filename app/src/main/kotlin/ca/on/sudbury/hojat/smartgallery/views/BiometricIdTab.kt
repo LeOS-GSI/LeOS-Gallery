@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.biometric.auth.AuthPromptHost
 import androidx.constraintlayout.widget.ConstraintLayout
+import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.extensions.showBiometricPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
