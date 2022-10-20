@@ -155,7 +155,7 @@ import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatSpinner
 import ca.on.sudbury.hojat.smartgallery.views.MyAutoCompleteTextView
-import ca.on.sudbury.hojat.smartgallery.views.MyButton
+import ca.on.hojat.palette.views.MyButton
 import ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
 import ca.on.sudbury.hojat.smartgallery.views.MyEditText
 import ca.on.sudbury.hojat.smartgallery.views.MyFloatingActionButton
