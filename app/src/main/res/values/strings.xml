@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="lib_name">PatternLockView</string>
-    <string name="message_pattern_dot_added">Dot added to pattern</string>
-    <string name="message_pattern_started">Pattern drawing started</string>
-    <string name="message_pattern_detected">Pattern drawing completed</string>
-    <string name="message_pattern_cleared">Pattern cleared</string>
     <string name="handleimage">handleImage</string>
     <string name="biometrics">Biometrics</string>
     <string name="fingerprint">Fingerprint</string>

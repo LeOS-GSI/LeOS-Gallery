@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="pattern_lock_path_width">3dp</dimen>
-    <dimen name="pattern_lock_dot_size">10dp</dimen>
-    <dimen name="pattern_lock_dot_selected_size">24dp</dimen>
-
     <!--    fast scroller recyclerview-->
     <dimen name="corner_radius">24dp</dimen>
     <dimen name="default_handle_width">26dp</dimen>

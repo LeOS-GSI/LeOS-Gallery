@@ -8,6 +8,9 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.RelativeLayout
 import androidx.biometric.auth.AuthPromptHost
+import ca.on.hojat.palette.patternlockview.PatternLockView
+import ca.on.hojat.palette.patternlockview.listener.PatternLockViewListener
+import ca.on.hojat.palette.patternlockview.utils.PatternLockUtils
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
@@ -16,9 +19,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
-import ca.on.sudbury.hojat.smartgallery.patternlockview.PatternLockView
-import ca.on.sudbury.hojat.smartgallery.patternlockview.listener.PatternLockViewListener
-import ca.on.sudbury.hojat.smartgallery.patternlockview.utils.PatternLockUtils
 import kotlinx.android.synthetic.main.tab_pattern.view.*
 
 class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
