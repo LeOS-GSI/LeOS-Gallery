@@ -1,5 +1,4 @@
-package ca.on.sudbury.hojat.smartgallery.views
-
+package ca.on.hojat.palette.views
 
 import android.content.Context
 import android.util.AttributeSet

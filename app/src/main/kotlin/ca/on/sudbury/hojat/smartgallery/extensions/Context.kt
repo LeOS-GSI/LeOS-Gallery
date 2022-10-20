@@ -160,7 +160,7 @@ import ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
 import ca.on.sudbury.hojat.smartgallery.views.MyEditText
 import ca.on.sudbury.hojat.smartgallery.views.MyFloatingActionButton
 import ca.on.sudbury.hojat.smartgallery.views.MySeekBar
-import ca.on.sudbury.hojat.smartgallery.views.MySquareImageView
+import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.sudbury.hojat.smartgallery.views.MyTextView

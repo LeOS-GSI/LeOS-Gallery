@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true">
 
-    <ca.on.sudbury.hojat.smartgallery.views.MySquareImageView
+    <ca.on.hojat.palette.views.MySquareImageView
         android:id="@+id/medium_thumbnail"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

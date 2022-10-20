@@ -9,7 +9,7 @@
     android:focusable="true"
     android:paddingTop="@dimen/medium_margin">
 
-    <ca.on.sudbury.hojat.smartgallery.views.MySquareImageView
+    <ca.on.hojat.palette.views.MySquareImageView
         android:id="@+id/dir_thumbnail"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
