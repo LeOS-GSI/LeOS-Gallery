@@ -34,7 +34,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager
+import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask

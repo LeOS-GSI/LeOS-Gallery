@@ -9,7 +9,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
-import ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager
+import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogMediumPickerBinding

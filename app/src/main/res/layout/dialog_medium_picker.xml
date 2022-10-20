@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            app:layoutManager="ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager"
+            app:layoutManager="ca.on.hojat.palette.views.MyGridLayoutManager"
             app:spanCount="@integer/media_columns_vertical_scroll" />
 
     </ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller>

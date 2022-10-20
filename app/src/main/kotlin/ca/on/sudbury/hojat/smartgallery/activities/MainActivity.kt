@@ -6,7 +6,6 @@ import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
@@ -17,7 +16,6 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -146,7 +144,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
-import ca.on.sudbury.hojat.smartgallery.views.MyGridLayoutManager
+import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import java.io.File
 import java.io.FileInputStream
