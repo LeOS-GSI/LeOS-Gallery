@@ -41,7 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.util.*
@@ -128,7 +128,7 @@ open class FileDirItem(
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileSize(path)
             context.isPathOnOTG(path) -> context.getDocumentFile(path)?.getItemSize(countHidden)
                 ?: 0
-            isNougatPlus() && path.startsWith("content://") -> {
+            IsNougatPlusUseCase() && path.startsWith("content://") -> {
                 try {
                     context.contentResolver.openInputStream(Uri.parse(path))?.available()?.toLong()
                         ?: 0L
@@ -169,7 +169,7 @@ open class FileDirItem(
         return when {
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFLastModified(path)
             context.isPathOnOTG(path) -> context.getFastDocumentFile(path)?.lastModified() ?: 0L
-            isNougatPlus() && path.startsWith("content://") -> context.getMediaStoreLastModified(
+            IsNougatPlusUseCase() && path.startsWith("content://") -> context.getMediaStoreLastModified(
                 path
             )
             else -> File(path).lastModified()

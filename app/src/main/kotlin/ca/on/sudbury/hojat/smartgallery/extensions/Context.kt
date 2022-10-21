@@ -130,7 +130,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
@@ -157,6 +156,7 @@ import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.bumptech.glide.Glide
@@ -2989,7 +2989,7 @@ fun Context.saveImageRotation(path: String, degrees: Int): Boolean {
     if (!needsStupidWritePermissions(path)) {
         saveExifRotation(ExifInterface(path), degrees)
         return true
-    } else if (isNougatPlus()) {
+    } else if (IsNougatPlusUseCase()) {
         val documentFile = getSomeDocumentFile(path)
         if (documentFile != null) {
             val parcelFileDescriptor = contentResolver.openFileDescriptor(documentFile.uri, "rw")

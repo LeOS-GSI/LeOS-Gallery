@@ -12,11 +12,11 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.MainActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySetWallpaperBinding
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 private const val RATIO_PORTRAIT = 0
@@ -131,7 +131,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
     }
 
     private fun confirmWallpaper() {
-        if (isNougatPlus()) {
+        if (IsNougatPlusUseCase()) {
             val items = arrayListOf(
                 RadioItem(WallpaperManager.FLAG_SYSTEM, getString(R.string.home_screen)),
                 RadioItem(WallpaperManager.FLAG_LOCK, getString(R.string.lock_screen)),
@@ -164,7 +164,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
                 try {
                     val scaledBitmap =
                         Bitmap.createScaledBitmap(bitmap, wantedWidth, wantedHeight, true)
-                    if (isNougatPlus()) {
+                    if (IsNougatPlusUseCase()) {
                         wallpaperManager.setBitmap(scaledBitmap, null, true, wallpaperFlag)
                     } else {
                         wallpaperManager.setBitmap(scaledBitmap)

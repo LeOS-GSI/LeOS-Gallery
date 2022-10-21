@@ -49,12 +49,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.extensions.removeValues
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
@@ -173,13 +173,13 @@ class PropertiesDialog() {
                     }
                 }
 
-                val exif = if (isNougatPlus() && mActivity.isPathOnOTG(fileDirItem.path)) {
+                val exif = if (IsNougatPlusUseCase() && mActivity.isPathOnOTG(fileDirItem.path)) {
                     ExifInterface(
                         (mActivity as BaseSimpleActivity).getFileInputStreamSync(
                             fileDirItem.path
                         )!!
                     )
-                } else if (isNougatPlus() && fileDirItem.path.startsWith("content://")) {
+                } else if (IsNougatPlusUseCase() && fileDirItem.path.startsWith("content://")) {
                     try {
                         ExifInterface(
                             mActivity.contentResolver.openInputStream(
@@ -374,9 +374,9 @@ class PropertiesDialog() {
     }
 
     private fun addExifProperties(path: String, activity: Activity) {
-        val exif = if (isNougatPlus() && activity.isPathOnOTG(path)) {
+        val exif = if (IsNougatPlusUseCase() && activity.isPathOnOTG(path)) {
             ExifInterface((activity as BaseSimpleActivity).getFileInputStreamSync(path)!!)
-        } else if (isNougatPlus() && path.startsWith("content://")) {
+        } else if (IsNougatPlusUseCase() && path.startsWith("content://")) {
             try {
                 ExifInterface(activity.contentResolver.openInputStream(Uri.parse(path))!!)
             } catch (e: Exception) {

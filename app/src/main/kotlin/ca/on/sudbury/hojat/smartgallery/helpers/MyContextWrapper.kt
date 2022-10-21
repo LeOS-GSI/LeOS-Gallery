@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.Configuration
 import android.os.Build
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import java.util.Locale
 
 // language forcing used at "Use english language", taken from https://stackoverflow.com/a/40704077/1967672
@@ -14,7 +15,7 @@ class MyContextWrapper(context: Context) : ContextWrapper(context) {
         var newContext = context
         val config = newContext.resources.configuration
 
-        val sysLocale: Locale? = if (isNougatPlus()) {
+        val sysLocale: Locale? = if (IsNougatPlusUseCase()) {
             getSystemLocale(config)
         } else {
             getSystemLocaleLegacy(config)
@@ -23,7 +24,7 @@ class MyContextWrapper(context: Context) : ContextWrapper(context) {
         if (language != "" && sysLocale!!.language != language) {
             val locale = Locale(language)
             Locale.setDefault(locale)
-            if (isNougatPlus()) {
+            if (IsNougatPlusUseCase()) {
                 setSystemLocale(config, locale)
             } else {
                 setSystemLocaleLegacy(config, locale)

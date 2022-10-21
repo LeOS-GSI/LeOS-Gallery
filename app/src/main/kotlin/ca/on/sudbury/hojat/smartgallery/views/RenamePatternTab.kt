@@ -27,10 +27,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.updateInMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.value
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.interfaces.RenameTab
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import kotlinx.android.synthetic.main.dialog_rename_items_pattern.view.*
 import java.io.File
 import java.text.SimpleDateFormat
@@ -137,7 +137,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
     private fun getNewPath(path: String, useMediaFileExtension: Boolean): String? {
         try {
             val exif = ExifInterface(path)
-            var dateTime = if (isNougatPlus()) {
+            var dateTime = if (IsNougatPlusUseCase()) {
                 exif.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL) ?: exif.getAttribute(
                     ExifInterface.TAG_DATETIME
                 )

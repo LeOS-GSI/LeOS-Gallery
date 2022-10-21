@@ -58,7 +58,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
@@ -80,6 +79,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_FREE
 import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_OTHER
 import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
@@ -417,7 +417,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     private fun setOldExif() {
         var inputStream: InputStream? = null
         try {
-            if (isNougatPlus()) {
+            if (IsNougatPlusUseCase()) {
                 inputStream = contentResolver.openInputStream(uri!!)
                 oldExif = ExifInterface(inputStream!!)
             }
@@ -988,7 +988,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
 
         try {
-            if (isNougatPlus()) {
+            if (IsNougatPlusUseCase()) {
                 val newExif = ExifInterface(file.absolutePath)
                 oldExif?.copyNonDimensionAttributesTo(newExif)
             }

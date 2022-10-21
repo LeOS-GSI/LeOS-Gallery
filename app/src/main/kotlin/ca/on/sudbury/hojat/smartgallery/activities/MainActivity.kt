@@ -135,7 +135,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.WAS_PROTECTION_HANDLED
 import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
 import ca.on.sudbury.hojat.smartgallery.models.Directory
@@ -143,6 +142,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
@@ -550,7 +550,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun startNewPhotoFetcher() {
-        if (isNougatPlus()) {
+        if (IsNougatPlusUseCase()) {
             val photoFetcher = NewPhotoFetcher()
             if (!photoFetcher.isScheduled(applicationContext)) {
                 photoFetcher.scheduleJob(applicationContext)

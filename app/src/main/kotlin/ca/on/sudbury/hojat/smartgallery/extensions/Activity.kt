@@ -66,7 +66,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GESTURE_VIEWS
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_APNG
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
@@ -103,6 +102,7 @@ import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.squareup.picasso.Picasso
@@ -1891,7 +1891,7 @@ fun BaseSimpleActivity.showFileCreateError(path: String) {
 @TargetApi(Build.VERSION_CODES.N)
 fun Activity.showFileOnMap(path: String) {
     val exif = try {
-        if (path.startsWith("content://") && isNougatPlus()) {
+        if (path.startsWith("content://") && IsNougatPlusUseCase()) {
             ExifInterface(contentResolver.openInputStream(Uri.parse(path))!!)
         } else {
             ExifInterface(path)

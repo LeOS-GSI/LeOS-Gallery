@@ -383,9 +383,6 @@ val appIconColorStrings = arrayListOf(
 const val VIEW_TYPE_GRID = 1
 const val VIEW_TYPE_LIST = 2
 
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N)
-fun isNougatPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
 fun isOreoPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 

@@ -43,7 +43,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
@@ -183,6 +182,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -572,7 +572,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
-            mIsFullScreen = if (isNougatPlus() && isInMultiWindowMode) {
+            mIsFullScreen = if (IsNougatPlusUseCase() && isInMultiWindowMode) {
                 visibility and View.SYSTEM_UI_FLAG_LOW_PROFILE != 0
             } else if (visibility and View.SYSTEM_UI_FLAG_LOW_PROFILE == 0) {
                 false
@@ -1253,7 +1253,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             RunOnBackgroundThreadUseCase {
                 try {
                     var oldExif: ExifInterface? = null
-                    if (isNougatPlus()) {
+                    if (IsNougatPlusUseCase()) {
                         val inputStream =
                             contentResolver.openInputStream(Uri.fromFile(File(oldPath)))
                         oldExif = ExifInterface(inputStream!!)
@@ -1297,7 +1297,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         try {
             bitmap.compress(file.absolutePath.getCompressionFormat(), 90, out)
 
-            if (isNougatPlus()) {
+            if (IsNougatPlusUseCase()) {
                 val newExif = ExifInterface(file.absolutePath)
                 oldExif?.copyNonDimensionAttributesTo(newExif)
             }
