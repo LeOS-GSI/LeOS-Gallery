@@ -318,9 +318,9 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
         mIsFullscreen = !mIsFullscreen
         toggleButtonVisibility()
         if (mIsFullscreen) {
-            HideSystemUiUseCase.invoke(this)
+            HideSystemUiUseCase(this)
         } else {
-            ShowSystemUiUseCase.invoke(this)
+            ShowSystemUiUseCase(this)
         }
     }
 

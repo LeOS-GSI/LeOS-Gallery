@@ -69,7 +69,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.AlphanumericComparator
 import ca.on.sudbury.hojat.smartgallery.helpers.BaseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.Config
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
-import ca.on.sudbury.hojat.smartgallery.helpers.DAY_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTERNAL_STORAGE_PROVIDER_AUTHORITY
 import ca.on.sudbury.hojat.smartgallery.helpers.ExternalStorageProviderHack
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
@@ -80,13 +79,11 @@ import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.HOUR_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IsoTypeReader
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
-import ca.on.sudbury.hojat.smartgallery.helpers.MINUTE_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
@@ -136,7 +133,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
 import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
@@ -162,6 +158,7 @@ import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -2170,7 +2167,7 @@ fun Context.toast(id: Int, length: Int = Toast.LENGTH_SHORT) {
 
 fun Context.toast(msg: String, length: Int = Toast.LENGTH_SHORT) {
     try {
-        if (isOnMainThread()) {
+        if (IsMainThreadUseCase()) {
             doToast(this, msg, length)
         } else {
             Handler(Looper.getMainLooper()).post {

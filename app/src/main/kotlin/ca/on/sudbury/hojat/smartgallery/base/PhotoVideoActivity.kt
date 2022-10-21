@@ -286,7 +286,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         }
 
         checkNotchSupport()
-        ShowSystemUiUseCase.invoke(this)
+        ShowSystemUiUseCase(this)
         val bundle = Bundle()
         val file = File(mUri.toString())
         val intentType = intent.type ?: ""
@@ -527,9 +527,9 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
     override fun fragmentClicked() {
         mIsFullScreen = !mIsFullScreen
         if (mIsFullScreen) {
-            HideSystemUiUseCase.invoke(this)
+            HideSystemUiUseCase(this)
         } else {
-            ShowSystemUiUseCase.invoke(this)
+            ShowSystemUiUseCase(this)
         }
 
         val newAlpha = if (mIsFullScreen) 0f else 1f

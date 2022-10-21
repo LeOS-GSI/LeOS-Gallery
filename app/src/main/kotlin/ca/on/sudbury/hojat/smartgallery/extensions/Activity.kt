@@ -104,13 +104,13 @@ import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_SET_AS
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
-import ca.on.sudbury.hojat.smartgallery.helpers.isOnMainThread
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
+import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileNotFoundException
@@ -756,7 +756,7 @@ fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean
 }
 
 fun Activity.hideKeyboard() {
-    if (isOnMainThread()) {
+    if (IsMainThreadUseCase()) {
         hideKeyboardSync()
     } else {
         Handler(Looper.getMainLooper()).post {

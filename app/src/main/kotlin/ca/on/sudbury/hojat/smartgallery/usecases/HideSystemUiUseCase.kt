@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
  * Just receives an instance of an AppCompatActivity and hides the system UI controls. Returns Unit.
  */
 object HideSystemUiUseCase {
-    fun invoke(activity: AppCompatActivity) {
+   operator fun invoke(activity: AppCompatActivity) {
         activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or

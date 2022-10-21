@@ -202,9 +202,9 @@ open class PanoramaPhotoActivity : SimpleActivity() {
         isFullscreen = !isFullscreen
         toggleButtonVisibility()
         if (isFullscreen) {
-            HideSystemUiUseCase.invoke(this)
+            HideSystemUiUseCase(this)
         } else {
-            ShowSystemUiUseCase.invoke(this)
+            ShowSystemUiUseCase(this)
         }
     }
 }

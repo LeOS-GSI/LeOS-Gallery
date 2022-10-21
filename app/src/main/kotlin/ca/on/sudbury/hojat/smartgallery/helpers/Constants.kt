@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Looper
 import androidx.annotation.ChecksSdkIntAtLeast
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 
 // shared preferences
 const val DIRECTORY_SORT_ORDER = "directory_sort_order"
@@ -384,10 +385,8 @@ val appIconColorStrings = arrayListOf(
 const val VIEW_TYPE_GRID = 1
 const val VIEW_TYPE_LIST = 2
 
-fun isOnMainThread() = Looper.myLooper() == Looper.getMainLooper()
-
 fun ensureBackgroundThread(callback: () -> Unit) {
-    if (isOnMainThread()) {
+    if (IsMainThreadUseCase()) {
         Thread {
             callback()
         }.start()

@@ -499,7 +499,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             return
         }
 
-        ShowSystemUiUseCase.invoke(this)
+        ShowSystemUiUseCase(this)
 
         if (intent.getBooleanExtra(SKIP_AUTHENTICATION, false)) {
             initContinue()
@@ -680,7 +680,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         binding.viewPager.setPageTransformer(false, FadePageTransformer())
                     }
 
-                    HideSystemUiUseCase.invoke(this)
+                    HideSystemUiUseCase(this)
                     mSlideshowInterval = config.slideshowInterval
                     mSlideshowMoveBackwards = config.slideshowMoveBackwards
                     mIsSlideshowActive = true
@@ -774,7 +774,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         if (mIsSlideshowActive) {
             binding.viewPager.setPageTransformer(false, DefaultPageTransformer())
             mIsSlideshowActive = false
-            ShowSystemUiUseCase.invoke(this)
+            ShowSystemUiUseCase(this)
             mSlideshowHandler.removeCallbacksAndMessages(null)
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             mAreSlideShowMediaVisible = false
@@ -1649,10 +1649,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun checkSystemUI() {
         if (mIsFullScreen) {
-            HideSystemUiUseCase.invoke(this)
+            HideSystemUiUseCase(this)
         } else {
             stopSlideshow()
-            ShowSystemUiUseCase.invoke(this)
+            ShowSystemUiUseCase(this)
         }
     }
 
