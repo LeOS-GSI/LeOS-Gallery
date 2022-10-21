@@ -11,7 +11,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getPicturesDirectoryPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
@@ -24,6 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import java.io.File
 
 // TODO: this dialog should be replaced by DialogFragment.
@@ -65,7 +65,7 @@ class SaveAsDialog(
 
             binding.filenameValue.setText(name)
             binding.folderValue.setOnClickListener {
-                activity.hideKeyboard(binding.folderValue)
+                HideKeyboardUseCase(activity, binding.folderValue)
                 FilePickerDialog(
                     activity,
                     realPath,

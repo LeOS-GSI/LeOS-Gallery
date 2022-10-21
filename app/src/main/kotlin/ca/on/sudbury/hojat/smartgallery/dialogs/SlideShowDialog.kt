@@ -1,12 +1,12 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogSlideshowBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
@@ -15,6 +15,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_FADE
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_NONE
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_SLIDE
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_DEFAULT_INTERVAL
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 
 @SuppressLint("InflateParams")
 class SlideShowDialog(
@@ -34,7 +35,7 @@ class SlideShowDialog(
 
             intervalValue.setOnFocusChangeListener { v, hasFocus ->
                 if (!hasFocus)
-                    activity.hideKeyboard(v)
+                    HideKeyboardUseCase(activity, v)
             }
 
             animationHolder.setOnClickListener {
@@ -82,7 +83,7 @@ class SlideShowDialog(
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(binding.root, this) { alertDialog ->
-                    alertDialog.hideKeyboard()
+                    alertDialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN) // hides the keyboard
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         storeValues()
                         callback()

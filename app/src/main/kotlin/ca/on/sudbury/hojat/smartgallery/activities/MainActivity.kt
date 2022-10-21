@@ -70,7 +70,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
@@ -145,6 +144,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import java.io.File
 import java.io.FileInputStream
@@ -662,7 +662,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun launchSearchActivity() {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         Intent(this, SearchActivity::class.java).apply {
             startActivity(this)
         }
@@ -701,7 +701,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             if (mIsThirdPartyIntent) {
                 handleMediaIntent(this)
             } else {
-                hideKeyboard()
+                HideKeyboardUseCase
                 startActivity(this)
                 finish()
             }
@@ -1093,7 +1093,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun handleMediaIntent(intent: Intent) {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         intent.apply {
             if (mIsSetWallpaperIntent) {
                 putExtra(SET_WALLPAPER_INTENT, true)

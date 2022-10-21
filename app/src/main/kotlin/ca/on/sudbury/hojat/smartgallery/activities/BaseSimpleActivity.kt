@@ -59,7 +59,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getPermissionString
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperStatusBarColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isAppInstalledOnSDCard
@@ -119,6 +118,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import java.io.File
 import java.io.OutputStream
 import java.util.regex.Pattern
@@ -198,7 +198,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                hideKeyboard()
+                HideKeyboardUseCase(this)
                 finish()
             }
             else -> return super.onOptionsItemSelected(item)
@@ -561,7 +561,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         faqItems: ArrayList<FaqItem>,
         showFAQBeforeMail: Boolean
     ) {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         Intent(applicationContext, AboutActivity::class.java).apply {
             putExtra(APP_ICON_IDS, getAppIconIDs())
             putExtra(APP_LAUNCHER_NAME, getAppLauncherName())
@@ -611,7 +611,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     // synchronous return value determines only if we are showing the SAF dialog, callback result tells if the SD or OTG permission has been granted
     fun handleSAFDialog(path: String, callback: (success: Boolean) -> Unit): Boolean {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         return if (isShowingSAFDialog(path) || isShowingOTGDialog(path)) {
             funAfterSAFPermission = callback
             true
@@ -622,7 +622,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     fun handleSAFDialogSdk30(path: String, callback: (success: Boolean) -> Unit): Boolean {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         return if (isShowingSAFDialogSdk30(path)) {
             funAfterSdk30Action = callback
             true
@@ -636,7 +636,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         path: String,
         callback: (success: Boolean) -> Unit
     ): Boolean {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         return if (canManageMedia()) {
             callback(true)
             false
@@ -649,7 +649,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         path: String,
         callback: (success: Boolean) -> Unit
     ): Boolean {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         return if (isShowingSAFCreateDocumentDialogSdk30(path)) {
             funAfterSdk30Action = callback
             true
@@ -660,7 +660,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     fun handleAndroidSAFDialog(path: String, callback: (success: Boolean) -> Unit): Boolean {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         return if (isShowingAndroidSAFDialog(path)) {
             funAfterSAFPermission = callback
             true
@@ -671,7 +671,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     fun handleOTGPermission(callback: (success: Boolean) -> Unit) {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         if (baseConfig.OTGTreeUri.isNotEmpty()) {
             callback(true)
             return
@@ -700,7 +700,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     fun deleteSDK30Uris(uris: List<Uri>, callback: (success: Boolean) -> Unit) {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         if (isRPlus()) {
             funAfterSdk30Action = callback
             try {
@@ -717,7 +717,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     fun updateSDK30Uris(uris: List<Uri>, callback: (success: Boolean) -> Unit) {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         if (isRPlus()) {
             funAfterUpdate30File = callback
             try {
@@ -1161,7 +1161,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             statusBarColor
         )
         toolbar.setNavigationOnClickListener {
-            hideKeyboard()
+            HideKeyboardUseCase(this)
             finish()
         }
 

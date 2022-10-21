@@ -38,7 +38,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPath
 import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
@@ -85,6 +84,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_IN_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.video.VideoPlayerActivity
@@ -192,7 +192,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
     private fun checkIntent(savedInstanceState: Bundle? = null) {
         if (intent.data == null && intent.action == Intent.ACTION_VIEW) {
-            hideKeyboard()
+            HideKeyboardUseCase(this)
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
@@ -364,7 +364,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         } catch (ignored: OutOfMemoryError) {
         }
 
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         if (isPanorama) {
             Intent(applicationContext, PanoramaVideoActivity::class.java).apply {
                 putExtra(PATH, realPath)
@@ -416,7 +416,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             MediaActivity.mMedia.clear()
         }
         runOnUiThread {
-            hideKeyboard()
+            HideKeyboardUseCase(this)
             Intent(this, ViewPagerActivity::class.java).apply {
                 putExtra(SKIP_AUTHENTICATION, intent.getBooleanExtra(SKIP_AUTHENTICATION, false))
                 putExtra(SHOW_FAVORITES, intent.getBooleanExtra(SHOW_FAVORITES, false))

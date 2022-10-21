@@ -16,6 +16,4 @@ fun AlertDialog.showKeyboard(editText: AppCompatEditText) {
     }
 }
 
-fun AlertDialog.hideKeyboard() {
-    window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-}
+

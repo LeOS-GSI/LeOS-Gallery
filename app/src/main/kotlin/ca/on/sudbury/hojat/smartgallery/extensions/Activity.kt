@@ -110,6 +110,7 @@ import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -559,13 +560,6 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
     }
 }
 
-fun Activity.hideKeyboardSync() {
-    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow((currentFocus ?: View(this)).windowToken, 0)
-    window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-    currentFocus?.clearFocus()
-}
-
 fun Activity.rescanPath(path: String, callback: (() -> Unit)? = null) {
     applicationContext.rescanPath(path, callback)
 }
@@ -755,23 +749,8 @@ fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean
     }
 }
 
-fun Activity.hideKeyboard() {
-    if (IsMainThreadUseCase()) {
-        hideKeyboardSync()
-    } else {
-        Handler(Looper.getMainLooper()).post {
-            hideKeyboardSync()
-        }
-    }
-}
-
-fun Activity.hideKeyboard(view: View) {
-    val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-}
-
 fun SimpleActivity.launchSettings() {
-    hideKeyboard()
+    HideKeyboardUseCase(this)
     startActivity(Intent(applicationContext, SettingsActivity::class.java))
 }
 
@@ -2195,7 +2174,7 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
 }
 
 fun Activity.launchPurchaseThankYouIntent() {
-    hideKeyboard()
+    HideKeyboardUseCase(this)
     try {
         launchViewIntent("market://details?id=com.simplemobiletools.thankyou")
     } catch (ignored: Exception) {
@@ -2214,7 +2193,7 @@ fun Activity.launchUpgradeToProIntent() {
 fun Activity.launchViewIntent(id: Int) = launchViewIntent(getString(id))
 
 fun Activity.launchViewIntent(url: String) {
-    hideKeyboard()
+    HideKeyboardUseCase(this)
     ensureBackgroundThread {
         Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
             try {
@@ -2229,7 +2208,7 @@ fun Activity.launchViewIntent(url: String) {
 }
 
 fun Activity.redirectToRateUs() {
-    hideKeyboard()
+    HideKeyboardUseCase(this)
     try {
         launchViewIntent("market://details?id=${packageName.removeSuffix(".debug")}")
     } catch (ignored: ActivityNotFoundException) {

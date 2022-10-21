@@ -168,7 +168,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap
 import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getUriMimeType
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.tryGenericMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getFinalUriFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
@@ -185,6 +184,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
@@ -1620,7 +1620,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     }
 
     override fun launchViewVideoIntent(path: String) {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         ensureBackgroundThread {
             val newUri = getFinalUriFromPath(path, BuildConfig.APPLICATION_ID)
                 ?: return@ensureBackgroundThread

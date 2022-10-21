@@ -90,7 +90,6 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.hideKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
@@ -110,6 +109,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
+import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import java.io.File
 import java.io.IOException
 
@@ -377,7 +377,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun startSlideshow() {
         if (mMedia.isNotEmpty()) {
-            hideKeyboard()
+            HideKeyboardUseCase(this)
             Intent(this, ViewPagerActivity::class.java).apply {
                 val item = mMedia.firstOrNull { it is Medium } as? Medium ?: return
                 putExtra(SKIP_AUTHENTICATION, shouldSkipAuthentication())
@@ -622,7 +622,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun switchToFolderView() {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         config.showAll = false
         startActivity(Intent(this, MainActivity::class.java))
         finish()
@@ -907,7 +907,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun itemClicked(path: String) {
-        hideKeyboard()
+        HideKeyboardUseCase(this)
         if (isSetWallpaperIntent()) {
             toast(R.string.setting_wallpaper)
 
