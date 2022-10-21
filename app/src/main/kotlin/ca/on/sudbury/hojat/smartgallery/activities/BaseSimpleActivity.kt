@@ -124,21 +124,21 @@ import java.io.File
 import java.io.OutputStream
 import java.util.regex.Pattern
 
+private const val GENERIC_PERM_HANDLER = 100
+private const val DELETE_FILE_SDK_30_HANDLER = 300
+private const val RECOVERABLE_SECURITY_HANDLER = 301
+private const val UPDATE_FILE_SDK_30_HANDLER = 302
+private const val MANAGE_MEDIA_RC = 303
+
 abstract class BaseSimpleActivity : AppCompatActivity() {
     var copyMoveCallback: ((destinationPath: String) -> Unit)? = null
-    var actionOnPermission: ((granted: Boolean) -> Unit)? = null
-    var isAskingPermissions = false
+    private var actionOnPermission: ((granted: Boolean) -> Unit)? = null
+    private var isAskingPermissions = false
     var useDynamicTheme = true
     var showTransparentTop = false
     var showTransparentNavigation = false
     var checkedDocumentPath = ""
-    var configItemsToExport = LinkedHashMap<String, Any>()
-
-    private val GENERIC_PERM_HANDLER = 100
-    private val DELETE_FILE_SDK_30_HANDLER = 300
-    private val RECOVERABLE_SECURITY_HANDLER = 301
-    private val UPDATE_FILE_SDK_30_HANDLER = 302
-    private val MANAGE_MEDIA_RC = 303
+    private var configItemsToExport = LinkedHashMap<String, Any>()
 
     companion object {
         var funAfterSAFPermission: ((success: Boolean) -> Unit)? = null
