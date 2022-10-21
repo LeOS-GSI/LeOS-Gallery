@@ -19,6 +19,7 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.Settings
 import android.telecom.TelecomManager
+import android.text.Html
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -73,7 +74,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.storeAndroidTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
-import ca.on.sudbury.hojat.smartgallery.extensions.updateActionBarTitle
 import ca.on.sudbury.hojat.smartgallery.extensions.updateOTGPathFromPartition
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
@@ -111,6 +111,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog.Mode
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
+import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.extensions.writeLn
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContextWrapper
@@ -233,7 +234,13 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     fun updateActionbarColor(color: Int = getProperStatusBarColor()) {
-        updateActionBarTitle(supportActionBar?.title.toString(), color)
+        val text = supportActionBar?.title.toString()
+        val colorToUse = if (baseConfig.isUsingSystemTheme) {
+            getProperTextColor()
+        } else {
+            color.getContrastColor()
+        }
+        supportActionBar?.title = Html.fromHtml("<font color='${colorToUse.toHex()}'>$text</font>")
         supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
         updateStatusbarColor(color)
         setTaskDescription(ActivityManager.TaskDescription(null, null, color))

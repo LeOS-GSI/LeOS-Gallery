@@ -7,7 +7,6 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.ContentProviderOperation
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -20,22 +19,17 @@ import android.graphics.drawable.LayerDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.os.TransactionTooLargeException
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.provider.Settings
-import android.text.Html
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -111,7 +105,6 @@ import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileNotFoundException
@@ -2548,15 +2541,6 @@ fun BaseSimpleActivity.copyOldLastModified(sourcePath: String, destinationPath: 
             applicationContext.contentResolver.update(uri, values, selection, selectionArgs)
         }
     }
-}
-
-fun AppCompatActivity.updateActionBarTitle(text: String, color: Int = getProperStatusBarColor()) {
-    val colorToUse = if (baseConfig.isUsingSystemTheme) {
-        getProperTextColor()
-    } else {
-        color.getContrastColor()
-    }
-    supportActionBar?.title = Html.fromHtml("<font color='${colorToUse.toHex()}'>$text</font>")
 }
 
 fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop: Boolean = false) =
