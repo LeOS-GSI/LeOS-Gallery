@@ -59,7 +59,6 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivityVideoPlayerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.shareMediumPath
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
@@ -72,6 +71,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.DRAG_THRESHOLD
 import ca.on.sudbury.hojat.smartgallery.helpers.HIDE_SYSTEM_UI_DELAY
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
+import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -558,7 +558,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
     private fun fullscreenToggled(isFullScreen: Boolean) {
         mIsFullscreen = isFullScreen
         if (isFullScreen) {
-            hideSystemUI()
+            HideSystemUiUseCase.invoke(this)
         } else {
             ShowSystemUiUseCase.invoke(this)
         }

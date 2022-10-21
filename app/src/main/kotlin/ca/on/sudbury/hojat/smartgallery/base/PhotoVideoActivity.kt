@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.sharePath
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
-import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -86,6 +85,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_IN_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.video.VideoPlayerActivity
 import java.io.File
@@ -527,7 +527,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
     override fun fragmentClicked() {
         mIsFullScreen = !mIsFullScreen
         if (mIsFullScreen) {
-            hideSystemUI()
+            HideSystemUiUseCase.invoke(this)
         } else {
             ShowSystemUiUseCase.invoke(this)
         }

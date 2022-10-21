@@ -867,16 +867,6 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
     }
 }
 
-fun AppCompatActivity.hideSystemUI() {
-    window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-            View.SYSTEM_UI_FLAG_FULLSCREEN or
-            View.SYSTEM_UI_FLAG_IMMERSIVE
-}
-
 fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
     val file = File(path, NOMEDIA)
     if (getDoesFilePathExist(file.absolutePath)) {
@@ -2425,7 +2415,7 @@ private fun BaseSimpleActivity.deleteFilesCasual(
     }
 }
 
-fun Activity.createTempFile(file: File): File? {
+fun createTempFile(file: File): File? {
     return if (file.isDirectory) {
         createTempDir("temp", "${System.currentTimeMillis()}", file.parentFile)
     } else {

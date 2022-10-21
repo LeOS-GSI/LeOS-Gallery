@@ -84,7 +84,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleFileVisibility
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPath
-import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDBMediaPath
 import ca.on.sudbury.hojat.smartgallery.photoview.PhotoFragment
@@ -186,6 +185,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
 import java.io.OutputStream
@@ -680,7 +680,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         binding.viewPager.setPageTransformer(false, FadePageTransformer())
                     }
 
-                    hideSystemUI()
+                    HideSystemUiUseCase.invoke(this)
                     mSlideshowInterval = config.slideshowInterval
                     mSlideshowMoveBackwards = config.slideshowMoveBackwards
                     mIsSlideshowActive = true
@@ -1649,7 +1649,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun checkSystemUI() {
         if (mIsFullScreen) {
-            hideSystemUI()
+            HideSystemUiUseCase.invoke(this)
         } else {
             stopSlideshow()
             ShowSystemUiUseCase.invoke(this)

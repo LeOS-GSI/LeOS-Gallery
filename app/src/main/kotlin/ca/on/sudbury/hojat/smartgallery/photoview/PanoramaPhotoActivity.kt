@@ -24,8 +24,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityPanoramaPhotoBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
+import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 
 private const val CARDBOARD_DISPLAY_MODE = 3
@@ -202,7 +202,7 @@ open class PanoramaPhotoActivity : SimpleActivity() {
         isFullscreen = !isFullscreen
         toggleButtonVisibility()
         if (isFullscreen) {
-            hideSystemUI()
+            HideSystemUiUseCase.invoke(this)
         } else {
             ShowSystemUiUseCase.invoke(this)
         }

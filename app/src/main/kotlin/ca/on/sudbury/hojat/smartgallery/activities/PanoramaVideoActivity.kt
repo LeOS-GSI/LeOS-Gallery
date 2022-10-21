@@ -27,9 +27,9 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityPanoramaVideoBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
-import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.helpers.MIN_SKIP_LENGTH
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
+import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
 import kotlin.math.roundToInt
@@ -318,7 +318,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
         mIsFullscreen = !mIsFullscreen
         toggleButtonVisibility()
         if (mIsFullscreen) {
-            hideSystemUI()
+            HideSystemUiUseCase.invoke(this)
         } else {
             ShowSystemUiUseCase.invoke(this)
         }
