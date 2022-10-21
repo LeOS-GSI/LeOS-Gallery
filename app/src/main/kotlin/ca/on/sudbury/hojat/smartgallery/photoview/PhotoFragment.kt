@@ -60,7 +60,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.PortraitPhotosAdapter
@@ -81,6 +80,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.NORMAL_TILE_DPI
 import ca.on.sudbury.hojat.smartgallery.helpers.LOW_TILE_DPI
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.apache.sanselan.common.byteSources.ByteSourceInputStream
@@ -313,7 +313,7 @@ class PhotoFragment : ViewPagerFragment() {
         }
         mLoadZoomableViewHandler.removeCallbacksAndMessages(null)
         if (mCurrentRotationDegrees != 0) {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 val path = mMedium.path
                 (activity as? BaseSimpleActivity)?.saveRotatedImageToFile(
                     path,
@@ -413,7 +413,7 @@ class PhotoFragment : ViewPagerFragment() {
             showPortraitStripe()
         }
 
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase{
             mImageOrientation = getImageOrientation()
             activity?.runOnUiThread {
                 when {
@@ -439,7 +439,7 @@ class PhotoFragment : ViewPagerFragment() {
             binding.apply {
                 gesturesView.beGone()
                 gifViewFrame.beVisible()
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     gifView.setInputSource(source)
                 }
             }

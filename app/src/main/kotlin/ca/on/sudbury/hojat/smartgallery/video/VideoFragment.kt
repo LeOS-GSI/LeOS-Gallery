@@ -56,7 +56,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.activities.PanoramaVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerVideoItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -69,6 +68,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOULD_INIT_FRAGMENT
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.FAST_FORWARD_VIDEO_MS
 import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
 import java.io.FileInputStream
 import kotlin.math.roundToInt
@@ -204,12 +204,13 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         initTimeHolder()
         checkIfPanorama()
 
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             activity?.getVideoResolution(mMedium.path)?.apply {
                 mVideoSize.x = x
                 mVideoSize.y = y
             }
         }
+
 
         if (mIsPanorama) {
             binding.apply {
@@ -757,7 +758,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun setupVideoDuration() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             mDuration = context?.getDuration(mMedium.path) ?: 0
             activity?.runOnUiThread {
                 setupTimeHolder()
@@ -824,7 +825,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
     private fun releaseExoPlayer() {
         mIsPlayerPrepared = false
         mExoPlayer?.stop()
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             mExoPlayer?.release()
             mExoPlayer = null
         }
@@ -837,7 +838,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture) = false
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             mExoPlayer?.setVideoSurface(Surface(binding.videoSurface.surfaceTexture))
         }
     }

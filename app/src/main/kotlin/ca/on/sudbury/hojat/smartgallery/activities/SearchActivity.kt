@@ -24,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
@@ -43,6 +42,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
 
 class SearchActivity : SimpleActivity(), MediaOperationsListener {
@@ -126,7 +126,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun textChanged(text: String) {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             try {
                 val filtered =
                     mAllMedia.filter { it is Medium && it.name.contains(text, true) } as ArrayList
@@ -337,7 +337,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
 
             mAllMedia.removeAll { filtered.map { it.path }.contains((it as? Medium)?.path) }
 
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 val useRecycleBin = config.useRecycleBin
                 filtered.forEach {
                     if (it.path.startsWith(recycleBinPath) || !useRecycleBin) {

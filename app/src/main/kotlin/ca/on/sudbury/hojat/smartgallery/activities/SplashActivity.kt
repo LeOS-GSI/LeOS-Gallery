@@ -1,12 +1,12 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.content.Intent
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoriteFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 class SplashActivity : BaseSplashActivity() {
     override fun initActivity() {
@@ -20,7 +20,7 @@ class SplashActivity : BaseSplashActivity() {
                 launchActivity()
             } else {
                 config.wereFavoritesMigrated = true
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     val favorites = ArrayList<Favorite>()
                     val favoritePaths =
                         mediaDB.getFavorites().map { it.path }.toMutableList() as ArrayList<String>

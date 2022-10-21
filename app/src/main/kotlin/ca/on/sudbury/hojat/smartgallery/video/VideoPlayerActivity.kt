@@ -53,7 +53,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityVideoPlayerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
@@ -72,6 +71,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.HIDE_SYSTEM_UI_DELAY
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -742,7 +742,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
 
     private fun releaseExoPlayer() {
         mExoPlayer?.stop()
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             mExoPlayer?.release()
             mExoPlayer = null
         }
@@ -778,7 +778,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture) = false
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             mExoPlayer?.setVideoSurface(Surface(binding.videoSurface.surfaceTexture))
         }
     }

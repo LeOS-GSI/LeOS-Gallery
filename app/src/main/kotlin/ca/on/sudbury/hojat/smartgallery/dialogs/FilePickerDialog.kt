@@ -48,8 +48,8 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.FilepickerFavoritesAdapter
 import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFilepickerBinding
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
 import timber.log.Timber
 import java.io.File
@@ -183,7 +183,7 @@ class FilePickerDialog(
     }
 
     private fun tryUpdateItems() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             getItems(currPath) {
                 activity.runOnUiThread {
                     binding.filepickerPlaceholder.beGone()

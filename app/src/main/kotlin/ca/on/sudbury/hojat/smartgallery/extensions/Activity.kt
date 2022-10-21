@@ -66,7 +66,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GESTURE_VIEWS
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_APNG
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
@@ -105,6 +104,7 @@ import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileNotFoundException
@@ -566,8 +566,9 @@ fun Activity.sharePath(path: String) {
 }
 
 fun Activity.sharePathIntent(path: String, applicationId: String) {
-    ensureBackgroundThread {
-        val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
+    RunOnBackgroundThreadUseCase {
+
+        val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
         Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_STREAM, newUri)
@@ -596,13 +597,15 @@ fun Activity.sharePaths(paths: ArrayList<String>) {
 }
 
 fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
+
         if (paths.size == 1) {
             sharePathIntent(paths.first(), applicationId)
         } else {
             val uriPaths = java.util.ArrayList<String>()
             val newUris = paths.map {
-                val uri = getFinalUriFromPath(it, applicationId) ?: return@ensureBackgroundThread
+                val uri =
+                    getFinalUriFromPath(it, applicationId) ?: return@RunOnBackgroundThreadUseCase
                 uriPaths.add(uri.path!!)
                 uri
             } as java.util.ArrayList<Uri>
@@ -865,7 +868,7 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
     } else {
         try {
             if (file.createNewFile()) {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     addNoMediaIntoMediaStore(file.absolutePath)
                 }
             } else {
@@ -897,7 +900,7 @@ fun BaseSimpleActivity.deleteFile(
     isDeletingMultipleFiles: Boolean,
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         deleteFileBg(fileDirItem, allowDeleteFolder, isDeletingMultipleFiles, callback)
     }
 }
@@ -971,7 +974,7 @@ fun BaseSimpleActivity.deleteFiles(
     allowDeleteFolder: Boolean = false,
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         deleteFilesBg(files, allowDeleteFolder, callback)
     }
 }
@@ -1010,12 +1013,13 @@ fun BaseSimpleActivity.renameFile(
             }
 
             try {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     val success = renameAndroidSAFDocument(oldPath, newPath)
                     runOnUiThread {
                         callback?.invoke(success, Android30RenameFormat.NONE)
                     }
                 }
+
             } catch (e: Exception) {
                 showErrorToast(e)
                 runOnUiThread {
@@ -1033,7 +1037,8 @@ fun BaseSimpleActivity.renameFile(
                 }
 
                 try {
-                    ensureBackgroundThread {
+                    RunOnBackgroundThreadUseCase {
+
                         val success = renameDocumentSdk30(oldPath, newPath)
                         if (success) {
                             updateInMediaStore(oldPath, newPath)
@@ -1076,7 +1081,8 @@ fun BaseSimpleActivity.renameFile(
             }
 
             try {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
+
                     try {
                         DocumentsContract.renameDocument(
                             applicationContext.contentResolver,
@@ -1088,7 +1094,7 @@ fun BaseSimpleActivity.renameFile(
                     } catch (e: Exception) {
                         showErrorToast(e)
                         callback?.invoke(false, Android30RenameFormat.NONE)
-                        return@ensureBackgroundThread
+                        return@RunOnBackgroundThreadUseCase
                     }
 
                     updateInMediaStore(oldPath, newPath)
@@ -1136,7 +1142,7 @@ fun BaseSimpleActivity.toggleFileVisibility(
             callback?.invoke(newPath)
         }
 
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             updateDBMediaPath(oldPath, newPath)
         }
     }
@@ -1184,7 +1190,7 @@ fun BaseSimpleActivity.tryDeleteFileDirItem(
 ) {
     deleteFile(fileDirItem, allowDeleteFolder, isDeletingMultipleFiles = false) {
         if (deleteFromDatabase) {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 deleteDBPath(fileDirItem.path)
                 runOnUiThread {
                     callback?.invoke(it)
@@ -1200,7 +1206,8 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
     paths: ArrayList<String>,
     callback: ((wasSuccess: Boolean) -> Unit)?
 ) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
+
         var pathsCnt = paths.size
         val otgPath = config.OTGPath
 
@@ -1239,7 +1246,7 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
                     }
                 } catch (e: Exception) {
                     showErrorToast(e)
-                    return@ensureBackgroundThread
+                    return@RunOnBackgroundThreadUseCase
                 } finally {
                     inputStream?.close()
                     out?.close()
@@ -1263,7 +1270,7 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
                     }
                 } catch (e: Exception) {
                     showErrorToast(e)
-                    return@ensureBackgroundThread
+                    return@RunOnBackgroundThreadUseCase
                 }
             }
         }
@@ -1276,7 +1283,7 @@ fun BaseSimpleActivity.restoreRecycleBinPath(path: String, callback: () -> Unit)
 }
 
 fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback: () -> Unit) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         val newPaths = ArrayList<String>()
         var shownRestoringToPictures = false
         for (source in paths) {
@@ -1297,12 +1304,12 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
 
             val isShowingSAF = handleSAFDialog(destination) {}
             if (isShowingSAF) {
-                return@ensureBackgroundThread
+                return@RunOnBackgroundThreadUseCase
             }
 
             val isShowingSAFSdk30 = handleSAFDialogSdk30(destination) {}
             if (isShowingSAFSdk30) {
-                return@ensureBackgroundThread
+                return@RunOnBackgroundThreadUseCase
             }
 
             if (getDoesFilePathExist(destination)) {
@@ -1358,7 +1365,7 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
 }
 
 fun BaseSimpleActivity.emptyTheRecycleBin(callback: (() -> Unit)? = null) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         try {
             recycleBin.deleteRecursively()
             mediaDB.clearRecycleBin()
@@ -1372,7 +1379,7 @@ fun BaseSimpleActivity.emptyTheRecycleBin(callback: (() -> Unit)? = null) {
 }
 
 fun BaseSimpleActivity.emptyAndDisableTheRecycleBin(callback: () -> Unit) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         emptyTheRecycleBin {
             config.useRecycleBin = false
             callback()
@@ -1396,7 +1403,7 @@ fun BaseSimpleActivity.updateFavoritePaths(
     fileDirItems: ArrayList<FileDirItem>,
     destination: String
 ) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         fileDirItems.forEach {
             val newPath = "$destination/${it.name}"
             updateDBMediaPath(it.path, newPath)
@@ -1431,8 +1438,7 @@ fun AppCompatActivity.fixDateTaken(
     try {
         var didUpdateFile = false
         val operations = ArrayList<ContentProviderOperation>()
-
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             val dateTakens = ArrayList<DateTaken>()
 
             for (path in paths) {
@@ -1493,7 +1499,7 @@ fun AppCompatActivity.fixDateTaken(
                 runOnUiThread {
                     callback?.invoke()
                 }
-                return@ensureBackgroundThread
+                return@RunOnBackgroundThreadUseCase
             }
 
             val resultSize = contentResolver.applyBatch(MediaStore.AUTHORITY, operations).size
@@ -1653,7 +1659,8 @@ fun saveFile(path: String, bitmap: Bitmap, out: FileOutputStream, degrees: Int) 
 }
 
 fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> Unit) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
+
         val options = RequestOptions()
             .format(DecodeFormat.PREFER_ARGB_8888)
             .skipMemoryCache(true)
@@ -1688,8 +1695,8 @@ fun Activity.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? =
 }
 
 fun Activity.setAsIntent(path: String, applicationId: String) {
-    ensureBackgroundThread {
-        val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
+    RunOnBackgroundThreadUseCase {
+        val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
         Intent().apply {
             action = Intent.ACTION_ATTACH_DATA
             setDataAndType(newUri, getUriMimeType(path, newUri))
@@ -2187,7 +2194,7 @@ fun Activity.launchViewIntent(id: Int) = launchViewIntent(getString(id))
 
 fun Activity.launchViewIntent(url: String) {
     HideKeyboardUseCase(this)
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
             try {
                 startActivity(this)
@@ -2210,8 +2217,8 @@ fun Activity.redirectToRateUs() {
 }
 
 fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId: String) {
-    ensureBackgroundThread {
-        val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
+    RunOnBackgroundThreadUseCase {
+        val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
         Intent().apply {
             action = Intent.ACTION_EDIT
             setDataAndType(newUri, getUriMimeType(path, newUri))
@@ -2266,8 +2273,9 @@ fun Activity.openPathIntent(
     forceMimeType: String = "",
     extras: java.util.HashMap<String, Boolean> = java.util.HashMap()
 ) {
-    ensureBackgroundThread {
-        val newUri = getFinalUriFromPath(path, applicationId) ?: return@ensureBackgroundThread
+    RunOnBackgroundThreadUseCase {
+
+        val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
         val mimeType =
             forceMimeType.ifEmpty { getUriMimeType(path, newUri) }
         Intent().apply {

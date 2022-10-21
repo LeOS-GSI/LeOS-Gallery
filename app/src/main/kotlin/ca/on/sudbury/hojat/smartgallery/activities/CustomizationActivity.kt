@@ -38,11 +38,11 @@ import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.SAVE_DISCARD_PROMPT_INTERVAL
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.models.MyTheme
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlin.math.abs
 
 private const val THEME_LIGHT = 0
@@ -91,7 +91,8 @@ class CustomizationActivity : BaseSimpleActivity() {
 
         if (isThankYouInstalled()) {
             val cursorLoader = getMyContentProviderCursorLoader()
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
+
                 try {
                     storedSharedTheme = getSharedThemeSync(cursorLoader)
                     if (storedSharedTheme == null) {

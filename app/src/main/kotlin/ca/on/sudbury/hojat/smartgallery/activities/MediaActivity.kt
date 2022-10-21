@@ -24,7 +24,6 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
@@ -110,6 +109,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
 import java.io.IOException
 
@@ -447,7 +447,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun searchQueryChanged(text: String) {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             try {
                 val filtered =
                     mMedia.filter { it is Medium && it.name.contains(text, true) } as ArrayList
@@ -552,7 +552,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
         mLastMediaHandler.removeCallbacksAndMessages(null)
         mLastMediaHandler.postDelayed({
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase{
                 val mediaId = getLatestMediaId()
                 val mediaDateId = getLatestMediaByDateId()
                 if (mLatestMediaId != mediaId || mLatestMediaDateId != mediaDateId) {
@@ -609,7 +609,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun restoreAllFiles() {
         val paths = mMedia.filter { it is Medium }.map { (it as Medium).path } as ArrayList<String>
         restoreRecycleBinPaths(paths) {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase{
                 directoryDao.deleteDirPath(RECYCLE_BIN)
             }
             finish()
@@ -649,7 +649,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         if (config.deleteEmptyFolders) {
             val fileDirItem = FileDirItem(mPath, mPath.getFilenameFromPath(), true)
             if (!fileDirItem.isDownloadsFolder() && fileDirItem.isDirectory) {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     if (fileDirItem.getProperFileCount(this, true) == 0) {
                         tryDeleteFileDirItem(
                             fileDirItem,
@@ -695,7 +695,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             mIsGetVideoIntent,
             mShowAll
         ) {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
+
                 val oldMedia = mMedia.clone() as ArrayList<ThumbnailItem>
                 val newMedia = it
                 try {
@@ -728,7 +729,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             }
 
             if (mPath == FAVORITES) {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     directoryDao.deleteDirPath(FAVORITES)
                 }
             }
@@ -741,7 +742,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun deleteDBDirectory() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             try {
                 directoryDao.deleteDirPath(mPath)
             } catch (ignored: Exception) {
@@ -1043,7 +1044,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
             mMedia.removeAll { filtered.map { it.path }.contains((it as? Medium)?.path) }
 
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase{
                 val useRecycleBin = config.useRecycleBin
                 filtered.forEach {
                     if (it.path.startsWith(recycleBinPath) || !useRecycleBin) {

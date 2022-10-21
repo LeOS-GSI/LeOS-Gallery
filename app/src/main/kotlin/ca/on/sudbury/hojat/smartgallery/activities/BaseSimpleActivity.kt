@@ -95,7 +95,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_CODE_SET_DEFAULT_DIALER
 import ca.on.sudbury.hojat.smartgallery.helpers.SD_OTG_SHORT
 import ca.on.sudbury.hojat.smartgallery.helpers.SELECT_EXPORT_SETTINGS_FILE_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
@@ -120,6 +119,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
 import java.io.OutputStream
 import java.util.regex.Pattern
@@ -835,7 +835,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                         try {
                             checkConflicts(fileDirItems, destination, 0, LinkedHashMap()) {
                                 toast(R.string.moving)
-                                ensureBackgroundThread {
+                                RunOnBackgroundThreadUseCase {
                                     val updatedPaths = ArrayList<String>(fileDirItems.size)
                                     val destinationFolder = File(destination)
                                     for (oldFileDirItem in fileDirItems) {
@@ -1100,13 +1100,12 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             return
         }
 
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             outputStream.bufferedWriter().use { out ->
                 for ((key, value) in configItems) {
                     out.writeLn("$key=$value")
                 }
             }
-
             toast(R.string.settings_exported_successfully)
         }
     }

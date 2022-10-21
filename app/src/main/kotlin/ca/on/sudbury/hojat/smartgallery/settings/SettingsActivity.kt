@@ -42,7 +42,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isPiePlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_USING_SHARED_THEME
 import ca.on.sudbury.hojat.smartgallery.helpers.TEXT_COLOR
@@ -155,6 +154,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
 import java.io.InputStream
 import java.util.Locale
@@ -901,7 +901,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupEmptyRecycleBin() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             try {
                 mRecycleBinContentSize = mediaDB.getDeletedMedia().sumByLong { medium ->
                     val size = medium.size
@@ -935,15 +935,16 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupClearCache() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             val size = cacheDir.getProperSize(true).formatSize()
             runOnUiThread {
                 binding.settingsClearCacheSize.text = size
             }
         }
 
+
         binding.settingsClearCacheHolder.setOnClickListener {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 cacheDir.deleteRecursively()
                 runOnUiThread {
                     binding.settingsClearCacheSize.text = cacheDir.getProperSize(true).formatSize()
@@ -1057,7 +1058,7 @@ class SettingsActivity : SimpleActivity() {
                 handlePermission(PERMISSION_READ_STORAGE) {
                     if (it) {
                         FilePickerDialog(this) {
-                            ensureBackgroundThread {
+                            RunOnBackgroundThreadUseCase {
                                 parseFile(File(it).inputStream())
                             }
                         }

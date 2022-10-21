@@ -43,7 +43,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
@@ -186,6 +185,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
 import java.io.OutputStream
@@ -585,7 +585,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         if (intent.action == "com.android.camera.action.REVIEW") {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 if (mediaDB.getMediaFromPath(mPath).isEmpty()) {
                     val filename = mPath.getFilenameFromPath()
                     val parent = mPath.getParentPath()
@@ -630,7 +630,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     }
 
     private fun initFavorites() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             mFavoritePaths = getFavoritePaths()
         }
     }
@@ -923,8 +923,9 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 }
 
                 toast(R.string.saving)
-                ensureBackgroundThread {
-                    val photoFragment = getCurrentPhotoFragment() ?: return@ensureBackgroundThread
+                RunOnBackgroundThreadUseCase {
+                    val photoFragment =
+                        getCurrentPhotoFragment() ?: return@RunOnBackgroundThreadUseCase
                     saveRotatedImageToFile(
                         currPath,
                         newPath,
@@ -936,6 +937,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         refreshMenuItems()
                     }
                 }
+
             }
         }
     }
@@ -1157,14 +1159,13 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     private fun toggleFavorite() {
         val medium = getCurrentMedium() ?: return
         medium.isFavorite = !medium.isFavorite
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             updateFavorite(medium.path, medium.isFavorite)
             if (medium.isFavorite) {
                 mFavoritePaths.add(medium.path)
             } else {
                 mFavoritePaths.remove(medium.path)
             }
-
             runOnUiThread {
                 refreshMenuItems()
             }
@@ -1249,7 +1250,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         val oldPath = getCurrentPath()
         val originalSize = oldPath.getImageResolution(this) ?: return
         ResizeWithPathDialog(this, originalSize, oldPath) { newSize, newPath ->
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 try {
                     var oldExif: ExifInterface? = null
                     if (isNougatPlus()) {
@@ -1466,8 +1467,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 path = it
                 name = it.getFilenameFromPath()
             }
-
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 updateDBMediaPath(oldPath, it)
             }
             updateActionbarTitle()
@@ -1557,7 +1557,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 File(mDirectory).isDirectory
             )
             if (!fileDirItem.isDownloadsFolder() && fileDirItem.isDirectory) {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     if (fileDirItem.getProperFileCount(this, true) == 0) {
                         tryDeleteFileDirItem(
                             fileDirItem,
@@ -1621,9 +1621,9 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     override fun launchViewVideoIntent(path: String) {
         HideKeyboardUseCase(this)
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             val newUri = getFinalUriFromPath(path, BuildConfig.APPLICATION_ID)
-                ?: return@ensureBackgroundThread
+                ?: return@RunOnBackgroundThreadUseCase
             val mimeType = getUriMimeType(path, newUri)
             Intent().apply {
                 action = Intent.ACTION_VIEW

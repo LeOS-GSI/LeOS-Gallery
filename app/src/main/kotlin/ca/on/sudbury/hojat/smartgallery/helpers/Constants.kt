@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.os.Looper
 import androidx.annotation.ChecksSdkIntAtLeast
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
@@ -384,16 +383,6 @@ val appIconColorStrings = arrayListOf(
 // view types
 const val VIEW_TYPE_GRID = 1
 const val VIEW_TYPE_LIST = 2
-
-fun ensureBackgroundThread(callback: () -> Unit) {
-    if (IsMainThreadUseCase()) {
-        Thread {
-            callback()
-        }.start()
-    } else {
-        callback()
-    }
-}
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.M)
 fun isMarshmallowPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

@@ -21,7 +21,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityWidgetConfigBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
@@ -35,6 +34,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.Widget
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 class WidgetConfigureActivity : SimpleActivity() {
 
@@ -122,7 +122,7 @@ class WidgetConfigureActivity : SimpleActivity() {
         AppWidgetManager.getInstance(this)?.updateAppWidget(mWidgetId, views) ?: return
         config.showWidgetFolderName = binding.folderPickerShowFolderName.isChecked
         val widget = Widget(null, mWidgetId, mFolderPath)
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             widgetsDB.insertOrUpdate(widget)
         }
 
@@ -206,7 +206,7 @@ class WidgetConfigureActivity : SimpleActivity() {
             binding.configFolderName.text = getFolderNameFromPath(folderPath)
         }
 
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             val path = directoryDao.getDirectoryThumbnail(folderPath)
             if (path != null) {
                 runOnUiThread {

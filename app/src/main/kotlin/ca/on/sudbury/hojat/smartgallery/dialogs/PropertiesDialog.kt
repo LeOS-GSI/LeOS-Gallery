@@ -49,13 +49,13 @@ import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.extensions.removeValues
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
 import java.io.File
@@ -129,7 +129,8 @@ class PropertiesDialog() {
         addProperty(R.string.path, fileDirItem.getParentPath())
         addProperty(R.string.size, "…", R.id.properties_size)
 
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
+
             val fileCount = fileDirItem.getProperFileCount(mActivity, mCountHiddenItems)
             val size = fileDirItem.getProperSize(mActivity, mCountHiddenItems).formatSize()
 
@@ -188,7 +189,7 @@ class PropertiesDialog() {
                             )!!
                         )
                     } catch (e: Exception) {
-                        return@ensureBackgroundThread
+                        return@RunOnBackgroundThreadUseCase
                     }
                 } else if (mActivity.isRestrictedSAFOnlyRoot(path)) {
                     try {
@@ -200,13 +201,13 @@ class PropertiesDialog() {
                             )!!
                         )
                     } catch (e: Exception) {
-                        return@ensureBackgroundThread
+                        return@RunOnBackgroundThreadUseCase
                     }
                 } else {
                     try {
                         ExifInterface(fileDirItem.path)
                     } catch (e: Exception) {
-                        return@ensureBackgroundThread
+                        return@RunOnBackgroundThreadUseCase
                     }
                 }
 
@@ -270,14 +271,13 @@ class PropertiesDialog() {
 
             if (mActivity.baseConfig.appId.removeSuffix(".debug") == "com.simplemobiletools.filemanager.pro") {
                 addProperty(R.string.md5, "…", R.id.properties_md5)
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     val md5 = if (mActivity.isRestrictedSAFOnlyRoot(path)) {
                         mActivity.contentResolver.openInputStream(mActivity.getAndroidSAFUri(path))
                             ?.md5()
                     } else {
                         File(path).md5()
                     }
-
                     mActivity.runOnUiThread {
                         if (md5 != null) {
                             (mDialogView.findViewById<LinearLayout>(R.id.properties_md5).property_value as TextView).text =
@@ -335,7 +335,7 @@ class PropertiesDialog() {
         addProperty(R.string.size, "…", R.id.properties_size)
         addProperty(R.string.files_count, "…", R.id.properties_file_count)
 
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             val fileCount =
                 fileDirItems.sumByInt { it.getProperFileCount(activity, countHiddenItems) }
             val size =

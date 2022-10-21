@@ -44,7 +44,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
@@ -85,6 +84,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.photo_item_grid.view.*
 import kotlinx.android.synthetic.main.thumbnail_section.view.*
 import kotlinx.android.synthetic.main.video_item_grid.view.*
@@ -326,9 +326,8 @@ class MediaAdapter(
 
         if (selectedKeys.size == 1) {
             RenameItemDialog(activity, firstPath) {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     activity.updateDBMediaPath(firstPath, it)
-
                     activity.runOnUiThread {
                         enableInstantLoad()
                         listener?.refreshItems()
@@ -361,7 +360,7 @@ class MediaAdapter(
     }
 
     private fun toggleFileVisibility(hide: Boolean) {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             getSelectedItems().forEach {
                 activity.toggleFileVisibility(it.path, hide)
             }
@@ -373,7 +372,7 @@ class MediaAdapter(
     }
 
     private fun toggleFavorites(add: Boolean) {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             getSelectedItems().forEach {
                 it.isFavorite = add
                 activity.updateFavorite(it.path, add)
@@ -404,7 +403,7 @@ class MediaAdapter(
         var fileCnt = paths.size
         rotatedImagePaths.clear()
         activity.toast(R.string.saving)
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             paths.forEach {
                 rotatedImagePaths.add(it)
                 activity.saveRotatedImageToFile(it, it, degrees, true) {
@@ -515,7 +514,7 @@ class MediaAdapter(
     }
 
     private fun fixDateTaken() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             activity.fixDateTaken(getSelectedPaths(), true) {
                 listener?.refreshItems()
                 finishActMode()

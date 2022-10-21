@@ -59,7 +59,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
@@ -81,6 +80,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_FREE
 import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_OTHER
 import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
 import java.io.File
@@ -331,7 +331,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         if (!wasDrawCanvasPositioned) {
             wasDrawCanvasPositioned = true
             binding.editorDrawCanvas.onGlobalLayout {
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     fillCanvasBackground()
                 }
             }
@@ -399,7 +399,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 binding.bottomEditorFilterActions.bottomActionsFilterList.adapter = null
                 binding.bottomEditorFilterActions.bottomActionsFilterList.beGone()
 
-                ensureBackgroundThread {
+                RunOnBackgroundThreadUseCase {
                     try {
                         val originalBitmap = Glide.with(applicationContext).asBitmap().load(uri)
                             .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
@@ -428,13 +428,14 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     }
 
     private fun shareImage() {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
+
             when {
                 binding.defaultImageView.isVisible() -> {
                     val currentFilter = getFiltersAdapter()?.getCurrentFilter()
                     if (currentFilter == null) {
                         toast(R.string.unknown_error_occurred)
-                        return@ensureBackgroundThread
+                        return@RunOnBackgroundThreadUseCase
                     }
 
                     val originalBitmap = Glide.with(applicationContext).asBitmap().load(uri)
@@ -666,7 +667,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         binding.bottomEditorDrawActions.root.beVisibleIf(currPrimaryAction == PRIMARY_ACTION_DRAW)
 
         if (currPrimaryAction == PRIMARY_ACTION_FILTER && binding.bottomEditorFilterActions.bottomActionsFilterList.adapter == null) {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
+
                 val thumbnailSize =
                     resources.getDimension(R.dimen.bottom_filters_thumbnail_size).toInt()
 
@@ -697,7 +699,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 } catch (e: GlideException) {
                     showErrorToast(e)
                     finish()
-                    return@ensureBackgroundThread
+                    return@RunOnBackgroundThreadUseCase
                 }
 
                 runOnUiThread {
@@ -949,7 +951,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
 
         try {
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 val file = File(path)
                 val fileDirItem = FileDirItem(path, path.getFilenameFromPath())
                 getFileOutputStream(fileDirItem, true) {

@@ -11,11 +11,11 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathRecursively
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isPiePlus
 import ca.on.sudbury.hojat.smartgallery.extensions.addPathToDB
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDirectoryPath
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 /**
  * This is the base Activity used for all our activities.
@@ -107,7 +107,7 @@ open class SimpleActivity : BaseSimpleActivity() {
             config.lastFilepickerPath = it
             config.addIncludedFolder(it)
             callback()
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 scanPathRecursively(it)
             }
         }

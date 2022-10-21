@@ -19,13 +19,13 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityPanoramaPhotoBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 
 private const val CARDBOARD_DISPLAY_MODE = 3
@@ -111,7 +111,8 @@ open class PanoramaPhotoActivity : SimpleActivity() {
         try {
             val options = VrPanoramaView.Options()
             options.inputType = VrPanoramaView.Options.TYPE_MONO
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
+
                 val bitmap = getBitmapToLoad(path)
                 runOnUiThread {
                     binding.panoramaView.apply {

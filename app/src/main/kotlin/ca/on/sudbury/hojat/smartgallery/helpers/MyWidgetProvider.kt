@@ -21,6 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setText
 import ca.on.sudbury.hojat.smartgallery.extensions.setVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.widgetsDB
 import ca.on.sudbury.hojat.smartgallery.models.Widget
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -49,7 +50,7 @@ class MyWidgetProvider : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             val config = context.config
             context.widgetsDB.getWidgets().filter { appWidgetIds.contains(it.widgetId) }.forEach {
                 val views = RemoteViews(context.packageName, R.layout.widget).apply {
@@ -111,7 +112,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         super.onDeleted(context, appWidgetIds)
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             appWidgetIds.forEach {
                 context.widgetsDB.deleteWidgetId(it)
             }

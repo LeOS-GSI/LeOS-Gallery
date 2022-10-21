@@ -12,12 +12,12 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.MainActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySetWallpaperBinding
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 private const val RATIO_PORTRAIT = 0
 private const val RATIO_LANDSCAPE = 1
@@ -135,7 +135,10 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
             val items = arrayListOf(
                 RadioItem(WallpaperManager.FLAG_SYSTEM, getString(R.string.home_screen)),
                 RadioItem(WallpaperManager.FLAG_LOCK, getString(R.string.lock_screen)),
-                RadioItem(WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK, getString(R.string.home_and_lock_screen))
+                RadioItem(
+                    WallpaperManager.FLAG_SYSTEM or WallpaperManager.FLAG_LOCK,
+                    getString(R.string.home_and_lock_screen)
+                )
             )
 
             RadioGroupDialog(this, items) {
@@ -153,13 +156,14 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
 
         if (result.error == null) {
             toast(R.string.setting_wallpaper)
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 val bitmap = result.bitmap
                 val wantedHeight = wallpaperManager.desiredMinimumHeight
                 val ratio = wantedHeight / bitmap.height.toFloat()
                 val wantedWidth = (bitmap.width * ratio).toInt()
                 try {
-                    val scaledBitmap = Bitmap.createScaledBitmap(bitmap, wantedWidth, wantedHeight, true)
+                    val scaledBitmap =
+                        Bitmap.createScaledBitmap(bitmap, wantedWidth, wantedHeight, true)
                     if (isNougatPlus()) {
                         wallpaperManager.setBitmap(scaledBitmap, null, true, wallpaperFlag)
                     } else {

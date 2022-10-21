@@ -130,7 +130,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
@@ -159,6 +158,7 @@ import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -1368,7 +1368,7 @@ fun Context.getFastDocumentFile(path: String): DocumentFile? {
 }
 
 fun Context.updateSDCardPath() {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         val oldPath = baseConfig.sdCardPath
         baseConfig.sdCardPath = getSDCardPath()
         if (oldPath != baseConfig.sdCardPath) {
@@ -1418,7 +1418,7 @@ fun updateSubfolderCounts(
 }
 
 fun Context.getNoMediaFolders(callback: (folders: ArrayList<String>) -> Unit) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         callback(getNoMediaFoldersSync())
     }
 }
@@ -1458,7 +1458,7 @@ fun Context.getNoMediaFoldersSync(): ArrayList<String> {
 }
 
 fun Context.rescanFolderMedia(path: String) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         rescanFolderMediaSync(path)
     }
 }
@@ -1472,7 +1472,7 @@ fun Context.rescanFolderMediaSync(path: String) {
             isPickVideo = false,
             showAll = false
         ) { newMedia ->
-            ensureBackgroundThread {
+            RunOnBackgroundThreadUseCase {
                 val media = newMedia.filterIsInstance<Medium>() as ArrayList<Medium>
                 try {
                     mediaDB.insertAll(media)
@@ -1493,7 +1493,7 @@ fun Context.rescanFolderMediaSync(path: String) {
 }
 
 fun Context.storeDirectoryItems(items: ArrayList<Directory>) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         directoryDao.insertAll(items)
     }
 }
@@ -1810,7 +1810,8 @@ fun Context.getCachedDirectories(
     forceShowHidden: Boolean = false,
     callback: (ArrayList<Directory>) -> Unit
 ) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
+
         try {
             Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE)
         } catch (ignored: Exception) {
@@ -1899,7 +1900,8 @@ fun Context.getCachedMedia(
     getImagesOnly: Boolean = false,
     callback: (ArrayList<ThumbnailItem>) -> Unit
 ) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
+
         val mediaFetcher = MediaFetcher(this)
         val foldersToScan =
             if (path.isEmpty()) mediaFetcher.getFoldersToScan() else arrayListOf(path)
@@ -2107,7 +2109,8 @@ fun Context.getOTGFastDocumentFile(path: String, otgPathToUse: String? = null): 
     return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
 }
 
-fun Context.getOTGFolderChildren(path: String): Array<DocumentFile>? = getDocumentFile(path)?.listFiles()
+fun Context.getOTGFolderChildren(path: String): Array<DocumentFile>? =
+    getDocumentFile(path)?.listFiles()
 
 fun Context.getOTGFolderChildrenNames(path: String) =
     getOTGFolderChildren(path)?.map { it.name }?.toMutableList()
@@ -2313,9 +2316,10 @@ fun Context.parseFileChannel(
 
 @RequiresApi(Build.VERSION_CODES.Q)
 fun Context.addPathToDB(path: String) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
+
         if (!getDoesFilePathExist(path)) {
-            return@ensureBackgroundThread
+            return@RunOnBackgroundThreadUseCase
         }
 
         val type = when {
@@ -2819,7 +2823,7 @@ fun Context.getSharedTheme(callback: (sharedTheme: SharedTheme?) -> Unit) {
         callback(null)
     } else {
         val cursorLoader = getMyContentProviderCursorLoader()
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             callback(getSharedThemeSync(cursorLoader))
         }
     }
@@ -3230,7 +3234,7 @@ fun Context.deleteFromMediaStore(path: String, callback: ((needsRescan: Boolean)
         return
     }
 
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase {
         try {
             val where = "${MediaStore.MediaColumns.DATA} = ?"
             val args = arrayOf(path)
@@ -3240,6 +3244,7 @@ fun Context.deleteFromMediaStore(path: String, callback: ((needsRescan: Boolean)
         }
         callback?.invoke(true)
     }
+
 }
 
 fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
@@ -3260,7 +3265,7 @@ fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
 }
 
 fun Context.updateInMediaStore(oldPath: String, newPath: String) {
-    ensureBackgroundThread {
+    RunOnBackgroundThreadUseCase{
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DATA, newPath)
             put(MediaStore.MediaColumns.DISPLAY_NAME, newPath.getFilenameFromPath())

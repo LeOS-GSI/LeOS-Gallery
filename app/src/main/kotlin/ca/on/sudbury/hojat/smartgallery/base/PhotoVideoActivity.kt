@@ -62,7 +62,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
-import ca.on.sudbury.hojat.smartgallery.helpers.ensureBackgroundThread
 import ca.on.sudbury.hojat.smartgallery.photoview.PhotoFragment
 import ca.on.sudbury.hojat.smartgallery.video.VideoFragment
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
@@ -86,6 +85,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.IS_IN_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.video.VideoPlayerActivity
 import java.io.File
@@ -400,7 +400,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
     }
 
     private fun sendViewPagerIntent(path: String) {
-        ensureBackgroundThread {
+        RunOnBackgroundThreadUseCase {
             if (isPathPresentInMediaStore(path)) {
                 openViewPager(path)
             } else {
