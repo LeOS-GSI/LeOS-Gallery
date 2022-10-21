@@ -130,7 +130,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
-import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isNougatPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
@@ -157,6 +156,7 @@ import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.bumptech.glide.Glide
@@ -1153,7 +1153,7 @@ fun Context.getStorageDirectories(): Array<String> {
     val rawSecondaryStoragesStr = System.getenv("SECONDARY_STORAGE")
     val rawEmulatedStorageTarget = System.getenv("EMULATED_STORAGE_TARGET")
     if (TextUtils.isEmpty(rawEmulatedStorageTarget)) {
-        if (isMarshmallowPlus()) {
+        if (IsMarshmallowPlusUseCase()) {
             getExternalFilesDirs(null).filterNotNull().map { it.absolutePath }
                 .mapTo(paths) { it.substring(0, it.indexOf("Android/data")) }
         } else {
@@ -2905,7 +2905,7 @@ fun Context.hasProperStoredFirstParentUri(path: String): Boolean {
     return contentResolver.persistedUriPermissions.any { it.uri.toString() == firstParentUri.toString() }
 }
 
-fun isFingerPrintSensorAvailable() = isMarshmallowPlus() && Reprint.isHardwarePresent()
+fun isFingerPrintSensorAvailable() = IsMarshmallowPlusUseCase() && Reprint.isHardwarePresent()
 
 fun Context.isUsingSystemDarkTheme() =
     resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES != 0
@@ -3265,7 +3265,7 @@ fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
 }
 
 fun Context.updateInMediaStore(oldPath: String, newPath: String) {
-    RunOnBackgroundThreadUseCase{
+    RunOnBackgroundThreadUseCase {
         val values = ContentValues().apply {
             put(MediaStore.MediaColumns.DATA, newPath)
             put(MediaStore.MediaColumns.DISPLAY_NAME, newPath.getFilenameFromPath())

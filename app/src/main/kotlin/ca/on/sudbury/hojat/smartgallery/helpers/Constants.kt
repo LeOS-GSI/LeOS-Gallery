@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 
 // shared preferences
 const val DIRECTORY_SORT_ORDER = "directory_sort_order"
@@ -383,9 +382,6 @@ val appIconColorStrings = arrayListOf(
 // view types
 const val VIEW_TYPE_GRID = 1
 const val VIEW_TYPE_LIST = 2
-
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.M)
-fun isMarshmallowPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.N)
 fun isNougatPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N

@@ -96,7 +96,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SD_OTG_SHORT
 import ca.on.sudbury.hojat.smartgallery.helpers.SELECT_EXPORT_SETTINGS_FILE_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
-import ca.on.sudbury.hojat.smartgallery.helpers.isMarshmallowPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
@@ -118,6 +117,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
@@ -222,7 +222,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     fun updateStatusbarColor(color: Int) {
         window.statusBarColor = color
 
-        if (isMarshmallowPlus()) {
+        if (IsMarshmallowPlusUseCase()) {
             if (color.getContrastColor() == 0xFF333333.toInt()) {
                 window.decorView.systemUiVisibility =
                     window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
