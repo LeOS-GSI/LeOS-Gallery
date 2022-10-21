@@ -8,6 +8,9 @@ import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 
+/**
+ * Receives an instance of Activity and an optional View. Hides the keyboard.
+ */
 object HideKeyboardUseCase {
 
     operator fun invoke(activity: Activity, view: View? = null) {

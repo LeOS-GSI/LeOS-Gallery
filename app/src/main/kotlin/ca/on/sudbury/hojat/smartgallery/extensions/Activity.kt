@@ -2411,12 +2411,6 @@ fun createTempFile(file: File): File? {
     }
 }
 
-fun Activity.showKeyboard(et: EditText) {
-    et.requestFocus()
-    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT)
-}
-
 fun BaseSimpleActivity.createDirectorySync(directory: String): Boolean {
     if (getDoesFilePathExist(directory)) {
         return true
