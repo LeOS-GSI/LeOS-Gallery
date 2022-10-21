@@ -49,12 +49,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.extensions.removeValues
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
@@ -103,7 +103,7 @@ class PropertiesDialog() {
                 path
             )
         ) {
-            if ((isRPlus() && Environment.isExternalStorageManager()) || (!isRPlus() && activity.hasPermission(
+            if ((IsRPlusUseCase() && Environment.isExternalStorageManager()) || (!IsRPlusUseCase() && activity.hasPermission(
                     PERMISSION_WRITE_STORAGE
                 ))
             ) {
@@ -356,7 +356,7 @@ class PropertiesDialog() {
                     it
                 )
             }) {
-            if ((isRPlus() && Environment.isExternalStorageManager()) || (!isRPlus() && activity.hasPermission(
+            if ((IsRPlusUseCase() && Environment.isExternalStorageManager()) || (!IsRPlusUseCase() && activity.hasPermission(
                     PERMISSION_WRITE_STORAGE
                 ))
             ) {

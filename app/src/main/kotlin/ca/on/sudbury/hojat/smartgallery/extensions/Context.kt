@@ -130,9 +130,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
-import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.proPackages
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
@@ -157,6 +154,9 @@ import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.bumptech.glide.Glide
@@ -232,7 +232,7 @@ fun Context.createFirstParentTreeUri(fullPath: String): Uri {
 
 // is the app a Media Management App on Android 12+?
 fun Context.canManageMedia(): Boolean {
-    return isSPlus() && MediaStore.canManageMedia(this)
+    return IsSPlusUseCase() && MediaStore.canManageMedia(this)
 }
 
 fun Context.createDocumentUriUsingFirstParentTreeUri(fullPath: String): Uri {
@@ -378,7 +378,7 @@ private fun Context.queryCursorDesc(
     sortColumn: String,
     limit: Int,
 ): Cursor? {
-    return if (isRPlus()) {
+    return if (IsRPlusUseCase()) {
         val queryArgs = bundleOf(
             ContentResolver.QUERY_ARG_LIMIT to limit,
             ContentResolver.QUERY_ARG_SORT_DIRECTION to ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
@@ -628,7 +628,7 @@ fun Context.getFileUrisFromFileDirItems(fileDirItems: List<FileDirItem>): List<U
 
 fun Context.getFirstParentLevel(path: String): Int {
     return when {
-        isRPlus() && (isInAndroidDir(path) || isInSubFolderInDownloadDir(path)) -> 1
+        IsRPlusUseCase() && (isInAndroidDir(path) || isInSubFolderInDownloadDir(path)) -> 1
         else -> 0
     }
 }
@@ -729,7 +729,7 @@ fun getPermissionString(id: Int) = when (id) {
     PERMISSION_READ_SMS -> Manifest.permission.READ_SMS
     PERMISSION_SEND_SMS -> Manifest.permission.SEND_SMS
     PERMISSION_READ_PHONE_STATE -> Manifest.permission.READ_PHONE_STATE
-    PERMISSION_MEDIA_LOCATION -> if (isQPlus()) Manifest.permission.ACCESS_MEDIA_LOCATION else ""
+    PERMISSION_MEDIA_LOCATION -> if (IsQPlusUseCase()) Manifest.permission.ACCESS_MEDIA_LOCATION else ""
     else -> ""
 }
 
@@ -862,7 +862,7 @@ fun Context.isAccessibleWithSAFSdk30(path: String): Boolean {
     val isDirectory = File(firstParentPath).isDirectory
     val isAnAccessibleDirectory =
         DIRS_INACCESSIBLE_WITH_SAF_SDK_30.all { !firstParentDir.equals(it, true) }
-    return isRPlus() && isValidName && isDirectory && isAnAccessibleDirectory
+    return IsRPlusUseCase() && isValidName && isDirectory && isAnAccessibleDirectory
 }
 
 fun Context.isAStorageRootFolder(path: String): Boolean {
@@ -920,7 +920,7 @@ val Context.navigationBarWidth: Int get() = if (navigationBarRight) navigationBa
 
 // no need to use DocumentFile if an SD card is set as the default storage
 fun Context.needsStupidWritePermissions(path: String) =
-    !isRPlus() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
+    !IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
 
 val Context.newNavigationBarHeight: Int
     @SuppressLint("InternalInsetResource")
@@ -973,7 +973,7 @@ fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
 fun Context.isPathOnOTG(path: String) = otgPath.isNotEmpty() && path.startsWith(otgPath)
 
 fun Context.isRestrictedSAFOnlyRoot(path: String): Boolean {
-    return isRPlus() && isSAFOnlyRoot(path)
+    return IsRPlusUseCase() && isSAFOnlyRoot(path)
 }
 
 fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
@@ -994,7 +994,7 @@ fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
                 true
             )
         }
-    return isRPlus() && (isInvalidName || (isDirectory && isARestrictedDirectory))
+    return IsRPlusUseCase() && (isInvalidName || (isDirectory && isARestrictedDirectory))
 }
 
 val Context.isRTLLayout: Boolean get() = resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -2523,7 +2523,7 @@ fun Context.getDuration(path: String): Int? {
 }
 
 fun Context.getPopupMenuTheme(): Int {
-    return if (isSPlus() && baseConfig.isUsingSystemTheme) {
+    return if (IsSPlusUseCase() && baseConfig.isUsingSystemTheme) {
         R.style.AppTheme_YouPopupMenuStyle
     } else if (isWhiteTheme()) {
         R.style.AppTheme_PopupMenuLightStyle
@@ -3049,7 +3049,7 @@ fun isAndroidDataDir(path: String): Boolean {
 }
 
 fun isExternalStorageManager(): Boolean {
-    return isRPlus() && Environment.isExternalStorageManager()
+    return IsRPlusUseCase() && Environment.isExternalStorageManager()
 }
 
 fun Context.checkAppIconColor() {

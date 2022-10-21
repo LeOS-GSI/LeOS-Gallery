@@ -8,12 +8,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.adapters.ManageFoldersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 
 class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
@@ -41,7 +41,7 @@ class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
             beVisibleIf(folders.isEmpty())
             setTextColor(getProperTextColor())
 
-            if (isRPlus() && !isExternalStorageManager()) {
+            if (IsRPlusUseCase() && !isExternalStorageManager()) {
                 placeholderText = placeholderText.substringBefore("\n")
             }
 

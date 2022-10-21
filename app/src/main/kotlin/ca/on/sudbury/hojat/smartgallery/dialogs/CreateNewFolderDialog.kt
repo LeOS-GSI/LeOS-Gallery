@@ -23,7 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import timber.log.Timber
 import java.io.File
 
@@ -100,7 +100,7 @@ class CreateNewFolderDialog(
                     }
                 }
                 File(path).mkdirs() -> sendSuccess(alertDialog, path)
-                isRPlus() && activity.isAStorageRootFolder(path.getParentPath()) -> activity.handleSAFCreateDocumentDialogSdk30(
+                IsRPlusUseCase() && activity.isAStorageRootFolder(path.getParentPath()) -> activity.handleSAFCreateDocumentDialogSdk30(
                     path
                 ) {
                     if (it) {

@@ -26,8 +26,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogColorPickerBinding
-import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.hojat.palette.views.ColorPickerSquare
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import java.util.LinkedList
 
 private const val RECENT_COLORS_NUMBER = 5
@@ -58,7 +58,7 @@ class ColorPickerDialog(
     init {
         Color.colorToHSV(color, currentColorHsv)
         val binding = DialogColorPickerBinding.inflate(activity.layoutInflater).apply {
-            if (isQPlus()) {
+            if (IsQPlusUseCase()) {
                 root.isForceDarkAllowed = false
             }
 

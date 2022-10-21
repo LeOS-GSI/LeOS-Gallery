@@ -38,9 +38,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isPiePlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_USING_SHARED_THEME
@@ -154,6 +151,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
 import java.io.InputStream
@@ -307,7 +307,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupFileLoadingPriority() {
-        binding.settingsFileLoadingPriorityHolder.beGoneIf(isRPlus() && !isExternalStorageManager())
+        binding.settingsFileLoadingPriorityHolder.beGoneIf(IsRPlusUseCase() && !isExternalStorageManager())
         binding.settingsFileLoadingPriority.text = getFileLoadingPriorityText()
         binding.settingsFileLoadingPriorityHolder.setOnClickListener {
             val items = arrayListOf(
@@ -332,7 +332,7 @@ class SettingsActivity : SimpleActivity() {
     )
 
     private fun setupManageIncludedFolders() {
-        binding.settingsManageIncludedFoldersHolder.beGoneIf(isRPlus() && !isExternalStorageManager())
+        binding.settingsManageIncludedFoldersHolder.beGoneIf(IsRPlusUseCase() && !isExternalStorageManager())
         binding.settingsManageIncludedFoldersHolder.setOnClickListener {
             startActivity(Intent(this, IncludedFoldersActivity::class.java))
         }
@@ -347,7 +347,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupManageHiddenFolders() {
-        binding.settingsManageHiddenFoldersHolder.beGoneIf(isQPlus())
+        binding.settingsManageHiddenFoldersHolder.beGoneIf(IsQPlusUseCase())
         binding.settingsManageHiddenFoldersHolder.setOnClickListener {
             handleHiddenFolderPasswordProtection {
                 startActivity(Intent(this, HiddenFoldersActivity::class.java))
@@ -357,7 +357,7 @@ class SettingsActivity : SimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupShowHiddenItems() {
-        if (isRPlus() && !isExternalStorageManager()) {
+        if (IsRPlusUseCase() && !isExternalStorageManager()) {
             binding.settingsShowHiddenItemsHolder.beGone()
             binding.settingsManageExcludedFoldersHolder.background =
                 resources.getDrawable(R.drawable.ripple_bottom_corners, theme)
@@ -460,7 +460,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupHiddenItemPasswordProtection() {
-        binding.settingsHiddenItemPasswordProtectionHolder.beGoneIf(isRPlus() && !isExternalStorageManager())
+        binding.settingsHiddenItemPasswordProtectionHolder.beGoneIf(IsRPlusUseCase() && !isExternalStorageManager())
         binding.settingsHiddenItemPasswordProtection.isChecked = config.isHiddenPasswordProtectionOn
         binding.settingsHiddenItemPasswordProtectionHolder.setOnClickListener {
             val tabToShow =
@@ -602,7 +602,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupShowNotch() {
-        binding.settingsShowNotchHolder.beVisibleIf(isPiePlus())
+        binding.settingsShowNotchHolder.beVisibleIf(IsPiePlusUseCase())
         binding.settingsShowNotch.isChecked = config.showNotch
         binding.settingsShowNotchHolder.setOnClickListener {
             binding.settingsShowNotch.toggle()
@@ -1048,7 +1048,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupImportSettings() {
         binding.settingsImportHolder.setOnClickListener {
-            if (isQPlus()) {
+            if (IsQPlusUseCase()) {
                 Intent(Intent.ACTION_GET_CONTENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     type = "text/plain"

@@ -96,9 +96,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SD_OTG_SHORT
 import ca.on.sudbury.hojat.smartgallery.helpers.SELECT_EXPORT_SETTINGS_FILE_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
-import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isQPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialog
@@ -118,6 +115,9 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import java.io.File
@@ -252,7 +252,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 val colorToUse = if (color == -2) -1 else color
                 window.navigationBarColor = colorToUse
 
-                if (isOreoPlus()) {
+                if (IsOreoPlusUseCase()) {
                     if (color.getContrastColor() == 0xFF333333.toInt()) {
                         window.decorView.systemUiVisibility =
                             window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
@@ -418,7 +418,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                         )
                     )
                     Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
-                        if (isRPlus()) {
+                        if (IsRPlusUseCase()) {
                             putExtra(
                                 DocumentsContract.EXTRA_INITIAL_URI,
                                 createAndroidDataOrObbUri(checkedDocumentPath)
@@ -708,7 +708,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     @SuppressLint("NewApi")
     fun deleteSDK30Uris(uris: List<Uri>, callback: (success: Boolean) -> Unit) {
         HideKeyboardUseCase(this)
-        if (isRPlus()) {
+        if (IsRPlusUseCase()) {
             funAfterSdk30Action = callback
             try {
                 val deleteRequest =
@@ -725,7 +725,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     @SuppressLint("NewApi")
     fun updateSDK30Uris(uris: List<Uri>, callback: (success: Boolean) -> Unit) {
         HideKeyboardUseCase(this)
-        if (isRPlus()) {
+        if (IsRPlusUseCase()) {
             funAfterUpdate30File = callback
             try {
                 val writeRequest = MediaStore.createWriteRequest(contentResolver, uris).intentSender
@@ -743,7 +743,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         try {
             callback.invoke(true)
         } catch (securityException: SecurityException) {
-            if (isQPlus()) {
+            if (IsQPlusUseCase()) {
                 funRecoverableSecurity = callback
                 val recoverableSecurityException =
                     securityException as? RecoverableSecurityException ?: throw securityException
@@ -1056,7 +1056,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     fun exportSettings(configItems: LinkedHashMap<String, Any>) {
-        if (isQPlus()) {
+        if (IsQPlusUseCase()) {
             configItemsToExport = configItems
             ExportSettingsDialog(this, getExportSettingsFilename(), true) { _, filename ->
                 Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
@@ -1117,7 +1117,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     @SuppressLint("InlinedApi")
     protected fun launchSetDefaultDialerIntent() {
-        if (isQPlus()) {
+        if (IsQPlusUseCase()) {
             val roleManager = getSystemService(RoleManager::class.java)
             if (roleManager!!.isRoleAvailable(RoleManager.ROLE_DIALER) && !roleManager.isRoleHeld(
                     RoleManager.ROLE_DIALER
@@ -1186,7 +1186,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 setHintTextColor(contrastColor.adjustAlpha(MEDIUM_ALPHA))
                 hint = "${getString(R.string.search)}…"
 
-                if (isQPlus()) {
+                if (IsQPlusUseCase()) {
                     textCursorDrawable = null
                 }
             }

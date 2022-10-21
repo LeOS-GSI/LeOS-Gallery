@@ -41,9 +41,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_KEEP_BOTH
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_SKIP
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
-import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -169,7 +169,7 @@ class CopyMoveTask(
     private fun initProgressNotification() {
         val channelId = "Copy/Move"
         val title = activity.getString(if (copyOnly) R.string.copying else R.string.moving)
-        if (isOreoPlus()) {
+        if (IsOreoPlusUseCase()) {
             val importance = NotificationManager.IMPORTANCE_LOW
             NotificationChannel(channelId, title, importance).apply {
                 enableLights(false)

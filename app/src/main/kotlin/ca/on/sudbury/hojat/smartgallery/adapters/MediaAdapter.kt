@@ -43,8 +43,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
-import ca.on.sudbury.hojat.smartgallery.helpers.isOreoPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
@@ -84,6 +82,8 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.photo_item_grid.view.*
 import kotlinx.android.synthetic.main.thumbnail_section.view.*
@@ -210,7 +210,7 @@ class MediaAdapter(
                 isAGetIntent && allowMultiplePicks && selectedKeys.isNotEmpty()
             findItem(R.id.cab_restore_recycle_bin_files).isVisible =
                 selectedPaths.all { it.startsWith(activity.recycleBinPath) }
-            findItem(R.id.cab_create_shortcut).isVisible = isOreoPlus() && isOneItemSelected
+            findItem(R.id.cab_create_shortcut).isVisible = IsOreoPlusUseCase() && isOneItemSelected
 
             checkHideBtnVisibility(this, selectedItems)
             checkFavoriteBtnVisibility(this, selectedItems)
@@ -278,9 +278,9 @@ class MediaAdapter(
     private fun checkHideBtnVisibility(menu: Menu, selectedItems: ArrayList<Medium>) {
         val isInRecycleBin = selectedItems.firstOrNull()?.getIsInRecycleBin() == true
         menu.findItem(R.id.cab_hide).isVisible =
-            (!isRPlus() || isExternalStorageManager()) && !isInRecycleBin && selectedItems.any { !it.isHidden() }
+            (!IsRPlusUseCase() || isExternalStorageManager()) && !isInRecycleBin && selectedItems.any { !it.isHidden() }
         menu.findItem(R.id.cab_unhide).isVisible =
-            (!isRPlus() || isExternalStorageManager()) && !isInRecycleBin && selectedItems.any { it.isHidden() }
+            (!IsRPlusUseCase() || isExternalStorageManager()) && !isInRecycleBin && selectedItems.any { it.isHidden() }
     }
 
     private fun checkFavoriteBtnVisibility(menu: Menu, selectedItems: ArrayList<Medium>) {
@@ -318,7 +318,7 @@ class MediaAdapter(
             activity.isAStorageRootFolder(firstPath.getParentPath()) && !firstPath.startsWith(
                 activity.internalStoragePath
             )
-        if (isRPlus() && isSDOrOtgRootFolder) {
+        if (IsRPlusUseCase() && isSDOrOtgRootFolder) {
             activity.toast(R.string.rename_in_sd_card_system_restriction, Toast.LENGTH_LONG)
             finishActMode()
             return
@@ -483,7 +483,7 @@ class MediaAdapter(
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun createShortcut() {
-        if (!isOreoPlus()) {
+        if (!IsOreoPlusUseCase()) {
             return
         }
 
