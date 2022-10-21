@@ -84,7 +84,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleFileVisibility
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPath
-import ca.on.sudbury.hojat.smartgallery.extensions.showSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDBMediaPath
@@ -187,6 +186,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
 import java.io.OutputStream
 import kotlin.math.min
@@ -499,7 +499,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             return
         }
 
-        showSystemUI()
+        ShowSystemUiUseCase.invoke(this)
 
         if (intent.getBooleanExtra(SKIP_AUTHENTICATION, false)) {
             initContinue()
@@ -774,7 +774,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         if (mIsSlideshowActive) {
             binding.viewPager.setPageTransformer(false, DefaultPageTransformer())
             mIsSlideshowActive = false
-            showSystemUI()
+            ShowSystemUiUseCase.invoke(this)
             mSlideshowHandler.removeCallbacksAndMessages(null)
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             mAreSlideShowMediaVisible = false
@@ -1652,7 +1652,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             hideSystemUI()
         } else {
             stopSlideshow()
-            showSystemUI()
+            ShowSystemUiUseCase.invoke(this)
         }
     }
 

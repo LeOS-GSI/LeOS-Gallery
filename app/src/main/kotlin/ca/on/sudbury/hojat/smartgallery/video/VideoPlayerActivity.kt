@@ -60,7 +60,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.shareMediumPath
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
-import ca.on.sudbury.hojat.smartgallery.extensions.showSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
@@ -73,6 +72,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.DRAG_THRESHOLD
 import ca.on.sudbury.hojat.smartgallery.helpers.HIDE_SYSTEM_UI_DELAY
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -225,7 +225,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         binding.videoToolbar.title = getFilenameFromUri(mUri!!)
         initTimeHolder()
 
-        showSystemUI()
+        ShowSystemUiUseCase.invoke(this)
         window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->
             val isFullscreen = visibility and View.SYSTEM_UI_FLAG_FULLSCREEN != 0
             fullscreenToggled(isFullscreen)
@@ -560,7 +560,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         if (isFullScreen) {
             hideSystemUI()
         } else {
-            showSystemUI()
+            ShowSystemUiUseCase.invoke(this)
         }
 
         val newAlpha = if (isFullScreen) 0f else 1f

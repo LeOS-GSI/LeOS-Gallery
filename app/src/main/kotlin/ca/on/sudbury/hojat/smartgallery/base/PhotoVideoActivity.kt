@@ -25,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePath
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
-import ca.on.sudbury.hojat.smartgallery.extensions.showSystemUI
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
 import ca.on.sudbury.hojat.smartgallery.extensions.hideSystemUI
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
@@ -87,6 +86,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_IN_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.video.VideoPlayerActivity
 import java.io.File
 import java.io.FileInputStream
@@ -286,7 +286,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         }
 
         checkNotchSupport()
-        showSystemUI()
+        ShowSystemUiUseCase.invoke(this)
         val bundle = Bundle()
         val file = File(mUri.toString())
         val intentType = intent.type ?: ""
@@ -529,7 +529,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         if (mIsFullScreen) {
             hideSystemUI()
         } else {
-            showSystemUI()
+            ShowSystemUiUseCase.invoke(this)
         }
 
         val newAlpha = if (mIsFullScreen) 0f else 1f
