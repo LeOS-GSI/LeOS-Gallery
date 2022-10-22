@@ -62,11 +62,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.isAppInstalledOnSDCard
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
-import ca.on.sudbury.hojat.smartgallery.extensions.launchPurchaseThankYouIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.removeBit
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
@@ -1040,13 +1038,6 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         override fun copyFailed() {
             toast(R.string.copy_move_failed)
             copyMoveCallback = null
-        }
-    }
-
-    fun checkAppOnSDCard() {
-        if (!baseConfig.wasAppOnSDShown && isAppInstalledOnSDCard()) {
-            baseConfig.wasAppOnSDShown = true
-            ConfirmationDialog(this, "", R.string.app_on_sd_card, R.string.ok, 0) {}
         }
     }
 
