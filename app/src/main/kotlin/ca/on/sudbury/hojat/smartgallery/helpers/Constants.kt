@@ -378,26 +378,9 @@ val appIconColorStrings = arrayListOf(
     ".Grey_black"
 )
 
-
 // view types
 const val VIEW_TYPE_GRID = 1
 const val VIEW_TYPE_LIST = 2
-
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
-fun isOreoPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.P)
-fun isPiePlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
-
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
-fun isQPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.R)
-fun isRPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-fun isSPlus() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
 
 val normalizeRegex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 

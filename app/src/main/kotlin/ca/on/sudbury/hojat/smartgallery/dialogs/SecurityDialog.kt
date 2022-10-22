@@ -17,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogSecurityBinding
@@ -26,6 +25,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onPageChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.hojat.palette.views.MyDialogViewPager
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 
 /**
  * In the settings page, there's section named "Security" with 3 check boxes.
@@ -56,7 +56,7 @@ class SecurityDialog(
                 scrollView = dialogScrollview,
                 biometricPromptHost = AuthPromptHost(activity as FragmentActivity),
                 showBiometricIdTab = shouldShowBiometricIdTab(),
-                showBiometricAuthentication = showTabIndex == PROTECTION_FINGERPRINT && isRPlus()
+                showBiometricAuthentication = showTabIndex == PROTECTION_FINGERPRINT && IsRPlusUseCase()
             )
             viewPager.adapter = tabsAdapter
             viewPager.onPageChangeListener {
@@ -71,7 +71,7 @@ class SecurityDialog(
                 val textColor = root.context.getProperTextColor()
 
                 if (shouldShowBiometricIdTab()) {
-                    val tabTitle = if (isRPlus()) R.string.biometrics else R.string.fingerprint
+                    val tabTitle = if (IsRPlusUseCase()) R.string.biometrics else R.string.fingerprint
                     dialogTabLayout.addTab(
                         dialogTabLayout.newTab().setText(tabTitle),
                         PROTECTION_FINGERPRINT
@@ -133,7 +133,7 @@ class SecurityDialog(
     }
 
     private fun shouldShowBiometricIdTab(): Boolean {
-        return if (isRPlus()) {
+        return if (IsRPlusUseCase()) {
             activity.isBiometricIdAvailable()
         } else {
             isFingerPrintSensorAvailable()

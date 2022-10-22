@@ -44,6 +44,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import java.io.File
 import java.util.Locale
 import java.util.Calendar
@@ -86,7 +87,7 @@ class MediaFetcher(val context: Context) {
                 curMedia.addAll(newMedia)
             }
         } else {
-            if (curPath != FAVORITES && curPath != RECYCLE_BIN && isRPlus() && !isExternalStorageManager()) {
+            if (curPath != FAVORITES && curPath != RECYCLE_BIN && IsRPlusUseCase() && !isExternalStorageManager()) {
                 if (android11Files?.containsKey(curPath.lowercase(Locale.ROOT)) == true) {
                     curMedia.addAll(android11Files[curPath.lowercase(Locale.ROOT)]!!)
                 } else if (android11Files == null) {
@@ -119,7 +120,7 @@ class MediaFetcher(val context: Context) {
                     dateTakens.clone() as HashMap<String, Long>
                 )
 
-                if (curPath == FAVORITES && isRPlus() && !isExternalStorageManager()) {
+                if (curPath == FAVORITES && IsRPlusUseCase() && !isExternalStorageManager()) {
                     val files =
                         getAndroid11FolderMedia(
                             isPickImage,
@@ -219,7 +220,7 @@ class MediaFetcher(val context: Context) {
         val parents = LinkedHashSet<String>()
         var cursor: Cursor? = null
         try {
-            if (isRPlus()) {
+            if (IsRPlusUseCase()) {
                 val bundle = Bundle().apply {
                     putInt(ContentResolver.QUERY_ARG_LIMIT, 10)
                     putStringArray(ContentResolver.QUERY_ARG_SORT_COLUMNS, arrayOf(BaseColumns._ID))
@@ -552,7 +553,7 @@ class MediaFetcher(val context: Context) {
         dateTakens: HashMap<String, Long>
     ): HashMap<String, ArrayList<Medium>> {
         val media = HashMap<String, ArrayList<Medium>>()
-        if (!isRPlus() || Environment.isExternalStorageManager()) {
+        if (!IsRPlusUseCase() || Environment.isExternalStorageManager()) {
             return media
         }
 

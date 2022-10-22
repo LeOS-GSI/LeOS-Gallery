@@ -7,15 +7,14 @@ import android.graphics.Point
 import android.os.Environment
 import android.os.StatFs
 import android.provider.MediaStore
-import android.telephony.PhoneNumberUtils
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.normalizeRegex
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.io.IOException
@@ -198,7 +197,7 @@ fun String.shouldFolderBeVisible(
     val containsNoMedia = if (showHidden) {
         false
     } else {
-        folderNoMediaStatuses.getOrElse("$this/$NOMEDIA") { false } || ((!isRPlus() || isExternalStorageManager()) && File(
+        folderNoMediaStatuses.getOrElse("$this/$NOMEDIA") { false } || ((!IsRPlusUseCase() || isExternalStorageManager()) && File(
             this,
             NOMEDIA
         ).exists())

@@ -22,7 +22,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isInSubFolderInDownloadDir
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import java.io.File
 
@@ -118,7 +118,7 @@ class SaveAsDialog(
                                 val isInDownloadDir = activity.isInDownloadDir(newPath)
                                 val isInSubFolderInDownloadDir =
                                     activity.isInSubFolderInDownloadDir(newPath)
-                                if ((isRPlus() && !isExternalStorageManager()) && isInDownloadDir && !isInSubFolderInDownloadDir && !newFile.canWrite()) {
+                                if ((IsRPlusUseCase() && !isExternalStorageManager()) && isInDownloadDir && !isInSubFolderInDownloadDir && !newFile.canWrite()) {
                                     val fileDirItem =
                                         arrayListOf(File(newPath).toFileDirItem(activity))
                                     val fileUris = activity.getFileUrisFromFileDirItems(fileDirItem)

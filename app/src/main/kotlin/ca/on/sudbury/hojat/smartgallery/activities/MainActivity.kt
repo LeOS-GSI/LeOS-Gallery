@@ -135,7 +135,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.WAS_PROTECTION_HANDLED
 import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
@@ -143,6 +142,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
@@ -277,7 +277,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     private fun handleMediaPermissions(callback: (granted: Boolean) -> Unit) {
         handlePermission(PERMISSION_WRITE_STORAGE) { granted ->
             callback(granted)
-            if (granted && isRPlus()) {
+            if (granted && IsRPlusUseCase()) {
                 handlePermission(PERMISSION_MEDIA_LOCATION) {}
                 if (!mWasMediaManagementPromptShown) {
                     mWasMediaManagementPromptShown = true
@@ -435,9 +435,9 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
         binding.directoriesToolbar.menu.apply {
             findItem(R.id.temporarily_show_hidden).isVisible =
-                (!isRPlus() || isExternalStorageManager()) && !config.shouldShowHidden
+                (!IsRPlusUseCase() || isExternalStorageManager()) && !config.shouldShowHidden
             findItem(R.id.stop_showing_hidden).isVisible =
-                (!isRPlus() || isExternalStorageManager()) && config.temporarilyShowHidden
+                (!IsRPlusUseCase() || isExternalStorageManager()) && config.temporarilyShowHidden
 
             findItem(R.id.temporarily_show_excluded).isVisible =
                 !findItem(R.id.temporarily_show_hidden).isVisible && !config.temporarilyShowExcluded
@@ -1447,7 +1447,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             binding.directoriesEmptyPlaceholder.text = getString(R.string.no_items_found)
             binding.directoriesEmptyPlaceholder2.beGone()
         } else if (dirs.isEmpty() && config.filterMedia == getDefaultFileFilter()) {
-            if (isRPlus() && !isExternalStorageManager()) {
+            if (IsRPlusUseCase() && !isExternalStorageManager()) {
                 binding.directoriesEmptyPlaceholder.text = getString(R.string.no_items_found)
                 binding.directoriesEmptyPlaceholder2.beGone()
             } else {
@@ -1549,7 +1549,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         dirs.filter { !it.areFavorites() && !it.isRecycleBin() }.forEach { it ->
             if (!getDoesFilePathExist(it.path, otgPath)) {
                 invalidDirs.add(it)
-            } else if (it.path != config.tempFolderPath && (!isRPlus() || isExternalStorageManager())) {
+            } else if (it.path != config.tempFolderPath && (!IsRPlusUseCase() || isExternalStorageManager())) {
                 // avoid calling file.list() or listfiles() on Android 11+, it became way too slow
                 val children = if (isPathOnOTG(it.path)) {
                     getOTGFolderChildrenNames(it.path)

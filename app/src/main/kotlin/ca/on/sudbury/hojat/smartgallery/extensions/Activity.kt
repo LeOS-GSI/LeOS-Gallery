@@ -64,9 +64,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SANSELAN
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_FILTERS
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GESTURE_VIEWS
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_APNG
-import ca.on.sudbury.hojat.smartgallery.helpers.isRPlus
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.isSPlus
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
@@ -103,6 +101,8 @@ import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.squareup.picasso.Picasso
@@ -128,7 +128,7 @@ private fun BaseSimpleActivity.renameCasually(
     val tempFile = try {
         createTempFile(oldFile) ?: return
     } catch (exception: Exception) {
-        if (isRPlus() && exception is java.nio.file.FileSystemException) {
+        if (IsRPlusUseCase() && exception is java.nio.file.FileSystemException) {
             // if we are renaming multiple files at once, we should give the Android 30+ permission dialog all uris together, not one by one
             if (isRenamingMultipleFiles) {
                 callback?.invoke(false, Android30RenameFormat.CONTENT_RESOLVER)
@@ -198,7 +198,7 @@ private fun BaseSimpleActivity.renameCasually(
     } else {
         tempFile.delete()
         newFile.delete()
-        if (isRPlus()) {
+        if (IsRPlusUseCase()) {
             // if we are renaming multiple files at once, we should give the Android 30+ permission dialog all uris together, not one by one
             if (isRenamingMultipleFiles) {
                 callback?.invoke(false, Android30RenameFormat.SAF)
@@ -787,7 +787,7 @@ fun SimpleActivity.launchAbout() {
         faqItems.add(FaqItem(R.string.faq_10_title_commons, R.string.faq_10_text_commons))
     }
 
-    if (isRPlus() && !isExternalStorageManager()) {
+    if (IsRPlusUseCase() && !isExternalStorageManager()) {
         faqItems.add(0, FaqItem(R.string.faq_16_title, R.string.faq_16_text))
         faqItems.add(1, FaqItem(R.string.faq_17_title, R.string.faq_17_text))
         faqItems.removeIf { it.text == R.string.faq_7_text }
@@ -801,12 +801,12 @@ fun SimpleActivity.launchAbout() {
 fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
     if (canManageMedia() || isExternalStorageManager()) {
         callback()
-    } else if (isRPlus() && resources.getBoolean(R.bool.require_all_files_access)) {
+    } else if (IsRPlusUseCase() && resources.getBoolean(R.bool.require_all_files_access)) {
         if (Environment.isExternalStorageManager()) {
             callback()
         } else {
             var messagePrompt = getString(R.string.access_storage_prompt)
-            if (isSPlus()) {
+            if (IsSPlusUseCase()) {
                 messagePrompt += "\n\n${getString(R.string.media_management_alternative)}"
             }
 
@@ -831,7 +831,7 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
                 }
             }
         }
-    } else if (isSPlus() && !MediaStore.canManageMedia(this) && !isExternalStorageManager()) {
+    } else if (IsSPlusUseCase() && !MediaStore.canManageMedia(this) && !isExternalStorageManager()) {
         val message =
             "${getString(R.string.media_management_prompt)}\n\n${getString(R.string.media_management_note)}"
         ConfirmationDialog(this, message, 0, R.string.ok, 0) {
@@ -916,7 +916,7 @@ fun BaseSimpleActivity.deleteFileBg(
         deleteAndroidSAFDirectory(path, allowDeleteFolder, callback)
     } else {
         val file = File(path)
-        if (!isRPlus() && file.absolutePath.startsWith(internalStoragePath) && !file.canWrite()) {
+        if (!IsRPlusUseCase() && file.absolutePath.startsWith(internalStoragePath) && !file.canWrite()) {
             callback?.invoke(false)
             return
         }
@@ -959,7 +959,7 @@ fun BaseSimpleActivity.deleteFileBg(
                             }
                         }
                     }
-                } else if (isRPlus() && !isDeletingMultipleFiles) {
+                } else if (IsRPlusUseCase() && !isDeletingMultipleFiles) {
                     deleteSdk30(fileDirItem, callback)
                 } else {
                     callback?.invoke(false)
@@ -1957,7 +1957,7 @@ fun Activity.isAppInstalledOnSDCard(): Boolean = try {
 }
 
 fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
-    return if ((!isRPlus() && isPathOnSD(path) && !isSDCardSetAsDefaultStorage() && (baseConfig.sdTreeUri.isEmpty() || !hasProperStoredTreeUri(
+    return if ((!IsRPlusUseCase() && isPathOnSD(path) && !isSDCardSetAsDefaultStorage() && (baseConfig.sdTreeUri.isEmpty() || !hasProperStoredTreeUri(
             false
         )))
     ) {
@@ -2135,7 +2135,7 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
 }
 
 fun BaseSimpleActivity.isShowingOTGDialog(path: String): Boolean {
-    return if (!isRPlus() && isPathOnOTG(path) && (baseConfig.OTGTreeUri.isEmpty() || !hasProperStoredTreeUri(
+    return if (!IsRPlusUseCase() && isPathOnOTG(path) && (baseConfig.OTGTreeUri.isEmpty() || !hasProperStoredTreeUri(
             true
         ))
     ) {
@@ -2222,7 +2222,7 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
         Intent().apply {
             action = Intent.ACTION_EDIT
             setDataAndType(newUri, getUriMimeType(path, newUri))
-            if (!isRPlus() || (isRPlus() && (hasProperStoredDocumentUriSdk30(path) || Environment.isExternalStorageManager()))) {
+            if (!IsRPlusUseCase() || (IsRPlusUseCase() && (hasProperStoredDocumentUriSdk30(path) || Environment.isExternalStorageManager()))) {
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             }
 
@@ -2235,7 +2235,7 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
                 "$newFilePath",
                 applicationId
             )
-            if (!isRPlus()) {
+            if (!IsRPlusUseCase()) {
                 val resInfoList =
                     packageManager.queryIntentActivities(this, PackageManager.MATCH_DEFAULT_ONLY)
                 for (resolveInfo in resInfoList) {
@@ -2248,7 +2248,7 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
                 }
             }
 
-            if (!isRPlus()) {
+            if (!IsRPlusUseCase()) {
                 putExtra(MediaStore.EXTRA_OUTPUT, outputUri)
             }
 
@@ -2378,7 +2378,7 @@ private fun BaseSimpleActivity.deleteFilesCasual(
             }
 
             if (index == files.lastIndex) {
-                if (isRPlus() && failedFileDirItems.isNotEmpty()) {
+                if (IsRPlusUseCase() && failedFileDirItems.isNotEmpty()) {
                     val fileUris = getFileUrisFromFileDirItems(failedFileDirItems)
                     deleteSDK30Uris(fileUris) { success ->
                         runOnUiThread {
@@ -2399,7 +2399,7 @@ fun createTempFile(file: File): File? {
     return if (file.isDirectory) {
         createTempDir("temp", "${System.currentTimeMillis()}", file.parentFile)
     } else {
-        if (isRPlus()) {
+        if (IsRPlusUseCase()) {
             // this can throw FileSystemException, lets catch and handle it at the place calling this function
             kotlin.io.path.createTempFile(
                 file.parentFile?.toPath(),
