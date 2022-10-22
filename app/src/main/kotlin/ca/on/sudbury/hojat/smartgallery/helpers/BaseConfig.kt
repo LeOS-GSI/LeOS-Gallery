@@ -498,16 +498,6 @@ open class BaseConfig(val context: Context) {
     fun hasCustomSorting(path: String) =
         prefs.contains(SORT_FOLDER_PREFIX + path.lowercase(Locale.getDefault()))
 
-    var hadThankYouInstalled: Boolean
-        get() = prefs.getBoolean(
-            HAD_THANK_YOU_INSTALLED,
-            false
-        )
-        set(hadThankYouInstalled) = prefs.edit().putBoolean(
-            HAD_THANK_YOU_INSTALLED,
-            hadThankYouInstalled
-        ).apply()
-
     var skipDeleteConfirmation: Boolean
         get() = prefs.getBoolean(
             SKIP_DELETE_CONFIRMATION,

@@ -1003,20 +1003,6 @@ fun Context.isSAFOnlyRoot(path: String): Boolean {
     return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
-fun isThankYouInstalled() = true
-
-fun Context.isOrWasThankYouInstalled(): Boolean {
-    return when {
-        resources.getBoolean(R.bool.pretend_thank_you_installed) -> true
-        baseConfig.hadThankYouInstalled -> true
-        isThankYouInstalled() -> {
-            baseConfig.hadThankYouInstalled = true
-            true
-        }
-        else -> false
-    }
-}
-
 val Context.recycleBin: File get() = filesDir
 
 fun Context.launchActivityIntent(intent: Intent) {
@@ -2123,7 +2109,7 @@ fun Context.getFavoritePaths(): ArrayList<String> {
     }
 }
 
-fun Context.getFavoriteFromPath(path: String) =
+fun getFavoriteFromPath(path: String) =
     Favorite(null, path, path.getFilenameFromPath(), path.getParentPath())
 
 // Convert paths like /storage/emulated/0/Pictures/Screenshots/first.jpg to content://media/external/images/media/131799
@@ -2819,13 +2805,9 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
 }
 
 fun Context.getSharedTheme(callback: (sharedTheme: SharedTheme?) -> Unit) {
-    if (!isThankYouInstalled()) {
-        callback(null)
-    } else {
-        val cursorLoader = getMyContentProviderCursorLoader()
-        RunOnBackgroundThreadUseCase {
-            callback(getSharedThemeSync(cursorLoader))
-        }
+    val cursorLoader = getMyContentProviderCursorLoader()
+    RunOnBackgroundThreadUseCase {
+        callback(getSharedThemeSync(cursorLoader))
     }
 }
 

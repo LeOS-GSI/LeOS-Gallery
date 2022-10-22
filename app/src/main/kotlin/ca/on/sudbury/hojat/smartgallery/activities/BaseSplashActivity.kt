@@ -7,7 +7,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.extensions.getSharedTheme
-import ca.on.sudbury.hojat.smartgallery.extensions.isThankYouInstalled
 import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.showSideloadingDialog
 import ca.on.sudbury.hojat.smartgallery.R
@@ -41,7 +40,7 @@ abstract class BaseSplashActivity : AppCompatActivity() {
             }
         }
 
-        if (!baseConfig.isUsingAutoTheme && !baseConfig.isUsingSystemTheme && isThankYouInstalled()) {
+        if (!baseConfig.isUsingAutoTheme && !baseConfig.isUsingSystemTheme) {
             getSharedTheme {
                 if (it != null) {
                     baseConfig.apply {

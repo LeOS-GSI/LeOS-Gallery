@@ -63,7 +63,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isAppInstalledOnSDCard
-import ca.on.sudbury.hojat.smartgallery.extensions.isOrWasThankYouInstalled
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
@@ -601,11 +600,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     fun handleCustomizeColorsClick() {
-        if (isOrWasThankYouInstalled()) {
-            startCustomizationActivity()
-        } else {
-            launchPurchaseThankYouIntent()
-        }
+        startCustomizationActivity()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
