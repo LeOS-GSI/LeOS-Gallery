@@ -24,7 +24,6 @@ import android.graphics.Point
 import android.graphics.drawable.PictureDrawable
 import android.hardware.usb.UsbConstants
 import android.hardware.usb.UsbManager
-import android.media.AudioManager
 import android.media.MediaMetadataRetriever
 import android.media.MediaScannerConnection
 import android.net.Uri
@@ -443,9 +442,6 @@ fun Context.getAndroidTreeUri(path: String): String {
         else -> if (isAndroidDataDir(path)) baseConfig.primaryAndroidDataTreeUri else baseConfig.primaryAndroidObbTreeUri
     }
 }
-
-fun Context.getAppIconColors() =
-    resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
 
 fun Context.getCanAppBeUpgraded() = proPackages.contains(
     baseConfig.appId.removeSuffix(".debug").removePrefix("com.simplemobiletools.")
@@ -3008,11 +3004,12 @@ fun isExternalStorageManager(): Boolean {
 fun Context.checkAppIconColor() {
     val appId = baseConfig.appId
     if (appId.isNotEmpty() && baseConfig.lastIconColor != baseConfig.appIconColor) {
-        getAppIconColors().forEachIndexed { index, color ->
-            toggleAppIconColor(appId, index, color, false)
-        }
+        resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
+            .forEachIndexed { index, color ->
+                toggleAppIconColor(appId, index, color, false)
+            }
 
-        getAppIconColors().forEachIndexed { index, color ->
+        resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList()).forEachIndexed { index, color ->
             if (baseConfig.appIconColor == color) {
                 toggleAppIconColor(appId, index, color, true)
             }

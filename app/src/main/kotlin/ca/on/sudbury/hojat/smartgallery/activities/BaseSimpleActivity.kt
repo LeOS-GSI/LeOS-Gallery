@@ -48,7 +48,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbUri
 import ca.on.sudbury.hojat.smartgallery.extensions.createFirstParentTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFromMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
-import ca.on.sudbury.hojat.smartgallery.extensions.getAppIconColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getAvailableStorageB
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -319,11 +318,12 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     private fun getCurrentAppIconColorIndex(): Int {
         val appIconColor = baseConfig.appIconColor
-        getAppIconColors().forEachIndexed { index, color ->
-            if (color == appIconColor) {
-                return index
+        this.resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
+            .forEachIndexed { index, color ->
+                if (color == appIconColor) {
+                    return index
+                }
             }
-        }
         return 0
     }
 

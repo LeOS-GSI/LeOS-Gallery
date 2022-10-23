@@ -31,7 +31,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toBoolean
 import ca.on.sudbury.hojat.smartgallery.extensions.toInt
-import ca.on.sudbury.hojat.smartgallery.extensions.getAppIconColors
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
@@ -1099,7 +1098,7 @@ class SettingsActivity : SimpleActivity() {
                 PRIMARY_COLOR -> config.primaryColor = value.toInt()
                 ACCENT_COLOR -> config.accentColor = value.toInt()
                 APP_ICON_COLOR -> {
-                    if (getAppIconColors().contains(value.toInt())) {
+                    if (resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList()).contains(value.toInt())) {
                         config.appIconColor = value.toInt()
                         checkAppIconColor()
                     }
