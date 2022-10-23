@@ -14,7 +14,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.audioManager
 import ca.on.sudbury.hojat.smartgallery.helpers.DRAG_THRESHOLD
 import kotlin.math.abs
 
@@ -145,7 +144,10 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
     }
 
     private fun getCurrentVolume() =
-        activity?.audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 0
+        (activity?.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getStreamVolume(
+            AudioManager.STREAM_MUSIC
+        )
+
 
     private fun getCurrentBrightness(): Int {
         return try {
@@ -165,7 +167,10 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
 
     private fun volumePercentChanged(percent: Int) {
         val stream = AudioManager.STREAM_MUSIC
-        val maxVolume = activity!!.audioManager.getStreamMaxVolume(stream)
+        val maxVolume =
+            (activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getStreamMaxVolume(
+                stream
+            )
         val percentPerPoint = 100 / maxVolume
         if (percentPerPoint == 0) {
             return
@@ -173,7 +178,11 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
 
         val addPoints = percent / percentPerPoint
         val newVolume = maxVolume.coerceAtMost(0.coerceAtLeast(mTouchDownValue + addPoints))
-        activity!!.audioManager.setStreamVolume(stream, newVolume, 0)
+        (activity!!.getSystemService(Context.AUDIO_SERVICE) as AudioManager).setStreamVolume(
+            stream,
+            newVolume,
+            0
+        )
 
         val absolutePercent = ((newVolume / maxVolume.toFloat()) * 100).toInt()
         showValue(absolutePercent)

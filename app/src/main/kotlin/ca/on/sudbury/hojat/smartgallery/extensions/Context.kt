@@ -419,8 +419,6 @@ val Context.baseConfig: BaseConfig get() = BaseConfig.newInstance(this)
 
 val Context.recycleBinPath: String get() = filesDir.absolutePath
 
-val Context.audioManager get() = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
 fun Context.getAndroidSAFDirectChildrenCount(path: String, countHidden: Boolean): Int {
     val treeUri = getAndroidTreeUri(path).toUri()
     if (treeUri == Uri.EMPTY) {
