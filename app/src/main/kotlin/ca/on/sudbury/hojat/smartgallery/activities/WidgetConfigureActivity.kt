@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.RemoteViews
+import android.widget.SeekBar
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
@@ -16,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
-import ca.on.sudbury.hojat.smartgallery.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
@@ -105,10 +105,22 @@ class WidgetConfigureActivity : SimpleActivity() {
         binding.configBgSeekbar.apply {
             progress = (mBgAlpha * 100).toInt()
 
-            onSeekBarChangeListener {
-                mBgAlpha = it / 100f
-                updateBackgroundColor()
-            }
+
+            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(
+                    seekBar: SeekBar?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    mBgAlpha = progress / 100f
+                    updateBackgroundColor()
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+            })
+
         }
         updateBackgroundColor()
 

@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
 import android.widget.RelativeLayout
+import android.widget.SeekBar
 import androidx.exifinterface.media.ExifInterface
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.on.hojat.renderer.cropper.CropImageView
@@ -41,7 +42,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.onSeekBarChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
@@ -619,10 +619,17 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             }
         }
 
-        binding.bottomEditorDrawActions.bottomDrawWidth.onSeekBarChangeListener {
-            config.lastEditorBrushSize = it
-            updateBrushSize(it)
-        }
+        binding.bottomEditorDrawActions.bottomDrawWidth.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                config.lastEditorBrushSize = progress
+                updateBrushSize(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
 
         binding.bottomEditorDrawActions.bottomDrawUndo.setOnClickListener {
             binding.editorDrawCanvas.undo()
