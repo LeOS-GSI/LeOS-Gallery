@@ -414,7 +414,7 @@ fun getPaths(file: File): java.util.ArrayList<String> {
     return paths
 }
 
-// TODO : The baseConfig should be extracted into a repository
+// TODO : Everything about baseConfig should be extracted into a repository
 val Context.baseConfig: BaseConfig get() = BaseConfig.newInstance(this)
 
 val Context.recycleBinPath: String get() = filesDir.absolutePath
