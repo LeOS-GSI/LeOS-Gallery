@@ -1365,7 +1365,7 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
 fun BaseSimpleActivity.emptyTheRecycleBin(callback: (() -> Unit)? = null) {
     RunOnBackgroundThreadUseCase {
         try {
-            recycleBin.deleteRecursively()
+            baseContext.filesDir.deleteRecursively()
             mediaDB.clearRecycleBin()
             directoryDao.deleteRecycleBin()
             ShowSafeToastUseCase(this, R.string.recycle_bin_emptied)

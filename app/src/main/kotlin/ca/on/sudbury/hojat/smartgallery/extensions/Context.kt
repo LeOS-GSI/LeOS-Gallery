@@ -997,8 +997,6 @@ fun Context.isSAFOnlyRoot(path: String): Boolean {
     return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
-val Context.recycleBin: File get() = filesDir
-
 fun Context.launchActivityIntent(intent: Intent) {
     try {
         startActivity(intent)
