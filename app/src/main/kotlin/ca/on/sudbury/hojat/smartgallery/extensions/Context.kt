@@ -389,9 +389,6 @@ private fun Context.queryCursorDesc(
     }
 }
 
-private fun isDownloadsDocument(uri: Uri) =
-    uri.authority == "com.android.providers.downloads.documents"
-
 private fun isExternalStorageDocument(uri: Uri) =
     uri.authority == "com.android.externalstorage.documents"
 
@@ -2730,7 +2727,7 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
         return uri.path
     }
 
-    if (isDownloadsDocument(uri)) {
+    if (uri.authority == "com.android.providers.downloads.documents") {
         val id = DocumentsContract.getDocumentId(uri)
         if (id.areDigitsOnly()) {
             val newUri = ContentUris.withAppendedId(
