@@ -101,7 +101,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
-import ca.on.sudbury.hojat.smartgallery.extensions.writeLn
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContextWrapper
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
@@ -1112,7 +1111,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         RunOnBackgroundThreadUseCase {
             outputStream.bufferedWriter().use { out ->
                 for ((key, value) in configItems) {
-                    out.writeLn("$key=$value")
+                    val line = "$key=$value"
+                    out.write(line)
+                    out.newLine()
+
                 }
             }
             ShowSafeToastUseCase(this, R.string.settings_exported_successfully)
