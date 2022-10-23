@@ -23,7 +23,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordPro
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
@@ -152,6 +151,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
@@ -916,7 +916,8 @@ class SettingsActivity : SimpleActivity() {
             }
 
             runOnUiThread {
-                binding.settingsEmptyRecycleBinSize.text = mRecycleBinContentSize.formatSize()
+                binding.settingsEmptyRecycleBinSize.text =
+                    FormatFileSizeUseCase(mRecycleBinContentSize)
             }
         }
 
@@ -927,7 +928,7 @@ class SettingsActivity : SimpleActivity() {
                 showRecycleBinEmptyingDialog {
                     emptyTheRecycleBin()
                     mRecycleBinContentSize = 0L
-                    binding.settingsEmptyRecycleBinSize.text = 0L.formatSize()
+                    binding.settingsEmptyRecycleBinSize.text = FormatFileSizeUseCase(0L)
                 }
             }
         }
@@ -935,7 +936,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupClearCache() {
         RunOnBackgroundThreadUseCase {
-            val size = cacheDir.getProperSize(true).formatSize()
+            val size = FormatFileSizeUseCase(cacheDir.getProperSize(true))
             runOnUiThread {
                 binding.settingsClearCacheSize.text = size
             }
@@ -946,7 +947,8 @@ class SettingsActivity : SimpleActivity() {
             RunOnBackgroundThreadUseCase {
                 cacheDir.deleteRecursively()
                 runOnUiThread {
-                    binding.settingsClearCacheSize.text = cacheDir.getProperSize(true).formatSize()
+                    binding.settingsClearCacheSize.text =
+                        FormatFileSizeUseCase(cacheDir.getProperSize(true))
                 }
             }
         }

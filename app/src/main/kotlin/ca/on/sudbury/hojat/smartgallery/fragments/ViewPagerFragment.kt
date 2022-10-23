@@ -8,7 +8,6 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.formatAsResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifDateTaken
@@ -30,6 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.EXT_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_LAST_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_CLOSE_DOWN_GESTURE_DURATION
 import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import java.io.File
 import kotlin.math.abs
 
@@ -82,7 +82,7 @@ abstract class ViewPagerFragment : Fragment() {
         }
 
         if (detailsFlag and EXT_SIZE != 0) {
-            file.length().formatSize().let { if (it.isNotEmpty()) details.appendLine(it) }
+            FormatFileSizeUseCase(file.length()).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
         if (detailsFlag and EXT_RESOLUTION != 0) {

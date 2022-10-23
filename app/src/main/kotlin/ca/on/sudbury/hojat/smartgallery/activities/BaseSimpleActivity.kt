@@ -47,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbPath
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbUri
 import ca.on.sudbury.hojat.smartgallery.extensions.createFirstParentTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFromMediaStore
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getAvailableStorageB
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -113,6 +112,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseC
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -944,8 +944,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         } else {
             val text = String.format(
                 getString(R.string.no_space),
-                sumToCopy.formatSize(),
-                availableSpace.formatSize()
+                FormatFileSizeUseCase(sumToCopy),
+                FormatFileSizeUseCase(availableSpace)
             )
             ShowSafeToastUseCase(this, text, Toast.LENGTH_LONG)
         }

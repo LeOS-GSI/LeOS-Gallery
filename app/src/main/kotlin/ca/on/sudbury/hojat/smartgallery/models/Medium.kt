@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import ca.on.sudbury.hojat.smartgallery.extensions.isApng
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
@@ -30,6 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import java.io.File
 import java.io.Serializable
 import java.util.Calendar
@@ -85,7 +85,7 @@ data class Medium(
         when {
             sorting and SORT_BY_NAME != 0 -> name
             sorting and SORT_BY_PATH != 0 -> path
-            sorting and SORT_BY_SIZE != 0 -> size.formatSize()
+            sorting and SORT_BY_SIZE != 0 -> FormatFileSizeUseCase(size)
             sorting and SORT_BY_DATE_MODIFIED != 0 -> modified.formatDate(
                 context,
                 dateFormat,

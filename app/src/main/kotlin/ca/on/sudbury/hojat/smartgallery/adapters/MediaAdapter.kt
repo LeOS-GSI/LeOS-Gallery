@@ -25,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtectio
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -83,6 +82,7 @@ import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.photo_item_grid.view.*
@@ -549,7 +549,7 @@ class MediaAdapter(
         val selectedMedia = getSelectedItems()
         val firstPath = selectedMedia.first().path
         val fileDirItem = selectedMedia.first().toFileDirItem()
-        val size = fileDirItem.getProperSize(activity, countHidden = true).formatSize()
+        val size = FormatFileSizeUseCase(fileDirItem.getProperSize(activity, countHidden = true))
         val itemsAndSize = if (itemsCnt == 1) {
             fileDirItem.mediaStoreId = selectedMedia.first().mediaStoreId
             "\"${firstPath.getFilenameFromPath()}\" ($size)"
@@ -559,8 +559,12 @@ class MediaAdapter(
                 val curFileDirItem = medium.toFileDirItem()
                 fileDirItems.add(curFileDirItem)
             }
-            val fileSize = fileDirItems.sumByLong { it.getProperSize(activity, countHidden = true) }
-                .formatSize()
+            val fileSize = FormatFileSizeUseCase(fileDirItems.sumByLong {
+                it.getProperSize(
+                    activity,
+                    countHidden = true
+                )
+            })
             val deleteItemsString =
                 resources.getQuantityString(R.plurals.delete_items, itemsCnt, itemsCnt)
             "$deleteItemsString ($fileSize)"

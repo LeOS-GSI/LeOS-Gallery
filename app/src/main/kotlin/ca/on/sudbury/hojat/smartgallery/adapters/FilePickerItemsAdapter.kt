@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
@@ -29,6 +28,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.getFilePlaceholderDrawables
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import kotlinx.android.synthetic.main.item_filepicker_list.view.*
 import java.util.Locale
@@ -111,7 +111,7 @@ class FilePickerItemsAdapter(
                 list_item_icon.setImageDrawable(folderDrawable)
                 list_item_details.text = getChildrenCnt(fileDirItem)
             } else {
-                list_item_details.text = fileDirItem.size.formatSize()
+                list_item_details.text = FormatFileSizeUseCase(fileDirItem.size)
                 val path = fileDirItem.path
                 val placeholder = fileDrawables.getOrElse(
                     fileDirItem.name.substringAfterLast(".").lowercase(Locale.getDefault())

@@ -2,11 +2,8 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
 import android.text.format.DateFormat
-import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.math.log10
-import kotlin.math.pow
 
 fun Long.formatDate(
     context: Context,
@@ -20,16 +17,3 @@ fun Long.formatDate(
     return DateFormat.format("$useDateFormat, $useTimeFormat", cal).toString()
 }
 
-fun Long.formatSize(): String {
-    if (this <= 0) {
-        return "0 B"
-    }
-
-    val units = arrayOf("B", "kB", "MB", "GB", "TB")
-    val digitGroups = (log10(toDouble()) / log10(1024.0)).toInt()
-    return "${
-        DecimalFormat("#,##0.#").format(
-            this / 1024.0.pow(digitGroups.toDouble())
-        )
-    } ${units[digitGroups]}"
-}

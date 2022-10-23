@@ -21,7 +21,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.canModifyEXIF
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.formatAsResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
@@ -54,6 +53,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.removeValues
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
@@ -133,7 +133,9 @@ class PropertiesDialog() {
         RunOnBackgroundThreadUseCase {
 
             val fileCount = fileDirItem.getProperFileCount(mActivity, mCountHiddenItems)
-            val size = fileDirItem.getProperSize(mActivity, mCountHiddenItems).formatSize()
+            val size =
+                FormatFileSizeUseCase(fileDirItem.getProperSize(mActivity, mCountHiddenItems))
+
 
             val directChildrenCount = if (fileDirItem.isDirectory) {
                 fileDirItem.getDirectChildrenCount(mActivity, mCountHiddenItems).toString()
@@ -339,8 +341,12 @@ class PropertiesDialog() {
         RunOnBackgroundThreadUseCase {
             val fileCount =
                 fileDirItems.sumByInt { it.getProperFileCount(activity, countHiddenItems) }
-            val size =
-                fileDirItems.sumByLong { it.getProperSize(activity, countHiddenItems) }.formatSize()
+            val size = FormatFileSizeUseCase(fileDirItems.sumByLong {
+                it.getProperSize(
+                    activity,
+                    countHiddenItems
+                )
+            })
             activity.runOnUiThread {
                 (mDialogView.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
                     size

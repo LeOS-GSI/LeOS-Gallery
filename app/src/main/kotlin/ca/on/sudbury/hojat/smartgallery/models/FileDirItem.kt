@@ -8,7 +8,6 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
-import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlbum
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileCount
@@ -42,6 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.util.*
@@ -112,7 +112,7 @@ open class FileDirItem(
 
     fun getBubbleText(context: Context, dateFormat: String? = null, timeFormat: String? = null) =
         when {
-            sorting and SORT_BY_SIZE != 0 -> size.formatSize()
+            sorting and SORT_BY_SIZE != 0 -> FormatFileSizeUseCase(size)
             sorting and SORT_BY_DATE_MODIFIED != 0 -> modified.formatDate(
                 context,
                 dateFormat,
