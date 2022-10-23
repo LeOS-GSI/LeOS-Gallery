@@ -25,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtectio
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
-import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
@@ -83,6 +82,7 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.photo_item_grid.view.*
@@ -512,7 +512,7 @@ class MediaAdapter(
 
                 val shortcut = ShortcutInfo.Builder(activity, path)
                     .setShortLabel(path.getFilenameFromPath())
-                    .setIcon(Icon.createWithBitmap(drawable.convertToBitmap()))
+                    .setIcon(Icon.createWithBitmap(ConvertDrawableToBitmapUseCase(drawable)))
                     .setIntent(intent)
                     .build()
 

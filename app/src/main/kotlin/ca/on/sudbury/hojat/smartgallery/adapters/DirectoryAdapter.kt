@@ -50,7 +50,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtectio
 import ca.on.sudbury.hojat.smartgallery.extensions.containsNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
-import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
@@ -102,6 +101,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.dir_check
@@ -683,7 +683,7 @@ class DirectoryAdapter(
 
                 val shortcut = ShortcutInfo.Builder(activity, path)
                     .setShortLabel(dir.name)
-                    .setIcon(Icon.createWithBitmap(drawable.convertToBitmap()))
+                    .setIcon(Icon.createWithBitmap(ConvertDrawableToBitmapUseCase(drawable)))
                     .setIntent(intent)
                     .build()
 
