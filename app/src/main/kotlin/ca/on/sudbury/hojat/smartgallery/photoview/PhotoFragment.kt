@@ -48,7 +48,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
@@ -81,6 +80,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.apache.sanselan.common.byteSources.ByteSourceInputStream
@@ -241,7 +241,7 @@ class PhotoFragment : ViewPagerFragment() {
                         mMedium.path = file.absolutePath
                     }
                 } catch (e: Exception) {
-                    requireActivity().toast(R.string.unknown_error_occurred)
+                    ShowSafeToastUseCase(requireActivity(), R.string.unknown_error_occurred)
                     return binding.root
                 } finally {
                     out?.close()
@@ -413,7 +413,7 @@ class PhotoFragment : ViewPagerFragment() {
             showPortraitStripe()
         }
 
-        RunOnBackgroundThreadUseCase{
+        RunOnBackgroundThreadUseCase {
             mImageOrientation = getImageOrientation()
             activity?.runOnUiThread {
                 when {

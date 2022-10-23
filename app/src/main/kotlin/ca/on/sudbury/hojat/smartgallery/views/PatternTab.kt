@@ -15,11 +15,11 @@ import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_pattern.view.*
 
 class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
@@ -86,7 +86,7 @@ class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context
             }
             else -> {
                 pattern_lock_view.setViewMode(PatternLockView.PatternViewMode.WRONG)
-                context.toast(R.string.wrong_pattern)
+                ShowSafeToastUseCase(context, R.string.wrong_pattern)
                 Handler().postDelayed({
                     pattern_lock_view.clearPattern()
                     if (requiredHash.isEmpty()) {

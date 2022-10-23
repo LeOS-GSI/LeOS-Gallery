@@ -137,7 +137,6 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -186,6 +185,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
 import java.io.OutputStream
@@ -241,7 +241,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             if (it) {
                 initViewPager()
             } else {
-                toast(R.string.no_storage_permissions)
+                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
                 finish()
             }
         }
@@ -428,7 +428,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             mPrevHashcode = 0
             refreshViewPager()
         } else if (requestCode == REQUEST_SET_AS && resultCode == Activity.RESULT_OK) {
-            toast(R.string.wallpaper_set_successfully)
+            ShowSafeToastUseCase(this, R.string.wallpaper_set_successfully)
         } else if (requestCode == REQUEST_VIEW_VIDEO && resultCode == Activity.RESULT_OK && resultData != null) {
             if (resultData.getBooleanExtra(GO_TO_NEXT_ITEM, false)) {
                 goToNextItem()
@@ -475,7 +475,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         if (mPath.isEmpty()) {
-            toast(R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
             finish()
             return
         }
@@ -766,7 +766,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             }
         } else {
             stopSlideshow()
-            toast(R.string.slideshow_ended)
+            ShowSafeToastUseCase(this, R.string.slideshow_ended)
         }
     }
 
@@ -818,7 +818,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         return if (mSlideshowMedia.isEmpty()) {
-            toast(R.string.no_media_for_slideshow)
+            ShowSafeToastUseCase(this, R.string.no_media_for_slideshow)
             false
         } else {
             updatePagerItems(mSlideshowMedia)
@@ -842,7 +842,11 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     private fun copyMoveTo(isCopyOperation: Boolean) {
         val currPath = getCurrentPath()
         if (!isCopyOperation && currPath.startsWith(recycleBinPath)) {
-            toast(R.string.moving_recycle_bin_items_disabled, Toast.LENGTH_LONG)
+            ShowSafeToastUseCase(
+                this,
+                R.string.moving_recycle_bin_items_disabled,
+                Toast.LENGTH_LONG
+            )
             return
         }
 
@@ -922,7 +926,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                     return@handleSAFDialog
                 }
 
-                toast(R.string.saving)
+                ShowSafeToastUseCase(this, R.string.saving)
                 RunOnBackgroundThreadUseCase {
                     val photoFragment =
                         getCurrentPhotoFragment() ?: return@RunOnBackgroundThreadUseCase
@@ -932,7 +936,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         photoFragment.mCurrentRotationDegrees,
                         true
                     ) {
-                        toast(R.string.file_saved)
+                        ShowSafeToastUseCase(this, R.string.file_saved)
                         getCurrentPhotoFragment()?.mCurrentRotationDegrees = 0
                         refreshMenuItems()
                     }
@@ -1030,7 +1034,12 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         val visibleBottomActions = if (config.bottomActions) config.visibleBottomActions else 0
         with(binding.bottomActions.bottomFavorite) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE != 0 && currentMedium?.getIsInRecycleBin() == false)
-            setOnLongClickListener { toast(R.string.toggle_favorite); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.toggle_favorite
+                ); true
+            }
             setOnClickListener {
                 toggleFavorite()
             }
@@ -1038,37 +1047,67 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
         with(binding.bottomActions.bottomEdit) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && currentMedium?.isSVG() == false)
-            setOnLongClickListener { toast(R.string.edit); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.edit
+                ); true
+            }
             setOnClickListener { openEditor(getCurrentPath()) }
         }
 
         with(binding.bottomActions.bottomShare) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
-            setOnLongClickListener { toast(R.string.share); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.share
+                ); true
+            }
             setOnClickListener { shareMediumPath(getCurrentPath()) }
         }
 
         with(binding.bottomActions.bottomDelete) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_DELETE != 0)
-            setOnLongClickListener { toast(R.string.delete); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.delete
+                ); true
+            }
             setOnClickListener { checkDeleteConfirmation() }
         }
 
         with(binding.bottomActions.bottomRotate) {
             beVisibleIf(config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true)
-            setOnLongClickListener { toast(R.string.rotate); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.rotate
+                ); true
+            }
             setOnClickListener { rotateImage(90) }
         }
 
         with(binding.bottomActions.bottomProperties) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_PROPERTIES != 0)
-            setOnLongClickListener { toast(R.string.properties); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.properties
+                ); true
+            }
             setOnClickListener { showProperties() }
         }
 
         with(binding.bottomActions.bottomChangeOrientation) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_CHANGE_ORIENTATION != 0)
-            setOnLongClickListener { toast(R.string.change_orientation); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.change_orientation
+                ); true
+            }
             setOnClickListener {
                 requestedOrientation = when (requestedOrientation) {
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -1083,20 +1122,33 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
         with(binding.bottomActions.bottomSlideshow) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SLIDESHOW != 0)
-            setOnLongClickListener { toast(R.string.slideshow); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.slideshow
+                ); true
+            }
             setOnClickListener { initSlideshow() }
         }
 
         with(binding.bottomActions.bottomShowOnMap) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0)
-            setOnLongClickListener { toast(R.string.show_on_map); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.show_on_map
+                ); true
+            }
             setOnClickListener { showFileOnMap(getCurrentPath()) }
         }
 
         with(binding.bottomActions.bottomToggleFileVisibility) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY != 0)
             setOnLongClickListener {
-                toast(if (currentMedium?.isHidden() == true) R.string.unhide else R.string.hide); true
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    if (currentMedium?.isHidden() == true) R.string.unhide else R.string.hide
+                ); true
             }
             setOnClickListener {
                 currentMedium?.apply {
@@ -1109,31 +1161,56 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
         with(binding.bottomActions.bottomRename) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RENAME != 0 && currentMedium?.getIsInRecycleBin() == false)
-            setOnLongClickListener { toast(R.string.rename); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.rename
+                ); true
+            }
             setOnClickListener { checkMediaManagementAndRename() }
         }
 
         with(binding.bottomActions.bottomSetAs) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SET_AS != 0)
-            setOnLongClickListener { toast(R.string.set_as); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.set_as
+                ); true
+            }
             setOnClickListener { setAs(getCurrentPath()) }
         }
 
         with(binding.bottomActions.bottomCopy) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_COPY != 0)
-            setOnLongClickListener { toast(R.string.copy); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.copy
+                ); true
+            }
             setOnClickListener { checkMediaManagementAndCopy(true) }
         }
 
         with(binding.bottomActions.bottomMove) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_MOVE != 0)
-            setOnLongClickListener { toast(R.string.move); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.move
+                ); true
+            }
             setOnClickListener { moveFileTo() }
         }
 
         with(binding.bottomActions.bottomResize) {
             beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RESIZE != 0 && currentMedium?.isImage() == true)
-            setOnLongClickListener { toast(R.string.resize); true }
+            setOnLongClickListener {
+                ShowSafeToastUseCase(
+                    this@ViewPagerActivity,
+                    R.string.resize
+                ); true
+            }
             setOnClickListener { resizeImage() }
         }
     }
@@ -1184,7 +1261,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         try {
             val resolution = path.getImageResolution(this)
             if (resolution == null) {
-                toast(R.string.unknown_error_occurred)
+                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                 return
             }
 
@@ -1274,11 +1351,11 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                                 File(oldPath).lastModified()
                             )
                         } else {
-                            toast(R.string.image_editing_failed)
+                            ShowSafeToastUseCase(this, R.string.image_editing_failed)
                         }
                     }
                 } catch (e: OutOfMemoryError) {
-                    toast(R.string.out_of_memory_error)
+                    ShowSafeToastUseCase(this, R.string.out_of_memory_error)
                 } catch (e: Exception) {
                     showErrorToast(e)
                 }
@@ -1304,7 +1381,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         } catch (_: Exception) {
         }
 
-        toast(R.string.file_saved)
+        ShowSafeToastUseCase(this, R.string.file_saved)
         val paths = arrayListOf(file.absolutePath)
         rescanPaths(paths) {
             fixDateTaken(paths, false)
@@ -1395,7 +1472,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                             }
                         }
                     } else {
-                        toast(R.string.unknown_error_occurred)
+                        ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                     }
                 }
             }
@@ -1458,7 +1535,11 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         val isSDOrOtgRootFolder =
             isAStorageRootFolder(oldPath.getParentPath()) && !oldPath.startsWith(internalStoragePath)
         if (IsRPlusUseCase() && isSDOrOtgRootFolder && !isExternalStorageManager()) {
-            toast(R.string.rename_in_sd_card_system_restriction, Toast.LENGTH_LONG)
+            ShowSafeToastUseCase(
+                this,
+                R.string.rename_in_sd_card_system_restriction,
+                Toast.LENGTH_LONG
+            )
             return
         }
 
@@ -1638,7 +1719,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                     startActivityForResult(this, REQUEST_VIEW_VIDEO)
                 } catch (e: ActivityNotFoundException) {
                     if (!tryGenericMimeType(this, mimeType, newUri)) {
-                        toast(R.string.no_app_found)
+                        ShowSafeToastUseCase(this@ViewPagerActivity, R.string.no_app_found)
                     }
                 } catch (e: Exception) {
                     showErrorToast(e)

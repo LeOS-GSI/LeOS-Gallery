@@ -28,7 +28,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
@@ -42,6 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 class AboutActivity : BaseSimpleActivity() {
 
@@ -205,7 +205,7 @@ class AboutActivity : BaseSimpleActivity() {
                 try {
                     startActivity(emailIntent)
                 } catch (e: ActivityNotFoundException) {
-                    toast(R.string.no_app_found)
+                    ShowSafeToastUseCase(this, R.string.no_app_found)
                 } catch (e: Exception) {
                     showErrorToast(e)
                 }
@@ -402,7 +402,7 @@ class AboutActivity : BaseSimpleActivity() {
 
             clicksSinceFirstClick++
             if (clicksSinceFirstClick >= easterEggRequiredClicks) {
-                toast(R.string.hello)
+                ShowSafeToastUseCase(this, R.string.hello)
                 firstVersionClickTS = 0L
                 clicksSinceFirstClick = 0
             }

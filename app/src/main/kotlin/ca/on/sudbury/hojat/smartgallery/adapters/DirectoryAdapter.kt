@@ -59,6 +59,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.ItemMoveCallback
 import ca.on.sudbury.hojat.smartgallery.interfaces.ItemTouchHelperContract
 import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmDeleteFolderDialog
@@ -98,7 +99,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_BRACKETS
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -339,7 +339,8 @@ class DirectoryAdapter(
             val sourcePath = firstDir.path
             val dir = File(sourcePath)
             if (activity.isAStorageRootFolder(dir.absolutePath)) {
-                activity.toast(R.string.rename_folder_root)
+
+                ShowSafeToastUseCase(activity, R.string.rename_folder_root)
                 return
             }
 

@@ -13,7 +13,6 @@ import android.widget.RelativeLayout
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener
 import com.google.vr.sdk.widgets.pano.VrPanoramaView
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
@@ -26,6 +25,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 
 private const val CARDBOARD_DISPLAY_MODE = 3
@@ -101,7 +101,7 @@ open class PanoramaPhotoActivity : SimpleActivity() {
     private fun checkIntent() {
         val path = intent.getStringExtra(PATH)
         if (path == null) {
-            toast(R.string.invalid_image_path)
+            ShowSafeToastUseCase(this, R.string.invalid_image_path)
             finish()
             return
         }

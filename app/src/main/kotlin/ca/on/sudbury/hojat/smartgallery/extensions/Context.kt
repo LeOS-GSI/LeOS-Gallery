@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
 import android.content.ActivityNotFoundException
@@ -157,8 +156,8 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsMainThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -415,6 +414,7 @@ fun getPaths(file: File): java.util.ArrayList<String> {
     return paths
 }
 
+// TODO : The baseConfig should be extracted into a repository
 val Context.baseConfig: BaseConfig get() = BaseConfig.newInstance(this)
 
 val Context.recycleBinPath: String get() = filesDir.absolutePath
@@ -1009,7 +1009,7 @@ fun Context.launchActivityIntent(intent: Intent) {
     try {
         startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        toast(R.string.no_app_found)
+        ShowSafeToastUseCase(this, R.string.no_app_found)
     } catch (e: Exception) {
         showErrorToast(e)
     }
@@ -2146,34 +2146,7 @@ fun Context.updateFavorite(path: String, isFavorite: Boolean) {
             favoritesDB.deleteFavoritePath(path)
         }
     } catch (e: Exception) {
-        toast(R.string.unknown_error_occurred)
-    }
-}
-
-fun Context.toast(id: Int, length: Int = Toast.LENGTH_SHORT) {
-    toast(getString(id), length)
-}
-
-fun Context.toast(msg: String, length: Int = Toast.LENGTH_SHORT) {
-    try {
-        if (IsMainThreadUseCase()) {
-            doToast(this, msg, length)
-        } else {
-            Handler(Looper.getMainLooper()).post {
-                doToast(this, msg, length)
-            }
-        }
-    } catch (_: Exception) {
-    }
-}
-
-private fun doToast(context: Context, message: String, length: Int) {
-    if (context is Activity) {
-        if (!context.isFinishing && !context.isDestroyed) {
-            Toast.makeText(context, message, length).show()
-        }
-    } else {
-        Toast.makeText(context, message, length).show()
+        ShowSafeToastUseCase(this@updateFavorite, R.string.unknown_error_occurred)
     }
 }
 
@@ -2998,7 +2971,7 @@ fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath
 
 fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
-    toast(String.format(getString(R.string.error), msg), length)
+    ShowSafeToastUseCase(this, String.format(getString(R.string.error), msg), length)
 }
 
 fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
@@ -3079,7 +3052,7 @@ fun Context.copyToClipboard(text: String) {
     val clip = ClipData.newPlainText(getString(R.string.simple_commons), text)
     (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(clip)
     val toastText = String.format(getString(R.string.value_copied_to_clipboard_show), text)
-    toast(toastText)
+    ShowSafeToastUseCase(this, toastText)
 }
 
 fun Context.getFolderLastModifieds(folder: String): java.util.HashMap<String, Long> {

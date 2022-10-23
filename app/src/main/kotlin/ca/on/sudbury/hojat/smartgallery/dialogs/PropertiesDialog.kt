@@ -44,7 +44,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.md5
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -56,6 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
 import java.io.File
@@ -79,7 +79,8 @@ class PropertiesDialog() {
     @SuppressLint("InflateParams")
     constructor(activity: Activity, path: String, countHiddenItems: Boolean = false) : this() {
         if (!activity.getDoesFilePathExist(path) && !path.startsWith("content://")) {
-            activity.toast(
+            ShowSafeToastUseCase(
+                activity,
                 String.format(
                     activity.getString(R.string.source_file_doesnt_exist),
                     path
@@ -419,8 +420,7 @@ class PropertiesDialog() {
         ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
             try {
                 ExifInterface(path).removeValues()
-                mActivity.toast(R.string.exif_removed)
-
+                ShowSafeToastUseCase(mActivity ,R.string.exif_removed)
                 mPropertyView.properties_holder.removeAllViews()
                 addProperties(path)
             } catch (e: Exception) {
@@ -436,7 +436,7 @@ class PropertiesDialog() {
                     .forEach {
                         ExifInterface(it).removeValues()
                     }
-                mActivity.toast(R.string.exif_removed)
+                ShowSafeToastUseCase(mActivity ,R.string.exif_removed)
             } catch (e: Exception) {
                 mActivity.showErrorToast(e)
             }

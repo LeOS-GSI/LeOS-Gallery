@@ -85,7 +85,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
@@ -110,6 +109,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.IOException
 
@@ -489,7 +489,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 getMedia()
                 setupLayoutManager()
             } else {
-                toast(R.string.no_storage_permissions)
+                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
                 finish()
             }
         }
@@ -552,7 +552,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
         mLastMediaHandler.removeCallbacksAndMessages(null)
         mLastMediaHandler.postDelayed({
-            RunOnBackgroundThreadUseCase{
+            RunOnBackgroundThreadUseCase {
                 val mediaId = getLatestMediaId()
                 val mediaDateId = getLatestMediaByDateId()
                 if (mLatestMediaId != mediaId || mLatestMediaDateId != mediaDateId) {
@@ -609,7 +609,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun restoreAllFiles() {
         val paths = mMedia.filter { it is Medium }.map { (it as Medium).path } as ArrayList<String>
         restoreRecycleBinPaths(paths) {
-            RunOnBackgroundThreadUseCase{
+            RunOnBackgroundThreadUseCase {
                 directoryDao.deleteDirPath(RECYCLE_BIN)
             }
             finish()
@@ -910,7 +910,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun itemClicked(path: String) {
         HideKeyboardUseCase(this)
         if (isSetWallpaperIntent()) {
-            toast(R.string.setting_wallpaper)
+            ShowSafeToastUseCase(this, R.string.setting_wallpaper)
 
             val wantedWidth = wallpaperDesiredMinimumWidth
             val wantedHeight = wallpaperDesiredMinimumHeight
@@ -1016,19 +1016,19 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 filtered.size,
                 filtered.size
             )
-            toast(movingItems)
+            ShowSafeToastUseCase(this, movingItems)
 
             movePathsInRecycleBin(filtered.map { it.path } as ArrayList<String>) {
                 if (it) {
                     deleteFilteredFiles(filtered)
                 } else {
-                    toast(R.string.unknown_error_occurred)
+                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                 }
             }
         } else {
             val deletingItems =
                 resources.getQuantityString(R.plurals.deleting_items, filtered.size, filtered.size)
-            toast(deletingItems)
+            ShowSafeToastUseCase(this, deletingItems)
             deleteFilteredFiles(filtered)
         }
     }
@@ -1038,13 +1038,13 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun deleteFilteredFiles(filtered: ArrayList<FileDirItem>) {
         deleteFiles(filtered) {
             if (!it) {
-                toast(R.string.unknown_error_occurred)
+                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                 return@deleteFiles
             }
 
             mMedia.removeAll { filtered.map { it.path }.contains((it as? Medium)?.path) }
 
-            RunOnBackgroundThreadUseCase{
+            RunOnBackgroundThreadUseCase {
                 val useRecycleBin = config.useRecycleBin
                 filtered.forEach {
                     if (it.path.startsWith(recycleBinPath) || !useRecycleBin) {

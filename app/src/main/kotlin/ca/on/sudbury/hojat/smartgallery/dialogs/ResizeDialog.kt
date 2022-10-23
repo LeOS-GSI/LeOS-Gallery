@@ -11,8 +11,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onTextChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 @SuppressLint("InflateParams")
 class ResizeDialog(
@@ -71,7 +71,7 @@ class ResizeDialog(
                         val width = getViewValue(binding.resizeImageWidth)
                         val height = getViewValue(binding.resizeImageHeight)
                         if (width <= 0 || height <= 0) {
-                            activity.toast(R.string.invalid_values)
+                            ShowSafeToastUseCase(activity, R.string.invalid_values)
                             return@setOnClickListener
                         }
 

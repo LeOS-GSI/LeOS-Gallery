@@ -9,11 +9,11 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.performHapticFeedback
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_pin.view.*
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -75,7 +75,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
     private fun confirmPIN() {
         val newHash = getHashedPin()
         if (pin.isEmpty()) {
-            context.toast(R.string.please_enter_pin)
+            ShowSafeToastUseCase(context, R.string.please_enter_pin)
         } else if (hash.isEmpty()) {
             hash = newHash
             resetPin()
@@ -84,7 +84,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
             hashListener.receivedHash(hash, PROTECTION_PIN)
         } else {
             resetPin()
-            context.toast(R.string.wrong_pin)
+            ShowSafeToastUseCase(context, R.string.wrong_pin)
             if (requiredHash.isEmpty()) {
                 hash = ""
                 pin_lock_title.setText(R.string.enter_pin)

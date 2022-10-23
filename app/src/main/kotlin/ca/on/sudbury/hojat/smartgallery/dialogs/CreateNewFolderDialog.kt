@@ -9,7 +9,6 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogCreateNewFolderBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidSAFDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
@@ -24,6 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 import java.io.File
 
@@ -54,17 +54,20 @@ class CreateNewFolderDialog(
                         .setOnClickListener(View.OnClickListener {
                             val name = binding.folderName.value
                             when {
-                                name.isEmpty() -> activity.toast(R.string.empty_name)
+                                name.isEmpty() -> ShowSafeToastUseCase(
+                                    activity,
+                                    R.string.empty_name
+                                )
                                 name.isAValidFilename() -> {
                                     val file = File(path, name)
                                     if (file.exists()) {
-                                        activity.toast(R.string.name_taken)
+                                        ShowSafeToastUseCase(activity, R.string.name_taken)
                                         return@OnClickListener
                                     }
 
                                     createFolder("$path/$name", alertDialog)
                                 }
-                                else -> activity.toast(R.string.invalid_name)
+                                else -> ShowSafeToastUseCase(activity, R.string.invalid_name)
                             }
                         })
                 }
@@ -92,7 +95,7 @@ class CreateNewFolderDialog(
                             if (newDir != null) {
                                 sendSuccess(alertDialog, path)
                             } else {
-                                activity.toast(R.string.unknown_error_occurred)
+                                ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
                             }
                         } catch (e: SecurityException) {
                             activity.showErrorToast(e)
@@ -107,7 +110,8 @@ class CreateNewFolderDialog(
                         sendSuccess(alertDialog, path)
                     }
                 }
-                else -> activity.toast(
+                else -> ShowSafeToastUseCase(
+                    activity,
                     activity.getString(
                         R.string.could_not_create_folder,
                         path.getFilenameFromPath()

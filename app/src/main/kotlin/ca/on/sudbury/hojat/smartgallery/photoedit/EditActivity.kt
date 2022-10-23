@@ -34,7 +34,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
@@ -81,6 +80,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.zomato.photofilters.FilterPack
 import com.zomato.photofilters.imageprocessors.Filter
 import java.io.File
@@ -142,7 +142,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         setupOptionsMenu()
         handlePermission(PERMISSION_WRITE_STORAGE) {
             if (!it) {
-                toast(R.string.no_storage_permissions)
+                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
                 finish()
             }
             initEditActivity()
@@ -181,7 +181,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
     private fun initEditActivity() {
         if (intent.data == null) {
-            toast(R.string.invalid_image_path)
+            ShowSafeToastUseCase(this, R.string.invalid_image_path)
             finish()
             return
         }
@@ -189,7 +189,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         uri = intent.data!!
         originalUri = uri
         if (uri!!.scheme != "file" && uri!!.scheme != "content") {
-            toast(R.string.unknown_file_location)
+            ShowSafeToastUseCase(this, R.string.unknown_file_location)
             finish()
             return
         }
@@ -391,7 +391,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             val currentFilter = getFiltersAdapter()?.getCurrentFilter() ?: return
             val filePathGetter = getNewFilePath()
             SaveAsDialog(this, filePathGetter.first, filePathGetter.second) {
-                toast(R.string.saving)
+                ShowSafeToastUseCase(this, R.string.saving)
 
                 // clean up everything to free as much memory as possible
                 binding.defaultImageView.setImageResource(0)
@@ -406,7 +406,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                         currentFilter.filter.processFilter(originalBitmap)
                         saveBitmapToFile(originalBitmap, it, false)
                     } catch (e: OutOfMemoryError) {
-                        toast(R.string.out_of_memory_error)
+                        ShowSafeToastUseCase(this, R.string.out_of_memory_error)
                     }
                 }
             }
@@ -434,7 +434,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 binding.defaultImageView.isVisible() -> {
                     val currentFilter = getFiltersAdapter()?.getCurrentFilter()
                     if (currentFilter == null) {
-                        toast(R.string.unknown_error_occurred)
+                        ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                         return@RunOnBackgroundThreadUseCase
                     }
 
@@ -489,7 +489,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             if (it != null) {
                 sharePathIntent(it, BuildConfig.APPLICATION_ID)
             } else {
-                toast(R.string.unknown_error_occurred)
+                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
             }
         }
     }
@@ -817,7 +817,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     private fun resizeImage() {
         val point = getAreaSize()
         if (point == null) {
-            toast(R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
             return
         }
 
@@ -895,10 +895,13 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     saveBitmapToFile(bitmap, it, true)
                 }
             } else {
-                toast(R.string.unknown_file_location)
+                ShowSafeToastUseCase(this, R.string.unknown_file_location)
             }
         } else {
-            toast("${getString(R.string.image_editing_failed)}: ${result.error.message}")
+            ShowSafeToastUseCase(
+                this,
+                "${getString(R.string.image_editing_failed)}: ${result.error.message}"
+            )
         }
     }
 
@@ -958,14 +961,14 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     if (it != null) {
                         saveBitmap(file, bitmap, it, showSavingToast)
                     } else {
-                        toast(R.string.image_editing_failed)
+                        ShowSafeToastUseCase(this, R.string.image_editing_failed)
                     }
                 }
             }
         } catch (e: Exception) {
             showErrorToast(e)
         } catch (e: OutOfMemoryError) {
-            toast(R.string.out_of_memory_error)
+            ShowSafeToastUseCase(this, R.string.out_of_memory_error)
         }
     }
 
@@ -977,7 +980,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         showSavingToast: Boolean
     ) {
         if (showSavingToast) {
-            toast(R.string.saving)
+            ShowSafeToastUseCase(this, R.string.saving)
         }
 
         if (resizeWidth > 0 && resizeHeight > 0) {
@@ -1010,7 +1013,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         rescanPaths(paths) {
             fixDateTaken(paths, false)
             setResult(Activity.RESULT_OK, intent)
-            toast(R.string.file_saved)
+            ShowSafeToastUseCase(this, R.string.file_saved)
             finish()
         }
     }

@@ -93,7 +93,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.storeDirectoryItems
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.underlineText
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDBDirectory
@@ -145,6 +144,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import java.io.File
 import java.io.FileInputStream
@@ -268,7 +268,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         // just request the permission, tryLoadGallery will then trigger in onResume
         handleMediaPermissions {
             if (!it) {
-                toast(R.string.no_storage_permissions)
+                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
                 finish()
             }
         }
@@ -565,7 +565,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 if (newFolder.getProperSize(true) == 0L && newFolder.getFileCount(true) == 0 && newFolder.list()
                         ?.isEmpty() == true
                 ) {
-                    toast(
+                    ShowSafeToastUseCase(
+                        this,
                         String.format(getString(R.string.deleting_folder), config.tempFolderPath),
                         Toast.LENGTH_LONG
                     )
@@ -640,7 +641,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
                 setupLayoutManager()
             } else {
-                toast(R.string.no_storage_permissions)
+                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
                 finish()
             }
         }
@@ -763,7 +764,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             fileDirItems.isEmpty() -> return
             fileDirItems.size == 1 -> {
                 try {
-                    toast(
+                    ShowSafeToastUseCase(
+                        this,
                         String.format(
                             getString(R.string.deleting_folder),
                             fileDirItems.first().name
@@ -778,7 +780,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     if (config.useRecycleBin) R.plurals.moving_items_into_bin else R.plurals.delete_items
                 val deletingItems =
                     resources.getQuantityString(baseString, fileDirItems.size, fileDirItems.size)
-                toast(deletingItems)
+                ShowSafeToastUseCase(this, deletingItems)
             }
         }
 
@@ -805,7 +807,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 if (it) {
                     deleteFilteredFileDirItems(itemsToDelete, folders)
                 } else {
-                    toast(R.string.unknown_error_occurred)
+                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                 }
             }
         } else {
@@ -1734,7 +1736,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     override fun updateDirectories(directories: ArrayList<Directory>) {
-        RunOnBackgroundThreadUseCase{
+        RunOnBackgroundThreadUseCase {
             storeDirectoryItems(directories)
             removeInvalidDBDirectories()
         }

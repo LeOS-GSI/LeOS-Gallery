@@ -24,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.convertToBitmap
 import ca.on.sudbury.hojat.smartgallery.extensions.formatSize
@@ -85,6 +84,7 @@ import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.photo_item_grid.view.*
 import kotlinx.android.synthetic.main.thumbnail_section.view.*
 import kotlinx.android.synthetic.main.video_item_grid.view.*
@@ -319,7 +319,11 @@ class MediaAdapter(
                 activity.internalStoragePath
             )
         if (IsRPlusUseCase() && isSDOrOtgRootFolder) {
-            activity.toast(R.string.rename_in_sd_card_system_restriction, Toast.LENGTH_LONG)
+            ShowSafeToastUseCase(
+                activity,
+                R.string.rename_in_sd_card_system_restriction,
+                Toast.LENGTH_LONG
+            )
             finishActMode()
             return
         }
@@ -402,7 +406,7 @@ class MediaAdapter(
     private fun handleRotate(paths: List<String>, degrees: Int) {
         var fileCnt = paths.size
         rotatedImagePaths.clear()
-        activity.toast(R.string.saving)
+        ShowSafeToastUseCase(activity, R.string.saving)
         RunOnBackgroundThreadUseCase {
             paths.forEach {
                 rotatedImagePaths.add(it)
@@ -455,7 +459,11 @@ class MediaAdapter(
             }.toMutableList() as ArrayList
 
         if (!isCopyOperation && paths.any { it.startsWith(recycleBinPath) }) {
-            activity.toast(R.string.moving_recycle_bin_items_disabled, Toast.LENGTH_LONG)
+            ShowSafeToastUseCase(
+                activity,
+                R.string.moving_recycle_bin_items_disabled,
+                Toast.LENGTH_LONG
+            )
         }
 
         if (fileDirItems.isEmpty()) {

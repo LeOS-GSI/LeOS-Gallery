@@ -8,7 +8,6 @@ import android.content.ComponentName
 import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -75,7 +74,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideloadedDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.DonateDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.UpgradeToProDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialog
@@ -105,6 +103,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileNotFoundException
@@ -158,7 +157,7 @@ private fun BaseSimpleActivity.renameCasually(
                     oldPath
                 )
             ) {
-                toast(R.string.cannot_rename_folder)
+                ShowSafeToastUseCase(this, R.string.cannot_rename_folder)
             } else {
                 showErrorToast(exception)
             }
@@ -261,7 +260,7 @@ private fun BaseSimpleActivity.renameCasually(
                                     }
                                 }
                             } else {
-                                toast(R.string.unknown_error_occurred)
+                                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                                 callback?.invoke(false, Android30RenameFormat.NONE)
                             }
                         }
@@ -273,7 +272,7 @@ private fun BaseSimpleActivity.renameCasually(
                 }
             }
         } else {
-            toast(R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
             callback?.invoke(false, Android30RenameFormat.NONE)
         }
     }
@@ -573,10 +572,10 @@ fun Activity.sharePathIntent(path: String, applicationId: String) {
             try {
                 startActivity(Intent.createChooser(this, getString(R.string.share_via)))
             } catch (e: ActivityNotFoundException) {
-                toast(R.string.no_app_found)
+                ShowSafeToastUseCase(this@sharePathIntent, R.string.no_app_found)
             } catch (e: RuntimeException) {
                 if (e.cause is TransactionTooLargeException) {
-                    toast(R.string.maximum_share_reached)
+                    ShowSafeToastUseCase(this@sharePathIntent, R.string.maximum_share_reached)
                 } else {
                     showErrorToast(e)
                 }
@@ -619,10 +618,10 @@ fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
                 try {
                     startActivity(Intent.createChooser(this, getString(R.string.share_via)))
                 } catch (e: ActivityNotFoundException) {
-                    toast(R.string.no_app_found)
+                    ShowSafeToastUseCase(this@sharePathsIntent, R.string.no_app_found)
                 } catch (e: RuntimeException) {
                     if (e.cause is TransactionTooLargeException) {
-                        toast(R.string.maximum_share_reached)
+                        ShowSafeToastUseCase(this@sharePathsIntent, R.string.maximum_share_reached)
                     } else {
                         showErrorToast(e)
                     }
@@ -673,7 +672,7 @@ fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
     }
 
     if (uri == null) {
-        toast(R.string.unknown_error_occurred)
+        ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
         return null
     }
 
@@ -856,7 +855,7 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
                 addNoMediaIntoMediaStore(file.absolutePath)
                 callback()
             } else {
-                toast(R.string.unknown_error_occurred)
+                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                 callback()
             }
         }
@@ -867,7 +866,7 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
                     addNoMediaIntoMediaStore(file.absolutePath)
                 }
             } else {
-                toast(R.string.unknown_error_occurred)
+                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
             }
         } catch (e: Exception) {
             showErrorToast(e)
@@ -1069,7 +1068,7 @@ fun BaseSimpleActivity.renameFile(
             val document = getSomeDocumentFile(oldPath)
             if (document == null || (File(oldPath).isDirectory != document.isDirectory)) {
                 runOnUiThread {
-                    toast(R.string.unknown_error_occurred)
+                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                     callback?.invoke(false, Android30RenameFormat.NONE)
                 }
                 return@handleSAFDialog
@@ -1149,7 +1148,7 @@ fun BaseSimpleActivity.tryCopyMoveFilesTo(
     callback: (destinationPath: String) -> Unit
 ) {
     if (fileDirItems.isEmpty()) {
-        toast(R.string.unknown_error_occurred)
+        ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
         return
     }
 
@@ -1290,7 +1289,10 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
                 val picturesDirectory = getPicturesDirectoryPath(destination)
                 destination = File(picturesDirectory, destination.getFilenameFromPath()).path
                 if (!shownRestoringToPictures) {
-                    toast(getString(R.string.restore_to_path, humanizePath(picturesDirectory)))
+                    ShowSafeToastUseCase(
+                        this,
+                        getString(R.string.restore_to_path, humanizePath(picturesDirectory))
+                    )
                     shownRestoringToPictures = true
                 }
             }
@@ -1365,10 +1367,10 @@ fun BaseSimpleActivity.emptyTheRecycleBin(callback: (() -> Unit)? = null) {
             recycleBin.deleteRecursively()
             mediaDB.clearRecycleBin()
             directoryDao.deleteRecycleBin()
-            toast(R.string.recycle_bin_emptied)
+            ShowSafeToastUseCase(this, R.string.recycle_bin_emptied)
             callback?.invoke()
         } catch (e: Exception) {
-            toast(R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
         }
     }
 }
@@ -1426,7 +1428,7 @@ fun AppCompatActivity.fixDateTaken(
 ) {
     val batchSize = 50
     if (showToasts && !hasRescanned) {
-        toast(R.string.fixing)
+        ShowSafeToastUseCase(this, R.string.fixing)
     }
 
     val pathsToRescan = ArrayList<String>()
@@ -1488,7 +1490,7 @@ fun AppCompatActivity.fixDateTaken(
 
             if (!didUpdateFile) {
                 if (showToasts) {
-                    toast(R.string.no_date_takens_found)
+                    ShowSafeToastUseCase(this, R.string.no_date_takens_found)
                 }
 
                 runOnUiThread {
@@ -1509,7 +1511,10 @@ fun AppCompatActivity.fixDateTaken(
 
                 runOnUiThread {
                     if (showToasts) {
-                        toast(if (didUpdateFile) R.string.dates_fixed_successfully else R.string.unknown_error_occurred)
+                        ShowSafeToastUseCase(
+                            this,
+                            if (didUpdateFile) R.string.dates_fixed_successfully else R.string.unknown_error_occurred
+                        )
                     }
 
                     callback?.invoke()
@@ -1551,7 +1556,7 @@ fun BaseSimpleActivity.saveRotatedImageToFile(
         getFileOutputStream(tmpFileDirItem) {
             if (it == null) {
                 if (showToasts) {
-                    toast(R.string.unknown_error_occurred)
+                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
                 }
                 return@getFileOutputStream
             }
@@ -1576,7 +1581,7 @@ fun BaseSimpleActivity.saveRotatedImageToFile(
         }
     } catch (e: OutOfMemoryError) {
         if (showToasts) {
-            toast(R.string.out_of_memory_error)
+            ShowSafeToastUseCase(this, R.string.out_of_memory_error)
         }
     } catch (e: Exception) {
         if (showToasts) {
@@ -1601,7 +1606,7 @@ fun Activity.tryRotateByExif(
             fileRotatedSuccessfully(path, oldLastModified)
             callback.invoke()
             if (showToasts) {
-                toast(R.string.file_saved)
+                ShowSafeToastUseCase(this, R.string.file_saved)
             }
             true
         } else {
@@ -1701,7 +1706,7 @@ fun Activity.setAsIntent(path: String, applicationId: String) {
             try {
                 startActivityForResult(chooser, REQUEST_SET_AS)
             } catch (e: ActivityNotFoundException) {
-                toast(R.string.no_app_found)
+                ShowSafeToastUseCase(this@setAsIntent, R.string.no_app_found)
             } catch (e: Exception) {
                 showErrorToast(e)
             }
@@ -1898,7 +1903,7 @@ fun Activity.showFileOnMap(path: String) {
     if (exif.getLatLong(latLon)) {
         showLocationOnMap("${latLon[0]}, ${latLon[1]}")
     } else {
-        toast(R.string.unknown_location)
+        ShowSafeToastUseCase(this, R.string.unknown_location)
     }
 }
 
@@ -1964,9 +1969,16 @@ fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
                             startActivityForResult(this, OPEN_DOCUMENT_TREE_SD)
                             checkedDocumentPath = path
                         } catch (e: ActivityNotFoundException) {
-                            toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
+                            ShowSafeToastUseCase(
+                                this@isShowingSAFDialog,
+                                R.string.system_service_disabled,
+                                Toast.LENGTH_LONG
+                            )
                         } catch (e: Exception) {
-                            toast(R.string.unknown_error_occurred)
+                            ShowSafeToastUseCase(
+                                this@isShowingSAFDialog,
+                                R.string.unknown_error_occurred
+                            )
                         }
                     }
                 }
@@ -2011,9 +2023,16 @@ fun BaseSimpleActivity.isShowingSAFDialogSdk30(path: String): Boolean {
                             startActivityForResult(this, OPEN_DOCUMENT_TREE_FOR_SDK_30)
                             checkedDocumentPath = path
                         } catch (e: ActivityNotFoundException) {
-                            toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
+                            ShowSafeToastUseCase(
+                                this@isShowingSAFDialogSdk30,
+                                R.string.system_service_disabled,
+                                Toast.LENGTH_LONG
+                            )
                         } catch (e: Exception) {
-                            toast(R.string.unknown_error_occurred)
+                            ShowSafeToastUseCase(
+                                this@isShowingSAFDialogSdk30,
+                                R.string.unknown_error_occurred
+                            )
                         }
                     }
                 }
@@ -2052,9 +2071,16 @@ fun BaseSimpleActivity.isShowingSAFCreateDocumentDialogSdk30(path: String): Bool
                             startActivityForResult(this, CREATE_DOCUMENT_SDK_30)
                             checkedDocumentPath = path
                         } catch (e: ActivityNotFoundException) {
-                            toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
+                            ShowSafeToastUseCase(
+                                this@isShowingSAFCreateDocumentDialogSdk30,
+                                R.string.system_service_disabled,
+                                Toast.LENGTH_LONG
+                            )
                         } catch (e: Exception) {
-                            toast(R.string.unknown_error_occurred)
+                            ShowSafeToastUseCase(
+                                this@isShowingSAFCreateDocumentDialogSdk30,
+                                R.string.unknown_error_occurred
+                            )
                         }
                     }
                 }
@@ -2105,9 +2131,16 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
                                 )
                                 checkedDocumentPath = path
                             } catch (e: ActivityNotFoundException) {
-                                toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
+                                ShowSafeToastUseCase(
+                                    this@isShowingAndroidSAFDialog,
+                                    R.string.system_service_disabled,
+                                    Toast.LENGTH_LONG
+                                )
                             } catch (e: Exception) {
-                                toast(R.string.unknown_error_occurred)
+                                ShowSafeToastUseCase(
+                                    this@isShowingAndroidSAFDialog,
+                                    R.string.unknown_error_occurred
+                                )
                             }
                         }
                     }
@@ -2149,22 +2182,20 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
                         startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
                         checkedDocumentPath = path
                     } catch (e: ActivityNotFoundException) {
-                        toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
+                        ShowSafeToastUseCase(
+                            this@showOTGPermissionDialog,
+                            R.string.system_service_disabled,
+                            Toast.LENGTH_LONG
+                        )
                     } catch (e: Exception) {
-                        toast(R.string.unknown_error_occurred)
+                        ShowSafeToastUseCase(
+                            this@showOTGPermissionDialog,
+                            R.string.unknown_error_occurred
+                        )
                     }
                 }
             }
         }
-    }
-}
-
-fun Activity.launchPurchaseThankYouIntent() {
-    HideKeyboardUseCase(this)
-    try {
-        launchViewIntent("market://details?id=com.simplemobiletools.thankyou")
-    } catch (ignored: Exception) {
-        launchViewIntent(getString(R.string.thank_you_url))
     }
 }
 
@@ -2185,7 +2216,7 @@ fun Activity.launchViewIntent(url: String) {
             try {
                 startActivity(this)
             } catch (e: ActivityNotFoundException) {
-                toast(R.string.no_browser_found)
+                ShowSafeToastUseCase(this@launchViewIntent, R.string.no_browser_found)
             } catch (e: Exception) {
                 showErrorToast(e)
             }
@@ -2244,7 +2275,7 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
                 val chooser = Intent.createChooser(this, getString(R.string.edit_with))
                 startActivityForResult(if (forceChooser) chooser else this, REQUEST_EDIT_IMAGE)
             } catch (e: ActivityNotFoundException) {
-                toast(R.string.no_app_found)
+                ShowSafeToastUseCase(this@openEditorIntent, R.string.no_app_found)
             } catch (e: Exception) {
                 showErrorToast(e)
             }
@@ -2284,7 +2315,7 @@ fun Activity.openPathIntent(
                 startActivity(if (forceChooser) chooser else this)
             } catch (e: ActivityNotFoundException) {
                 if (!tryGenericMimeType(this, mimeType, newUri)) {
-                    toast(R.string.no_app_found)
+                    ShowSafeToastUseCase(this@openPathIntent, R.string.no_app_found)
                 }
             } catch (e: Exception) {
                 showErrorToast(e)
@@ -2966,13 +2997,13 @@ fun Activity.showBiometricPrompt(
                     val isCanceledByUser =
                         errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON || errorCode == BiometricPrompt.ERROR_USER_CANCELED
                     if (!isCanceledByUser) {
-                        toast(errString.toString())
+                        ShowSafeToastUseCase(this@showBiometricPrompt, errString.toString())
                     }
                     failureCallback?.invoke()
                 }
 
                 override fun onAuthenticationFailed(activity: FragmentActivity?) {
-                    toast(R.string.authentication_failed)
+                    ShowSafeToastUseCase(this@showBiometricPrompt, R.string.authentication_failed)
                     failureCallback?.invoke()
                 }
             }

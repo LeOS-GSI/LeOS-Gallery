@@ -9,12 +9,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 /**
  * The dialog for renaming pictures, videos, and folders is created via this class.
@@ -56,12 +56,12 @@ class RenameItemDialog(
                         val newExtension = binding.renameItemExtension.value
 
                         if (newName.isEmpty()) {
-                            activity.toast(R.string.empty_name)
+                            ShowSafeToastUseCase(activity, R.string.empty_name)
                             return@setOnClickListener
                         }
 
                         if (!newName.isAValidFilename()) {
-                            activity.toast(R.string.invalid_name)
+                            ShowSafeToastUseCase(activity, R.string.invalid_name)
                             return@setOnClickListener
                         }
 
@@ -72,7 +72,8 @@ class RenameItemDialog(
                         }
 
                         if (!activity.getDoesFilePathExist(path)) {
-                            activity.toast(
+                            ShowSafeToastUseCase(
+                                activity,
                                 String.format(
                                     activity.getString(R.string.source_file_doesnt_exist),
                                     path
@@ -84,7 +85,7 @@ class RenameItemDialog(
                         val newPath = "${path.getParentPath()}/$newName"
 
                         if (path == newPath) {
-                            activity.toast(R.string.name_taken)
+                            ShowSafeToastUseCase(activity, R.string.name_taken)
                             return@setOnClickListener
                         }
 
@@ -93,7 +94,7 @@ class RenameItemDialog(
                                 ignoreCase = true
                             ) && activity.getDoesFilePathExist(newPath)
                         ) {
-                            activity.toast(R.string.name_taken)
+                            ShowSafeToastUseCase(activity, R.string.name_taken)
                             return@setOnClickListener
                         }
 
@@ -105,7 +106,7 @@ class RenameItemDialog(
                                 callback(newPath)
                                 dismiss()
                             } else {
-                                activity.toast(R.string.unknown_error_occurred)
+                                ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
                             }
                         }
                     }

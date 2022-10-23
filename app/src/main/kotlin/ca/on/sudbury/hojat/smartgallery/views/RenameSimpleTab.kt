@@ -21,12 +21,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathsRecursively
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.updateInMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.interfaces.RenameTab
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_rename_simple.view.*
 import java.io.File
 
@@ -58,7 +58,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
         }
 
         if (!valueToAdd.isAValidFilename()) {
-            activity?.toast(R.string.invalid_name)
+            ShowSafeToastUseCase(activity ,R.string.invalid_name)
             return
         }
 
@@ -66,7 +66,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
         val firstPath = validPaths.firstOrNull()
         val sdFilePath = validPaths.firstOrNull { activity?.isPathOnSD(it) == true } ?: firstPath
         if (firstPath == null || sdFilePath == null) {
-            activity?.toast(R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(activity ,R.string.unknown_error_occurred)
             return
         }
 
@@ -120,7 +120,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                                 stopLooping = true
                                 renameAllFiles(validPaths, append, valueToAdd, android30Format, callback)
                             } else {
-                                activity?.toast(R.string.unknown_error_occurred)
+                                ShowSafeToastUseCase(activity ,R.string.unknown_error_occurred)
                             }
                         }
                     }

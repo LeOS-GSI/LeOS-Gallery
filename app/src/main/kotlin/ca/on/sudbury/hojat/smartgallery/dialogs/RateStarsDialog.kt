@@ -8,9 +8,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRateStarsBinding
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 
 /**
@@ -54,7 +54,7 @@ class RateStarsDialog(val activity: Activity) {
     private fun dialogCancelled(showThankYou: Boolean) {
         dialog?.dismiss()
         if (showThankYou) {
-            activity.toast(R.string.thank_you)
+            ShowSafeToastUseCase(activity, R.string.thank_you)
             activity.baseConfig.wasAppRated = true
         }
     }

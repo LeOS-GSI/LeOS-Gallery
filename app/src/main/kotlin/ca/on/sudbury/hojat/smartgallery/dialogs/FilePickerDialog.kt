@@ -42,7 +42,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.FilepickerFavoritesAdapter
@@ -50,6 +49,7 @@ import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFilepickerBinding
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
 import timber.log.Timber
 import java.io.File
@@ -261,7 +261,7 @@ class FilePickerDialog(
                     if (activity.isInDownloadDir(currPath)) {
                         sendSuccessForDirectFile()
                     } else {
-                        activity.toast(R.string.system_folder_restriction, Toast.LENGTH_LONG)
+                        ShowSafeToastUseCase(activity ,R.string.system_folder_restriction, Toast.LENGTH_LONG)
                     }
                 } else {
                     sendSuccessForDirectFile()

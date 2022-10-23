@@ -9,11 +9,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 
 /**
@@ -51,7 +51,7 @@ class RenameItemsDialog(
                         }
 
                         if (!valueToAdd.isAValidFilename()) {
-                            activity.toast(R.string.invalid_name)
+                            ShowSafeToastUseCase(activity, R.string.invalid_name)
                             return@setOnClickListener
                         }
 
@@ -59,7 +59,7 @@ class RenameItemsDialog(
                         val sdFilePath = validPaths.firstOrNull { activity.isPathOnSD(it) }
                             ?: validPaths.firstOrNull()
                         if (sdFilePath == null) {
-                            activity.toast(R.string.unknown_error_occurred)
+                            ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
                             dismiss()
                             return@setOnClickListener
                         }
@@ -107,7 +107,10 @@ class RenameItemsDialog(
                                         }
                                     } else {
                                         ignoreClicks = false
-                                        activity.toast(R.string.unknown_error_occurred)
+                                        ShowSafeToastUseCase(
+                                            activity,
+                                            R.string.unknown_error_occurred
+                                        )
                                         dismiss()
                                     }
                                 }

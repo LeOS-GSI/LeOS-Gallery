@@ -25,9 +25,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getSharedThemeSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.updateSharedTheme
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
@@ -105,7 +105,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                     binding.applyToAllHolder.beVisibleIf(storedSharedTheme == null && curSelectedThemeId != THEME_AUTO && curSelectedThemeId != THEME_SYSTEM && !hideGoogleRelations)
                 }
             } catch (e: Exception) {
-                toast(R.string.update_thank_you)
+                ShowSafeToastUseCase(this, R.string.update_thank_you)
                 finish()
             }
         }
@@ -264,7 +264,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateColorTheme(it as Int, true)
             if (it != THEME_CUSTOM && it != THEME_SHARED && it != THEME_AUTO && it != THEME_SYSTEM && !baseConfig.wasCustomThemeSwitchDescriptionShown) {
                 baseConfig.wasCustomThemeSwitchDescriptionShown = true
-                toast(R.string.changing_color_description)
+                ShowSafeToastUseCase(this, R.string.changing_color_description)
             }
 
             val hideGoogleRelations = resources.getBoolean(R.bool.hide_google_relations)

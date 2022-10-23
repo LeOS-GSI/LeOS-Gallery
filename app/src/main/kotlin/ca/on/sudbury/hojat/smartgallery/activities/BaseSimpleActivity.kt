@@ -70,7 +70,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.removeBit
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.storeAndroidTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
-import ca.on.sudbury.hojat.smartgallery.extensions.toast
 import ca.on.sudbury.hojat.smartgallery.extensions.updateOTGPathFromPartition
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
@@ -117,6 +116,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.OutputStream
 import java.util.regex.Pattern
@@ -351,7 +351,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 val checkedUri = buildDocumentUriSdk30(checkedDocumentPath)
 
                 if (treeUri != checkedUri) {
-                    toast(getString(R.string.wrong_folder_selected, checkedDocumentPath))
+                    ShowSafeToastUseCase(
+                        this,
+                        getString(R.string.wrong_folder_selected, checkedDocumentPath)
+                    )
                     return
                 }
 
@@ -373,7 +376,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 if (treeUri != checkedUri) {
                     val level = getFirstParentLevel(checkedDocumentPath)
                     val firstParentPath = checkedDocumentPath.getFirstParentPath(this, level)
-                    toast(getString(R.string.wrong_folder_selected, humanizePath(firstParentPath)))
+                    ShowSafeToastUseCase(
+                        this,
+                        getString(R.string.wrong_folder_selected, humanizePath(firstParentPath))
+                    )
                     return
                 }
 
@@ -392,7 +398,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 if (isProperAndroidRoot(checkedDocumentPath, resultData.data!!)) {
                     if (resultData.dataString == baseConfig.OTGTreeUri || resultData.dataString == baseConfig.sdTreeUri) {
                         val pathToSelect = createAndroidDataOrObbPath(checkedDocumentPath)
-                        toast(getString(R.string.wrong_folder_selected, pathToSelect))
+                        ShowSafeToastUseCase(
+                            this,
+                            getString(R.string.wrong_folder_selected, pathToSelect)
+                        )
                         return
                     }
 
@@ -408,7 +417,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     funAfterSAFPermission?.invoke(true)
                     funAfterSAFPermission = null
                 } else {
-                    toast(
+                    ShowSafeToastUseCase(
+                        this,
                         getString(
                             R.string.wrong_folder_selected,
                             createAndroidDataOrObbPath(checkedDocumentPath)
@@ -439,7 +449,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     .matches() && resultData.dataString!!.contains(partition))
                 if (isProperSDRootFolder(resultData.data!!) && isProperPartition) {
                     if (resultData.dataString == baseConfig.OTGTreeUri) {
-                        toast(R.string.sd_card_usb_same)
+                        ShowSafeToastUseCase(this, R.string.sd_card_usb_same)
                         return
                     }
 
@@ -447,7 +457,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     funAfterSAFPermission?.invoke(true)
                     funAfterSAFPermission = null
                 } else {
-                    toast(R.string.wrong_root_selected)
+                    ShowSafeToastUseCase(this, R.string.wrong_root_selected)
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
 
                     try {
@@ -467,7 +477,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 if (isProperOTGRootFolder(resultData.data!!) && isProperPartition) {
                     if (resultData.dataString == baseConfig.sdTreeUri) {
                         funAfterSAFPermission?.invoke(false)
-                        toast(R.string.sd_card_usb_same)
+                        ShowSafeToastUseCase(this, R.string.sd_card_usb_same)
                         return
                     }
                     baseConfig.OTGTreeUri = resultData.dataString!!
@@ -486,7 +496,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     funAfterSAFPermission?.invoke(true)
                     funAfterSAFPermission = null
                 } else {
-                    toast(R.string.wrong_root_selected_usb)
+                    ShowSafeToastUseCase(this, R.string.wrong_root_selected_usb)
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
 
                     try {
@@ -690,9 +700,13 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 try {
                     startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
                 } catch (e: ActivityNotFoundException) {
-                    toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
+                    ShowSafeToastUseCase(
+                        this@BaseSimpleActivity,
+                        R.string.system_service_disabled,
+                        Toast.LENGTH_LONG
+                    )
                 } catch (e: Exception) {
-                    toast(R.string.unknown_error_occurred)
+                    ShowSafeToastUseCase(this@BaseSimpleActivity, R.string.unknown_error_occurred)
                 }
             }
         }
@@ -774,12 +788,12 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         callback: (destinationPath: String) -> Unit
     ) {
         if (source == destination) {
-            toast(R.string.source_and_destination_same)
+            ShowSafeToastUseCase(this, R.string.source_and_destination_same)
             return
         }
 
         if (!getDoesFilePathExist(destination)) {
-            toast(R.string.invalid_destination)
+            ShowSafeToastUseCase(this, R.string.invalid_destination)
             return
         }
 
@@ -827,7 +841,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     } else {
                         try {
                             checkConflicts(fileDirItems, destination, 0, LinkedHashMap()) {
-                                toast(R.string.moving)
+                                ShowSafeToastUseCase(this, R.string.moving)
                                 RunOnBackgroundThreadUseCase {
                                     val updatedPaths = ArrayList<String>(fileDirItems.size)
                                     val destinationFolder = File(destination)
@@ -913,7 +927,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         val sumToCopy = files.sumByLong { it.getProperSize(applicationContext, copyHidden) }
         if (availableSpace == -1L || sumToCopy < availableSpace) {
             checkConflicts(files, destinationPath, 0, LinkedHashMap()) {
-                toast(if (isCopyOperation) R.string.copying else R.string.moving)
+                ShowSafeToastUseCase(
+                    this,
+                    if (isCopyOperation) R.string.copying else R.string.moving
+                )
                 val pair = Pair(files, destinationPath)
                 CopyMoveTask(
                     this,
@@ -930,7 +947,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 sumToCopy.formatSize(),
                 availableSpace.formatSize()
             )
-            toast(text, Toast.LENGTH_LONG)
+            ShowSafeToastUseCase(this, text, Toast.LENGTH_LONG)
         }
     }
 
@@ -1006,7 +1023,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             wasCopyingOneFileOnly: Boolean
         ) {
             if (copyOnly) {
-                toast(
+                ShowSafeToastUseCase(
+                    this@BaseSimpleActivity,
                     if (copiedAll) {
                         if (wasCopyingOneFileOnly) {
                             R.string.copying_success_one
@@ -1018,7 +1036,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     }
                 )
             } else {
-                toast(
+                ShowSafeToastUseCase(
+                    this@BaseSimpleActivity,
                     if (copiedAll) {
                         if (wasCopyingOneFileOnly) {
                             R.string.moving_success_one
@@ -1036,7 +1055,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
 
         override fun copyFailed() {
-            toast(R.string.copy_move_failed)
+            ShowSafeToastUseCase(this@BaseSimpleActivity, R.string.copy_move_failed)
             copyMoveCallback = null
         }
     }
@@ -1053,7 +1072,11 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     try {
                         startActivityForResult(this, SELECT_EXPORT_SETTINGS_FILE_INTENT)
                     } catch (e: ActivityNotFoundException) {
-                        toast(R.string.system_service_disabled, Toast.LENGTH_LONG)
+                        ShowSafeToastUseCase(
+                            this@BaseSimpleActivity,
+                            R.string.system_service_disabled,
+                            Toast.LENGTH_LONG
+                        )
                     } catch (e: Exception) {
                         showErrorToast(e)
                     }
@@ -1082,7 +1105,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         configItems: LinkedHashMap<String, Any>
     ) {
         if (outputStream == null) {
-            toast(R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
             return
         }
 
@@ -1092,7 +1115,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     out.writeLn("$key=$value")
                 }
             }
-            toast(R.string.settings_exported_successfully)
+            ShowSafeToastUseCase(this, R.string.settings_exported_successfully)
         }
     }
 
@@ -1120,7 +1143,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 try {
                     startActivityForResult(this, REQUEST_CODE_SET_DEFAULT_DIALER)
                 } catch (e: ActivityNotFoundException) {
-                    toast(R.string.no_app_found)
+                    ShowSafeToastUseCase(this@BaseSimpleActivity, R.string.no_app_found)
                 } catch (e: Exception) {
                     showErrorToast(e)
                 }
