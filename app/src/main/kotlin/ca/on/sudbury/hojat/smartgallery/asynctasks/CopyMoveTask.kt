@@ -28,7 +28,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
-import ca.on.sudbury.hojat.smartgallery.extensions.rescanPath
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.canManageMedia
@@ -37,6 +36,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.deleteFromMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
+import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_KEEP_BOTH
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_SKIP
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
@@ -334,15 +334,15 @@ class CopyMoveTask(
             if (source.size == copiedSize && activity.getDoesFilePathExist(destination.path)) {
                 mTransferredFiles.add(source)
                 if (copyOnly) {
-                    activity.rescanPath(destination.path) {
+                    activity.rescanPaths(arrayListOf(destination.path)) {
                         if (activity.baseConfig.keepLastModified) {
                             updateLastModifiedValues(source, destination)
-                            activity.rescanPath(destination.path)
+                            activity.rescanPaths(arrayListOf(destination.path))
                         }
                     }
                 } else if (activity.baseConfig.keepLastModified) {
                     updateLastModifiedValues(source, destination)
-                    activity.rescanPath(destination.path)
+                    activity.rescanPaths(arrayListOf(destination.path))
                     inputStream.close()
                     out?.close()
                     deleteSourceFile(source)

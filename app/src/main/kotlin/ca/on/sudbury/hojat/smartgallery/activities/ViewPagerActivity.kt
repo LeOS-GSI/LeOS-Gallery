@@ -149,7 +149,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
-import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
@@ -176,6 +175,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
+import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -852,7 +852,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         val fileDirItems = arrayListOf(FileDirItem(currPath, currPath.getFilenameFromPath()))
         tryCopyMoveFilesTo(fileDirItems, isCopyOperation) {
             val newPath = "$it/${currPath.getFilenameFromPath()}"
-            rescanPaths(arrayListOf(newPath)) {
+            applicationContext.rescanPaths(arrayListOf(newPath)) {
                 fixDateTaken(arrayListOf(newPath), false)
             }
 

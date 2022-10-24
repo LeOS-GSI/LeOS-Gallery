@@ -37,7 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.rescanPath
 import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
@@ -405,7 +404,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             if (isPathPresentInMediaStore(path)) {
                 openViewPager(path)
             } else {
-                rescanPath(path) {
+                rescanPaths(arrayListOf(path)) {
                     openViewPager(path)
                 }
             }

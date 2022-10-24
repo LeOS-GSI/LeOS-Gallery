@@ -166,7 +166,7 @@ private fun BaseSimpleActivity.renameCasually(
     if (oldToTempSucceeds && tempToNewSucceeds) {
         if (newFile.isDirectory) {
             updateInMediaStore(oldPath, newPath)
-            rescanPath(newPath) {
+                applicationContext.rescanPaths(arrayListOf(newPath)) {
                 runOnUiThread {
                     callback?.invoke(true, Android30RenameFormat.NONE)
                 }
@@ -489,10 +489,6 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
             targetFile
         )
     }
-}
-
-fun Activity.rescanPath(path: String, callback: (() -> Unit)? = null) {
-    applicationContext.rescanPath(path, callback)
 }
 
 fun Activity.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
@@ -989,7 +985,7 @@ fun BaseSimpleActivity.renameFile(
                         val success = renameDocumentSdk30(oldPath, newPath)
                         if (success) {
                             updateInMediaStore(oldPath, newPath)
-                            rescanPath(newPath) {
+                                applicationContext.rescanPaths(arrayListOf(newPath)) {
                                 runOnUiThread {
                                     callback?.invoke(true, Android30RenameFormat.NONE)
                                 }
