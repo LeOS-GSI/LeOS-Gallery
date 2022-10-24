@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.databinding.FragmentHolderBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.setAs
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
-import ca.on.sudbury.hojat.smartgallery.extensions.sharePath
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
@@ -55,6 +54,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
+import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
@@ -176,7 +176,8 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             when (menuItem.itemId) {
                 R.id.menu_set_as -> setAs(mUri!!.toString())
                 R.id.menu_open_with -> openPath(mUri!!.toString(), true)
-                R.id.menu_share -> sharePath(mUri!!.toString())
+                R.id.menu_share -> sharePathIntent(mUri!!.toString(), BuildConfig.APPLICATION_ID)
+
                 R.id.menu_edit -> openEditor(mUri!!.toString())
                 R.id.menu_properties -> showProperties()
                 R.id.menu_show_on_map -> showFileOnMap(mUri!!.toString())
@@ -509,7 +510,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         binding.bottomActions.bottomShare.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
         binding.bottomActions.bottomShare.setOnClickListener {
             if (mUri != null && binding.bottomActions.root.alpha == 1f) {
-                sharePath(mUri!!.toString())
+                sharePathIntent(mUri!!.toString(), BuildConfig.APPLICATION_ID)
             }
         }
 

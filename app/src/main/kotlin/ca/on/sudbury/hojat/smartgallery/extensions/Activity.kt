@@ -499,10 +499,6 @@ fun Activity.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
     applicationContext.rescanPaths(paths, callback)
 }
 
-fun Activity.sharePath(path: String) {
-    sharePathIntent(path, BuildConfig.APPLICATION_ID)
-}
-
 fun Activity.sharePathIntent(path: String, applicationId: String) {
     RunOnBackgroundThreadUseCase {
 
@@ -574,7 +570,7 @@ fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
 }
 
 fun Activity.shareMediumPath(path: String) {
-    sharePath(path)
+    sharePathIntent(path, BuildConfig.APPLICATION_ID)
 }
 
 fun Activity.shareMediaPaths(paths: ArrayList<String>) {
