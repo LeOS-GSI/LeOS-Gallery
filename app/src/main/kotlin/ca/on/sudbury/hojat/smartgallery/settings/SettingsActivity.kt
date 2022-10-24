@@ -28,7 +28,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toBoolean
-import ca.on.sudbury.hojat.smartgallery.extensions.toInt
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
@@ -151,6 +150,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToIntUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -1098,28 +1098,28 @@ class SettingsActivity : SimpleActivity() {
         for ((key, value) in configValues) {
             when (key) {
                 IS_USING_SHARED_THEME -> config.isUsingSharedTheme = value.toBoolean()
-                TEXT_COLOR -> config.textColor = value.toInt()
-                BACKGROUND_COLOR -> config.backgroundColor = value.toInt()
-                PRIMARY_COLOR -> config.primaryColor = value.toInt()
-                ACCENT_COLOR -> config.accentColor = value.toInt()
+                TEXT_COLOR -> config.textColor = ConvertToIntUseCase(value)
+                BACKGROUND_COLOR -> config.backgroundColor = ConvertToIntUseCase(value)
+                PRIMARY_COLOR -> config.primaryColor = ConvertToIntUseCase(value)
+                ACCENT_COLOR -> config.accentColor = ConvertToIntUseCase(value)
                 APP_ICON_COLOR -> {
                     if (resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
-                            .contains(value.toInt())
+                            .contains(ConvertToIntUseCase(value))
                     ) {
-                        config.appIconColor = value.toInt()
+                        config.appIconColor = ConvertToIntUseCase(value)
                         checkAppIconColor()
                     }
                 }
                 USE_ENGLISH -> config.useEnglish = value.toBoolean()
                 WAS_USE_ENGLISH_TOGGLED -> config.wasUseEnglishToggled = value.toBoolean()
-                WIDGET_BG_COLOR -> config.widgetBgColor = value.toInt()
-                WIDGET_TEXT_COLOR -> config.widgetTextColor = value.toInt()
+                WIDGET_BG_COLOR -> config.widgetBgColor = ConvertToIntUseCase(value)
+                WIDGET_TEXT_COLOR -> config.widgetTextColor = ConvertToIntUseCase(value)
                 DATE_FORMAT -> config.dateFormat = value.toString()
                 USE_24_HOUR_FORMAT -> config.use24HourFormat = value.toBoolean()
                 INCLUDED_FOLDERS -> config.addIncludedFolders(value.toStringSet())
                 EXCLUDED_FOLDERS -> config.addExcludedFolders(value.toStringSet())
                 SHOW_HIDDEN_MEDIA -> config.showHiddenMedia = value.toBoolean()
-                FILE_LOADING_PRIORITY -> config.fileLoadingPriority = value.toInt()
+                FILE_LOADING_PRIORITY -> config.fileLoadingPriority = ConvertToIntUseCase(value)
                 AUTOPLAY_VIDEOS -> config.autoplayVideos = value.toBoolean()
                 REMEMBER_LAST_VIDEO_POSITION -> config.rememberLastVideoPosition = value.toBoolean()
                 LOOP_VIDEOS -> config.loopVideos = value.toBoolean()
@@ -1142,54 +1142,56 @@ class SettingsActivity : SimpleActivity() {
                 ALLOW_DOWN_GESTURE -> config.allowDownGesture = value.toBoolean()
                 ALLOW_ROTATING_WITH_GESTURES -> config.allowRotatingWithGestures = value.toBoolean()
                 SHOW_NOTCH -> config.showNotch = value.toBoolean()
-                SCREEN_ROTATION -> config.screenRotation = value.toInt()
+                SCREEN_ROTATION -> config.screenRotation = ConvertToIntUseCase(value)
                 ALLOW_ZOOMING_IMAGES -> config.allowZoomingImages = value.toBoolean()
                 SHOW_HIGHEST_QUALITY -> config.showHighestQuality = value.toBoolean()
                 ALLOW_ONE_TO_ONE_ZOOM -> config.allowOneToOneZoom = value.toBoolean()
                 SHOW_EXTENDED_DETAILS -> config.showExtendedDetails = value.toBoolean()
                 HIDE_EXTENDED_DETAILS -> config.hideExtendedDetails = value.toBoolean()
-                EXTENDED_DETAILS -> config.extendedDetails = value.toInt()
+                EXTENDED_DETAILS -> config.extendedDetails = ConvertToIntUseCase(value)
                 DELETE_EMPTY_FOLDERS -> config.deleteEmptyFolders = value.toBoolean()
                 KEEP_LAST_MODIFIED -> config.keepLastModified = value.toBoolean()
                 SKIP_DELETE_CONFIRMATION -> config.skipDeleteConfirmation = value.toBoolean()
                 BOTTOM_ACTIONS -> config.bottomActions = value.toBoolean()
-                VISIBLE_BOTTOM_ACTIONS -> config.visibleBottomActions = value.toInt()
+                VISIBLE_BOTTOM_ACTIONS -> config.visibleBottomActions = ConvertToIntUseCase(value)
                 USE_RECYCLE_BIN -> config.useRecycleBin = value.toBoolean()
                 SHOW_RECYCLE_BIN_AT_FOLDERS -> config.showRecycleBinAtFolders = value.toBoolean()
                 SHOW_RECYCLE_BIN_LAST -> config.showRecycleBinLast = value.toBoolean()
-                SORT_ORDER -> config.sorting = value.toInt()
-                DIRECTORY_SORT_ORDER -> config.directorySorting = value.toInt()
-                GROUP_BY -> config.groupBy = value.toInt()
+                SORT_ORDER -> config.sorting = ConvertToIntUseCase(value)
+                DIRECTORY_SORT_ORDER -> config.directorySorting = ConvertToIntUseCase(value)
+                GROUP_BY -> config.groupBy = ConvertToIntUseCase(value)
                 GROUP_DIRECT_SUBFOLDERS -> config.groupDirectSubfolders = value.toBoolean()
                 PINNED_FOLDERS -> config.addPinnedFolders(value.toStringSet())
                 DISPLAY_FILE_NAMES -> config.displayFileNames = value.toBoolean()
-                FILTER_MEDIA -> config.filterMedia = value.toInt()
-                DIR_COLUMN_CNT -> config.dirColumnCnt = value.toInt()
-                MEDIA_COLUMN_CNT -> config.mediaColumnCnt = value.toInt()
+                FILTER_MEDIA -> config.filterMedia = ConvertToIntUseCase(value)
+                DIR_COLUMN_CNT -> config.dirColumnCnt = ConvertToIntUseCase(value)
+                MEDIA_COLUMN_CNT -> config.mediaColumnCnt = ConvertToIntUseCase(value)
                 SHOW_ALL -> config.showAll = value.toBoolean()
                 SHOW_WIDGET_FOLDER_NAME -> config.showWidgetFolderName = value.toBoolean()
-                VIEW_TYPE_FILES -> config.viewTypeFiles = value.toInt()
-                VIEW_TYPE_FOLDERS -> config.viewTypeFolders = value.toInt()
-                SLIDESHOW_INTERVAL -> config.slideshowInterval = value.toInt()
+                VIEW_TYPE_FILES -> config.viewTypeFiles = ConvertToIntUseCase(value)
+                VIEW_TYPE_FOLDERS -> config.viewTypeFolders = ConvertToIntUseCase(value)
+                SLIDESHOW_INTERVAL -> config.slideshowInterval = ConvertToIntUseCase(value)
                 SLIDESHOW_INCLUDE_VIDEOS -> config.slideshowIncludeVideos = value.toBoolean()
                 SLIDESHOW_INCLUDE_GIFS -> config.slideshowIncludeGIFs = value.toBoolean()
                 SLIDESHOW_RANDOM_ORDER -> config.slideshowRandomOrder = value.toBoolean()
                 SLIDESHOW_MOVE_BACKWARDS -> config.slideshowMoveBackwards = value.toBoolean()
                 SLIDESHOW_LOOP -> config.loopSlideshow = value.toBoolean()
-                LAST_EDITOR_CROP_ASPECT_RATIO -> config.lastEditorCropAspectRatio = value.toInt()
+                LAST_EDITOR_CROP_ASPECT_RATIO -> config.lastEditorCropAspectRatio =
+                    ConvertToIntUseCase(value)
                 LAST_EDITOR_CROP_OTHER_ASPECT_RATIO_X -> config.lastEditorCropOtherAspectRatioX =
                     value.toString().toFloat()
                 LAST_EDITOR_CROP_OTHER_ASPECT_RATIO_Y -> config.lastEditorCropOtherAspectRatioY =
                     value.toString().toFloat()
-                LAST_CONFLICT_RESOLUTION -> config.lastConflictResolution = value.toInt()
+                LAST_CONFLICT_RESOLUTION -> config.lastConflictResolution =
+                    ConvertToIntUseCase(value)
                 LAST_CONFLICT_APPLY_TO_ALL -> config.lastConflictApplyToAll = value.toBoolean()
-                EDITOR_BRUSH_COLOR -> config.editorBrushColor = value.toInt()
+                EDITOR_BRUSH_COLOR -> config.editorBrushColor = ConvertToIntUseCase(value)
                 EDITOR_BRUSH_HARDNESS -> config.editorBrushHardness = value.toString().toFloat()
                 EDITOR_BRUSH_SIZE -> config.editorBrushSize = value.toString().toFloat()
-                FOLDER_THUMBNAIL_STYLE -> config.folderStyle = value.toInt()
-                FOLDER_MEDIA_COUNT -> config.showFolderMediaCount = value.toInt()
+                FOLDER_THUMBNAIL_STYLE -> config.folderStyle = ConvertToIntUseCase(value)
+                FOLDER_MEDIA_COUNT -> config.showFolderMediaCount = ConvertToIntUseCase(value)
                 LIMIT_FOLDER_TITLE -> config.limitFolderTitle = value.toBoolean()
-                THUMBNAIL_SPACING -> config.thumbnailSpacing = value.toInt()
+                THUMBNAIL_SPACING -> config.thumbnailSpacing = ConvertToIntUseCase(value)
                 FILE_ROUNDED_CORNERS -> config.fileRoundedCorners = value.toBoolean()
                 ALBUM_COVERS -> {
                     val existingCovers = config.parseAlbumCovers()
