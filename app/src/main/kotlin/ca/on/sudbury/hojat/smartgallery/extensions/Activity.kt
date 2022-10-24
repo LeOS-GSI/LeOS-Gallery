@@ -530,10 +530,6 @@ fun Activity.sharePathIntent(path: String, applicationId: String) {
     }
 }
 
-fun Activity.sharePaths(paths: ArrayList<String>) {
-    sharePathsIntent(paths, BuildConfig.APPLICATION_ID)
-}
-
 fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
     RunOnBackgroundThreadUseCase {
 
@@ -582,7 +578,7 @@ fun Activity.shareMediumPath(path: String) {
 }
 
 fun Activity.shareMediaPaths(paths: ArrayList<String>) {
-    sharePaths(paths)
+    sharePathsIntent(paths, BuildConfig.APPLICATION_ID)
 }
 
 fun Activity.setAs(path: String) {
