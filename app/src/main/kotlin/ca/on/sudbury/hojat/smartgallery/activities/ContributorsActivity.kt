@@ -16,6 +16,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityContributorsBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 
 class ContributorsActivity : BaseSimpleActivity() {
 
@@ -52,7 +53,7 @@ class ContributorsActivity : BaseSimpleActivity() {
             binding.contributorsDevelopmentHolder,
             binding.contributorsTranslationHolder
         ).forEach {
-            it.background.applyColorFilter(backgroundColor.getContrastColor())
+            ApplyColorToDrawableUseCase(it.background, backgroundColor.getContrastColor())
         }
 
         if (resources.getBoolean(R.bool.hide_all_external_links)) {

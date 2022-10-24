@@ -5,8 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 
 class MyEditText : AppCompatEditText {
     constructor(context: Context) : super(context)
@@ -19,8 +19,8 @@ class MyEditText : AppCompatEditText {
         defStyle
     )
 
-    fun setColors(textColor: Int, accentColor: Int, backgroundColor: Int) {
-        background?.mutate()?.applyColorFilter(accentColor)
+    fun setColors(textColor: Int, accentColor: Int) {
+        ApplyColorToDrawableUseCase(background?.mutate(), accentColor)
 
         // requires android:textCursorDrawable="@null" in xml to color the cursor too
         setTextColor(textColor)

@@ -16,7 +16,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
@@ -34,6 +33,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.Widget
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 class WidgetConfigureActivity : SimpleActivity() {
@@ -72,7 +72,7 @@ class WidgetConfigureActivity : SimpleActivity() {
 
         updateTextColors(binding.folderPickerHolder)
         val primaryColor = getProperPrimaryColor()
-        binding.configBgSeekbar.setColors(mTextColor, primaryColor, primaryColor)
+        binding.configBgSeekbar.setColors(primaryColor)
         binding.folderPickerHolder.background = ColorDrawable(getProperBackgroundColor())
 
         binding.folderPickerShowFolderName.isChecked = config.showWidgetFolderName
@@ -169,7 +169,7 @@ class WidgetConfigureActivity : SimpleActivity() {
 
     private fun updateBackgroundColor() {
         mBgColor = mBgColorWithoutTransparency.adjustAlpha(mBgAlpha)
-        binding.configImageHolder.background.applyColorFilter(mBgColor)
+        ApplyColorToDrawableUseCase(binding.configImageHolder.background, mBgColor)
         binding.configBgColor.setFillWithStroke(mBgColor, mBgColor)
         binding.configSave.backgroundTintList = ColorStateList.valueOf(getProperPrimaryColor())
     }

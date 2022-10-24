@@ -101,6 +101,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
@@ -894,7 +895,7 @@ class DirectoryAdapter(
 
             dir_check?.beVisibleIf(isSelected)
             if (isSelected) {
-                dir_check.background?.applyColorFilter(properPrimaryColor)
+                ApplyColorToDrawableUseCase(dir_check.background, properPrimaryColor)
                 dir_check.applyColorFilter(contrastColor)
             }
 

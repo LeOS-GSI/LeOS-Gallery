@@ -13,7 +13,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
@@ -151,6 +150,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -263,7 +263,10 @@ class SettingsActivity : SimpleActivity() {
             binding.settingsRecycleBinHolder,
             binding.settingsMigratingHolder
         ).forEach {
-            it.background.applyColorFilter(getProperBackgroundColor().getContrastColor())
+            ApplyColorToDrawableUseCase(
+                it.background,
+                getProperBackgroundColor().getContrastColor()
+            )
         }
     }
 
@@ -1100,7 +1103,9 @@ class SettingsActivity : SimpleActivity() {
                 PRIMARY_COLOR -> config.primaryColor = value.toInt()
                 ACCENT_COLOR -> config.accentColor = value.toInt()
                 APP_ICON_COLOR -> {
-                    if (resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList()).contains(value.toInt())) {
+                    if (resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
+                            .contains(value.toInt())
+                    ) {
                         config.appIconColor = value.toInt()
                         checkAppIconColor()
                     }

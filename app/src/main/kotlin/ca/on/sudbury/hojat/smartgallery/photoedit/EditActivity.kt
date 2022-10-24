@@ -54,8 +54,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
@@ -153,9 +151,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         super.onResume()
         isEditingWithThirdParty = false
         binding.bottomEditorDrawActions.bottomDrawWidth.setColors(
-            getProperTextColor(),
-            getProperPrimaryColor(),
-            getProperBackgroundColor()
+            getProperPrimaryColor()
         )
         setupToolbar(binding.editorToolbar, NavigationIcon.Arrow)
     }

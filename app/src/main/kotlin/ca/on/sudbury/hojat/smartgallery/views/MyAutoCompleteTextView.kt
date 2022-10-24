@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 
 class MyAutoCompleteTextView : AppCompatAutoCompleteTextView {
     constructor(context: Context) : super(context)
@@ -17,8 +17,8 @@ class MyAutoCompleteTextView : AppCompatAutoCompleteTextView {
         defStyle
     )
 
-    fun setColors(textColor: Int, accentColor: Int, backgroundColor: Int) {
-        background?.mutate()?.applyColorFilter(accentColor)
+    fun setColors(textColor: Int, accentColor: Int) {
+        ApplyColorToDrawableUseCase(background?.mutate(), accentColor)
 
         // requires android:textCursorDrawable="@null" in xml to color the cursor too
         setTextColor(textColor)

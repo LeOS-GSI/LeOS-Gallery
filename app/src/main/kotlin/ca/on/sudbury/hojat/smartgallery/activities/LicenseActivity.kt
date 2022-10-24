@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.widget.LinearLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -49,6 +48,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityLicenseBinding
 import ca.on.sudbury.hojat.smartgallery.databinding.ItemLicenseBinding
 import ca.on.sudbury.hojat.smartgallery.models.License
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 
 class LicenseActivity : BaseSimpleActivity() {
 
@@ -76,7 +76,7 @@ class LicenseActivity : BaseSimpleActivity() {
         licenses.filter { licenseMask and it.id.toInt() != 0 }.forEach { license ->
 
             ItemLicenseBinding.inflate(inflater).apply {
-                root.background.applyColorFilter(backgroundColor.getContrastColor())
+                ApplyColorToDrawableUseCase(root.background, backgroundColor.getContrastColor())
                 licenseTitle.apply {
                     text = getString(license.titleId)
                     setTextColor(primaryColor)

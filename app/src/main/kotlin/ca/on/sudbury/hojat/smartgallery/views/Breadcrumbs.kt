@@ -13,7 +13,6 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getBasePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -22,6 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 import kotlinx.android.synthetic.main.item_breadcrumb.view.*
 
 class Breadcrumbs(context: Context, attrs: AttributeSet) : HorizontalScrollView(context, attrs) {
@@ -198,7 +198,7 @@ class Breadcrumbs(context: Context, attrs: AttributeSet) : HorizontalScrollView(
                 resources.apply {
                     breadcrumb_text.background =
                         ContextCompat.getDrawable(context, R.drawable.button_background)
-                    breadcrumb_text.background.applyColorFilter(textColor)
+                    ApplyColorToDrawableUseCase(breadcrumb_text.background, textColor)
                     elevation = 1f
                     background = ColorDrawable(firstItemBgColor)
                     val medium = getDimension(R.dimen.medium_margin).toInt()

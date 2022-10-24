@@ -7,7 +7,6 @@ import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.Menu
 import android.widget.LinearLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -20,6 +19,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 
 class FAQActivity : BaseSimpleActivity() {
 
@@ -45,7 +45,7 @@ class FAQActivity : BaseSimpleActivity() {
         faqItems.forEach { faqItem ->
 
             ItemFaqBinding.inflate(inflater).apply {
-                root.background.applyColorFilter(backgroundColor.getContrastColor())
+                ApplyColorToDrawableUseCase(root.background, backgroundColor.getContrastColor())
                 this.faqTitle.apply {
                     text =
                         if (faqItem.title is Int) getString(faqItem.title) else faqItem.title as String

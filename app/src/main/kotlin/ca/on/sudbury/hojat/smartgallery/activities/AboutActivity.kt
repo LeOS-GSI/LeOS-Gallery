@@ -41,6 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 class AboutActivity : BaseSimpleActivity() {
@@ -98,7 +99,8 @@ class AboutActivity : BaseSimpleActivity() {
             binding.aboutSocialHolder,
             binding.aboutOtherHolder
         ).forEach { linearLayout ->
-            linearLayout.background.applyColorFilter(backgroundColor.getContrastColor())
+            ApplyColorToDrawableUseCase(linearLayout.background, backgroundColor.getContrastColor())
+
         }
     }
 
