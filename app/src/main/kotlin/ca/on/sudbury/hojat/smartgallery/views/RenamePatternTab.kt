@@ -25,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateInMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.interfaces.RenameTab
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
@@ -68,7 +67,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
             return
         }
 
-        val newNameRaw = rename_items_value.value
+        val newNameRaw = rename_items_value.text.toString().trim()
         if (newNameRaw.isEmpty()) {
             callback(false)
             return
@@ -82,7 +81,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
             return
         }
 
-        activity?.baseConfig?.lastRenamePatternUsed = rename_items_value.value
+        activity?.baseConfig?.lastRenamePatternUsed = rename_items_value.text.toString().trim()
         activity?.handleSAFDialog(sdFilePath) {
             if (!it) {
                 return@handleSAFDialog
@@ -168,7 +167,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
             val minutes = (cal.get(Calendar.MINUTE)).ensureTwoDigits()
             val seconds = (cal.get(Calendar.SECOND)).ensureTwoDigits()
 
-            var newName = rename_items_value.value
+            var newName = rename_items_value.text.toString().trim()
                 .replace("%Y", year, false)
                 .replace("%M", month, false)
                 .replace("%D", day, false)

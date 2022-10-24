@@ -13,7 +13,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onTextChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -109,8 +108,8 @@ class ResizeWithPathDialog(
 
                         val newSize = Point(getViewValue(widthView), getViewValue(heightView))
 
-                        val filename = binding.filenameValue.value
-                        val extension = binding.extensionValue.value
+                        val filename = binding.filenameValue.text.toString().trim()
+                        val extension = binding.extensionValue.text.toString().trim()
                         if (filename.isEmpty()) {
                             ShowSafeToastUseCase(activity, R.string.filename_cannot_be_empty)
                             return@setOnClickListener
@@ -147,7 +146,7 @@ class ResizeWithPathDialog(
     }
 
     private fun getViewValue(view: EditText): Int {
-        val textValue = view.value
+        val textValue = view.text.toString().trim()
         return if (textValue.isEmpty()) 0 else textValue.toInt()
     }
 }

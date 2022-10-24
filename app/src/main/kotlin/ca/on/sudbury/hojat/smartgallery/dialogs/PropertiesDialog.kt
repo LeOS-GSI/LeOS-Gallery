@@ -43,7 +43,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.md5
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
@@ -476,7 +475,7 @@ class PropertiesDialog() {
             mPropertyView.properties_holder.addView(this)
 
             setOnLongClickListener {
-                mActivity.copyToClipboard(property_value.value)
+                mActivity.copyToClipboard(property_value.text.toString().trim())
                 true
             }
 

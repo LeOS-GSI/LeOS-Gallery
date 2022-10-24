@@ -1,12 +1,10 @@
 package ca.on.sudbury.hojat.smartgallery.views
 
-
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
 import com.google.android.material.textfield.TextInputLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.helpers.HIGHER_ALPHA
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 
@@ -22,13 +20,13 @@ class MyTextInputLayout : TextInputLayout {
     )
 
     // we need to use reflection to make some colors work well
-    fun setColors(textColor: Int, accentColor: Int, backgroundColor: Int) {
+    fun setColors(textColor: Int, accentColor: Int) {
         try {
             editText!!.setTextColor(textColor)
             editText!!.backgroundTintList = ColorStateList.valueOf(accentColor)
 
             val hintColor =
-                if (editText!!.value.isEmpty()) textColor.adjustAlpha(HIGHER_ALPHA) else textColor
+                if (editText!!.text.toString().trim().isEmpty()) textColor.adjustAlpha(HIGHER_ALPHA) else textColor
             val defaultTextColor =
                 TextInputLayout::class.java.getDeclaredField("defaultHintTextColor")
             defaultTextColor.isAccessible = true

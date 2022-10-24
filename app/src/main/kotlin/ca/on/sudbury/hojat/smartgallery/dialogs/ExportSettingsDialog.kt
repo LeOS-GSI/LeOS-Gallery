@@ -10,7 +10,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogExportSettingsBinding
@@ -64,7 +63,7 @@ class ExportSettingsDialog(
                     R.string.export_settings
                 ) { alertDialog ->
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        var filename = binding.exportSettingsFilename.value
+                        var filename = binding.exportSettingsFilename.text.toString().trim()
                         if (filename.isEmpty()) {
                             ShowSafeToastUseCase(activity, R.string.filename_cannot_be_empty)
                             return@setOnClickListener

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogCreateNewFolderBinding
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
@@ -52,7 +51,7 @@ class CreateNewFolderDialog(
                     alertDialog.showKeyboard(binding.folderName)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
                         .setOnClickListener(View.OnClickListener {
-                            val name = binding.folderName.value
+                            val name = binding.folderName.text.toString().trim()
                             when {
                                 name.isEmpty() -> ShowSafeToastUseCase(
                                     activity,

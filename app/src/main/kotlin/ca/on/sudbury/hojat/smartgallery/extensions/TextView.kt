@@ -6,9 +6,6 @@ import android.text.TextPaint
 import android.text.style.URLSpan
 import android.widget.TextView
 
-
-val TextView.value: String get() = text.toString().trim()
-
 fun TextView.underlineText() {
     paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
 }

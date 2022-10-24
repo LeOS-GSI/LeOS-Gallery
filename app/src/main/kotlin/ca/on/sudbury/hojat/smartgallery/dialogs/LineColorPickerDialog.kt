@@ -9,7 +9,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogLineColorPickerBinding
@@ -38,7 +37,7 @@ class LineColorPickerDialog(
         binding.apply {
             hexCode.text = color.toHex()
             hexCode.setOnLongClickListener {
-                activity.copyToClipboard(hexCode.value.substring(1))
+                activity.copyToClipboard(hexCode.text.toString().trim().substring(1))
                 true
             }
 

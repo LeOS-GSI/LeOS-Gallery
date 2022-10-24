@@ -8,7 +8,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 
 class CustomAspectRatioDialog(
     val activity: BaseSimpleActivity,
@@ -42,7 +41,7 @@ class CustomAspectRatioDialog(
     }
 
     private fun getViewValue(view: EditText): Float {
-        val textValue = view.value
+        val textValue = view.text.toString().trim()
         return if (textValue.isEmpty()) 0f else textValue.toFloat()
     }
 }

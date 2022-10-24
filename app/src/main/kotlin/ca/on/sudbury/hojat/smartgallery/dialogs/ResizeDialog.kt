@@ -11,7 +11,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onTextChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 @SuppressLint("InflateParams")
@@ -87,7 +86,7 @@ class ResizeDialog(
     }
 
     private fun getViewValue(view: EditText): Int {
-        val textValue = view.value
+        val textValue = view.text.toString().trim()
         return if (textValue.isEmpty()) 0 else textValue.toInt()
     }
 }

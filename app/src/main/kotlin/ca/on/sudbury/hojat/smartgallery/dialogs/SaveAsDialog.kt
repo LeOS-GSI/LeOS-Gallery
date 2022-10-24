@@ -14,7 +14,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.isInSubFolderInDownloadDir
@@ -88,8 +87,8 @@ class SaveAsDialog(
                 activity.setupDialogStuff(binding.root, this, R.string.save_as) { alertDialog ->
                     alertDialog.showKeyboard(binding.filenameValue)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        val filename = binding.filenameValue.value
-                        val extension = binding.extensionValue.value
+                        val filename = binding.filenameValue.text.toString().trim()
+                        val extension = binding.extensionValue.text.toString().trim()
 
                         if (filename.isEmpty()) {
                             ShowSafeToastUseCase(activity, R.string.filename_cannot_be_empty)

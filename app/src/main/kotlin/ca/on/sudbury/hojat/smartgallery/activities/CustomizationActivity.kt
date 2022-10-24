@@ -24,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getSharedThemeSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
@@ -248,7 +247,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             }
         }
 
-        if (binding.customizationTheme.value == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
             binding.applyToAllHolder.beGone()
         }
     }
@@ -764,28 +763,28 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun getCurrentTextColor() =
-        if (binding.customizationTheme.value == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
             resources.getColor(R.color.you_neutral_text_color)
         } else {
             curTextColor
         }
 
     private fun getCurrentBackgroundColor() =
-        if (binding.customizationTheme.value == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
             resources.getColor(R.color.you_background_color)
         } else {
             curBackgroundColor
         }
 
     private fun getCurrentPrimaryColor() =
-        if (binding.customizationTheme.value == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
             resources.getColor(R.color.you_primary_color)
         } else {
             curPrimaryColor
         }
 
     private fun getCurrentStatusBarColor() =
-        if (binding.customizationTheme.value == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
             resources.getColor(R.color.you_status_bar_color)
         } else {
             curPrimaryColor

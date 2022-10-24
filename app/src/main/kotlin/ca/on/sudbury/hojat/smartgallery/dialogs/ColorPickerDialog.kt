@@ -23,7 +23,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onTextChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogColorPickerBinding
 import ca.on.hojat.palette.views.ColorPickerSquare
@@ -200,7 +199,7 @@ class ColorPickerDialog(
     }
 
     private fun confirmNewColor() {
-        val hexValue = newHexField.value
+        val hexValue = newHexField.text.toString().trim()
         val newColor = if (hexValue.length == 6) {
             Color.parseColor("#$hexValue")
         } else {

@@ -9,7 +9,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemBinding
@@ -52,8 +51,8 @@ class RenameItemDialog(
                             return@setOnClickListener
                         }
 
-                        var newName = binding.renameItemName.value
-                        val newExtension = binding.renameItemExtension.value
+                        var newName = binding.renameItemName.text.toString().trim()
+                        val newExtension = binding.renameItemExtension.text.toString().trim()
 
                         if (newName.isEmpty()) {
                             ShowSafeToastUseCase(activity, R.string.empty_name)

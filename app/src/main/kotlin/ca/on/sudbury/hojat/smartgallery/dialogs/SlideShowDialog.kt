@@ -8,7 +8,6 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogSlideshowBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.value
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_FADE
@@ -112,7 +111,7 @@ class SlideShowDialog(
             interval = SLIDESHOW_DEFAULT_INTERVAL.toString()
 
         activity.config.apply {
-            slideshowAnimation = getAnimationValue(binding.animationValue.value)
+            slideshowAnimation = getAnimationValue(binding.animationValue.text.toString().trim())
             slideshowInterval = interval.toInt()
             slideshowIncludeVideos = binding.includeVideos.isChecked
             slideshowIncludeGIFs = binding.includeGifs.isChecked
