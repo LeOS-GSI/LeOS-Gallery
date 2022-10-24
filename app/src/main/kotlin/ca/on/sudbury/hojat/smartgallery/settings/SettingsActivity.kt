@@ -28,7 +28,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
-import ca.on.sudbury.hojat.smartgallery.extensions.toStringSet
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
@@ -151,6 +150,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToBooleanUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToIntUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToStringSetUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -1111,17 +1111,19 @@ class SettingsActivity : SimpleActivity() {
                     }
                 }
                 USE_ENGLISH -> config.useEnglish = ConvertToBooleanUseCase(value)
-                WAS_USE_ENGLISH_TOGGLED -> config.wasUseEnglishToggled = ConvertToBooleanUseCase(value)
+                WAS_USE_ENGLISH_TOGGLED -> config.wasUseEnglishToggled =
+                    ConvertToBooleanUseCase(value)
                 WIDGET_BG_COLOR -> config.widgetBgColor = ConvertToIntUseCase(value)
                 WIDGET_TEXT_COLOR -> config.widgetTextColor = ConvertToIntUseCase(value)
                 DATE_FORMAT -> config.dateFormat = value.toString()
                 USE_24_HOUR_FORMAT -> config.use24HourFormat = ConvertToBooleanUseCase(value)
-                INCLUDED_FOLDERS -> config.addIncludedFolders(value.toStringSet())
-                EXCLUDED_FOLDERS -> config.addExcludedFolders(value.toStringSet())
+                INCLUDED_FOLDERS -> config.addIncludedFolders(ConvertToStringSetUseCase(value))
+                EXCLUDED_FOLDERS -> config.addExcludedFolders(ConvertToStringSetUseCase(value))
                 SHOW_HIDDEN_MEDIA -> config.showHiddenMedia = ConvertToBooleanUseCase(value)
                 FILE_LOADING_PRIORITY -> config.fileLoadingPriority = ConvertToIntUseCase(value)
                 AUTOPLAY_VIDEOS -> config.autoplayVideos = ConvertToBooleanUseCase(value)
-                REMEMBER_LAST_VIDEO_POSITION -> config.rememberLastVideoPosition = ConvertToBooleanUseCase(value)
+                REMEMBER_LAST_VIDEO_POSITION -> config.rememberLastVideoPosition =
+                    ConvertToBooleanUseCase(value)
                 LOOP_VIDEOS -> config.loopVideos = ConvertToBooleanUseCase(value)
                 OPEN_VIDEOS_ON_SEPARATE_SCREEN -> config.openVideosOnSeparateScreen =
                     ConvertToBooleanUseCase(value)
@@ -1130,17 +1132,20 @@ class SettingsActivity : SimpleActivity() {
                 CROP_THUMBNAILS -> config.cropThumbnails = ConvertToBooleanUseCase(value)
                 SHOW_THUMBNAIL_VIDEO_DURATION -> config.showThumbnailVideoDuration =
                     ConvertToBooleanUseCase(value)
-                SHOW_THUMBNAIL_FILE_TYPES -> config.showThumbnailFileTypes = ConvertToBooleanUseCase(value)
+                SHOW_THUMBNAIL_FILE_TYPES -> config.showThumbnailFileTypes =
+                    ConvertToBooleanUseCase(value)
                 MARK_FAVORITE_ITEMS -> config.markFavoriteItems = ConvertToBooleanUseCase(value)
                 SCROLL_HORIZONTALLY -> config.scrollHorizontally = ConvertToBooleanUseCase(value)
-                ENABLE_PULL_TO_REFRESH -> config.enablePullToRefresh = ConvertToBooleanUseCase(value)
+                ENABLE_PULL_TO_REFRESH -> config.enablePullToRefresh =
+                    ConvertToBooleanUseCase(value)
                 MAX_BRIGHTNESS -> config.maxBrightness = ConvertToBooleanUseCase(value)
                 BLACK_BACKGROUND -> config.blackBackground = ConvertToBooleanUseCase(value)
                 HIDE_SYSTEM_UI -> config.hideSystemUI = ConvertToBooleanUseCase(value)
                 ALLOW_INSTANT_CHANGE -> config.allowInstantChange = ConvertToBooleanUseCase(value)
                 ALLOW_PHOTO_GESTURES -> config.allowPhotoGestures = ConvertToBooleanUseCase(value)
                 ALLOW_DOWN_GESTURE -> config.allowDownGesture = ConvertToBooleanUseCase(value)
-                ALLOW_ROTATING_WITH_GESTURES -> config.allowRotatingWithGestures = ConvertToBooleanUseCase(value)
+                ALLOW_ROTATING_WITH_GESTURES -> config.allowRotatingWithGestures =
+                    ConvertToBooleanUseCase(value)
                 SHOW_NOTCH -> config.showNotch = ConvertToBooleanUseCase(value)
                 SCREEN_ROTATION -> config.screenRotation = ConvertToIntUseCase(value)
                 ALLOW_ZOOMING_IMAGES -> config.allowZoomingImages = ConvertToBooleanUseCase(value)
@@ -1151,30 +1156,38 @@ class SettingsActivity : SimpleActivity() {
                 EXTENDED_DETAILS -> config.extendedDetails = ConvertToIntUseCase(value)
                 DELETE_EMPTY_FOLDERS -> config.deleteEmptyFolders = ConvertToBooleanUseCase(value)
                 KEEP_LAST_MODIFIED -> config.keepLastModified = ConvertToBooleanUseCase(value)
-                SKIP_DELETE_CONFIRMATION -> config.skipDeleteConfirmation = ConvertToBooleanUseCase(value)
+                SKIP_DELETE_CONFIRMATION -> config.skipDeleteConfirmation =
+                    ConvertToBooleanUseCase(value)
                 BOTTOM_ACTIONS -> config.bottomActions = ConvertToBooleanUseCase(value)
                 VISIBLE_BOTTOM_ACTIONS -> config.visibleBottomActions = ConvertToIntUseCase(value)
                 USE_RECYCLE_BIN -> config.useRecycleBin = ConvertToBooleanUseCase(value)
-                SHOW_RECYCLE_BIN_AT_FOLDERS -> config.showRecycleBinAtFolders = ConvertToBooleanUseCase(value)
+                SHOW_RECYCLE_BIN_AT_FOLDERS -> config.showRecycleBinAtFolders =
+                    ConvertToBooleanUseCase(value)
                 SHOW_RECYCLE_BIN_LAST -> config.showRecycleBinLast = ConvertToBooleanUseCase(value)
                 SORT_ORDER -> config.sorting = ConvertToIntUseCase(value)
                 DIRECTORY_SORT_ORDER -> config.directorySorting = ConvertToIntUseCase(value)
                 GROUP_BY -> config.groupBy = ConvertToIntUseCase(value)
-                GROUP_DIRECT_SUBFOLDERS -> config.groupDirectSubfolders = ConvertToBooleanUseCase(value)
-                PINNED_FOLDERS -> config.addPinnedFolders(value.toStringSet())
+                GROUP_DIRECT_SUBFOLDERS -> config.groupDirectSubfolders =
+                    ConvertToBooleanUseCase(value)
+                PINNED_FOLDERS -> config.addPinnedFolders(ConvertToStringSetUseCase(value))
                 DISPLAY_FILE_NAMES -> config.displayFileNames = ConvertToBooleanUseCase(value)
                 FILTER_MEDIA -> config.filterMedia = ConvertToIntUseCase(value)
                 DIR_COLUMN_CNT -> config.dirColumnCnt = ConvertToIntUseCase(value)
                 MEDIA_COLUMN_CNT -> config.mediaColumnCnt = ConvertToIntUseCase(value)
                 SHOW_ALL -> config.showAll = ConvertToBooleanUseCase(value)
-                SHOW_WIDGET_FOLDER_NAME -> config.showWidgetFolderName = ConvertToBooleanUseCase(value)
+                SHOW_WIDGET_FOLDER_NAME -> config.showWidgetFolderName =
+                    ConvertToBooleanUseCase(value)
                 VIEW_TYPE_FILES -> config.viewTypeFiles = ConvertToIntUseCase(value)
                 VIEW_TYPE_FOLDERS -> config.viewTypeFolders = ConvertToIntUseCase(value)
                 SLIDESHOW_INTERVAL -> config.slideshowInterval = ConvertToIntUseCase(value)
-                SLIDESHOW_INCLUDE_VIDEOS -> config.slideshowIncludeVideos = ConvertToBooleanUseCase(value)
-                SLIDESHOW_INCLUDE_GIFS -> config.slideshowIncludeGIFs = ConvertToBooleanUseCase(value)
-                SLIDESHOW_RANDOM_ORDER -> config.slideshowRandomOrder = ConvertToBooleanUseCase(value)
-                SLIDESHOW_MOVE_BACKWARDS -> config.slideshowMoveBackwards = ConvertToBooleanUseCase(value)
+                SLIDESHOW_INCLUDE_VIDEOS -> config.slideshowIncludeVideos =
+                    ConvertToBooleanUseCase(value)
+                SLIDESHOW_INCLUDE_GIFS -> config.slideshowIncludeGIFs =
+                    ConvertToBooleanUseCase(value)
+                SLIDESHOW_RANDOM_ORDER -> config.slideshowRandomOrder =
+                    ConvertToBooleanUseCase(value)
+                SLIDESHOW_MOVE_BACKWARDS -> config.slideshowMoveBackwards =
+                    ConvertToBooleanUseCase(value)
                 SLIDESHOW_LOOP -> config.loopSlideshow = ConvertToBooleanUseCase(value)
                 LAST_EDITOR_CROP_ASPECT_RATIO -> config.lastEditorCropAspectRatio =
                     ConvertToIntUseCase(value)
@@ -1184,7 +1197,8 @@ class SettingsActivity : SimpleActivity() {
                     value.toString().toFloat()
                 LAST_CONFLICT_RESOLUTION -> config.lastConflictResolution =
                     ConvertToIntUseCase(value)
-                LAST_CONFLICT_APPLY_TO_ALL -> config.lastConflictApplyToAll = ConvertToBooleanUseCase(value)
+                LAST_CONFLICT_APPLY_TO_ALL -> config.lastConflictApplyToAll =
+                    ConvertToBooleanUseCase(value)
                 EDITOR_BRUSH_COLOR -> config.editorBrushColor = ConvertToIntUseCase(value)
                 EDITOR_BRUSH_HARDNESS -> config.editorBrushHardness = value.toString().toFloat()
                 EDITOR_BRUSH_SIZE -> config.editorBrushSize = value.toString().toFloat()
