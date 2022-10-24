@@ -586,7 +586,24 @@ fun Activity.shareMediaPaths(paths: ArrayList<String>) {
 }
 
 fun Activity.setAs(path: String) {
-    setAsIntent(path, BuildConfig.APPLICATION_ID)
+    val applicationId = BuildConfig.APPLICATION_ID
+    RunOnBackgroundThreadUseCase {
+        val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
+        Intent().apply {
+            action = Intent.ACTION_ATTACH_DATA
+            setDataAndType(newUri, getUriMimeType(path, newUri))
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val chooser = Intent.createChooser(this, getString(R.string.set_as))
+
+            try {
+                startActivityForResult(chooser, REQUEST_SET_AS)
+            } catch (e: ActivityNotFoundException) {
+                ShowSafeToastUseCase(this@setAs, R.string.no_app_found)
+            } catch (e: Exception) {
+                ShowSafeToastUseCase(this@setAs, e.toString())
+            }
+        }
+    }
 }
 
 fun Activity.openPath(
@@ -1636,26 +1653,6 @@ fun Activity.scanPathRecursively(path: String, callback: (() -> Unit)? = null) {
 
 fun Activity.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = null) {
     applicationContext.scanPathsRecursively(paths, callback)
-}
-
-fun Activity.setAsIntent(path: String, applicationId: String) {
-    RunOnBackgroundThreadUseCase {
-        val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
-        Intent().apply {
-            action = Intent.ACTION_ATTACH_DATA
-            setDataAndType(newUri, getUriMimeType(path, newUri))
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            val chooser = Intent.createChooser(this, getString(R.string.set_as))
-
-            try {
-                startActivityForResult(chooser, REQUEST_SET_AS)
-            } catch (e: ActivityNotFoundException) {
-                ShowSafeToastUseCase(this@setAsIntent, R.string.no_app_found)
-            } catch (e: Exception) {
-                ShowSafeToastUseCase(this@setAsIntent, e.toString())
-            }
-        }
-    }
 }
 
 @SuppressLint("UseCompatLoadingForDrawables")
