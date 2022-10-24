@@ -14,7 +14,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.notificationManager
 import ca.on.sudbury.hojat.smartgallery.extensions.createDirectorySync
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
@@ -44,6 +43,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -135,7 +135,7 @@ class CopyMoveTask(
 
                 copy(file, newFileDirItem)
             } catch (e: Exception) {
-                activity.showErrorToast(e)
+                ShowSafeToastUseCase(activity, e.toString())
                 return false
             }
         }
@@ -218,7 +218,7 @@ class CopyMoveTask(
         if (!activity.createDirectorySync(destinationPath)) {
             val error =
                 String.format(activity.getString(R.string.could_not_create_folder), destinationPath)
-            activity.showErrorToast(error)
+            ShowSafeToastUseCase(activity, error)
             return
         }
 
@@ -296,7 +296,7 @@ class CopyMoveTask(
         if (!activity.createDirectorySync(directory)) {
             val error =
                 String.format(activity.getString(R.string.could_not_create_folder), directory)
-            activity.showErrorToast(error)
+            ShowSafeToastUseCase(activity, error)
             mCurrentProgress += source.size
             return
         }
@@ -353,7 +353,7 @@ class CopyMoveTask(
                 }
             }
         } catch (e: Exception) {
-            activity.showErrorToast(e)
+            ShowSafeToastUseCase(activity, e.toString())
         } finally {
             inputStream?.close()
             out?.close()

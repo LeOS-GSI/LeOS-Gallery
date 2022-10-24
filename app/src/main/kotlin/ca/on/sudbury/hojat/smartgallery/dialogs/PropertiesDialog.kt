@@ -41,7 +41,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoSlow
 import ca.on.sudbury.hojat.smartgallery.extensions.md5
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -267,7 +266,7 @@ class PropertiesDialog() {
             try {
                 addExifProperties(path, mActivity)
             } catch (e: Exception) {
-                mActivity.showErrorToast(e)
+                ShowSafeToastUseCase(mActivity, e.toString())
                 return
             }
 
@@ -429,7 +428,7 @@ class PropertiesDialog() {
                 mPropertyView.properties_holder.removeAllViews()
                 addProperties(path)
             } catch (e: Exception) {
-                mActivity.showErrorToast(e)
+                ShowSafeToastUseCase(mActivity, e.toString())
             }
         }
     }
@@ -443,7 +442,7 @@ class PropertiesDialog() {
                     }
                 ShowSafeToastUseCase(mActivity ,R.string.exif_removed)
             } catch (e: Exception) {
-                mActivity.showErrorToast(e)
+                ShowSafeToastUseCase(mActivity, e.toString())
             }
         }
     }

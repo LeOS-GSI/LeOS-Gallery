@@ -19,7 +19,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityPanoramaVideoBinding
@@ -174,7 +173,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
                 togglePlayPause()
             }
         } catch (e: Exception) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
 
         window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->

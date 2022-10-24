@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.ComponentName
 import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.content.Intent
@@ -28,7 +27,6 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -74,13 +72,10 @@ import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideloadedDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.UpgradeToProDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
-import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
@@ -144,7 +139,7 @@ private fun BaseSimpleActivity.renameCasually(
                             contentResolver.update(fileUris.first(), values, null, null)
                             callback?.invoke(true, Android30RenameFormat.NONE)
                         } catch (e: Exception) {
-                            showErrorToast(e)
+                            ShowSafeToastUseCase(this, e.toString())
                             callback?.invoke(false, Android30RenameFormat.NONE)
                         }
                     } else {
@@ -159,7 +154,7 @@ private fun BaseSimpleActivity.renameCasually(
             ) {
                 ShowSafeToastUseCase(this, R.string.cannot_rename_folder)
             } else {
-                showErrorToast(exception)
+                ShowSafeToastUseCase(this, exception.toString())
             }
             callback?.invoke(false, Android30RenameFormat.NONE)
         }
@@ -216,7 +211,7 @@ private fun BaseSimpleActivity.renameCasually(
                             val tempDestination = try {
                                 createTempFile(File(sourceFile.path)) ?: return@updateSDK30Uris
                             } catch (exception: Exception) {
-                                showErrorToast(exception)
+                                ShowSafeToastUseCase(this, exception.toString())
                                 callback?.invoke(false, Android30RenameFormat.NONE)
                                 return@updateSDK30Uris
                             }
@@ -266,7 +261,7 @@ private fun BaseSimpleActivity.renameCasually(
                         }
 
                     } catch (e: Exception) {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this, e.toString())
                         callback?.invoke(false, Android30RenameFormat.NONE)
                     }
                 }
@@ -289,7 +284,7 @@ private fun createCasualFileOutputStream(
     return try {
         FileOutputStream(targetFile)
     } catch (e: Exception) {
-        activity.showErrorToast(e)
+        ShowSafeToastUseCase(activity, e.toString())
         null
     }
 }
@@ -371,7 +366,7 @@ fun BaseSimpleActivity.getFileOutputStream(
                     try {
                         callback(applicationContext.contentResolver.openOutputStream(document.uri))
                     } catch (e: FileNotFoundException) {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this, e.toString())
                         callback(null)
                     }
                 } else {
@@ -471,7 +466,7 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
                 }
                 applicationContext.contentResolver.openOutputStream(uri)
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this, e.toString())
                 null
             }
         }
@@ -526,10 +521,10 @@ fun Activity.sharePathIntent(path: String, applicationId: String) {
                 if (e.cause is TransactionTooLargeException) {
                     ShowSafeToastUseCase(this@sharePathIntent, R.string.maximum_share_reached)
                 } else {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this@sharePathIntent, e.toString())
                 }
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this@sharePathIntent, e.toString())
             }
         }
     }
@@ -572,10 +567,10 @@ fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
                     if (e.cause is TransactionTooLargeException) {
                         ShowSafeToastUseCase(this@sharePathsIntent, R.string.maximum_share_reached)
                     } else {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this@sharePathsIntent, e.toString())
                     }
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this@sharePathsIntent, e.toString())
                 }
             }
         }
@@ -616,7 +611,7 @@ fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
     val uri = try {
         ensurePublicUri(path, applicationId)
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         return null
     }
 
@@ -766,7 +761,7 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
                         try {
                             startActivity(intent)
                         } catch (e: Exception) {
-                            showErrorToast(e)
+                            ShowSafeToastUseCase(this, e.toString())
                         }
                     }
                 } else {
@@ -818,7 +813,7 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
                 ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
             }
         } catch (e: Exception) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
         callback()
     }
@@ -833,7 +828,7 @@ fun BaseSimpleActivity.addNoMediaIntoMediaStore(path: String) {
         }
         contentResolver.insert(Files.getContentUri("external"), content)
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
     }
 }
 
@@ -964,7 +959,7 @@ fun BaseSimpleActivity.renameFile(
                 }
 
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this, e.toString())
                 runOnUiThread {
                     callback?.invoke(false, Android30RenameFormat.NONE)
                 }
@@ -1001,7 +996,7 @@ fun BaseSimpleActivity.renameFile(
                         }
                     }
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                     runOnUiThread {
                         callback?.invoke(false, Android30RenameFormat.NONE)
                     }
@@ -1035,7 +1030,7 @@ fun BaseSimpleActivity.renameFile(
                     } catch (ignored: FileNotFoundException) {
                         // FileNotFoundException is thrown in some weird cases, but renaming works just fine
                     } catch (e: Exception) {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this, e.toString())
                         callback?.invoke(false, Android30RenameFormat.NONE)
                         return@RunOnBackgroundThreadUseCase
                     }
@@ -1052,7 +1047,7 @@ fun BaseSimpleActivity.renameFile(
                     }
                 }
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this, e.toString())
                 runOnUiThread {
                     callback?.invoke(false, Android30RenameFormat.NONE)
                 }
@@ -1188,7 +1183,7 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
                         pathsCnt--
                     }
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                     return@RunOnBackgroundThreadUseCase
                 } finally {
                     inputStream?.close()
@@ -1212,7 +1207,7 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
                         }
                     }
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                     return@RunOnBackgroundThreadUseCase
                 }
             }
@@ -1293,7 +1288,7 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
                     File(destination).setLastModified(lastModified)
                 }
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this, e.toString())
             } finally {
                 inputStream?.close()
                 out?.close()
@@ -1476,7 +1471,7 @@ fun AppCompatActivity.fixDateTaken(
         }
     } catch (e: Exception) {
         if (showToasts) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
     }
 }
@@ -1534,7 +1529,7 @@ fun BaseSimpleActivity.saveRotatedImageToFile(
         }
     } catch (e: Exception) {
         if (showToasts) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
     } finally {
         tryDeleteFileDirItem(tmpFileDirItem, allowDeleteFolder = false, deleteFromDatabase = true)
@@ -1564,7 +1559,7 @@ fun Activity.tryRotateByExif(
     } catch (e: Exception) {
         // lets not show IOExceptions, rotating is saved just fine even with them
         if (showToasts && e !is IOException) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
         false
     }
@@ -1593,7 +1588,7 @@ fun BaseSimpleActivity.copyFile(source: String, destination: String) {
         inputStream = getFileInputStreamSync(source)
         inputStream!!.copyTo(out!!)
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
     } finally {
         inputStream?.close()
         out?.close()
@@ -1657,7 +1652,7 @@ fun Activity.setAsIntent(path: String, applicationId: String) {
             } catch (e: ActivityNotFoundException) {
                 ShowSafeToastUseCase(this@setAsIntent, R.string.no_app_found)
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this@setAsIntent, e.toString())
             }
         }
     }
@@ -1823,16 +1818,10 @@ fun Activity.setupDialogStuff(
     callback?.invoke()
 }
 
-fun Activity.showDonateOrUpgradeDialog() {
-    if (getCanAppBeUpgraded()) {
-        UpgradeToProDialog(this)
-    }
-}
-
 fun BaseSimpleActivity.showFileCreateError(path: String) {
     val error = String.format(getString(R.string.could_not_create_file), path)
     baseConfig.sdTreeUri = ""
-    showErrorToast(error)
+    ShowSafeToastUseCase(this, error)
 }
 
 @TargetApi(Build.VERSION_CODES.N)
@@ -1844,7 +1833,7 @@ fun Activity.showFileOnMap(path: String) {
             ExifInterface(path)
         }
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         return
     }
 
@@ -2167,7 +2156,7 @@ fun Activity.launchViewIntent(url: String) {
             } catch (e: ActivityNotFoundException) {
                 ShowSafeToastUseCase(this@launchViewIntent, R.string.no_browser_found)
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this@launchViewIntent, e.toString())
             }
         }
     }
@@ -2226,7 +2215,7 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
             } catch (e: ActivityNotFoundException) {
                 ShowSafeToastUseCase(this@openEditorIntent, R.string.no_app_found)
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this@openEditorIntent, e.toString())
             }
         }
     }
@@ -2267,7 +2256,7 @@ fun Activity.openPathIntent(
                     ShowSafeToastUseCase(this@openPathIntent, R.string.no_app_found)
                 }
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this@openPathIntent, e.toString())
             }
         }
     }
@@ -2413,7 +2402,7 @@ fun Activity.updateSharedTheme(sharedTheme: SharedTheme) {
             null
         )
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
     }
 }
 
@@ -2452,7 +2441,7 @@ fun BaseSimpleActivity.copySingleFileSdk30(source: FileDirItem, destination: Fil
     val directory = destination.getParentPath()
     if (!createDirectorySync(directory)) {
         val error = String.format(getString(R.string.could_not_create_folder), directory)
-        showErrorToast(error)
+        ShowSafeToastUseCase(this, error)
         return false
     }
 

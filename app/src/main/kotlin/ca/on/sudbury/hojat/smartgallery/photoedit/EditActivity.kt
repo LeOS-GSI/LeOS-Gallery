@@ -30,7 +30,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
@@ -361,7 +360,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 }
             }
         } catch (e: Exception) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
     }
 
@@ -685,7 +684,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                                 target: Target<Bitmap>?,
                                 isFirstResource: Boolean
                             ): Boolean {
-                                showErrorToast(e.toString())
+                                ShowSafeToastUseCase(this@EditActivity, e.toString())
                                 return false
                             }
 
@@ -700,7 +699,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                         .submit(thumbnailSize, thumbnailSize)
                         .get()
                 } catch (e: GlideException) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                     finish()
                     return@RunOnBackgroundThreadUseCase
                 }
@@ -874,7 +873,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                         outputStream = contentResolver.openOutputStream(saveUri)
                         inputStream.copyTo(outputStream!!)
                     } catch (e: Exception) {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this, e.toString())
                         return
                     } finally {
                         inputStream?.close()
@@ -969,7 +968,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 }
             }
         } catch (e: Exception) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         } catch (e: OutOfMemoryError) {
             ShowSafeToastUseCase(this, R.string.out_of_memory_error)
         }

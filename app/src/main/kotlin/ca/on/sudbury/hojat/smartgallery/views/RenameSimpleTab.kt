@@ -19,7 +19,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathsRecursively
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateInMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
@@ -203,7 +202,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                     }
                 } catch (e: Exception) {
                     activity.runOnUiThread {
-                        activity.showErrorToast(e)
+                        ShowSafeToastUseCase(activity, e.toString())
                         callback(false)
                     }
                 }

@@ -32,7 +32,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.queryCursor
 import ca.on.sudbury.hojat.smartgallery.extensions.normalizeString
@@ -45,6 +44,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.util.Locale
 import java.util.Calendar
@@ -248,7 +248,7 @@ class MediaFetcher(val context: Context) {
                 }
             }
         } catch (e: Exception) {
-            context.showErrorToast(e)
+            ShowSafeToastUseCase(context, e.toString())
         } finally {
             cursor?.close()
         }

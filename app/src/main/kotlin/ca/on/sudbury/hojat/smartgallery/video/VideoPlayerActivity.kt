@@ -52,7 +52,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityVideoPlayerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
@@ -72,6 +71,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -315,7 +315,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         try {
             fileDataSource.open(dataSpec)
         } catch (e: Exception) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
 
         val factory = DataSource.Factory { fileDataSource }

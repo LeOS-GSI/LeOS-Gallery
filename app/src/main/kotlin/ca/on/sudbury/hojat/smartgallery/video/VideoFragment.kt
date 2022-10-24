@@ -49,7 +49,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
@@ -69,6 +68,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.FAST_FORWARD_VIDEO_MS
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import kotlin.math.roundToInt
@@ -409,7 +409,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         try {
             fileDataSource.open(dataSpec)
         } catch (e: Exception) {
-            activity?.showErrorToast(e)
+            Timber.e(e.toString())
             return
         }
 

@@ -105,7 +105,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -166,7 +165,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         try {
             mPath = intent.getStringExtra(DIRECTORY) ?: ""
         } catch (e: Exception) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
             finish()
             return
         }

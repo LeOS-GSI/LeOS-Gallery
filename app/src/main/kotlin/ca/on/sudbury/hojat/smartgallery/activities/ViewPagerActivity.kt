@@ -146,7 +146,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
@@ -464,7 +463,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 mPath = intent.getStringExtra(PATH) ?: ""
                 mShowAll = config.showAll
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this, e.toString())
                 finish()
                 return
             }
@@ -1293,7 +1292,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         target: Target<Bitmap>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        showErrorToast(e?.localizedMessage ?: "")
+                        ShowSafeToastUseCase(this@ViewPagerActivity, e.toString())
                         return false
                     }
 
@@ -1357,7 +1356,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 } catch (e: OutOfMemoryError) {
                     ShowSafeToastUseCase(this, R.string.out_of_memory_error)
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                 }
             }
         }
@@ -1722,7 +1721,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         ShowSafeToastUseCase(this@ViewPagerActivity, R.string.no_app_found)
                     }
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this@ViewPagerActivity, e.toString())
                 }
             }
         }

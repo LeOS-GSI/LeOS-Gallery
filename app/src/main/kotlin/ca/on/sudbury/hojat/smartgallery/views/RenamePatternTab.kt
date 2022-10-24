@@ -21,7 +21,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathsRecursively
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateInMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
@@ -31,6 +30,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_rename_items_pattern.view.*
+import timber.log.Timber
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -125,7 +125,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
                             }
                         }
                     } catch (e: Exception) {
-                        activity?.showErrorToast(e)
+                        Timber.e(e.toString())
                     }
                 }
                 stopLooping = false
@@ -272,7 +272,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
                     }
                 } catch (e: Exception) {
                     activity.runOnUiThread {
-                        activity.showErrorToast(e)
+                        ShowSafeToastUseCase(activity, e.toString())
                         callback(false)
                     }
                 }

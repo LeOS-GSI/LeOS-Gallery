@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
@@ -1090,7 +1089,7 @@ class SettingsActivity : SimpleActivity() {
                     }
                     importedItems++
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                 }
             }
         }

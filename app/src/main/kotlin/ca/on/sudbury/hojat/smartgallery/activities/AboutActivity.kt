@@ -27,7 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getStoreUrl
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
@@ -209,7 +208,7 @@ class AboutActivity : BaseSimpleActivity() {
                 } catch (e: ActivityNotFoundException) {
                     ShowSafeToastUseCase(this, R.string.no_app_found)
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                 }
             }
         }

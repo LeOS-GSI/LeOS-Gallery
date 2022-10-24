@@ -48,7 +48,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.containsNoMedia
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
@@ -365,7 +364,7 @@ class DirectoryAdapter(
                                     )
                                     listener?.refreshItems()
                                 } catch (e: Exception) {
-                                    activity.showErrorToast(e)
+                                    ShowSafeToastUseCase(activity, e.toString())
                                 }
                             }
                         }

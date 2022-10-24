@@ -65,7 +65,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.removeBit
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.storeAndroidTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateOTGPathFromPartition
@@ -434,7 +433,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                         try {
                             startActivityForResult(this, requestCode)
                         } catch (e: Exception) {
-                            showErrorToast(e)
+                            ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
                         }
                     }
                 }
@@ -462,7 +461,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     try {
                         startActivityForResult(intent, requestCode)
                     } catch (e: Exception) {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
                     }
                 }
             } else {
@@ -501,7 +500,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     try {
                         startActivityForResult(intent, requestCode)
                     } catch (e: Exception) {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
                     }
                 }
             } else {
@@ -721,7 +720,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     MediaStore.createDeleteRequest(contentResolver, uris).intentSender
                 startIntentSenderForResult(deleteRequest, DELETE_FILE_SDK_30_HANDLER, null, 0, 0, 0)
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
             }
         } else {
             callback(false)
@@ -737,7 +736,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 val writeRequest = MediaStore.createWriteRequest(contentResolver, uris).intentSender
                 startIntentSenderForResult(writeRequest, UPDATE_FILE_SDK_30_HANDLER, null, 0, 0, 0)
             } catch (e: Exception) {
-                showErrorToast(e)
+                ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
             }
         } else {
             callback(false)
@@ -895,7 +894,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                                 }
                             }
                         } catch (e: Exception) {
-                            showErrorToast(e)
+                            ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
                         }
                     }
                 }
@@ -1077,7 +1076,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                             Toast.LENGTH_LONG
                         )
                     } catch (e: Exception) {
-                        showErrorToast(e)
+                        ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
                     }
                 }
             }
@@ -1147,7 +1146,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 } catch (e: ActivityNotFoundException) {
                     ShowSafeToastUseCase(this@BaseSimpleActivity, R.string.no_app_found)
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this@BaseSimpleActivity, e.toString())
                 }
             }
         }

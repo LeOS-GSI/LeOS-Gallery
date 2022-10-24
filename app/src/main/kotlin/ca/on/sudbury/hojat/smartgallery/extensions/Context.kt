@@ -44,7 +44,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
@@ -262,7 +261,7 @@ fun Context.createSAFDirectorySdk30(path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         false
     }
 }
@@ -284,7 +283,7 @@ fun Context.createSAFFileSdk30(path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         false
     }
 }
@@ -365,7 +364,7 @@ fun Context.queryCursor(
         }
     } catch (e: Exception) {
         if (showErrors) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         }
     }
 }
@@ -935,8 +934,6 @@ val Context.favoritesDB: FavoritesDao
 val Context.dateTakensDB: DateTakensDao
     get() = GalleryDatabase.getInstance(applicationContext).DateTakensDao()
 
-fun isAProApp() = true
-
 fun Context.isInDownloadDir(path: String): Boolean {
     if (path.startsWith(recycleBinPath)) {
         return false
@@ -1000,7 +997,7 @@ fun Context.launchActivityIntent(intent: Intent) {
     } catch (e: ActivityNotFoundException) {
         ShowSafeToastUseCase(this, R.string.no_app_found)
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
     }
 }
 
@@ -2063,7 +2060,7 @@ fun Context.deleteDocumentWithSAFSdk30(
 
     } catch (e: Exception) {
         callback?.invoke(false)
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
     }
 }
 
@@ -2872,7 +2869,7 @@ fun Context.renameAndroidSAFDocument(oldPath: String, newPath: String): Boolean 
             newPath.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         false
     }
 }
@@ -2888,7 +2885,7 @@ fun Context.renameDocumentSdk30(oldPath: String, newPath: String): Boolean {
             newPath.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         false
     }
 }
@@ -2959,13 +2956,13 @@ fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = 
 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath
 
-fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
-    ShowSafeToastUseCase(this, String.format(getString(R.string.error), msg), length)
-}
-
-fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
-    showErrorToast(exception.toString(), length)
-}
+//fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
+//    ShowSafeToastUseCase(this, String.format(getString(R.string.error), msg), length)
+//}
+//
+//fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
+//    showErrorToast(exception.toString(), length)
+//}
 
 fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
     val className =
@@ -3004,11 +3001,12 @@ fun Context.checkAppIconColor() {
                 toggleAppIconColor(appId, index, color, false)
             }
 
-        resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList()).forEachIndexed { index, color ->
-            if (baseConfig.appIconColor == color) {
-                toggleAppIconColor(appId, index, color, true)
+        resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
+            .forEachIndexed { index, color ->
+                if (baseConfig.appIconColor == color) {
+                    toggleAppIconColor(appId, index, color, true)
+                }
             }
-        }
     }
 }
 
@@ -3157,7 +3155,7 @@ fun Context.deleteAndroidSAFDirectory(
             )
         callback?.invoke(fileDeleted)
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         callback?.invoke(false)
         storeAndroidTreeUri(path, "")
     }
@@ -3253,7 +3251,7 @@ fun Context.getOTGItems(
     var rootUri = try {
         DocumentFile.fromTreeUri(applicationContext, Uri.parse(otgTreeUri))
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         baseConfig.OTGPath = ""
         baseConfig.OTGTreeUri = ""
         baseConfig.OTGPartition = ""
@@ -3328,7 +3326,7 @@ fun Context.getAndroidSAFFileItems(
     val childrenUri = try {
         DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         storeAndroidTreeUri(path, "")
         null
     }
@@ -3390,7 +3388,7 @@ fun Context.getAndroidSAFFileItems(
             }
         }
     } catch (e: Exception) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
     }
     callback(items)
 }
@@ -3497,7 +3495,7 @@ fun Context.createAndroidSAFDirectory(path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         false
     }
 }
@@ -3519,7 +3517,7 @@ fun Context.createAndroidSAFFile(path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        showErrorToast(e)
+        ShowSafeToastUseCase(this, e.toString())
         false
     }
 }

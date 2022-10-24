@@ -92,7 +92,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.movePinnedDirectoriesToFront
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.removeInvalidDBDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.storeDirectoryItems
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
@@ -833,7 +832,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                         )
                     )
                 } catch (e: Exception) {
-                    showErrorToast(e)
+                    ShowSafeToastUseCase(this, e.toString())
                 }
             }
             else -> {
@@ -1110,7 +1109,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             outputStream = contentResolver.openOutputStream(output)
             inputStream.copyTo(outputStream!!)
         } catch (e: SecurityException) {
-            showErrorToast(e)
+            ShowSafeToastUseCase(this, e.toString())
         } catch (ignored: FileNotFoundException) {
             return getFilePublicUri(file, BuildConfig.APPLICATION_ID)
         } finally {

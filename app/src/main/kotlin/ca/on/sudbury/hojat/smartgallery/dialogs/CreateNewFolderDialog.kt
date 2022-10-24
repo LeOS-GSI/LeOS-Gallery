@@ -15,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.createSAFDirectorySdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
-import ca.on.sudbury.hojat.smartgallery.extensions.showErrorToast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
@@ -97,7 +96,7 @@ class CreateNewFolderDialog(
                                 ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
                             }
                         } catch (e: SecurityException) {
-                            activity.showErrorToast(e)
+                            ShowSafeToastUseCase(activity, e.toString())
                         }
                     }
                 }
@@ -118,7 +117,7 @@ class CreateNewFolderDialog(
                 )
             }
         } catch (e: Exception) {
-            activity.showErrorToast(e)
+            ShowSafeToastUseCase(activity, e.toString())
         }
     }
 
