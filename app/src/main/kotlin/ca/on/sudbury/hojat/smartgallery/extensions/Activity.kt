@@ -317,58 +317,6 @@ private fun deleteRecursively(file: File): Boolean {
     return file.delete()
 }
 
-
-fun Activity.appLaunched(appId: String) {
-    baseConfig.internalStoragePath = getRealInternalStoragePath()
-    updateSDCardPath()
-    baseConfig.appId = appId
-    if (baseConfig.appRunCount == 0) {
-        baseConfig.wasOrangeIconChecked = true
-        checkAppIconColor()
-    } else if (!baseConfig.wasOrangeIconChecked) {
-        baseConfig.wasOrangeIconChecked = true
-        val primaryColor = resources.getColor(R.color.color_primary)
-        if (baseConfig.appIconColor != primaryColor) {
-            resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
-                .forEachIndexed { index, color ->
-                    toggleAppIconColor(appId, index, color, false)
-                }
-
-            val defaultClassName =
-                "${baseConfig.appId.removeSuffix(".debug")}.activities.SplashActivity"
-            packageManager.setComponentEnabledSetting(
-                ComponentName(baseConfig.appId, defaultClassName),
-                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-                PackageManager.DONT_KILL_APP
-            )
-
-            val orangeClassName =
-                "${baseConfig.appId.removeSuffix(".debug")}.activities.SplashActivity.Orange"
-            packageManager.setComponentEnabledSetting(
-                ComponentName(baseConfig.appId, orangeClassName),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP
-            )
-
-            baseConfig.appIconColor = primaryColor
-            baseConfig.lastIconColor = primaryColor
-        }
-    }
-
-    baseConfig.appRunCount++
-
-    if (baseConfig.appRunCount % 40 == 0 && !baseConfig.wasAppRated) {
-        if (!resources.getBoolean(R.bool.hide_google_relations)) {
-            RateStarsDialog(this)
-        }
-    }
-
-    if (baseConfig.navigationBarColor == INVALID_NAVIGATION_BAR_COLOR && (window.attributes.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN == 0)) {
-        baseConfig.defaultNavigationBarColor = window.navigationBarColor
-        baseConfig.navigationBarColor = window.navigationBarColor
-    }
-}
-
 fun Activity.getAlertDialogBuilder() = if (baseConfig.isUsingSystemTheme) {
     MaterialAlertDialogBuilder(this)
 } else {

@@ -3,8 +3,10 @@ package ca.on.sudbury.hojat.smartgallery.activities
 import android.app.Activity
 import android.app.SearchManager
 import android.content.ClipData
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +16,7 @@ import android.provider.MediaStore.Video
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -32,7 +35,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
-import ca.on.sudbury.hojat.smartgallery.extensions.appLaunched
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -140,6 +142,13 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
+import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
+import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
+import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
+import ca.on.sudbury.hojat.smartgallery.extensions.updateSDCardPath
+import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
@@ -203,7 +212,59 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        appLaunched(BuildConfig.APPLICATION_ID)
+
+        // all the necessary warm-up operations in the MainActivity
+        val appId = BuildConfig.APPLICATION_ID
+
+        baseConfig.internalStoragePath = getRealInternalStoragePath()
+        updateSDCardPath()
+        baseConfig.appId = appId
+        if (baseConfig.appRunCount == 0) {
+            baseConfig.wasOrangeIconChecked = true
+            checkAppIconColor()
+        } else if (!baseConfig.wasOrangeIconChecked) {
+            baseConfig.wasOrangeIconChecked = true
+            val primaryColor = resources.getColor(R.color.color_primary)
+            if (baseConfig.appIconColor != primaryColor) {
+                resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
+                    .forEachIndexed { index, color ->
+                        toggleAppIconColor(appId, index, color, false)
+                    }
+
+                val defaultClassName =
+                    "${baseConfig.appId.removeSuffix(".debug")}.activities.SplashActivity"
+                packageManager.setComponentEnabledSetting(
+                    ComponentName(baseConfig.appId, defaultClassName),
+                    PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+                    PackageManager.DONT_KILL_APP
+                )
+
+                val orangeClassName =
+                    "${baseConfig.appId.removeSuffix(".debug")}.activities.SplashActivity.Orange"
+                packageManager.setComponentEnabledSetting(
+                    ComponentName(baseConfig.appId, orangeClassName),
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+
+                baseConfig.appIconColor = primaryColor
+                baseConfig.lastIconColor = primaryColor
+            }
+        }
+
+        baseConfig.appRunCount++
+
+        if (baseConfig.appRunCount % 40 == 0 && !baseConfig.wasAppRated) {
+            if (!resources.getBoolean(R.bool.hide_google_relations)) {
+                RateStarsDialog(this)
+            }
+        }
+
+        if (baseConfig.navigationBarColor == INVALID_NAVIGATION_BAR_COLOR && (window.attributes.flags and WindowManager.LayoutParams.FLAG_FULLSCREEN == 0)) {
+            baseConfig.defaultNavigationBarColor = window.navigationBarColor
+            baseConfig.navigationBarColor = window.navigationBarColor
+        }
+
 
         if (savedInstanceState == null) {
             config.temporarilyShowHidden = false
