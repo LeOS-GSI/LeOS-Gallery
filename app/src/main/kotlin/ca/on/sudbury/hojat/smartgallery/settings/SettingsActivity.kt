@@ -146,7 +146,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToBooleanUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToIntUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToStringSetUseCase
@@ -262,7 +262,7 @@ class SettingsActivity : SimpleActivity() {
             binding.settingsRecycleBinHolder,
             binding.settingsMigratingHolder
         ).forEach {
-            ApplyColorToDrawableUseCase(
+            ApplyColorFilterUseCase(
                 it.background,
                 getProperBackgroundColor().getContrastColor()
             )

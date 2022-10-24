@@ -97,7 +97,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FileConflictDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog.Mode
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
@@ -110,6 +109,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseC
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -1187,7 +1187,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
         searchMenuItem?.actionView?.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
             ?.apply {
-                applyColorFilter(contrastColor)
+                ApplyColorFilterUseCase(this, contrastColor)
             }
 
         searchMenuItem?.actionView?.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)

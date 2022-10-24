@@ -38,7 +38,7 @@ import ca.on.sudbury.hojat.smartgallery.models.MyTheme
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlin.math.abs
 
@@ -589,7 +589,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         } else {
             val applyBackground =
                 resources.getDrawable(R.drawable.button_background_rounded, theme) as RippleDrawable
-            ApplyColorToDrawableUseCase((applyBackground as LayerDrawable).findDrawableByLayerId(R.id.button_background_holder), newColor)
+            ApplyColorFilterUseCase((applyBackground as LayerDrawable).findDrawableByLayerId(R.id.button_background_holder), newColor)
             binding.applyToAll.background = applyBackground
         }
     }

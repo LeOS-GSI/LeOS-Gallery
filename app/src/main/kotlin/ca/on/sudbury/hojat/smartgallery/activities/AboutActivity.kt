@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import androidx.core.net.toUri
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -40,7 +39,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 class AboutActivity : BaseSimpleActivity() {
@@ -80,7 +79,7 @@ class AboutActivity : BaseSimpleActivity() {
             binding.aboutWebsiteIcon,
             binding.aboutVersionIcon
         ).forEach { imageview ->
-            imageview.applyColorFilter(textColor)
+            ApplyColorFilterUseCase(imageview, textColor)
         }
 
         arrayOf(
@@ -98,7 +97,7 @@ class AboutActivity : BaseSimpleActivity() {
             binding.aboutSocialHolder,
             binding.aboutOtherHolder
         ).forEach { linearLayout ->
-            ApplyColorToDrawableUseCase(linearLayout.background, backgroundColor.getContrastColor())
+            ApplyColorFilterUseCase(linearLayout.background, backgroundColor.getContrastColor())
 
         }
     }

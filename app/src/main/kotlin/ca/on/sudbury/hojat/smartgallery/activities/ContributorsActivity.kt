@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.Menu
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -16,7 +15,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityContributorsBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 
 class ContributorsActivity : BaseSimpleActivity() {
 
@@ -46,14 +45,14 @@ class ContributorsActivity : BaseSimpleActivity() {
             removeUnderlines()
         }
 
-        binding.contributorsDevelopmentIcon.applyColorFilter(textColor)
-        binding.contributorsFooterIcon.applyColorFilter(textColor)
+        ApplyColorFilterUseCase(binding.contributorsDevelopmentIcon, textColor)
+        ApplyColorFilterUseCase(binding.contributorsFooterIcon, textColor)
 
         arrayOf(
             binding.contributorsDevelopmentHolder,
             binding.contributorsTranslationHolder
         ).forEach {
-            ApplyColorToDrawableUseCase(it.background, backgroundColor.getContrastColor())
+            ApplyColorFilterUseCase(it.background, backgroundColor.getContrastColor())
         }
 
         if (resources.getBoolean(R.bool.hide_all_external_links)) {

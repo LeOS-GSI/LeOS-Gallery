@@ -6,13 +6,13 @@ import android.widget.RelativeLayout
 import androidx.biometric.auth.AuthPromptHost
 import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.performHapticFeedback
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_pin.view.*
 import java.math.BigInteger
@@ -23,7 +23,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
     private var hash = ""
     private var requiredHash = ""
     private var pin = ""
-    lateinit var hashListener: HashListener
+    private lateinit var hashListener: HashListener
 
     override fun onFinishInflate() {
         super.onFinishInflate()
@@ -41,7 +41,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
         pin_9.setOnClickListener { addNumber("9") }
         pin_c.setOnClickListener { clear() }
         pin_ok.setOnClickListener { confirmPIN() }
-        pin_ok.applyColorFilter(context.getProperTextColor())
+        ApplyColorFilterUseCase(pin_ok, context.getProperTextColor())
     }
 
     override fun initTab(

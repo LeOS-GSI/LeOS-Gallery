@@ -13,7 +13,6 @@ import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -21,6 +20,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.interfaces.MyActionModeCallback
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 
 abstract class MyRecyclerViewAdapter(
@@ -109,7 +109,7 @@ abstract class MyRecyclerViewAdapter(
                     actBarTextView?.onGlobalLayout {
                         val backArrow =
                             activity.findViewById<ImageView>(R.id.action_mode_close_button)
-                        backArrow?.applyColorFilter(bgColor.getContrastColor())
+                        ApplyColorFilterUseCase(backArrow, bgColor.getContrastColor())
                     }
                 }
                 return true

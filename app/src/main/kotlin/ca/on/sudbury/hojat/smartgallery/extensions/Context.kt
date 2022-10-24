@@ -2627,7 +2627,7 @@ fun Context.updateTextColors(viewGroup: ViewGroup) {
             is MyAppCompatCheckbox -> it.setColors(textColor, accentColor)
             is MyEditText -> it.setColors(textColor, accentColor)
             is MyAutoCompleteTextView -> it.setColors(textColor, accentColor)
-            is MyFloatingActionButton -> it.setColors(textColor, accentColor, backgroundColor)
+            is MyFloatingActionButton -> it.setColors(accentColor)
             is MySeekBar -> it.setColors(accentColor)
             is MyButton -> it.setColors(textColor, accentColor, backgroundColor)
             is MyTextInputLayout -> it.setColors(textColor, accentColor)

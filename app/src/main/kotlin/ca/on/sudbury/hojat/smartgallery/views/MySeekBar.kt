@@ -4,7 +4,7 @@ package ca.on.sudbury.hojat.smartgallery.views
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatSeekBar
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 
 class MySeekBar : AppCompatSeekBar {
     constructor(context: Context) : super(context)
@@ -18,7 +18,7 @@ class MySeekBar : AppCompatSeekBar {
     )
 
     fun setColors(accentColor: Int) {
-        ApplyColorToDrawableUseCase(progressDrawable, accentColor)
-        ApplyColorToDrawableUseCase(thumb, accentColor)
+        ApplyColorFilterUseCase(progressDrawable, accentColor)
+        ApplyColorFilterUseCase(thumb, accentColor)
     }
 }

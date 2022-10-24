@@ -38,7 +38,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
@@ -76,6 +75,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_OTHER
 import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.zomato.photofilters.FilterPack
@@ -652,8 +652,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             binding.bottomEditorPrimaryActions.bottomPrimaryFilter,
             binding.bottomEditorPrimaryActions.bottomPrimaryCropRotate,
             binding.bottomEditorPrimaryActions.bottomPrimaryDraw
-        ).forEach {
-            it.applyColorFilter(Color.WHITE)
+        ).forEach { imageView ->
+            ApplyColorFilterUseCase(imageView, Color.WHITE)
         }
 
         val currentPrimaryActionButton = when (currPrimaryAction) {
@@ -663,7 +663,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             else -> null
         }
 
-        currentPrimaryActionButton?.applyColorFilter(getProperPrimaryColor())
+        ApplyColorFilterUseCase(currentPrimaryActionButton, getProperPrimaryColor())
         binding.bottomEditorFilterActions.root.beVisibleIf(currPrimaryAction == PRIMARY_ACTION_FILTER)
         binding.bottomEditorCropRotateActions.root.beVisibleIf(currPrimaryAction == PRIMARY_ACTION_CROP_ROTATE)
         binding.bottomEditorDrawActions.root.beVisibleIf(currPrimaryAction == PRIMARY_ACTION_DRAW)
@@ -797,8 +797,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     }
 
     private fun updateCropRotateActionButtons() {
-        arrayOf(binding.bottomEditorCropRotateActions.bottomAspectRatio).forEach {
-            it.applyColorFilter(Color.WHITE)
+        arrayOf(binding.bottomEditorCropRotateActions.bottomAspectRatio).forEach { imageView ->
+            ApplyColorFilterUseCase(imageView, Color.WHITE)
         }
 
         val primaryActionView = when (currCropRotateAction) {
@@ -806,12 +806,12 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             else -> null
         }
 
-        primaryActionView?.applyColorFilter(getProperPrimaryColor())
+        ApplyColorFilterUseCase(primaryActionView, getProperPrimaryColor())
     }
 
     private fun updateDrawColor(color: Int) {
         drawColor = color
-        binding.bottomEditorDrawActions.bottomDrawColor.applyColorFilter(color)
+        ApplyColorFilterUseCase(binding.bottomEditorDrawActions.bottomDrawColor, color)
         config.lastEditorDrawColor = color
         binding.editorDrawCanvas.updateColor(color)
     }

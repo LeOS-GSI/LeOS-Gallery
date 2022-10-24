@@ -34,7 +34,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
@@ -100,7 +99,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
@@ -894,8 +893,8 @@ class DirectoryAdapter(
 
             dir_check?.beVisibleIf(isSelected)
             if (isSelected) {
-                ApplyColorToDrawableUseCase(dir_check.background, properPrimaryColor)
-                dir_check.applyColorFilter(contrastColor)
+                ApplyColorFilterUseCase(dir_check.background, properPrimaryColor)
+                ApplyColorFilterUseCase(dir_check, contrastColor)
             }
 
             if (isListViewType) {
@@ -926,7 +925,10 @@ class DirectoryAdapter(
             if (lockedFolderPaths.contains(directory.path)) {
                 dir_lock.beVisible()
                 dir_lock.background = ColorDrawable(context.getProperBackgroundColor())
-                dir_lock.applyColorFilter(context.getProperBackgroundColor().getContrastColor())
+                ApplyColorFilterUseCase(
+                    dir_lock,
+                    context.getProperBackgroundColor().getContrastColor()
+                )
             } else {
                 dir_lock.beGone()
                 val roundedCorners = when {
@@ -977,20 +979,20 @@ class DirectoryAdapter(
             if (isListViewType || folderStyle == FOLDER_STYLE_ROUNDED_CORNERS) {
                 photo_cnt.setTextColor(textColor)
                 dir_name.setTextColor(textColor)
-                dir_location.applyColorFilter(textColor)
+                ApplyColorFilterUseCase(dir_location, textColor)
             }
 
             if (isListViewType) {
                 dir_path.setTextColor(textColor)
-                dir_pin.applyColorFilter(textColor)
-                dir_location.applyColorFilter(textColor)
+                ApplyColorFilterUseCase(dir_pin, textColor)
+                ApplyColorFilterUseCase(dir_location, textColor)
                 dir_drag_handle.beVisibleIf(isDragAndDropping)
             } else {
                 dir_drag_handle_wrapper.beVisibleIf(isDragAndDropping)
             }
 
             if (isDragAndDropping) {
-                dir_drag_handle.applyColorFilter(textColor)
+                ApplyColorFilterUseCase(dir_drag_handle, textColor)
                 dir_drag_handle.setOnTouchListener { _, event ->
                     if (event.action == MotionEvent.ACTION_DOWN) {
                         startReorderDragListener?.requestDrag(holder)

@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatSpinner
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.MyArrayAdapter
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 
 class MyAppCompatSpinner : AppCompatSpinner {
     constructor(context: Context) : super(context)
@@ -59,6 +59,6 @@ class MyAppCompatSpinner : AppCompatSpinner {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-        ApplyColorToDrawableUseCase(background, textColor)
+        ApplyColorFilterUseCase(background, textColor)
     }
 }

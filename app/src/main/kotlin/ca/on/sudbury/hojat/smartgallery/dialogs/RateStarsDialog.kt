@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -10,6 +9,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRateStarsBinding
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 
@@ -24,7 +24,7 @@ class RateStarsDialog(val activity: Activity) {
         val binding = DialogRateStarsBinding.inflate(activity.layoutInflater).apply {
             val primaryColor = activity.getProperPrimaryColor()
             arrayOf(rateStar1, rateStar2, rateStar3, rateStar4, rateStar5).forEach {
-                it.applyColorFilter(primaryColor)
+                ApplyColorFilterUseCase(it, primaryColor)
             }
 
             rateStar1.setOnClickListener { dialogCancelled(true) }

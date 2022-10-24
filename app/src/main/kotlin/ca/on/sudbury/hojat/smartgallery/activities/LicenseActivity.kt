@@ -48,7 +48,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityLicenseBinding
 import ca.on.sudbury.hojat.smartgallery.databinding.ItemLicenseBinding
 import ca.on.sudbury.hojat.smartgallery.models.License
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 
 class LicenseActivity : BaseSimpleActivity() {
 
@@ -76,7 +76,7 @@ class LicenseActivity : BaseSimpleActivity() {
         licenses.filter { licenseMask and it.id.toInt() != 0 }.forEach { license ->
 
             ItemLicenseBinding.inflate(inflater).apply {
-                ApplyColorToDrawableUseCase(root.background, backgroundColor.getContrastColor())
+                ApplyColorFilterUseCase(root.background, backgroundColor.getContrastColor())
                 licenseTitle.apply {
                     text = getString(license.titleId)
                     setTextColor(primaryColor)

@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
-import android.graphics.PorterDuff
 import android.graphics.drawable.GradientDrawable
 import android.widget.ImageView
 
@@ -22,4 +21,3 @@ fun ImageView.setFillWithStroke(
     }
 }
 
-fun ImageView.applyColorFilter(color: Int) = setColorFilter(color, PorterDuff.Mode.SRC_IN)

@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 
 class MyFloatingActionButton : FloatingActionButton {
     constructor(context: Context) : super(context)
@@ -19,8 +19,8 @@ class MyFloatingActionButton : FloatingActionButton {
         defStyle
     )
 
-    fun setColors(textColor: Int, accentColor: Int, backgroundColor: Int) {
+    fun setColors(accentColor: Int) {
         backgroundTintList = ColorStateList.valueOf(accentColor)
-        applyColorFilter(accentColor.getContrastColor())
+        ApplyColorFilterUseCase(this, accentColor.getContrastColor())
     }
 }

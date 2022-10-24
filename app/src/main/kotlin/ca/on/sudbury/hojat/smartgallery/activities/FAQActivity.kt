@@ -19,7 +19,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_FAQ
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 
 class FAQActivity : BaseSimpleActivity() {
 
@@ -45,7 +45,7 @@ class FAQActivity : BaseSimpleActivity() {
         faqItems.forEach { faqItem ->
 
             ItemFaqBinding.inflate(inflater).apply {
-                ApplyColorToDrawableUseCase(root.background, backgroundColor.getContrastColor())
+                ApplyColorFilterUseCase(root.background, backgroundColor.getContrastColor())
                 this.faqTitle.apply {
                     text =
                         if (faqItem.title is Int) getString(faqItem.title) else faqItem.title as String

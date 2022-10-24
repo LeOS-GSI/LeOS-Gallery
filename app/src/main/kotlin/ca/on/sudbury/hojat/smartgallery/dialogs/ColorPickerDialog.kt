@@ -12,7 +12,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintHelper
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
@@ -27,6 +26,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogColorPickerBinding
 import ca.on.hojat.palette.views.ColorPickerSquare
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import java.util.LinkedList
 
 private const val RECENT_COLORS_NUMBER = 5
@@ -165,9 +165,9 @@ class ColorPickerDialog(
         builder.apply {
             activity.setupDialogStuff(binding.root, this) { alertDialog ->
                 dialog = alertDialog
-                binding.colorPickerArrow.applyColorFilter(textColor)
-                binding.colorPickerHexArrow.applyColorFilter(textColor)
-                viewCursor.applyColorFilter(textColor)
+                ApplyColorFilterUseCase(binding.colorPickerArrow, textColor)
+                ApplyColorFilterUseCase(binding.colorPickerHexArrow, textColor)
+                ApplyColorFilterUseCase(viewCursor, textColor)
             }
         }
 

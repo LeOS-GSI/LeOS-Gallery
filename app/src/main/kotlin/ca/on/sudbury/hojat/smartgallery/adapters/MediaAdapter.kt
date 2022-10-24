@@ -81,7 +81,7 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -722,8 +722,8 @@ class MediaAdapter(
             medium_check?.beVisibleIf(isSelected)
             if (isSelected) {
 
-                ApplyColorToDrawableUseCase(medium_check?.background, properPrimaryColor)
-                medium_check.applyColorFilter(contrastColor)
+                ApplyColorFilterUseCase(medium_check?.background, properPrimaryColor)
+                ApplyColorFilterUseCase(medium_check, contrastColor)
             }
 
             if (isListViewType) {
@@ -776,7 +776,7 @@ class MediaAdapter(
 
             if (isListViewType) {
                 medium_name.setTextColor(textColor)
-                play_portrait_outline?.applyColorFilter(textColor)
+                ApplyColorFilterUseCase(play_portrait_outline, textColor)
             }
         }
     }

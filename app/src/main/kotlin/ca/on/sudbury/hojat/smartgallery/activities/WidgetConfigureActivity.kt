@@ -33,7 +33,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.Widget
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 class WidgetConfigureActivity : SimpleActivity() {
@@ -169,7 +169,7 @@ class WidgetConfigureActivity : SimpleActivity() {
 
     private fun updateBackgroundColor() {
         mBgColor = mBgColorWithoutTransparency.adjustAlpha(mBgAlpha)
-        ApplyColorToDrawableUseCase(binding.configImageHolder.background, mBgColor)
+        ApplyColorFilterUseCase(binding.configImageHolder.background, mBgColor)
         binding.configBgColor.setFillWithStroke(mBgColor, mBgColor)
         binding.configSave.backgroundTintList = ColorStateList.valueOf(getProperPrimaryColor())
     }

@@ -21,7 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorToDrawableUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import kotlinx.android.synthetic.main.item_breadcrumb.view.*
 
 class Breadcrumbs(context: Context, attrs: AttributeSet) : HorizontalScrollView(context, attrs) {
@@ -198,7 +198,7 @@ class Breadcrumbs(context: Context, attrs: AttributeSet) : HorizontalScrollView(
                 resources.apply {
                     breadcrumb_text.background =
                         ContextCompat.getDrawable(context, R.drawable.button_background)
-                    ApplyColorToDrawableUseCase(breadcrumb_text.background, textColor)
+                    ApplyColorFilterUseCase(breadcrumb_text.background, textColor)
                     elevation = 1f
                     background = ColorDrawable(firstItemBgColor)
                     val medium = getDimension(R.dimen.medium_margin).toInt()

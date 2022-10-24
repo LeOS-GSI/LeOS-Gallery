@@ -12,13 +12,13 @@ import ca.on.hojat.fingerprint.core.AuthenticationListener
 import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
+import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_fingerprint.view.*
 
@@ -33,7 +33,7 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
         super.onFinishInflate()
         val textColor = context.getProperTextColor()
         context.updateTextColors(fingerprint_lock_holder)
-        fingerprint_image.applyColorFilter(textColor)
+        ApplyColorFilterUseCase(fingerprint_image, textColor)
 
         fingerprint_settings.setOnClickListener {
             context.startActivity(Intent(Settings.ACTION_SETTINGS))
@@ -77,8 +77,14 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
                 errorCode: Int
             ) {
                 when (failureReason) {
-                    AuthenticationFailureReason.AUTHENTICATION_FAILED -> ShowSafeToastUseCase(context ,R.string.authentication_failed)
-                    AuthenticationFailureReason.LOCKED_OUT -> ShowSafeToastUseCase(context ,R.string.authentication_blocked)
+                    AuthenticationFailureReason.AUTHENTICATION_FAILED -> ShowSafeToastUseCase(
+                        context,
+                        R.string.authentication_failed
+                    )
+                    AuthenticationFailureReason.LOCKED_OUT -> ShowSafeToastUseCase(
+                        context,
+                        R.string.authentication_blocked
+                    )
                 }
             }
         })
