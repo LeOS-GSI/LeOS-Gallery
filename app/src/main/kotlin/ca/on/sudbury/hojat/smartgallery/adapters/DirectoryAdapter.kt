@@ -70,7 +70,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.tryCopyMoveFilesTo
 import ca.on.sudbury.hojat.smartgallery.extensions.fixDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.getShortcutImage
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
-import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.loadImage
 import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
@@ -360,11 +359,11 @@ class DirectoryAdapter(
                                 try {
                                     GalleryDatabase.getInstance(activity.applicationContext)
                                         .DirectoryDao().updateDirectoryAfterRename(
-                                        firstDir.tmb,
-                                        firstDir.name,
-                                        firstDir.path,
-                                        sourcePath
-                                    )
+                                            firstDir.tmb,
+                                            firstDir.name,
+                                            firstDir.path,
+                                            sourcePath
+                                        )
                                     listener?.refreshItems()
                                 } catch (e: Exception) {
                                     ShowSafeToastUseCase(activity, e.toString())
@@ -766,7 +765,8 @@ class DirectoryAdapter(
                         } else {
                             RunOnBackgroundThreadUseCase {
                                 activity.mediaDB.clearFavorites()
-                                activity.favoritesDB.clearFavorites()
+                                GalleryDatabase.getInstance(activity.applicationContext)
+                                    .FavoritesDao().clearFavorites()
                                 listener?.refreshItems()
                             }
                         }

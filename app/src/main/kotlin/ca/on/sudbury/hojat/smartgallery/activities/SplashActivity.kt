@@ -1,8 +1,8 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.content.Intent
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoriteFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.models.Favorite
@@ -27,7 +27,8 @@ class SplashActivity : BaseSplashActivity() {
                     favoritePaths.forEach {
                         favorites.add(getFavoriteFromPath(it))
                     }
-                    favoritesDB.insertAll(favorites)
+                    GalleryDatabase.getInstance(applicationContext).FavoritesDao()
+                        .insertAll(favorites)
 
                     runOnUiThread {
                         launchActivity()

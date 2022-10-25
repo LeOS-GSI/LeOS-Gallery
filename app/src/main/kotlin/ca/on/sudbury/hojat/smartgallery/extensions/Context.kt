@@ -56,8 +56,6 @@ import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.database.DateTakensDao
-import ca.on.sudbury.hojat.smartgallery.database.DirectoryDao
-import ca.on.sudbury.hojat.smartgallery.database.FavoritesDao
 import ca.on.sudbury.hojat.smartgallery.database.MediumDao
 import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
@@ -903,9 +901,6 @@ val Context.newNavigationBarHeight: Int
         }
         return navigationBarHeight
     }
-
-val Context.favoritesDB: FavoritesDao
-    get() = GalleryDatabase.getInstance(applicationContext).FavoritesDao()
 
 val Context.dateTakensDB: DateTakensDao
     get() = GalleryDatabase.getInstance(applicationContext).DateTakensDao()
@@ -1757,7 +1752,8 @@ fun Context.getCachedDirectories(
         }
 
         val directories = try {
-            GalleryDatabase.getInstance(applicationContext).DirectoryDao().getAll() as ArrayList<Directory>
+            GalleryDatabase.getInstance(applicationContext).DirectoryDao()
+                .getAll() as ArrayList<Directory>
         } catch (e: Exception) {
             ArrayList()
         }
@@ -1914,7 +1910,8 @@ fun Context.getCachedMedia(
                         mediaDB.deleteMedia(*mediaToDelete.toTypedArray())
 
                         mediaToDelete.filter { it.isFavorite }.forEach {
-                            favoritesDB.deleteFavoritePath(it.path)
+                            GalleryDatabase.getInstance(applicationContext).FavoritesDao()
+                                .deleteFavoritePath(it.path)
                         }
                     } catch (ignored: Exception) {
                     }
@@ -1926,7 +1923,8 @@ fun Context.getCachedMedia(
 }
 
 fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
-    val dirsToCheck = dirs ?: GalleryDatabase.getInstance(applicationContext).DirectoryDao().getAll()
+    val dirsToCheck =
+        dirs ?: GalleryDatabase.getInstance(applicationContext).DirectoryDao().getAll()
     val otgPath = config.OTGPath
     dirsToCheck.filter {
         !it.areFavorites() && !it.isRecycleBin() && !getDoesFilePathExist(
@@ -1987,7 +1985,8 @@ fun Context.updateDBMediaPath(oldPath: String, newPath: String) {
     val newParentPath = newPath.getParentPath()
     try {
         mediaDB.updateMedium(newFilename, newPath, newParentPath, oldPath)
-        favoritesDB.updateFavorite(newFilename, newPath, newParentPath, oldPath)
+        GalleryDatabase.getInstance(applicationContext).FavoritesDao()
+            .updateFavorite(newFilename, newPath, newParentPath, oldPath)
     } catch (ignored: Exception) {
     }
 }
@@ -2056,7 +2055,8 @@ fun Context.getOTGFolderChildrenNames(path: String) =
 
 fun Context.getFavoritePaths(): ArrayList<String> {
     return try {
-        favoritesDB.getValidFavoritePaths() as ArrayList<String>
+        GalleryDatabase.getInstance(applicationContext).FavoritesDao()
+            .getValidFavoritePaths() as ArrayList<String>
     } catch (e: Exception) {
         ArrayList()
     }
@@ -2068,9 +2068,9 @@ fun getFavoriteFromPath(path: String) =
 // Convert paths like /storage/emulated/0/Pictures/Screenshots/first.jpg to content://media/external/images/media/131799
 // so that we can refer to the file in the MediaStore.
 // If we found no mediastore uri for a given file, do not return its path either to avoid some mismatching
-fun Context.getUrisPathsFromFileDirItems(fileDirItems: List<FileDirItem>): Pair<java.util.ArrayList<String>, java.util.ArrayList<Uri>> {
-    val fileUris = java.util.ArrayList<Uri>()
-    val successfulFilePaths = java.util.ArrayList<String>()
+fun Context.getUrisPathsFromFileDirItems(fileDirItems: List<FileDirItem>): Pair<ArrayList<String>, ArrayList<Uri>> {
+    val fileUris = ArrayList<Uri>()
+    val successfulFilePaths = ArrayList<String>()
     val allIds = getMediaStoreIds(this)
     val filePaths = fileDirItems.map { it.path }
     filePaths.forEach { path ->
@@ -2094,9 +2094,10 @@ val Context.portrait get() = resources.configuration.orientation == Configuratio
 fun Context.updateFavorite(path: String, isFavorite: Boolean) {
     try {
         if (isFavorite) {
-            favoritesDB.insert(getFavoriteFromPath(path))
+            GalleryDatabase.getInstance(applicationContext).FavoritesDao()
+                .insert(getFavoriteFromPath(path))
         } else {
-            favoritesDB.deleteFavoritePath(path)
+            GalleryDatabase.getInstance(applicationContext).FavoritesDao().deleteFavoritePath(path)
         }
     } catch (e: Exception) {
         ShowSafeToastUseCase(this@updateFavorite, R.string.unknown_error_occurred)
@@ -2244,7 +2245,8 @@ fun Context.addPathToDB(path: String) {
         }
 
         try {
-            val isFavorite = favoritesDB.isFavorite(path)
+            val isFavorite =
+                GalleryDatabase.getInstance(applicationContext).FavoritesDao().isFavorite(path)
             val videoDuration = if (type == TYPE_VIDEOS) getDuration(path) ?: 0 else 0
             val medium = Medium(
                 null,

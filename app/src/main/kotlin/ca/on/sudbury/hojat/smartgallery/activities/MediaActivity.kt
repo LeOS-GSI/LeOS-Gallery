@@ -55,7 +55,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteDBPath
-import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
@@ -712,7 +711,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                     oldMedia.mapNotNull { it as? Medium }.filter { !newPaths.contains(it.path) }
                         .forEach {
                             if (mPath == FAVORITES && getDoesFilePathExist(it.path)) {
-                                favoritesDB.deleteFavoritePath(it.path)
+                                GalleryDatabase.getInstance(applicationContext).FavoritesDao()
+                                    .deleteFavoritePath(it.path)
                                 mediaDB.updateFavorite(it.path, false)
                             } else {
                                 mediaDB.deleteMediumPath(it.path)

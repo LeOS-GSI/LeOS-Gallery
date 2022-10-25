@@ -53,6 +53,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.MyPagerAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediumBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialog
@@ -73,7 +74,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.copyNonDimensionAttributesTo
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
-import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleFileVisibility
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
@@ -594,7 +594,8 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                     val filename = mPath.getFilenameFromPath()
                     val parent = mPath.getParentPath()
                     val type = getTypeFromPath(mPath)
-                    val isFavorite = favoritesDB.isFavorite(mPath)
+                    val isFavorite = GalleryDatabase.getInstance(applicationContext).FavoritesDao()
+                        .isFavorite(mPath)
                     val duration = if (type == TYPE_VIDEOS) getDuration(mPath) ?: 0 else 0
                     val ts = System.currentTimeMillis()
                     val medium = Medium(
@@ -1027,7 +1028,12 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         if (!portrait && navigationBarRight && (if (navigationBarRight) navigationBarSize.x else 0) > 0) {
-            binding.mediumViewerToolbar.setPadding(0, 0, if (navigationBarRight) navigationBarSize.x else 0, 0)
+            binding.mediumViewerToolbar.setPadding(
+                0,
+                0,
+                if (navigationBarRight) navigationBarSize.x else 0,
+                0
+            )
         } else {
             binding.mediumViewerToolbar.setPadding(0, 0, 0, 0)
         }
