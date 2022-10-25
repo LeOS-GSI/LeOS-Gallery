@@ -20,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
-import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -78,6 +77,8 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
+import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
@@ -431,8 +432,20 @@ class MediaAdapter(
     private fun rotateSelection(degrees: Int) {
         val paths = getSelectedPaths().filter { it.isImageFast() }
 
-        if (paths.any { activity.needsStupidWritePermissions(it) }) {
-            activity.handleSAFDialog(paths.first { activity.needsStupidWritePermissions(it) }) {
+        if (paths.any { path ->
+                with(activity) {
+                    !IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(
+                        path
+                    )) && !isSDCardSetAsDefaultStorage()
+                }
+            }) {
+            activity.handleSAFDialog(paths.first { path ->
+                with(activity) {
+                    !IsRPlusUseCase() && (isPathOnSD(
+                        path
+                    ) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
+                }
+            }) {
                 if (it) {
                     handleRotate(paths, degrees)
                 }
@@ -592,7 +605,11 @@ class MediaAdapter(
 
         val selectedItems = getSelectedItems()
         val selectedPaths = selectedItems.map { it.path } as ArrayList<String>
-        val SAFPath = selectedPaths.firstOrNull { activity.needsStupidWritePermissions(it) }
+        val SAFPath = selectedPaths.firstOrNull { path ->
+            with(activity) {
+                !IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
+            }
+        }
             ?: getFirstSelectedItemPath() ?: return
         activity.handleSAFDialog(SAFPath) {
             if (!it) {

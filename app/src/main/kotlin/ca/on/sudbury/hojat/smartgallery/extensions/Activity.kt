@@ -338,7 +338,7 @@ fun BaseSimpleActivity.getFileOutputStream(
                 callback.invoke(applicationContext.contentResolver.openOutputStream(uri))
             }
         }
-        needsStupidWritePermissions(fileDirItem.path) -> {
+        (!IsRPlusUseCase() && (isPathOnSD(fileDirItem.path) || isPathOnOTG(fileDirItem.path)) && !isSDCardSetAsDefaultStorage()) -> {
             handleSAFDialog(fileDirItem.path) {
                 if (!it) {
                     return@handleSAFDialog
@@ -425,7 +425,7 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
             }
             applicationContext.contentResolver.openOutputStream(uri)
         }
-        needsStupidWritePermissions(path) -> {
+        (!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()) -> {
             var documentFile = parentDocumentFile
             if (documentFile == null) {
                 if (targetFile.parentFile?.let { getDoesFilePathExist(it.absolutePath) } == true) {
@@ -785,7 +785,7 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
         return
     }
 
-    if (needsStupidWritePermissions(path)) {
+    if (!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()) {
         handleSAFDialog(file.absolutePath) {
             if (!it) {
                 return@handleSAFDialog
@@ -879,7 +879,7 @@ fun BaseSimpleActivity.deleteFileBg(
             }
 
             if (!fileDeleted) {
-                if (needsStupidWritePermissions(path)) {
+                if (!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()) {
                     handleSAFDialog(path) {
                         if (it) {
                             trySAFFileDelete(fileDirItem, allowDeleteFolder, callback)
@@ -1001,7 +1001,7 @@ fun BaseSimpleActivity.renameFile(
                 }
             }
         }
-    } else if (needsStupidWritePermissions(newPath)) {
+    } else if (!IsRPlusUseCase() && (isPathOnSD(newPath) || isPathOnOTG(newPath)) && !isSDCardSetAsDefaultStorage()) {
         handleSAFDialog(newPath) {
             if (!it) {
                 return@handleSAFDialog
@@ -2356,7 +2356,7 @@ fun BaseSimpleActivity.createDirectorySync(directory: String): Boolean {
         return true
     }
 
-    if (needsStupidWritePermissions(directory)) {
+    if (!IsRPlusUseCase() && (isPathOnSD(directory) || isPathOnOTG(directory)) && !isSDCardSetAsDefaultStorage()) {
         val documentFile = getDocumentFile(directory.getParentPath()) ?: return false
         val newDir =
             documentFile.createDirectory(directory.getFilenameFromPath()) ?: getDocumentFile(

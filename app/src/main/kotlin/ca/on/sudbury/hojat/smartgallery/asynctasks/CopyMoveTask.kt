@@ -24,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
-import ca.on.sudbury.hojat.smartgallery.extensions.needsStupidWritePermissions
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
@@ -36,6 +35,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.deleteFromMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
+import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
+import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_KEEP_BOTH
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_SKIP
@@ -43,6 +44,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.InputStream
@@ -305,9 +307,10 @@ class CopyMoveTask(
         var inputStream: InputStream? = null
         var out: OutputStream? = null
         try {
-            if (!mDocuments.containsKey(directory) && activity.needsStupidWritePermissions(
-                    destination.path
-                )
+            if (!mDocuments.containsKey(directory) &&
+                with(activity) {
+                    !IsRPlusUseCase() && (isPathOnSD(destination.path) || isPathOnOTG(destination.path)) && !isSDCardSetAsDefaultStorage()
+                }
             ) {
                 mDocuments[directory] = activity.getDocumentFile(directory)
             }

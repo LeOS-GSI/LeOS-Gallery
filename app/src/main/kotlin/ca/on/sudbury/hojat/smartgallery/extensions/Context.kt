@@ -181,10 +181,6 @@ import java.util.regex.Pattern
 import kotlin.collections.set
 import kotlin.math.roundToInt
 
-private const val DOWNLOAD_DIR = "Download"
-private const val ANDROID_DIR = "Android"
-private val DIRS_INACCESSIBLE_WITH_SAF_SDK_30 = listOf(DOWNLOAD_DIR, ANDROID_DIR)
-
 // avoid these being set as SD card paths
 @SuppressLint("SdCardPath")
 private val physicalPaths = arrayListOf(
@@ -840,7 +836,7 @@ fun Context.isAccessibleWithSAFSdk30(path: String): Boolean {
     val isValidName = firstParentDir != null
     val isDirectory = File(firstParentPath).isDirectory
     val isAnAccessibleDirectory =
-        DIRS_INACCESSIBLE_WITH_SAF_SDK_30.all { !firstParentDir.equals(it, true) }
+        listOf("Download", "Android").all { !firstParentDir.equals(it, true) }
     return IsRPlusUseCase() && isValidName && isDirectory && isAnAccessibleDirectory
 }
 
@@ -860,7 +856,7 @@ fun Context.isInAndroidDir(path: String): Boolean {
         return false
     }
     val firstParentDir = path.getFirstParentDirName(this, 0)
-    return firstParentDir.equals(ANDROID_DIR, true)
+    return firstParentDir.equals("Android", true)
 }
 
 fun Context.isPathOnInternalStorage(path: String) =
@@ -898,10 +894,6 @@ val Context.navigationBarSize: Point
 
 val Context.navigationBarWidth: Int get() = if (navigationBarRight) navigationBarSize.x else 0
 
-// no need to use DocumentFile if an SD card is set as the default storage
-fun Context.needsStupidWritePermissions(path: String) =
-    !IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
-
 val Context.newNavigationBarHeight: Int
     @SuppressLint("InternalInsetResource")
     get() {
@@ -929,7 +921,7 @@ fun Context.isInDownloadDir(path: String): Boolean {
         return false
     }
     val firstParentDir = path.getFirstParentDirName(this, 0)
-    return firstParentDir.equals(DOWNLOAD_DIR, true)
+    return firstParentDir.equals("Download", true)
 }
 
 fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
@@ -941,7 +933,7 @@ fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
         false
     } else {
         val startsWithDownloadDir =
-            firstParentDir.startsWith(DOWNLOAD_DIR, true)
+            firstParentDir.startsWith("Download", true)
         val hasAtLeast1PathSegment = firstParentDir.split("/").filter { it.isNotEmpty() }.size > 1
         val firstParentPath = path.getFirstParentPath(this, 1)
         startsWithDownloadDir && hasAtLeast1PathSegment && File(firstParentPath).isDirectory
@@ -966,7 +958,7 @@ fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
     val isInvalidName = firstParentDir == null
     val isDirectory = File(firstParentPath).isDirectory
     val isARestrictedDirectory =
-        DIRS_INACCESSIBLE_WITH_SAF_SDK_30.any {
+        listOf("Download", "Android").any {
             firstParentDir.equals(
                 it,
                 true
@@ -2903,7 +2895,7 @@ fun saveExifRotation(exif: ExifInterface, degrees: Int) {
 @SuppressLint("Recycle")
 @RequiresApi(Build.VERSION_CODES.N)
 fun Context.saveImageRotation(path: String, degrees: Int): Boolean {
-    if (!needsStupidWritePermissions(path)) {
+    if (!(!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage())) {
         saveExifRotation(ExifInterface(path), degrees)
         return true
     } else if (IsNougatPlusUseCase()) {
