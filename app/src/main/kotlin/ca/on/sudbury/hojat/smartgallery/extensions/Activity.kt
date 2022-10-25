@@ -602,7 +602,13 @@ fun Activity.openEditor(path: String, forceChooser: Boolean = false) {
 
 fun Activity.launchCamera() {
     val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
-    launchActivityIntent(intent)
+    try {
+        startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        ShowSafeToastUseCase(this, R.string.no_app_found)
+    } catch (e: Exception) {
+        ShowSafeToastUseCase(this, e.toString())
+    }
 }
 
 fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
@@ -1828,7 +1834,13 @@ fun Activity.showLocationOnMap(coordinates: String) {
     val encodedQuery = Uri.encode(coordinates)
     val uriString = "$uriBegin?q=$encodedQuery&z=16"
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uriString))
-    launchActivityIntent(intent)
+    try {
+        startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        ShowSafeToastUseCase(this, R.string.no_app_found)
+    } catch (e: Exception) {
+        ShowSafeToastUseCase(this, e.toString())
+    }
 }
 
 fun Activity.tryGenericMimeType(intent: Intent, mimeType: String, uri: Uri): Boolean {

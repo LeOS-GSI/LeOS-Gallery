@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
-import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.ComponentName
@@ -118,8 +117,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
@@ -982,16 +979,6 @@ val Context.isRTLLayout: Boolean get() = resources.configuration.layoutDirection
 
 fun Context.isSAFOnlyRoot(path: String): Boolean {
     return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
-}
-
-fun Context.launchActivityIntent(intent: Intent) {
-    try {
-        startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        ShowSafeToastUseCase(this, R.string.no_app_found)
-    } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
-    }
 }
 
 fun Context.movePinnedDirectoriesToFront(dirs: ArrayList<Directory>): ArrayList<Directory> {
