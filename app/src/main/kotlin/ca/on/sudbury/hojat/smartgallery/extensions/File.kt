@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
-import ca.on.sudbury.hojat.smartgallery.helpers.MD5
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
@@ -144,4 +143,3 @@ fun File.getDigest(algorithm: String): String? {
     }
 }
 
-fun File.md5() = this.getDigest(MD5)

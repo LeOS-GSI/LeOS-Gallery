@@ -39,15 +39,16 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnInternalStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoSlow
-import ca.on.sudbury.hojat.smartgallery.extensions.md5
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.extensions.getDigest
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.extensions.removeValues
+import ca.on.sudbury.hojat.smartgallery.helpers.MD5
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -275,9 +276,9 @@ class PropertiesDialog() {
                 RunOnBackgroundThreadUseCase {
                     val md5 = if (mActivity.isRestrictedSAFOnlyRoot(path)) {
                         mActivity.contentResolver.openInputStream(mActivity.getAndroidSAFUri(path))
-                            ?.md5()
+                            ?.getDigest(MD5)
                     } else {
-                        File(path).md5()
+                        File(path).getDigest(MD5)
                     }
                     mActivity.runOnUiThread {
                         if (md5 != null) {
