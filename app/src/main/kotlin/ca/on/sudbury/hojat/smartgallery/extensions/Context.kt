@@ -902,9 +902,6 @@ val Context.newNavigationBarHeight: Int
         return navigationBarHeight
     }
 
-val Context.dateTakensDB: DateTakensDao
-    get() = GalleryDatabase.getInstance(applicationContext).DateTakensDao()
-
 fun Context.isInDownloadDir(path: String): Boolean {
     if (path.startsWith(recycleBinPath)) {
         return false

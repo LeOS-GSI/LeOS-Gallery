@@ -1449,7 +1449,7 @@ fun AppCompatActivity.fixDateTaken(
 
             if (hasRescanned || pathsToRescan.isEmpty()) {
                 if (dateTakens.isNotEmpty()) {
-                    dateTakensDB.insertAll(dateTakens)
+                    GalleryDatabase.getInstance(applicationContext).DateTakensDao().insertAll(dateTakens)
                 }
 
                 runOnUiThread {

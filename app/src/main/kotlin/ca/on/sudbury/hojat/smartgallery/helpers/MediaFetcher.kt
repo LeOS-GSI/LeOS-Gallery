@@ -15,11 +15,11 @@ import android.provider.MediaStore.Images
 import android.text.format.DateFormat
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getUpdatedDeletedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
 import ca.on.sudbury.hojat.smartgallery.extensions.shouldFolderBeVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.dateTakensDB
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
@@ -792,9 +792,11 @@ class MediaFetcher(val context: Context) {
 
         val dateTakenValues = try {
             if (folder == FAVORITES) {
-                context.dateTakensDB.getAllDateTakens()
+                GalleryDatabase.getInstance(context.applicationContext).DateTakensDao()
+                    .getAllDateTakens()
             } else {
-                context.dateTakensDB.getDateTakensFromPath(folder)
+                GalleryDatabase.getInstance(context.applicationContext).DateTakensDao()
+                    .getDateTakensFromPath(folder)
             }
         } catch (e: Exception) {
             return dateTakens
@@ -828,7 +830,9 @@ class MediaFetcher(val context: Context) {
                 }
             }
 
-            val dateTakenValues = context.dateTakensDB.getAllDateTakens()
+            val dateTakenValues =
+                GalleryDatabase.getInstance(context.applicationContext).DateTakensDao()
+                    .getAllDateTakens()
 
             dateTakenValues.forEach {
                 dateTakens[it.fullPath] = it.taken
