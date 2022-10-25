@@ -60,7 +60,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SlideShowDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.setAs
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
-import ca.on.sudbury.hojat.smartgallery.extensions.shareMediumPath
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.launchSettings
@@ -176,6 +175,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
+import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -390,7 +390,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 R.id.menu_open_with -> openPath(getCurrentPath(), true)
                 R.id.menu_hide -> toggleFileVisibility(true)
                 R.id.menu_unhide -> toggleFileVisibility(false)
-                R.id.menu_share -> shareMediumPath(getCurrentPath())
+                R.id.menu_share -> sharePathIntent(getCurrentPath(), BuildConfig.APPLICATION_ID)
                 R.id.menu_delete -> checkDeleteConfirmation()
                 R.id.menu_rename -> checkMediaManagementAndRename()
                 R.id.menu_print -> printFile()
@@ -1063,7 +1063,9 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                     R.string.share
                 ); true
             }
-            setOnClickListener { shareMediumPath(getCurrentPath()) }
+            setOnClickListener {
+                sharePathIntent(getCurrentPath(), BuildConfig.APPLICATION_ID)
+            }
         }
 
         with(binding.bottomActions.bottomDelete) {

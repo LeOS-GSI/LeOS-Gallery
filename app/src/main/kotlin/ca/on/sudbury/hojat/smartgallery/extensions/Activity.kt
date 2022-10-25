@@ -562,10 +562,6 @@ fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
     }
 }
 
-fun Activity.shareMediumPath(path: String) {
-    sharePathIntent(path, BuildConfig.APPLICATION_ID)
-}
-
 fun Activity.shareMediaPaths(paths: ArrayList<String>) {
     sharePathsIntent(paths, BuildConfig.APPLICATION_ID)
 }

@@ -21,6 +21,7 @@ import android.view.TextureView
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.android.exoplayer2.PlaybackParameters
 import com.google.android.exoplayer2.ExoPlaybackException
@@ -55,9 +56,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityVideoPlayerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
-import ca.on.sudbury.hojat.smartgallery.extensions.shareMediumPath
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
+import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_ASPECT_RATIO
@@ -180,7 +181,8 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
             when (menuItem.itemId) {
                 R.id.menu_change_orientation -> changeOrientation()
                 R.id.menu_open_with -> openPath(mUri!!.toString(), true)
-                R.id.menu_share -> shareMediumPath(mUri!!.toString())
+                R.id.menu_share -> sharePathIntent(mUri!!.toString(), BuildConfig.APPLICATION_ID)
+
                 else -> return@setOnMenuItemClickListener false
             }
             return@setOnMenuItemClickListener true

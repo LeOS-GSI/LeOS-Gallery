@@ -52,7 +52,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toggleFileVisibility
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDBMediaPath
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
-import ca.on.sudbury.hojat.smartgallery.extensions.shareMediumPath
 import ca.on.sudbury.hojat.smartgallery.extensions.shareMediaPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.saveRotatedImageToFile
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
@@ -78,6 +77,8 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.sudbury.hojat.smartgallery.BuildConfig
+import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
@@ -397,7 +398,7 @@ class MediaAdapter(
 
     private fun shareMedia() {
         if (selectedKeys.size == 1 && selectedKeys.first() != -1) {
-            activity.shareMediumPath(getSelectedItems().first().path)
+            activity.sharePathIntent(getSelectedItems().first().path, BuildConfig.APPLICATION_ID)
         } else if (selectedKeys.size > 1) {
             activity.shareMediaPaths(getSelectedPaths())
         }
