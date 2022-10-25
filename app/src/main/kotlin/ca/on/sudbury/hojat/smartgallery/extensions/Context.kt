@@ -763,8 +763,6 @@ fun Context.getStorageRootIdForAndroidDir(path: String) =
         ) "%3AAndroid%2Fdata" else "%3AAndroid%2Fobb"
     ).substringAfterLast('/').trimEnd('/')
 
-fun Context.getTimeFormat() = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
-
 fun Context.getUriMimeType(path: String, newUri: Uri): String {
     var mimeType = path.getMimeType()
     if (mimeType.isEmpty()) {
@@ -871,7 +869,8 @@ fun Context.isInAndroidDir(path: String): Boolean {
 fun Context.isPathOnInternalStorage(path: String) =
     internalStoragePath.isNotEmpty() && path.startsWith(internalStoragePath)
 
-fun Context.isPathOnSD(path: String) = baseConfig.sdCardPath.isNotEmpty() && path.startsWith(baseConfig.sdCardPath)
+fun Context.isPathOnSD(path: String) =
+    baseConfig.sdCardPath.isNotEmpty() && path.startsWith(baseConfig.sdCardPath)
 
 fun Context.isSDCardSetAsDefaultStorage() =
     baseConfig.sdCardPath.isNotEmpty() && Environment.getExternalStorageDirectory().absolutePath.equals(

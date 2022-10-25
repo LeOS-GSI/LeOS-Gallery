@@ -6,6 +6,8 @@ import android.media.ExifInterface
 import android.text.format.DateFormat
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -24,7 +26,7 @@ fun Int.formatDate(
     timeFormat: String? = null
 ): String {
     val useDateFormat = dateFormat ?: context.baseConfig.dateFormat
-    val useTimeFormat = timeFormat ?: context.getTimeFormat()
+    val useTimeFormat = timeFormat ?: with(context){if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12 }
     val cal = Calendar.getInstance(Locale.ENGLISH)
     cal.timeInMillis = this * 1000L
     return DateFormat.format("$useDateFormat, $useTimeFormat", cal).toString()

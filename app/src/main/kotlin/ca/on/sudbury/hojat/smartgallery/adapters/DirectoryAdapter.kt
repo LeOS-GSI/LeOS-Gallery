@@ -47,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.containsNoMedia
-import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
@@ -97,6 +96,9 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
@@ -147,7 +149,8 @@ class DirectoryAdapter(
     private var limitFolderTitle = config.limitFolderTitle
     var directorySorting = config.directorySorting
     var dateFormat = config.dateFormat
-    var timeFormat = activity.getTimeFormat()
+    var timeFormat =
+        with(activity) { if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12 }
 
     init {
         setupDragListener(true)

@@ -64,7 +64,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.handleAppPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
@@ -147,6 +146,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateSDCardPath
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
@@ -355,7 +356,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         super.onResume()
         config.isThirdPartyIntent = false
         mDateFormat = config.dateFormat
-        mTimeFormat = getTimeFormat()
+        mTimeFormat = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
 
         setupToolbar(binding.directoriesToolbar, searchMenuItem = mSearchMenuItem)
         refreshMenuItems()
@@ -393,7 +394,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         binding.directoriesRefreshLayout.isEnabled = config.enablePullToRefresh
         getRecyclerAdapter()?.apply {
             dateFormat = config.dateFormat
-            timeFormat = getTimeFormat()
+            timeFormat = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
         }
 
         binding.directoriesEmptyPlaceholder.setTextColor(getProperTextColor())

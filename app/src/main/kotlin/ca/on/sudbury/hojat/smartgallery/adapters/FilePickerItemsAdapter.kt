@@ -12,7 +12,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getTextSize
-import ca.on.sudbury.hojat.smartgallery.extensions.getTimeFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
@@ -28,6 +27,8 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.getFilePlaceholderDrawables
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
+import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import kotlinx.android.synthetic.main.item_filepicker_list.view.*
@@ -48,7 +49,8 @@ class FilePickerItemsAdapter(
     private var fontSize = 0f
     private val cornerRadius = resources.getDimension(R.dimen.rounded_corner_radius_small).toInt()
     private val dateFormat = activity.baseConfig.dateFormat
-    private val timeFormat = activity.getTimeFormat()
+    private val timeFormat =
+        with(activity) { if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12 }
 
     init {
         initDrawables()
