@@ -2134,8 +2134,6 @@ fun Activity.launchUpgradeToProIntent() {
     }
 }
 
-fun Activity.launchViewIntent(id: Int) = launchViewIntent(getString(id))
-
 fun Activity.launchViewIntent(url: String) {
     HideKeyboardUseCase(this)
     RunOnBackgroundThreadUseCase {

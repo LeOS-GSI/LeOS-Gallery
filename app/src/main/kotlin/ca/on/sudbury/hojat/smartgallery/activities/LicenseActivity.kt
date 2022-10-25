@@ -81,7 +81,7 @@ class LicenseActivity : BaseSimpleActivity() {
                     text = getString(license.titleId)
                     setTextColor(primaryColor)
                     setOnClickListener {
-                        launchViewIntent(license.urlId)
+                        launchViewIntent(getString(license.urlId))
                     }
                 }
 
