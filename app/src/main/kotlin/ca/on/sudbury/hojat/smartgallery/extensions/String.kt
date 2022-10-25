@@ -15,6 +15,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.io.IOException
@@ -22,11 +23,12 @@ import java.text.Normalizer
 import java.util.Locale
 import kotlin.collections.HashMap
 
-fun String.getCompressionFormat() = when (getFilenameExtension().lowercase(Locale.getDefault())) {
-    "png" -> Bitmap.CompressFormat.PNG
-    "webp" -> Bitmap.CompressFormat.WEBP
-    else -> Bitmap.CompressFormat.JPEG
-}
+fun String.getCompressionFormat() =
+    when (GetFileExtensionUseCase(this).lowercase(Locale.getDefault())) {
+        "png" -> Bitmap.CompressFormat.PNG
+        "webp" -> Bitmap.CompressFormat.WEBP
+        else -> Bitmap.CompressFormat.JPEG
+    }
 
 fun String.getFileKey(lastModified: Long? = null): String {
     val file = File(this)
@@ -38,8 +40,6 @@ fun String.getFileKey(lastModified: Long? = null): String {
 
     return "${file.absolutePath}$modified"
 }
-
-fun String.getFilenameExtension() = substring(lastIndexOf(".") + 1)
 
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
 
@@ -873,7 +873,7 @@ fun String.getMimeType(): String {
         put("zip", "application/zip")
     }
 
-    return typesMap[getFilenameExtension().lowercase(Locale.ROOT)] ?: ""
+    return typesMap[GetFileExtensionUseCase(this).lowercase(Locale.ROOT)] ?: ""
 }
 
 fun String.getOTGPublicPath(context: Context) =

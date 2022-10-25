@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
@@ -13,6 +12,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 
@@ -80,7 +80,7 @@ class RenameItemsDialog(
 
                                 val name = fullName.substring(0, dotAt)
                                 val extension =
-                                    if (fullName.contains(".")) ".${fullName.getFilenameExtension()}" else ""
+                                    if (fullName.contains(".")) ".${GetFileExtensionUseCase(fullName)}" else ""
 
                                 val newName = if (append) {
                                     "$name$valueToAdd$extension"

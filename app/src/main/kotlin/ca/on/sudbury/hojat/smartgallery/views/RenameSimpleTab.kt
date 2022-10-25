@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.views
 
-
 import android.content.ContentValues
 import android.content.Context
 import android.provider.MediaStore
@@ -12,7 +11,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.copySingleFileSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItemsTuple
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
@@ -25,6 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.interfaces.RenameTab
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_rename_simple.view.*
 import java.io.File
@@ -93,7 +92,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                     }
 
                     val name = fullName.substring(0, dotAt)
-                    val extension = if (fullName.contains(".")) ".${fullName.getFilenameExtension()}" else ""
+                    val extension = if (fullName.contains(".")) ".${GetFileExtensionUseCase(fullName)}" else ""
 
                     val newName = if (append) {
                         "$name$valueToAdd$extension"
@@ -154,7 +153,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                         }
 
                         val name = fullName.substring(0, dotAt)
-                        val extension = if (fullName.contains(".")) ".${fullName.getFilenameExtension()}" else ""
+                        val extension = if (fullName.contains(".")) ".${GetFileExtensionUseCase(fullName)}" else ""
 
                         val newName = if (appendString) {
                             "$name$stringToAdd$extension"

@@ -43,7 +43,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -76,6 +75,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.zomato.photofilters.FilterPack
@@ -928,7 +928,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
         if (newPath.isEmpty()) {
             newPath = "$internalStoragePath/${getCurrentFormattedDateTime()}.${
-                saveUri.toString().getFilenameExtension()
+                GetFileExtensionUseCase(saveUri.toString())
             }"
             shouldAppendFilename = false
         }

@@ -23,18 +23,17 @@ import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import ca.on.sudbury.hojat.smartgallery.extensions.isApng
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
-import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameExtension
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import java.io.File
 import java.io.Serializable
 import java.util.Calendar
 import java.util.Locale
-
 
 @Entity(tableName = "media", indices = [(Index(value = ["full_path"], unique = true))])
 data class Medium(
@@ -102,8 +101,7 @@ data class Medium(
             groupBy and GROUP_BY_DATE_TAKEN_DAILY != 0 -> getDayStartTS(taken, false)
             groupBy and GROUP_BY_DATE_TAKEN_MONTHLY != 0 -> getDayStartTS(taken, true)
             groupBy and GROUP_BY_FILE_TYPE != 0 -> type.toString()
-            groupBy and GROUP_BY_EXTENSION != 0 -> name.getFilenameExtension()
-                .lowercase(Locale.ROOT)
+            groupBy and GROUP_BY_EXTENSION != 0 -> GetFileExtensionUseCase(name).lowercase(Locale.ROOT)
             groupBy and GROUP_BY_FOLDER != 0 -> parentPath
             else -> ""
         }

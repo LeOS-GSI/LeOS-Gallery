@@ -96,6 +96,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -166,7 +167,7 @@ private fun BaseSimpleActivity.renameCasually(
     if (oldToTempSucceeds && tempToNewSucceeds) {
         if (newFile.isDirectory) {
             updateInMediaStore(oldPath, newPath)
-                applicationContext.rescanPaths(arrayListOf(newPath)) {
+            applicationContext.rescanPaths(arrayListOf(newPath)) {
                 runOnUiThread {
                     callback?.invoke(true, Android30RenameFormat.NONE)
                 }
@@ -985,7 +986,7 @@ fun BaseSimpleActivity.renameFile(
                         val success = renameDocumentSdk30(oldPath, newPath)
                         if (success) {
                             updateInMediaStore(oldPath, newPath)
-                                applicationContext.rescanPaths(arrayListOf(newPath)) {
+                            applicationContext.rescanPaths(arrayListOf(newPath)) {
                                 runOnUiThread {
                                     callback?.invoke(true, Android30RenameFormat.NONE)
                                 }
@@ -2168,7 +2169,7 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
 
             val parent = path.getParentPath()
             val newFilename = "${path.getFilenameFromPath().substringBeforeLast('.')}_1"
-            val extension = path.getFilenameExtension()
+            val extension = GetFileExtensionUseCase(path)
             val newFilePath = File(parent, "$newFilename.$extension")
 
             val outputUri = if (isPathOnOTG(path)) newUri else getFinalUriFromPath(
