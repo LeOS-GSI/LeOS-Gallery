@@ -1026,7 +1026,7 @@ fun Context.getSortedDirectories(source: ArrayList<Directory>): ArrayList<Direct
                     )
                 } else {
                     o1.sortValue.normalizeString().lowercase(Locale.ROOT)
-                        .compareTo(o2.sortValue.normalizeString().toLowerCase(Locale.ROOT))
+                        .compareTo(o2.sortValue.normalizeString().lowercase(Locale.ROOT))
                 }
             }
             sorting and SORT_BY_PATH != 0 -> {
