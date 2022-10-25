@@ -468,7 +468,7 @@ fun Context.getDirectChildrenCount(
 
 fun Context.getDocumentFile(path: String): DocumentFile? {
     val isOTG = isPathOnOTG(path)
-    var relativePath = path.substring(if (isOTG) otgPath.length else baseConfig.sdCardPath.length)
+    var relativePath = path.substring(if (isOTG) baseConfig.OTGPath.length else baseConfig.sdCardPath.length)
     if (relativePath.startsWith(File.separator)) {
         relativePath = relativePath.substring(1)
     }
@@ -620,7 +620,7 @@ fun Context.getHumanReadablePath(path: String): String {
         when (path) {
             "/" -> R.string.root
             internalStoragePath -> R.string.internal
-            otgPath -> R.string.usb
+            baseConfig.OTGPath -> R.string.usb
             else -> R.string.sd_card
         }
     )
@@ -845,7 +845,7 @@ fun Context.isAStorageRootFolder(path: String): Boolean {
     return trimmed.isEmpty() || trimmed.equals(internalStoragePath, true) || trimmed.equals(
         baseConfig.sdCardPath,
         true
-    ) || trimmed.equals(otgPath, true)
+    ) || trimmed.equals(baseConfig.OTGPath, true)
 }
 
 fun Context.isBlackAndWhiteTheme() =
@@ -903,8 +903,6 @@ val Context.newNavigationBarHeight: Int
         return navigationBarHeight
     }
 
-val Context.otgPath: String get() = baseConfig.OTGPath
-
 val Context.directoryDao: DirectoryDao
     get() = GalleryDatabase.getInstance(applicationContext).DirectoryDao()
 
@@ -938,7 +936,7 @@ fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
     }
 }
 
-fun Context.isPathOnOTG(path: String) = otgPath.isNotEmpty() && path.startsWith(otgPath)
+fun Context.isPathOnOTG(path: String) = baseConfig.OTGPath.isNotEmpty() && path.startsWith(baseConfig.OTGPath)
 
 fun Context.isRestrictedSAFOnlyRoot(path: String): Boolean {
     return IsRPlusUseCase() && isSAFOnlyRoot(path)
@@ -1467,7 +1465,7 @@ fun Context.getFolderNameFromPath(path: String): String {
     return when (path) {
         internalStoragePath -> getString(R.string.internal)
         baseConfig.sdCardPath -> getString(R.string.sd_card)
-        otgPath -> getString(R.string.usb)
+        baseConfig.OTGPath -> getString(R.string.usb)
         FAVORITES -> getString(R.string.favorites)
         RECYCLE_BIN -> getString(R.string.recycle_bin)
         else -> path.getFilenameFromPath()
@@ -3221,7 +3219,7 @@ fun Context.getOTGItems(
 
     val parts = path.split("/").dropLastWhile { it.isEmpty() }
     for (part in parts) {
-        if (path == otgPath) {
+        if (path == baseConfig.OTGPath) {
             break
         }
 
@@ -3246,7 +3244,7 @@ fun Context.getOTGItems(
 
         val isDirectory = file.isDirectory
         val filePath = file.uri.toString().substring(basePath.length)
-        val decodedPath = otgPath + "/" + URLDecoder.decode(filePath, "UTF-8")
+        val decodedPath = baseConfig.OTGPath + "/" + URLDecoder.decode(filePath, "UTF-8")
         val fileSize = when {
             getProperFileSize -> file.getItemSize(shouldShowHidden)
             isDirectory -> 0L

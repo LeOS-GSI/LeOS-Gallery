@@ -11,7 +11,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getBasePath
 import ca.on.sudbury.hojat.smartgallery.extensions.hasExternalSDCard
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
-import ca.on.sudbury.hojat.smartgallery.extensions.otgPath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -104,7 +103,7 @@ class StoragePickerDialog(
             otgButton.apply {
                 id = idOtg
                 text = resources.getString(R.string.usb)
-                isChecked = basePath == context.otgPath
+                isChecked = basePath == context.baseConfig.OTGPath
                 setOnClickListener { otgPicked() }
                 if (isChecked) {
                     defaultSelectedId = id
@@ -148,7 +147,7 @@ class StoragePickerDialog(
     private fun otgPicked() {
         activity.handleOTGPermission {
             if (it) {
-                callback(activity.otgPath)
+                callback(activity.baseConfig.OTGPath)
                 dialog?.dismiss()
             } else {
                 radioGroup.check(defaultSelectedId)
