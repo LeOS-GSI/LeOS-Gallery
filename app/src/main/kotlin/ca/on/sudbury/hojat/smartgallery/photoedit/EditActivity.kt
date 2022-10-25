@@ -1012,7 +1012,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
     private fun scanFinalPath(path: String) {
         val paths = arrayListOf(path)
-        rescanPaths(paths) {
+        applicationContext.rescanPaths(paths) {
             fixDateTaken(paths, false)
             setResult(Activity.RESULT_OK, intent)
             ShowSafeToastUseCase(this, R.string.file_saved)

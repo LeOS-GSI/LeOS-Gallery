@@ -641,7 +641,7 @@ class DirectoryAdapter(
             val destinationPath = it
             val newPaths = fileDirItems.map { "$destinationPath/${it.name}" }
                 .toMutableList() as ArrayList<String>
-            activity.rescanPaths(newPaths) {
+            activity.applicationContext.rescanPaths(newPaths) {
                 activity.fixDateTaken(newPaths, false)
             }
 

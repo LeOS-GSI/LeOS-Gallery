@@ -492,10 +492,6 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
     }
 }
 
-fun Activity.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
-    applicationContext.rescanPaths(paths, callback)
-}
-
 fun Activity.sharePathIntent(path: String, applicationId: String) {
     RunOnBackgroundThreadUseCase {
 
@@ -1042,7 +1038,7 @@ fun BaseSimpleActivity.renameFile(
                     }
 
                     updateInMediaStore(oldPath, newPath)
-                    rescanPaths(arrayListOf(oldPath, newPath)) {
+                    applicationContext.rescanPaths(arrayListOf(oldPath, newPath)) {
                         if (!baseConfig.keepLastModified) {
                             updateLastModified(newPath, System.currentTimeMillis())
                         }
@@ -1305,7 +1301,7 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
             callback()
         }
 
-        rescanPaths(newPaths) {
+        applicationContext.rescanPaths(newPaths) {
             fixDateTaken(newPaths, false)
         }
     }
@@ -1470,7 +1466,7 @@ fun AppCompatActivity.fixDateTaken(
                     callback?.invoke()
                 }
             } else {
-                rescanPaths(pathsToRescan) {
+                applicationContext.rescanPaths(pathsToRescan) {
                     fixDateTaken(paths, showToasts, true, callback)
                 }
             }
@@ -1522,7 +1518,7 @@ fun BaseSimpleActivity.saveRotatedImageToFile(
             }
 
             copyFile(tmpPath, newPath)
-            rescanPaths(arrayListOf(newPath))
+            applicationContext.rescanPaths(arrayListOf(newPath))
             fileRotatedSuccessfully(newPath, oldLastModified)
 
             it.flush()

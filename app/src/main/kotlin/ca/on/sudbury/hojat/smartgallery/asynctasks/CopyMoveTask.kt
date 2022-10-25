@@ -334,15 +334,15 @@ class CopyMoveTask(
             if (source.size == copiedSize && activity.getDoesFilePathExist(destination.path)) {
                 mTransferredFiles.add(source)
                 if (copyOnly) {
-                    activity.rescanPaths(arrayListOf(destination.path)) {
+                    activity.applicationContext.rescanPaths(arrayListOf(destination.path)) {
                         if (activity.baseConfig.keepLastModified) {
                             updateLastModifiedValues(source, destination)
-                            activity.rescanPaths(arrayListOf(destination.path))
+                            activity.applicationContext.rescanPaths(arrayListOf(destination.path))
                         }
                     }
                 } else if (activity.baseConfig.keepLastModified) {
                     updateLastModifiedValues(source, destination)
-                    activity.rescanPaths(arrayListOf(destination.path))
+                    activity.applicationContext.rescanPaths(arrayListOf(destination.path))
                     inputStream.close()
                     out?.close()
                     deleteSourceFile(source)

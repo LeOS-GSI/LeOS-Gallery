@@ -1382,7 +1382,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
         ShowSafeToastUseCase(this, R.string.file_saved)
         val paths = arrayListOf(file.absolutePath)
-        rescanPaths(paths) {
+        applicationContext.rescanPaths(paths) {
             fixDateTaken(paths, false)
 
             if (config.keepLastModified && lastModified != 0L) {

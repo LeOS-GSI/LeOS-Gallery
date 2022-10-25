@@ -29,7 +29,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
@@ -479,7 +478,7 @@ class MediaAdapter(
 
             val newPaths = fileDirItems.map { "$destinationPath/${it.name}" }
                 .toMutableList() as ArrayList<String>
-            activity.rescanPaths(newPaths) {
+            activity.applicationContext.rescanPaths(newPaths) {
                 activity.fixDateTaken(newPaths, false)
             }
 

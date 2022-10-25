@@ -249,7 +249,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         if (mUri!!.scheme == "file") {
             if (filename.contains('.')) {
                 binding.bottomActions.root.beGone()
-                rescanPaths(arrayListOf(mUri!!.path!!))
+                    applicationContext.rescanPaths(arrayListOf(mUri!!.path!!))
                 sendViewPagerIntent(mUri!!.path!!)
                 finish()
             }
@@ -269,7 +269,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
                 ) {
                     if (isFileTypeVisible(realPath)) {
                         binding.bottomActions.root.beGone()
-                        rescanPaths(arrayListOf(mUri!!.path!!))
+                        applicationContext.rescanPaths(arrayListOf(mUri!!.path!!))
                         sendViewPagerIntent(realPath)
                         finish()
                         return
@@ -404,7 +404,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             if (isPathPresentInMediaStore(path)) {
                 openViewPager(path)
             } else {
-                rescanPaths(arrayListOf(path)) {
+                applicationContext.rescanPaths(arrayListOf(path)) {
                     openViewPager(path)
                 }
             }
