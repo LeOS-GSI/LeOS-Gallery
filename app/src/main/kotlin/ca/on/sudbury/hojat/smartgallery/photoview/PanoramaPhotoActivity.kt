@@ -15,11 +15,12 @@ import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener
 import com.google.vr.sdk.widgets.pano.VrPanoramaView
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityPanoramaPhotoBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
@@ -179,7 +180,7 @@ open class PanoramaPhotoActivity : SimpleActivity() {
         val navBarHeight = navigationBarHeight
         (binding.cardboard.layoutParams as RelativeLayout.LayoutParams).apply {
             bottomMargin = navBarHeight
-            rightMargin = navigationBarWidth
+            rightMargin = if (navigationBarRight) navigationBarSize.x else 0
         }
 
         (binding.explore.layoutParams as RelativeLayout.LayoutParams).bottomMargin =

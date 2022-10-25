@@ -45,7 +45,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
-import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -59,6 +58,8 @@ import ca.on.sudbury.hojat.smartgallery.activities.PanoramaVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerVideoItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.Config
@@ -529,7 +530,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         }
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && activity?.hasNavBar() == true) {
-            right += requireActivity().navigationBarWidth
+            right += with(requireActivity()) { if (navigationBarRight) navigationBarSize.x else 0 }
         }
 
         (binding.rlBottomVideoTimeHolder.videoTimeHolder.layoutParams as RelativeLayout.LayoutParams).apply {

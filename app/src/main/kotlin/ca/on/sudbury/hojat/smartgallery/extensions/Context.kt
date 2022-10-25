@@ -892,8 +892,6 @@ val Context.navigationBarSize: Point
         else -> Point()
     }
 
-val Context.navigationBarWidth: Int get() = if (navigationBarRight) navigationBarSize.x else 0
-
 val Context.newNavigationBarHeight: Int
     @SuppressLint("InternalInsetResource")
     get() {

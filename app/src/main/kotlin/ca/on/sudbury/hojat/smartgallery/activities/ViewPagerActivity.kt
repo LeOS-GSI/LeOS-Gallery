@@ -142,7 +142,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
-import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -175,6 +174,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
@@ -1026,8 +1026,8 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             binding.bottomActions.root.beGone()
         }
 
-        if (!portrait && navigationBarRight && navigationBarWidth > 0) {
-            binding.mediumViewerToolbar.setPadding(0, 0, navigationBarWidth, 0)
+        if (!portrait && navigationBarRight && (if (navigationBarRight) navigationBarSize.x else 0) > 0) {
+            binding.mediumViewerToolbar.setPadding(0, 0, if (navigationBarRight) navigationBarSize.x else 0, 0)
         } else {
             binding.mediumViewerToolbar.setPadding(0, 0, 0, 0)
         }

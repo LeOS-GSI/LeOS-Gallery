@@ -16,7 +16,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.google.vr.sdk.widgets.video.VrVideoEventListener
 import com.google.vr.sdk.widgets.video.VrVideoView
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -24,6 +23,8 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityPanoramaVideoBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.helpers.MIN_SKIP_LENGTH
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -259,7 +260,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 bottom += navigationBarHeight
             } else {
-                right += navigationBarWidth
+                right += if (navigationBarRight) navigationBarSize.x else 0
                 bottom += navigationBarHeight
             }
         }
@@ -276,7 +277,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
 
             (binding.cardboard.layoutParams as RelativeLayout.LayoutParams).apply {
                 bottomMargin = newBottomMargin
-                rightMargin = navigationBarWidth
+                rightMargin = if (navigationBarRight) navigationBarSize.x else 0
             }
             binding.explore.requestLayout()
         }

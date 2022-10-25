@@ -41,7 +41,6 @@ import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.video.VideoListener
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarWidth
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
@@ -58,6 +57,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivityVideoPlayerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
+import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
@@ -137,8 +137,13 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
 
         updateTextColors(binding.videoPlayerHolder)
 
-        if (!portrait && navigationBarRight && navigationBarWidth > 0) {
-            binding.videoToolbar.setPadding(0, 0, navigationBarWidth, 0)
+        if (!portrait && navigationBarRight && (if (navigationBarRight) navigationBarSize.x else 0) > 0) {
+            binding.videoToolbar.setPadding(
+                0,
+                0,
+                if (navigationBarRight) navigationBarSize.x else 0,
+                0
+            )
         } else {
             binding.videoToolbar.setPadding(0, 0, 0, 0)
         }
@@ -204,8 +209,13 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         binding.topShadow.layoutParams.height = statusBarHeight + actionBarHeight
         (binding.videoAppbar.layoutParams as RelativeLayout.LayoutParams).topMargin =
             statusBarHeight
-        if (!portrait && navigationBarRight && navigationBarWidth > 0) {
-            binding.videoToolbar.setPadding(0, 0, navigationBarWidth, 0)
+        if (!portrait && navigationBarRight && (if (navigationBarRight) navigationBarSize.x else 0) > 0) {
+            binding.videoToolbar.setPadding(
+                0,
+                0,
+                if (navigationBarRight) navigationBarSize.x else 0,
+                0
+            )
         } else {
             binding.videoToolbar.setPadding(0, 0, 0, 0)
         }
@@ -603,7 +613,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                 bottom += navigationBarHeight
             } else {
-                right += navigationBarWidth
+                right += if (navigationBarRight) navigationBarSize.x else 0
                 bottom += navigationBarHeight
             }
         }
