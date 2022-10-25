@@ -214,11 +214,6 @@ fun Context.createFirstParentTreeUri(fullPath: String): Uri {
     )
 }
 
-// is the app a Media Management App on Android 12+?
-fun Context.canManageMedia(): Boolean {
-    return IsSPlusUseCase() && MediaStore.canManageMedia(this)
-}
-
 fun Context.createDocumentUriUsingFirstParentTreeUri(fullPath: String): Uri {
     val storageId = getSAFStorageId(fullPath)
     val relativePath = when {

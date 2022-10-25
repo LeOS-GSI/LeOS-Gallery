@@ -736,7 +736,7 @@ fun SimpleActivity.launchAbout() {
 }
 
 fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
-    if (canManageMedia() || isExternalStorageManager()) {
+    if ((IsSPlusUseCase() && MediaStore.canManageMedia(this)) || isExternalStorageManager()) {
         callback()
     } else if (IsRPlusUseCase() && resources.getBoolean(R.bool.require_all_files_access)) {
         if (Environment.isExternalStorageManager()) {
@@ -887,7 +887,7 @@ fun BaseSimpleActivity.deleteFileBg(
                         }
                     }
                 } else if (isAccessibleWithSAFSdk30(path)) {
-                    if (canManageMedia()) {
+                    if (IsSPlusUseCase() && MediaStore.canManageMedia(this)) {
                         deleteSdk30(fileDirItem, callback)
                     } else {
                         handleSAFDialogSdk30(path) {
@@ -965,7 +965,10 @@ fun BaseSimpleActivity.renameFile(
             }
         }
     } else if (isAccessibleWithSAFSdk30(oldPath)) {
-        if (canManageMedia() && !File(oldPath).isDirectory && isPathOnInternalStorage(oldPath)) {
+        if ((IsSPlusUseCase() && MediaStore.canManageMedia(this)) && !File(oldPath).isDirectory && isPathOnInternalStorage(
+                oldPath
+            )
+        ) {
             renameCasually(oldPath, newPath, isRenamingMultipleFiles, callback)
         } else {
             handleSAFDialogSdk30(oldPath) {
@@ -1449,7 +1452,8 @@ fun AppCompatActivity.fixDateTaken(
 
             if (hasRescanned || pathsToRescan.isEmpty()) {
                 if (dateTakens.isNotEmpty()) {
-                    GalleryDatabase.getInstance(applicationContext).DateTakensDao().insertAll(dateTakens)
+                    GalleryDatabase.getInstance(applicationContext).DateTakensDao()
+                        .insertAll(dateTakens)
                 }
 
                 runOnUiThread {
@@ -2287,7 +2291,7 @@ fun BaseSimpleActivity.deleteFilesBg(
             }
 
             val recycleBinPath = firstFile.isRecycleBinPath(this)
-            if (canManageMedia() && !recycleBinPath) {
+            if ((IsSPlusUseCase() && MediaStore.canManageMedia(this)) && !recycleBinPath) {
                 val fileUris = getFileUrisFromFileDirItems(files)
 
                 deleteSDK30Uris(fileUris) { success ->

@@ -42,7 +42,6 @@ import ca.on.sudbury.hojat.smartgallery.asynctasks.CopyMoveTask
 import ca.on.sudbury.hojat.smartgallery.extensions.addBit
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.buildDocumentUriSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.canManageMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbPath
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbUri
 import ca.on.sudbury.hojat.smartgallery.extensions.createFirstParentTreeUri
@@ -109,6 +108,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseC
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
@@ -645,7 +645,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         callback: (success: Boolean) -> Unit
     ): Boolean {
         HideKeyboardUseCase(this)
-        return if (canManageMedia()) {
+        return if (IsSPlusUseCase() && MediaStore.canManageMedia(this)) {
             callback(true)
             false
         } else {

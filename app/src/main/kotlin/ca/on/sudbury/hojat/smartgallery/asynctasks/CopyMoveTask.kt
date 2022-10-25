@@ -29,7 +29,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.canManageMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFileBg
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFromMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
@@ -45,6 +44,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.InputStream
@@ -372,7 +372,10 @@ class CopyMoveTask(
     }
 
     private fun deleteSourceFile(source: FileDirItem) {
-        if (activity.isRestrictedWithSAFSdk30(source.path) && !activity.canManageMedia()) {
+        if (activity.isRestrictedWithSAFSdk30(source.path) && !(IsSPlusUseCase() && MediaStore.canManageMedia(
+                activity
+            ))
+        ) {
             mFileDirItemsToDelete.add(source)
         } else {
             activity.deleteFileBg(source, isDeletingMultipleFiles = false)
