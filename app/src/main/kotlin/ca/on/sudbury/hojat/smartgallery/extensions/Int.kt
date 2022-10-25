@@ -6,10 +6,8 @@ import android.media.ExifInterface
 import android.text.format.DateFormat
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
-import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.math.pow
 import kotlin.math.roundToInt
 
 fun Int.adjustAlpha(factor: Float): Int {
@@ -30,20 +28,6 @@ fun Int.formatDate(
     val cal = Calendar.getInstance(Locale.ENGLISH)
     cal.timeInMillis = this * 1000L
     return DateFormat.format("$useDateFormat, $useTimeFormat", cal).toString()
-}
-
-fun Int.formatSize(): String {
-    if (this <= 0) {
-        return "0 B"
-    }
-
-    val units = arrayOf("B", "kB", "MB", "GB", "TB")
-    val digitGroups = (kotlin.math.log10(toDouble()) / kotlin.math.log10(1024.0)).toInt()
-    return "${
-        DecimalFormat("#,##0.#").format(
-            this / 1024.0.pow(digitGroups.toDouble())
-        )
-    } ${units[digitGroups]}"
 }
 
 fun Int.getContrastColor(): Int {
