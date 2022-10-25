@@ -439,10 +439,6 @@ fun Context.getAndroidTreeUri(path: String): String {
     }
 }
 
-fun Context.getCanAppBeUpgraded() = proPackages.contains(
-    baseConfig.appId.removeSuffix(".debug").removePrefix("com.simplemobiletools.")
-)
-
 fun getCurrentFormattedDateTime(): String {
     val simpleDateFormat = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
     return simpleDateFormat.format(Date(System.currentTimeMillis()))
@@ -2951,14 +2947,6 @@ fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = 
 }
 
 val Context.sdCardPath: String get() = baseConfig.sdCardPath
-
-//fun Context.showErrorToast(msg: String, length: Int = Toast.LENGTH_LONG) {
-//    ShowSafeToastUseCase(this, String.format(getString(R.string.error), msg), length)
-//}
-//
-//fun Context.showErrorToast(exception: Exception, length: Int = Toast.LENGTH_LONG) {
-//    showErrorToast(exception.toString(), length)
-//}
 
 fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
     val className =
