@@ -62,7 +62,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setAs
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
-import ca.on.sudbury.hojat.smartgallery.extensions.launchSettings
 import ca.on.sudbury.hojat.smartgallery.extensions.updateFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.tryCopyMoveFilesTo
@@ -179,6 +178,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
@@ -409,7 +409,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 R.id.menu_save_as -> saveImageAs()
                 R.id.menu_create_shortcut -> createShortcut()
                 R.id.menu_resize -> resizeImage()
-                R.id.menu_settings -> launchSettings()
+                R.id.menu_settings -> {
+                    HideKeyboardUseCase(this)
+                    startActivity(Intent(applicationContext, SettingsActivity::class.java))
+                }
                 else -> return@setOnMenuItemClickListener false
             }
             return@setOnMenuItemClickListener true

@@ -64,7 +64,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_APNG
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogTitleBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
@@ -685,11 +684,6 @@ fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean
     } else {
         callback(true)
     }
-}
-
-fun SimpleActivity.launchSettings() {
-    HideKeyboardUseCase(this)
-    startActivity(Intent(applicationContext, SettingsActivity::class.java))
 }
 
 fun SimpleActivity.launchAbout() {

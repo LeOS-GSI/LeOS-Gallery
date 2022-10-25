@@ -84,7 +84,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
 import ca.on.sudbury.hojat.smartgallery.extensions.launchCamera
-import ca.on.sudbury.hojat.smartgallery.extensions.launchSettings
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.extensions.movePinnedDirectoriesToFront
@@ -150,6 +149,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -537,7 +537,11 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 R.id.increase_column_count -> increaseColumnCount()
                 R.id.reduce_column_count -> reduceColumnCount()
                 R.id.set_as_default_folder -> setAsDefaultFolder()
-                R.id.settings -> launchSettings()
+                R.id.settings -> {
+                    // fire up settings page
+                    HideKeyboardUseCase(this)
+                    startActivity(Intent(applicationContext, SettingsActivity::class.java))
+                }
                 R.id.about -> launchAbout()
                 else -> return@setOnMenuItemClickListener false
             }
