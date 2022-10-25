@@ -39,7 +39,6 @@ import android.provider.MediaStore.Images
 import android.provider.OpenableColumns
 import android.provider.Settings
 import android.text.TextUtils
-import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
@@ -55,7 +54,6 @@ import androidx.loader.content.CursorLoader
 import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
-import ca.on.sudbury.hojat.smartgallery.database.DateTakensDao
 import ca.on.sudbury.hojat.smartgallery.database.MediumDao
 import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
@@ -953,8 +951,6 @@ fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
         }
     return IsRPlusUseCase() && (isInvalidName || (isDirectory && isARestrictedDirectory))
 }
-
-val Context.isRTLLayout: Boolean get() = resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
 fun Context.isSAFOnlyRoot(path: String): Boolean {
     return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }

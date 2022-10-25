@@ -5,9 +5,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.View
 import android.widget.LinearLayout
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.isRTLLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.interfaces.LineColorPickerListener
 
@@ -84,7 +84,7 @@ class LineColorPicker(context: Context, attrs: AttributeSet) : LinearLayout(cont
 
     private fun touchAt(touchX: Int) {
         var colorIndex = touchX / stripeWidth
-        if (context.isRTLLayout) {
+        if (context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             colorIndex = colors.size - colorIndex - 1
         }
         val index = 0.coerceAtLeast(colorIndex.coerceAtMost(colorsCount - 1))
