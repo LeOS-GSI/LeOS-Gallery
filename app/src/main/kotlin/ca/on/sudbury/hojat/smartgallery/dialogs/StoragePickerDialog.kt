@@ -12,11 +12,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hasExternalSDCard
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.otgPath
-import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRadioGroupBinding
+import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import timber.log.Timber
 
 /**
@@ -49,7 +49,7 @@ class StoragePickerDialog(
         Timber.d("Hojat Ghasemi : StoragePickerDialog was called")
         availableStorages.add(activity.internalStoragePath)
         when {
-            activity.hasExternalSDCard() -> availableStorages.add(activity.sdCardPath)
+            activity.hasExternalSDCard() -> availableStorages.add(activity.baseConfig.sdCardPath)
             activity.hasOTGConnected() -> availableStorages.add("otg")
             showRoot -> availableStorages.add("root")
         }
@@ -90,7 +90,7 @@ class StoragePickerDialog(
             sdButton.apply {
                 id = idSd
                 text = resources.getString(R.string.sd_card)
-                isChecked = basePath == context.sdCardPath
+                isChecked = basePath == context.baseConfig.sdCardPath
                 setOnClickListener { sdPicked() }
                 if (isChecked) {
                     defaultSelectedId = id
@@ -142,7 +142,7 @@ class StoragePickerDialog(
 
     private fun sdPicked() {
         dialog?.dismiss()
-        callback(activity.sdCardPath)
+        callback(activity.baseConfig.sdCardPath)
     }
 
     private fun otgPicked() {

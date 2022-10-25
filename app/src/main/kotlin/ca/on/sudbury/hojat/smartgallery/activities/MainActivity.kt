@@ -91,7 +91,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.extensions.movePinnedDirectoriesToFront
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.removeInvalidDBDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.sdCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.storeDirectoryItems
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
@@ -647,7 +646,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 getStorageDirectories().firstOrNull {
                     it.trimEnd('/') != internalStoragePath && it.trimEnd(
                         '/'
-                    ) != sdCardPath
+                    ) != baseConfig.sdCardPath
                 }?.apply {
                     config.wasOTGHandled = true
                     val otgPath = trimEnd('/')

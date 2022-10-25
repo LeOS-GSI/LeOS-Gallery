@@ -243,7 +243,7 @@ fun String.shouldFolderBeVisible(
 fun String.getBasePath(context: Context): String {
     return when {
         startsWith(context.internalStoragePath) -> context.internalStoragePath
-        context.isPathOnSD(this) -> context.sdCardPath
+        context.isPathOnSD(this) -> context.baseConfig.sdCardPath
         context.isPathOnOTG(this) -> context.otgPath
         else -> "/"
     }

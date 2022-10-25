@@ -127,7 +127,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
-import ca.on.sudbury.hojat.smartgallery.helpers.proPackages
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
@@ -188,7 +187,6 @@ import kotlin.math.roundToInt
 private const val DOWNLOAD_DIR = "Download"
 private const val ANDROID_DIR = "Android"
 private val DIRS_INACCESSIBLE_WITH_SAF_SDK_30 = listOf(DOWNLOAD_DIR, ANDROID_DIR)
-
 
 // avoid these being set as SD card paths
 @SuppressLint("SdCardPath")
@@ -477,7 +475,7 @@ fun Context.getDirectChildrenCount(
 
 fun Context.getDocumentFile(path: String): DocumentFile? {
     val isOTG = isPathOnOTG(path)
-    var relativePath = path.substring(if (isOTG) otgPath.length else sdCardPath.length)
+    var relativePath = path.substring(if (isOTG) otgPath.length else baseConfig.sdCardPath.length)
     if (relativePath.startsWith(File.separator)) {
         relativePath = relativePath.substring(1)
     }
@@ -726,7 +724,7 @@ fun Context.getPicturesDirectoryPath(fullPath: String): String {
 
 fun Context.getSAFOnlyDirs(): List<String> {
     return DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$internalStoragePath$it" } +
-            DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$sdCardPath$it" }
+            DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$baseConfig.sdCardPath$it" }
 }
 
 fun Context.getSAFStorageId(fullPath: String): String {
@@ -854,7 +852,7 @@ fun Context.isAccessibleWithSAFSdk30(path: String): Boolean {
 fun Context.isAStorageRootFolder(path: String): Boolean {
     val trimmed = path.trimEnd('/')
     return trimmed.isEmpty() || trimmed.equals(internalStoragePath, true) || trimmed.equals(
-        sdCardPath,
+        baseConfig.sdCardPath,
         true
     ) || trimmed.equals(otgPath, true)
 }
@@ -873,11 +871,11 @@ fun Context.isInAndroidDir(path: String): Boolean {
 fun Context.isPathOnInternalStorage(path: String) =
     internalStoragePath.isNotEmpty() && path.startsWith(internalStoragePath)
 
-fun Context.isPathOnSD(path: String) = sdCardPath.isNotEmpty() && path.startsWith(sdCardPath)
+fun Context.isPathOnSD(path: String) = baseConfig.sdCardPath.isNotEmpty() && path.startsWith(baseConfig.sdCardPath)
 
 fun Context.isSDCardSetAsDefaultStorage() =
-    sdCardPath.isNotEmpty() && Environment.getExternalStorageDirectory().absolutePath.equals(
-        sdCardPath,
+    baseConfig.sdCardPath.isNotEmpty() && Environment.getExternalStorageDirectory().absolutePath.equals(
+        baseConfig.sdCardPath,
         true
     )
 
@@ -1492,7 +1490,7 @@ fun Context.checkAppendingHidden(
 fun Context.getFolderNameFromPath(path: String): String {
     return when (path) {
         internalStoragePath -> getString(R.string.internal)
-        sdCardPath -> getString(R.string.sd_card)
+        baseConfig.sdCardPath -> getString(R.string.sd_card)
         otgPath -> getString(R.string.usb)
         FAVORITES -> getString(R.string.favorites)
         RECYCLE_BIN -> getString(R.string.recycle_bin)
@@ -2946,8 +2944,6 @@ fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = 
     rescanPaths(allPaths, callback)
 }
 
-val Context.sdCardPath: String get() = baseConfig.sdCardPath
-
 fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
     val className =
         "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
@@ -3550,7 +3546,7 @@ fun Context.getSDCardPath(): String {
     return finalPath
 }
 
-fun Context.hasExternalSDCard() = sdCardPath.isNotEmpty()
+fun Context.hasExternalSDCard() = baseConfig.sdCardPath.isNotEmpty()
 
 fun Context.hasProperStoredTreeUri(isOTG: Boolean): Boolean {
     val uri = if (isOTG) baseConfig.OTGTreeUri else baseConfig.sdTreeUri
