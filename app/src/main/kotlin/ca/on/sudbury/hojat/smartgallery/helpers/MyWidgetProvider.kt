@@ -12,9 +12,9 @@ import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileSignature
 import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.setText
@@ -61,7 +61,7 @@ class MyWidgetProvider : AppWidgetProvider() {
                 }
 
                 val path =
-                    context.directoryDao.getDirectoryThumbnail(it.folderPath) ?: return@forEach
+                    GalleryDatabase.getInstance(context.applicationContext).DirectoryDao().getDirectoryThumbnail(it.folderPath) ?: return@forEach
                 val options = RequestOptions()
                     .signature(path.getFileSignature())
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)

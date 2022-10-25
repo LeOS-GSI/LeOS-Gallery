@@ -21,11 +21,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityWidgetConfigBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
 import ca.on.sudbury.hojat.smartgallery.extensions.loadJpg
 import ca.on.sudbury.hojat.smartgallery.extensions.getCachedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.widgetsDB
@@ -219,7 +219,8 @@ class WidgetConfigureActivity : SimpleActivity() {
         }
 
         RunOnBackgroundThreadUseCase {
-            val path = directoryDao.getDirectoryThumbnail(folderPath)
+            val path = GalleryDatabase.getInstance(applicationContext).DirectoryDao()
+                .getDirectoryThumbnail(folderPath)
             if (path != null) {
                 runOnUiThread {
                     val signature = ObjectKey(System.currentTimeMillis().toString())

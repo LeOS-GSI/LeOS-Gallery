@@ -468,7 +468,8 @@ fun Context.getDirectChildrenCount(
 
 fun Context.getDocumentFile(path: String): DocumentFile? {
     val isOTG = isPathOnOTG(path)
-    var relativePath = path.substring(if (isOTG) baseConfig.OTGPath.length else baseConfig.sdCardPath.length)
+    var relativePath =
+        path.substring(if (isOTG) baseConfig.OTGPath.length else baseConfig.sdCardPath.length)
     if (relativePath.startsWith(File.separator)) {
         relativePath = relativePath.substring(1)
     }
@@ -903,9 +904,6 @@ val Context.newNavigationBarHeight: Int
         return navigationBarHeight
     }
 
-val Context.directoryDao: DirectoryDao
-    get() = GalleryDatabase.getInstance(applicationContext).DirectoryDao()
-
 val Context.favoritesDB: FavoritesDao
     get() = GalleryDatabase.getInstance(applicationContext).FavoritesDao()
 
@@ -936,7 +934,8 @@ fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
     }
 }
 
-fun Context.isPathOnOTG(path: String) = baseConfig.OTGPath.isNotEmpty() && path.startsWith(baseConfig.OTGPath)
+fun Context.isPathOnOTG(path: String) =
+    baseConfig.OTGPath.isNotEmpty() && path.startsWith(baseConfig.OTGPath)
 
 fun Context.isRestrictedSAFOnlyRoot(path: String): Boolean {
     return IsRPlusUseCase() && isSAFOnlyRoot(path)
@@ -1434,7 +1433,7 @@ fun Context.rescanFolderMediaSync(path: String) {
 
 fun Context.storeDirectoryItems(items: ArrayList<Directory>) {
     RunOnBackgroundThreadUseCase {
-        directoryDao.insertAll(items)
+        GalleryDatabase.getInstance(applicationContext).DirectoryDao().insertAll(items)
     }
 }
 
@@ -1758,7 +1757,7 @@ fun Context.getCachedDirectories(
         }
 
         val directories = try {
-            directoryDao.getAll() as ArrayList<Directory>
+            GalleryDatabase.getInstance(applicationContext).DirectoryDao().getAll() as ArrayList<Directory>
         } catch (e: Exception) {
             ArrayList()
         }
@@ -1927,7 +1926,7 @@ fun Context.getCachedMedia(
 }
 
 fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
-    val dirsToCheck = dirs ?: directoryDao.getAll()
+    val dirsToCheck = dirs ?: GalleryDatabase.getInstance(applicationContext).DirectoryDao().getAll()
     val otgPath = config.OTGPath
     dirsToCheck.filter {
         !it.areFavorites() && !it.isRecycleBin() && !getDoesFilePathExist(
@@ -1936,7 +1935,7 @@ fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
         ) && it.path != config.tempFolderPath
     }.forEach {
         try {
-            directoryDao.deleteDirPath(it.path)
+            GalleryDatabase.getInstance(applicationContext).DirectoryDao().deleteDirPath(it.path)
         } catch (ignored: Exception) {
         }
     }
@@ -1995,7 +1994,7 @@ fun Context.updateDBMediaPath(oldPath: String, newPath: String) {
 
 fun Context.updateDBDirectory(directory: Directory) {
     try {
-        directoryDao.updateDirectory(
+        GalleryDatabase.getInstance(applicationContext).DirectoryDao().updateDirectory(
             directory.path,
             directory.tmb,
             directory.mediaCnt,

@@ -51,7 +51,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.emptyAndDisableTheRecycleBin
-import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
@@ -615,7 +614,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         val paths = mMedia.filter { it is Medium }.map { (it as Medium).path } as ArrayList<String>
         restoreRecycleBinPaths(paths) {
             RunOnBackgroundThreadUseCase {
-                directoryDao.deleteDirPath(RECYCLE_BIN)
+                GalleryDatabase.getInstance(applicationContext).DirectoryDao()
+                    .deleteDirPath(RECYCLE_BIN)
             }
             finish()
         }
@@ -735,7 +735,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
             if (mPath == FAVORITES) {
                 RunOnBackgroundThreadUseCase {
-                    directoryDao.deleteDirPath(FAVORITES)
+                    GalleryDatabase.getInstance(applicationContext).DirectoryDao()
+                        .deleteDirPath(FAVORITES)
                 }
             }
 
@@ -749,7 +750,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun deleteDBDirectory() {
         RunOnBackgroundThreadUseCase {
             try {
-                directoryDao.deleteDirPath(mPath)
+                GalleryDatabase.getInstance(applicationContext).DirectoryDao().deleteDirPath(mPath)
             } catch (ignored: Exception) {
             }
         }

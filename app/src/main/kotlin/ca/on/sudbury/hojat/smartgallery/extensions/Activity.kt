@@ -90,6 +90,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.hojat.palette.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
@@ -1308,7 +1309,7 @@ fun BaseSimpleActivity.emptyTheRecycleBin(callback: (() -> Unit)? = null) {
         try {
             baseContext.filesDir.deleteRecursively()
             mediaDB.clearRecycleBin()
-            directoryDao.deleteRecycleBin()
+            GalleryDatabase.getInstance(applicationContext).DirectoryDao().deleteRecycleBin()
             ShowSafeToastUseCase(this, R.string.recycle_bin_emptied)
             callback?.invoke()
         } catch (e: Exception) {

@@ -43,7 +43,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.createDirectoryFromMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
-import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
 import ca.on.sudbury.hojat.smartgallery.extensions.getCachedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirectorySortingValue
@@ -892,7 +891,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             RunOnBackgroundThreadUseCase {
 
                 folders.filter { !getDoesFilePathExist(it.absolutePath, otgPath) }.forEach {
-                    directoryDao.deleteDirPath(it.absolutePath)
+                    GalleryDatabase.getInstance(applicationContext).DirectoryDao()
+                        .deleteDirPath(it.absolutePath)
                 }
 
                 if (config.deleteEmptyFolders) {
@@ -1355,7 +1355,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             if (dirPathsToRemove.isNotEmpty()) {
                 val dirsToRemove = dirs.filter { dirPathsToRemove.contains(it.path) }
                 dirsToRemove.forEach {
-                    directoryDao.deleteDirPath(it.path)
+                    GalleryDatabase.getInstance(applicationContext).DirectoryDao()
+                        .deleteDirPath(it.path)
                 }
                 dirs.removeAll(dirsToRemove)
                 setupAdapter(dirs)
@@ -1432,7 +1433,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             // make sure to create a new thread for these operations, dont just use the common bg thread
             Thread {
                 try {
-                    directoryDao.insert(newDir)
+                    GalleryDatabase.getInstance(applicationContext).DirectoryDao().insert(newDir)
                     if (folder != RECYCLE_BIN && folder != FAVORITES) {
                         mediaDB.insertAll(newMedia)
                     }
@@ -1658,7 +1659,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             setupAdapter(dirs)
             invalidDirs.forEach {
                 try {
-                    directoryDao.deleteDirPath(it.path)
+                    GalleryDatabase.getInstance(applicationContext).DirectoryDao()
+                        .deleteDirPath(it.path)
                 } catch (ignored: Exception) {
                 }
             }

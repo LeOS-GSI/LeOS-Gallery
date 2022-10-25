@@ -73,7 +73,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.favoritesDB
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.loadImage
-import ca.on.sudbury.hojat.smartgallery.extensions.directoryDao
 import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
@@ -96,6 +95,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
+import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
@@ -358,7 +358,8 @@ class DirectoryAdapter(
                             updateDirs(dirs)
                             RunOnBackgroundThreadUseCase {
                                 try {
-                                    activity.directoryDao.updateDirectoryAfterRename(
+                                    GalleryDatabase.getInstance(activity.applicationContext)
+                                        .DirectoryDao().updateDirectoryAfterRename(
                                         firstDir.tmb,
                                         firstDir.name,
                                         firstDir.path,
