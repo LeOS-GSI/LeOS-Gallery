@@ -97,6 +97,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetMimeTypeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -525,17 +526,17 @@ fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
         if (paths.size == 1) {
             sharePathIntent(paths.first(), applicationId)
         } else {
-            val uriPaths = java.util.ArrayList<String>()
+            val uriPaths = ArrayList<String>()
             val newUris = paths.map {
                 val uri =
                     getFinalUriFromPath(it, applicationId) ?: return@RunOnBackgroundThreadUseCase
                 uriPaths.add(uri.path!!)
                 uri
-            } as java.util.ArrayList<Uri>
+            } as ArrayList<Uri>
 
-            var mimeType = uriPaths.getMimeType()
+            var mimeType = GetMimeTypeUseCase(uriPaths)
             if (mimeType.isEmpty() || mimeType == "*/*") {
-                mimeType = paths.getMimeType()
+                mimeType = GetMimeTypeUseCase(paths)
             }
 
             Intent().apply {
