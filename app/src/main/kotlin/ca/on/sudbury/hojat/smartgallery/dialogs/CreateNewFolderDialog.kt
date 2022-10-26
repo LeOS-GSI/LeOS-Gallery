@@ -16,13 +16,13 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
-import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 import java.io.File
@@ -49,7 +49,7 @@ class CreateNewFolderDialog(
                     this,
                     R.string.create_new_folder
                 ) { alertDialog ->
-                    alertDialog.showKeyboard(binding.folderName)
+                    ShowKeyboardUseCase(alertDialog, binding.folderName)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
                         .setOnClickListener(View.OnClickListener {
                             val name = binding.folderName.text.toString().trim()

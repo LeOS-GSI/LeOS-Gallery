@@ -7,7 +7,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogCustomAspectRatioBindi
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.showKeyboard
+import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
 
 class CustomAspectRatioDialog(
     val activity: BaseSimpleActivity,
@@ -29,7 +29,7 @@ class CustomAspectRatioDialog(
             .setNegativeButton(R.string.cancel, null)
             .apply {
                 activity.setupDialogStuff(binding.root, this) { alertDialog ->
-                    alertDialog.showKeyboard(binding.aspectRatioWidth)
+                    ShowKeyboardUseCase(alertDialog,binding.aspectRatioWidth )
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         val width = getViewValue(binding.aspectRatioWidth)
                         val height = getViewValue(binding.aspectRatioHeight)
