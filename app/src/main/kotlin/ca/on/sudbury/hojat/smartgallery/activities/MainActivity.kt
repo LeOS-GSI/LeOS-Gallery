@@ -15,6 +15,7 @@ import android.provider.MediaStore.Images
 import android.provider.MediaStore.Video
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.RelativeLayout
@@ -36,7 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
@@ -601,7 +601,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 // this triggers on device rotation too, avoid doing anything
                 override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                     if (mIsSearchOpen) {
-                        binding.directoriesSwitchSearching.beGone()
+                        binding.directoriesSwitchSearching.visibility = View.GONE
                         mIsSearchOpen = false
                         binding.directoriesRefreshLayout.isEnabled = config.enablePullToRefresh
                         setupAdapter(mDirs, "")
@@ -1417,8 +1417,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             if (isPlaceholderVisible) {
                 isPlaceholderVisible = false
                 runOnUiThread {
-                    binding.directoriesEmptyPlaceholder.beGone()
-                    binding.directoriesEmptyPlaceholder2.beGone()
+                    binding.directoriesEmptyPlaceholder.visibility = View.GONE
+                    binding.directoriesEmptyPlaceholder2.visibility = View.GONE
                     binding.directoriesFastscroller.beVisible()
                 }
             }
@@ -1517,11 +1517,11 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
         if (mIsSearchOpen) {
             binding.directoriesEmptyPlaceholder.text = getString(R.string.no_items_found)
-            binding.directoriesEmptyPlaceholder2.beGone()
+            binding.directoriesEmptyPlaceholder2.visibility = View.GONE
         } else if (dirs.isEmpty() && config.filterMedia == getDefaultFileFilter()) {
             if (IsRPlusUseCase() && !isExternalStorageManager()) {
                 binding.directoriesEmptyPlaceholder.text = getString(R.string.no_items_found)
-                binding.directoriesEmptyPlaceholder2.beGone()
+                binding.directoriesEmptyPlaceholder2.visibility = View.GONE
             } else {
                 binding.directoriesEmptyPlaceholder.text = getString(R.string.no_media_add_included)
                 binding.directoriesEmptyPlaceholder2.text = getString(R.string.add_folder)

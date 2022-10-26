@@ -13,9 +13,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
+import android.view.View
 import androidx.core.net.toUri
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -147,11 +147,11 @@ class AboutActivity : BaseSimpleActivity() {
         }
 
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            binding.aboutEmailHolder.beGone()
+            binding.aboutEmailHolder.visibility = View.GONE
 
             if (binding.aboutFaqHolder.isGone()) {
-                binding.aboutSupport.beGone()
-                binding.aboutSupportHolder.beGone()
+                binding.aboutSupport.visibility = View.GONE
+                binding.aboutSupportHolder.visibility = View.GONE
             } else {
                 binding.aboutFaqHolder.background =
                     resources.getDrawable(R.drawable.ripple_all_corners, theme)
@@ -215,7 +215,7 @@ class AboutActivity : BaseSimpleActivity() {
 
     private fun setupRateUs() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
-            binding.aboutRateUsHolder.beGone()
+            binding.aboutRateUsHolder.visibility = View.GONE
         }
 
         binding.aboutRateUsHolder.setOnClickListener {
@@ -249,7 +249,7 @@ class AboutActivity : BaseSimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupInvite() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
-            binding.aboutInviteHolder.beGone()
+            binding.aboutInviteHolder.visibility = View.GONE
         } else if (binding.aboutRateUsHolder.isGone()) {
             binding.aboutInviteHolder.background =
                 resources.getDrawable(R.drawable.ripple_top_corners, theme)
@@ -298,14 +298,14 @@ class AboutActivity : BaseSimpleActivity() {
                 launchViewIntent("https://simplemobiletools.com/donate")
             }
         } else {
-            binding.aboutDonateHolder.beGone()
+            binding.aboutDonateHolder.visibility = View.GONE
         }
     }
 
     private fun setupFacebook() {
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            binding.aboutSocial.beGone()
-            binding.aboutSocialHolder.beGone()
+            binding.aboutSocial.visibility = View.GONE
+            binding.aboutSocialHolder.visibility = View.GONE
         }
 
         binding.aboutFacebookHolder.setOnClickListener {
@@ -328,7 +328,7 @@ class AboutActivity : BaseSimpleActivity() {
 
     private fun setupMoreApps() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
-            binding.aboutMoreAppsHolder.beGone()
+            binding.aboutMoreAppsHolder.visibility = View.GONE
         }
 
         binding.aboutMoreAppsHolder.setOnClickListener {
@@ -349,13 +349,13 @@ class AboutActivity : BaseSimpleActivity() {
                 launchViewIntent("https://simplemobiletools.com/")
             }
         } else {
-            binding.aboutWebsiteHolder.beGone()
+            binding.aboutWebsiteHolder.visibility = View.GONE
         }
     }
 
     private fun setupPrivacyPolicy() {
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            binding.aboutPrivacyPolicyHolder.beGone()
+            binding.aboutPrivacyPolicyHolder.visibility = View.GONE
         }
 
         binding.aboutPrivacyPolicyHolder.setOnClickListener {

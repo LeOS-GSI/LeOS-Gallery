@@ -1,7 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
+import android.view.View
 import androidx.appcompat.app.AlertDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
@@ -34,7 +34,7 @@ class RenameItemDialog(
                 val extension = fullName.substring(dotAt + 1)
                 renameItemExtension.setText(extension)
             } else {
-                renameItemExtensionHint.beGone()
+                renameItemExtensionHint.visibility = View.GONE
             }
 
             renameItemName.setText(name)

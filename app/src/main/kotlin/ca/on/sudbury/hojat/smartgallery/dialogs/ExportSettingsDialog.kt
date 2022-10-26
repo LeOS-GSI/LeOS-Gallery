@@ -1,8 +1,8 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -40,8 +40,8 @@ class ExportSettingsDialog(
             exportSettingsFilename.setText(defaultFilename.removeSuffix(".txt"))
 
             if (hidePath) {
-                exportSettingsPathLabel.beGone()
-                exportSettingsPath.beGone()
+                exportSettingsPathLabel.visibility = View.GONE
+                exportSettingsPath.visibility = View.GONE
             } else {
                 exportSettingsPath.text = activity.humanizePath(folder)
                 exportSettingsPath.setOnClickListener {

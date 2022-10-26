@@ -48,7 +48,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -275,7 +274,7 @@ class PhotoFragment : ViewPagerFragment() {
         if (mWasInit) {
             if (config.allowZoomingImages != mStoredAllowDeepZoomableImages || config.showHighestQuality != mStoredShowHighestQuality) {
                 mIsSubsamplingVisible = false
-                binding.subsamplingView.beGone()
+                binding.subsamplingView.visibility = View.GONE
                 loadImage()
             } else if (mMedium.isGIF()) {
                 loadGif()
@@ -437,7 +436,7 @@ class PhotoFragment : ViewPagerFragment() {
                 }
 
             binding.apply {
-                gesturesView.beGone()
+                gesturesView.visibility = View.GONE
                 gifViewFrame.beVisible()
                 RunOnBackgroundThreadUseCase {
                     gifView.setInputSource(source)
@@ -760,7 +759,7 @@ class PhotoFragment : ViewPagerFragment() {
                     binding.gesturesView.controller.settings.isZoomEnabled = true
                     background = ColorDrawable(Color.TRANSPARENT)
                     mIsSubsamplingVisible = false
-                    beGone()
+                    visibility = View.GONE
                 }
 
                 override fun onImageRotation(degrees: Int) {
@@ -909,7 +908,7 @@ class PhotoFragment : ViewPagerFragment() {
                 }
             }
         } else {
-            binding.photoDetails.beGone()
+            binding.photoDetails.visibility = View.GONE
         }
     }
 
@@ -917,7 +916,7 @@ class PhotoFragment : ViewPagerFragment() {
         if (context?.config?.allowZoomingImages == true) {
             mIsSubsamplingVisible = false
             binding.subsamplingView.recycle()
-            binding.subsamplingView.beGone()
+            binding.subsamplingView.visibility = View.GONE
             mLoadZoomableViewHandler.removeCallbacksAndMessages(null)
         }
     }

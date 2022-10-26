@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.os.Environment
 import android.os.Parcelable
 import android.view.KeyEvent
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -12,7 +13,6 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
@@ -144,7 +144,7 @@ class FilePickerDialog(
             beVisibleIf(!showHidden && canAddShowHiddenButton)
             setOnClickListener {
                 activity.handleHiddenFolderPasswordProtection {
-                    beGone()
+                    visibility = View.GONE
                     showHidden = true
                     tryUpdateItems()
                 }
@@ -186,7 +186,7 @@ class FilePickerDialog(
         RunOnBackgroundThreadUseCase {
             getItems(currPath) {
                 activity.runOnUiThread {
-                    binding.filepickerPlaceholder.beGone()
+                    binding.filepickerPlaceholder.visibility = View.GONE
                     updateItems(it as ArrayList<FileDirItem>)
                 }
             }
@@ -365,7 +365,7 @@ class FilePickerDialog(
     private fun showFavorites() {
         binding.apply {
             filepickerFavoritesHolder.beVisible()
-            filepickerFilesHolder.beGone()
+            filepickerFilesHolder.visibility = View.GONE
             val drawable = activity.resources.getColoredDrawableWithColor(
                 R.drawable.ic_folder_vector,
                 activity.getProperPrimaryColor().getContrastColor()
@@ -376,7 +376,7 @@ class FilePickerDialog(
 
     private fun hideFavorites() {
         binding.apply {
-            filepickerFavoritesHolder.beGone()
+            filepickerFavoritesHolder.visibility = View.GONE
             filepickerFilesHolder.beVisible()
             val drawable = activity.resources.getColoredDrawableWithColor(
                 R.drawable.ic_star_vector,

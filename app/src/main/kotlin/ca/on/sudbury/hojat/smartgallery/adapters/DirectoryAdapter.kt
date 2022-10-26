@@ -35,7 +35,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
@@ -945,7 +944,7 @@ class DirectoryAdapter(
                     context.getProperBackgroundColor().getContrastColor()
                 )
             } else {
-                dir_lock.beGone()
+                dir_lock.visibility = View.GONE
                 val roundedCorners = when {
                     isListViewType -> ROUNDED_CORNERS_SMALL
                     folderStyle == FOLDER_STYLE_SQUARE -> ROUNDED_CORNERS_NONE

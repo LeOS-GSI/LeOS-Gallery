@@ -139,7 +139,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarRight
 import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
@@ -1024,7 +1023,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         if (config.bottomActions) {
             binding.bottomActions.root.beVisible()
         } else {
-            binding.bottomActions.root.beGone()
+            binding.bottomActions.root.visibility = View.GONE
         }
 
         if (!portrait && navigationBarRight && (if (navigationBarRight) navigationBarSize.x else 0) > 0) {

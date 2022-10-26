@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.SearchView
@@ -97,7 +98,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -463,9 +463,9 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                     if (grouped.isEmpty()) {
                         binding.mediaEmptyTextPlaceholder.text = getString(R.string.no_items_found)
                         binding.mediaEmptyTextPlaceholder.beVisible()
-                        binding.mediaFastscroller.beGone()
+                        binding.mediaFastscroller.visibility = View.GONE
                     } else {
-                        binding.mediaEmptyTextPlaceholder.beGone()
+                        binding.mediaEmptyTextPlaceholder.visibility = View.GONE
                         binding.mediaFastscroller.beVisible()
                     }
 

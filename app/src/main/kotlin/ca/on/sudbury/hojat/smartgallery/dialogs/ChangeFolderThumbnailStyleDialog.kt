@@ -2,6 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.view.View
 import android.widget.RelativeLayout
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
@@ -11,7 +12,6 @@ import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -105,12 +105,12 @@ class ChangeFolderThumbnailStyleDialog(
                     photo_cnt.beVisible()
                 }
                 R.id.dialog_radio_folder_count_brackets -> {
-                    photo_cnt.beGone()
+                    photo_cnt.visibility = View.GONE
                     dir_name.text = "$folderName ($photoCount)"
                 }
                 else -> {
                     dir_name.text = folderName
-                    photo_cnt?.beGone()
+                    photo_cnt?.visibility = View.GONE
                 }
             }
 

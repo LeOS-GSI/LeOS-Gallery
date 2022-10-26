@@ -44,7 +44,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
@@ -216,9 +215,9 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         if (mIsPanorama) {
             binding.apply {
                 panoramaOutline.beVisible()
-                videoPlayOutline.beGone()
-                videoVolumeController.beGone()
-                videoBrightnessController.beGone()
+                videoPlayOutline.visibility = View.GONE
+                videoVolumeController.visibility = View.GONE
+                videoBrightnessController.visibility = View.GONE
                 Glide.with(requireContext()).load(mMedium.path).into(videoPreview)
             }
         }
@@ -518,7 +517,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
                 }
             }
         } else {
-            binding.videoDetails.beGone()
+            binding.videoDetails.visibility = View.GONE
         }
     }
 
@@ -694,7 +693,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         }
 
         if (binding.videoPreview.isVisible()) {
-            binding.videoPreview.beGone()
+            binding.videoPreview.visibility = View.GONE
             initExoPlayer()
         }
 
@@ -713,7 +712,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         }
 
         if (!mWasVideoStarted) {
-            binding.videoPlayOutline.beGone()
+            binding.videoPlayOutline.visibility = View.GONE
             binding.rlBottomVideoTimeHolder.videoTogglePlayPause.beVisible()
         }
 

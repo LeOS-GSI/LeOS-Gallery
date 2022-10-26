@@ -29,7 +29,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
@@ -234,7 +233,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
                 if (!preventShowingHiddenFile) {
                     if (realPath.getFilenameFromPath().contains('.') || filename.contains('.')) {
                         if (isFileTypeVisible(realPath)) {
-                            binding.bottomActions.root.beGone()
+                            binding.bottomActions.root.visibility = View.GONE
                             sendViewPagerIntent(realPath)
                             finish()
                             return
@@ -248,7 +247,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
         if (mUri!!.scheme == "file") {
             if (filename.contains('.')) {
-                binding.bottomActions.root.beGone()
+                binding.bottomActions.root.visibility = View.GONE
                 applicationContext.rescanPaths(arrayListOf(mUri!!.path!!))
                 sendViewPagerIntent(mUri!!.path!!)
                 finish()
@@ -268,7 +267,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
                     ) && getDoesFilePathExist(realPath)
                 ) {
                     if (isFileTypeVisible(realPath)) {
-                        binding.bottomActions.root.beGone()
+                        binding.bottomActions.root.visibility = View.GONE
                         applicationContext.rescanPaths(arrayListOf(mUri!!.path!!))
                         sendViewPagerIntent(realPath)
                         finish()
@@ -486,7 +485,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         if (config.bottomActions) {
             binding.bottomActions.root.beVisible()
         } else {
-            binding.bottomActions.root.beGone()
+            binding.bottomActions.root.visibility = View.GONE
         }
     }
 
@@ -505,7 +504,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             binding.bottomActions.bottomMove,
             binding.bottomActions.bottomResize
         ).forEach {
-            it.beGone()
+            it.visibility = View.GONE
         }
 
         val visibleBottomActions = if (config.bottomActions) config.visibleBottomActions else 0

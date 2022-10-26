@@ -16,7 +16,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.canModifyEXIF
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
@@ -285,7 +284,7 @@ class PropertiesDialog() {
                             (mDialogView.findViewById<LinearLayout>(R.id.properties_md5).property_value as TextView).text =
                                 md5
                         } else {
-                            mDialogView.findViewById<LinearLayout>(R.id.properties_md5).beGone()
+                            mDialogView.findViewById<LinearLayout>(R.id.properties_md5).visibility = View.GONE
                         }
                     }
                 }

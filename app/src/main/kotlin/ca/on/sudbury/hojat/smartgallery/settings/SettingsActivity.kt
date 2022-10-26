@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
@@ -359,7 +359,7 @@ class SettingsActivity : SimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupShowHiddenItems() {
         if (IsRPlusUseCase() && !isExternalStorageManager()) {
-            binding.settingsShowHiddenItemsHolder.beGone()
+            binding.settingsShowHiddenItemsHolder.visibility = View.GONE
             binding.settingsManageExcludedFoldersHolder.background =
                 resources.getDrawable(R.drawable.ripple_bottom_corners, theme)
         }

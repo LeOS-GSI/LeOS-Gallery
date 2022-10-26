@@ -27,7 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
@@ -727,7 +726,7 @@ class MediaAdapter(
                 )
                 file_type.beVisible()
             } else {
-                file_type?.beGone()
+                file_type?.visibility = View.GONE
             }
 
             medium_name.beVisibleIf(displayFilenames || isListViewType)

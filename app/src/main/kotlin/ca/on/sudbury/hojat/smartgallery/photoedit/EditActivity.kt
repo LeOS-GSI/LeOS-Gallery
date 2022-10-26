@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.view.View
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.exifinterface.media.ExifInterface
@@ -30,7 +31,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
@@ -211,7 +211,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
         isCropIntent = intent.extras?.get(CROP) == "true"
         if (isCropIntent) {
-            binding.bottomEditorPrimaryActions.root.beGone()
+            binding.bottomEditorPrimaryActions.root.visibility = View.GONE
             (binding.bottomEditorCropRotateActions.root.layoutParams as RelativeLayout.LayoutParams).addRule(
                 RelativeLayout.ALIGN_PARENT_BOTTOM,
                 1
@@ -240,8 +240,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
     private fun loadDefaultImageView() {
         binding.defaultImageView.beVisible()
-        binding.cropImageView.beGone()
-        binding.editorDrawCanvas.beGone()
+        binding.cropImageView.visibility = View.GONE
+        binding.editorDrawCanvas.visibility = View.GONE
 
         val options = RequestOptions()
             .skipMemoryCache(true)
@@ -292,8 +292,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     }
 
                     if (isCropIntent) {
-                        binding.bottomEditorPrimaryActions.bottomPrimaryFilter.beGone()
-                        binding.bottomEditorPrimaryActions.bottomPrimaryDraw.beGone()
+                        binding.bottomEditorPrimaryActions.bottomPrimaryFilter.visibility = View.GONE
+                        binding.bottomEditorPrimaryActions.bottomPrimaryDraw.visibility = View.GONE
                     }
 
                     return false
@@ -302,8 +302,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     }
 
     private fun loadCropImageView() {
-        binding.defaultImageView.beGone()
-        binding.editorDrawCanvas.beGone()
+        binding.defaultImageView.visibility = View.GONE
+        binding.editorDrawCanvas.visibility = View.GONE
         binding.cropImageView.apply {
             beVisible()
             setOnCropImageCompleteListener(this@EditActivity)
@@ -313,14 +313,14 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             if (isCropIntent && shouldCropSquare()) {
                 currAspectRatio = ASPECT_RATIO_ONE_ONE
                 setFixedAspectRatio(true)
-                binding.bottomEditorCropRotateActions.bottomAspectRatio.beGone()
+                binding.bottomEditorCropRotateActions.bottomAspectRatio.visibility = View.GONE
             }
         }
     }
 
     private fun loadDrawCanvas() {
-        binding.defaultImageView.beGone()
-        binding.cropImageView.beGone()
+        binding.defaultImageView.visibility = View.GONE
+        binding.cropImageView.visibility = View.GONE
         binding.editorDrawCanvas.beVisible()
 
         if (!wasDrawCanvasPositioned) {
@@ -392,7 +392,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 binding.defaultImageView.setImageResource(0)
                 binding.cropImageView.setImageBitmap(null)
                 binding.bottomEditorFilterActions.bottomActionsFilterList.adapter = null
-                binding.bottomEditorFilterActions.bottomActionsFilterList.beGone()
+                binding.bottomEditorFilterActions.bottomActionsFilterList.visibility = View.GONE
 
                 RunOnBackgroundThreadUseCase {
                     try {
@@ -561,7 +561,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         binding.bottomEditorCropRotateActions.bottomAspectRatio.setOnClickListener {
             currCropRotateAction = if (currCropRotateAction == CROP_ROTATE_ASPECT_RATIO) {
                 binding.cropImageView.guidelines = CropImageView.Guidelines.OFF
-                binding.bottomAspectRatios.root.beGone()
+                binding.bottomAspectRatios.root.visibility = View.GONE
                 CROP_ROTATE_NONE
             } else {
                 binding.cropImageView.guidelines = CropImageView.Guidelines.ON
@@ -742,7 +742,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
 
         if (currPrimaryAction != PRIMARY_ACTION_CROP_ROTATE) {
-            binding.bottomAspectRatios.root.beGone()
+            binding.bottomAspectRatios.root.visibility = View.GONE
             currCropRotateAction = CROP_ROTATE_NONE
         }
         updateCropRotateActionButtons()

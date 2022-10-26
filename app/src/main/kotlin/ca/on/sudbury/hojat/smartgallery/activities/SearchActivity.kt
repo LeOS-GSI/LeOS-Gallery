@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.SearchView
@@ -16,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
@@ -138,7 +138,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
                         binding.searchEmptyTextPlaceholder.text = getString(R.string.no_items_found)
                         binding.searchEmptyTextPlaceholder.beVisible()
                     } else {
-                        binding.searchEmptyTextPlaceholder.beGone()
+                        binding.searchEmptyTextPlaceholder.visibility = View.GONE
                     }
 
                     handleGridSpacing(grouped)

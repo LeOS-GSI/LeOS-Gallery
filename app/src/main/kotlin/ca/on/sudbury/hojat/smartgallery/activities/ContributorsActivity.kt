@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.Menu
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
+import android.view.View
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -56,8 +56,8 @@ class ContributorsActivity : BaseSimpleActivity() {
         }
 
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            binding.contributorsFooterIcon.beGone()
-            binding.contributorsLabel.beGone()
+            binding.contributorsFooterIcon.visibility = View.GONE
+            binding.contributorsLabel.visibility = View.GONE
         }
     }
 

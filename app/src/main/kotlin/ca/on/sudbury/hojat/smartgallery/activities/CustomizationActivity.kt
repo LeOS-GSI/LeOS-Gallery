@@ -8,13 +8,13 @@ import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -120,7 +120,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         originalAppIconColor = baseConfig.appIconColor
 
         if (resources.getBoolean(R.bool.hide_google_relations)) {
-            binding.applyToAllHolder.beGone()
+            binding.applyToAllHolder.visibility = View.GONE
         }
     }
 
@@ -248,7 +248,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
 
         if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
-            binding.applyToAllHolder.beGone()
+            binding.applyToAllHolder.visibility = View.GONE
         }
     }
 
@@ -736,7 +736,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                 predefinedThemes[THEME_SHARED] = MyTheme(R.string.shared, 0, 0, 0, 0)
             }
             baseConfig.wasSharedThemeEverActivated = true
-            binding.applyToAllHolder.beGone()
+            binding.applyToAllHolder.visibility = View.GONE
             updateColorTheme(THEME_SHARED)
             saveChanges(false)
         }

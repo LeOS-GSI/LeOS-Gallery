@@ -1,11 +1,11 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.app.Activity
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.biometric.auth.AuthPromptHost
 import androidx.fragment.app.FragmentActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -99,7 +99,7 @@ class SecurityDialog(
                     updateTabVisibility()
                 })
             } else {
-                dialogTabLayout.beGone()
+                dialogTabLayout.visibility = View.GONE
                 viewPager.currentItem = showTabIndex
                 viewPager.allowSwiping = false
             }

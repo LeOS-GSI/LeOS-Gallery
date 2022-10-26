@@ -50,7 +50,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
-import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityVideoPlayerBinding
@@ -308,8 +307,8 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
                     doSkip(true)
                 })
         } else {
-            binding.videoBrightnessController.beGone()
-            binding.videoVolumeController.beGone()
+            binding.videoBrightnessController.visibility = View.GONE
+            binding.videoVolumeController.visibility = View.GONE
         }
 
         if (config.hideSystemUI) {
