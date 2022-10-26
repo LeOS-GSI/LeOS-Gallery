@@ -1,14 +1,9 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
-import android.content.Context
 import android.graphics.Color
 import android.media.ExifInterface
-import android.text.format.DateFormat
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
-import java.util.Calendar
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -18,18 +13,6 @@ fun Int.adjustAlpha(factor: Float): Int {
     val green = Color.green(this)
     val blue = Color.blue(this)
     return Color.argb(alpha, red, green, blue)
-}
-
-fun Int.formatDate(
-    context: Context,
-    dateFormat: String? = null,
-    timeFormat: String? = null
-): String {
-    val useDateFormat = dateFormat ?: context.baseConfig.dateFormat
-    val useTimeFormat = timeFormat ?: with(context){if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12 }
-    val cal = Calendar.getInstance(Locale.ENGLISH)
-    cal.timeInMillis = this * 1000L
-    return DateFormat.format("$useDateFormat, $useTimeFormat", cal).toString()
 }
 
 fun Int.getContrastColor(): Int {
