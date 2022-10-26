@@ -9,14 +9,12 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File
 import java.util.HashMap
 
-fun File.isMediaFile() = absolutePath.isMediaFile()
-fun File.isGif() = absolutePath.endsWith(".gif", true)
 fun File.isVideoFast() = videoExtensions.any { absolutePath.endsWith(it, true) }
+
 fun File.isImageFast() = photoExtensions.any { absolutePath.endsWith(it, true) }
 fun File.isRawFast() = rawExtensions.any { absolutePath.endsWith(it, true) }
 fun File.isSvg() = absolutePath.isSvg()
 fun File.isPortrait() = absolutePath.isPortrait()
-
 
 
 fun File.getProperSize(countHiddenItems: Boolean): Long {

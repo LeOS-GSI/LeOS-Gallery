@@ -73,7 +73,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
-import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
@@ -856,7 +855,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
                         ((it.isImageFast() && filter and TYPE_IMAGES != 0) ||
                                 (it.isVideoFast() && filter and TYPE_VIDEOS != 0) ||
-                                (it.isGif() && filter and TYPE_GIFS != 0) ||
+                                (it.absolutePath.endsWith(".gif", true) && filter and TYPE_GIFS != 0) ||
                                 (it.isRawFast() && filter and TYPE_RAWS != 0) ||
                                 (it.isSvg() && filter and TYPE_SVGS != 0))
             }?.mapTo(itemsToDelete) { it.toFileDirItem(applicationContext) }
@@ -1777,7 +1776,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 for (file in files) {
                     if (file.isDirectory && !file.startsWith("${config.internalStoragePath}/Android")) {
                         folders.addAll(getFoldersWithMedia(file.absolutePath))
-                    } else if (file.isFile && file.isMediaFile()) {
+                    } else if (file.isFile && file.absolutePath.isMediaFile()) {
                         folders.add(file.parent ?: "")
                         break
                     }
