@@ -40,6 +40,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
@@ -145,8 +146,10 @@ open class FileDirItem(
                 path,
                 countHidden
             )
-            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.getFileCount(countHidden)
-                ?: 0
+            context.isPathOnOTG(path) -> GetFileCountUseCase(
+                context.getDocumentFile(path),
+                countHidden
+            )
             else -> File(path).getFileCount(countHidden)
         }
     }
