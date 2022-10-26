@@ -74,12 +74,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
-import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
-import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
 import ca.on.sudbury.hojat.smartgallery.extensions.launchCamera
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
@@ -145,6 +142,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateSDCardPath
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
+import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
@@ -853,10 +853,16 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             val files = File(it.path).listFiles()
             files?.filter {
                 it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
-                        ((it.isImageFast() && filter and TYPE_IMAGES != 0) ||
-                                (it.isVideoFast() && filter and TYPE_VIDEOS != 0) ||
+                        ((photoExtensions.any { extension ->
+                            it.absolutePath.endsWith(extension, true)
+                        } && filter and TYPE_IMAGES != 0) ||
+                                (videoExtensions.any { extension ->
+                                    it.absolutePath.endsWith(extension, true)
+                                } && filter and TYPE_VIDEOS != 0) ||
                                 (it.absolutePath.endsWith(".gif", true) && filter and TYPE_GIFS != 0) ||
-                                (it.isRawFast() && filter and TYPE_RAWS != 0) ||
+                                (rawExtensions.any { extension ->
+                                    it.absolutePath.endsWith(extension, true)
+                                } && filter and TYPE_RAWS != 0) ||
                                 (it.absolutePath.isSvg() && filter and TYPE_SVGS != 0))
             }?.mapTo(itemsToDelete) { it.toFileDirItem(applicationContext) }
         }

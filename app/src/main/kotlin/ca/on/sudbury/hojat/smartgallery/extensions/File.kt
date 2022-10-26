@@ -2,17 +2,9 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.content.Context
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File
 import java.util.HashMap
-
-fun File.isVideoFast() = videoExtensions.any { absolutePath.endsWith(it, true) }
-fun File.isImageFast() = photoExtensions.any { absolutePath.endsWith(it, true) }
-fun File.isRawFast() = rawExtensions.any { absolutePath.endsWith(it, true) }
-
 
 fun File.getProperSize(countHiddenItems: Boolean): Long {
     return if (isDirectory) {

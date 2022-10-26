@@ -27,7 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
@@ -98,6 +97,9 @@ import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
+import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
+import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
@@ -630,10 +632,19 @@ class DirectoryAdapter(
             File(it).listFiles()?.filter {
                 !File(it.absolutePath).isDirectory &&
                         it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
-                        ((it.isImageFast() && filter and TYPE_IMAGES != 0) ||
-                                (it.isVideoFast() && filter and TYPE_VIDEOS != 0) ||
-                                (it.absolutePath.endsWith(".gif", true) && filter and TYPE_GIFS != 0) ||
-                                (it.isRawFast() && filter and TYPE_RAWS != 0) ||
+                        ((photoExtensions.any { extension ->
+                            it.absolutePath.endsWith(extension, true)
+                        } && filter and TYPE_IMAGES != 0) ||
+                                (videoExtensions.any { extension ->
+                                    it.absolutePath.endsWith(extension, true)
+                                } && filter and TYPE_VIDEOS != 0) ||
+                                (it.absolutePath.endsWith(
+                                    ".gif",
+                                    true
+                                ) && filter and TYPE_GIFS != 0) ||
+                                (rawExtensions.any { extension ->
+                                    it.absolutePath.endsWith(extension, true)
+                                } && filter and TYPE_RAWS != 0) ||
                                 (it.absolutePath.isSvg() && filter and TYPE_SVGS != 0))
             }?.mapTo(paths) { it.absolutePath }
         }
