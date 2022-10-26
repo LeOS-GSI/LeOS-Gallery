@@ -857,7 +857,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                                 (it.isVideoFast() && filter and TYPE_VIDEOS != 0) ||
                                 (it.absolutePath.endsWith(".gif", true) && filter and TYPE_GIFS != 0) ||
                                 (it.isRawFast() && filter and TYPE_RAWS != 0) ||
-                                (it.isSvg() && filter and TYPE_SVGS != 0))
+                                (it.absolutePath.isSvg() && filter and TYPE_SVGS != 0))
             }?.mapTo(itemsToDelete) { it.toFileDirItem(applicationContext) }
         }
 

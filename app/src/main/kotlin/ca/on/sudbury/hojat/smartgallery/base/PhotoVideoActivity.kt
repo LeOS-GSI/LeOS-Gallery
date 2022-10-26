@@ -300,7 +300,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             filename.isGif() || intentType.equals("image/gif", true) -> TYPE_GIFS
             filename.isRawFast() -> TYPE_RAWS
             filename.isSvg() -> TYPE_SVGS
-            file.isPortrait() -> TYPE_PORTRAITS
+            file.absolutePath.isPortrait() -> TYPE_PORTRAITS
             else -> TYPE_IMAGES
         }
 
