@@ -20,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
-import ca.on.sudbury.hojat.smartgallery.extensions.getItemSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getMediaStoreLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
@@ -41,6 +40,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.util.*
@@ -125,8 +125,8 @@ open class FileDirItem(
     fun getProperSize(context: Context, countHidden: Boolean): Long {
         return when {
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileSize(path)
-            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.getItemSize(countHidden)
-                ?: 0
+            context.isPathOnOTG(path) ->
+                GetFileSizeUseCase(context.getDocumentFile(path), countHidden)
             IsNougatPlusUseCase() && path.startsWith("content://") -> {
                 try {
                     context.contentResolver.openInputStream(Uri.parse(path))?.available()?.toLong()

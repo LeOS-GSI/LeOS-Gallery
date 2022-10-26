@@ -146,6 +146,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.bumptech.glide.Glide
@@ -3262,7 +3263,7 @@ fun Context.getOTGItems(
         val filePath = file.uri.toString().substring(basePath.length)
         val decodedPath = baseConfig.OTGPath + "/" + URLDecoder.decode(filePath, "UTF-8")
         val fileSize = when {
-            getProperFileSize -> file.getItemSize(shouldShowHidden)
+            getProperFileSize -> GetFileSizeUseCase(file, shouldShowHidden)
             isDirectory -> 0L
             else -> file.length()
         }

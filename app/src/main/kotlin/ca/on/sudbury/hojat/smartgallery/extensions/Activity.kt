@@ -97,6 +97,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMimeTypeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -1170,7 +1171,10 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
 
                     out?.flush()
 
-                    if (fileDocument.getItemSize(true) == copiedSize && getDoesFilePathExist(
+                    if (GetFileSizeUseCase(
+                            fileDocument,
+                            true
+                        ) == copiedSize && getDoesFilePathExist(
                             destination
                         )
                     ) {
