@@ -1,16 +1,17 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.os.SystemClock
-import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 
 fun View.beGoneIf(beGone: Boolean) = beVisibleIf(!beGone)
 
-fun View.beInvisibleIf(beInvisible: Boolean) = if (beInvisible) visibility = View.INVISIBLE else visibility = View.VISIBLE
+fun View.beInvisibleIf(beInvisible: Boolean) =
+    if (beInvisible) visibility = View.INVISIBLE else visibility = View.VISIBLE
 
-fun View.beVisibleIf(beVisible: Boolean) = if (beVisible) visibility = View.VISIBLE else visibility = View.GONE
+fun View.beVisibleIf(beVisible: Boolean) =
+    if (beVisible) visibility = View.VISIBLE else visibility = View.GONE
 
 fun View.onGlobalLayout(callback: () -> Unit) {
     viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -20,12 +21,6 @@ fun View.onGlobalLayout(callback: () -> Unit) {
         }
     })
 }
-
-fun View.performHapticFeedback() = performHapticFeedback(
-    HapticFeedbackConstants.VIRTUAL_KEY,
-    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
-)
-
 
 fun View.sendFakeClick(x: Float, y: Float) {
     val uptime = SystemClock.uptimeMillis()

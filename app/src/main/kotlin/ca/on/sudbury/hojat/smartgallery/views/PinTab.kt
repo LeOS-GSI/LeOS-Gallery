@@ -7,12 +7,12 @@ import androidx.biometric.auth.AuthPromptHost
 import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
-import ca.on.sudbury.hojat.smartgallery.extensions.performHapticFeedback
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.PerformHapticFeedbackUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_pin.view.*
 import java.math.BigInteger
@@ -61,7 +61,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
             pin += number
             updatePinCode()
         }
-        performHapticFeedback()
+        PerformHapticFeedbackUseCase(this)
     }
 
     private fun clear() {
@@ -69,7 +69,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
             pin = pin.substring(0, pin.length - 1)
             updatePinCode()
         }
-        performHapticFeedback()
+        PerformHapticFeedbackUseCase(this)
     }
 
     private fun confirmPIN() {
@@ -90,7 +90,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
                 pin_lock_title.setText(R.string.enter_pin)
             }
         }
-        performHapticFeedback()
+        PerformHapticFeedbackUseCase(this)
     }
 
     private fun resetPin() {
