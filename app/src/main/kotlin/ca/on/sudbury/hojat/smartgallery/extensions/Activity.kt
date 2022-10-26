@@ -2284,7 +2284,8 @@ fun BaseSimpleActivity.deleteFilesBg(
                 return@checkManageMediaOrHandleSAFDialogSdk30
             }
 
-            val recycleBinPath = firstFile.isRecycleBinPath(this)
+            val recycleBinPath = firstFile.path.startsWith(this.recycleBinPath)
+
             if ((IsSPlusUseCase() && MediaStore.canManageMedia(this)) && !recycleBinPath) {
                 val fileUris = getFileUrisFromFileDirItems(files)
 
