@@ -6,19 +6,18 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
-import ca.on.sudbury.hojat.smartgallery.extensions.applyColorFilter
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileSignature
 import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.setText
-import ca.on.sudbury.hojat.smartgallery.extensions.setVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.widgetsDB
 import ca.on.sudbury.hojat.smartgallery.models.Widget
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -54,14 +53,26 @@ class MyWidgetProvider : AppWidgetProvider() {
             val config = context.config
             context.widgetsDB.getWidgets().filter { appWidgetIds.contains(it.widgetId) }.forEach {
                 val views = RemoteViews(context.packageName, R.layout.widget).apply {
-                    applyColorFilter(R.id.widget_background, config.widgetBgColor)
-                    setVisibleIf(R.id.widget_folder_name, config.showWidgetFolderName)
+
+                    setInt(R.id.widget_background, "setColorFilter", config.widgetBgColor)
+                    setInt(
+                        R.id.widget_background,
+                        "setImageAlpha",
+                        Color.alpha(config.widgetBgColor)
+                    )
+
+                    val visibility = if (config.showWidgetFolderName) View.VISIBLE else View.GONE
+                    setViewVisibility(R.id.widget_folder_name, visibility)
                     setTextColor(R.id.widget_folder_name, config.widgetTextColor)
-                    setText(R.id.widget_folder_name, context.getFolderNameFromPath(it.folderPath))
+                    setTextViewText(
+                        R.id.widget_folder_name,
+                        context.getFolderNameFromPath(it.folderPath)
+                    )
                 }
 
                 val path =
-                    GalleryDatabase.getInstance(context.applicationContext).DirectoryDao().getDirectoryThumbnail(it.folderPath) ?: return@forEach
+                    GalleryDatabase.getInstance(context.applicationContext).DirectoryDao()
+                        .getDirectoryThumbnail(it.folderPath) ?: return@forEach
                 val options = RequestOptions()
                     .signature(path.getFileSignature())
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)

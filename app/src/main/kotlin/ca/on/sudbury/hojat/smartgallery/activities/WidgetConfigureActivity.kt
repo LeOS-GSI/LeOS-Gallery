@@ -16,7 +16,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.extensions.setBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
@@ -130,7 +129,7 @@ class WidgetConfigureActivity : SimpleActivity() {
 
     private fun saveConfig() {
         val views = RemoteViews(packageName, R.layout.widget)
-        views.setBackgroundColor(R.id.widget_holder, mBgColor)
+        views.setInt(R.id.widget_holder, "setBackgroundColor", mBgColor)
         AppWidgetManager.getInstance(this)?.updateAppWidget(mWidgetId, views) ?: return
         config.showWidgetFolderName = binding.folderPickerShowFolderName.isChecked
         val widget = Widget(null, mWidgetId, mFolderPath)
