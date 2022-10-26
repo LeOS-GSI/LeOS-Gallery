@@ -39,7 +39,6 @@ import com.google.android.exoplayer2.upstream.ContentDataSource
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.upstream.FileDataSource
-import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
@@ -281,8 +280,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
             requireContext().config      // make sure we get a new config, in case the user changed something in the app settings
         requireActivity().updateTextColors(binding.videoHolder)
         val allowVideoGestures = mConfig.allowVideoGestures
-        binding.videoSurface.beGoneIf(mConfig.openVideosOnSeparateScreen || mIsPanorama)
-        binding.videoSurfaceFrame.beGoneIf(binding.videoSurface.visibility == View.GONE)
+        binding.videoSurface.beVisibleIf(!(mConfig.openVideosOnSeparateScreen || mIsPanorama))
+        binding.videoSurfaceFrame.beVisibleIf(binding.videoSurface.visibility != View.GONE)
         binding.videoVolumeController.beVisibleIf(allowVideoGestures && !mIsPanorama)
         binding.videoBrightnessController.beVisibleIf(allowVideoGestures && !mIsPanorama)
 

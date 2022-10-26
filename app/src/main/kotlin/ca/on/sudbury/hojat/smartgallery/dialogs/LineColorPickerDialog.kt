@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 import android.view.Menu
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
@@ -41,7 +40,7 @@ class LineColorPickerDialog(
                 true
             }
 
-            lineColorPickerIcon.beGoneIf(isPrimaryColorPicker)
+            lineColorPickerIcon.beVisibleIf(!isPrimaryColorPicker)
             val indexes = getColorIndexes(color)
 
             val primaryColorIndex = indexes.first

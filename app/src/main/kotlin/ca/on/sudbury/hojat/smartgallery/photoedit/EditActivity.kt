@@ -47,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
-import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
@@ -542,7 +541,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             binding.cropImageView.rotateImage(90)
         }
 
-        binding.bottomEditorCropRotateActions.bottomResize.beGoneIf(isCropIntent)
+        binding.bottomEditorCropRotateActions.bottomResize.beVisibleIf(!isCropIntent)
         binding.bottomEditorCropRotateActions.bottomResize.setOnClickListener {
             resizeImage()
         }

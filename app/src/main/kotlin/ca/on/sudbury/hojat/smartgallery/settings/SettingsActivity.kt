@@ -16,7 +16,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
@@ -306,7 +305,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupFileLoadingPriority() {
-        binding.settingsFileLoadingPriorityHolder.beGoneIf(IsRPlusUseCase() && !isExternalStorageManager())
+        binding.settingsFileLoadingPriorityHolder.beVisibleIf(!(IsRPlusUseCase() && !isExternalStorageManager()))
         binding.settingsFileLoadingPriority.text = getFileLoadingPriorityText()
         binding.settingsFileLoadingPriorityHolder.setOnClickListener {
             val items = arrayListOf(
@@ -331,7 +330,7 @@ class SettingsActivity : SimpleActivity() {
     )
 
     private fun setupManageIncludedFolders() {
-        binding.settingsManageIncludedFoldersHolder.beGoneIf(IsRPlusUseCase() && !isExternalStorageManager())
+        binding.settingsManageIncludedFoldersHolder.beVisibleIf(!(IsRPlusUseCase() && !isExternalStorageManager()))
         binding.settingsManageIncludedFoldersHolder.setOnClickListener {
             startActivity(Intent(this, IncludedFoldersActivity::class.java))
         }
@@ -346,7 +345,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupManageHiddenFolders() {
-        binding.settingsManageHiddenFoldersHolder.beGoneIf(IsQPlusUseCase())
+        binding.settingsManageHiddenFoldersHolder.beVisibleIf(!IsQPlusUseCase())
         binding.settingsManageHiddenFoldersHolder.setOnClickListener {
             handleHiddenFolderPasswordProtection {
                 startActivity(Intent(this, HiddenFoldersActivity::class.java))
@@ -459,7 +458,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupHiddenItemPasswordProtection() {
-        binding.settingsHiddenItemPasswordProtectionHolder.beGoneIf(IsRPlusUseCase() && !isExternalStorageManager())
+        binding.settingsHiddenItemPasswordProtectionHolder.beVisibleIf(!(IsRPlusUseCase() && !isExternalStorageManager()))
         binding.settingsHiddenItemPasswordProtection.isChecked = config.isHiddenPasswordProtectionOn
         binding.settingsHiddenItemPasswordProtectionHolder.setOnClickListener {
             val tabToShow =
@@ -484,7 +483,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupExcludedItemPasswordProtection() {
-        binding.settingsExcludedItemPasswordProtectionHolder.beGoneIf(binding.settingsHiddenItemPasswordProtectionHolder.visibility == View.VISIBLE)
+        binding.settingsExcludedItemPasswordProtectionHolder.beVisibleIf(binding.settingsHiddenItemPasswordProtectionHolder.visibility != View.VISIBLE)
         binding.settingsExcludedItemPasswordProtection.isChecked =
             config.isExcludedPasswordProtectionOn
         binding.settingsExcludedItemPasswordProtectionHolder.setOnClickListener {

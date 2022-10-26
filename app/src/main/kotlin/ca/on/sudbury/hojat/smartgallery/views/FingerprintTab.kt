@@ -12,7 +12,7 @@ import ca.on.hojat.fingerprint.core.AuthenticationListener
 import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
+import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
@@ -60,7 +60,7 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
 
     private fun checkRegisteredFingerprints() {
         val hasFingerprints = Reprint.hasFingerprintRegistered()
-        fingerprint_settings.beGoneIf(hasFingerprints)
+        fingerprint_settings.beVisibleIf(!hasFingerprints)
         fingerprint_label.text =
             context.getString(if (hasFingerprints) R.string.place_finger else R.string.no_fingerprints_registered)
 

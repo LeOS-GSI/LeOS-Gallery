@@ -8,7 +8,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
@@ -71,8 +70,8 @@ class ChangeSortingDialog(
 
             val hideSortOrder =
                 checkedId == binding.sortingDialogRadioCustom.id || checkedId == binding.sortingDialogRadioRandom.id
-            binding.sortingDialogRadioOrder.beGoneIf(hideSortOrder)
-            binding.sortingDialogOrderDivider.root.beGoneIf(hideSortOrder)
+            binding.sortingDialogRadioOrder.beVisibleIf(!hideSortOrder)
+            binding.sortingDialogOrderDivider.root.beVisibleIf(!hideSortOrder)
         }
 
         val sortBtn = when {

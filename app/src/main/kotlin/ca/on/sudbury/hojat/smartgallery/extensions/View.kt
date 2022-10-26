@@ -5,8 +5,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 
-fun View.beGoneIf(beGone: Boolean) = beVisibleIf(!beGone)
-
 fun View.beInvisibleIf(beInvisible: Boolean) =
     if (beInvisible) visibility = View.INVISIBLE else visibility = View.VISIBLE
 
