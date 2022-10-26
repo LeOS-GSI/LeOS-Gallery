@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getStoreUrl
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
@@ -140,7 +139,7 @@ class AboutActivity : BaseSimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupEmail() {
-        if (binding.aboutFaqHolder.isGone()) {
+        if (binding.aboutFaqHolder.visibility == View.GONE) {
             binding.aboutEmailHolder.background =
                 resources.getDrawable(R.drawable.ripple_all_corners, theme)
         }
@@ -148,7 +147,7 @@ class AboutActivity : BaseSimpleActivity() {
         if (resources.getBoolean(R.bool.hide_all_external_links)) {
             binding.aboutEmailHolder.visibility = View.GONE
 
-            if (binding.aboutFaqHolder.isGone()) {
+            if (binding.aboutFaqHolder.visibility == View.GONE) {
                 binding.aboutSupport.visibility = View.GONE
                 binding.aboutSupportHolder.visibility = View.GONE
             } else {
@@ -249,7 +248,7 @@ class AboutActivity : BaseSimpleActivity() {
     private fun setupInvite() {
         if (resources.getBoolean(R.bool.hide_google_relations)) {
             binding.aboutInviteHolder.visibility = View.GONE
-        } else if (binding.aboutRateUsHolder.isGone()) {
+        } else if (binding.aboutRateUsHolder.visibility == View.GONE) {
             binding.aboutInviteHolder.background =
                 resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }
@@ -268,7 +267,7 @@ class AboutActivity : BaseSimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupContributors() {
-        if (binding.aboutRateUsHolder.isGone() && binding.aboutInviteHolder.isGone()) {
+        if (binding.aboutRateUsHolder.visibility == View.GONE && binding.aboutInviteHolder.visibility == View.GONE) {
             binding.aboutContributorsHolder.background =
                 resources.getDrawable(R.drawable.ripple_all_corners, theme)
         }
@@ -285,7 +284,7 @@ class AboutActivity : BaseSimpleActivity() {
             binding.aboutDonateHolder.visibility = View.VISIBLE
 
             val contributorsBg =
-                if (binding.aboutRateUsHolder.isGone() && binding.aboutInviteHolder.isGone()) {
+                if (binding.aboutRateUsHolder.visibility == View.GONE && binding.aboutInviteHolder.visibility == View.GONE) {
                     R.drawable.ripple_top_corners
                 } else {
                     R.drawable.ripple_background
@@ -338,7 +337,7 @@ class AboutActivity : BaseSimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupWebsite() {
         if (resources.getBoolean(R.bool.show_donate_in_about) && !resources.getBoolean(R.bool.hide_all_external_links)) {
-            if (binding.aboutMoreAppsHolder.isGone()) {
+            if (binding.aboutMoreAppsHolder.visibility == View.GONE) {
                 binding.aboutWebsiteHolder.background =
                     resources.getDrawable(R.drawable.ripple_top_corners, theme)
             }
@@ -367,7 +366,7 @@ class AboutActivity : BaseSimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupLicense() {
-        if (binding.aboutWebsiteHolder.isGone() && binding.aboutMoreAppsHolder.isGone() && binding.aboutPrivacyPolicyHolder.isGone()) {
+        if (binding.aboutWebsiteHolder.visibility == View.GONE && binding.aboutMoreAppsHolder.visibility == View.GONE && binding.aboutPrivacyPolicyHolder.visibility == View.GONE) {
             binding.aboutLicensesHolder.background =
                 resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }

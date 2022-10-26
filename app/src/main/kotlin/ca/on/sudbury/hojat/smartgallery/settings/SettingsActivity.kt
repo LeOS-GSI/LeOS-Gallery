@@ -16,11 +16,9 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -289,7 +287,7 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsUseEnglishHolder.beVisibleIf(config.wasUseEnglishToggled || Locale.getDefault().language != "en")
         binding.settingsUseEnglish.isChecked = config.useEnglish
 
-        if (binding.settingsUseEnglishHolder.isGone()) {
+        if (binding.settingsUseEnglishHolder.visibility == View.GONE) {
             binding.settingsChangeDateTimeFormatHolder.background =
                 resources.getDrawable(R.drawable.ripple_top_corners, theme)
         }
@@ -486,7 +484,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupExcludedItemPasswordProtection() {
-        binding.settingsExcludedItemPasswordProtectionHolder.beGoneIf(binding.settingsHiddenItemPasswordProtectionHolder.isVisible())
+        binding.settingsExcludedItemPasswordProtectionHolder.beGoneIf(binding.settingsHiddenItemPasswordProtectionHolder.visibility == View.VISIBLE)
         binding.settingsExcludedItemPasswordProtection.isChecked =
             config.isExcludedPasswordProtectionOn
         binding.settingsExcludedItemPasswordProtectionHolder.setOnClickListener {

@@ -86,14 +86,12 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
@@ -987,10 +985,10 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             binding.mediaEmptyTextPlaceholder.beVisibleIf(media.isEmpty() && !isFromCache)
             binding.mediaEmptyTextPlaceholder2.beVisibleIf(media.isEmpty() && !isFromCache)
 
-            if (binding.mediaEmptyTextPlaceholder.isVisible()) {
+            if (binding.mediaEmptyTextPlaceholder.visibility == View.VISIBLE) {
                 binding.mediaEmptyTextPlaceholder.text = getString(R.string.no_media_with_filters)
             }
-            binding.mediaFastscroller.beVisibleIf(binding.mediaEmptyTextPlaceholder.isGone())
+            binding.mediaFastscroller.beVisibleIf(binding.mediaEmptyTextPlaceholder.visibility == View.GONE)
             setupAdapter()
         }
 

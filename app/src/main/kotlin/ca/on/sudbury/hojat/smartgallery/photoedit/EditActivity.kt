@@ -32,11 +32,9 @@ import com.bumptech.glide.request.target.Target
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
@@ -367,9 +365,9 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     private fun saveImage() {
         setOldExif()
 
-        if (binding.cropImageView.isVisible()) {
+        if (binding.cropImageView.visibility == View.VISIBLE) {
             binding.cropImageView.getCroppedImageAsync()
-        } else if (binding.editorDrawCanvas.isVisible()) {
+        } else if (binding.editorDrawCanvas.visibility == View.VISIBLE) {
             val bitmap = binding.editorDrawCanvas.getBitmap()
             if (saveUri.scheme == "file") {
                 SaveAsDialog(this, saveUri.path!!, true) {
@@ -425,7 +423,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         RunOnBackgroundThreadUseCase {
 
             when {
-                binding.defaultImageView.isVisible() -> {
+                binding.defaultImageView.visibility == View.VISIBLE -> {
                     val currentFilter = getFiltersAdapter()?.getCurrentFilter()
                     if (currentFilter == null) {
                         ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
@@ -437,13 +435,13 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     currentFilter.filter.processFilter(originalBitmap)
                     shareBitmap(originalBitmap)
                 }
-                binding.cropImageView.isVisible() -> {
+                binding.cropImageView.visibility == View.VISIBLE -> {
                     isSharingBitmap = true
                     runOnUiThread {
                         binding.cropImageView.getCroppedImageAsync()
                     }
                 }
-                binding.editorDrawCanvas.isVisible() -> shareBitmap(binding.editorDrawCanvas.getBitmap())
+                binding.editorDrawCanvas.visibility == View.VISIBLE -> shareBitmap(binding.editorDrawCanvas.getBitmap())
             }
         }
     }
@@ -639,11 +637,11 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
     @SuppressLint("NotifyDataSetChanged")
     private fun updatePrimaryActionButtons() {
-        if (binding.cropImageView.isGone() && currPrimaryAction == PRIMARY_ACTION_CROP_ROTATE) {
+        if (binding.cropImageView.visibility == View.GONE && currPrimaryAction == PRIMARY_ACTION_CROP_ROTATE) {
             loadCropImageView()
-        } else if (binding.defaultImageView.isGone() && currPrimaryAction == PRIMARY_ACTION_FILTER) {
+        } else if (binding.defaultImageView.visibility == View.GONE && currPrimaryAction == PRIMARY_ACTION_FILTER) {
             loadDefaultImageView()
-        } else if (binding.editorDrawCanvas.isGone() && currPrimaryAction == PRIMARY_ACTION_DRAW) {
+        } else if (binding.editorDrawCanvas.visibility == View.GONE && currPrimaryAction == PRIMARY_ACTION_DRAW) {
             loadDrawCanvas()
         }
 

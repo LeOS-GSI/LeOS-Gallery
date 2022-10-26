@@ -45,7 +45,6 @@ import ca.on.hojat.palette.subscaleview.SubsamplingScaleImageView
 import com.github.penfeizhou.animation.apng.APNGDrawable
 import com.github.penfeizhou.animation.webp.WebPDrawable
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
@@ -158,7 +157,7 @@ class PhotoFragment : ViewPagerFragment() {
                 container,
                 singleTap = { x, y ->
                     binding.apply {
-                        if (subsamplingView.isVisible()) {
+                        if (subsamplingView.visibility == View.VISIBLE) {
                             subsamplingView.sendFakeClick(x, y)
                         } else {
                             gesturesView.sendFakeClick(x, y)
@@ -932,7 +931,7 @@ class PhotoFragment : ViewPagerFragment() {
         this.mIsFullscreen = isFullscreen
         binding.apply {
             photoDetails.apply {
-                if (mStoredShowExtendedDetails && isVisible() && context != null && resources != null) {
+                if (mStoredShowExtendedDetails && visibility == View.VISIBLE && context != null && resources != null) {
                     animate().y(getExtendedDetailsY(height))
 
                     if (mStoredHideExtendedDetails) {

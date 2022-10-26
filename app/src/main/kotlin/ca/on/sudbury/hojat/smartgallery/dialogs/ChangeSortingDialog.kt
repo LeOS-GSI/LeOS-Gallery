@@ -1,13 +1,13 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.content.DialogInterface
+import android.view.View
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeSortingBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
@@ -67,7 +67,7 @@ class ChangeSortingDialog(
             val isSortingByNameOrPath =
                 checkedId == binding.sortingDialogRadioName.id || checkedId == binding.sortingDialogRadioPath.id
             binding.sortingDialogNumericSorting.beVisibleIf(isSortingByNameOrPath)
-            binding.useForThisFolderDivider.root.beVisibleIf(binding.sortingDialogNumericSorting.isVisible() || binding.sortingDialogUseForThisFolder.isVisible())
+            binding.useForThisFolderDivider.root.beVisibleIf(binding.sortingDialogNumericSorting.visibility == View.VISIBLE || binding.sortingDialogUseForThisFolder.visibility == View.VISIBLE)
 
             val hideSortOrder =
                 checkedId == binding.sortingDialogRadioCustom.id || checkedId == binding.sortingDialogRadioRandom.id

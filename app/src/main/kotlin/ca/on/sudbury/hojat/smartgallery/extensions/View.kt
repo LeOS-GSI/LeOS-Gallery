@@ -12,10 +12,6 @@ fun View.beInvisibleIf(beInvisible: Boolean) = if (beInvisible) visibility = Vie
 
 fun View.beVisibleIf(beVisible: Boolean) = if (beVisible) visibility = View.VISIBLE else visibility = View.GONE
 
-fun View.isGone() = visibility == View.GONE
-
-fun View.isVisible() = visibility == View.VISIBLE
-
 fun View.onGlobalLayout(callback: () -> Unit) {
     viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {

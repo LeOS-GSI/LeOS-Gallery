@@ -42,7 +42,6 @@ import com.google.android.exoplayer2.upstream.FileDataSource
 import ca.on.sudbury.hojat.smartgallery.extensions.beGoneIf
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
@@ -50,7 +49,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.realScreenSize
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.activities.PanoramaVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerVideoItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -284,7 +282,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         requireActivity().updateTextColors(binding.videoHolder)
         val allowVideoGestures = mConfig.allowVideoGestures
         binding.videoSurface.beGoneIf(mConfig.openVideosOnSeparateScreen || mIsPanorama)
-        binding.videoSurfaceFrame.beGoneIf(binding.videoSurface.isGone())
+        binding.videoSurfaceFrame.beGoneIf(binding.videoSurface.visibility == View.GONE)
         binding.videoVolumeController.beVisibleIf(allowVideoGestures && !mIsPanorama)
         binding.videoBrightnessController.beVisibleIf(allowVideoGestures && !mIsPanorama)
 
@@ -501,7 +499,8 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
     private fun checkExtendedDetails() {
         if (mConfig.showExtendedDetails) {
             binding.videoDetails.apply {
-                visibility = View.INVISIBLE   // make it invisible so we can measure it, but not show yet
+                visibility =
+                    View.INVISIBLE   // make it invisible so we can measure it, but not show yet
                 text = getMediumExtendedDetails(mMedium)
                 onGlobalLayout {
                     if (isAdded) {
@@ -575,7 +574,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
 
         binding.rlBottomVideoTimeHolder.videoTimeHolder.animate().alpha(newAlpha).start()
         binding.videoDetails.apply {
-            if (mStoredShowExtendedDetails && isVisible() && context != null && resources != null) {
+            if (mStoredShowExtendedDetails && visibility == View.VISIBLE && context != null && resources != null) {
                 animate().y(getExtendedDetailsY(height))
 
                 if (mStoredHideExtendedDetails) {
@@ -690,7 +689,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
             return
         }
 
-        if (binding.videoPreview.isVisible()) {
+        if (binding.videoPreview.visibility == View.VISIBLE) {
             binding.videoPreview.visibility = View.GONE
             initExoPlayer()
         }

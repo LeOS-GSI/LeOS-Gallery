@@ -39,7 +39,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -153,7 +152,7 @@ class FilePickerDialog(
         binding.filepickerFabShowFavorites.apply {
             beVisibleIf(showFavoritesButton && context.baseConfig.favorites.isNotEmpty())
             setOnClickListener {
-                if (binding.filepickerFavoritesHolder.isVisible()) {
+                if (binding.filepickerFavoritesHolder.visibility == View.VISIBLE) {
                     hideFavorites()
                 } else {
                     showFavorites()

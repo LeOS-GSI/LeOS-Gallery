@@ -36,7 +36,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
-import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.doesThisOrParentHaveNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
@@ -964,7 +963,7 @@ class DirectoryAdapter(
 
             dir_pin.beVisibleIf(pinnedFolders.contains(directory.path))
             dir_location.beVisibleIf(directory.location != LOCATION_INTERNAL)
-            if (dir_location.isVisible()) {
+            if (dir_location.visibility == View.VISIBLE) {
                 dir_location.setImageResource(if (directory.location == LOCATION_SD) R.drawable.ic_sd_card_vector else R.drawable.ic_usb_vector)
             }
 

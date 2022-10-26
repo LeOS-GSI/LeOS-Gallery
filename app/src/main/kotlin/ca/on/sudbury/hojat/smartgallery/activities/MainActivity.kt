@@ -72,7 +72,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
@@ -1542,7 +1541,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
 
         binding.directoriesEmptyPlaceholder2.underlineText()
-        binding.directoriesFastscroller.beVisibleIf(binding.directoriesEmptyPlaceholder.isGone())
+        binding.directoriesFastscroller.beVisibleIf(binding.directoriesEmptyPlaceholder.visibility == View.GONE)
     }
 
     private fun setupAdapter(

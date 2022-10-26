@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
@@ -542,7 +541,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
         val newAlpha = if (mIsFullScreen) 0f else 1f
         binding.topShadow.animate().alpha(newAlpha).start()
-        if (!binding.bottomActions.root.isGone()) {
+        if (binding.bottomActions.root.visibility != View.GONE) {
             binding.bottomActions.root.animate().alpha(newAlpha).start()
         }
 
