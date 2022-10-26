@@ -50,7 +50,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toggleFileVisibility
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDBMediaPath
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
-import ca.on.sudbury.hojat.smartgallery.extensions.shareMediaPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.saveRotatedImageToFile
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.tryCopyMoveFilesTo
@@ -80,6 +79,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
+import ca.on.sudbury.hojat.smartgallery.extensions.sharePathsIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
@@ -405,7 +405,7 @@ class MediaAdapter(
         if (selectedKeys.size == 1 && selectedKeys.first() != -1) {
             activity.sharePathIntent(getSelectedItems().first().path, BuildConfig.APPLICATION_ID)
         } else if (selectedKeys.size > 1) {
-            activity.shareMediaPaths(getSelectedPaths())
+            activity.sharePathsIntent(getSelectedPaths(), BuildConfig.APPLICATION_ID)
         }
     }
 

@@ -562,10 +562,6 @@ fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
     }
 }
 
-fun Activity.shareMediaPaths(paths: ArrayList<String>) {
-    sharePathsIntent(paths, BuildConfig.APPLICATION_ID)
-}
-
 fun Activity.setAs(path: String) {
     val applicationId = BuildConfig.APPLICATION_ID
     RunOnBackgroundThreadUseCase {
