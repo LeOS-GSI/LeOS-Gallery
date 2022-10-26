@@ -19,7 +19,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.beGone
 import ca.on.sudbury.hojat.smartgallery.extensions.canModifyEXIF
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
-import ca.on.sudbury.hojat.smartgallery.extensions.formatAsResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFUri
@@ -44,6 +43,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getDigest
+import ca.on.sudbury.hojat.smartgallery.extensions.getMPx
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
@@ -240,7 +240,7 @@ class PropertiesDialog() {
             }
             fileDirItem.path.isImageSlow() -> {
                 fileDirItem.getResolution(mActivity)
-                    ?.let { addProperty(R.string.resolution, it.formatAsResolution()) }
+                    ?.let { addProperty(R.string.resolution, "${it.x} x ${it.y} ${it.getMPx()}") }
             }
             fileDirItem.path.isAudioSlow() -> {
                 fileDirItem.getDuration(mActivity)?.let { addProperty(R.string.duration, it) }
@@ -251,7 +251,7 @@ class PropertiesDialog() {
             fileDirItem.path.isVideoSlow() -> {
                 fileDirItem.getDuration(mActivity)?.let { addProperty(R.string.duration, it) }
                 fileDirItem.getResolution(mActivity)
-                    ?.let { addProperty(R.string.resolution, it.formatAsResolution()) }
+                    ?.let { addProperty(R.string.resolution, "${it.x} x ${it.y} ${it.getMPx()}") }
                 fileDirItem.getArtist(mActivity)?.let { addProperty(R.string.artist, it) }
                 fileDirItem.getAlbum(mActivity)?.let { addProperty(R.string.album, it) }
             }

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
-import ca.on.sudbury.hojat.smartgallery.extensions.formatAsResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifCameraModel
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifProperties
@@ -18,6 +17,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.getMPx
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_GPS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_EXIF_PROPERTIES
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_CAMERA_MODEL
@@ -86,8 +86,9 @@ abstract class ViewPagerFragment : Fragment() {
         }
 
         if (detailsFlag and EXT_RESOLUTION != 0) {
-            requireContext().getResolution(file.absolutePath)?.formatAsResolution()
-                .let { if (it?.isNotEmpty() == true) details.appendLine(it) }
+            with(requireContext().getResolution(file.absolutePath)){
+                "${this?.x} x ${this?.y} ${this?.getMPx()}".let { if (it.isNotEmpty()) details.appendLine(it) }
+            }
         }
 
         if (detailsFlag and EXT_LAST_MODIFIED != 0) {
