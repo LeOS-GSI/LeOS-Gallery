@@ -8,15 +8,7 @@ import android.view.ViewTreeObserver
 
 fun View.beGoneIf(beGone: Boolean) = beVisibleIf(!beGone)
 
-fun View.beInvisible() {
-    visibility = View.INVISIBLE
-}
-
-fun View.beInvisibleIf(beInvisible: Boolean) = if (beInvisible) beInvisible() else visibility = View.VISIBLE
-
-fun View.beVisible() {
-    visibility = View.VISIBLE
-}
+fun View.beInvisibleIf(beInvisible: Boolean) = if (beInvisible) visibility = View.INVISIBLE else visibility = View.VISIBLE
 
 fun View.beVisibleIf(beVisible: Boolean) = if (beVisible) visibility = View.VISIBLE else visibility = View.GONE
 

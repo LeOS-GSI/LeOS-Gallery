@@ -56,7 +56,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
-import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.PortraitPhotosAdapter
 import ca.on.sudbury.hojat.smartgallery.base.PhotoVideoActivity
@@ -892,7 +891,7 @@ class PhotoFragment : ViewPagerFragment() {
     private fun initExtendedDetails() {
         if (requireContext().config.showExtendedDetails) {
             binding.photoDetails.apply {
-                beInvisible()   // make it invisible so we can measure it, but not show yet
+                visibility = View.INVISIBLE   // make it invisible so we can measure it, but not show yet
                 text = getMediumExtendedDetails(mMedium)
                 onGlobalLayout {
                     if (isAdded) {
