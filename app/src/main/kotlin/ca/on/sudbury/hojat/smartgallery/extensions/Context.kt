@@ -2312,7 +2312,34 @@ fun Context.createDirectoryFromMedia(
             lastItem.taken
         )
     val size = if (getProperFileSize) curMedia.sumByLong { it.size } else 0L
-    val mediaTypes = curMedia.getDirMediaTypes()
+    val mediaTypes = with(curMedia) {
+        var types = 0
+        if (any { it.isImage() }) {
+            types += TYPE_IMAGES
+        }
+
+        if (any { it.isVideo() }) {
+            types += TYPE_VIDEOS
+        }
+
+        if (any { it.isGIF() }) {
+            types += TYPE_GIFS
+        }
+
+        if (any { it.isRaw() }) {
+            types += TYPE_RAWS
+        }
+
+        if (any { it.isSVG() }) {
+            types += TYPE_SVGS
+        }
+
+        if (any { it.isPortrait() }) {
+            types += TYPE_PORTRAITS
+        }
+
+        types
+    }
     val sortValue = getDirectorySortingValue(curMedia, path, dirName, size)
     return Directory(
         null,
