@@ -13,7 +13,6 @@ import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintHelper
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
@@ -180,7 +179,7 @@ class ColorPickerDialog(
     private fun View.setupRecentColors() {
         val recentColors = baseConfig.colorPickerRecentColors
         if (recentColors.isNotEmpty()) {
-            findViewById<View>(R.id.recent_colors).beVisible()
+            findViewById<View>(R.id.recent_colors).visibility = View.VISIBLE
             val squareSize = context.resources.getDimensionPixelSize(R.dimen.colorpicker_hue_width)
             recentColors.take(RECENT_COLORS_NUMBER).forEach { recentColor ->
                 val recentColorView = ImageView(context)

@@ -18,7 +18,6 @@ import com.google.vr.sdk.widgets.video.VrVideoView
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityPanoramaVideoBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -161,7 +160,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
                         } else {
                             binding.rlVideoController.videoTogglePlayPause.setImageResource(R.drawable.ic_play_outline_vector)
                         }
-                        binding.rlVideoController.videoTogglePlayPause.beVisible()
+                        binding.rlVideoController.videoTogglePlayPause.visibility = View.VISIBLE
                     }
 
                     override fun onCompletion() {

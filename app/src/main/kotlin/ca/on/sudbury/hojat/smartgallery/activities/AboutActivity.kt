@@ -16,7 +16,6 @@ import android.view.Menu
 import android.view.View
 import androidx.core.net.toUri
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -283,7 +282,7 @@ class AboutActivity : BaseSimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupDonate() {
         if (resources.getBoolean(R.bool.show_donate_in_about) && !resources.getBoolean(R.bool.hide_all_external_links)) {
-            binding.aboutDonateHolder.beVisible()
+            binding.aboutDonateHolder.visibility = View.VISIBLE
 
             val contributorsBg =
                 if (binding.aboutRateUsHolder.isGone() && binding.aboutInviteHolder.isGone()) {
@@ -344,7 +343,7 @@ class AboutActivity : BaseSimpleActivity() {
                     resources.getDrawable(R.drawable.ripple_top_corners, theme)
             }
 
-            binding.aboutWebsiteHolder.beVisible()
+            binding.aboutWebsiteHolder.visibility = View.VISIBLE
             binding.aboutWebsiteHolder.setOnClickListener {
                 launchViewIntent("https://simplemobiletools.com/")
             }

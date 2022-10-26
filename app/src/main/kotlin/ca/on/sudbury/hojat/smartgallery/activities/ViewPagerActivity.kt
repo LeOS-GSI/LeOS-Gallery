@@ -1021,7 +1021,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         binding.bottomActions.root.layoutParams.height =
             resources.getDimension(R.dimen.bottom_actions_height).toInt() + navigationBarHeight
         if (config.bottomActions) {
-            binding.bottomActions.root.beVisible()
+            binding.bottomActions.root.visibility = View.VISIBLE
         } else {
             binding.bottomActions.root.visibility = View.GONE
         }
@@ -1754,13 +1754,13 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             val newAlpha = if (mIsFullScreen) 0f else 1f
             binding.topShadow.animate().alpha(newAlpha).start()
             binding.bottomActions.root.animate().alpha(newAlpha).withStartAction {
-                binding.bottomActions.root.beVisible()
+                binding.bottomActions.root.visibility = View.VISIBLE
             }.withEndAction {
                 binding.bottomActions.root.beVisibleIf(newAlpha == 1f)
             }.start()
 
             binding.mediumViewerAppbar.animate().alpha(newAlpha).withStartAction {
-                binding.mediumViewerAppbar.beVisible()
+                binding.mediumViewerAppbar.visibility = View.VISIBLE
             }.withEndAction {
                 binding.mediumViewerAppbar.beVisibleIf(newAlpha == 1f)
             }.start()

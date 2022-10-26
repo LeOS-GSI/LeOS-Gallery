@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
@@ -710,7 +709,7 @@ class MediaAdapter(
             play_portrait_outline?.beVisibleIf(medium.isVideo() || medium.isPortrait())
             if (medium.isVideo()) {
                 play_portrait_outline?.setImageResource(R.drawable.ic_play_outline_vector)
-                play_portrait_outline?.beVisible()
+                play_portrait_outline?.visibility = View.VISIBLE
             } else if (medium.isPortrait()) {
                 play_portrait_outline?.setImageResource(R.drawable.ic_portrait_photo_vector)
                 play_portrait_outline?.beVisibleIf(showFileTypes)
@@ -724,7 +723,7 @@ class MediaAdapter(
                         else -> R.string.svg
                     }
                 )
-                file_type.beVisible()
+                file_type.visibility = View.VISIBLE
             } else {
                 file_type?.visibility = View.GONE
             }

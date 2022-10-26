@@ -37,7 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -592,7 +591,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             mSearchMenuItem,
             object : MenuItemCompat.OnActionExpandListener {
                 override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                    binding.directoriesSwitchSearching.beVisible()
+                    binding.directoriesSwitchSearching.visibility = View.VISIBLE
                     mIsSearchOpen = true
                     binding.directoriesRefreshLayout.isEnabled = false
                     return true
@@ -1419,7 +1418,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 runOnUiThread {
                     binding.directoriesEmptyPlaceholder.visibility = View.GONE
                     binding.directoriesEmptyPlaceholder2.visibility = View.GONE
-                    binding.directoriesFastscroller.beVisible()
+                    binding.directoriesFastscroller.visibility = View.VISIBLE
                 }
             }
 

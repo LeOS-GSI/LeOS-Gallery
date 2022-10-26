@@ -27,7 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isGone
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
@@ -483,7 +482,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         binding.bottomActions.root.layoutParams.height =
             resources.getDimension(R.dimen.bottom_actions_height).toInt() + navigationBarHeight
         if (config.bottomActions) {
-            binding.bottomActions.root.beVisible()
+            binding.bottomActions.root.visibility = View.VISIBLE
         } else {
             binding.bottomActions.root.visibility = View.GONE
         }
@@ -548,7 +547,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         }
 
         binding.fragmentViewerToolbar.animate().alpha(newAlpha).withStartAction {
-            binding.fragmentViewerToolbar.beVisible()
+            binding.fragmentViewerToolbar.visibility = View.VISIBLE
         }.withEndAction {
             binding.fragmentViewerToolbar.beVisibleIf(newAlpha == 1f)
         }.start()

@@ -31,7 +31,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
@@ -235,11 +234,11 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
         updateAspectRatio(config.lastEditorCropAspectRatio)
         binding.cropImageView.guidelines = CropImageView.Guidelines.ON
-        binding.bottomAspectRatios.root.beVisible()
+        binding.bottomAspectRatios.root.visibility = View.VISIBLE
     }
 
     private fun loadDefaultImageView() {
-        binding.defaultImageView.beVisible()
+        binding.defaultImageView.visibility = View.VISIBLE
         binding.cropImageView.visibility = View.GONE
         binding.editorDrawCanvas.visibility = View.GONE
 
@@ -305,7 +304,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         binding.defaultImageView.visibility = View.GONE
         binding.editorDrawCanvas.visibility = View.GONE
         binding.cropImageView.apply {
-            beVisible()
+            visibility = View.VISIBLE
             setOnCropImageCompleteListener(this@EditActivity)
             setImageUriAsync(uri)
             guidelines = CropImageView.Guidelines.ON
@@ -321,7 +320,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     private fun loadDrawCanvas() {
         binding.defaultImageView.visibility = View.GONE
         binding.cropImageView.visibility = View.GONE
-        binding.editorDrawCanvas.beVisible()
+        binding.editorDrawCanvas.visibility = View.VISIBLE
 
         if (!wasDrawCanvasPositioned) {
             wasDrawCanvasPositioned = true
@@ -565,7 +564,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 CROP_ROTATE_NONE
             } else {
                 binding.cropImageView.guidelines = CropImageView.Guidelines.ON
-                binding.bottomAspectRatios.root.beVisible()
+                binding.bottomAspectRatios.root.visibility = View.VISIBLE
                 CROP_ROTATE_ASPECT_RATIO
             }
             updateCropRotateActionButtons()

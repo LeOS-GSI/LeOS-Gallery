@@ -50,7 +50,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import ca.on.sudbury.hojat.smartgallery.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
@@ -437,7 +436,7 @@ class PhotoFragment : ViewPagerFragment() {
 
             binding.apply {
                 gesturesView.visibility = View.GONE
-                gifViewFrame.beVisible()
+                gifViewFrame.visibility = View.VISIBLE
                 RunOnBackgroundThreadUseCase {
                     gifView.setInputSource(source)
                 }
@@ -617,7 +616,7 @@ class PhotoFragment : ViewPagerFragment() {
                 binding.photoPortraitStripe.onGlobalLayout {
                     binding.photoPortraitStripe.scrollBy((coverIndex - fakeItemsCnt) * itemWidth, 0)
                     adapter.setCurrentPhoto(coverIndex)
-                    binding.photoPortraitStripeWrapper.beVisible()
+                    binding.photoPortraitStripeWrapper.visibility = View.VISIBLE
                     if (mIsFullscreen) {
                         binding.photoPortraitStripeWrapper.alpha = 0f
                     }
@@ -732,7 +731,7 @@ class PhotoFragment : ViewPagerFragment() {
             bitmapDecoderFactory = bitmapDecoder
             regionDecoderFactory = regionDecoder
             maxScale = 10f
-            beVisible()
+            visibility = View.VISIBLE
             rotationEnabled = config.allowRotatingWithGestures
             isOneToOneZoomEnabled = config.allowOneToOneZoom
             orientation = newOrientation

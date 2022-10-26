@@ -13,7 +13,6 @@ import android.widget.RelativeLayout
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.vr.sdk.widgets.pano.VrPanoramaEventListener
 import com.google.vr.sdk.widgets.pano.VrPanoramaView
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
@@ -116,7 +115,7 @@ open class PanoramaPhotoActivity : SimpleActivity() {
                 val bitmap = getBitmapToLoad(path)
                 runOnUiThread {
                     binding.panoramaView.apply {
-                        beVisible()
+                        visibility = View.VISIBLE
                         loadImageFromBitmap(bitmap, options)
                         setFlingingEnabled(true)
                         setPureTouchTracking(true)

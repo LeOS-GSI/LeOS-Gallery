@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
@@ -136,7 +135,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
                 runOnUiThread {
                     if (grouped.isEmpty()) {
                         binding.searchEmptyTextPlaceholder.text = getString(R.string.no_items_found)
-                        binding.searchEmptyTextPlaceholder.beVisible()
+                        binding.searchEmptyTextPlaceholder.visibility = View.VISIBLE
                     } else {
                         binding.searchEmptyTextPlaceholder.visibility = View.GONE
                     }

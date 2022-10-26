@@ -12,7 +12,6 @@ import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_SQUARE
@@ -102,7 +101,7 @@ class ChangeFolderThumbnailStyleDialog(
                 R.id.dialog_radio_folder_count_line -> {
                     dir_name.text = folderName
                     photo_cnt.text = photoCount.toString()
-                    photo_cnt.beVisible()
+                    photo_cnt.visibility = View.VISIBLE
                 }
                 R.id.dialog_radio_folder_count_brackets -> {
                     photo_cnt.visibility = View.GONE

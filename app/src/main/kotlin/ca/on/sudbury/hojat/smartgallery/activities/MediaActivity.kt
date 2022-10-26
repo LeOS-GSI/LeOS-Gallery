@@ -97,7 +97,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -462,11 +461,11 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 runOnUiThread {
                     if (grouped.isEmpty()) {
                         binding.mediaEmptyTextPlaceholder.text = getString(R.string.no_items_found)
-                        binding.mediaEmptyTextPlaceholder.beVisible()
+                        binding.mediaEmptyTextPlaceholder.visibility = View.VISIBLE
                         binding.mediaFastscroller.visibility = View.GONE
                     } else {
                         binding.mediaEmptyTextPlaceholder.visibility = View.GONE
-                        binding.mediaFastscroller.beVisible()
+                        binding.mediaFastscroller.visibility = View.VISIBLE
                     }
 
                     handleGridSpacing(grouped)

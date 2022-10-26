@@ -48,7 +48,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
@@ -404,7 +403,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
 
     private fun videoPrepared() {
         if (!mWasVideoStarted) {
-            binding.rlBottomVideoController.videoTogglePlayPause.beVisible()
+            binding.rlBottomVideoController.videoTogglePlayPause.visibility = View.VISIBLE
             mDuration = (mExoPlayer!!.duration / 1000).toInt()
             binding.rlBottomVideoController.videoSeekbar.max = mDuration
             binding.rlBottomVideoController.videoDuration.text = mDuration.getFormattedDuration()
@@ -598,7 +597,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         }
 
         binding.videoAppbar.animate().alpha(newAlpha).withStartAction {
-            binding.videoAppbar.beVisible()
+            binding.videoAppbar.visibility = View.VISIBLE
         }.withEndAction {
             binding.videoAppbar.beVisibleIf(newAlpha == 1f)
         }.start()

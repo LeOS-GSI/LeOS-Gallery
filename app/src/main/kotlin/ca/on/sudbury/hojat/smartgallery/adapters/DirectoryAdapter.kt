@@ -36,7 +36,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.doesThisOrParentHaveNoMedia
@@ -937,7 +936,7 @@ class DirectoryAdapter(
             }
 
             if (lockedFolderPaths.contains(directory.path)) {
-                dir_lock.beVisible()
+                dir_lock.visibility = View.VISIBLE
                 dir_lock.background = ColorDrawable(context.getProperBackgroundColor())
                 ApplyColorFilterUseCase(
                     dir_lock,

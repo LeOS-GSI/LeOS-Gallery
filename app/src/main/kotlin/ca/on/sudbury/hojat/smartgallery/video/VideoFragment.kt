@@ -46,7 +46,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isGone
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.beInvisible
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
@@ -214,7 +213,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
 
         if (mIsPanorama) {
             binding.apply {
-                panoramaOutline.beVisible()
+                panoramaOutline.visibility = View.VISIBLE
                 videoPlayOutline.visibility = View.GONE
                 videoVolumeController.visibility = View.GONE
                 videoBrightnessController.visibility = View.GONE
@@ -563,7 +562,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
         mIsFullscreen = isFullscreen
         val newAlpha = if (isFullscreen) 0f else 1f
         if (!mIsFullscreen) {
-            binding.rlBottomVideoTimeHolder.videoTimeHolder.beVisible()
+            binding.rlBottomVideoTimeHolder.videoTimeHolder.visibility = View.VISIBLE
         }
 
         binding.rlBottomVideoTimeHolder.videoSeekbar.setOnSeekBarChangeListener(if (mIsFullscreen) null else this)
@@ -713,7 +712,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
 
         if (!mWasVideoStarted) {
             binding.videoPlayOutline.visibility = View.GONE
-            binding.rlBottomVideoTimeHolder.videoTogglePlayPause.beVisible()
+            binding.rlBottomVideoTimeHolder.videoTogglePlayPause.visibility = View.VISIBLE
         }
 
         mWasVideoStarted = true

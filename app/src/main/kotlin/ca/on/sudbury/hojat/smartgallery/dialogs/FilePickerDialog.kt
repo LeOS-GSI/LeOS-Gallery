@@ -13,7 +13,6 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisible
 import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileItems
@@ -128,7 +127,7 @@ class FilePickerDialog(
         }
         if (showFAB) {
             binding.filepickerFab.apply {
-                beVisible()
+                visibility = View.VISIBLE
                 setOnClickListener { createNewFolder() }
             }
         }
@@ -364,7 +363,7 @@ class FilePickerDialog(
 
     private fun showFavorites() {
         binding.apply {
-            filepickerFavoritesHolder.beVisible()
+            filepickerFavoritesHolder.visibility = View.VISIBLE
             filepickerFilesHolder.visibility = View.GONE
             val drawable = activity.resources.getColoredDrawableWithColor(
                 R.drawable.ic_folder_vector,
@@ -377,7 +376,7 @@ class FilePickerDialog(
     private fun hideFavorites() {
         binding.apply {
             filepickerFavoritesHolder.visibility = View.GONE
-            filepickerFilesHolder.beVisible()
+            filepickerFilesHolder.visibility = View.VISIBLE
             val drawable = activity.resources.getColoredDrawableWithColor(
                 R.drawable.ic_star_vector,
                 activity.getProperPrimaryColor().getContrastColor()
