@@ -1649,7 +1649,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 mDirectory.getFilenameFromPath(),
                 File(mDirectory).isDirectory
             )
-            if (!fileDirItem.isDownloadsFolder() && fileDirItem.isDirectory) {
+            if (!fileDirItem.path.isDownloadsFolder() && fileDirItem.isDirectory) {
                 RunOnBackgroundThreadUseCase {
                     if (fileDirItem.getProperFileCount(this, true) == 0) {
                         tryDeleteFileDirItem(

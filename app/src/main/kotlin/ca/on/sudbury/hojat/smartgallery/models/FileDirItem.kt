@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.models
 
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
