@@ -17,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.getMPx
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_GPS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_EXIF_PROPERTIES
 import ca.on.sudbury.hojat.smartgallery.helpers.EXT_CAMERA_MODEL
@@ -30,6 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.EXT_LAST_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_CLOSE_DOWN_GESTURE_DURATION
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import java.io.File
 import kotlin.math.abs
 
@@ -86,8 +86,12 @@ abstract class ViewPagerFragment : Fragment() {
         }
 
         if (detailsFlag and EXT_RESOLUTION != 0) {
-            with(requireContext().getResolution(file.absolutePath)){
-                "${this?.x} x ${this?.y} ${this?.getMPx()}".let { if (it.isNotEmpty()) details.appendLine(it) }
+            with(requireContext().getResolution(file.absolutePath)) {
+                "${this?.x} x ${this?.y} ${GetMegaPixelUseCase(this)}".let {
+                    if (it.isNotEmpty()) details.appendLine(
+                        it
+                    )
+                }
             }
         }
 

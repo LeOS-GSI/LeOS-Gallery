@@ -42,7 +42,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getDigest
-import ca.on.sudbury.hojat.smartgallery.extensions.getMPx
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
@@ -52,6 +51,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
@@ -239,7 +239,12 @@ class PropertiesDialog() {
             }
             fileDirItem.path.isImageSlow() -> {
                 fileDirItem.getResolution(mActivity)
-                    ?.let { addProperty(R.string.resolution, "${it.x} x ${it.y} ${it.getMPx()}") }
+                    ?.let {
+                        addProperty(
+                            R.string.resolution,
+                            "${it.x} x ${it.y} ${GetMegaPixelUseCase(it)}"
+                        )
+                    }
             }
             fileDirItem.path.isAudioSlow() -> {
                 fileDirItem.getDuration(mActivity)?.let { addProperty(R.string.duration, it) }
@@ -250,7 +255,12 @@ class PropertiesDialog() {
             fileDirItem.path.isVideoSlow() -> {
                 fileDirItem.getDuration(mActivity)?.let { addProperty(R.string.duration, it) }
                 fileDirItem.getResolution(mActivity)
-                    ?.let { addProperty(R.string.resolution, "${it.x} x ${it.y} ${it.getMPx()}") }
+                    ?.let {
+                        addProperty(
+                            R.string.resolution,
+                            "${it.x} x ${it.y} ${GetMegaPixelUseCase(it)}"
+                        )
+                    }
                 fileDirItem.getArtist(mActivity)?.let { addProperty(R.string.artist, it) }
                 fileDirItem.getAlbum(mActivity)?.let { addProperty(R.string.album, it) }
             }
@@ -284,7 +294,8 @@ class PropertiesDialog() {
                             (mDialogView.findViewById<LinearLayout>(R.id.properties_md5).property_value as TextView).text =
                                 md5
                         } else {
-                            mDialogView.findViewById<LinearLayout>(R.id.properties_md5).visibility = View.GONE
+                            mDialogView.findViewById<LinearLayout>(R.id.properties_md5).visibility =
+                                View.GONE
                         }
                     }
                 }
@@ -424,7 +435,7 @@ class PropertiesDialog() {
         ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
             try {
                 ExifInterface(path).removeValues()
-                ShowSafeToastUseCase(mActivity ,R.string.exif_removed)
+                ShowSafeToastUseCase(mActivity, R.string.exif_removed)
                 mPropertyView.properties_holder.removeAllViews()
                 addProperties(path)
             } catch (e: Exception) {
@@ -440,7 +451,7 @@ class PropertiesDialog() {
                     .forEach {
                         ExifInterface(it).removeValues()
                     }
-                ShowSafeToastUseCase(mActivity ,R.string.exif_removed)
+                ShowSafeToastUseCase(mActivity, R.string.exif_removed)
             } catch (e: Exception) {
                 ShowSafeToastUseCase(mActivity, e.toString())
             }
