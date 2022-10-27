@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.SystemClock
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -60,7 +61,6 @@ import ca.on.sudbury.hojat.smartgallery.base.PhotoVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerPhotoItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.saveRotatedImageToFile
-import ca.on.sudbury.hojat.smartgallery.extensions.sendFakeClick
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOULD_INIT_FRAGMENT
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM
@@ -158,9 +158,9 @@ class PhotoFragment : ViewPagerFragment() {
                 singleTap = { x, y ->
                     binding.apply {
                         if (subsamplingView.visibility == View.VISIBLE) {
-                            subsamplingView.sendFakeClick(x, y)
+                            sendFakeClick(subsamplingView, x, y)
                         } else {
-                            gesturesView.sendFakeClick(x, y)
+                            sendFakeClick(gesturesView, x, y)
                         }
                     }
                 })
@@ -960,5 +960,13 @@ class PhotoFragment : ViewPagerFragment() {
         val actionsHeight =
             if (requireContext().config.bottomActions && !mIsFullscreen) resources.getDimension(R.dimen.bottom_actions_height) else 0f
         return requireContext().realScreenSize.y - height - actionsHeight - fullscreenOffset
+    }
+
+    private fun sendFakeClick(view: View, x: Float, y: Float) {
+        val uptime = SystemClock.uptimeMillis()
+        val event = MotionEvent.obtain(uptime, uptime, MotionEvent.ACTION_DOWN, x, y, 0)
+        view.dispatchTouchEvent(event)
+        event.action = MotionEvent.ACTION_UP
+        view.dispatchTouchEvent(event)
     }
 }
