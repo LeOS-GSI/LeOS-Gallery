@@ -13,7 +13,6 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.LinearLayoutManager
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileItems
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
@@ -46,6 +45,7 @@ import ca.on.sudbury.hojat.smartgallery.adapters.FilepickerFavoritesAdapter
 import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFilepickerBinding
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
@@ -139,7 +139,7 @@ class FilePickerDialog(
         binding.filepickerPlaceholder.setTextColor(activity.getProperTextColor())
         binding.filepickerFastscroller.updateColors(activity.getProperPrimaryColor())
         binding.filepickerFabShowHidden.apply {
-            beVisibleIf(!showHidden && canAddShowHiddenButton)
+            BeVisibleOrGoneUseCase(this, !showHidden && canAddShowHiddenButton)
             setOnClickListener {
                 activity.handleHiddenFolderPasswordProtection {
                     visibility = View.GONE
@@ -150,7 +150,10 @@ class FilePickerDialog(
         }
         binding.filepickerFavoritesLabel.text = "${activity.getString(R.string.favorites)}:"
         binding.filepickerFabShowFavorites.apply {
-            beVisibleIf(showFavoritesButton && context.baseConfig.favorites.isNotEmpty())
+            BeVisibleOrGoneUseCase(
+                this,
+                showFavoritesButton && context.baseConfig.favorites.isNotEmpty()
+            )
             setOnClickListener {
                 if (binding.filepickerFavoritesHolder.visibility == View.VISIBLE) {
                     hideFavorites()
@@ -259,7 +262,11 @@ class FilePickerDialog(
                     if (activity.isInDownloadDir(currPath)) {
                         sendSuccessForDirectFile()
                     } else {
-                        ShowSafeToastUseCase(activity ,R.string.system_folder_restriction, Toast.LENGTH_LONG)
+                        ShowSafeToastUseCase(
+                            activity,
+                            R.string.system_folder_restriction,
+                            Toast.LENGTH_LONG
+                        )
                     }
                 } else {
                     sendSuccessForDirectFile()

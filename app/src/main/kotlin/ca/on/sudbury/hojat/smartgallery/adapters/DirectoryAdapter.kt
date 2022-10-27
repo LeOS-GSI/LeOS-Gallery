@@ -33,7 +33,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
@@ -100,6 +99,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
@@ -903,7 +903,7 @@ class DirectoryAdapter(
                 else -> TYPE_IMAGES
             }
 
-            dir_check?.beVisibleIf(isSelected)
+            BeVisibleOrGoneUseCase(dir_check, isSelected)
             if (isSelected) {
                 ApplyColorFilterUseCase(dir_check.background, properPrimaryColor)
                 ApplyColorFilterUseCase(dir_check, contrastColor)
@@ -961,14 +961,15 @@ class DirectoryAdapter(
                 )
             }
 
-            dir_pin.beVisibleIf(pinnedFolders.contains(directory.path))
-            dir_location.beVisibleIf(directory.location != LOCATION_INTERNAL)
+            BeVisibleOrGoneUseCase(dir_pin, pinnedFolders.contains(directory.path))
+            BeVisibleOrGoneUseCase(dir_location, directory.location != LOCATION_INTERNAL)
+
             if (dir_location.visibility == View.VISIBLE) {
                 dir_location.setImageResource(if (directory.location == LOCATION_SD) R.drawable.ic_sd_card_vector else R.drawable.ic_usb_vector)
             }
 
             photo_cnt.text = directory.subfoldersMediaCount.toString()
-            photo_cnt.beVisibleIf(showMediaCount == FOLDER_MEDIA_CNT_LINE)
+            BeVisibleOrGoneUseCase(photo_cnt, showMediaCount == FOLDER_MEDIA_CNT_LINE)
 
             if (limitFolderTitle) {
                 dir_name.setSingleLine()
@@ -998,9 +999,9 @@ class DirectoryAdapter(
                 dir_path.setTextColor(textColor)
                 ApplyColorFilterUseCase(dir_pin, textColor)
                 ApplyColorFilterUseCase(dir_location, textColor)
-                dir_drag_handle.beVisibleIf(isDragAndDropping)
+                BeVisibleOrGoneUseCase(dir_drag_handle, isDragAndDropping)
             } else {
-                dir_drag_handle_wrapper.beVisibleIf(isDragAndDropping)
+                BeVisibleOrGoneUseCase(dir_drag_handle_wrapper, isDragAndDropping)
             }
 
             if (isDragAndDropping) {

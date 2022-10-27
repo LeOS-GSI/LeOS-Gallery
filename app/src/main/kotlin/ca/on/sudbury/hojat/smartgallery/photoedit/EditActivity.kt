@@ -36,7 +36,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
@@ -71,6 +70,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -288,7 +288,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     }
 
                     if (isCropIntent) {
-                        binding.bottomEditorPrimaryActions.bottomPrimaryFilter.visibility = View.GONE
+                        binding.bottomEditorPrimaryActions.bottomPrimaryFilter.visibility =
+                            View.GONE
                         binding.bottomEditorPrimaryActions.bottomPrimaryDraw.visibility = View.GONE
                     }
 
@@ -541,7 +542,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             binding.cropImageView.rotateImage(90)
         }
 
-        binding.bottomEditorCropRotateActions.bottomResize.beVisibleIf(!isCropIntent)
+        BeVisibleOrGoneUseCase(binding.bottomEditorCropRotateActions.bottomResize, !isCropIntent)
         binding.bottomEditorCropRotateActions.bottomResize.setOnClickListener {
             resizeImage()
         }
@@ -660,9 +661,19 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
 
         ApplyColorFilterUseCase(currentPrimaryActionButton, getProperPrimaryColor())
-        binding.bottomEditorFilterActions.root.beVisibleIf(currPrimaryAction == PRIMARY_ACTION_FILTER)
-        binding.bottomEditorCropRotateActions.root.beVisibleIf(currPrimaryAction == PRIMARY_ACTION_CROP_ROTATE)
-        binding.bottomEditorDrawActions.root.beVisibleIf(currPrimaryAction == PRIMARY_ACTION_DRAW)
+
+        BeVisibleOrGoneUseCase(
+            binding.bottomEditorFilterActions.root,
+            currPrimaryAction == PRIMARY_ACTION_FILTER
+        )
+        BeVisibleOrGoneUseCase(
+            binding.bottomEditorCropRotateActions.root,
+            currPrimaryAction == PRIMARY_ACTION_CROP_ROTATE
+        )
+        BeVisibleOrGoneUseCase(
+            binding.bottomEditorDrawActions.root,
+            currPrimaryAction == PRIMARY_ACTION_DRAW
+        )
 
         if (currPrimaryAction == PRIMARY_ACTION_FILTER && binding.bottomEditorFilterActions.bottomActionsFilterList.adapter == null) {
             RunOnBackgroundThreadUseCase {

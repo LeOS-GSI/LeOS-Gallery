@@ -40,13 +40,11 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DataSpec
 import com.google.android.exoplayer2.upstream.FileDataSource
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getVideoResolution
-import ca.on.sudbury.hojat.smartgallery.extensions.beInvisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.activities.PanoramaVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerVideoItemBinding
@@ -62,6 +60,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOULD_INIT_FRAGMENT
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.FAST_FORWARD_VIDEO_MS
 import ca.on.sudbury.hojat.smartgallery.models.Medium
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrInvisibleUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import timber.log.Timber
 import java.io.File
@@ -280,10 +280,19 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
             requireContext().config      // make sure we get a new config, in case the user changed something in the app settings
         requireActivity().updateTextColors(binding.videoHolder)
         val allowVideoGestures = mConfig.allowVideoGestures
-        binding.videoSurface.beVisibleIf(!(mConfig.openVideosOnSeparateScreen || mIsPanorama))
-        binding.videoSurfaceFrame.beVisibleIf(binding.videoSurface.visibility != View.GONE)
-        binding.videoVolumeController.beVisibleIf(allowVideoGestures && !mIsPanorama)
-        binding.videoBrightnessController.beVisibleIf(allowVideoGestures && !mIsPanorama)
+        BeVisibleOrGoneUseCase(
+            binding.videoSurface,
+            !(mConfig.openVideosOnSeparateScreen || mIsPanorama)
+        )
+        BeVisibleOrGoneUseCase(
+            binding.videoSurfaceFrame,
+            binding.videoSurface.visibility != View.GONE
+        )
+        BeVisibleOrGoneUseCase(binding.videoVolumeController, allowVideoGestures && !mIsPanorama)
+        BeVisibleOrGoneUseCase(
+            binding.videoBrightnessController,
+            allowVideoGestures && !mIsPanorama
+        )
 
         checkExtendedDetails()
         initTimeHolder()
@@ -506,7 +515,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
                         val realY = getExtendedDetailsY(height)
                         if (realY > 0) {
                             y = realY
-                            beVisibleIf(text.isNotEmpty())
+                            BeVisibleOrGoneUseCase(this, text.isNotEmpty())
                             alpha = if (!mConfig.hideExtendedDetails || !mIsFullscreen) 1f else 0f
                         }
                     }
@@ -532,7 +541,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
             bottomMargin = bottom
             rightMargin = right
         }
-        binding.rlBottomVideoTimeHolder.videoTimeHolder.beInvisibleIf(mIsFullscreen)
+        BeVisibleOrInvisibleUseCase(binding.rlBottomVideoTimeHolder.videoTimeHolder, !mIsFullscreen)
     }
 
     private fun checkIfPanorama() {

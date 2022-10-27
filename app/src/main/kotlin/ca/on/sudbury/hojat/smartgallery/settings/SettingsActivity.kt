@@ -15,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
@@ -144,6 +143,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToBooleanUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToIntUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToStringSetUseCase
@@ -283,7 +283,10 @@ class SettingsActivity : SimpleActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupUseEnglish() {
-        binding.settingsUseEnglishHolder.beVisibleIf(config.wasUseEnglishToggled || Locale.getDefault().language != "en")
+        BeVisibleOrGoneUseCase(
+            binding.settingsUseEnglishHolder,
+            config.wasUseEnglishToggled || Locale.getDefault().language != "en"
+        )
         binding.settingsUseEnglish.isChecked = config.useEnglish
 
         if (binding.settingsUseEnglishHolder.visibility == View.GONE) {
@@ -305,7 +308,10 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupFileLoadingPriority() {
-        binding.settingsFileLoadingPriorityHolder.beVisibleIf(!(IsRPlusUseCase() && !isExternalStorageManager()))
+        BeVisibleOrGoneUseCase(
+            binding.settingsFileLoadingPriorityHolder,
+            !(IsRPlusUseCase() && !isExternalStorageManager())
+        )
         binding.settingsFileLoadingPriority.text = getFileLoadingPriorityText()
         binding.settingsFileLoadingPriorityHolder.setOnClickListener {
             val items = arrayListOf(
@@ -330,7 +336,10 @@ class SettingsActivity : SimpleActivity() {
     )
 
     private fun setupManageIncludedFolders() {
-        binding.settingsManageIncludedFoldersHolder.beVisibleIf(!(IsRPlusUseCase() && !isExternalStorageManager()))
+        BeVisibleOrGoneUseCase(
+            binding.settingsManageIncludedFoldersHolder,
+            !(IsRPlusUseCase() && !isExternalStorageManager())
+        )
         binding.settingsManageIncludedFoldersHolder.setOnClickListener {
             startActivity(Intent(this, IncludedFoldersActivity::class.java))
         }
@@ -345,7 +354,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupManageHiddenFolders() {
-        binding.settingsManageHiddenFoldersHolder.beVisibleIf(!IsQPlusUseCase())
+        BeVisibleOrGoneUseCase(binding.settingsManageHiddenFoldersHolder, !IsQPlusUseCase())
         binding.settingsManageHiddenFoldersHolder.setOnClickListener {
             handleHiddenFolderPasswordProtection {
                 startActivity(Intent(this, HiddenFoldersActivity::class.java))
@@ -458,7 +467,10 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupHiddenItemPasswordProtection() {
-        binding.settingsHiddenItemPasswordProtectionHolder.beVisibleIf(!(IsRPlusUseCase() && !isExternalStorageManager()))
+        BeVisibleOrGoneUseCase(
+            binding.settingsHiddenItemPasswordProtectionHolder,
+            !(IsRPlusUseCase() && !isExternalStorageManager())
+        )
         binding.settingsHiddenItemPasswordProtection.isChecked = config.isHiddenPasswordProtectionOn
         binding.settingsHiddenItemPasswordProtectionHolder.setOnClickListener {
             val tabToShow =
@@ -483,7 +495,10 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupExcludedItemPasswordProtection() {
-        binding.settingsExcludedItemPasswordProtectionHolder.beVisibleIf(binding.settingsHiddenItemPasswordProtectionHolder.visibility != View.VISIBLE)
+        BeVisibleOrGoneUseCase(
+            binding.settingsExcludedItemPasswordProtectionHolder,
+            binding.settingsHiddenItemPasswordProtectionHolder.visibility != View.VISIBLE
+        )
         binding.settingsExcludedItemPasswordProtection.isChecked =
             config.isExcludedPasswordProtectionOn
         binding.settingsExcludedItemPasswordProtectionHolder.setOnClickListener {
@@ -600,7 +615,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupShowNotch() {
-        binding.settingsShowNotchHolder.beVisibleIf(IsPiePlusUseCase())
+        BeVisibleOrGoneUseCase(binding.settingsShowNotchHolder, IsPiePlusUseCase())
         binding.settingsShowNotch.isChecked = config.showNotch
         binding.settingsShowNotchHolder.setOnClickListener {
             binding.settingsShowNotch.toggle()
@@ -669,9 +684,13 @@ class SettingsActivity : SimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateDeepZoomToggleButtons() {
         with(binding) {
-            settingsAllowRotatingWithGesturesHolder.beVisibleIf(config.allowZoomingImages)
-            settingsShowHighestQualityHolder.beVisibleIf(config.allowZoomingImages)
-            settingsAllowOneToOneZoomHolder.beVisibleIf(config.allowZoomingImages)
+
+            BeVisibleOrGoneUseCase(
+                settingsAllowRotatingWithGesturesHolder,
+                config.allowZoomingImages
+            )
+            BeVisibleOrGoneUseCase(settingsShowHighestQualityHolder, config.allowZoomingImages)
+            BeVisibleOrGoneUseCase(settingsAllowOneToOneZoomHolder, config.allowZoomingImages)
 
             if (config.allowZoomingImages) {
                 settingsAllowZoomingImagesHolder.background =
@@ -750,8 +769,8 @@ class SettingsActivity : SimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateExtendedDetailsButtons() {
         with(binding) {
-            settingsManageExtendedDetailsHolder.beVisibleIf(config.showExtendedDetails)
-            settingsHideExtendedDetailsHolder.beVisibleIf(config.showExtendedDetails)
+            BeVisibleOrGoneUseCase(settingsManageExtendedDetailsHolder, config.showExtendedDetails)
+            BeVisibleOrGoneUseCase(settingsHideExtendedDetailsHolder, config.showExtendedDetails)
             if (config.showExtendedDetails) {
                 settingsShowExtendedDetailsHolder.background =
                     resources.getDrawable(R.drawable.ripple_top_corners, theme)
@@ -835,7 +854,7 @@ class SettingsActivity : SimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateManageBottomActionsButtons() {
         with(binding) {
-            settingsManageBottomActionsHolder.beVisibleIf(config.bottomActions)
+            BeVisibleOrGoneUseCase(settingsManageBottomActionsHolder, config.bottomActions)
             if (config.bottomActions) {
                 settingsBottomActionsCheckboxHolder.background =
                     resources.getDrawable(R.drawable.ripple_top_corners, theme)
@@ -885,9 +904,12 @@ class SettingsActivity : SimpleActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun updateRecycleBinButtons() {
         with(binding) {
-            settingsShowRecycleBinLastHolder.beVisibleIf(config.useRecycleBin && config.showRecycleBinAtFolders)
-            settingsEmptyRecycleBinHolder.beVisibleIf(config.useRecycleBin)
-            settingsShowRecycleBinHolder.beVisibleIf(config.useRecycleBin)
+            BeVisibleOrGoneUseCase(
+                settingsShowRecycleBinLastHolder,
+                config.useRecycleBin && config.showRecycleBinAtFolders
+            )
+            BeVisibleOrGoneUseCase(settingsEmptyRecycleBinHolder, config.useRecycleBin)
+            BeVisibleOrGoneUseCase(settingsShowRecycleBinHolder, config.useRecycleBin)
             if (config.useRecycleBin) {
                 settingsUseRecycleBinHolder.background =
                     resources.getDrawable(R.drawable.ripple_top_corners, theme)

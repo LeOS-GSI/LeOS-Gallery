@@ -3,13 +3,13 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeViewTypeBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 class ChangeViewTypeDialog(
     val activity: BaseSimpleActivity,
@@ -43,12 +43,12 @@ class ChangeViewTypeDialog(
 
             changeViewTypeDialogRadio.check(viewToCheck)
             changeViewTypeDialogGroupDirectSubfolders.apply {
-                beVisibleIf(fromFoldersView)
+                BeVisibleOrGoneUseCase(this, fromFoldersView)
                 isChecked = config.groupDirectSubfolders
             }
 
             changeViewTypeDialogUseForThisFolder.apply {
-                beVisibleIf(!fromFoldersView)
+                BeVisibleOrGoneUseCase(this, !fromFoldersView)
                 isChecked = config.hasCustomViewType(pathToUse)
             }
         }

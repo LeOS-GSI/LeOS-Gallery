@@ -11,7 +11,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
@@ -27,6 +26,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
 import ca.on.sudbury.hojat.smartgallery.models.Directory
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 @SuppressLint("InflateParams")
@@ -82,7 +82,10 @@ class PickDirectoryDialog(
                 R.string.select_destination
             ) { alertDialog ->
                 dialog = alertDialog
-                binding.directoriesShowHidden.beVisibleIf(!context.config.shouldShowHidden)
+                BeVisibleOrGoneUseCase(
+                    binding.directoriesShowHidden,
+                    !context.config.shouldShowHidden
+                )
                 binding.directoriesShowHidden.setOnClickListener {
                     activity.handleHiddenFolderPasswordProtection {
                         binding.directoriesShowHidden.visibility = View.GONE

@@ -7,7 +7,6 @@ import ca.on.sudbury.hojat.smartgallery.R.id.conflict_dialog_radio_merge
 import ca.on.sudbury.hojat.smartgallery.R.id.conflict_dialog_radio_skip
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFileConflictBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_KEEP_BOTH
@@ -15,6 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_MERGE
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_OVERWRITE
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_SKIP
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import timber.log.Timber
 
 /**
@@ -36,9 +36,10 @@ class FileConflictDialog(
             conflictDialogTitle.text =
                 String.format(activity.getString(stringBase), fileDirItem.name)
             conflictDialogApplyToAll.isChecked = activity.baseConfig.lastConflictApplyToAll
-            conflictDialogApplyToAll.beVisibleIf(showApplyToAllCheckbox)
-            conflictDialogDivider.root.beVisibleIf(showApplyToAllCheckbox)
-            conflictDialogRadioMerge.beVisibleIf(fileDirItem.isDirectory)
+
+            BeVisibleOrGoneUseCase(conflictDialogApplyToAll, showApplyToAllCheckbox)
+            BeVisibleOrGoneUseCase(conflictDialogDivider.root, showApplyToAllCheckbox)
+            BeVisibleOrGoneUseCase(conflictDialogRadioMerge, fileDirItem.isDirectory)
 
             val resolutionButton = when (activity.baseConfig.lastConflictResolution) {
                 CONFLICT_OVERWRITE -> conflictDialogRadioOverwrite

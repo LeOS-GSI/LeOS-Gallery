@@ -15,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getMyContentProviderCursorLoader
@@ -39,6 +38,7 @@ import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlin.math.abs
 
@@ -101,7 +101,10 @@ class CustomizationActivity : BaseSimpleActivity() {
                 runOnUiThread {
                     setupThemes()
                     val hideGoogleRelations = resources.getBoolean(R.bool.hide_google_relations)
-                    binding.applyToAllHolder.beVisibleIf(storedSharedTheme == null && curSelectedThemeId != THEME_AUTO && curSelectedThemeId != THEME_SYSTEM && !hideGoogleRelations)
+                    BeVisibleOrGoneUseCase(
+                        binding.applyToAllHolder,
+                        storedSharedTheme == null && curSelectedThemeId != THEME_AUTO && curSelectedThemeId != THEME_SYSTEM && !hideGoogleRelations
+                    )
                 }
             } catch (e: Exception) {
                 ShowSafeToastUseCase(this, R.string.update_thank_you)
@@ -247,7 +250,9 @@ class CustomizationActivity : BaseSimpleActivity() {
             }
         }
 
-        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString()
+                .trim() == getString(R.string.system_default)
+        ) {
             binding.applyToAllHolder.visibility = View.GONE
         }
     }
@@ -267,7 +272,10 @@ class CustomizationActivity : BaseSimpleActivity() {
             }
 
             val hideGoogleRelations = resources.getBoolean(R.bool.hide_google_relations)
-            binding.applyToAllHolder.beVisibleIf(curSelectedThemeId != THEME_AUTO && curSelectedThemeId != THEME_SYSTEM && curSelectedThemeId != THEME_SHARED && !hideGoogleRelations)
+            BeVisibleOrGoneUseCase(
+                binding.applyToAllHolder,
+                curSelectedThemeId != THEME_AUTO && curSelectedThemeId != THEME_SYSTEM && curSelectedThemeId != THEME_SHARED && !hideGoogleRelations
+            )
             updateMenuItemColors(menu, true, getCurrentStatusBarColor())
         }
     }
@@ -416,10 +424,16 @@ class CustomizationActivity : BaseSimpleActivity() {
             binding.customizationBackgroundColorHolder,
             binding.customizationNavigationBarColorHolder
         ).forEach {
-            it.beVisibleIf(curSelectedThemeId != THEME_AUTO && curSelectedThemeId != THEME_SYSTEM)
+            BeVisibleOrGoneUseCase(
+                it,
+                curSelectedThemeId != THEME_AUTO && curSelectedThemeId != THEME_SYSTEM
+            )
         }
 
-        binding.customizationPrimaryColorHolder.beVisibleIf(curSelectedThemeId != THEME_SYSTEM)
+        BeVisibleOrGoneUseCase(
+            binding.customizationPrimaryColorHolder,
+            curSelectedThemeId != THEME_SYSTEM
+        )
     }
 
     private fun promptSaveDiscard() {
@@ -589,7 +603,10 @@ class CustomizationActivity : BaseSimpleActivity() {
         } else {
             val applyBackground =
                 resources.getDrawable(R.drawable.button_background_rounded, theme) as RippleDrawable
-            ApplyColorFilterUseCase((applyBackground as LayerDrawable).findDrawableByLayerId(R.id.button_background_holder), newColor)
+            ApplyColorFilterUseCase(
+                (applyBackground as LayerDrawable).findDrawableByLayerId(R.id.button_background_holder),
+                newColor
+            )
             binding.applyToAll.background = applyBackground
         }
     }
@@ -600,7 +617,11 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun handleAccentColorLayout() {
-        binding.customizationAccentColorHolder.beVisibleIf(curSelectedThemeId == THEME_WHITE || isCurrentWhiteTheme() || curSelectedThemeId == THEME_BLACK_WHITE || isCurrentBlackAndWhiteTheme())
+        BeVisibleOrGoneUseCase(
+            binding.customizationAccentColorHolder,
+            curSelectedThemeId == THEME_WHITE || isCurrentWhiteTheme() || curSelectedThemeId == THEME_BLACK_WHITE || isCurrentBlackAndWhiteTheme()
+        )
+
         binding.customizationAccentColorLabel.text = getString(
             if (curSelectedThemeId == THEME_WHITE || isCurrentWhiteTheme()) {
                 R.string.accent_color_white
@@ -763,28 +784,36 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun getCurrentTextColor() =
-        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString()
+                .trim() == getString(R.string.system_default)
+        ) {
             resources.getColor(R.color.you_neutral_text_color)
         } else {
             curTextColor
         }
 
     private fun getCurrentBackgroundColor() =
-        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString()
+                .trim() == getString(R.string.system_default)
+        ) {
             resources.getColor(R.color.you_background_color)
         } else {
             curBackgroundColor
         }
 
     private fun getCurrentPrimaryColor() =
-        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString()
+                .trim() == getString(R.string.system_default)
+        ) {
             resources.getColor(R.color.you_primary_color)
         } else {
             curPrimaryColor
         }
 
     private fun getCurrentStatusBarColor() =
-        if (binding.customizationTheme.text.toString().trim() == getString(R.string.system_default)) {
+        if (binding.customizationTheme.text.toString()
+                .trim() == getString(R.string.system_default)
+        ) {
             resources.getColor(R.color.you_status_bar_color)
         } else {
             curPrimaryColor

@@ -5,7 +5,6 @@ import android.view.View
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeSortingBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
@@ -19,6 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 class ChangeSortingDialog(
     val activity: BaseSimpleActivity,
@@ -39,15 +39,21 @@ class ChangeSortingDialog(
         currSorting =
             if (isDirectorySorting) config.directorySorting else config.getFolderSorting(pathToUse)
         binding.apply {
-            useForThisFolderDivider.root.beVisibleIf(showFolderCheckbox || (currSorting and SORT_BY_NAME != 0 || currSorting and SORT_BY_PATH != 0))
+            BeVisibleOrGoneUseCase(
+                useForThisFolderDivider.root,
+                showFolderCheckbox || (currSorting and SORT_BY_NAME != 0 || currSorting and SORT_BY_PATH != 0)
+            )
 
-            sortingDialogNumericSorting.beVisibleIf(showFolderCheckbox && (currSorting and SORT_BY_NAME != 0 || currSorting and SORT_BY_PATH != 0))
+            BeVisibleOrGoneUseCase(
+                sortingDialogNumericSorting,
+                showFolderCheckbox && (currSorting and SORT_BY_NAME != 0 || currSorting and SORT_BY_PATH != 0)
+            )
             sortingDialogNumericSorting.isChecked = currSorting and SORT_USE_NUMERIC_VALUE != 0
 
-            sortingDialogUseForThisFolder.beVisibleIf(showFolderCheckbox)
+            BeVisibleOrGoneUseCase(sortingDialogUseForThisFolder, showFolderCheckbox)
             sortingDialogUseForThisFolder.isChecked = config.hasCustomSorting(pathToUse)
-            sortingDialogBottomNote.beVisibleIf(!isDirectorySorting)
-            sortingDialogRadioCustom.beVisibleIf(isDirectorySorting)
+            BeVisibleOrGoneUseCase(sortingDialogBottomNote, !isDirectorySorting)
+            BeVisibleOrGoneUseCase(sortingDialogRadioCustom, isDirectorySorting)
         }
 
         activity.getAlertDialogBuilder()
@@ -65,13 +71,16 @@ class ChangeSortingDialog(
         binding.sortingDialogRadioSorting.setOnCheckedChangeListener { _, checkedId ->
             val isSortingByNameOrPath =
                 checkedId == binding.sortingDialogRadioName.id || checkedId == binding.sortingDialogRadioPath.id
-            binding.sortingDialogNumericSorting.beVisibleIf(isSortingByNameOrPath)
-            binding.useForThisFolderDivider.root.beVisibleIf(binding.sortingDialogNumericSorting.visibility == View.VISIBLE || binding.sortingDialogUseForThisFolder.visibility == View.VISIBLE)
+            BeVisibleOrGoneUseCase(binding.sortingDialogNumericSorting, isSortingByNameOrPath)
+            BeVisibleOrGoneUseCase(
+                binding.useForThisFolderDivider.root,
+                binding.sortingDialogNumericSorting.visibility == View.VISIBLE || binding.sortingDialogUseForThisFolder.visibility == View.VISIBLE
+            )
 
             val hideSortOrder =
                 checkedId == binding.sortingDialogRadioCustom.id || checkedId == binding.sortingDialogRadioRandom.id
-            binding.sortingDialogRadioOrder.beVisibleIf(!hideSortOrder)
-            binding.sortingDialogOrderDivider.root.beVisibleIf(!hideSortOrder)
+            BeVisibleOrGoneUseCase(binding.sortingDialogRadioOrder, !hideSortOrder)
+            BeVisibleOrGoneUseCase(binding.sortingDialogOrderDivider.root, !hideSortOrder)
         }
 
         val sortBtn = when {

@@ -86,7 +86,6 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
@@ -103,6 +102,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -982,13 +982,22 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
         runOnUiThread {
             binding.mediaRefreshLayout.isRefreshing = false
-            binding.mediaEmptyTextPlaceholder.beVisibleIf(media.isEmpty() && !isFromCache)
-            binding.mediaEmptyTextPlaceholder2.beVisibleIf(media.isEmpty() && !isFromCache)
+            BeVisibleOrGoneUseCase(
+                binding.mediaEmptyTextPlaceholder,
+                media.isEmpty() && !isFromCache
+            )
+            BeVisibleOrGoneUseCase(
+                binding.mediaEmptyTextPlaceholder2,
+                media.isEmpty() && !isFromCache
+            )
 
             if (binding.mediaEmptyTextPlaceholder.visibility == View.VISIBLE) {
                 binding.mediaEmptyTextPlaceholder.text = getString(R.string.no_media_with_filters)
             }
-            binding.mediaFastscroller.beVisibleIf(binding.mediaEmptyTextPlaceholder.visibility == View.GONE)
+            BeVisibleOrGoneUseCase(
+                binding.mediaFastscroller,
+                binding.mediaEmptyTextPlaceholder.visibility == View.GONE
+            )
             setupAdapter()
         }
 

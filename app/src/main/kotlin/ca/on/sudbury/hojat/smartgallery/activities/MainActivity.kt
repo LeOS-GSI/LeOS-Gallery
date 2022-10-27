@@ -37,7 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.createDirectoryFromMedia
@@ -146,6 +145,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -857,7 +857,10 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                                 (videoExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
                                 } && filter and TYPE_VIDEOS != 0) ||
-                                (it.absolutePath.endsWith(".gif", true) && filter and TYPE_GIFS != 0) ||
+                                (it.absolutePath.endsWith(
+                                    ".gif",
+                                    true
+                                ) && filter and TYPE_GIFS != 0) ||
                                 (rawExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
                                 } && filter and TYPE_RAWS != 0) ||
@@ -1510,8 +1513,14 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun checkPlaceholderVisibility(dirs: ArrayList<Directory>) {
-        binding.directoriesEmptyPlaceholder.beVisibleIf(dirs.isEmpty() && mLoadedInitialPhotos)
-        binding.directoriesEmptyPlaceholder2.beVisibleIf(dirs.isEmpty() && mLoadedInitialPhotos)
+        BeVisibleOrGoneUseCase(
+            binding.directoriesEmptyPlaceholder,
+            dirs.isEmpty() && mLoadedInitialPhotos
+        )
+        BeVisibleOrGoneUseCase(
+            binding.directoriesEmptyPlaceholder2,
+            dirs.isEmpty() && mLoadedInitialPhotos
+        )
 
         if (mIsSearchOpen) {
             binding.directoriesEmptyPlaceholder.text = getString(R.string.no_items_found)
@@ -1541,7 +1550,10 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
 
         binding.directoriesEmptyPlaceholder2.underlineText()
-        binding.directoriesFastscroller.beVisibleIf(binding.directoriesEmptyPlaceholder.visibility == View.GONE)
+        BeVisibleOrGoneUseCase(
+            binding.directoriesFastscroller,
+            binding.directoriesEmptyPlaceholder.visibility == View.GONE
+        )
     }
 
     private fun setupAdapter(

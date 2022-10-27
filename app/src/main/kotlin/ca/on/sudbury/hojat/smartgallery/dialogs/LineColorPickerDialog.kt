@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 import android.view.Menu
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
@@ -12,6 +11,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogLineColorPickerBinding
 import ca.on.sudbury.hojat.smartgallery.interfaces.LineColorPickerListener
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 class LineColorPickerDialog(
     val activity: BaseSimpleActivity,
@@ -40,7 +40,7 @@ class LineColorPickerDialog(
                 true
             }
 
-            lineColorPickerIcon.beVisibleIf(!isPrimaryColorPicker)
+            BeVisibleOrGoneUseCase(lineColorPickerIcon, !isPrimaryColorPicker)
             val indexes = getColorIndexes(color)
 
             val primaryColorIndex = indexes.first
@@ -61,7 +61,7 @@ class LineColorPickerDialog(
                 }
             }
 
-            secondaryLineColorPicker.beVisibleIf(isPrimaryColorPicker)
+            BeVisibleOrGoneUseCase(secondaryLineColorPicker, isPrimaryColorPicker)
             secondaryLineColorPicker.updateColors(
                 getColorsForIndex(primaryColorIndex),
                 indexes.second

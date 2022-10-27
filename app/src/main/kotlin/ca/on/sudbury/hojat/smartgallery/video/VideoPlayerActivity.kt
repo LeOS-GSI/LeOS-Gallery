@@ -47,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromUri
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
@@ -68,6 +67,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.DRAG_THRESHOLD
 import ca.on.sudbury.hojat.smartgallery.helpers.HIDE_SYSTEM_UI_DELAY
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -247,20 +247,23 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         binding.videoSurfaceFrame.setOnClickListener { toggleFullscreen() }
         binding.videoSurfaceFrame.controller.settings.swallowDoubleTaps = true
 
-        binding.rlBottomVideoController.videoNextFile.beVisibleIf(
-            intent.getBooleanExtra(
+        BeVisibleOrGoneUseCase(
+            binding.rlBottomVideoController.videoNextFile, intent.getBooleanExtra(
                 SHOW_NEXT_ITEM,
                 false
             )
         )
+
         binding.rlBottomVideoController.videoNextFile.setOnClickListener { handleNextFile() }
 
-        binding.rlBottomVideoController.videoPrevFile.beVisibleIf(
+        BeVisibleOrGoneUseCase(
+            binding.rlBottomVideoController.videoPrevFile,
             intent.getBooleanExtra(
                 SHOW_PREV_ITEM,
                 false
             )
         )
+
         binding.rlBottomVideoController.videoPrevFile.setOnClickListener { handlePrevFile() }
 
 
@@ -599,7 +602,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         binding.videoAppbar.animate().alpha(newAlpha).withStartAction {
             binding.videoAppbar.visibility = View.VISIBLE
         }.withEndAction {
-            binding.videoAppbar.beVisibleIf(newAlpha == 1f)
+            BeVisibleOrGoneUseCase(binding.videoAppbar, newAlpha == 1f)
         }.start()
     }
 

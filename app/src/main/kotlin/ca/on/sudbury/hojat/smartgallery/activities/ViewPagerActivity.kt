@@ -132,7 +132,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_NONE
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_DEFAULT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
@@ -179,6 +178,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
@@ -1041,7 +1041,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         val currentMedium = getCurrentMedium()
         val visibleBottomActions = if (config.bottomActions) config.visibleBottomActions else 0
         with(binding.bottomActions.bottomFavorite) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE != 0 && currentMedium?.getIsInRecycleBin() == false)
+            BeVisibleOrGoneUseCase(
+                this,
+                visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE != 0 && currentMedium?.getIsInRecycleBin() == false
+            )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1054,7 +1057,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomEdit) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && currentMedium?.isSVG() == false)
+            BeVisibleOrGoneUseCase(
+                this,
+                visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && currentMedium?.isSVG() == false
+            )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1065,7 +1071,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomShare) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1078,7 +1084,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomDelete) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_DELETE != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_DELETE != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1089,7 +1095,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomRotate) {
-            beVisibleIf(config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true)
+            BeVisibleOrGoneUseCase(
+                this,
+                config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true
+            )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1100,7 +1109,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomProperties) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_PROPERTIES != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_PROPERTIES != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1111,7 +1120,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomChangeOrientation) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_CHANGE_ORIENTATION != 0)
+            BeVisibleOrGoneUseCase(
+                this,
+                visibleBottomActions and BOTTOM_ACTION_CHANGE_ORIENTATION != 0
+            )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1131,7 +1143,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomSlideshow) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SLIDESHOW != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SLIDESHOW != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1142,7 +1154,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomShowOnMap) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1153,7 +1165,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomToggleFileVisibility) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY != 0)
+            BeVisibleOrGoneUseCase(
+                this,
+                visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY != 0
+            )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1170,7 +1185,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomRename) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RENAME != 0 && currentMedium?.getIsInRecycleBin() == false)
+            BeVisibleOrGoneUseCase(
+                this,
+                visibleBottomActions and BOTTOM_ACTION_RENAME != 0 && currentMedium?.getIsInRecycleBin() == false
+            )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1181,7 +1199,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomSetAs) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SET_AS != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SET_AS != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1192,7 +1210,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomCopy) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_COPY != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_COPY != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1203,7 +1221,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomMove) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_MOVE != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_MOVE != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1214,7 +1232,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomResize) {
-            beVisibleIf(visibleBottomActions and BOTTOM_ACTION_RESIZE != 0 && currentMedium?.isImage() == true)
+            BeVisibleOrGoneUseCase(
+                this,
+                visibleBottomActions and BOTTOM_ACTION_RESIZE != 0 && currentMedium?.isImage() == true
+            )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1238,7 +1259,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             val hideIcon =
                 if (medium.isHidden()) R.drawable.ic_unhide_vector else R.drawable.ic_hide_vector
             bottomToggleFileVisibility.setImageResource(hideIcon)
-            bottomRotate.beVisibleIf(config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true)
+            BeVisibleOrGoneUseCase(
+                bottomRotate,
+                config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true
+            )
             bottomChangeOrientation.setImageResource(getChangeOrientationIcon())
         }
     }
@@ -1755,13 +1779,13 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             binding.bottomActions.root.animate().alpha(newAlpha).withStartAction {
                 binding.bottomActions.root.visibility = View.VISIBLE
             }.withEndAction {
-                binding.bottomActions.root.beVisibleIf(newAlpha == 1f)
+                BeVisibleOrGoneUseCase(binding.bottomActions.root, newAlpha == 1f)
             }.start()
 
             binding.mediumViewerAppbar.animate().alpha(newAlpha).withStartAction {
                 binding.mediumViewerAppbar.visibility = View.VISIBLE
             }.withEndAction {
-                binding.mediumViewerAppbar.beVisibleIf(newAlpha == 1f)
+                BeVisibleOrGoneUseCase(binding.mediumViewerAppbar, newAlpha == 1f)
             }.start()
         }
     }

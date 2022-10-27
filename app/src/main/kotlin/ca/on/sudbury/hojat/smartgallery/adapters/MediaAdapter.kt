@@ -25,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
@@ -83,6 +82,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -704,15 +704,15 @@ class MediaAdapter(
 
             media_item_holder.setPadding(padding, padding, padding, padding)
 
-            favorite.beVisibleIf(medium.isFavorite && config.markFavoriteItems)
+            BeVisibleOrGoneUseCase(favorite, medium.isFavorite && config.markFavoriteItems)
 
-            play_portrait_outline?.beVisibleIf(medium.isVideo() || medium.isPortrait())
+            BeVisibleOrGoneUseCase(play_portrait_outline, medium.isVideo() || medium.isPortrait())
             if (medium.isVideo()) {
                 play_portrait_outline?.setImageResource(R.drawable.ic_play_outline_vector)
                 play_portrait_outline?.visibility = View.VISIBLE
             } else if (medium.isPortrait()) {
                 play_portrait_outline?.setImageResource(R.drawable.ic_portrait_photo_vector)
-                play_portrait_outline?.beVisibleIf(showFileTypes)
+                BeVisibleOrGoneUseCase(play_portrait_outline, showFileTypes)
             }
 
             if (showFileTypes && (medium.isGIF() || medium.isRaw() || medium.isSVG())) {
@@ -728,7 +728,7 @@ class MediaAdapter(
                 file_type?.visibility = View.GONE
             }
 
-            medium_name.beVisibleIf(displayFilenames || isListViewType)
+            BeVisibleOrGoneUseCase(medium_name, displayFilenames || isListViewType)
             medium_name.text = medium.name
             medium_name.tag = medium.path
 
@@ -736,9 +736,8 @@ class MediaAdapter(
             if (showVideoDuration) {
                 video_duration?.text = medium.videoDuration.getFormattedDuration()
             }
-            video_duration?.beVisibleIf(showVideoDuration)
-
-            medium_check?.beVisibleIf(isSelected)
+            BeVisibleOrGoneUseCase(video_duration, showVideoDuration)
+            BeVisibleOrGoneUseCase(medium_check, isSelected)
             if (isSelected) {
 
                 ApplyColorFilterUseCase(medium_check?.background, properPrimaryColor)

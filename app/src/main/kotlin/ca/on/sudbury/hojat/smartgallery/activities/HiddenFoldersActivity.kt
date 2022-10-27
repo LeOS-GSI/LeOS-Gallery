@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.activities
 import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
@@ -13,6 +12,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.addNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFolders
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 class HiddenFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
@@ -38,7 +38,7 @@ class HiddenFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
             runOnUiThread {
                 binding.manageFoldersPlaceholder.apply {
                     text = getString(R.string.hidden_folders_placeholder)
-                    beVisibleIf(it.isEmpty())
+                    BeVisibleOrGoneUseCase(this, it.isEmpty())
                     setTextColor(getProperTextColor())
                 }
 

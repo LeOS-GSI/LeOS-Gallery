@@ -18,7 +18,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityWidgetConfigBinding
@@ -33,6 +32,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.Widget
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 class WidgetConfigureActivity : SimpleActivity() {
@@ -237,6 +237,6 @@ class WidgetConfigureActivity : SimpleActivity() {
 
     private fun handleFolderNameDisplay() {
         val showFolderName = binding.folderPickerShowFolderName.isChecked
-        binding.configFolderName.beVisibleIf(showFolderName)
+        BeVisibleOrGoneUseCase(binding.configFolderName, showFolderName)
     }
 }

@@ -16,7 +16,6 @@ import android.view.Menu
 import android.view.View
 import androidx.core.net.toUri
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -38,6 +37,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 class AboutActivity : BaseSimpleActivity() {
@@ -126,7 +126,7 @@ class AboutActivity : BaseSimpleActivity() {
 
     private fun setupFAQ() {
         val faqItems = intent.getSerializableExtra(APP_FAQ) as ArrayList<FaqItem>
-        binding.aboutFaqHolder.beVisibleIf(faqItems.isNotEmpty())
+        BeVisibleOrGoneUseCase(binding.aboutFaqHolder, faqItems.isNotEmpty())
         binding.aboutFaqHolder.setOnClickListener {
             Intent(applicationContext, FAQActivity::class.java).apply {
                 putExtra(APP_ICON_IDS, getAppIconIDs())

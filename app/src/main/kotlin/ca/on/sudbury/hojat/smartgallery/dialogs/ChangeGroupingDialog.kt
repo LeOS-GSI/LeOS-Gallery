@@ -4,7 +4,6 @@ import android.content.DialogInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeGroupingBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -19,6 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FILE_TYPE
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_EXTENSION
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 class ChangeGroupingDialog(
     val activity: BaseSimpleActivity,
@@ -38,7 +38,7 @@ class ChangeGroupingDialog(
         currGrouping = config.getFolderGrouping(pathToUse)
         binding.apply {
             groupingDialogUseForThisFolder.isChecked = config.hasCustomGrouping(pathToUse)
-            groupingDialogRadioFolder.beVisibleIf(path.isEmpty())
+            BeVisibleOrGoneUseCase(groupingDialogRadioFolder, path.isEmpty())
         }
 
         activity.getAlertDialogBuilder()

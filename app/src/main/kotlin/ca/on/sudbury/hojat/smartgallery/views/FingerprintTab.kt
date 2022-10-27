@@ -12,13 +12,13 @@ import ca.on.hojat.fingerprint.core.AuthenticationListener
 import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_fingerprint.view.*
 
@@ -60,7 +60,7 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
 
     private fun checkRegisteredFingerprints() {
         val hasFingerprints = Reprint.hasFingerprintRegistered()
-        fingerprint_settings.beVisibleIf(!hasFingerprints)
+        BeVisibleOrGoneUseCase(fingerprint_settings, !hasFingerprints)
         fingerprint_label.text =
             context.getString(if (hasFingerprints) R.string.place_finger else R.string.no_fingerprints_registered)
 

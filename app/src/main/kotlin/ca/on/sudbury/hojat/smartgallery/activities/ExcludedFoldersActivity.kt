@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.activities
 import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
@@ -14,6 +13,7 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
 
@@ -38,7 +38,7 @@ class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
         config.excludedFolders.mapTo(folders) { it }
         var placeholderText = getString(R.string.excluded_activity_placeholder)
         binding.manageFoldersPlaceholder.apply {
-            beVisibleIf(folders.isEmpty())
+            BeVisibleOrGoneUseCase(this, folders.isEmpty())
             setTextColor(getProperTextColor())
 
             if (IsRPlusUseCase() && !isExternalStorageManager()) {

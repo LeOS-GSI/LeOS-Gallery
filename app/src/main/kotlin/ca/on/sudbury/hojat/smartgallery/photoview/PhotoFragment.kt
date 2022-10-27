@@ -48,7 +48,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import ca.on.sudbury.hojat.smartgallery.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
@@ -75,6 +74,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LOW_TILE_DPI
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.squareup.picasso.Callback
@@ -287,9 +287,10 @@ class PhotoFragment : ViewPagerFragment() {
         val allowInstantChange = config.allowInstantChange
 
         binding.apply {
-            photoBrightnessController.beVisibleIf(allowPhotoGestures)
-            instantPrevItem.beVisibleIf(allowInstantChange)
-            instantNextItem.beVisibleIf(allowInstantChange)
+
+            BeVisibleOrGoneUseCase(photoBrightnessController, allowPhotoGestures)
+            BeVisibleOrGoneUseCase(instantPrevItem, allowInstantChange)
+            BeVisibleOrGoneUseCase(instantNextItem, allowInstantChange)
         }
 
         storeStateVariables()
@@ -818,7 +819,7 @@ class PhotoFragment : ViewPagerFragment() {
             false
         }
 
-        binding.panoramaOutline.beVisibleIf(mIsPanorama)
+        BeVisibleOrGoneUseCase(binding.panoramaOutline, mIsPanorama)
         if (mIsFullscreen) {
             binding.panoramaOutline.alpha = 0f
         }
@@ -890,14 +891,15 @@ class PhotoFragment : ViewPagerFragment() {
     private fun initExtendedDetails() {
         if (requireContext().config.showExtendedDetails) {
             binding.photoDetails.apply {
-                visibility = View.INVISIBLE   // make it invisible so we can measure it, but not show yet
+                visibility =
+                    View.INVISIBLE   // make it invisible so we can measure it, but not show yet
                 text = getMediumExtendedDetails(mMedium)
                 onGlobalLayout {
                     if (isAdded) {
                         val realY = getExtendedDetailsY(height)
                         if (realY > 0) {
                             y = realY
-                            beVisibleIf(text.isNotEmpty())
+                            BeVisibleOrGoneUseCase(this, text.isNotEmpty())
                             alpha =
                                 if (!requireContext().config.hideExtendedDetails || !mIsFullscreen) 1f else 0f
                         }

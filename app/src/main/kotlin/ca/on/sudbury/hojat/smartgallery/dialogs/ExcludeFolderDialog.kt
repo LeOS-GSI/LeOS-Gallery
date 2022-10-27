@@ -7,11 +7,11 @@ import android.widget.RadioGroup
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogExcludeFolderBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getBasePath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 
 @SuppressLint("InflateParams")
@@ -29,10 +29,10 @@ class ExcludeFolderDialog(
 
     init {
         binding.apply {
-            excludeFolderParent.beVisibleIf(alternativePaths.size > 1)
+            BeVisibleOrGoneUseCase(excludeFolderParent, alternativePaths.size > 1)
 
             radioGroup = excludeFolderRadioGroup
-            excludeFolderRadioGroup.beVisibleIf(alternativePaths.size > 1)
+            BeVisibleOrGoneUseCase(excludeFolderRadioGroup, alternativePaths.size > 1)
         }
 
         alternativePaths.forEachIndexed { index, _ ->

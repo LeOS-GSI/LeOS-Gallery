@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.beVisibleIf
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
@@ -78,6 +77,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_IN_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -506,26 +506,38 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         }
 
         val visibleBottomActions = if (config.bottomActions) config.visibleBottomActions else 0
-        binding.bottomActions.bottomEdit.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && mMedium?.isImage() == true)
+        BeVisibleOrGoneUseCase(
+            binding.bottomActions.bottomEdit,
+            visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && mMedium?.isImage() == true
+        )
         binding.bottomActions.bottomEdit.setOnClickListener {
             if (mUri != null && binding.bottomActions.root.alpha == 1f) {
                 openEditor(mUri!!.toString())
             }
         }
 
-        binding.bottomActions.bottomShare.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
+        BeVisibleOrGoneUseCase(
+            binding.bottomActions.bottomShare,
+            visibleBottomActions and BOTTOM_ACTION_SHARE != 0
+        )
         binding.bottomActions.bottomShare.setOnClickListener {
             if (mUri != null && binding.bottomActions.root.alpha == 1f) {
                 sharePathIntent(mUri!!.toString(), BuildConfig.APPLICATION_ID)
             }
         }
 
-        binding.bottomActions.bottomSetAs.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SET_AS != 0 && mMedium?.isImage() == true)
+        BeVisibleOrGoneUseCase(
+            binding.bottomActions.bottomSetAs,
+            visibleBottomActions and BOTTOM_ACTION_SET_AS != 0 && mMedium?.isImage() == true
+        )
         binding.bottomActions.bottomSetAs.setOnClickListener {
             setAs(mUri!!.toString())
         }
 
-        binding.bottomActions.bottomShowOnMap.beVisibleIf(visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0)
+        BeVisibleOrGoneUseCase(
+            binding.bottomActions.bottomShowOnMap,
+            visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0
+        )
         binding.bottomActions.bottomShowOnMap.setOnClickListener {
             showFileOnMap(mUri!!.toString())
         }
@@ -548,7 +560,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         binding.fragmentViewerToolbar.animate().alpha(newAlpha).withStartAction {
             binding.fragmentViewerToolbar.visibility = View.VISIBLE
         }.withEndAction {
-            binding.fragmentViewerToolbar.beVisibleIf(newAlpha == 1f)
+            BeVisibleOrGoneUseCase(binding.fragmentViewerToolbar, newAlpha == 1f)
         }.start()
     }
 

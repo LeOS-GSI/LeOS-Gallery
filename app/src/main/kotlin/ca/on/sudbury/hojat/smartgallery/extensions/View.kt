@@ -5,12 +5,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 
-fun View.beInvisibleIf(beInvisible: Boolean) =
-    if (beInvisible) visibility = View.INVISIBLE else visibility = View.VISIBLE
-
-fun View.beVisibleIf(beVisible: Boolean) =
-    if (beVisible) visibility = View.VISIBLE else visibility = View.GONE
-
 fun View.onGlobalLayout(callback: () -> Unit) {
     viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
