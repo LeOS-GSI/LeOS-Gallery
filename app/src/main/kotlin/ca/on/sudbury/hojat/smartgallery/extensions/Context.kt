@@ -147,6 +147,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.bumptech.glide.Glide
@@ -1468,7 +1469,7 @@ fun Context.loadImage(
 ) {
     target.isHorizontalScrolling = horizontalScroll
     if (type == TYPE_IMAGES || type == TYPE_VIDEOS || type == TYPE_RAWS || type == TYPE_PORTRAITS) {
-        if (type == TYPE_IMAGES && path.isPng()) {
+        if (type == TYPE_IMAGES && IsPngUseCase(path)) {
             loadPng(path, target, cropThumbnails, roundCorners, signature, skipMemoryCacheAtPaths)
         } else {
             loadJpg(path, target, cropThumbnails, roundCorners, signature, skipMemoryCacheAtPaths)
