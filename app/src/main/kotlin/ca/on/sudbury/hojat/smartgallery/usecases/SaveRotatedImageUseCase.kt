@@ -9,7 +9,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.fileRotatedSuccessfully
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.isJpg
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.saveExifRotation
@@ -38,7 +37,7 @@ object SaveRotatedImageUseCase {
             newDegrees += 360
         }
 
-        if (oldPath == newPath && oldPath.isJpg()) {
+        if (oldPath == newPath && IsJpgUseCase(oldPath)) {
             if (owner.tryRotateByExif(oldPath, newDegrees, showToasts, callback)) {
                 return
             }
@@ -56,7 +55,7 @@ object SaveRotatedImageUseCase {
                 }
 
                 val oldLastModified = File(oldPath).lastModified()
-                if (oldPath.isJpg()) {
+                if (IsJpgUseCase(oldPath)) {
                     owner.copyFile(oldPath, tmpPath)
                     saveExifRotation(ExifInterface(tmpPath), newDegrees)
                 } else {

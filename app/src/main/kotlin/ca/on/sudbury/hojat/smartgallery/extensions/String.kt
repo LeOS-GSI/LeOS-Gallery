@@ -152,8 +152,6 @@ fun String.isPortrait() = getFilenameFromPath().contains(
 fun String.isImageSlow() =
     isImageFast() || getMimeType().startsWith("image") || startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
 
-fun String.isJpg() = endsWith(".jpg", true) or endsWith(".jpeg", true)
-
 fun String.isPng() = endsWith(".png", true)
 
 fun String.isRawFast() = rawExtensions.any { endsWith(it, true) }
