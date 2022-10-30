@@ -28,7 +28,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
-import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
@@ -100,6 +99,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
@@ -897,7 +897,7 @@ class DirectoryAdapter(
             dir_path?.text = "${directory.path.substringBeforeLast("/")}/"
             val thumbnailType = when {
                 directory.tmb.isVideoFast() -> TYPE_VIDEOS
-                directory.tmb.isGif() -> TYPE_GIFS
+                IsGifUseCase(directory.tmb) -> TYPE_GIFS
                 directory.tmb.isRawFast() -> TYPE_RAWS
                 IsSvgUseCase(directory.tmb) -> TYPE_SVGS
                 else -> TYPE_IMAGES

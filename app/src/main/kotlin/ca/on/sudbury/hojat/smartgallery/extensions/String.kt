@@ -16,6 +16,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
@@ -138,10 +139,8 @@ fun String.isAValidFilename(): Boolean {
     return true
 }
 
-fun String.isGif() = endsWith(".gif", true)
-
 fun String.isMediaFile() =
-    isImageFast() || isVideoFast() || isGif() || isRawFast() || IsSvgUseCase(this) || isPortrait()
+    isImageFast() || isVideoFast() || IsGifUseCase(this) || isRawFast() || IsSvgUseCase(this) || isPortrait()
 
 fun String.isImageFast() = photoExtensions.any { endsWith(it, true) }
 

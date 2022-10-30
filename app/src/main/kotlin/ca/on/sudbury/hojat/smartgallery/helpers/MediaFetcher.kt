@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
-import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
@@ -43,6 +42,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
@@ -420,7 +420,7 @@ class MediaFetcher(val context: Context) {
             var isPortrait = false
             val isImage = path.isImageFast()
             val isVideo = if (isImage) false else path.isVideoFast()
-            val isGif = if (isImage || isVideo) false else path.isGif()
+            val isGif = if (isImage || isVideo) false else IsGifUseCase(path)
             val isRaw = if (isImage || isVideo || isGif) false else path.isRawFast()
             val isSvg = if (isImage || isVideo || isGif || isRaw) false else IsSvgUseCase(path)
 
@@ -588,7 +588,7 @@ class MediaFetcher(val context: Context) {
                 val isPortrait = false
                 val isImage = path.isImageFast()
                 val isVideo = if (isImage) false else path.isVideoFast()
-                val isGif = if (isImage || isVideo) false else path.isGif()
+                val isGif = if (isImage || isVideo) false else IsGifUseCase(path)
                 val isRaw = if (isImage || isVideo || isGif) false else path.isRawFast()
                 val isSvg = if (isImage || isVideo || isGif || isRaw) false else IsSvgUseCase(path)
 
@@ -694,7 +694,7 @@ class MediaFetcher(val context: Context) {
             val filename = file.name ?: continue
             val isImage = filename.isImageFast()
             val isVideo = if (isImage) false else filename.isVideoFast()
-            val isGif = if (isImage || isVideo) false else filename.isGif()
+            val isGif = if (isImage || isVideo) false else IsGifUseCase(filename)
             val isRaw = if (isImage || isVideo || isGif) false else filename.isRawFast()
             val isSvg = if (isImage || isVideo || isGif || isRaw) false else IsSvgUseCase(filename)
 

@@ -147,6 +147,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -2228,7 +2229,7 @@ fun Context.addPathToDB(path: String) {
 
         val type = when {
             path.isVideoFast() -> TYPE_VIDEOS
-            path.isGif() -> TYPE_GIFS
+            IsGifUseCase(path) -> TYPE_GIFS
             path.isRawFast() -> TYPE_RAWS
             IsSvgUseCase(path) -> TYPE_SVGS
             path.isPortrait() -> TYPE_PORTRAITS

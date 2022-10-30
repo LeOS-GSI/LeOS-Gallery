@@ -13,7 +13,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getTextSize
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
-import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import com.bumptech.glide.Glide
@@ -30,6 +29,7 @@ import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import kotlinx.android.synthetic.main.item_filepicker_list.view.*
 import java.util.Locale
@@ -151,7 +151,7 @@ class FilePickerItemsAdapter(
                         itemToLoad = itemToLoad.getOTGPublicPath(activity)
                     }
 
-                    if (itemToLoad.toString().isGif()) {
+                    if (IsGifUseCase(itemToLoad.toString())) {
                         Glide.with(activity).asBitmap().load(itemToLoad).apply(options)
                             .into(list_item_icon)
                     } else {
