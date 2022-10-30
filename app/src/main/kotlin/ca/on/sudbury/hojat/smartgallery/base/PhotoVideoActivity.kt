@@ -30,7 +30,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
-import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isPortrait
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
@@ -80,6 +79,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
@@ -296,7 +296,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             filename.isVideoFast() || intentType.startsWith("video/") -> TYPE_VIDEOS
             filename.isGif() || intentType.equals("image/gif", true) -> TYPE_GIFS
             filename.isRawFast() -> TYPE_RAWS
-            filename.isSvg() -> TYPE_SVGS
+            IsSvgUseCase(filename) -> TYPE_SVGS
             file.absolutePath.isPortrait() -> TYPE_PORTRAITS
             else -> TYPE_IMAGES
         }
@@ -468,7 +468,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
                 path.isVideoFast() && filter and TYPE_VIDEOS == 0 ||
                 path.isGif() && filter and TYPE_GIFS == 0 ||
                 path.isRawFast() && filter and TYPE_RAWS == 0 ||
-                path.isSvg() && filter and TYPE_SVGS == 0 ||
+                IsSvgUseCase(path) && filter and TYPE_SVGS == 0 ||
                 path.isPortrait() && filter and TYPE_PORTRAITS == 0)
     }
 

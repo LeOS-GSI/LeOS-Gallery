@@ -16,6 +16,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.io.IOException
@@ -140,7 +141,7 @@ fun String.isAValidFilename(): Boolean {
 fun String.isGif() = endsWith(".gif", true)
 
 fun String.isMediaFile() =
-    isImageFast() || isVideoFast() || isGif() || isRawFast() || isSvg() || isPortrait()
+    isImageFast() || isVideoFast() || isGif() || isRawFast() || IsSvgUseCase(this) || isPortrait()
 
 fun String.isImageFast() = photoExtensions.any { endsWith(it, true) }
 
@@ -154,7 +155,6 @@ fun String.isImageSlow() =
 
 fun String.isRawFast() = rawExtensions.any { endsWith(it, true) }
 
-fun String.isSvg() = endsWith(".svg", true)
 fun String.isVideoSlow() = isVideoFast() || getMimeType().startsWith("video") || startsWith(
     MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString()
 )

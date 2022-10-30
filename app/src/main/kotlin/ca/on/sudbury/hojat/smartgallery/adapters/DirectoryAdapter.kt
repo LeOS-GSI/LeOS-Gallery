@@ -30,7 +30,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
-import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
@@ -101,6 +100,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.dir_check
@@ -642,7 +642,7 @@ class DirectoryAdapter(
                                 (rawExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
                                 } && filter and TYPE_RAWS != 0) ||
-                                (it.absolutePath.isSvg() && filter and TYPE_SVGS != 0))
+                                (IsSvgUseCase(it.absolutePath) && filter and TYPE_SVGS != 0))
             }?.mapTo(paths) { it.absolutePath }
         }
 
@@ -899,7 +899,7 @@ class DirectoryAdapter(
                 directory.tmb.isVideoFast() -> TYPE_VIDEOS
                 directory.tmb.isGif() -> TYPE_GIFS
                 directory.tmb.isRawFast() -> TYPE_RAWS
-                directory.tmb.isSvg() -> TYPE_SVGS
+                IsSvgUseCase(directory.tmb) -> TYPE_SVGS
                 else -> TYPE_IMAGES
             }
 

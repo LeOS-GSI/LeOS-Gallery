@@ -148,6 +148,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.bumptech.glide.Glide
@@ -2229,7 +2230,7 @@ fun Context.addPathToDB(path: String) {
             path.isVideoFast() -> TYPE_VIDEOS
             path.isGif() -> TYPE_GIFS
             path.isRawFast() -> TYPE_RAWS
-            path.isSvg() -> TYPE_SVGS
+            IsSvgUseCase(path) -> TYPE_SVGS
             path.isPortrait() -> TYPE_PORTRAITS
             else -> TYPE_IMAGES
         }

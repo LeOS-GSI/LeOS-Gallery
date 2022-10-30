@@ -156,7 +156,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFinalUriFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isGif
-import ca.on.sudbury.hojat.smartgallery.extensions.isSvg
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathRecursively
 import ca.on.sudbury.hojat.smartgallery.extensions.statusBarHeight
@@ -182,6 +181,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -620,7 +620,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         return when {
             path.isVideoFast() -> TYPE_VIDEOS
             path.isGif() -> TYPE_GIFS
-            path.isSvg() -> TYPE_SVGS
+            IsSvgUseCase(path) -> TYPE_SVGS
             path.isRawFast() -> TYPE_RAWS
             path.isPortrait() -> TYPE_PORTRAITS
             else -> TYPE_IMAGES
