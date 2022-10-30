@@ -47,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toggleFileVisibility
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDBMediaPath
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
-import ca.on.sudbury.hojat.smartgallery.extensions.saveRotatedImageToFile
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.tryCopyMoveFilesTo
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanFolderMedia
@@ -86,6 +85,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.photo_item_grid.view.*
 import kotlinx.android.synthetic.main.thumbnail_section.view.*
@@ -414,7 +414,7 @@ class MediaAdapter(
         RunOnBackgroundThreadUseCase {
             paths.forEach {
                 rotatedImagePaths.add(it)
-                activity.saveRotatedImageToFile(it, it, degrees, true) {
+                SaveRotatedImageUseCase(activity, it, it, degrees, true) {
                     fileCnt--
                     if (fileCnt == 0) {
                         activity.runOnUiThread {

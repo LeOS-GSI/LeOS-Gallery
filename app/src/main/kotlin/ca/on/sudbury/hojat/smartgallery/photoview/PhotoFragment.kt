@@ -43,9 +43,9 @@ import ca.on.hojat.palette.subscaleview.DecoderFactory
 import ca.on.hojat.palette.subscaleview.ImageDecoder
 import ca.on.hojat.palette.subscaleview.ImageRegionDecoder
 import ca.on.hojat.palette.subscaleview.SubsamplingScaleImageView
+import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import com.github.penfeizhou.animation.apng.APNGDrawable
 import com.github.penfeizhou.animation.webp.WebPDrawable
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
@@ -60,7 +60,6 @@ import ca.on.sudbury.hojat.smartgallery.adapters.PortraitPhotosAdapter
 import ca.on.sudbury.hojat.smartgallery.base.PhotoVideoActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.PagerPhotoItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.saveRotatedImageToFile
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOULD_INIT_FRAGMENT
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM
@@ -76,6 +75,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -312,7 +312,8 @@ class PhotoFragment : ViewPagerFragment() {
         if (mCurrentRotationDegrees != 0) {
             RunOnBackgroundThreadUseCase {
                 val path = mMedium.path
-                (activity as? BaseSimpleActivity)?.saveRotatedImageToFile(
+                SaveRotatedImageUseCase(
+                    activity as BaseSimpleActivity?,
                     path,
                     path,
                     mCurrentRotationDegrees,

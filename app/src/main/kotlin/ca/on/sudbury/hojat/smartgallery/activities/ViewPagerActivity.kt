@@ -67,7 +67,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.tryCopyMoveFilesTo
 import ca.on.sudbury.hojat.smartgallery.extensions.fixDateTaken
-import ca.on.sudbury.hojat.smartgallery.extensions.saveRotatedImageToFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getShortcutImage
 import ca.on.sudbury.hojat.smartgallery.extensions.updateFavorite
 import ca.on.sudbury.hojat.smartgallery.extensions.copyNonDimensionAttributesTo
@@ -184,6 +183,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
@@ -933,7 +933,8 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 RunOnBackgroundThreadUseCase {
                     val photoFragment =
                         getCurrentPhotoFragment() ?: return@RunOnBackgroundThreadUseCase
-                    saveRotatedImageToFile(
+                    SaveRotatedImageUseCase(
+                        this,
                         currPath,
                         newPath,
                         photoFragment.mCurrentRotationDegrees,
@@ -944,7 +945,6 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                         refreshMenuItems()
                     }
                 }
-
             }
         }
     }

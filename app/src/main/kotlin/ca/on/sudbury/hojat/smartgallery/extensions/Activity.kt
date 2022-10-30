@@ -1480,66 +1480,6 @@ fun AppCompatActivity.fixDateTaken(
     }
 }
 
-fun BaseSimpleActivity.saveRotatedImageToFile(
-    oldPath: String,
-    newPath: String,
-    degrees: Int,
-    showToasts: Boolean,
-    callback: () -> Unit
-) {
-    var newDegrees = degrees
-    if (newDegrees < 0) {
-        newDegrees += 360
-    }
-
-    if (oldPath == newPath && oldPath.isJpg()) {
-        if (tryRotateByExif(oldPath, newDegrees, showToasts, callback)) {
-            return
-        }
-    }
-
-    val tmpPath = "$recycleBinPath/.tmp_${newPath.getFilenameFromPath()}"
-    val tmpFileDirItem = FileDirItem(tmpPath, tmpPath.getFilenameFromPath())
-    try {
-        getFileOutputStream(tmpFileDirItem) {
-            if (it == null) {
-                if (showToasts) {
-                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
-                }
-                return@getFileOutputStream
-            }
-
-            val oldLastModified = File(oldPath).lastModified()
-            if (oldPath.isJpg()) {
-                copyFile(oldPath, tmpPath)
-                saveExifRotation(ExifInterface(tmpPath), newDegrees)
-            } else {
-                val inputstream = getFileInputStreamSync(oldPath)
-                val bitmap = BitmapFactory.decodeStream(inputstream)
-                saveFile(tmpPath, bitmap, it as FileOutputStream, newDegrees)
-            }
-
-            copyFile(tmpPath, newPath)
-            applicationContext.rescanPaths(arrayListOf(newPath))
-            fileRotatedSuccessfully(newPath, oldLastModified)
-
-            it.flush()
-            it.close()
-            callback.invoke()
-        }
-    } catch (e: OutOfMemoryError) {
-        if (showToasts) {
-            ShowSafeToastUseCase(this, R.string.out_of_memory_error)
-        }
-    } catch (e: Exception) {
-        if (showToasts) {
-            ShowSafeToastUseCase(this, e.toString())
-        }
-    } finally {
-        tryDeleteFileDirItem(tmpFileDirItem, allowDeleteFolder = false, deleteFromDatabase = true)
-    }
-}
-
 @TargetApi(Build.VERSION_CODES.N)
 fun Activity.tryRotateByExif(
     path: String,
