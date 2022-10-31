@@ -158,8 +158,6 @@ fun String.isVideoSlow() = isVideoFast() || getMimeType().startsWith("video") ||
     MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString()
 )
 
-fun String.isWebP() = endsWith(".webp", true)
-
 // cache which folders contain .nomedia files to avoid checking them over and over again
 fun String.shouldFolderBeVisible(
     excludedPaths: MutableSet<String>,

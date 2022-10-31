@@ -20,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FILE_TYPE
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_EXTENSION
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 import com.bumptech.glide.signature.ObjectKey
-import ca.on.sudbury.hojat.smartgallery.extensions.isWebP
 import ca.on.sudbury.hojat.smartgallery.extensions.isApng
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
@@ -30,6 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsWebpUseCase
 import java.io.File
 import java.io.Serializable
 import java.util.Calendar
@@ -59,7 +59,7 @@ data class Medium(
         private const val serialVersionUID = -6553149366975655L
     }
 
-    fun isWebP() = name.isWebP()
+    fun isWebP() = IsWebpUseCase(name)
 
     fun isGIF() = type == TYPE_GIFS
 
