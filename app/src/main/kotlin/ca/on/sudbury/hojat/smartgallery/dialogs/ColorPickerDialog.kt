@@ -12,12 +12,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintHelper
+import androidx.core.widget.addTextChangedListener
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.onTextChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
@@ -139,10 +139,12 @@ class ColorPickerDialog(
             false
         })
 
-        newHexField.onTextChangeListener {
-            if (it.length == 6 && !isHueBeingDragged) {
+
+        newHexField.addTextChangedListener { editable ->
+            val finalString = editable.toString()
+            if (finalString.length == 6 && !isHueBeingDragged) {
                 try {
-                    val newColor = Color.parseColor("#$it")
+                    val newColor = Color.parseColor("#$finalString")
                     Color.colorToHSV(newColor, currentColorHsv)
                     updateHue()
                     moveColorPicker()

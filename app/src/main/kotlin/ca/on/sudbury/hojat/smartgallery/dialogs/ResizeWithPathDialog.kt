@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.graphics.Point
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogResizeImageWithPathBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.onTextChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
@@ -68,7 +68,7 @@ class ResizeWithPathDialog(
 
         val ratio = size.x / size.y.toFloat()
 
-        widthView.onTextChangeListener {
+        widthView.addTextChangedListener {
             if (widthView.hasFocus()) {
                 var width = getViewValue(widthView)
                 if (width > size.x) {
@@ -80,7 +80,7 @@ class ResizeWithPathDialog(
             }
         }
 
-        heightView.onTextChangeListener {
+        heightView.addTextChangedListener {
             if (heightView.hasFocus()) {
                 var height = getViewValue(heightView)
                 if (height > size.y) {

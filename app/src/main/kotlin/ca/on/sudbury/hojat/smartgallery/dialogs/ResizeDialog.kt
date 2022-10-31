@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.graphics.Point
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogResizeImageBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.onTextChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
@@ -28,7 +28,7 @@ class ResizeDialog(
         binding.resizeImageWidth.setText(size.x.toString())
         binding.resizeImageHeight.setText(size.y.toString())
         val ratio = size.x / size.y.toFloat()
-        binding.resizeImageWidth.onTextChangeListener {
+        binding.resizeImageWidth.addTextChangedListener {
             if (binding.resizeImageWidth.hasFocus()) {
                 var width = getViewValue(binding.resizeImageWidth)
                 if (width > size.x) {
@@ -42,7 +42,7 @@ class ResizeDialog(
             }
         }
 
-        binding.resizeImageHeight.onTextChangeListener {
+        binding.resizeImageHeight.addTextChangedListener {
             if (binding.resizeImageHeight.hasFocus()) {
                 var height = getViewValue(binding.resizeImageHeight)
                 if (height > size.y) {
