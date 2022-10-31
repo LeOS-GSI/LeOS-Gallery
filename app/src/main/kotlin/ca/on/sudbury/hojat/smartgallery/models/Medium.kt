@@ -20,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FILE_TYPE
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_EXTENSION
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 import com.bumptech.glide.signature.ObjectKey
-import ca.on.sudbury.hojat.smartgallery.extensions.isApng
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
@@ -29,6 +28,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsApngUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsWebpUseCase
 import java.io.File
 import java.io.Serializable
@@ -73,7 +73,7 @@ data class Medium(
 
     fun isPortrait() = type == TYPE_PORTRAITS
 
-    fun isApng() = name.isApng()
+    fun isApng() = IsApngUseCase(name)
 
     fun isHidden() = name.startsWith('.')
 

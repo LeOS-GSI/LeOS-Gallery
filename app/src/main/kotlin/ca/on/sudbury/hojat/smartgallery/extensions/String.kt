@@ -122,8 +122,6 @@ fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
         )
     }
 
-fun String.isApng() = endsWith(".apng", true)
-
 fun String.isAudioFast() = audioExtensions.any { endsWith(it, true) }
 
 fun String.isAudioSlow() =
