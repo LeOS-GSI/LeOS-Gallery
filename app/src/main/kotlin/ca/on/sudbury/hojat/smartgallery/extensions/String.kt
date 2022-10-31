@@ -122,7 +122,7 @@ fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
         )
     }
 
-fun String.isAudioFast() = audioExtensions.any { endsWith(it, true) }
+fun String.isAudioFast() = audioExtensions.any { audioExtension -> endsWith(audioExtension, true) }
 
 fun String.isAudioSlow() =
     isAudioFast() || getMimeType().startsWith("audio") || startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())
