@@ -784,7 +784,7 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
             val fileDocument = getDocumentFile(path)
             if (fileDocument?.exists() == true && fileDocument.isDirectory) {
                 fileDocument.createFile("", NOMEDIA)
-                addNoMediaIntoMediaStore(file.absolutePath)
+                addNoMediaIntoMediaStore(this, file.absolutePath)
                 callback()
             } else {
                 ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
@@ -795,7 +795,7 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
         try {
             if (file.createNewFile()) {
                 RunOnBackgroundThreadUseCase {
-                    addNoMediaIntoMediaStore(file.absolutePath)
+                    addNoMediaIntoMediaStore(this, file.absolutePath)
                 }
             } else {
                 ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
@@ -807,16 +807,16 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
     }
 }
 
-fun BaseSimpleActivity.addNoMediaIntoMediaStore(path: String) {
+private fun addNoMediaIntoMediaStore(owner: BaseSimpleActivity, path: String) {
     try {
         val content = ContentValues().apply {
             put(Files.FileColumns.TITLE, NOMEDIA)
             put(Files.FileColumns.DATA, path)
             put(Files.FileColumns.MEDIA_TYPE, Files.FileColumns.MEDIA_TYPE_NONE)
         }
-        contentResolver.insert(Files.getContentUri("external"), content)
+        owner.contentResolver.insert(Files.getContentUri("external"), content)
     } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
+        ShowSafeToastUseCase(owner, e.toString())
     }
 }
 
