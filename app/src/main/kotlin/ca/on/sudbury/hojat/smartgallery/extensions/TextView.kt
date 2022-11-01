@@ -6,6 +6,12 @@ import android.text.TextPaint
 import android.text.style.URLSpan
 import android.widget.TextView
 
+/**
+ * These 2 extension functions of [TextView] are pretty simple and are specific to this class.
+ * That's why I'm not going to remove them; they'll remain in here at least till the time I
+ * migrate to Jetpack Compose.
+ */
+
 fun TextView.underlineText() {
     paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
 }
