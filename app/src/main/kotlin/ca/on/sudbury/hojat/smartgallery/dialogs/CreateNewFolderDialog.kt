@@ -18,10 +18,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
@@ -87,8 +87,10 @@ class CreateNewFolderDialog(
                     }
                 }
                 with(activity) {
-                    !IsRPlusUseCase() && (isPathOnSD(path) ||
-                            IsPathOnOtgUseCase(this, path)) && !isSDCardSetAsDefaultStorage()
+                    !IsRPlusUseCase() && (
+                            IsPathOnSdUseCase(this, path) ||
+                                    IsPathOnOtgUseCase(this, path))
+                            && !isSDCardSetAsDefaultStorage()
                 } -> activity.handleSAFDialog(
                     path
                 ) {

@@ -164,7 +164,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.actionBarHeight
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
@@ -181,6 +180,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
@@ -886,8 +886,9 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun rotateImage(degrees: Int) {
         val currentPath = getCurrentPath()
-        if (!IsRPlusUseCase() && (isPathOnSD(currentPath) ||
-                    IsPathOnOtgUseCase(this, currentPath)) && !isSDCardSetAsDefaultStorage()
+        if (!IsRPlusUseCase() && (
+                    IsPathOnSdUseCase(this, currentPath) ||
+                            IsPathOnOtgUseCase(this, currentPath)) && !isSDCardSetAsDefaultStorage()
         ) {
             handleSAFDialog(currentPath) {
                 if (it) {

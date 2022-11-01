@@ -149,6 +149,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -422,7 +423,8 @@ fun Context.getAndroidTreeUri(path: String): String {
     return when {
         IsPathOnOtgUseCase(this, path) ->
             if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri else baseConfig.otgAndroidObbTreeUri
-        isPathOnSD(path) -> if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri else baseConfig.sdAndroidObbTreeUri
+        IsPathOnSdUseCase(this, path) ->
+            if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri else baseConfig.sdAndroidObbTreeUri
         else -> if (isAndroidDataDir(path)) baseConfig.primaryAndroidDataTreeUri else baseConfig.primaryAndroidObbTreeUri
     }
 }
@@ -859,9 +861,6 @@ private fun isInAndroidDir(owner: Context, path: String): Boolean {
 
 fun Context.isPathOnInternalStorage(path: String) =
     internalStoragePath.isNotEmpty() && path.startsWith(internalStoragePath)
-
-fun Context.isPathOnSD(path: String) =
-    baseConfig.sdCardPath.isNotEmpty() && path.startsWith(baseConfig.sdCardPath)
 
 fun Context.isSDCardSetAsDefaultStorage() =
     baseConfig.sdCardPath.isNotEmpty() && Environment.getExternalStorageDirectory().absolutePath.equals(
@@ -1521,7 +1520,7 @@ fun Context.addTempFolderIfNeeded(dirs: ArrayList<Directory>): ArrayList<Directo
 
 fun Context.getPathLocation(path: String): Int {
     return when {
-        isPathOnSD(path) -> LOCATION_SD
+        IsPathOnSdUseCase(this, path) -> LOCATION_SD
         IsPathOnOtgUseCase(this, path) -> LOCATION_OTG
         else -> LOCATION_INTERNAL
     }
@@ -2893,7 +2892,7 @@ private fun getDegreesFromOrientation(orientation: Int) = when (orientation) {
 @RequiresApi(Build.VERSION_CODES.N)
 fun Context.saveImageRotation(path: String, degrees: Int): Boolean {
     if (!(!IsRPlusUseCase() &&
-                (isPathOnSD(path) ||
+                (IsPathOnSdUseCase(this, path) ||
                         IsPathOnOtgUseCase(this, path)) &&
                 !isSDCardSetAsDefaultStorage())
     ) {
@@ -3554,8 +3553,9 @@ fun Context.storeAndroidTreeUri(path: String, treeUri: String) {
         IsPathOnOtgUseCase(this, path) ->
             if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri =
                 treeUri else baseConfig.otgAndroidObbTreeUri = treeUri
-        isPathOnSD(path) -> if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri =
-            treeUri else baseConfig.sdAndroidObbTreeUri = treeUri
+        IsPathOnSdUseCase(this, path) ->
+            if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri =
+                treeUri else baseConfig.sdAndroidObbTreeUri = treeUri
         else -> if (isAndroidDataDir(path)) baseConfig.primaryAndroidDataTreeUri =
             treeUri else baseConfig.primaryAndroidObbTreeUri = treeUri
     }

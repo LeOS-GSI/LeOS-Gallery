@@ -33,7 +33,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.deleteFromMediaStore
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getIntValue
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_KEEP_BOTH
@@ -45,6 +44,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.InputStream
@@ -310,7 +310,7 @@ class CopyMoveTask(
             if (!mDocuments.containsKey(directory) &&
                 with(activity) {
                     !IsRPlusUseCase() && (
-                            isPathOnSD(destination.path) ||
+                            IsPathOnSdUseCase(this, destination.path) ||
                                     IsPathOnOtgUseCase(this, destination.path)) &&
                             !isSDCardSetAsDefaultStorage()
                 }

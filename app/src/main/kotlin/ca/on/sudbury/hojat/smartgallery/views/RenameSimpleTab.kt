@@ -14,7 +14,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItemsTu
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathsRecursively
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
@@ -24,6 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.RenameTab
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_rename_simple.view.*
 import java.io.File
@@ -31,7 +31,8 @@ import java.io.File
 class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
     RenameTab {
     var ignoreClicks = false
-    var stopLooping = false     // we should request the permission on Android 30+ for all uris at once, not one by one
+    var stopLooping =
+        false     // we should request the permission on Android 30+ for all uris at once, not one by one
     var activity: BaseSimpleActivity? = null
     var paths = ArrayList<String>()
 
@@ -45,7 +46,10 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
         this.paths = paths
     }
 
-    override fun dialogConfirmed(useMediaFileExtension: Boolean, callback: (success: Boolean) -> Unit) {
+    override fun dialogConfirmed(
+        useMediaFileExtension: Boolean,
+        callback: (success: Boolean) -> Unit
+    ) {
         stopLooping = false
         val valueToAdd = rename_simple_value.text.toString()
         val append = rename_simple_radio_group.checkedRadioButtonId == rename_simple_radio_append.id
@@ -56,15 +60,15 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
         }
 
         if (!valueToAdd.isAValidFilename()) {
-            ShowSafeToastUseCase(activity ,R.string.invalid_name)
+            ShowSafeToastUseCase(activity, R.string.invalid_name)
             return
         }
 
         val validPaths = paths.filter { activity?.getDoesFilePathExist(it) == true }
         val firstPath = validPaths.firstOrNull()
-        val sdFilePath = validPaths.firstOrNull { activity?.isPathOnSD(it) == true } ?: firstPath
+        val sdFilePath = validPaths.firstOrNull { IsPathOnSdUseCase(activity, it) } ?: firstPath
         if (firstPath == null || sdFilePath == null) {
-            ShowSafeToastUseCase(activity ,R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
             return
         }
 
@@ -92,7 +96,8 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                     }
 
                     val name = fullName.substring(0, dotAt)
-                    val extension = if (fullName.contains(".")) ".${GetFileExtensionUseCase(fullName)}" else ""
+                    val extension =
+                        if (fullName.contains(".")) ".${GetFileExtensionUseCase(fullName)}" else ""
 
                     val newName = if (append) {
                         "$name$valueToAdd$extension"
@@ -116,9 +121,15 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                             ignoreClicks = false
                             if (android30Format != Android30RenameFormat.NONE) {
                                 stopLooping = true
-                                renameAllFiles(validPaths, append, valueToAdd, android30Format, callback)
+                                renameAllFiles(
+                                    validPaths,
+                                    append,
+                                    valueToAdd,
+                                    android30Format,
+                                    callback
+                                )
                             } else {
-                                ShowSafeToastUseCase(activity ,R.string.unknown_error_occurred)
+                                ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
                             }
                         }
                     }
@@ -153,7 +164,8 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                         }
 
                         val name = fullName.substring(0, dotAt)
-                        val extension = if (fullName.contains(".")) ".${GetFileExtensionUseCase(fullName)}" else ""
+                        val extension =
+                            if (fullName.contains(".")) ".${GetFileExtensionUseCase(fullName)}" else ""
 
                         val newName = if (appendString) {
                             "$name$stringToAdd$extension"

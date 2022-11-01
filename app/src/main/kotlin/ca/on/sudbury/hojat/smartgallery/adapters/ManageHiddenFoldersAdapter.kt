@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
 
 class ManageHiddenFoldersAdapter(
@@ -76,7 +76,7 @@ class ManageHiddenFoldersAdapter(
 
         val sdCardPaths = ArrayList<String>()
         getSelectedItems().forEach {
-            if (activity.isPathOnSD(it)) {
+            if (IsPathOnSdUseCase(activity, it)) {
                 sdCardPaths.add(it)
             }
         }

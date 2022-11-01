@@ -5,13 +5,13 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
@@ -56,7 +56,7 @@ class RenameItemsDialog(
                         }
 
                         val validPaths = paths.filter { activity.getDoesFilePathExist(it) }
-                        val sdFilePath = validPaths.firstOrNull { activity.isPathOnSD(it) }
+                        val sdFilePath = validPaths.firstOrNull { IsPathOnSdUseCase(activity, it) }
                             ?: validPaths.firstOrNull()
                         if (sdFilePath == null) {
                             ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)

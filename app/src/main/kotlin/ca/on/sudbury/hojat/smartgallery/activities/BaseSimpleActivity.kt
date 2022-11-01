@@ -59,7 +59,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.removeBit
@@ -112,6 +111,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
@@ -561,7 +561,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     private fun isProperAndroidRoot(path: String, uri: Uri): Boolean {
         return when {
             IsPathOnOtgUseCase(this, path) -> isOTGAndroidDir(uri)
-            isPathOnSD(path) -> isSDAndroidDir(uri)
+            IsPathOnSdUseCase(this, path) -> isSDAndroidDir(uri)
             else -> isInternalStorageAndroidDir(uri)
         }
     }
@@ -820,8 +820,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 } else {
                     if (IsPathOnOtgUseCase(this, source) ||
                         IsPathOnOtgUseCase(this, destination) ||
-                        isPathOnSD(source) ||
-                        isPathOnSD(destination) ||
+                        IsPathOnSdUseCase(this, source) ||
+                        IsPathOnSdUseCase(this, destination) ||
                         isRestrictedSAFOnlyRoot(source) ||
                         isRestrictedSAFOnlyRoot(destination) ||
                         isAccessibleWithSAFSdk30(source) ||

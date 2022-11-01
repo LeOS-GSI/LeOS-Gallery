@@ -18,7 +18,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItemsTu
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathsRecursively
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
@@ -28,6 +27,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.RenameTab
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_rename_items_pattern.view.*
 import timber.log.Timber
@@ -75,7 +75,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
 
         val validPaths = paths.filter { activity?.getDoesFilePathExist(it) == true }
         val firstPath = validPaths.firstOrNull()
-        val sdFilePath = validPaths.firstOrNull { activity?.isPathOnSD(it) == true } ?: firstPath
+        val sdFilePath = validPaths.firstOrNull { IsPathOnSdUseCase(activity, it) } ?: firstPath
         if (firstPath == null || sdFilePath == null) {
             ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
             return

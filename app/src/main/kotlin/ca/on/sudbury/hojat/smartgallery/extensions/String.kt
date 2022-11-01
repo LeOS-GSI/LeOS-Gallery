@@ -18,6 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import java.io.File
 import java.io.IOException
@@ -233,7 +234,7 @@ fun String.shouldFolderBeVisible(
 fun String.getBasePath(context: Context): String {
     return when {
         startsWith(context.internalStoragePath) -> context.internalStoragePath
-        context.isPathOnSD(this) -> context.baseConfig.sdCardPath
+        IsPathOnSdUseCase(context, this) -> context.baseConfig.sdCardPath
         IsPathOnOtgUseCase(context, this) -> context.baseConfig.OTGPath
         else -> "/"
     }
