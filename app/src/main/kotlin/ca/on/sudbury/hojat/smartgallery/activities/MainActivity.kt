@@ -132,8 +132,8 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
+import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
-import ca.on.sudbury.hojat.smartgallery.extensions.updateSDCardPath
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
@@ -212,7 +212,16 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         val appId = BuildConfig.APPLICATION_ID
 
         baseConfig.internalStoragePath = getRealInternalStoragePath()
-        updateSDCardPath()
+
+        //update the SD card path
+        RunOnBackgroundThreadUseCase {
+            val oldPath = baseConfig.sdCardPath
+            baseConfig.sdCardPath = getSDCardPath()
+            if (oldPath != baseConfig.sdCardPath) {
+                baseConfig.sdTreeUri = ""
+            }
+        }
+
         baseConfig.appId = appId
         if (baseConfig.appRunCount == 0) {
             baseConfig.wasOrangeIconChecked = true

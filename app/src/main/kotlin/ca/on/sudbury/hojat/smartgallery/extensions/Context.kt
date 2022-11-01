@@ -1288,16 +1288,6 @@ fun Context.getFastDocumentFile(path: String): DocumentFile? {
     return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
 }
 
-fun Context.updateSDCardPath() {
-    RunOnBackgroundThreadUseCase {
-        val oldPath = baseConfig.sdCardPath
-        baseConfig.sdCardPath = getSDCardPath()
-        if (oldPath != baseConfig.sdCardPath) {
-            baseConfig.sdTreeUri = ""
-        }
-    }
-}
-
 fun updateSubfolderCounts(
     children: ArrayList<Directory>,
     parentDirs: ArrayList<Directory>
