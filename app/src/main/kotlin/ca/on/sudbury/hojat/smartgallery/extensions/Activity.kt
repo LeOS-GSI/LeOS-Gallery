@@ -2308,20 +2308,6 @@ fun BaseSimpleActivity.createDirectorySync(directory: String): Boolean {
     return File(directory).mkdirs()
 }
 
-fun Activity.updateSharedTheme(sharedTheme: SharedTheme) {
-    try {
-        val contentValues = MyContentProvider.fillThemeContentValues(sharedTheme)
-        applicationContext.contentResolver.update(
-            MyContentProvider.MY_CONTENT_URI,
-            contentValues,
-            null,
-            null
-        )
-    } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
-    }
-}
-
 fun Activity.checkAppSideloading(): Boolean {
     val isSideloaded = when (baseConfig.appSideloadingStatus) {
         SIDELOADING_TRUE -> true

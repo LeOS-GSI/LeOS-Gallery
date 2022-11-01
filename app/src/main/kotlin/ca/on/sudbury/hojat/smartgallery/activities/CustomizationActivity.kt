@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
-import ca.on.sudbury.hojat.smartgallery.extensions.updateSharedTheme
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
@@ -818,4 +817,18 @@ class CustomizationActivity : BaseSimpleActivity() {
         } else {
             curPrimaryColor
         }
+
+    private fun updateSharedTheme(sharedTheme: SharedTheme) {
+        try {
+            val contentValues = MyContentProvider.fillThemeContentValues(sharedTheme)
+            applicationContext.contentResolver.update(
+                MyContentProvider.MY_CONTENT_URI,
+                contentValues,
+                null,
+                null
+            )
+        } catch (e: Exception) {
+            ShowSafeToastUseCase(this, e.toString())
+        }
+    }
 }
