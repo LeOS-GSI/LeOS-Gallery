@@ -43,7 +43,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDigest
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
-import ca.on.sudbury.hojat.smartgallery.extensions.removeValues
 import ca.on.sudbury.hojat.smartgallery.helpers.MD5
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
@@ -443,7 +442,7 @@ class PropertiesDialog() {
     private fun removeEXIFFromPath(path: String) {
         ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
             try {
-                ExifInterface(path).removeValues()
+                removeValues(ExifInterface(path))
                 ShowSafeToastUseCase(mActivity, R.string.exif_removed)
                 mPropertyView.properties_holder.removeAllViews()
                 addProperties(path)
@@ -458,7 +457,7 @@ class PropertiesDialog() {
             try {
                 paths.filter { mActivity.isPathOnInternalStorage(it) && it.canModifyEXIF() }
                     .forEach {
-                        ExifInterface(it).removeValues()
+                        removeValues(ExifInterface(it))
                     }
                 ShowSafeToastUseCase(mActivity, R.string.exif_removed)
             } catch (e: Exception) {
@@ -509,4 +508,40 @@ class PropertiesDialog() {
             }
         }
     }
+
+    private fun removeValues(exifInterface: ExifInterface) {
+        val attributes = arrayListOf(
+            // ExifInterface.TAG_ORIENTATION,   // do not remove the orientation, it could lead to unexpected behaviour at displaying the file
+            ExifInterface.TAG_APERTURE_VALUE,
+            ExifInterface.TAG_DATETIME,
+            ExifInterface.TAG_DATETIME_DIGITIZED,
+            ExifInterface.TAG_DATETIME_ORIGINAL,
+            ExifInterface.TAG_EXPOSURE_TIME,
+            ExifInterface.TAG_FLASH,
+            ExifInterface.TAG_F_NUMBER,
+            ExifInterface.TAG_FOCAL_LENGTH,
+            ExifInterface.TAG_GPS_ALTITUDE,
+            ExifInterface.TAG_GPS_ALTITUDE_REF,
+            ExifInterface.TAG_GPS_DATESTAMP,
+            ExifInterface.TAG_GPS_LATITUDE,
+            ExifInterface.TAG_GPS_LATITUDE_REF,
+            ExifInterface.TAG_GPS_LONGITUDE,
+            ExifInterface.TAG_GPS_LONGITUDE_REF,
+            ExifInterface.TAG_GPS_PROCESSING_METHOD,
+            ExifInterface.TAG_GPS_TIMESTAMP,
+            ExifInterface.TAG_IMAGE_LENGTH,
+            ExifInterface.TAG_IMAGE_WIDTH,
+            ExifInterface.TAG_ISO_SPEED_RATINGS,
+            ExifInterface.TAG_MAKE,
+            ExifInterface.TAG_MODEL,
+            ExifInterface.TAG_WHITE_BALANCE
+        )
+
+        attributes.forEach {
+            exifInterface.setAttribute(it, null)
+        }
+
+        exifInterface.saveAttributes()
+    }
+
 }
