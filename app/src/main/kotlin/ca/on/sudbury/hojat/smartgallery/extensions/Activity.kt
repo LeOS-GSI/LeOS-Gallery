@@ -75,7 +75,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
-import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_OTG
@@ -87,7 +86,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
 import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.Release
-import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
