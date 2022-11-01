@@ -898,7 +898,7 @@ fun BaseSimpleActivity.deleteFiles(
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
     RunOnBackgroundThreadUseCase {
-        deleteFilesBg(files, allowDeleteFolder, callback)
+        deleteFilesBg(this, files, allowDeleteFolder, callback)
     }
 }
 
@@ -2186,41 +2186,42 @@ fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int) 
     baseConfig.lastVersion = currVersion
 }
 
-fun BaseSimpleActivity.deleteFilesBg(
+private fun deleteFilesBg(
+    owner: BaseSimpleActivity,
     files: List<FileDirItem>,
     allowDeleteFolder: Boolean = false,
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
     if (files.isEmpty()) {
-        runOnUiThread {
+        owner.runOnUiThread {
             callback?.invoke(true)
         }
         return
     }
 
     val firstFile = files.first()
-    handleSAFDialog(firstFile.path) {
+    owner.handleSAFDialog(firstFile.path) {
         if (!it) {
             return@handleSAFDialog
         }
 
-        checkManageMediaOrHandleSAFDialogSdk30(firstFile.path) {
+        owner.checkManageMediaOrHandleSAFDialogSdk30(firstFile.path) {
             if (!it) {
                 return@checkManageMediaOrHandleSAFDialogSdk30
             }
 
-            val recycleBinPath = firstFile.path.startsWith(this.recycleBinPath)
+            val recycleBinPath = firstFile.path.startsWith(owner.recycleBinPath)
 
-            if ((IsSPlusUseCase() && MediaStore.canManageMedia(this)) && !recycleBinPath) {
-                val fileUris = getFileUrisFromFileDirItems(files)
+            if ((IsSPlusUseCase() && MediaStore.canManageMedia(owner)) && !recycleBinPath) {
+                val fileUris = owner.getFileUrisFromFileDirItems(files)
 
-                deleteSDK30Uris(fileUris) { success ->
-                    runOnUiThread {
+                owner.deleteSDK30Uris(fileUris) { success ->
+                    owner.runOnUiThread {
                         callback?.invoke(success)
                     }
                 }
             } else {
-                deleteFilesCasual(files, allowDeleteFolder, callback)
+                owner.deleteFilesCasual(files, allowDeleteFolder, callback)
             }
         }
     }
@@ -2282,8 +2283,7 @@ fun BaseSimpleActivity.createDirectorySync(directory: String): Boolean {
     }
 
     if (!IsRPlusUseCase() &&
-        (
-                IsPathOnSdUseCase(this, directory) || IsPathOnOtgUseCase(this, directory)) &&
+        (IsPathOnSdUseCase(this, directory) || IsPathOnOtgUseCase(this, directory)) &&
         !isSDCardSetAsDefaultStorage()
     ) {
         val documentFile = getDocumentFile(directory.getParentPath()) ?: return false
