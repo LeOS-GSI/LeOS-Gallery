@@ -820,14 +820,15 @@ private fun addNoMediaIntoMediaStore(owner: BaseSimpleActivity, path: String) {
     }
 }
 
-fun BaseSimpleActivity.deleteFile(
+private fun deleteFile(
+    owner: BaseSimpleActivity,
     fileDirItem: FileDirItem,
     allowDeleteFolder: Boolean = false,
     isDeletingMultipleFiles: Boolean,
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
     RunOnBackgroundThreadUseCase {
-        deleteFileBg(fileDirItem, allowDeleteFolder, isDeletingMultipleFiles, callback)
+        owner.deleteFileBg(fileDirItem, allowDeleteFolder, isDeletingMultipleFiles, callback)
     }
 }
 
@@ -1122,7 +1123,7 @@ fun BaseSimpleActivity.tryDeleteFileDirItem(
     fileDirItem: FileDirItem, allowDeleteFolder: Boolean = false, deleteFromDatabase: Boolean,
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
-    deleteFile(fileDirItem, allowDeleteFolder, isDeletingMultipleFiles = false) {
+    deleteFile(this, fileDirItem, allowDeleteFolder, isDeletingMultipleFiles = false) {
         if (deleteFromDatabase) {
             RunOnBackgroundThreadUseCase {
                 deleteDBPath(fileDirItem.path)
