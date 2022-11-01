@@ -120,10 +120,11 @@ fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
         )
     }
 
-fun String.isAudioFast() = audioExtensions.any { audioExtension -> endsWith(audioExtension, true) }
+private fun isAudioFast(path: String) =
+    audioExtensions.any { audioExtension -> path.endsWith(audioExtension, true) }
 
 fun String.isAudioSlow() =
-    isAudioFast() || getMimeType().startsWith("audio") || startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())
+    isAudioFast(this) || getMimeType().startsWith("audio") || startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())
 
 fun String.isAValidFilename(): Boolean {
     val illegalCharacters =
