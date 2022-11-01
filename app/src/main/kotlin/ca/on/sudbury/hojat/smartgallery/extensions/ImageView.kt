@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.graphics.drawable.GradientDrawable
 import android.widget.ImageView
 
-
 fun ImageView.setFillWithStroke(
     fillColor: Int,
     backgroundColor: Int,
