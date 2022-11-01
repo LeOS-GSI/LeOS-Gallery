@@ -288,7 +288,7 @@ class PropertiesDialog() {
                         mActivity.contentResolver.openInputStream(mActivity.getAndroidSAFUri(path))
                             ?.getDigest(MD5)
                     } else {
-                        File(path).getDigest(MD5)
+                        getDigest(File(path), MD5)
                     }
                     mActivity.runOnUiThread {
                         if (md5 != null) {
@@ -301,6 +301,14 @@ class PropertiesDialog() {
                     }
                 }
             }
+        }
+    }
+
+    private fun getDigest(inputFile: File, algorithm: String): String? {
+        return try {
+            inputFile.inputStream().getDigest(algorithm)
+        } catch (e: Exception) {
+            null
         }
     }
 

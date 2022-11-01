@@ -121,12 +121,3 @@ fun File.doesThisOrParentHaveNoMedia(
     }
     return false
 }
-
-fun File.getDigest(algorithm: String): String? {
-    return try {
-        inputStream().getDigest(algorithm)
-    } catch (e: Exception) {
-        null
-    }
-}
-
