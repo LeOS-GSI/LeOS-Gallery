@@ -893,16 +893,6 @@ fun String.doesThisOrParentHaveNoMedia(
 ) =
     File(this).doesThisOrParentHaveNoMedia(folderNoMediaStatuses, callback)
 
-fun String.getAvailableStorageB(): Long {
-    return try {
-        val stat = StatFs(this)
-        val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
-        bytesAvailable
-    } catch (e: Exception) {
-        -1L
-    }
-}
-
 operator fun String.times(x: Int): String {
     val stringBuilder = StringBuilder()
     for (i in 1..x) {

@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.StatFs
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.Settings
@@ -46,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbPath
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbUri
 import ca.on.sudbury.hojat.smartgallery.extensions.createFirstParentTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFromMediaStore
-import ca.on.sudbury.hojat.smartgallery.extensions.getAvailableStorageB
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getCurrentFormattedDateTime
@@ -924,7 +924,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         copyPhotoVideoOnly: Boolean,
         copyHidden: Boolean
     ) {
-        val availableSpace = destinationPath.getAvailableStorageB()
+        val availableSpace = getAvailableStorageB(destinationPath)
         val sumToCopy = files.sumByLong { it.getProperSize(applicationContext, copyHidden) }
         if (availableSpace == -1L || sumToCopy < availableSpace) {
             checkConflicts(files, destinationPath, 0, LinkedHashMap()) {
@@ -1209,5 +1209,15 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             ?.apply {
                 background.setColorFilter(contrastColor, PorterDuff.Mode.MULTIPLY)
             }
+    }
+
+    private fun getAvailableStorageB(path: String): Long {
+        return try {
+            val stat = StatFs(path)
+            val bytesAvailable = stat.blockSizeLong * stat.availableBlocksLong
+            bytesAvailable
+        } catch (e: Exception) {
+            -1L
+        }
     }
 }
