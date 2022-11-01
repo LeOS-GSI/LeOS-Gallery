@@ -34,7 +34,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.isAudioSlow
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageSlow
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnInternalStorage
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoSlow
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
@@ -52,6 +51,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
@@ -174,43 +174,44 @@ class PropertiesDialog() {
                     }
                 }
 
-                val exif = if (IsNougatPlusUseCase() && mActivity.isPathOnOTG(fileDirItem.path)) {
-                    ExifInterface(
-                        (mActivity as BaseSimpleActivity).getFileInputStreamSync(
-                            fileDirItem.path
-                        )!!
-                    )
-                } else if (IsNougatPlusUseCase() && fileDirItem.path.startsWith("content://")) {
-                    try {
+                val exif =
+                    if (IsNougatPlusUseCase() && IsPathOnOtgUseCase(mActivity, fileDirItem.path)) {
                         ExifInterface(
-                            mActivity.contentResolver.openInputStream(
-                                Uri.parse(
-                                    fileDirItem.path
-                                )
+                            (mActivity as BaseSimpleActivity).getFileInputStreamSync(
+                                fileDirItem.path
                             )!!
                         )
-                    } catch (e: Exception) {
-                        return@RunOnBackgroundThreadUseCase
+                    } else if (IsNougatPlusUseCase() && fileDirItem.path.startsWith("content://")) {
+                        try {
+                            ExifInterface(
+                                mActivity.contentResolver.openInputStream(
+                                    Uri.parse(
+                                        fileDirItem.path
+                                    )
+                                )!!
+                            )
+                        } catch (e: Exception) {
+                            return@RunOnBackgroundThreadUseCase
+                        }
+                    } else if (mActivity.isRestrictedSAFOnlyRoot(path)) {
+                        try {
+                            ExifInterface(
+                                mActivity.contentResolver.openInputStream(
+                                    mActivity.getAndroidSAFUri(
+                                        path
+                                    )
+                                )!!
+                            )
+                        } catch (e: Exception) {
+                            return@RunOnBackgroundThreadUseCase
+                        }
+                    } else {
+                        try {
+                            ExifInterface(fileDirItem.path)
+                        } catch (e: Exception) {
+                            return@RunOnBackgroundThreadUseCase
+                        }
                     }
-                } else if (mActivity.isRestrictedSAFOnlyRoot(path)) {
-                    try {
-                        ExifInterface(
-                            mActivity.contentResolver.openInputStream(
-                                mActivity.getAndroidSAFUri(
-                                    path
-                                )
-                            )!!
-                        )
-                    } catch (e: Exception) {
-                        return@RunOnBackgroundThreadUseCase
-                    }
-                } else {
-                    try {
-                        ExifInterface(fileDirItem.path)
-                    } catch (e: Exception) {
-                        return@RunOnBackgroundThreadUseCase
-                    }
-                }
 
                 val latLon = FloatArray(2)
                 if (exif.getLatLong(latLon)) {
@@ -390,7 +391,7 @@ class PropertiesDialog() {
     }
 
     private fun addExifProperties(path: String, activity: Activity) {
-        val exif = if (IsNougatPlusUseCase() && activity.isPathOnOTG(path)) {
+        val exif = if (IsNougatPlusUseCase() && IsPathOnOtgUseCase(activity, path)) {
             ExifInterface((activity as BaseSimpleActivity).getFileInputStreamSync(path)!!)
         } else if (IsNougatPlusUseCase() && path.startsWith("content://")) {
             try {

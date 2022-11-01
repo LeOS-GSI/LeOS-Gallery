@@ -52,7 +52,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.realScreenSize
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarHeight
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.portrait
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.PortraitPhotosAdapter
@@ -73,6 +72,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsWebpUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
@@ -843,7 +843,9 @@ class PhotoFragment : ViewPagerFragment() {
                 exif.getAttributeInt(TAG_ORIENTATION, defaultOrientation)
             }
 
-            if (orient == defaultOrientation || requireContext().isPathOnOTG(getFilePathToShow())) {
+            if (orient == defaultOrientation ||
+                IsPathOnOtgUseCase(requireContext(), getFilePathToShow())
+            ) {
                 val uri =
                     if (path.startsWith("content:/")) Uri.parse(path) else Uri.fromFile(File(path))
                 val inputStream = requireContext().contentResolver.openInputStream(uri)

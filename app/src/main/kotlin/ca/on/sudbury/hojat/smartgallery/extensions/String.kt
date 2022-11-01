@@ -17,6 +17,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
@@ -235,7 +236,7 @@ fun String.getBasePath(context: Context): String {
     return when {
         startsWith(context.internalStoragePath) -> context.internalStoragePath
         context.isPathOnSD(this) -> context.baseConfig.sdCardPath
-        context.isPathOnOTG(this) -> context.baseConfig.OTGPath
+        IsPathOnOtgUseCase(context, this) -> context.baseConfig.OTGPath
         else -> "/"
     }
 }

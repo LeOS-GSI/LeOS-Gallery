@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
@@ -84,6 +83,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -432,16 +432,15 @@ class MediaAdapter(
 
         if (paths.any { path ->
                 with(activity) {
-                    !IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(
-                        path
-                    )) && !isSDCardSetAsDefaultStorage()
+                    !IsRPlusUseCase() && (isPathOnSD(path) ||
+                            IsPathOnOtgUseCase(this, path)) && !isSDCardSetAsDefaultStorage()
                 }
             }) {
             activity.handleSAFDialog(paths.first { path ->
                 with(activity) {
-                    !IsRPlusUseCase() && (isPathOnSD(
-                        path
-                    ) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
+                    !IsRPlusUseCase() && (isPathOnSD(path) ||
+                            IsPathOnOtgUseCase(this, path))
+                            && !isSDCardSetAsDefaultStorage()
                 }
             }) {
                 if (it) {
@@ -605,7 +604,10 @@ class MediaAdapter(
         val selectedPaths = selectedItems.map { it.path } as ArrayList<String>
         val SAFPath = selectedPaths.firstOrNull { path ->
             with(activity) {
-                !IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()
+                !IsRPlusUseCase() && (isPathOnSD(path) || IsPathOnOtgUseCase(
+                    this,
+                    path
+                )) && !isSDCardSetAsDefaultStorage()
             }
         }
             ?: getFirstSelectedItemPath() ?: return
@@ -749,7 +751,7 @@ class MediaAdapter(
             }
 
             var path = medium.path
-            if (hasOTGConnected && context.isPathOnOTG(path)) {
+            if (hasOTGConnected && IsPathOnOtgUseCase(context, path)) {
                 path = path.getOTGPublicPath(context)
             }
 

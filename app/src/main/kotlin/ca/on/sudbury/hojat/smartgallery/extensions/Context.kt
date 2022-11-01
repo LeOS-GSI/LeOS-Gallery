@@ -148,6 +148,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -282,7 +283,7 @@ fun Context.ensurePublicUri(path: String, applicationId: String): Uri? {
         hasProperStoredDocumentUriSdk30(path) && isAccessibleWithSAFSdk30(path) -> {
             createDocumentUriUsingFirstParentTreeUri(path)
         }
-        isPathOnOTG(path) -> {
+        IsPathOnOtgUseCase(this, path) -> {
             getDocumentFile(path)?.uri
         }
         else -> {
@@ -419,7 +420,8 @@ fun Context.getAndroidSAFUri(path: String): Uri {
 
 fun Context.getAndroidTreeUri(path: String): String {
     return when {
-        isPathOnOTG(path) -> if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri else baseConfig.otgAndroidObbTreeUri
+        IsPathOnOtgUseCase(this, path) ->
+            if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri else baseConfig.otgAndroidObbTreeUri
         isPathOnSD(path) -> if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri else baseConfig.sdAndroidObbTreeUri
         else -> if (isAndroidDataDir(path)) baseConfig.primaryAndroidDataTreeUri else baseConfig.primaryAndroidObbTreeUri
     }
@@ -462,7 +464,7 @@ fun Context.getDirectChildrenCount(
 }
 
 fun Context.getDocumentFile(path: String): DocumentFile? {
-    val isOTG = isPathOnOTG(path)
+    val isOTG = IsPathOnOtgUseCase(this, path)
     var relativePath =
         path.substring(if (isOTG) baseConfig.OTGPath.length else baseConfig.sdCardPath.length)
     if (relativePath.startsWith(File.separator)) {
@@ -532,7 +534,7 @@ fun Context.getFileInputStreamSync(path: String): InputStream? {
                 applicationContext.contentResolver.openInputStream(uri)
             }
         }
-        isPathOnOTG(path) -> {
+        IsPathOnOtgUseCase(this, path) -> {
             val fileDocument = getSomeDocumentFile(path)
             applicationContext.contentResolver.openInputStream(fileDocument?.uri!!)
         }
@@ -923,11 +925,8 @@ fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
     }
 }
 
-fun Context.isPathOnOTG(path: String) =
-    baseConfig.OTGPath.isNotEmpty() && path.startsWith(baseConfig.OTGPath)
-
 fun Context.isRestrictedSAFOnlyRoot(path: String): Boolean {
-    return IsRPlusUseCase() && isSAFOnlyRoot(path)
+    return IsRPlusUseCase() && getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
 fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
@@ -949,10 +948,6 @@ fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
             )
         }
     return IsRPlusUseCase() && (isInvalidName || (isDirectory && isARestrictedDirectory))
-}
-
-fun Context.isSAFOnlyRoot(path: String): Boolean {
-    return getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
 fun Context.movePinnedDirectoriesToFront(dirs: ArrayList<Directory>): ArrayList<Directory> {
@@ -1278,7 +1273,7 @@ fun Context.getDirectParentSubfolders(
 }
 
 fun Context.getFastDocumentFile(path: String): DocumentFile? {
-    if (isPathOnOTG(path)) {
+    if (IsPathOnOtgUseCase(this, path)) {
         return getOTGFastDocumentFile(path)
     }
 
@@ -1548,7 +1543,7 @@ fun Context.addTempFolderIfNeeded(dirs: ArrayList<Directory>): ArrayList<Directo
 fun Context.getPathLocation(path: String): Int {
     return when {
         isPathOnSD(path) -> LOCATION_SD
-        isPathOnOTG(path) -> LOCATION_OTG
+        IsPathOnOtgUseCase(this, path) -> LOCATION_OTG
         else -> LOCATION_INTERNAL
     }
 }
@@ -2113,7 +2108,7 @@ fun Context.getUpdatedDeletedMedia(): ArrayList<Medium> {
 fun Context.getIsPathDirectory(path: String): Boolean {
     return when {
         isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(path)?.isDirectory ?: false
-        isPathOnOTG(path) -> getOTGFastDocumentFile(path)?.isDirectory ?: false
+        IsPathOnOtgUseCase(this, path) -> getOTGFastDocumentFile(path)?.isDirectory ?: false
         else -> File(path).isDirectory
     }
 }
@@ -2911,7 +2906,11 @@ fun saveExifRotation(exif: ExifInterface, degrees: Int) {
 @SuppressLint("Recycle")
 @RequiresApi(Build.VERSION_CODES.N)
 fun Context.saveImageRotation(path: String, degrees: Int): Boolean {
-    if (!(!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage())) {
+    if (!(!IsRPlusUseCase() &&
+                (isPathOnSD(path) ||
+                        IsPathOnOtgUseCase(this, path)) &&
+                !isSDCardSetAsDefaultStorage())
+    ) {
         saveExifRotation(ExifInterface(path), degrees)
         return true
     } else if (IsNougatPlusUseCase()) {
@@ -3566,8 +3565,9 @@ fun Context.hasProperStoredAndroidTreeUri(path: String): Boolean {
 
 fun Context.storeAndroidTreeUri(path: String, treeUri: String) {
     return when {
-        isPathOnOTG(path) -> if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri =
-            treeUri else baseConfig.otgAndroidObbTreeUri = treeUri
+        IsPathOnOtgUseCase(this, path) ->
+            if (isAndroidDataDir(path)) baseConfig.otgAndroidDataTreeUri =
+                treeUri else baseConfig.otgAndroidObbTreeUri = treeUri
         isPathOnSD(path) -> if (isAndroidDataDir(path)) baseConfig.sdAndroidDataTreeUri =
             treeUri else baseConfig.sdAndroidObbTreeUri = treeUri
         else -> if (isAndroidDataDir(path)) baseConfig.primaryAndroidDataTreeUri =

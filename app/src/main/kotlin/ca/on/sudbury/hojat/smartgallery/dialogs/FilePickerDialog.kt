@@ -35,7 +35,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
@@ -46,6 +45,7 @@ import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFilepickerBinding
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
@@ -240,7 +240,7 @@ class FilePickerDialog(
                 val document = activity.getSomeAndroidSAFDocument(currPath) ?: return
                 sendSuccessForDocumentFile(document)
             }
-            activity.isPathOnOTG(currPath) -> {
+            IsPathOnOtgUseCase(activity, currPath) -> {
                 val fileDocument = activity.getSomeDocumentFile(currPath) ?: return
                 sendSuccessForDocumentFile(fileDocument)
             }
@@ -311,7 +311,12 @@ class FilePickerDialog(
                     }
                 }
             }
-            activity.isPathOnOTG(path) -> activity.getOTGItems(path, showHidden, false, callback)
+            IsPathOnOtgUseCase(activity, path) -> activity.getOTGItems(
+                path,
+                showHidden,
+                false,
+                callback
+            )
             else -> {
                 val lastModifieds = activity.getFolderLastModifieds(path)
                 getRegularItems(path, lastModifieds, callback)

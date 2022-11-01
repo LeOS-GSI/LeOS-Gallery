@@ -16,7 +16,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.notificationManager
 import ca.on.sudbury.hojat.smartgallery.extensions.createDirectorySync
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileItems
@@ -45,6 +44,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.InputStream
@@ -224,7 +224,7 @@ class CopyMoveTask(
             return
         }
 
-        if (activity.isPathOnOTG(source.path)) {
+        if (IsPathOnOtgUseCase(activity, source.path)) {
             val children = activity.getDocumentFile(source.path)?.listFiles() ?: return
             for (child in children) {
                 val newPath = "$destinationPath/${child.name}"
@@ -309,7 +309,10 @@ class CopyMoveTask(
         try {
             if (!mDocuments.containsKey(directory) &&
                 with(activity) {
-                    !IsRPlusUseCase() && (isPathOnSD(destination.path) || isPathOnOTG(destination.path)) && !isSDCardSetAsDefaultStorage()
+                    !IsRPlusUseCase() && (
+                            isPathOnSD(destination.path) ||
+                                    IsPathOnOtgUseCase(this, destination.path)) &&
+                            !isSDCardSetAsDefaultStorage()
                 }
             ) {
                 mDocuments[directory] = activity.getDocumentFile(directory)

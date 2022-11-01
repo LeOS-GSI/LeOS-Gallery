@@ -59,7 +59,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
@@ -112,6 +111,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
@@ -560,7 +560,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     private fun isProperAndroidRoot(path: String, uri: Uri): Boolean {
         return when {
-            isPathOnOTG(path) -> isOTGAndroidDir(uri)
+            IsPathOnOtgUseCase(this, path) -> isOTGAndroidDir(uri)
             isPathOnSD(path) -> isSDAndroidDir(uri)
             else -> isInternalStorageAndroidDir(uri)
         }
@@ -818,11 +818,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                         copyHidden
                     )
                 } else {
-                    if (isPathOnOTG(source) || isPathOnOTG(destination) || isPathOnSD(source) || isPathOnSD(
-                            destination
-                        ) ||
-                        isRestrictedSAFOnlyRoot(source) || isRestrictedSAFOnlyRoot(destination) ||
-                        isAccessibleWithSAFSdk30(source) || isAccessibleWithSAFSdk30(destination) ||
+                    if (IsPathOnOtgUseCase(this, source) ||
+                        IsPathOnOtgUseCase(this, destination) ||
+                        isPathOnSD(source) ||
+                        isPathOnSD(destination) ||
+                        isRestrictedSAFOnlyRoot(source) ||
+                        isRestrictedSAFOnlyRoot(destination) ||
+                        isAccessibleWithSAFSdk30(source) ||
+                        isAccessibleWithSAFSdk30(destination) ||
                         fileDirItems.first().isDirectory
                     ) {
                         handleSAFDialog(source) {

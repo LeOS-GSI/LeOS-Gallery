@@ -12,7 +12,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifCameraModel
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifProperties
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
@@ -30,6 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MAX_CLOSE_DOWN_GESTURE_DURATION
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import java.io.File
 import kotlin.math.abs
 
@@ -119,7 +119,8 @@ abstract class ViewPagerFragment : Fragment() {
     }
 
     fun getPathToLoad(medium: Medium) =
-        if (context?.isPathOnOTG(medium.path) == true) medium.path.getOTGPublicPath(requireContext()) else medium.path
+        if (IsPathOnOtgUseCase(context, medium.path))
+            medium.path.getOTGPublicPath(requireContext()) else medium.path
 
     private fun getFileLastModified(file: File): String {
         val projection = arrayOf(Images.Media.DATE_MODIFIED)

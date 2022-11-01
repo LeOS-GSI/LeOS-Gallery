@@ -9,7 +9,6 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.drawable.Drawable
@@ -100,6 +99,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMimeTypeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.squareup.picasso.Picasso
@@ -341,7 +341,8 @@ fun BaseSimpleActivity.getFileOutputStream(
                 callback.invoke(applicationContext.contentResolver.openOutputStream(uri))
             }
         }
-        (!IsRPlusUseCase() && (isPathOnSD(fileDirItem.path) || isPathOnOTG(fileDirItem.path)) && !isSDCardSetAsDefaultStorage()) -> {
+        (!IsRPlusUseCase() && (isPathOnSD(fileDirItem.path) ||
+                IsPathOnOtgUseCase(this, fileDirItem.path)) && !isSDCardSetAsDefaultStorage()) -> {
             handleSAFDialog(fileDirItem.path) {
                 if (!it) {
                     return@handleSAFDialog
@@ -428,7 +429,8 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
             }
             applicationContext.contentResolver.openOutputStream(uri)
         }
-        (!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()) -> {
+        (!IsRPlusUseCase() && (isPathOnSD(path) ||
+                IsPathOnOtgUseCase(this, path)) && !isSDCardSetAsDefaultStorage()) -> {
             var documentFile = parentDocumentFile
             if (documentFile == null) {
                 if (targetFile.parentFile?.let { getDoesFilePathExist(it.absolutePath) } == true) {
@@ -784,7 +786,9 @@ fun BaseSimpleActivity.addNoMedia(path: String, callback: () -> Unit) {
         return
     }
 
-    if (!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()) {
+    if (!IsRPlusUseCase() && (isPathOnSD(path) ||
+                IsPathOnOtgUseCase(this, path)) && !isSDCardSetAsDefaultStorage()
+    ) {
         handleSAFDialog(file.absolutePath) {
             if (!it) {
                 return@handleSAFDialog
@@ -856,8 +860,8 @@ fun BaseSimpleActivity.deleteFileBg(
             return
         }
 
-        var fileDeleted =
-            !isPathOnOTG(path) && ((!file.exists() && file.length() == 0L) || file.delete())
+        var fileDeleted = !IsPathOnOtgUseCase(this, path) &&
+                ((!file.exists() && file.length() == 0L) || file.delete())
         if (fileDeleted) {
             deleteFromMediaStore(path) { needsRescan ->
                 if (needsRescan) {
@@ -878,7 +882,10 @@ fun BaseSimpleActivity.deleteFileBg(
             }
 
             if (!fileDeleted) {
-                if (!IsRPlusUseCase() && (isPathOnSD(path) || isPathOnOTG(path)) && !isSDCardSetAsDefaultStorage()) {
+                if (!IsRPlusUseCase() &&
+                    (isPathOnSD(path) || IsPathOnOtgUseCase(this, path)) &&
+                    !isSDCardSetAsDefaultStorage()
+                ) {
                     handleSAFDialog(path) {
                         if (it) {
                             trySAFFileDelete(fileDirItem, allowDeleteFolder, callback)
@@ -1003,7 +1010,9 @@ fun BaseSimpleActivity.renameFile(
                 }
             }
         }
-    } else if (!IsRPlusUseCase() && (isPathOnSD(newPath) || isPathOnOTG(newPath)) && !isSDCardSetAsDefaultStorage()) {
+    } else if (!IsRPlusUseCase() && (isPathOnSD(newPath) ||
+                IsPathOnOtgUseCase(this, newPath)) && !isSDCardSetAsDefaultStorage()
+    ) {
         handleSAFDialog(newPath) {
             if (!it) {
                 return@handleSAFDialog
@@ -2022,9 +2031,10 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
 }
 
 fun BaseSimpleActivity.isShowingOTGDialog(path: String): Boolean {
-    return if (!IsRPlusUseCase() && isPathOnOTG(path) && (baseConfig.OTGTreeUri.isEmpty() || !hasProperStoredTreeUri(
-            true
-        ))
+    return if (
+        !IsRPlusUseCase() &&
+        IsPathOnOtgUseCase(this, path) &&
+        (baseConfig.OTGTreeUri.isEmpty() || !hasProperStoredTreeUri(true))
     ) {
         showOTGPermissionDialog(path)
         true
@@ -2114,7 +2124,11 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
             val extension = GetFileExtensionUseCase(path)
             val newFilePath = File(parent, "$newFilename.$extension")
 
-            val outputUri = if (isPathOnOTG(path)) newUri else getFinalUriFromPath(
+            val outputUri = if (IsPathOnOtgUseCase(
+                    this@openEditorIntent,
+                    path
+                )
+            ) newUri else getFinalUriFromPath(
                 "$newFilePath",
                 applicationId
             )
@@ -2301,7 +2315,10 @@ fun BaseSimpleActivity.createDirectorySync(directory: String): Boolean {
         return true
     }
 
-    if (!IsRPlusUseCase() && (isPathOnSD(directory) || isPathOnOTG(directory)) && !isSDCardSetAsDefaultStorage()) {
+    if (!IsRPlusUseCase() &&
+        (isPathOnSD(directory) || IsPathOnOtgUseCase(this, directory)) &&
+        !isSDCardSetAsDefaultStorage()
+    ) {
         val documentFile = getDocumentFile(directory.getParentPath()) ?: return false
         val newDir =
             documentFile.createDirectory(directory.getFilenameFromPath()) ?: getDocumentFile(

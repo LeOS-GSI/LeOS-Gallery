@@ -27,7 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getSizeFromContentUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getTitle
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.normalizeString
@@ -42,6 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.util.*
@@ -126,7 +126,7 @@ open class FileDirItem(
     fun getProperSize(context: Context, countHidden: Boolean): Long {
         return when {
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileSize(path)
-            context.isPathOnOTG(path) ->
+            IsPathOnOtgUseCase(context, path) ->
                 GetFileSizeUseCase(context.getDocumentFile(path), countHidden)
             IsNougatPlusUseCase() && path.startsWith("content://") -> {
                 try {
@@ -146,7 +146,7 @@ open class FileDirItem(
                 path,
                 countHidden
             )
-            context.isPathOnOTG(path) -> GetFileCountUseCase(
+            IsPathOnOtgUseCase(context, path) -> GetFileCountUseCase(
                 context.getDocumentFile(path),
                 countHidden
             )
@@ -160,7 +160,7 @@ open class FileDirItem(
                 path,
                 countHiddenItems
             )
-            context.isPathOnOTG(path) -> context.getDocumentFile(path)?.listFiles()
+            IsPathOnOtgUseCase(context, path) -> context.getDocumentFile(path)?.listFiles()
                 ?.filter { if (countHiddenItems) true else !it.name!!.startsWith(".") }?.size
                 ?: 0
             else -> File(path).getDirectChildrenCount(context, countHiddenItems)
@@ -170,7 +170,8 @@ open class FileDirItem(
     fun getLastModified(context: Context): Long {
         return when {
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFLastModified(path)
-            context.isPathOnOTG(path) -> context.getFastDocumentFile(path)?.lastModified() ?: 0L
+            IsPathOnOtgUseCase(context, path) ->
+                context.getFastDocumentFile(path)?.lastModified() ?: 0L
             IsNougatPlusUseCase() && path.startsWith("content://") -> context.getMediaStoreLastModified(
                 path
             )

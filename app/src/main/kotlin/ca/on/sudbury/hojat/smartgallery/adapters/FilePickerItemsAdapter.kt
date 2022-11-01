@@ -13,7 +13,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getTextSize
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -30,6 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import kotlinx.android.synthetic.main.item_filepicker_list.view.*
 import java.util.Locale
@@ -144,9 +144,8 @@ class FilePickerItemsAdapter(
                 if (!activity.isDestroyed && !activity.isFinishing) {
                     if (activity.isRestrictedSAFOnlyRoot(path)) {
                         itemToLoad = activity.getAndroidSAFUri(path)
-                    } else if (hasOTGConnected && itemToLoad is String && activity.isPathOnOTG(
-                            itemToLoad
-                        )
+                    } else if (hasOTGConnected && itemToLoad is String &&
+                        IsPathOnOtgUseCase(activity, itemToLoad)
                     ) {
                         itemToLoad = itemToLoad.getOTGPublicPath(activity)
                     }

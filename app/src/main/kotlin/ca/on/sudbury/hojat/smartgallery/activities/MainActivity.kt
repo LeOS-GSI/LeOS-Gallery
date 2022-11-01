@@ -72,7 +72,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
-import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnOTG
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
 import ca.on.sudbury.hojat.smartgallery.extensions.launchCamera
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
@@ -146,6 +145,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -1633,7 +1633,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 invalidDirs.add(it)
             } else if (it.path != config.tempFolderPath && (!IsRPlusUseCase() || isExternalStorageManager())) {
                 // avoid calling file.list() or listfiles() on Android 11+, it became way too slow
-                val children = if (isPathOnOTG(it.path)) {
+                val children = if (
+                    IsPathOnOtgUseCase(this, it.path)) {
                     getOTGFolderChildrenNames(it.path)
                 } else {
                     File(it.path).list()?.asList()
