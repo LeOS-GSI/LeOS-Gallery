@@ -628,20 +628,6 @@ fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
     return uri
 }
 
-fun Activity.handleAppPasswordProtection(callback: (success: Boolean) -> Unit) {
-    if (baseConfig.isAppPasswordProtectionOn) {
-        SecurityDialog(
-            this,
-            baseConfig.appPasswordHash,
-            baseConfig.appProtectionType
-        ) { _, _, success ->
-            callback(success)
-        }
-    } else {
-        callback(true)
-    }
-}
-
 fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
     if (baseConfig.isDeletePasswordProtectionOn) {
         SecurityDialog(

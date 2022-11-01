@@ -61,7 +61,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.handleAppPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
@@ -129,6 +128,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
@@ -411,14 +411,24 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         if (!mIsSearchOpen) {
             refreshMenuItems()
             if (mIsPasswordProtectionPending && !mWasProtectionHandled) {
-                handleAppPasswordProtection {
-                    mWasProtectionHandled = it
-                    if (it) {
-                        mIsPasswordProtectionPending = false
-                        tryLoadGallery()
-                    } else {
-                        finish()
+                if (baseConfig.isAppPasswordProtectionOn) {
+                    SecurityDialog(
+                        this,
+                        baseConfig.appPasswordHash,
+                        baseConfig.appProtectionType
+                    ) { _, _, success ->
+                        mWasProtectionHandled = success
+                        if (success) {
+                            mIsPasswordProtectionPending = false
+                            tryLoadGallery()
+                        } else {
+                            finish()
+                        }
                     }
+                } else {
+                    mWasProtectionHandled = true
+                    mIsPasswordProtectionPending = false
+                    tryLoadGallery()
                 }
             } else {
                 tryLoadGallery()
