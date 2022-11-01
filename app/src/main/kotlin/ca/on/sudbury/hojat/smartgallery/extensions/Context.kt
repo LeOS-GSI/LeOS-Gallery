@@ -603,7 +603,7 @@ fun Context.getFileUrisFromFileDirItems(fileDirItems: List<FileDirItem>): List<U
 
 fun Context.getFirstParentLevel(path: String): Int {
     return when {
-        IsRPlusUseCase() && (isInAndroidDir(path) || isInSubFolderInDownloadDir(path)) -> 1
+        IsRPlusUseCase() && (isInAndroidDir(this, path) || isInSubFolderInDownloadDir(path)) -> 1
         else -> 0
     }
 }
@@ -849,11 +849,11 @@ fun Context.isAStorageRootFolder(path: String): Boolean {
 fun Context.isBlackAndWhiteTheme() =
     baseConfig.textColor == Color.WHITE && baseConfig.primaryColor == Color.BLACK && baseConfig.backgroundColor == Color.BLACK
 
-fun Context.isInAndroidDir(path: String): Boolean {
-    if (path.startsWith(recycleBinPath)) {
+private fun isInAndroidDir(owner: Context, path: String): Boolean {
+    if (path.startsWith(owner.recycleBinPath)) {
         return false
     }
-    val firstParentDir = path.getFirstParentDirName(this, 0)
+    val firstParentDir = path.getFirstParentDirName(owner, 0)
     return firstParentDir.equals("Android", true)
 }
 
