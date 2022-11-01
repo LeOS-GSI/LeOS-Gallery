@@ -2381,7 +2381,7 @@ fun BaseSimpleActivity.copySingleFileSdk30(source: FileDirItem, destination: Fil
 
         return if (source.size == copiedSize && getDoesFilePathExist(destination.path)) {
             if (baseConfig.keepLastModified) {
-                copyOldLastModified(source.path, destination.path)
+                copyOldLastModified(this, source.path, destination.path)
                 val lastModified = File(source.path).lastModified()
                 if (lastModified != 0L) {
                     File(destination.path).setLastModified(lastModified)
@@ -2397,14 +2397,24 @@ fun BaseSimpleActivity.copySingleFileSdk30(source: FileDirItem, destination: Fil
     }
 }
 
-fun BaseSimpleActivity.copyOldLastModified(sourcePath: String, destinationPath: String) {
+private fun copyOldLastModified(
+    owner: BaseSimpleActivity,
+    sourcePath: String,
+    destinationPath: String
+) {
     val projection =
         arrayOf(Images.Media.DATE_TAKEN, Images.Media.DATE_MODIFIED)
     val uri = Files.getContentUri("external")
     val selection = "${MediaStore.MediaColumns.DATA} = ?"
     var selectionArgs = arrayOf(sourcePath)
     val cursor =
-        applicationContext.contentResolver.query(uri, projection, selection, selectionArgs, null)
+        owner.applicationContext.contentResolver.query(
+            uri,
+            projection,
+            selection,
+            selectionArgs,
+            null
+        )
 
     cursor?.use {
         if (cursor.moveToFirst()) {
@@ -2417,7 +2427,7 @@ fun BaseSimpleActivity.copyOldLastModified(sourcePath: String, destinationPath: 
             }
 
             selectionArgs = arrayOf(destinationPath)
-            applicationContext.contentResolver.update(uri, values, selection, selectionArgs)
+            owner.applicationContext.contentResolver.update(uri, values, selection, selectionArgs)
         }
     }
 }
