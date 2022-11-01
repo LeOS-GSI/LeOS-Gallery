@@ -5,6 +5,7 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.biometric.auth.AuthPromptHost
 import androidx.fragment.app.FragmentActivity
+import androidx.viewpager.widget.ViewPager
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -21,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogSecurityBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.isBiometricIdAvailable
-import ca.on.sudbury.hojat.smartgallery.extensions.onPageChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.hojat.palette.views.MyDialogViewPager
@@ -59,9 +59,23 @@ class SecurityDialog(
                 showBiometricAuthentication = showTabIndex == PROTECTION_FINGERPRINT && IsRPlusUseCase()
             )
             viewPager.adapter = tabsAdapter
-            viewPager.onPageChangeListener {
-                dialogTabLayout.getTabAt(it)?.select()
-            }
+
+            viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    dialogTabLayout.getTabAt(position)?.select()
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {
+
+                }
+            })
 
             viewPager.onGlobalLayout {
                 updateTabVisibility()
@@ -71,7 +85,8 @@ class SecurityDialog(
                 val textColor = root.context.getProperTextColor()
 
                 if (shouldShowBiometricIdTab()) {
-                    val tabTitle = if (IsRPlusUseCase()) R.string.biometrics else R.string.fingerprint
+                    val tabTitle =
+                        if (IsRPlusUseCase()) R.string.biometrics else R.string.fingerprint
                     dialogTabLayout.addTab(
                         dialogTabLayout.newTab().setText(tabTitle),
                         PROTECTION_FINGERPRINT

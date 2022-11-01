@@ -2,6 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.viewpager.widget.ViewPager
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -12,7 +13,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.RenameAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameBinding
-import ca.on.sudbury.hojat.smartgallery.extensions.onPageChangeListener
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.helpers.RENAME_PATTERN
 import ca.on.sudbury.hojat.smartgallery.helpers.RENAME_SIMPLE
@@ -37,9 +37,20 @@ class RenameDialog(
             viewPager = dialogTabViewPager
             tabsAdapter = RenameAdapter(activity, paths)
             viewPager.adapter = tabsAdapter
-            viewPager.onPageChangeListener {
-                dialogTabLayout.getTabAt(it)!!.select()
-            }
+            viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(
+                    position: Int,
+                    positionOffset: Float,
+                    positionOffsetPixels: Int
+                ) {
+                }
+
+                override fun onPageSelected(position: Int) {
+                    dialogTabLayout.getTabAt(position)!!.select()
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {}
+            })
             viewPager.currentItem = activity.baseConfig.lastRenameUsed
 
             if (activity.baseConfig.isUsingSystemTheme) {
