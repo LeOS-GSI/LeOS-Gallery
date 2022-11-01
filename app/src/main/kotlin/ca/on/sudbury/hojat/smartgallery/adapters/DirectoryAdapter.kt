@@ -66,7 +66,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.loadImage
 import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
-import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
@@ -99,6 +98,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -451,7 +451,7 @@ class DirectoryAdapter(
     private fun emptyRecycleBin() {
         activity.handleLockedFolderOpening(RECYCLE_BIN) { success ->
             if (success) {
-                activity.emptyTheRecycleBin {
+                EmptyTheRecycleBinUseCase(activity) {
                     listener?.refreshItems()
                 }
             }

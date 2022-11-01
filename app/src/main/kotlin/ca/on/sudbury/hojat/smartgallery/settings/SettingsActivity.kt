@@ -138,7 +138,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -147,6 +146,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToBooleanUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToIntUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToStringSetUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -947,7 +947,7 @@ class SettingsActivity : SimpleActivity() {
                 ShowSafeToastUseCase(this, R.string.recycle_bin_empty)
             } else {
                 showRecycleBinEmptyingDialog {
-                    emptyTheRecycleBin()
+                    EmptyTheRecycleBinUseCase(this)
                     mRecycleBinContentSize = 0L
                     binding.settingsEmptyRecycleBinSize.text = FormatFileSizeUseCase(0L)
                 }

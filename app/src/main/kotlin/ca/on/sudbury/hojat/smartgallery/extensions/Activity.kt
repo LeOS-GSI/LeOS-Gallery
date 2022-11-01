@@ -95,6 +95,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMimeTypeUseCase
@@ -1313,23 +1314,9 @@ fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback
     }
 }
 
-fun BaseSimpleActivity.emptyTheRecycleBin(callback: (() -> Unit)? = null) {
-    RunOnBackgroundThreadUseCase {
-        try {
-            baseContext.filesDir.deleteRecursively()
-            mediaDB.clearRecycleBin()
-            GalleryDatabase.getInstance(applicationContext).DirectoryDao().deleteRecycleBin()
-            ShowSafeToastUseCase(this, R.string.recycle_bin_emptied)
-            callback?.invoke()
-        } catch (e: Exception) {
-            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
-        }
-    }
-}
-
 fun BaseSimpleActivity.emptyAndDisableTheRecycleBin(callback: () -> Unit) {
     RunOnBackgroundThreadUseCase {
-        emptyTheRecycleBin {
+        EmptyTheRecycleBinUseCase(this) {
             config.useRecycleBin = false
             callback()
         }

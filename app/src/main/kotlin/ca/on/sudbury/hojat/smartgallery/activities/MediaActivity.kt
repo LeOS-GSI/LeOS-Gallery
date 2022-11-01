@@ -61,7 +61,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.updateWidgets
 import ca.on.sudbury.hojat.smartgallery.extensions.getHumanizedFilename
-import ca.on.sudbury.hojat.smartgallery.extensions.emptyTheRecycleBin
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_COLUMN_COUNT
@@ -103,6 +102,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -592,7 +592,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun emptyRecycleBin() {
         showRecycleBinEmptyingDialog {
-            emptyTheRecycleBin {
+            EmptyTheRecycleBinUseCase(this) {
                 finish()
             }
         }
