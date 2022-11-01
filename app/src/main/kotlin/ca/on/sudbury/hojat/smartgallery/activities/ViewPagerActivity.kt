@@ -76,7 +76,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleFileVisibility
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
-import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDBMediaPath
 import ca.on.sudbury.hojat.smartgallery.photoview.PhotoFragment
@@ -169,6 +168,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isPathOnSD
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
+import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
@@ -1352,7 +1352,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     }
 
     private fun restoreFile() {
-        restoreRecycleBinPath(getCurrentPath()) {
+        restoreRecycleBinPaths(arrayListOf(getCurrentPath())) {
             refreshViewPager()
         }
     }

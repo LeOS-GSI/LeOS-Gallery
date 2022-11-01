@@ -1228,10 +1228,6 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
     }
 }
 
-fun BaseSimpleActivity.restoreRecycleBinPath(path: String, callback: () -> Unit) {
-    restoreRecycleBinPaths(arrayListOf(path), callback)
-}
-
 fun BaseSimpleActivity.restoreRecycleBinPaths(paths: ArrayList<String>, callback: () -> Unit) {
     RunOnBackgroundThreadUseCase {
         val newPaths = ArrayList<String>()
