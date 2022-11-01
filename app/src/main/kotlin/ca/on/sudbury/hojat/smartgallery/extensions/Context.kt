@@ -1123,7 +1123,42 @@ fun Context.getDirsToShow(
         }
 
         val parentDirs = getDirectParentSubfolders(dirs, currentPathPrefix)
-        updateSubfolderCounts(dirs, parentDirs)
+
+        // update the count of sub-folders
+        for (child in dirs) {
+            var longestSharedPath = ""
+            for (parentDir in parentDirs) {
+                if (parentDir.path == child.path) {
+                    longestSharedPath = child.path
+                    continue
+                }
+
+                if (child.path.startsWith(
+                        parentDir.path,
+                        true
+                    ) && parentDir.path.length > longestSharedPath.length
+                ) {
+                    longestSharedPath = parentDir.path
+                }
+            }
+
+            // make sure we count only the proper direct subfolders, grouped the same way as on the main screen
+            parentDirs.firstOrNull { it.path == longestSharedPath }?.apply {
+                if (path.equals(child.path, true) || path.equals(
+                        File(child.path).parent,
+                        true
+                    ) || dirs.any { it.path.equals(File(child.path).parent, true) }
+                ) {
+                    if (child.containsMediaFilesDirectly) {
+                        subfoldersCount++
+                    }
+
+                    if (path != child.path) {
+                        subfoldersMediaCount += child.mediaCnt
+                    }
+                }
+            }
+        }
 
         // show the current folder as an available option too, not just subfolders
         if (currentPathPrefix.isNotEmpty()) {
@@ -1286,46 +1321,6 @@ fun Context.getFastDocumentFile(path: String): DocumentFile? {
         baseConfig.sdCardPath.split("/").lastOrNull(String::isNotEmpty)?.trim('/') ?: return null
     val fullUri = "${baseConfig.sdTreeUri}/document/$externalPathPart%3A$relativePath"
     return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
-}
-
-fun updateSubfolderCounts(
-    children: ArrayList<Directory>,
-    parentDirs: ArrayList<Directory>
-) {
-    for (child in children) {
-        var longestSharedPath = ""
-        for (parentDir in parentDirs) {
-            if (parentDir.path == child.path) {
-                longestSharedPath = child.path
-                continue
-            }
-
-            if (child.path.startsWith(
-                    parentDir.path,
-                    true
-                ) && parentDir.path.length > longestSharedPath.length
-            ) {
-                longestSharedPath = parentDir.path
-            }
-        }
-
-        // make sure we count only the proper direct subfolders, grouped the same way as on the main screen
-        parentDirs.firstOrNull { it.path == longestSharedPath }?.apply {
-            if (path.equals(child.path, true) || path.equals(
-                    File(child.path).parent,
-                    true
-                ) || children.any { it.path.equals(File(child.path).parent, true) }
-            ) {
-                if (child.containsMediaFilesDirectly) {
-                    subfoldersCount++
-                }
-
-                if (path != child.path) {
-                    subfoldersMediaCount += child.mediaCnt
-                }
-            }
-        }
-    }
 }
 
 fun Context.getNoMediaFoldersSync(): ArrayList<String> {
