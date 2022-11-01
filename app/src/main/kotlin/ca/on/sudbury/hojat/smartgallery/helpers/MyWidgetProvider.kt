@@ -16,7 +16,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.getFileSignature
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileKey
 import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.widgetsDB
 import ca.on.sudbury.hojat.smartgallery.models.Widget
@@ -24,6 +24,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 
 class MyWidgetProvider : AppWidgetProvider() {
     @RequiresApi(Build.VERSION_CODES.M)
@@ -74,7 +75,7 @@ class MyWidgetProvider : AppWidgetProvider() {
                     GalleryDatabase.getInstance(context.applicationContext).DirectoryDao()
                         .getDirectoryThumbnail(it.folderPath) ?: return@forEach
                 val options = RequestOptions()
-                    .signature(path.getFileSignature())
+                    .signature(getFileSignature(path))
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 
                 if (context.config.cropThumbnails) {
@@ -129,4 +130,7 @@ class MyWidgetProvider : AppWidgetProvider() {
             }
         }
     }
+
+    private fun getFileSignature(path: String, lastModified: Long? = null) =
+        ObjectKey(path.getFileKey(lastModified))
 }

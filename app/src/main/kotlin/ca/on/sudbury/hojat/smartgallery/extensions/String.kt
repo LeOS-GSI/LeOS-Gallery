@@ -19,7 +19,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
-import com.bumptech.glide.signature.ObjectKey
 import java.io.File
 import java.io.IOException
 import java.text.Normalizer
@@ -45,8 +44,6 @@ fun String.getFileKey(lastModified: Long? = null): String {
 }
 
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
-
-fun String.getFileSignature(lastModified: Long? = null) = ObjectKey(getFileKey(lastModified))
 
 fun String.getFirstParentDirName(context: Context, level: Int): String? {
     val basePath = getBasePath(context)
