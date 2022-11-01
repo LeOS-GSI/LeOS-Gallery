@@ -112,9 +112,9 @@ fun String.isThisOrParentIncluded(includedPaths: MutableSet<String>) =
         )
     }
 
-fun String.isThisOrParentExcluded(excludedPaths: MutableSet<String>) =
-    excludedPaths.any { equals(it, true) } || excludedPaths.any {
-        "$this/".startsWith(
+private fun isThisOrParentExcluded(path: String, excludedPaths: MutableSet<String>) =
+    excludedPaths.any { path.equals(it, true) } || excludedPaths.any {
+        "$path/".startsWith(
             "$it/",
             true
         )
@@ -199,7 +199,7 @@ fun String.shouldFolderBeVisible(
         false
     } else if (isThisOrParentIncluded(includedPaths)) {
         true
-    } else if (isThisOrParentExcluded(excludedPaths)) {
+    } else if (isThisOrParentExcluded(this, excludedPaths)) {
         false
     } else if (!showHidden) {
         var containsNoMediaOrDot = containsNoMedia || contains("/.")
