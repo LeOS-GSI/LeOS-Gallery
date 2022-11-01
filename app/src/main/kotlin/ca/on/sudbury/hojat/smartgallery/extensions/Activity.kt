@@ -2326,7 +2326,7 @@ fun Activity.checkAppSideloading(): Boolean {
     val isSideloaded = when (baseConfig.appSideloadingStatus) {
         SIDELOADING_TRUE -> true
         SIDELOADING_FALSE -> false
-        else -> isAppSideloaded()
+        else -> isAppSideloaded(this)
     }
 
     baseConfig.appSideloadingStatus = if (isSideloaded) SIDELOADING_TRUE else SIDELOADING_FALSE
@@ -2338,9 +2338,9 @@ fun Activity.checkAppSideloading(): Boolean {
 }
 
 @SuppressLint("UseCompatLoadingForDrawables")
-fun Activity.isAppSideloaded(): Boolean {
+private fun isAppSideloaded(owner: Activity): Boolean {
     return try {
-        getDrawable(R.drawable.ic_camera_vector)
+        owner.getDrawable(R.drawable.ic_camera_vector)
         false
     } catch (e: Exception) {
         true
