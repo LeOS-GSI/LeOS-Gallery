@@ -1328,12 +1328,6 @@ fun updateSubfolderCounts(
     }
 }
 
-fun Context.getNoMediaFolders(callback: (folders: ArrayList<String>) -> Unit) {
-    RunOnBackgroundThreadUseCase {
-        callback(getNoMediaFoldersSync())
-    }
-}
-
 fun Context.getNoMediaFoldersSync(): ArrayList<String> {
     val folders = ArrayList<String>()
 

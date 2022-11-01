@@ -11,7 +11,7 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.addNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFolders
+import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
@@ -34,16 +34,19 @@ class HiddenFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun updateFolders() {
-        getNoMediaFolders {
+        RunOnBackgroundThreadUseCase {
             runOnUiThread {
                 binding.manageFoldersPlaceholder.apply {
                     text = getString(R.string.hidden_folders_placeholder)
-                    BeVisibleOrGoneUseCase(this, it.isEmpty())
+                    BeVisibleOrGoneUseCase(this, getNoMediaFoldersSync().isEmpty())
                     setTextColor(getProperTextColor())
                 }
-
-                val adapter =
-                    ManageHiddenFoldersAdapter(this, it, this, binding.manageFoldersList) {}
+                val adapter = ManageHiddenFoldersAdapter(
+                    this,
+                    getNoMediaFoldersSync(),
+                    this,
+                    binding.manageFoldersList
+                ) {}
                 binding.manageFoldersList.adapter = adapter
             }
         }
