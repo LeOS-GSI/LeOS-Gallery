@@ -10,7 +10,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifDateTaken
-import ca.on.sudbury.hojat.smartgallery.extensions.getExifCameraModel
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifProperties
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
@@ -28,6 +27,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.EXT_LAST_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_CLOSE_DOWN_GESTURE_DURATION
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetCameraModelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import java.io.File
@@ -105,7 +105,7 @@ abstract class ViewPagerFragment : Fragment() {
         }
 
         if (detailsFlag and EXT_CAMERA_MODEL != 0) {
-            exif.getExifCameraModel().let { if (it.isNotEmpty()) details.appendLine(it) }
+            GetCameraModelUseCase(exif).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
         if (detailsFlag and EXT_EXIF_PROPERTIES != 0) {

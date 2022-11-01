@@ -26,16 +26,6 @@ fun ExifInterface.copyNonDimensionAttributesTo(destination: ExifInterface) {
     }
 }
 
-fun ExifInterface.getExifCameraModel(): String {
-    getAttribute(ExifInterface.TAG_MAKE).let {
-        if (it?.isNotEmpty() == true) {
-            val model = getAttribute(ExifInterface.TAG_MODEL)
-            return "$it $model".trim()
-        }
-    }
-    return ""
-}
-
 @TargetApi(Build.VERSION_CODES.N)
 fun ExifInterface.getExifDateTaken(context: Context): String {
     val dateTime = getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
