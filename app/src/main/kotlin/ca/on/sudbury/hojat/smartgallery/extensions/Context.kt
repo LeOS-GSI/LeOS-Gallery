@@ -2898,9 +2898,16 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
 fun saveExifRotation(exif: ExifInterface, degrees: Int) {
     val orientation =
         exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-    val orientationDegrees = (orientation.degreesFromOrientation() + degrees) % 360
+    val orientationDegrees = (getDegreesFromOrientation(orientation) + degrees) % 360
     exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientationDegrees.orientationFromDegrees())
     exif.saveAttributes()
+}
+
+private fun getDegreesFromOrientation(orientation: Int) = when (orientation) {
+    ExifInterface.ORIENTATION_ROTATE_270 -> 270
+    ExifInterface.ORIENTATION_ROTATE_180 -> 180
+    ExifInterface.ORIENTATION_ROTATE_90 -> 90
+    else -> 0
 }
 
 @SuppressLint("Recycle")

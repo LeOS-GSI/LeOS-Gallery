@@ -53,13 +53,6 @@ fun Int.orientationFromDegrees() = when (this) {
     else -> ExifInterface.ORIENTATION_NORMAL
 }.toString()
 
-fun Int.degreesFromOrientation() = when (this) {
-    ExifInterface.ORIENTATION_ROTATE_270 -> 270
-    ExifInterface.ORIENTATION_ROTATE_180 -> 180
-    ExifInterface.ORIENTATION_ROTATE_90 -> 90
-    else -> 0
-}
-
 fun Int.ensureTwoDigits(): String {
     return if (toString().length == 1) {
         "0$this"
