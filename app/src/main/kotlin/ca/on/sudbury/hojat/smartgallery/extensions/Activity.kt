@@ -102,6 +102,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.squareup.picasso.Picasso
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
@@ -597,17 +598,6 @@ fun Activity.openPath(
 fun Activity.openEditor(path: String, forceChooser: Boolean = false) {
     val newPath = path.removePrefix("file://")
     openEditorIntent(newPath, forceChooser, BuildConfig.APPLICATION_ID)
-}
-
-fun Activity.launchCamera() {
-    val intent = Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA)
-    try {
-        startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        ShowSafeToastUseCase(this, R.string.no_app_found)
-    } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
-    }
 }
 
 fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {

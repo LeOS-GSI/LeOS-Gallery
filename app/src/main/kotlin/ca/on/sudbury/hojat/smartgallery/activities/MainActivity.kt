@@ -72,7 +72,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isDownloadsFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
-import ca.on.sudbury.hojat.smartgallery.extensions.launchCamera
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.extensions.movePinnedDirectoriesToFront
@@ -147,6 +146,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.LaunchCameraUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
@@ -539,7 +539,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             when (menuItem.itemId) {
                 R.id.sort -> showSortingDialog()
                 R.id.filter -> showFilterMediaDialog()
-                R.id.open_camera -> launchCamera()
+                R.id.open_camera -> LaunchCameraUseCase(this)
                 R.id.show_all -> showAllMedia()
                 R.id.change_view_type -> changeViewType()
                 R.id.temporarily_show_hidden -> tryToggleTemporarilyShowHidden()

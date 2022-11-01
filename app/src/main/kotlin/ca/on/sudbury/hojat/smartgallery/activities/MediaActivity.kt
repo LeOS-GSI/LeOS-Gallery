@@ -47,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.database.MediaOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediaBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.launchCamera
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
@@ -104,6 +103,7 @@ import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.LaunchCameraUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
@@ -351,7 +351,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 R.id.empty_disable_recycle_bin -> emptyAndDisableRecycleBin()
                 R.id.restore_all_files -> restoreAllFiles()
                 R.id.toggle_filename -> toggleFilenameVisibility()
-                R.id.open_camera -> launchCamera()
+                R.id.open_camera -> LaunchCameraUseCase(this)
                 R.id.folder_view -> switchToFolderView()
                 R.id.change_view_type -> changeViewType()
                 R.id.group -> showGroupByDialog()
