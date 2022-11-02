@@ -254,28 +254,6 @@ fun Context.createSAFDirectorySdk30(path: String): Boolean {
     }
 }
 
-fun Context.createSAFFileSdk30(path: String): Boolean {
-    return try {
-        val treeUri = createFirstParentTreeUri(path)
-        val parentPath = path.getParentPath()
-        if (!getDoesFilePathExistSdk30(parentPath)) {
-            createSAFDirectorySdk30(parentPath)
-        }
-
-        val documentId = getSAFDocumentId(parentPath)
-        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
-        DocumentsContract.createDocument(
-            contentResolver,
-            parentUri,
-            path.getMimeType(),
-            path.getFilenameFromPath()
-        ) != null
-    } catch (e: IllegalStateException) {
-        ShowSafeToastUseCase(this, e.toString())
-        false
-    }
-}
-
 fun Context.ensurePublicUri(path: String, applicationId: String): Uri? {
     return when {
         hasProperStoredAndroidTreeUri(path) && isRestrictedSAFOnlyRoot(path) -> {

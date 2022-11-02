@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ContentProviderOperation
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -27,13 +28,8 @@ import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.biometric.BiometricPrompt
-import androidx.biometric.auth.AuthPromptCallback
-import androidx.biometric.auth.AuthPromptHost
-import androidx.biometric.auth.Class2BiometricAuthPrompt
 import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
-import androidx.fragment.app.FragmentActivity
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
@@ -87,7 +83,6 @@ import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
@@ -110,6 +105,28 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+
+private fun createSAFFileSdk30(owner: Context, path: String): Boolean {
+    return try {
+        val treeUri = owner.createFirstParentTreeUri(path)
+        val parentPath = path.getParentPath()
+        if (!owner.getDoesFilePathExistSdk30(parentPath)) {
+            owner.createSAFDirectorySdk30(parentPath)
+        }
+
+        val documentId = owner.getSAFDocumentId(parentPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.createDocument(
+            owner.contentResolver,
+            parentUri,
+            path.getMimeType(),
+            path.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        ShowSafeToastUseCase(owner, e.toString())
+        false
+    }
+}
 
 // It's been used only by "renameFile" extension function
 private fun renameCasually(
@@ -394,7 +411,7 @@ fun BaseSimpleActivity.getFileOutputStream(
                     try {
                         val uri = createDocumentUriUsingFirstParentTreeUri(fileDirItem.path)
                         if (!getDoesFilePathExist(fileDirItem.path)) {
-                            createSAFFileSdk30(fileDirItem.path)
+                            createSAFFileSdk30(this, fileDirItem.path)
                         }
                         applicationContext.contentResolver.openOutputStream(uri)
                     } catch (e: Exception) {
@@ -485,7 +502,7 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
             try {
                 val uri = createDocumentUriUsingFirstParentTreeUri(path)
                 if (!getDoesFilePathExist(path)) {
-                    createSAFFileSdk30(path)
+                    createSAFFileSdk30(this, path)
                 }
                 applicationContext.contentResolver.openOutputStream(uri)
             } catch (e: Exception) {
