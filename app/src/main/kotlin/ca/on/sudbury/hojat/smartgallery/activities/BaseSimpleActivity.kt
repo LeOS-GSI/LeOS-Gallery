@@ -40,7 +40,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialogSdk30
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.CopyMoveTask
-import ca.on.sudbury.hojat.smartgallery.extensions.addBit
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.buildDocumentUriSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidDataOrObbPath
@@ -61,7 +60,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isAccessibleWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
-import ca.on.sudbury.hojat.smartgallery.extensions.removeBit
 import ca.on.sudbury.hojat.smartgallery.extensions.storeAndroidTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateOTGPathFromPartition
@@ -219,10 +217,18 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         if (IsMarshmallowPlusUseCase()) {
             if (color.getContrastColor() == 0xFF333333.toInt()) {
                 window.decorView.systemUiVisibility =
-                    window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                    addBit(
+                        window.decorView.systemUiVisibility,
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    )
+
             } else {
                 window.decorView.systemUiVisibility =
-                    window.decorView.systemUiVisibility.removeBit(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                    removeBit(
+                        window.decorView.systemUiVisibility,
+                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                    )
+
             }
         }
     }
@@ -249,10 +255,18 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 if (IsOreoPlusUseCase()) {
                     if (color.getContrastColor() == 0xFF333333.toInt()) {
                         window.decorView.systemUiVisibility =
-                            window.decorView.systemUiVisibility.addBit(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                            addBit(
+                                window.decorView.systemUiVisibility,
+                                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                            )
+
+
                     } else {
                         window.decorView.systemUiVisibility =
-                            window.decorView.systemUiVisibility.removeBit(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR)
+                            removeBit(
+                                window.decorView.systemUiVisibility,
+                                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                            )
                     }
                 }
             } catch (ignored: Exception) {
@@ -1220,4 +1234,9 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             -1L
         }
     }
+
+    // TODO: how to do "bits & ~bit" in kotlin?
+    private fun removeBit(inputBit: Int, bit: Int) = addBit(inputBit, bit) - bit
+
+    private fun addBit(inputBit: Int, bit: Int) = inputBit or bit
 }

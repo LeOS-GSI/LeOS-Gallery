@@ -41,11 +41,6 @@ fun Int.isSortingAscending() = this and SORT_DESCENDING == 0
 
 fun Int.toHex() = String.format("#%06X", 0xFFFFFF and this).uppercase(Locale.getDefault())
 
-// TODO: how to do "bits & ~bit" in kotlin?
-fun Int.removeBit(bit: Int) = addBit(bit) - bit
-
-fun Int.addBit(bit: Int) = this or bit
-
 fun Int.orientationFromDegrees() = when (this) {
     270 -> ExifInterface.ORIENTATION_ROTATE_270
     180 -> ExifInterface.ORIENTATION_ROTATE_180
