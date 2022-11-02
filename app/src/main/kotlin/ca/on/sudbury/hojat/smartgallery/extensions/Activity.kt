@@ -1459,35 +1459,6 @@ fun AppCompatActivity.fixDateTaken(
     }
 }
 
-@TargetApi(Build.VERSION_CODES.N)
-fun Activity.tryRotateByExif(
-    path: String,
-    degrees: Int,
-    showToasts: Boolean,
-    callback: () -> Unit
-): Boolean {
-    return try {
-        val file = File(path)
-        val oldLastModified = file.lastModified()
-        if (saveImageRotation(path, degrees)) {
-            fileRotatedSuccessfully(path, oldLastModified)
-            callback.invoke()
-            if (showToasts) {
-                ShowSafeToastUseCase(this, R.string.file_saved)
-            }
-            true
-        } else {
-            false
-        }
-    } catch (e: Exception) {
-        // lets not show IOExceptions, rotating is saved just fine even with them
-        if (showToasts && e !is IOException) {
-            ShowSafeToastUseCase(this, e.toString())
-        }
-        false
-    }
-}
-
 fun Activity.fileRotatedSuccessfully(path: String, lastModified: Long) {
     if (config.keepLastModified && lastModified != 0L) {
         File(path).setLastModified(lastModified)
