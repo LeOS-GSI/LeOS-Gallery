@@ -1969,14 +1969,6 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
     }
 }
 
-fun Activity.launchUpgradeToProIntent() {
-    try {
-        launchViewIntent("market://details?id=${baseConfig.appId.removeSuffix(".debug")}.pro")
-    } catch (ignored: Exception) {
-        launchViewIntent(getStoreUrl())
-    }
-}
-
 fun Activity.launchViewIntent(url: String) {
     HideKeyboardUseCase(this)
     RunOnBackgroundThreadUseCase {
