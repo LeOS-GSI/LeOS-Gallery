@@ -2,12 +2,15 @@ package ca.on.sudbury.hojat.smartgallery.usecases
 
 import android.annotation.TargetApi
 import android.app.Activity
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Build
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileKey
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
@@ -17,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.saveExifRotation
-import ca.on.sudbury.hojat.smartgallery.extensions.saveFile
 import ca.on.sudbury.hojat.smartgallery.extensions.saveImageRotation
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
@@ -163,5 +165,10 @@ object SaveRotatedImageUseCase {
         }
     }
 
-
+    private fun saveFile(path: String, bitmap: Bitmap, out: FileOutputStream, degrees: Int) {
+        val matrix = Matrix()
+        matrix.postRotate(degrees.toFloat())
+        val bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        bmp.compress(path.getCompressionFormat(), 90, out)
+    }
 }

@@ -1458,13 +1458,6 @@ fun AppCompatActivity.fixDateTaken(
     }
 }
 
-fun saveFile(path: String, bitmap: Bitmap, out: FileOutputStream, degrees: Int) {
-    val matrix = Matrix()
-    matrix.postRotate(degrees.toFloat())
-    val bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-    bmp.compress(path.getCompressionFormat(), 90, out)
-}
-
 fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> Unit) {
     RunOnBackgroundThreadUseCase {
 
