@@ -7,9 +7,10 @@ import android.os.Build
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.copyFile
-import ca.on.sudbury.hojat.smartgallery.extensions.fileRotatedSuccessfully
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileKey
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
@@ -18,7 +19,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.saveExifRotation
 import ca.on.sudbury.hojat.smartgallery.extensions.saveFile
 import ca.on.sudbury.hojat.smartgallery.extensions.saveImageRotation
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
+import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -70,7 +74,7 @@ object SaveRotatedImageUseCase {
                 with(owner) {
                     copyFile(tmpPath, newPath)
                     applicationContext.rescanPaths(arrayListOf(newPath))
-                    fileRotatedSuccessfully(newPath, oldLastModified)
+                    fileRotatedSuccessfully(this, newPath, oldLastModified)
                 }
 
 
@@ -108,7 +112,7 @@ object SaveRotatedImageUseCase {
             val file = File(path)
             val oldLastModified = file.lastModified()
             if (owner.saveImageRotation(path, degrees)) {
-                owner.fileRotatedSuccessfully(path, oldLastModified)
+                fileRotatedSuccessfully(owner, path, oldLastModified)
                 callback.invoke()
                 if (showToasts) {
                     ShowSafeToastUseCase(owner, R.string.file_saved)
@@ -125,4 +129,20 @@ object SaveRotatedImageUseCase {
             false
         }
     }
+
+    private fun fileRotatedSuccessfully(owner: Activity, path: String, lastModified: Long) {
+        if (owner.config.keepLastModified && lastModified != 0L) {
+            File(path).setLastModified(lastModified)
+            owner.updateLastModified(path, lastModified)
+        }
+
+        Picasso.get().invalidate(path.getFileKey(lastModified))
+        // we cannot refresh a specific image in Glide Cache, so just clear it all
+        val glide = Glide.get(owner.applicationContext)
+        glide.clearDiskCache()
+        owner.runOnUiThread {
+            glide.clearMemory()
+        }
+    }
+
 }
