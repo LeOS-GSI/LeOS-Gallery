@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.os.Environment
-import android.os.StatFs
 import android.provider.MediaStore
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
@@ -46,6 +45,7 @@ fun String.getFileKey(lastModified: Long? = null): String {
 
 fun String.getFilenameFromPath() = substring(lastIndexOf("/") + 1)
 
+// It's currently been used only by other extension functions
 fun String.getFirstParentDirName(context: Context, level: Int): String? {
     val basePath = getBasePath(context)
     val startIndex = basePath.length + 1
