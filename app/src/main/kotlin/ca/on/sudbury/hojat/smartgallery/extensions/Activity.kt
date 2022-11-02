@@ -2753,3 +2753,27 @@ fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop
             }
         }
     }
+
+private fun ensurePublicUri(owner: Context, path: String, applicationId: String): Uri? {
+    return when {
+        owner.hasProperStoredAndroidTreeUri(path) && owner.isRestrictedSAFOnlyRoot(path) -> {
+            owner.getAndroidSAFUri(path)
+        }
+        owner.hasProperStoredDocumentUriSdk30(path) && owner.isAccessibleWithSAFSdk30(path) -> {
+            owner.createDocumentUriUsingFirstParentTreeUri(path)
+        }
+        IsPathOnOtgUseCase(owner, path) -> {
+            owner.getDocumentFile(path)?.uri
+        }
+        else -> {
+            val uri = Uri.parse(path)
+            if (uri.scheme == "content") {
+                uri
+            } else {
+                val newPath = if (uri.toString().startsWith("/")) uri.toString() else uri.path
+                val file = newPath?.let { File(it) }
+                file?.let { owner.getFilePublicUri(it, applicationId) }
+            }
+        }
+    }
+}
