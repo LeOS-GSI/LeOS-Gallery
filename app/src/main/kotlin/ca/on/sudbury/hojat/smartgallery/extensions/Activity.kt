@@ -114,7 +114,9 @@ import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-private fun BaseSimpleActivity.renameCasually(
+// It's been used only by "renameFile" extension function
+private fun renameCasually(
+    owner: BaseSimpleActivity,
     oldPath: String,
     newPath: String,
     isRenamingMultipleFiles: Boolean,
@@ -131,18 +133,18 @@ private fun BaseSimpleActivity.renameCasually(
                 callback?.invoke(false, Android30RenameFormat.CONTENT_RESOLVER)
             } else {
                 val fileUris =
-                    getFileUrisFromFileDirItems(arrayListOf(File(oldPath).toFileDirItem(this)))
-                updateSDK30Uris(fileUris) { success ->
+                    owner.getFileUrisFromFileDirItems(arrayListOf(File(oldPath).toFileDirItem(owner)))
+                owner.updateSDK30Uris(fileUris) { success ->
                     if (success) {
                         val values = ContentValues().apply {
                             put(Images.Media.DISPLAY_NAME, newPath.getFilenameFromPath())
                         }
 
                         try {
-                            contentResolver.update(fileUris.first(), values, null, null)
+                            owner.contentResolver.update(fileUris.first(), values, null, null)
                             callback?.invoke(true, Android30RenameFormat.NONE)
                         } catch (e: Exception) {
-                            ShowSafeToastUseCase(this, e.toString())
+                            ShowSafeToastUseCase(owner, e.toString())
                             callback?.invoke(false, Android30RenameFormat.NONE)
                         }
                     } else {
@@ -151,13 +153,13 @@ private fun BaseSimpleActivity.renameCasually(
                 }
             }
         } else {
-            if (exception is IOException && File(oldPath).isDirectory && isRestrictedWithSAFSdk30(
+            if (exception is IOException && File(oldPath).isDirectory && owner.isRestrictedWithSAFSdk30(
                     oldPath
                 )
             ) {
-                ShowSafeToastUseCase(this, R.string.cannot_rename_folder)
+                ShowSafeToastUseCase(owner, R.string.cannot_rename_folder)
             } else {
-                ShowSafeToastUseCase(this, exception.toString())
+                ShowSafeToastUseCase(owner, exception.toString())
             }
             callback?.invoke(false, Android30RenameFormat.NONE)
         }
@@ -168,26 +170,26 @@ private fun BaseSimpleActivity.renameCasually(
     val tempToNewSucceeds = tempFile.renameTo(newFile)
     if (oldToTempSucceeds && tempToNewSucceeds) {
         if (newFile.isDirectory) {
-            updateInMediaStore(oldPath, newPath)
-            applicationContext.rescanPaths(arrayListOf(newPath)) {
-                runOnUiThread {
+            owner.updateInMediaStore(oldPath, newPath)
+            owner.applicationContext.rescanPaths(arrayListOf(newPath)) {
+                owner.runOnUiThread {
                     callback?.invoke(true, Android30RenameFormat.NONE)
                 }
                 if (!oldPath.equals(newPath, true)) {
-                    deleteFromMediaStore(oldPath)
+                    owner.deleteFromMediaStore(oldPath)
                 }
-                scanPathRecursively(newPath)
+                owner.scanPathRecursively(newPath)
             }
         } else {
-            if (!baseConfig.keepLastModified) {
+            if (!owner.baseConfig.keepLastModified) {
                 newFile.setLastModified(System.currentTimeMillis())
             }
-            updateInMediaStore(oldPath, newPath)
-            scanPathsRecursively(arrayListOf(newPath)) {
+            owner.updateInMediaStore(oldPath, newPath)
+            owner.scanPathsRecursively(arrayListOf(newPath)) {
                 if (!oldPath.equals(newPath, true)) {
-                    deleteFromMediaStore(oldPath)
+                    owner.deleteFromMediaStore(oldPath)
                 }
-                runOnUiThread {
+                owner.runOnUiThread {
                     callback?.invoke(true, Android30RenameFormat.NONE)
                 }
             }
@@ -201,35 +203,38 @@ private fun BaseSimpleActivity.renameCasually(
                 callback?.invoke(false, Android30RenameFormat.SAF)
             } else {
                 val fileUris =
-                    getFileUrisFromFileDirItems(arrayListOf(File(oldPath).toFileDirItem(this)))
-                updateSDK30Uris(fileUris) { success ->
+                    owner.getFileUrisFromFileDirItems(arrayListOf(File(oldPath).toFileDirItem(owner)))
+                owner.updateSDK30Uris(fileUris) { success ->
                     if (!success) {
                         return@updateSDK30Uris
                     }
                     try {
                         val sourceUri = fileUris.first()
-                        val sourceFile = File(oldPath).toFileDirItem(this)
+                        val sourceFile = File(oldPath).toFileDirItem(owner)
 
                         if (oldPath.equals(newPath, true)) {
                             val tempDestination = try {
                                 createTempFile(File(sourceFile.path)) ?: return@updateSDK30Uris
                             } catch (exception: Exception) {
-                                ShowSafeToastUseCase(this, exception.toString())
+                                ShowSafeToastUseCase(owner, exception.toString())
                                 callback?.invoke(false, Android30RenameFormat.NONE)
                                 return@updateSDK30Uris
                             }
 
                             val copyTempSuccess =
-                                copySingleFileSdk30(sourceFile, tempDestination.toFileDirItem(this))
+                                owner.copySingleFileSdk30(
+                                    sourceFile,
+                                    tempDestination.toFileDirItem(owner)
+                                )
                             if (copyTempSuccess) {
-                                contentResolver.delete(sourceUri, null)
+                                owner.contentResolver.delete(sourceUri, null)
                                 tempDestination.renameTo(File(newPath))
-                                if (!baseConfig.keepLastModified) {
+                                if (!owner.baseConfig.keepLastModified) {
                                     newFile.setLastModified(System.currentTimeMillis())
                                 }
-                                updateInMediaStore(oldPath, newPath)
-                                scanPathsRecursively(arrayListOf(newPath)) {
-                                    runOnUiThread {
+                                owner.updateInMediaStore(oldPath, newPath)
+                                owner.scanPathsRecursively(arrayListOf(newPath)) {
+                                    owner.runOnUiThread {
                                         callback?.invoke(true, Android30RenameFormat.NONE)
                                     }
                                 }
@@ -245,32 +250,33 @@ private fun BaseSimpleActivity.renameCasually(
                                 sourceFile.size,
                                 sourceFile.modified
                             )
-                            val copySuccessful = copySingleFileSdk30(sourceFile, destinationFile)
+                            val copySuccessful =
+                                owner.copySingleFileSdk30(sourceFile, destinationFile)
                             if (copySuccessful) {
-                                if (!baseConfig.keepLastModified) {
+                                if (!owner.baseConfig.keepLastModified) {
                                     newFile.setLastModified(System.currentTimeMillis())
                                 }
-                                contentResolver.delete(sourceUri, null)
-                                updateInMediaStore(oldPath, newPath)
-                                scanPathsRecursively(arrayListOf(newPath)) {
-                                    runOnUiThread {
+                                owner.contentResolver.delete(sourceUri, null)
+                                owner.updateInMediaStore(oldPath, newPath)
+                                owner.scanPathsRecursively(arrayListOf(newPath)) {
+                                    owner.runOnUiThread {
                                         callback?.invoke(true, Android30RenameFormat.NONE)
                                     }
                                 }
                             } else {
-                                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+                                ShowSafeToastUseCase(owner, R.string.unknown_error_occurred)
                                 callback?.invoke(false, Android30RenameFormat.NONE)
                             }
                         }
 
                     } catch (e: Exception) {
-                        ShowSafeToastUseCase(this, e.toString())
+                        ShowSafeToastUseCase(owner, e.toString())
                         callback?.invoke(false, Android30RenameFormat.NONE)
                     }
                 }
             }
         } else {
-            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+            ShowSafeToastUseCase(owner, R.string.unknown_error_occurred)
             callback?.invoke(false, Android30RenameFormat.NONE)
         }
     }
@@ -955,7 +961,7 @@ fun BaseSimpleActivity.renameFile(
                 oldPath
             )
         ) {
-            renameCasually(oldPath, newPath, isRenamingMultipleFiles, callback)
+            renameCasually(this, oldPath, newPath, isRenamingMultipleFiles, callback)
         } else {
             handleSAFDialogSdk30(oldPath) {
                 if (!it) {
@@ -1044,7 +1050,7 @@ fun BaseSimpleActivity.renameFile(
                 }
             }
         }
-    } else renameCasually(oldPath, newPath, isRenamingMultipleFiles, callback)
+    } else renameCasually(this, oldPath, newPath, isRenamingMultipleFiles, callback)
 }
 
 fun BaseSimpleActivity.toggleFileVisibility(
