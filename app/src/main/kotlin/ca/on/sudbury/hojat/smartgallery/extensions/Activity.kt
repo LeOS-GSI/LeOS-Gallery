@@ -8,9 +8,7 @@ import android.content.ContentProviderOperation
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.net.Uri
@@ -2139,13 +2137,14 @@ private fun deleteFilesBg(
                     }
                 }
             } else {
-                owner.deleteFilesCasual(files, allowDeleteFolder, callback)
+                deleteFilesCasual(owner, files, allowDeleteFolder, callback)
             }
         }
     }
 }
 
-private fun BaseSimpleActivity.deleteFilesCasual(
+private fun deleteFilesCasual(
+    owner: BaseSimpleActivity,
     files: List<FileDirItem>,
     allowDeleteFolder: Boolean = false,
     callback: ((wasSuccess: Boolean) -> Unit)? = null
@@ -2153,7 +2152,7 @@ private fun BaseSimpleActivity.deleteFilesCasual(
     var wasSuccess = false
     val failedFileDirItems = java.util.ArrayList<FileDirItem>()
     files.forEachIndexed { index, file ->
-        deleteFileBg(file, allowDeleteFolder, true) {
+        owner.deleteFileBg(file, allowDeleteFolder, true) {
             if (it) {
                 wasSuccess = true
             } else {
@@ -2162,14 +2161,14 @@ private fun BaseSimpleActivity.deleteFilesCasual(
 
             if (index == files.lastIndex) {
                 if (IsRPlusUseCase() && failedFileDirItems.isNotEmpty()) {
-                    val fileUris = getFileUrisFromFileDirItems(failedFileDirItems)
-                    deleteSDK30Uris(fileUris) { success ->
-                        runOnUiThread {
+                    val fileUris = owner.getFileUrisFromFileDirItems(failedFileDirItems)
+                    owner.deleteSDK30Uris(fileUris) { success ->
+                        owner.runOnUiThread {
                             callback?.invoke(success)
                         }
                     }
                 } else {
-                    runOnUiThread {
+                    owner.runOnUiThread {
                         callback?.invoke(wasSuccess)
                     }
                 }
