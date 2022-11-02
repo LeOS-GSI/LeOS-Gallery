@@ -254,7 +254,6 @@ fun Context.createSAFDirectorySdk30(path: String): Boolean {
     }
 }
 
-
 fun Context.getDoesFilePathExistSdk30(path: String): Boolean {
     return when {
         isAccessibleWithSAFSdk30(path) -> getFastDocumentSdk30(path)?.exists() ?: false
@@ -262,12 +261,12 @@ fun Context.getDoesFilePathExistSdk30(path: String): Boolean {
     }
 }
 
-fun Context.getMediaContent(path: String, uri: Uri): Uri? {
+private fun getMediaContent(owner: Context, path: String, uri: Uri): Uri? {
     val projection = arrayOf(Images.Media._ID)
     val selection = Images.Media.DATA + "= ?"
     val selectionArgs = arrayOf(path)
     try {
-        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        val cursor = owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
         cursor?.use {
             if (cursor.moveToFirst()) {
                 val id = cursor.getIntValue(Images.Media._ID).toString()
@@ -530,7 +529,7 @@ fun Context.getFilePublicUri(file: File, applicationId: String): Uri {
     var uri = if (file.absolutePath.isMediaFile()) {
         getMediaContentUri(file.absolutePath)
     } else {
-        getMediaContent(file.absolutePath, Files.getContentUri("external"))
+        getMediaContent(this, file.absolutePath, Files.getContentUri("external"))
     }
 
     if (uri == null) {
@@ -642,7 +641,7 @@ fun Context.getMediaContentUri(path: String): Uri? {
         else -> Files.getContentUri("external")
     }
 
-    return getMediaContent(path, uri)
+    return getMediaContent(this, path, uri)
 }
 
 fun getPermissionString(id: Int) = when (id) {
