@@ -1935,19 +1935,6 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
     }
 }
 
-fun BaseSimpleActivity.isShowingOTGDialog(path: String): Boolean {
-    return if (
-        !IsRPlusUseCase() &&
-        IsPathOnOtgUseCase(this, path) &&
-        (baseConfig.OTGTreeUri.isEmpty() || !hasProperStoredTreeUri(true))
-    ) {
-        showOTGPermissionDialog(path)
-        true
-    } else {
-        false
-    }
-}
-
 fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
     runOnUiThread {
         if (!isDestroyed && !isFinishing) {

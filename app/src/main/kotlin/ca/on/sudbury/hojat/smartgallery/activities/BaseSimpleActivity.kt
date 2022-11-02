@@ -34,7 +34,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.util.Pair
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingAndroidSAFDialog
-import ca.on.sudbury.hojat.smartgallery.extensions.isShowingOTGDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFCreateDocumentDialogSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isShowingSAFDialogSdk30
@@ -93,6 +92,8 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog.Mode
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
+import ca.on.sudbury.hojat.smartgallery.extensions.hasProperStoredTreeUri
+import ca.on.sudbury.hojat.smartgallery.extensions.showOTGPermissionDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
 import ca.on.sudbury.hojat.smartgallery.helpers.MyContextWrapper
@@ -1239,4 +1240,18 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     private fun removeBit(inputBit: Int, bit: Int) = addBit(inputBit, bit) - bit
 
     private fun addBit(inputBit: Int, bit: Int) = inputBit or bit
+
+    private fun isShowingOTGDialog(path: String): Boolean {
+        return if (
+            !IsRPlusUseCase() &&
+            IsPathOnOtgUseCase(this, path) &&
+            (baseConfig.OTGTreeUri.isEmpty() || !hasProperStoredTreeUri(true))
+        ) {
+            showOTGPermissionDialog(path)
+            true
+        } else {
+            false
+        }
+    }
+
 }
