@@ -16,7 +16,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.canModifyEXIF
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
@@ -42,6 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.MD5
+import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -97,7 +97,7 @@ class PropertiesDialog() {
         val builder = activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
 
-        if (!path.startsWith("content://") && path.canModifyEXIF() && activity.isPathOnInternalStorage(
+        if (!path.startsWith("content://") && canModifyEXIF(path) && activity.isPathOnInternalStorage(
                 path
             )
         ) {
@@ -375,7 +375,7 @@ class PropertiesDialog() {
         val builder = activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.ok, null)
 
-        if (!paths.any { it.startsWith("content://") } && paths.any { it.canModifyEXIF() } && paths.any {
+        if (!paths.any { it.startsWith("content://") } && paths.any { canModifyEXIF(it) } && paths.any {
                 activity.isPathOnInternalStorage(
                     it
                 )
@@ -455,7 +455,7 @@ class PropertiesDialog() {
     private fun removeEXIFFromPaths(paths: List<String>) {
         ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
             try {
-                paths.filter { mActivity.isPathOnInternalStorage(it) && it.canModifyEXIF() }
+                paths.filter { mActivity.isPathOnInternalStorage(it) && canModifyEXIF(it) }
                     .forEach {
                         removeValues(ExifInterface(it))
                     }
@@ -543,5 +543,8 @@ class PropertiesDialog() {
 
         exifInterface.saveAttributes()
     }
+
+    private fun canModifyEXIF(extensionName: String) =
+        extensionsSupportingEXIF.any { extensionName.endsWith(it, true) }
 
 }

@@ -874,8 +874,6 @@ fun String.getOTGPublicPath(context: Context) =
         ).replace("/", "%2F")
     }"
 
-fun String.canModifyEXIF() = extensionsSupportingEXIF.any { endsWith(it, true) }
-
 fun String.areDigitsOnly() = matches(Regex("[0-9]+"))
 
 fun String.getGenericMimeType(): String {
