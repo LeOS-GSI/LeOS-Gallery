@@ -8,11 +8,12 @@ import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.copyFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileKey
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.saveExifRotation
@@ -26,6 +27,8 @@ import com.squareup.picasso.Picasso
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 
 /**
  * You give it the owner [BaseSimpleActivity], picture's current path, new path you wanna save the picture in, and the required degrees of rotation. It saves the rotated picture in that path as a new picture.
@@ -64,7 +67,7 @@ object SaveRotatedImageUseCase {
 
                 val oldLastModified = File(oldPath).lastModified()
                 if (IsJpgUseCase(oldPath)) {
-                    owner.copyFile(oldPath, tmpPath)
+                    copyFile(owner, oldPath, tmpPath)
                     saveExifRotation(ExifInterface(tmpPath), newDegrees)
                 } else {
                     val inputstream = owner.getFileInputStreamSync(oldPath)
@@ -72,7 +75,7 @@ object SaveRotatedImageUseCase {
                     saveFile(tmpPath, bitmap, it as FileOutputStream, newDegrees)
                 }
                 with(owner) {
-                    copyFile(tmpPath, newPath)
+                    copyFile(this, tmpPath, newPath)
                     applicationContext.rescanPaths(arrayListOf(newPath))
                     fileRotatedSuccessfully(this, newPath, oldLastModified)
                 }
@@ -144,5 +147,21 @@ object SaveRotatedImageUseCase {
             glide.clearMemory()
         }
     }
+
+    private fun copyFile(owner: BaseSimpleActivity, source: String, destination: String) {
+        var inputStream: InputStream? = null
+        var out: OutputStream? = null
+        try {
+            out = owner.getFileOutputStreamSync(destination, source.getMimeType())
+            inputStream = owner.getFileInputStreamSync(source)
+            inputStream!!.copyTo(out!!)
+        } catch (e: Exception) {
+            ShowSafeToastUseCase(owner, e.toString())
+        } finally {
+            inputStream?.close()
+            out?.close()
+        }
+    }
+
 
 }

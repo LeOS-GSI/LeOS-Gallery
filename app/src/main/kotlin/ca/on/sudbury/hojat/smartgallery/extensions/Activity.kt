@@ -1458,21 +1458,6 @@ fun AppCompatActivity.fixDateTaken(
     }
 }
 
-fun BaseSimpleActivity.copyFile(source: String, destination: String) {
-    var inputStream: InputStream? = null
-    var out: OutputStream? = null
-    try {
-        out = getFileOutputStreamSync(destination, source.getMimeType())
-        inputStream = getFileInputStreamSync(source)
-        inputStream!!.copyTo(out!!)
-    } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
-    } finally {
-        inputStream?.close()
-        out?.close()
-    }
-}
-
 fun saveFile(path: String, bitmap: Bitmap, out: FileOutputStream, degrees: Int) {
     val matrix = Matrix()
     matrix.postRotate(degrees.toFloat())
