@@ -2177,7 +2177,7 @@ private fun deleteFilesCasual(
     }
 }
 
-fun createTempFile(file: File): File? {
+private fun createTempFile(file: File): File? {
     return if (file.isDirectory) {
         createTempDir("temp", "${System.currentTimeMillis()}", file.parentFile)
     } else {
