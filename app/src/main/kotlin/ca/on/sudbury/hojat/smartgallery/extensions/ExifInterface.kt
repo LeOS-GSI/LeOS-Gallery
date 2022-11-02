@@ -49,7 +49,7 @@ fun ExifInterface.getExifProperties(): String {
         }
     }
 
-    getAttribute(ExifInterface.TAG_ISO_SPEED_RATINGS).let {
+    getAttribute(ExifInterface.TAG_PHOTOGRAPHIC_SENSITIVITY).let {
         if (it?.isNotEmpty() == true) {
             exifString += "ISO-$it"
         }
