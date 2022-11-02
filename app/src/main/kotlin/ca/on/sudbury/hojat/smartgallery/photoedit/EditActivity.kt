@@ -57,7 +57,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.extensions.copyNonDimensionAttributesTo
 import ca.on.sudbury.hojat.smartgallery.extensions.fixDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_SIXTEEN_NINE
@@ -70,6 +69,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FilterItem
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CopyNonDimensionExifAttributesUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -1002,7 +1002,8 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         try {
             if (IsNougatPlusUseCase()) {
                 val newExif = ExifInterface(file.absolutePath)
-                oldExif?.copyNonDimensionAttributesTo(newExif)
+
+                oldExif?.let { CopyNonDimensionExifAttributesUseCase(it, newExif) }
             }
         } catch (_: Exception) {
         }

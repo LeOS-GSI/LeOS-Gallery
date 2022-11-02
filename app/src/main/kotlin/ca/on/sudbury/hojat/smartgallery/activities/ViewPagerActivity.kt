@@ -69,7 +69,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.tryCopyMoveFilesTo
 import ca.on.sudbury.hojat.smartgallery.extensions.fixDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.getShortcutImage
 import ca.on.sudbury.hojat.smartgallery.extensions.updateFavorite
-import ca.on.sudbury.hojat.smartgallery.extensions.copyNonDimensionAttributesTo
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
@@ -175,6 +174,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CopyNonDimensionExifAttributesUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
@@ -1413,7 +1413,13 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
             if (IsNougatPlusUseCase()) {
                 val newExif = ExifInterface(file.absolutePath)
-                oldExif?.copyNonDimensionAttributesTo(newExif)
+
+                if (oldExif != null) {
+                    CopyNonDimensionExifAttributesUseCase(oldExif, newExif)
+                }
+                if (oldExif != null) {
+                    CopyNonDimensionExifAttributesUseCase(oldExif, newExif)
+                }
             }
         } catch (_: Exception) {
         }
