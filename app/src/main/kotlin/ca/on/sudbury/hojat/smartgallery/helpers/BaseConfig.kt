@@ -1,16 +1,17 @@
 package ca.on.sudbury.hojat.smartgallery.helpers
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.text.format.DateFormat
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
-import ca.on.sudbury.hojat.smartgallery.extensions.getSharedPrefs
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
+import java.util.LinkedList
 
 open class BaseConfig(val context: Context) {
-    protected val prefs = context.getSharedPrefs()
+    protected val prefs = getSharedPrefs(context)
 
     companion object {
         fun newInstance(context: Context) = BaseConfig(context)
@@ -718,4 +719,8 @@ open class BaseConfig(val context: Context) {
             COLOR_PICKER_RECENT_COLORS,
             recentColors.joinToString(separator = "\n")
         ).apply()
+
+    private fun getSharedPrefs(owner: Context): SharedPreferences =
+        owner.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
+
 }

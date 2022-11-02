@@ -281,9 +281,6 @@ private fun getMediaContent(owner: Context, path: String, uri: Uri): Uri? {
 fun Context.getMyContentProviderCursorLoader() =
     CursorLoader(this, MyContentProvider.MY_CONTENT_URI, null, null, null, null)
 
-fun Context.getSharedPrefs(): SharedPreferences =
-    getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
-
 fun Context.getStringsPackageName() = getString(R.string.package_name)
 
 fun Context.queryCursor(
