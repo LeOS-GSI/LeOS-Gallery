@@ -625,7 +625,7 @@ fun Activity.openEditor(path: String, forceChooser: Boolean = false) {
 
 fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
     val uri = try {
-        ensurePublicUri(path, applicationId)
+        ensurePublicUri(this, path, applicationId)
     } catch (e: Exception) {
         ShowSafeToastUseCase(this, e.toString())
         return null

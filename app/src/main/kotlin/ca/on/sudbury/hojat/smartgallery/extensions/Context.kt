@@ -254,16 +254,16 @@ fun Context.createSAFDirectorySdk30(path: String): Boolean {
     }
 }
 
-fun Context.ensurePublicUri(path: String, applicationId: String): Uri? {
+fun ensurePublicUri(owner: Context, path: String, applicationId: String): Uri? {
     return when {
-        hasProperStoredAndroidTreeUri(path) && isRestrictedSAFOnlyRoot(path) -> {
-            getAndroidSAFUri(path)
+        owner.hasProperStoredAndroidTreeUri(path) && owner.isRestrictedSAFOnlyRoot(path) -> {
+            owner.getAndroidSAFUri(path)
         }
-        hasProperStoredDocumentUriSdk30(path) && isAccessibleWithSAFSdk30(path) -> {
-            createDocumentUriUsingFirstParentTreeUri(path)
+        owner.hasProperStoredDocumentUriSdk30(path) && owner.isAccessibleWithSAFSdk30(path) -> {
+            owner.createDocumentUriUsingFirstParentTreeUri(path)
         }
-        IsPathOnOtgUseCase(this, path) -> {
-            getDocumentFile(path)?.uri
+        IsPathOnOtgUseCase(owner, path) -> {
+            owner.getDocumentFile(path)?.uri
         }
         else -> {
             val uri = Uri.parse(path)
@@ -272,7 +272,7 @@ fun Context.ensurePublicUri(path: String, applicationId: String): Uri? {
             } else {
                 val newPath = if (uri.toString().startsWith("/")) uri.toString() else uri.path
                 val file = newPath?.let { File(it) }
-                file?.let { getFilePublicUri(it, applicationId) }
+                file?.let { owner.getFilePublicUri(it, applicationId) }
             }
         }
     }
