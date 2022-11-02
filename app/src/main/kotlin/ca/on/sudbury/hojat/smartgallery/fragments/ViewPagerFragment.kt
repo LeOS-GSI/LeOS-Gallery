@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
-import ca.on.sudbury.hojat.smartgallery.extensions.getExifProperties
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
@@ -28,6 +27,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetCameraModelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetDateTakenUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetGeneralPropertiesUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import java.io.File
@@ -109,7 +109,7 @@ abstract class ViewPagerFragment : Fragment() {
         }
 
         if (detailsFlag and EXT_EXIF_PROPERTIES != 0) {
-            exif.getExifProperties().let { if (it.isNotEmpty()) details.appendLine(it) }
+            GetGeneralPropertiesUseCase(exif).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
         if (detailsFlag and EXT_GPS != 0) {
