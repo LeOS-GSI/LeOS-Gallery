@@ -1,13 +1,8 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
-import android.annotation.TargetApi
-import android.content.Context
-import android.os.Build
 import androidx.exifinterface.media.ExifInterface
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
-import java.text.SimpleDateFormat
-import java.util.Locale
 import kotlin.math.roundToInt
 
 fun ExifInterface.copyNonDimensionAttributesTo(destination: ExifInterface) {
@@ -24,22 +19,6 @@ fun ExifInterface.copyNonDimensionAttributesTo(destination: ExifInterface) {
         destination.saveAttributes()
     } catch (ignored: Exception) {
     }
-}
-
-@TargetApi(Build.VERSION_CODES.N)
-fun ExifInterface.getExifDateTaken(context: Context): String {
-    val dateTime = getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
-        ?: getAttribute(ExifInterface.TAG_DATETIME)
-    dateTime.let {
-        if (it?.isNotEmpty() == true) {
-            try {
-                val simpleDateFormat = SimpleDateFormat("yyyy:MM:dd kk:mm:ss", Locale.ENGLISH)
-                return simpleDateFormat.parse(it)!!.time.formatDate(context).trim()
-            } catch (ignored: Exception) {
-            }
-        }
-    }
-    return ""
 }
 
 fun ExifInterface.getExifProperties(): String {
@@ -115,4 +94,3 @@ private class ExifInterfaceAttributes {
         }
     }
 }
-

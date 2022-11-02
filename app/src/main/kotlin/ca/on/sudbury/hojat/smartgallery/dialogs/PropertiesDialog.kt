@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
-import ca.on.sudbury.hojat.smartgallery.extensions.getExifDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.getExifProperties
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileInputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -49,6 +48,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetCameraModelUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetDateTakenUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -422,7 +422,7 @@ class PropertiesDialog() {
             ExifInterface(path)
         }
 
-        val dateTaken = exif.getExifDateTaken(activity)
+        val dateTaken = GetDateTakenUseCase(activity, exif)
         if (dateTaken.isNotEmpty()) {
             addProperty(R.string.date_taken, dateTaken)
         }
