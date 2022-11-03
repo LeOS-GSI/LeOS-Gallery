@@ -2645,38 +2645,6 @@ val Context.realScreenSize: Point
         return size
     }
 
-fun Context.renameAndroidSAFDocument(oldPath: String, newPath: String): Boolean {
-    return try {
-        val treeUri = getAndroidTreeUri(oldPath).toUri()
-        val documentId = createAndroidSAFDocumentId(oldPath)
-        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
-        DocumentsContract.renameDocument(
-            contentResolver,
-            parentUri,
-            newPath.getFilenameFromPath()
-        ) != null
-    } catch (e: IllegalStateException) {
-        ShowSafeToastUseCase(this, e.toString())
-        false
-    }
-}
-
-fun Context.renameDocumentSdk30(oldPath: String, newPath: String): Boolean {
-    return try {
-        val treeUri = createFirstParentTreeUri(oldPath)
-        val documentId = getSAFDocumentId(oldPath)
-        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
-        DocumentsContract.renameDocument(
-            contentResolver,
-            parentUri,
-            newPath.getFilenameFromPath()
-        ) != null
-    } catch (e: IllegalStateException) {
-        ShowSafeToastUseCase(this, e.toString())
-        false
-    }
-}
-
 // avoid calling this multiple times in row, it can delete whole folder contents
 fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
     if (paths.isEmpty()) {

@@ -28,6 +28,7 @@ import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
@@ -957,7 +958,7 @@ fun BaseSimpleActivity.renameFile(
 
             try {
                 RunOnBackgroundThreadUseCase {
-                    val success = renameAndroidSAFDocument(oldPath, newPath)
+                    val success = renameAndroidSAFDocument(this, oldPath, newPath)
                     runOnUiThread {
                         callback?.invoke(success, Android30RenameFormat.NONE)
                     }
@@ -985,7 +986,7 @@ fun BaseSimpleActivity.renameFile(
                 try {
                     RunOnBackgroundThreadUseCase {
 
-                        val success = renameDocumentSdk30(oldPath, newPath)
+                        val success = renameDocumentSdk30(this, oldPath, newPath)
                         if (success) {
                             updateInMediaStore(oldPath, newPath)
                             applicationContext.rescanPaths(arrayListOf(newPath)) {
@@ -2780,5 +2781,37 @@ private fun ensurePublicUri(owner: Context, path: String, applicationId: String)
                 file?.let { owner.getFilePublicUri(it, applicationId) }
             }
         }
+    }
+}
+
+private fun renameAndroidSAFDocument(owner: Context, oldPath: String, newPath: String): Boolean {
+    return try {
+        val treeUri = owner.getAndroidTreeUri(oldPath).toUri()
+        val documentId = owner.createAndroidSAFDocumentId(oldPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.renameDocument(
+            owner.contentResolver,
+            parentUri,
+            newPath.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        ShowSafeToastUseCase(owner, e.toString())
+        false
+    }
+}
+
+private fun renameDocumentSdk30(owner: Context, oldPath: String, newPath: String): Boolean {
+    return try {
+        val treeUri = owner.createFirstParentTreeUri(oldPath)
+        val documentId = owner.getSAFDocumentId(oldPath)
+        val parentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        DocumentsContract.renameDocument(
+            owner.contentResolver,
+            parentUri,
+            newPath.getFilenameFromPath()
+        ) != null
+    } catch (e: IllegalStateException) {
+        ShowSafeToastUseCase(owner, e.toString())
+        false
     }
 }
