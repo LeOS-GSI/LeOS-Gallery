@@ -682,18 +682,15 @@ private fun getStorageRootIdForAndroidDir(owner: Context, path: String) =
 fun Context.getUriMimeType(path: String, newUri: Uri): String {
     var mimeType = path.getMimeType()
     if (mimeType.isEmpty()) {
-        mimeType = getMimeTypeFromUri(newUri)
+        mimeType = getMimeTypeFromUri(this, newUri)
     }
     return mimeType
 }
 
-fun Context.getMimeTypeFromUri(uri: Uri): String {
+private fun getMimeTypeFromUri(owner: Context, uri: Uri): String {
     var mimetype = uri.path?.getMimeType() ?: ""
     if (mimetype.isEmpty()) {
-        try {
-            mimetype = contentResolver.getType(uri) ?: ""
-        } catch (_: IllegalStateException) {
-        }
+        mimetype = owner.contentResolver.getType(uri) ?: ""
     }
     return mimetype
 }
@@ -3323,7 +3320,7 @@ fun Context.getFileSize(treeUri: Uri, documentId: String): Long {
 fun Context.createAndroidSAFDocumentId(path: String): String {
     val basePath = path.getBasePath(this)
     val relativePath = path.substring(basePath.length).trim('/')
-    val storageId = getStorageRootIdForAndroidDir(this ,path)
+    val storageId = getStorageRootIdForAndroidDir(this, path)
     return "$storageId:$relativePath"
 }
 
