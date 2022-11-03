@@ -1041,7 +1041,7 @@ fun Context.getDirsToShow(
             it.subfoldersMediaCount = it.mediaCnt
         }
 
-        val parentDirs = getDirectParentSubfolders(dirs, currentPathPrefix)
+        val parentDirs = getDirectParentSubfolders(this, dirs, currentPathPrefix)
 
         // update the count of sub-folders
         for (child in dirs) {
@@ -1096,7 +1096,8 @@ fun Context.getDirsToShow(
     }
 }
 
-fun Context.getDirectParentSubfolders(
+private fun getDirectParentSubfolders(
+    owner: Context,
     dirs: ArrayList<Directory>,
     currentPathPrefix: String
 ): ArrayList<Directory> {
@@ -1139,7 +1140,7 @@ fun Context.getDirectParentSubfolders(
             val parent = File(path).parent
             if (parent != null && !folders.contains(parent) && dirs.none { it.path == parent }) {
                 currentPaths.add(parent)
-                val isSortingAscending = config.sorting.isSortingAscending()
+                val isSortingAscending = owner.config.sorting.isSortingAscending()
                 val subDirs = dirs.filter {
                     File(it.path).parent.equals(
                         File(path).parent,
@@ -1168,12 +1169,12 @@ fun Context.getDirectParentSubfolders(
                         newDirId++,
                         parent,
                         subDirs.first().tmb,
-                        getFolderNameFromPath(parent),
+                        owner.getFolderNameFromPath(parent),
                         subDirs.sumOf { it.mediaCnt },
                         lastModified,
                         dateTaken,
                         subDirs.sumByLong { it.size },
-                        getPathLocation(parent),
+                        owner.getPathLocation(parent),
                         mediaTypes,
                         ""
                     )
@@ -1220,7 +1221,7 @@ fun Context.getDirectParentSubfolders(
 
     val dirsToShow = dirs.filter { folders.contains(it.path) } as ArrayList<Directory>
     return if (areDirectSubfoldersAvailable) {
-        getDirectParentSubfolders(dirsToShow, currentPathPrefix)
+        getDirectParentSubfolders(owner, dirsToShow, currentPathPrefix)
     } else {
         dirsToShow
     }
