@@ -520,7 +520,7 @@ fun Context.getFilePublicUri(file: File, applicationId: String): Uri {
     // for images/videos/gifs try getting a media content uri first, like content://media/external/images/media/438
     // if media content uri is null, get our custom uri like content://com.simplemobiletools.gallery.provider/external_files/emulated/0/DCIM/IMG_20171104_233915.jpg
     var uri = if (file.absolutePath.isMediaFile()) {
-        getMediaContentUri(file.absolutePath)
+        getMediaContentUri(this, file.absolutePath)
     } else {
         getMediaContent(this, file.absolutePath, Files.getContentUri("external"))
     }
@@ -620,14 +620,14 @@ fun Context.getLatestMediaId(uri: Uri = Files.getContentUri("external")): Long {
     return 0
 }
 
-fun Context.getMediaContentUri(path: String): Uri? {
+private fun getMediaContentUri(owner: Context, path: String): Uri? {
     val uri = when {
         path.isImageFast() -> Images.Media.EXTERNAL_CONTENT_URI
         path.isVideoFast() -> MediaStore.Video.Media.EXTERNAL_CONTENT_URI
         else -> Files.getContentUri("external")
     }
 
-    return getMediaContent(this, path, uri)
+    return getMediaContent(owner, path, uri)
 }
 
 fun getPermissionString(id: Int) = when (id) {
