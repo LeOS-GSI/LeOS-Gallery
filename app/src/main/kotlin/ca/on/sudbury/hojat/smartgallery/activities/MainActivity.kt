@@ -57,7 +57,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
@@ -143,6 +142,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
@@ -641,7 +641,9 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         if (config.tempFolderPath.isNotEmpty()) {
             val newFolder = File(config.tempFolderPath)
             if (getDoesFilePathExist(newFolder.absolutePath) && newFolder.isDirectory) {
-                if (newFolder.getProperSize(true) == 0L && newFolder.getFileCount(true) == 0 && newFolder.list()
+                if (CalculateDirectorySizeUseCase(newFolder, true) == 0L && newFolder.getFileCount(
+                        true
+                    ) == 0 && newFolder.list()
                         ?.isEmpty() == true
                 ) {
                     ShowSafeToastUseCase(
@@ -1867,7 +1869,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun getOTGFolderChildrenNames(path: String) =
-        getOTGFolderChildren(this ,path)?.map { it.name }?.toMutableList()
+        getOTGFolderChildren(this, path)?.map { it.name }?.toMutableList()
 
     private fun getOTGFolderChildren(owner: Context, path: String): Array<DocumentFile>? =
         owner.getDocumentFile(path)?.listFiles()

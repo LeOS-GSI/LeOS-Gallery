@@ -6,31 +6,6 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File
 import java.util.HashMap
 
-fun File.getProperSize(countHiddenItems: Boolean): Long {
-    return if (isDirectory) {
-        getDirectorySize(this, countHiddenItems)
-    } else {
-        length()
-    }
-}
-
-private fun getDirectorySize(dir: File, countHiddenItems: Boolean): Long {
-    var size = 0L
-    if (dir.exists()) {
-        val files = dir.listFiles()
-        if (files != null) {
-            for (i in files.indices) {
-                if (files[i].isDirectory) {
-                    size += getDirectorySize(files[i], countHiddenItems)
-                } else if (!files[i].name.startsWith('.') && !dir.name.startsWith('.') || countHiddenItems) {
-                    size += files[i].length()
-                }
-            }
-        }
-    }
-    return size
-}
-
 fun File.getFileCount(countHiddenItems: Boolean): Int {
     return if (isDirectory) {
         getDirectoryFileCount(this, countHiddenItems)

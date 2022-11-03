@@ -18,7 +18,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -143,6 +142,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToBooleanUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToIntUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToStringSetUseCase
@@ -957,7 +957,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupClearCache() {
         RunOnBackgroundThreadUseCase {
-            val size = FormatFileSizeUseCase(cacheDir.getProperSize(true))
+            val size = FormatFileSizeUseCase(CalculateDirectorySizeUseCase(cacheDir, true))
             runOnUiThread {
                 binding.settingsClearCacheSize.text = size
             }
@@ -969,7 +969,7 @@ class SettingsActivity : SimpleActivity() {
                 cacheDir.deleteRecursively()
                 runOnUiThread {
                     binding.settingsClearCacheSize.text =
-                        FormatFileSizeUseCase(cacheDir.getProperSize(true))
+                        FormatFileSizeUseCase(CalculateDirectorySizeUseCase(cacheDir, true))
                 }
             }
         }

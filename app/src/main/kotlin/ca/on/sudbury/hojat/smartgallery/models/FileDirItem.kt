@@ -27,7 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperChildrenCount
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.isAndroidDataDir
@@ -43,6 +42,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
@@ -141,7 +141,7 @@ open class FileDirItem(
                     getSizeFromContentUri(context, Uri.parse(path))
                 }
             }
-            else -> File(path).getProperSize(countHidden)
+            else -> CalculateDirectorySizeUseCase(File(path), countHidden)
         }
     }
 
