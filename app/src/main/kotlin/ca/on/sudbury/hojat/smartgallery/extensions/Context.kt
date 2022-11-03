@@ -1312,12 +1312,6 @@ private fun rescanFolderMediaSync(owner: Context, path: String) {
     }
 }
 
-fun Context.storeDirectoryItems(items: ArrayList<Directory>) {
-    RunOnBackgroundThreadUseCase {
-        GalleryDatabase.getInstance(applicationContext).DirectoryDao().insertAll(items)
-    }
-}
-
 fun Context.checkAppendingHidden(
     path: String,
     hidden: String,

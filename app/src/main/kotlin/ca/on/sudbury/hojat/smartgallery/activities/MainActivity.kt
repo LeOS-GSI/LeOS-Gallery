@@ -77,7 +77,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
 import ca.on.sudbury.hojat.smartgallery.extensions.movePinnedDirectoriesToFront
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.removeInvalidDBDirectories
-import ca.on.sudbury.hojat.smartgallery.extensions.storeDirectoryItems
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.underlineText
@@ -1859,4 +1858,11 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             checkWhatsNew(this, BuildConfig.VERSION_CODE)
         }
     }
+
+    private fun storeDirectoryItems(items: ArrayList<Directory>) {
+        RunOnBackgroundThreadUseCase {
+            GalleryDatabase.getInstance(applicationContext).DirectoryDao().insertAll(items)
+        }
+    }
+
 }
