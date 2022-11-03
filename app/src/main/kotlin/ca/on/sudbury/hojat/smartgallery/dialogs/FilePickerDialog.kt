@@ -3,6 +3,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.os.Environment
 import android.os.Parcelable
 import android.provider.MediaStore
@@ -23,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
-import ca.on.sudbury.hojat.smartgallery.extensions.getOTGItems
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
@@ -49,12 +49,14 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
 import timber.log.Timber
 import java.io.File
+import java.net.URLDecoder
 import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -315,7 +317,8 @@ class FilePickerDialog(
                     }
                 }
             }
-            IsPathOnOtgUseCase(activity, path) -> activity.getOTGItems(
+            IsPathOnOtgUseCase(activity, path) -> getOTGItems(
+                activity,
                 path,
                 showHidden,
                 false,
@@ -455,4 +458,76 @@ class FilePickerDialog(
         return lastModifieds
     }
 
+    private fun getOTGItems(
+        owner: Context,
+        path: String,
+        shouldShowHidden: Boolean,
+        getProperFileSize: Boolean,
+        callback: (ArrayList<FileDirItem>) -> Unit
+    ) {
+        val items = java.util.ArrayList<FileDirItem>()
+        val otgTreeUri = owner.baseConfig.OTGTreeUri
+        var rootUri = try {
+            DocumentFile.fromTreeUri(owner.applicationContext, Uri.parse(otgTreeUri))
+        } catch (e: Exception) {
+            ShowSafeToastUseCase(owner, e.toString())
+            owner.baseConfig.OTGPath = ""
+            owner.baseConfig.OTGTreeUri = ""
+            owner.baseConfig.OTGPartition = ""
+            null
+        }
+
+        if (rootUri == null) {
+            callback(items)
+            return
+        }
+
+        val parts = path.split("/").dropLastWhile { it.isEmpty() }
+        for (part in parts) {
+            if (path == owner.baseConfig.OTGPath) {
+                break
+            }
+
+            if (part == "otg:" || part == "") {
+                continue
+            }
+
+            val file = rootUri!!.findFile(part)
+            if (file != null) {
+                rootUri = file
+            }
+        }
+
+        val files = rootUri!!.listFiles().filter { it.exists() }
+
+        val basePath = "${owner.baseConfig.OTGTreeUri}/document/${owner.baseConfig.OTGPartition}%3A"
+        for (file in files) {
+            val name = file.name ?: continue
+            if (!shouldShowHidden && name.startsWith(".")) {
+                continue
+            }
+
+            val isDirectory = file.isDirectory
+            val filePath = file.uri.toString().substring(basePath.length)
+            val decodedPath = owner.baseConfig.OTGPath + "/" + URLDecoder.decode(filePath, "UTF-8")
+            val fileSize = when {
+                getProperFileSize -> GetFileSizeUseCase(file, shouldShowHidden)
+                isDirectory -> 0L
+                else -> file.length()
+            }
+
+            val childrenCount = if (isDirectory) {
+                file.listFiles().size
+            } else {
+                0
+            }
+
+            val lastModified = file.lastModified()
+            val fileDirItem =
+                FileDirItem(decodedPath, name, isDirectory, childrenCount, fileSize, lastModified)
+            items.add(fileDirItem)
+        }
+
+        callback(items)
+    }
 }

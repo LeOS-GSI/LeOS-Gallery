@@ -12,9 +12,12 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.os.TransactionTooLargeException
 import android.provider.DocumentsContract
 import android.provider.MediaStore
@@ -866,7 +869,7 @@ fun BaseSimpleActivity.deleteFileBg(
         if (fileDeleted) {
             deleteFromMediaStore(path) { needsRescan ->
                 if (needsRescan) {
-                    rescanAndDeletePath(path) {
+                    rescanAndDeletePath(this, path) {
                         runOnUiThread {
                             callback?.invoke(true)
                         }
@@ -2813,5 +2816,19 @@ private fun renameDocumentSdk30(owner: Context, oldPath: String, newPath: String
     } catch (e: IllegalStateException) {
         ShowSafeToastUseCase(owner, e.toString())
         false
+    }
+}
+
+private fun rescanAndDeletePath(owner: Context, path: String, callback: () -> Unit) {
+    val scanFileMaxDuration = 1000L
+    val scanFileHandler = Handler(Looper.getMainLooper())
+    scanFileHandler.postDelayed({
+        callback()
+    }, scanFileMaxDuration)
+
+    MediaScannerConnection.scanFile(owner.applicationContext, arrayOf(path), null) { path, uri ->
+        scanFileHandler.removeCallbacksAndMessages(null)
+        owner.applicationContext.contentResolver.delete(uri, null, null)
+        callback()
     }
 }

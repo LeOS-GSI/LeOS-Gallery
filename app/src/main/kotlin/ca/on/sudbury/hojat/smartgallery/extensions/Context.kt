@@ -1955,9 +1955,6 @@ private fun getOTGFastDocumentFile(
     return DocumentFile.fromSingleUri(owner, Uri.parse(fullUri))
 }
 
-private fun getOTGFolderChildren(owner: Context, path: String): Array<DocumentFile>? =
-    owner.getDocumentFile(path)?.listFiles()
-
 fun Context.getFavoritePaths(): ArrayList<String> {
     return try {
         GalleryDatabase.getInstance(applicationContext).FavoritesDao()
@@ -2671,14 +2668,6 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
     }
 }
 
-fun saveExifRotation(exif: ExifInterface, degrees: Int) {
-    val orientation =
-        exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-    val orientationDegrees = (getDegreesFromOrientation(orientation) + degrees) % 360
-    exif.setAttribute(ExifInterface.TAG_ORIENTATION, orientationDegrees.orientationFromDegrees())
-    exif.saveAttributes()
-}
-
 private fun getDegreesFromOrientation(orientation: Int) = when (orientation) {
     ExifInterface.ORIENTATION_ROTATE_270 -> 270
     ExifInterface.ORIENTATION_ROTATE_180 -> 180
@@ -2746,6 +2735,7 @@ fun Context.checkAppIconColor() {
 }
 
 val Context.statusBarHeight: Int
+    @SuppressLint("DiscouragedApi")
     get() {
         var statusBarHeight = 0
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -2873,20 +2863,6 @@ fun Context.deleteFromMediaStore(path: String, callback: ((needsRescan: Boolean)
 
 }
 
-fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
-    val scanFileMaxDuration = 1000L
-    val scanFileHandler = Handler(Looper.getMainLooper())
-    scanFileHandler.postDelayed({
-        callback()
-    }, scanFileMaxDuration)
-
-    MediaScannerConnection.scanFile(applicationContext, arrayOf(path), null) { path, uri ->
-        scanFileHandler.removeCallbacksAndMessages(null)
-        applicationContext.contentResolver.delete(uri, null, null)
-        callback()
-    }
-}
-
 fun Context.updateInMediaStore(oldPath: String, newPath: String) {
     RunOnBackgroundThreadUseCase {
         val values = ContentValues().apply {
@@ -2918,78 +2894,6 @@ fun Context.updateLastModified(path: String, lastModified: Long) {
         contentResolver.update(uri, values, selection, selectionArgs)
     } catch (ignored: Exception) {
     }
-}
-
-fun Context.getOTGItems(
-    path: String,
-    shouldShowHidden: Boolean,
-    getProperFileSize: Boolean,
-    callback: (ArrayList<FileDirItem>) -> Unit
-) {
-    val items = java.util.ArrayList<FileDirItem>()
-    val otgTreeUri = baseConfig.OTGTreeUri
-    var rootUri = try {
-        DocumentFile.fromTreeUri(applicationContext, Uri.parse(otgTreeUri))
-    } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
-        baseConfig.OTGPath = ""
-        baseConfig.OTGTreeUri = ""
-        baseConfig.OTGPartition = ""
-        null
-    }
-
-    if (rootUri == null) {
-        callback(items)
-        return
-    }
-
-    val parts = path.split("/").dropLastWhile { it.isEmpty() }
-    for (part in parts) {
-        if (path == baseConfig.OTGPath) {
-            break
-        }
-
-        if (part == "otg:" || part == "") {
-            continue
-        }
-
-        val file = rootUri!!.findFile(part)
-        if (file != null) {
-            rootUri = file
-        }
-    }
-
-    val files = rootUri!!.listFiles().filter { it.exists() }
-
-    val basePath = "${baseConfig.OTGTreeUri}/document/${baseConfig.OTGPartition}%3A"
-    for (file in files) {
-        val name = file.name ?: continue
-        if (!shouldShowHidden && name.startsWith(".")) {
-            continue
-        }
-
-        val isDirectory = file.isDirectory
-        val filePath = file.uri.toString().substring(basePath.length)
-        val decodedPath = baseConfig.OTGPath + "/" + URLDecoder.decode(filePath, "UTF-8")
-        val fileSize = when {
-            getProperFileSize -> GetFileSizeUseCase(file, shouldShowHidden)
-            isDirectory -> 0L
-            else -> file.length()
-        }
-
-        val childrenCount = if (isDirectory) {
-            file.listFiles().size
-        } else {
-            0
-        }
-
-        val lastModified = file.lastModified()
-        val fileDirItem =
-            FileDirItem(decodedPath, name, isDirectory, childrenCount, fileSize, lastModified)
-        items.add(fileDirItem)
-    }
-
-    callback(items)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -3126,8 +3030,8 @@ fun Context.createAndroidSAFDocumentId(path: String): String {
     return "$storageId:$relativePath"
 }
 
-fun Context.getAndroidSAFDocument(path: String): DocumentFile? {
-    val basePath = path.getBasePath(this)
+private fun getAndroidSAFDocument(owner: Context, path: String): DocumentFile? {
+    val basePath = path.getBasePath(owner)
     val androidPath = File(basePath, "Android").path
     var relativePath = path.substring(androidPath.length)
     if (relativePath.startsWith(File.separator)) {
@@ -3135,8 +3039,8 @@ fun Context.getAndroidSAFDocument(path: String): DocumentFile? {
     }
 
     return try {
-        val treeUri = getAndroidTreeUri(path).toUri()
-        var document = DocumentFile.fromTreeUri(applicationContext, treeUri)
+        val treeUri = owner.getAndroidTreeUri(path).toUri()
+        var document = DocumentFile.fromTreeUri(owner.applicationContext, treeUri)
         val parts = relativePath.split("/").filter { it.isNotEmpty() }
         for (part in parts) {
             document = document?.findFile(part)
@@ -3148,7 +3052,7 @@ fun Context.getAndroidSAFDocument(path: String): DocumentFile? {
 }
 
 fun Context.getSomeAndroidSAFDocument(path: String): DocumentFile? =
-    getFastAndroidSAFDocument(path) ?: getAndroidSAFDocument(path)
+    getFastAndroidSAFDocument(path) ?: getAndroidSAFDocument(this, path)
 
 fun Context.getFastAndroidSAFDocument(path: String): DocumentFile? {
     val treeUri = getAndroidTreeUri(path)
