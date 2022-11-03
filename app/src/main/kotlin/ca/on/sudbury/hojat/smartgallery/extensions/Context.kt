@@ -671,20 +671,6 @@ private fun getSAFStorageId(owner: Context, fullPath: String): String {
     }
 }
 
-fun Context.getSizeFromContentUri(uri: Uri): Long {
-    val projection = arrayOf(OpenableColumns.SIZE)
-    try {
-        val cursor = contentResolver.query(uri, projection, null, null, null)
-        cursor?.use {
-            if (cursor.moveToFirst()) {
-                return cursor.getLongValue(OpenableColumns.SIZE)
-            }
-        }
-    } catch (_: Exception) {
-    }
-    return 0L
-}
-
 fun Context.getSomeDocumentSdk30(path: String): DocumentFile? =
     getFastDocumentSdk30(path) ?: getDocumentSdk30(path)
 

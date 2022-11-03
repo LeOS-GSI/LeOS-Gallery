@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlbum
@@ -20,11 +21,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
+import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getMediaStoreLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
-import ca.on.sudbury.hojat.smartgallery.extensions.getSizeFromContentUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getTitle
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
@@ -122,6 +123,7 @@ open class FileDirItem(
             else -> name
         }
 
+
     @SuppressLint("Recycle")
     fun getProperSize(context: Context, countHidden: Boolean): Long {
         return when {
@@ -133,7 +135,7 @@ open class FileDirItem(
                     context.contentResolver.openInputStream(Uri.parse(path))?.available()?.toLong()
                         ?: 0L
                 } catch (e: Exception) {
-                    context.getSizeFromContentUri(Uri.parse(path))
+                    getSizeFromContentUri(context ,Uri.parse(path))
                 }
             }
             else -> File(path).getProperSize(countHidden)
@@ -215,4 +217,16 @@ open class FileDirItem(
 
         return Uri.withAppendedPath(uri, mediaStoreId.toString())
     }
+
+    private fun getSizeFromContentUri(owner: Context, uri: Uri): Long {
+        val projection = arrayOf(OpenableColumns.SIZE)
+        val cursor = owner.contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                return cursor.getLongValue(OpenableColumns.SIZE)
+            }
+        }
+        return 0L
+    }
+
 }
