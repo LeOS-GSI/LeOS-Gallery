@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RadioButton
@@ -8,7 +9,6 @@ import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getBasePath
-import ca.on.sudbury.hojat.smartgallery.extensions.hasExternalSDCard
 import ca.on.sudbury.hojat.smartgallery.extensions.hasOTGConnected
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
@@ -48,7 +48,7 @@ class StoragePickerDialog(
         Timber.d("Hojat Ghasemi : StoragePickerDialog was called")
         availableStorages.add(activity.internalStoragePath)
         when {
-            activity.hasExternalSDCard() -> availableStorages.add(activity.baseConfig.sdCardPath)
+            hasExternalSDCard(activity) -> availableStorages.add(activity.baseConfig.sdCardPath)
             activity.hasOTGConnected() -> availableStorages.add("otg")
             showRoot -> availableStorages.add("root")
         }
@@ -84,7 +84,7 @@ class StoragePickerDialog(
         }
         radioGroup.addView(internalButton, layoutParams)
 
-        if (activity.hasExternalSDCard()) {
+        if (hasExternalSDCard(activity)) {
             val sdButton = inflater.inflate(R.layout.radio_button, null) as RadioButton
             sdButton.apply {
                 id = idSd
@@ -159,4 +159,7 @@ class StoragePickerDialog(
         dialog?.dismiss()
         callback("/")
     }
+
+    private fun hasExternalSDCard(owner: Context) = owner.baseConfig.sdCardPath.isNotEmpty()
+
 }

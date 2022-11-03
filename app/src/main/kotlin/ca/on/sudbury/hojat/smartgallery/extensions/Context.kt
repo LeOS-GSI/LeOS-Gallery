@@ -3151,8 +3151,6 @@ fun Context.getSDCardPath(): String {
     return finalPath
 }
 
-fun Context.hasExternalSDCard() = baseConfig.sdCardPath.isNotEmpty()
-
 fun Context.hasProperStoredTreeUri(isOTG: Boolean): Boolean {
     val uri = if (isOTG) baseConfig.OTGTreeUri else baseConfig.sdTreeUri
     val hasProperUri = contentResolver.persistedUriPermissions.any { it.uri.toString() == uri }
