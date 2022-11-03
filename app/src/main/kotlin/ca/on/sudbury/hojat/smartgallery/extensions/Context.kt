@@ -1174,7 +1174,7 @@ private fun getDirectParentSubfolders(
                         lastModified,
                         dateTaken,
                         subDirs.sumByLong { it.size },
-                        owner.getPathLocation(parent),
+                        getPathLocation(owner, parent),
                         mediaTypes,
                         ""
                     )
@@ -1421,7 +1421,7 @@ fun Context.addTempFolderIfNeeded(dirs: ArrayList<Directory>): ArrayList<Directo
             0,
             0,
             0L,
-            getPathLocation(tempFolderPath),
+            getPathLocation(this, tempFolderPath),
             0,
             ""
         )
@@ -1433,10 +1433,10 @@ fun Context.addTempFolderIfNeeded(dirs: ArrayList<Directory>): ArrayList<Directo
     }
 }
 
-fun Context.getPathLocation(path: String): Int {
+private fun getPathLocation(owner: Context, path: String): Int {
     return when {
-        IsPathOnSdUseCase(this, path) -> LOCATION_SD
-        IsPathOnOtgUseCase(this, path) -> LOCATION_OTG
+        IsPathOnSdUseCase(owner, path) -> LOCATION_SD
+        IsPathOnOtgUseCase(owner, path) -> LOCATION_OTG
         else -> LOCATION_INTERNAL
     }
 }
@@ -2242,7 +2242,7 @@ fun Context.createDirectoryFromMedia(
         lastModified,
         dateTaken,
         size,
-        getPathLocation(path),
+        getPathLocation(this, path),
         mediaTypes,
         sortValue
     )
