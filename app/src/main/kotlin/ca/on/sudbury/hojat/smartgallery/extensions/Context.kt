@@ -671,9 +671,6 @@ private fun getSAFStorageId(owner: Context, fullPath: String): String {
     }
 }
 
-fun Context.getSomeDocumentSdk30(path: String): DocumentFile? =
-    getFastDocumentSdk30(path) ?: getDocumentSdk30(path)
-
 fun Context.getStorageRootIdForAndroidDir(path: String) =
     getAndroidTreeUri(path).removeSuffix(
         if (isAndroidDataDir(

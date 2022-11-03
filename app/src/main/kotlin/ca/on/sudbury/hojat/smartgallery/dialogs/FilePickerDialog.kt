@@ -2,6 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Environment
 import android.os.Parcelable
 import android.view.KeyEvent
@@ -28,7 +29,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getSomeAndroidSAFDocument
 import ca.on.sudbury.hojat.smartgallery.extensions.getSomeDocumentFile
-import ca.on.sudbury.hojat.smartgallery.extensions.getSomeDocumentSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.getTextSize
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
@@ -43,6 +43,8 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.adapters.FilepickerFavoritesAdapter
 import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFilepickerBinding
+import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentSdk30
+import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentSdk30
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
@@ -248,7 +250,7 @@ class FilePickerDialog(
                 if (enforceStorageRestrictions) {
                     activity.handleSAFDialogSdk30(currPath) {
                         if (it) {
-                            val document = activity.getSomeDocumentSdk30(currPath)
+                            val document = getSomeDocumentSdk30(activity, currPath)
                             sendSuccessForDocumentFile(document ?: return@handleSAFDialogSdk30)
                         }
                     }
@@ -410,4 +412,8 @@ class FilePickerDialog(
             }
         }
     }
+
+    private fun getSomeDocumentSdk30(owner: Context, path: String): DocumentFile? =
+        owner.getFastDocumentSdk30(path) ?: owner.getDocumentSdk30(path)
+
 }
