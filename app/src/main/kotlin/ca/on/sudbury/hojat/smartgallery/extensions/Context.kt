@@ -12,7 +12,6 @@ import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.database.Cursor
@@ -96,7 +95,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_CALENDAR
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_CALL_LOG
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_CONTACTS
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
-import ca.on.sudbury.hojat.smartgallery.helpers.PREFS_KEY
 import ca.on.sudbury.hojat.smartgallery.helpers.PicassoRoundedCornersTransformation
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
@@ -557,11 +555,6 @@ fun Context.getFirstParentLevel(path: String): Int {
         IsRPlusUseCase() && (isInAndroidDir(this, path) || isInSubFolderInDownloadDir(path)) -> 1
         else -> 0
     }
-}
-
-fun Context.getHumanizedFilename(path: String): String {
-    val humanized = humanizePath(path)
-    return humanized.substring(humanized.lastIndexOf("/") + 1)
 }
 
 fun Context.getHumanReadablePath(path: String): String {

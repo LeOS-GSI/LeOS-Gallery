@@ -59,7 +59,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.updateWidgets
-import ca.on.sudbury.hojat.smartgallery.extensions.getHumanizedFilename
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_COLUMN_COUNT
@@ -96,6 +95,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
+import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -1111,4 +1111,10 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         config.defaultFolder = ""
         refreshMenuItems()
     }
+
+   private fun getHumanizedFilename(path: String): String {
+        val humanized = humanizePath(path)
+        return humanized.substring(humanized.lastIndexOf("/") + 1)
+    }
+
 }
