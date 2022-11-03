@@ -2,8 +2,10 @@ package ca.on.sudbury.hojat.smartgallery.models
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
+import android.provider.BaseColumns
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.annotation.RequiresApi
@@ -19,6 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
@@ -26,7 +29,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getMediaStoreLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
-import ca.on.sudbury.hojat.smartgallery.extensions.getTitle
+import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
@@ -135,7 +138,7 @@ open class FileDirItem(
                     context.contentResolver.openInputStream(Uri.parse(path))?.available()?.toLong()
                         ?: 0L
                 } catch (e: Exception) {
-                    getSizeFromContentUri(context ,Uri.parse(path))
+                    getSizeFromContentUri(context, Uri.parse(path))
                 }
             }
             else -> File(path).getProperSize(countHidden)
@@ -190,7 +193,7 @@ open class FileDirItem(
 
     fun getAlbum(context: Context) = context.getAlbum(path)
 
-    fun getTitle(context: Context) = context.getTitle(path)
+    fun getTitle(context: Context) = getTitle(context, path)
 
     fun getResolution(context: Context) = context.getResolution(path)
 
@@ -229,4 +232,36 @@ open class FileDirItem(
         return 0L
     }
 
+    private fun getTitle(owner: Context, path: String): String? {
+        val projection = arrayOf(
+            MediaStore.MediaColumns.TITLE
+        )
+
+        val uri = getFileUri(path)
+        val selection =
+            if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
+        val selectionArgs =
+            if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(
+                path
+            )
+
+        try {
+            val cursor =
+                owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            cursor?.use {
+                if (cursor.moveToFirst()) {
+                    return cursor.getStringValue(MediaStore.MediaColumns.TITLE)
+                }
+            }
+        } catch (ignored: Exception) {
+        }
+
+        return try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(path)
+            retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+        } catch (ignored: Exception) {
+            null
+        }
+    }
 }

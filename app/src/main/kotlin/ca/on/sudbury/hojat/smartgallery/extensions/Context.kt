@@ -2398,36 +2398,6 @@ fun Context.getSAFDocumentId(path: String): String {
 fun Context.getStoreUrl() =
     "https://play.google.com/store/apps/details?id=${packageName.removeSuffix(".debug")}"
 
-fun Context.getTitle(path: String): String? {
-    val projection = arrayOf(
-        MediaStore.MediaColumns.TITLE
-    )
-
-    val uri = getFileUri(path)
-    val selection =
-        if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
-    val selectionArgs =
-        if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(path)
-
-    try {
-        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
-        cursor?.use {
-            if (cursor.moveToFirst()) {
-                return cursor.getStringValue(MediaStore.MediaColumns.TITLE)
-            }
-        }
-    } catch (ignored: Exception) {
-    }
-
-    return try {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(path)
-        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-    } catch (ignored: Exception) {
-        null
-    }
-}
-
 fun Context.getTextSize() = when (baseConfig.fontSize) {
     FONT_SIZE_SMALL -> resources.getDimension(R.dimen.smaller_text_size)
     FONT_SIZE_MEDIUM -> resources.getDimension(R.dimen.bigger_text_size)
