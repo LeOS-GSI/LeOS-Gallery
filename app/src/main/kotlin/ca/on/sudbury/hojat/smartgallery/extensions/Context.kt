@@ -1279,14 +1279,14 @@ fun Context.getNoMediaFoldersSync(): ArrayList<String> {
 
 fun Context.rescanFolderMedia(path: String) {
     RunOnBackgroundThreadUseCase {
-        rescanFolderMediaSync(path)
+        rescanFolderMediaSync(this, path)
     }
 }
 
-fun Context.rescanFolderMediaSync(path: String) {
-    getCachedMedia(path) { cached ->
+private fun rescanFolderMediaSync(owner: Context, path: String) {
+    owner.getCachedMedia(path) { cached ->
         GetMediaAsynctask(
-            applicationContext,
+            owner.applicationContext,
             path,
             isPickImage = false,
             isPickVideo = false,
@@ -1295,13 +1295,13 @@ fun Context.rescanFolderMediaSync(path: String) {
             RunOnBackgroundThreadUseCase {
                 val media = newMedia.filterIsInstance<Medium>() as ArrayList<Medium>
                 try {
-                    mediaDB.insertAll(media)
+                    owner.mediaDB.insertAll(media)
 
                     cached.forEach { thumbnailItem ->
                         if (!newMedia.contains(thumbnailItem)) {
                             val mediumPath = (thumbnailItem as? Medium)?.path
                             if (mediumPath != null) {
-                                deleteDBPath(mediumPath)
+                                owner.deleteDBPath(mediumPath)
                             }
                         }
                     }
