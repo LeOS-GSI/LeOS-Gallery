@@ -26,8 +26,6 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.os.Process
 import android.provider.BaseColumns
 import android.provider.DocumentsContract
@@ -41,7 +39,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -140,7 +137,6 @@ import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
@@ -453,7 +449,7 @@ fun Context.getDocumentSdk30(path: String): DocumentFile? {
 fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Boolean {
     val otgPath = otgPathToUse ?: baseConfig.OTGPath
     return when {
-        isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(path)?.exists() ?: false
+        isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(this, path)?.exists() ?: false
         otgPath.isNotEmpty() && path.startsWith(otgPath) -> getOTGFastDocumentFile(
             this,
             path
@@ -2023,7 +2019,7 @@ fun Context.getUpdatedDeletedMedia(): ArrayList<Medium> {
 
 fun Context.getIsPathDirectory(path: String): Boolean {
     return when {
-        isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(path)?.isDirectory ?: false
+        isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(this, path)?.isDirectory ?: false
         IsPathOnOtgUseCase(this, path) -> getOTGFastDocumentFile(this, path)?.isDirectory ?: false
         else -> File(path).isDirectory
     }
@@ -3052,16 +3048,16 @@ private fun getAndroidSAFDocument(owner: Context, path: String): DocumentFile? {
 }
 
 fun Context.getSomeAndroidSAFDocument(path: String): DocumentFile? =
-    getFastAndroidSAFDocument(path) ?: getAndroidSAFDocument(this, path)
+    getFastAndroidSAFDocument(this, path) ?: getAndroidSAFDocument(this, path)
 
-fun Context.getFastAndroidSAFDocument(path: String): DocumentFile? {
-    val treeUri = getAndroidTreeUri(path)
+private fun getFastAndroidSAFDocument(owner: Context, path: String): DocumentFile? {
+    val treeUri = owner.getAndroidTreeUri(path)
     if (treeUri.isEmpty()) {
         return null
     }
 
-    val uri = getAndroidSAFUri(path)
-    return DocumentFile.fromSingleUri(this, uri)
+    val uri = owner.getAndroidSAFUri(path)
+    return DocumentFile.fromSingleUri(owner, uri)
 }
 
 fun Context.createAndroidSAFDirectory(path: String): Boolean {
