@@ -1360,7 +1360,15 @@ fun Context.loadImage(
     target.isHorizontalScrolling = horizontalScroll
     if (type == TYPE_IMAGES || type == TYPE_VIDEOS || type == TYPE_RAWS || type == TYPE_PORTRAITS) {
         if (type == TYPE_IMAGES && IsPngUseCase(path)) {
-            loadPng(path, target, cropThumbnails, roundCorners, signature, skipMemoryCacheAtPaths)
+            loadPng(
+                this,
+                path,
+                target,
+                cropThumbnails,
+                roundCorners,
+                signature,
+                skipMemoryCacheAtPaths
+            )
         } else {
             loadJpg(path, target, cropThumbnails, roundCorners, signature, skipMemoryCacheAtPaths)
         }
@@ -1442,7 +1450,8 @@ private fun getPathLocation(owner: Context, path: String): Int {
 }
 
 @SuppressLint("CheckResult")
-fun Context.loadPng(
+private fun loadPng(
+    owner: Context,
     path: String,
     target: MySquareImageView,
     cropThumbnails: Boolean,
@@ -1458,7 +1467,7 @@ fun Context.loadPng(
         .format(DecodeFormat.PREFER_ARGB_8888)
 
     if (cropThumbnails) options.centerCrop() else options.fitCenter()
-    var builder = Glide.with(applicationContext)
+    var builder = Glide.with(owner.applicationContext)
         .asBitmap()
         .load(path)
         .apply(options)
@@ -1469,7 +1478,7 @@ fun Context.loadPng(
                 targetBitmap: Target<Bitmap>?,
                 isFirstResource: Boolean
             ): Boolean {
-                tryLoadingWithPicasso(path, target, cropThumbnails, roundCorners, signature)
+                owner.tryLoadingWithPicasso(path, target, cropThumbnails, roundCorners, signature)
                 return true
             }
 
@@ -1487,7 +1496,7 @@ fun Context.loadPng(
     if (roundCorners != ROUNDED_CORNERS_NONE) {
         val cornerSize =
             if (roundCorners == ROUNDED_CORNERS_SMALL) R.dimen.rounded_corner_radius_small else R.dimen.rounded_corner_radius_big
-        val cornerRadius = resources.getDimension(cornerSize).toInt()
+        val cornerRadius = owner.resources.getDimension(cornerSize).toInt()
         builder = builder.transform(CenterCrop(), RoundedCorners(cornerRadius))
     }
 
