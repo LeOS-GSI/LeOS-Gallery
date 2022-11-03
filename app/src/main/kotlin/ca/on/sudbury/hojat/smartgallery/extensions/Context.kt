@@ -796,16 +796,14 @@ val Context.widgetsDB: WidgetsDao
 
 val Context.mediaDB: MediumDao get() = GalleryDatabase.getInstance(applicationContext).MediumDao()
 
-val Context.navigationBarBottom: Boolean get() = usableScreenSize.y < realScreenSize.y
-
-val Context.navigationBarHeight: Int get() = if (navigationBarBottom && navigationBarSize.y != usableScreenSize.y) navigationBarSize.y else 0
+val Context.navigationBarHeight: Int get() = if ((usableScreenSize.y < realScreenSize.y) && navigationBarSize.y != usableScreenSize.y) navigationBarSize.y else 0
 
 val Context.navigationBarRight: Boolean get() = usableScreenSize.x < realScreenSize.x && usableScreenSize.x > usableScreenSize.y
 
 val Context.navigationBarSize: Point
     get() = when {
         navigationBarRight -> Point(newNavigationBarHeight, usableScreenSize.y)
-        navigationBarBottom -> Point(usableScreenSize.x, newNavigationBarHeight)
+        (usableScreenSize.y < realScreenSize.y) -> Point(usableScreenSize.x, newNavigationBarHeight)
         else -> Point()
     }
 
