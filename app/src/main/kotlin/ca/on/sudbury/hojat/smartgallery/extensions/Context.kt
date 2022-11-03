@@ -208,7 +208,7 @@ val Context.areSystemAnimationsEnabled: Boolean
     ) > 0f
 
 fun Context.createFirstParentTreeUri(fullPath: String): Uri {
-    val storageId = getSAFStorageId(fullPath)
+    val storageId = getSAFStorageId(this, fullPath)
     val level = getFirstParentLevel(fullPath)
     val rootParentDirName = fullPath.getFirstParentDirName(this, level)
     val firstParentId = "$storageId:$rootParentDirName"
@@ -219,7 +219,7 @@ fun Context.createFirstParentTreeUri(fullPath: String): Uri {
 }
 
 fun Context.createDocumentUriUsingFirstParentTreeUri(fullPath: String): Uri {
-    val storageId = getSAFStorageId(fullPath)
+    val storageId = getSAFStorageId(this, fullPath)
     val relativePath = when {
         fullPath.startsWith(internalStoragePath) -> fullPath.substring(internalStoragePath.length)
             .trim('/')
@@ -660,10 +660,10 @@ private fun getSAFOnlyDirs(owner: Context): List<String> {
             DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "${owner.baseConfig.sdCardPath}$it" }
 }
 
-fun Context.getSAFStorageId(fullPath: String): String {
+private fun getSAFStorageId(owner: Context, fullPath: String): String {
     return if (fullPath.startsWith('/')) {
         when {
-            fullPath.startsWith(internalStoragePath) -> "primary"
+            fullPath.startsWith(owner.internalStoragePath) -> "primary"
             else -> fullPath.substringAfter("/storage/", "").substringBefore('/')
         }
     } else {
@@ -2175,7 +2175,7 @@ fun Context.addPathToDB(path: String) {
 }
 
 fun Context.buildDocumentUriSdk30(fullPath: String): Uri {
-    val storageId = getSAFStorageId(fullPath)
+    val storageId = getSAFStorageId(this, fullPath)
 
     val relativePath = when {
         fullPath.startsWith(internalStoragePath) -> fullPath.substring(internalStoragePath.length)
@@ -2274,7 +2274,7 @@ fun Context.createDirectoryFromMedia(
 }
 
 fun Context.createFirstParentTreeUriUsingRootTree(fullPath: String): Uri {
-    val storageId = getSAFStorageId(fullPath)
+    val storageId = getSAFStorageId(this, fullPath)
     val level = getFirstParentLevel(fullPath)
     val rootParentDirName = fullPath.getFirstParentDirName(this, level)
     val treeUri =
@@ -2403,7 +2403,7 @@ fun Context.getProperTextColor() = if (baseConfig.isUsingSystemTheme) {
 fun Context.getSAFDocumentId(path: String): String {
     val basePath = path.getBasePath(this)
     val relativePath = path.substring(basePath.length).trim('/')
-    val storageId = getSAFStorageId(path)
+    val storageId = getSAFStorageId(this, path)
     return "$storageId:$relativePath"
 }
 
@@ -3502,7 +3502,7 @@ fun Context.storeAndroidTreeUri(path: String, treeUri: String) {
 }
 
 fun Context.createDocumentUriFromRootTree(fullPath: String): Uri {
-    val storageId = getSAFStorageId(fullPath)
+    val storageId = getSAFStorageId(this, fullPath)
 
     val relativePath = when {
         fullPath.startsWith(internalStoragePath) -> fullPath.substring(internalStoragePath.length)
