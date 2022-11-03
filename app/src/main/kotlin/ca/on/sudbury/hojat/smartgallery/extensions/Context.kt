@@ -3221,14 +3221,6 @@ fun getRealInternalStoragePath() =
         '/'
     )
 
-@SuppressLint("WrongConstant")
-fun Context.isBiometricIdAvailable(): Boolean = when (BiometricManager.from(this).canAuthenticate(
-    BiometricManager.Authenticators.BIOMETRIC_WEAK
-)) {
-    BiometricManager.BIOMETRIC_SUCCESS, BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> true
-    else -> false
-}
-
 // Convert paths like /storage/emulated/0/Pictures/Screenshots/first.jpg to content://media/external/images/media/131799
 // so that we can refer to the file in the MediaStore.
 // If we found no mediastore uri for a given file, do not return its path either to avoid some mismatching

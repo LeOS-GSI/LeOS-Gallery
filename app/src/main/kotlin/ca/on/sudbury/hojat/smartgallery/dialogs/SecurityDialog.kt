@@ -1,8 +1,11 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.biometric.BiometricManager
 import androidx.biometric.auth.AuthPromptHost
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
@@ -21,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogSecurityBinding
-import ca.on.sudbury.hojat.smartgallery.extensions.isBiometricIdAvailable
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.hojat.palette.views.MyDialogViewPager
@@ -150,7 +152,7 @@ class SecurityDialog(
 
     private fun shouldShowBiometricIdTab(): Boolean {
         return if (IsRPlusUseCase()) {
-            activity.isBiometricIdAvailable()
+            isBiometricIdAvailable(activity)
         } else {
             isFingerPrintSensorAvailable()
         }
@@ -158,4 +160,13 @@ class SecurityDialog(
 
     private fun isFingerPrintSensorAvailable() =
         IsMarshmallowPlusUseCase() && Reprint.isHardwarePresent()
+
+    @SuppressLint("WrongConstant")
+    private fun isBiometricIdAvailable(owner: Context): Boolean =
+        when (BiometricManager.from(owner).canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_WEAK
+        )) {
+            BiometricManager.BIOMETRIC_SUCCESS, BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> true
+            else -> false
+        }
 }
