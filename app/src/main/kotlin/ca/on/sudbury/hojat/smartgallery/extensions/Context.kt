@@ -138,7 +138,6 @@ import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
@@ -2641,7 +2640,7 @@ fun Context.isUsingSystemDarkTheme() =
 val Context.realScreenSize: Point
     get() {
         val size = Point()
-        windowManager.defaultDisplay.getRealSize(size)
+        windowManager(this).defaultDisplay.getRealSize(size)
         return size
     }
 
@@ -2682,28 +2681,6 @@ private fun getDegreesFromOrientation(orientation: Int) = when (orientation) {
     else -> 0
 }
 
-@SuppressLint("Recycle")
-@RequiresApi(Build.VERSION_CODES.N)
-fun Context.saveImageRotation(path: String, degrees: Int): Boolean {
-    if (!(!IsRPlusUseCase() &&
-                (IsPathOnSdUseCase(this, path) ||
-                        IsPathOnOtgUseCase(this, path)) &&
-                !isSDCardSetAsDefaultStorage())
-    ) {
-        saveExifRotation(ExifInterface(path), degrees)
-        return true
-    } else if (IsNougatPlusUseCase()) {
-        val documentFile = getSomeDocumentFile(path)
-        if (documentFile != null) {
-            val parcelFileDescriptor = contentResolver.openFileDescriptor(documentFile.uri, "rw")
-            val fileDescriptor = parcelFileDescriptor!!.fileDescriptor
-            saveExifRotation(ExifInterface(fileDescriptor), degrees)
-            return true
-        }
-    }
-    return false
-}
-
 fun Context.scanPathRecursively(path: String, callback: (() -> Unit)? = null) {
     scanPathsRecursively(arrayListOf(path), callback)
 }
@@ -2734,7 +2711,8 @@ fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enabl
     }
 }
 
-val Context.windowManager: WindowManager get() = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+private fun windowManager(owner: Context) =
+    owner.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
 fun isAndroidDataDir(path: String): Boolean {
     val resolvedPath = "${path.trimEnd('/')}/"
@@ -2784,7 +2762,7 @@ val Context.actionBarHeight: Int
 val Context.usableScreenSize: Point
     get() {
         val size = Point()
-        windowManager.defaultDisplay.getSize(size)
+        windowManager(this).defaultDisplay.getSize(size)
         return size
     }
 

@@ -1,11 +1,14 @@
 package ca.on.sudbury.hojat.smartgallery.usecases
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -17,13 +20,16 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStreamSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
+import ca.on.sudbury.hojat.smartgallery.extensions.getSomeDocumentFile
+import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.saveExifRotation
-import ca.on.sudbury.hojat.smartgallery.extensions.saveImageRotation
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import java.io.File
@@ -116,7 +122,7 @@ object SaveRotatedImageUseCase {
         return try {
             val file = File(path)
             val oldLastModified = file.lastModified()
-            if (owner.saveImageRotation(path, degrees)) {
+            if (saveImageRotation(owner, path, degrees)) {
                 fileRotatedSuccessfully(owner, path, oldLastModified)
                 callback.invoke()
                 if (showToasts) {
@@ -170,5 +176,28 @@ object SaveRotatedImageUseCase {
         matrix.postRotate(degrees.toFloat())
         val bmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
         bmp.compress(path.getCompressionFormat(), 90, out)
+    }
+
+    @SuppressLint("Recycle")
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun saveImageRotation(owner: Context, path: String, degrees: Int): Boolean {
+        if (!(!IsRPlusUseCase() &&
+                    (IsPathOnSdUseCase(owner, path) ||
+                            IsPathOnOtgUseCase(owner, path)) &&
+                    !owner.isSDCardSetAsDefaultStorage())
+        ) {
+            saveExifRotation(ExifInterface(path), degrees)
+            return true
+        } else if (IsNougatPlusUseCase()) {
+            val documentFile = owner.getSomeDocumentFile(path)
+            if (documentFile != null) {
+                val parcelFileDescriptor =
+                    owner.contentResolver.openFileDescriptor(documentFile.uri, "rw")
+                val fileDescriptor = parcelFileDescriptor!!.fileDescriptor
+                saveExifRotation(ExifInterface(fileDescriptor), degrees)
+                return true
+            }
+        }
+        return false
     }
 }
