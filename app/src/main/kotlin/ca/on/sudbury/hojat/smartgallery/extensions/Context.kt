@@ -356,7 +356,7 @@ fun Context.getAndroidSAFDirectChildrenCount(path: String, countHidden: Boolean)
     }
 
     val documentId = createAndroidSAFDocumentId(path)
-    val rootDocId = getStorageRootIdForAndroidDir(path)
+    val rootDocId = getStorageRootIdForAndroidDir(this, path)
     return getDirectChildrenCount(rootDocId, treeUri, documentId, countHidden)
 }
 
@@ -671,8 +671,8 @@ private fun getSAFStorageId(owner: Context, fullPath: String): String {
     }
 }
 
-fun Context.getStorageRootIdForAndroidDir(path: String) =
-    getAndroidTreeUri(path).removeSuffix(
+private fun getStorageRootIdForAndroidDir(owner: Context, path: String) =
+    owner.getAndroidTreeUri(path).removeSuffix(
         if (isAndroidDataDir(
                 path
             )
@@ -2997,7 +2997,7 @@ fun Context.getAndroidSAFFileCount(path: String, countHidden: Boolean): Int {
     }
 
     val documentId = createAndroidSAFDocumentId(path)
-    val rootDocId = getStorageRootIdForAndroidDir(path)
+    val rootDocId = getStorageRootIdForAndroidDir(this, path)
     return getProperChildrenCount(rootDocId, treeUri, documentId, countHidden)
 }
 
@@ -3201,7 +3201,7 @@ fun Context.getAndroidSAFFileItems(
     callback: (ArrayList<FileDirItem>) -> Unit
 ) {
     val items = java.util.ArrayList<FileDirItem>()
-    val rootDocId = getStorageRootIdForAndroidDir(path)
+    val rootDocId = getStorageRootIdForAndroidDir(this, path)
     val treeUri = getAndroidTreeUri(path).toUri()
     val documentId = createAndroidSAFDocumentId(path)
     val childrenUri = try {
@@ -3237,7 +3237,8 @@ fun Context.getAndroidSAFFileItems(
                     val lastModified =
                         cursor.getLongValue(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
                     val isDirectory = mimeType == DocumentsContract.Document.MIME_TYPE_DIR
-                    val filePath = docId.substring("${getStorageRootIdForAndroidDir(path)}:".length)
+                    val filePath =
+                        docId.substring("${getStorageRootIdForAndroidDir(this, path)}:".length)
                     if (!shouldShowHidden && name.startsWith(".")) {
                         continue
                     }
@@ -3322,7 +3323,7 @@ fun Context.getFileSize(treeUri: Uri, documentId: String): Long {
 fun Context.createAndroidSAFDocumentId(path: String): String {
     val basePath = path.getBasePath(this)
     val relativePath = path.substring(basePath.length).trim('/')
-    val storageId = getStorageRootIdForAndroidDir(path)
+    val storageId = getStorageRootIdForAndroidDir(this ,path)
     return "$storageId:$relativePath"
 }
 
