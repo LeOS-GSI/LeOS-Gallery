@@ -52,7 +52,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFirstParentLevel
 import ca.on.sudbury.hojat.smartgallery.extensions.getFirstParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getPermissionString
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperStatusBarColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.hasPermission
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
@@ -1252,6 +1251,11 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         } else {
             false
         }
+    }
+
+    private fun getProperStatusBarColor() = when {
+        baseConfig.isUsingSystemTheme -> resources.getColor(R.color.you_status_bar_color, theme)
+        else -> baseConfig.primaryColor
     }
 
 }

@@ -142,7 +142,6 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseC
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
@@ -2394,12 +2393,6 @@ fun Context.getSAFDocumentId(path: String): String {
     val relativePath = path.substring(basePath.length).trim('/')
     val storageId = getSAFStorageId(this, path)
     return "$storageId:$relativePath"
-}
-
-@SuppressLint("NewApi")
-fun Context.getProperStatusBarColor() = when {
-    baseConfig.isUsingSystemTheme -> resources.getColor(R.color.you_status_bar_color, theme)
-    else -> baseConfig.primaryColor
 }
 
 fun Context.getStoreUrl() =
