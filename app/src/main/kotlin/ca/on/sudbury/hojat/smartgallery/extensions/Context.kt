@@ -2489,36 +2489,6 @@ fun Context.updateTextColors(viewGroup: ViewGroup) {
     }
 }
 
-fun Context.getAlbum(path: String): String? {
-    val projection = arrayOf(
-        MediaStore.Audio.Media.ALBUM
-    )
-
-    val uri = getFileUri(path)
-    val selection =
-        if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
-    val selectionArgs =
-        if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(path)
-
-    try {
-        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
-        cursor?.use {
-            if (cursor.moveToFirst()) {
-                return cursor.getStringValue(MediaStore.Audio.Media.ALBUM)
-            }
-        }
-    } catch (ignored: Exception) {
-    }
-
-    return try {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(path)
-        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
-    } catch (ignored: Exception) {
-        null
-    }
-}
-
 fun Context.getArtist(path: String): String? {
     val projection = arrayOf(
         MediaStore.Audio.Media.ARTIST

@@ -10,7 +10,6 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
-import ca.on.sudbury.hojat.smartgallery.extensions.getAlbum
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileSize
@@ -191,7 +190,7 @@ open class FileDirItem(
 
     fun getArtist(context: Context) = context.getArtist(path)
 
-    fun getAlbum(context: Context) = context.getAlbum(path)
+    fun getAlbum(context: Context) = getAlbum(context, path)
 
     fun getTitle(context: Context) = getTitle(context, path)
 
@@ -260,6 +259,39 @@ open class FileDirItem(
             val retriever = MediaMetadataRetriever()
             retriever.setDataSource(path)
             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+        } catch (ignored: Exception) {
+            null
+        }
+    }
+
+    private fun getAlbum(owner: Context, path: String): String? {
+        val projection = arrayOf(
+            MediaStore.Audio.Media.ALBUM
+        )
+
+        val uri = getFileUri(path)
+        val selection =
+            if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
+        val selectionArgs =
+            if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(
+                path
+            )
+
+        try {
+            val cursor =
+                owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            cursor?.use {
+                if (cursor.moveToFirst()) {
+                    return cursor.getStringValue(MediaStore.Audio.Media.ALBUM)
+                }
+            }
+        } catch (ignored: Exception) {
+        }
+
+        return try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(path)
+            retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM)
         } catch (ignored: Exception) {
             null
         }
