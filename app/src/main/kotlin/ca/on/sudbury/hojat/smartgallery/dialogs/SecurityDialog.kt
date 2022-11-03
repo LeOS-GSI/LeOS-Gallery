@@ -6,12 +6,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.biometric.auth.AuthPromptHost
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager.widget.ViewPager
+import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
-import ca.on.sudbury.hojat.smartgallery.extensions.isFingerPrintSensorAvailable
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
@@ -25,6 +25,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isBiometricIdAvailable
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.hojat.palette.views.MyDialogViewPager
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 
 /**
@@ -154,4 +155,7 @@ class SecurityDialog(
             isFingerPrintSensorAvailable()
         }
     }
+
+    private fun isFingerPrintSensorAvailable() =
+        IsMarshmallowPlusUseCase() && Reprint.isHardwarePresent()
 }

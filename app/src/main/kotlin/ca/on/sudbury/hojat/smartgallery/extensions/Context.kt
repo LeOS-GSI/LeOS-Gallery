@@ -49,7 +49,6 @@ import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
 import androidx.loader.content.CursorLoader
-import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.database.MediumDao
@@ -2635,13 +2634,6 @@ fun Context.hasProperStoredDocumentUriSdk30(path: String): Boolean {
     val documentUri = buildDocumentUriSdk30(path)
     return contentResolver.persistedUriPermissions.any { it.uri.toString() == documentUri.toString() }
 }
-
-fun Context.hasProperStoredFirstParentUri(path: String): Boolean {
-    val firstParentUri = createFirstParentTreeUri(path)
-    return contentResolver.persistedUriPermissions.any { it.uri.toString() == firstParentUri.toString() }
-}
-
-fun isFingerPrintSensorAvailable() = IsMarshmallowPlusUseCase() && Reprint.isHardwarePresent()
 
 fun Context.isUsingSystemDarkTheme() =
     resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES != 0

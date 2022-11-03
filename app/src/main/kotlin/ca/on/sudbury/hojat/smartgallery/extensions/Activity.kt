@@ -1787,9 +1787,14 @@ fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
     }
 }
 
+private fun hasProperStoredFirstParentUri(owner: Context, path: String): Boolean {
+    val firstParentUri = owner.createFirstParentTreeUri(path)
+    return owner.contentResolver.persistedUriPermissions.any { it.uri.toString() == firstParentUri.toString() }
+}
+
 @SuppressLint("InlinedApi")
 fun BaseSimpleActivity.isShowingSAFDialogSdk30(path: String): Boolean {
-    return if (isAccessibleWithSAFSdk30(path) && !hasProperStoredFirstParentUri(path)) {
+    return if (isAccessibleWithSAFSdk30(path) && !hasProperStoredFirstParentUri(this, path)) {
         runOnUiThread {
             if (!isDestroyed && !isFinishing) {
                 val level = getFirstParentLevel(path)
