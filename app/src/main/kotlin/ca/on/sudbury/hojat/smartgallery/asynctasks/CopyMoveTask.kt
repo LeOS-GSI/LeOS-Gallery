@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ContentValues
+import android.content.Context
 import android.os.AsyncTask
 import android.os.Handler
 import android.provider.MediaStore
@@ -14,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.notificationManager
 import ca.on.sudbury.hojat.smartgallery.extensions.createDirectorySync
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
@@ -153,7 +153,7 @@ class CopyMoveTask(
 
         deleteProtectedFiles()
         mProgressHandler.removeCallbacksAndMessages(null)
-        activity.notificationManager.cancel(mNotifId)
+        notificationManager(activity).cancel(mNotifId)
         val listener = mListener?.get() ?: return
 
         if (success) {
@@ -176,7 +176,7 @@ class CopyMoveTask(
             NotificationChannel(channelId, title, importance).apply {
                 enableLights(false)
                 enableVibration(false)
-                activity.notificationManager.createNotificationChannel(this)
+                notificationManager(activity).createNotificationChannel(this)
             }
         }
 
@@ -187,7 +187,7 @@ class CopyMoveTask(
 
     private fun updateProgress() {
         if (mIsTaskOver) {
-            activity.notificationManager.cancel(mNotifId)
+            notificationManager(activity).cancel(mNotifId)
             cancel(true)
             return
         }
@@ -195,7 +195,7 @@ class CopyMoveTask(
         mNotificationBuilder.apply {
             setContentText(mCurrFilename)
             setProgress(mMaxSize, (mCurrentProgress / 1000).toInt(), false)
-            activity.notificationManager.notify(mNotifId, build())
+            notificationManager(activity).notify(mNotifId, build())
         }
 
         mProgressHandler.removeCallbacksAndMessages(null)
@@ -437,4 +437,7 @@ class CopyMoveTask(
             }
         }
     }
+
+    private fun notificationManager(owner: Context): NotificationManager =
+        owner.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 }

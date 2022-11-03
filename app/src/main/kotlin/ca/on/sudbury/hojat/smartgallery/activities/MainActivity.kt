@@ -22,6 +22,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.RecyclerView
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
@@ -55,7 +56,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaId
 import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
-import ca.on.sudbury.hojat.smartgallery.extensions.getOTGFolderChildrenNames
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
@@ -129,6 +129,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
@@ -1865,4 +1866,9 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
     }
 
+    private fun getOTGFolderChildrenNames(path: String) =
+        getOTGFolderChildren(this ,path)?.map { it.name }?.toMutableList()
+
+    private fun getOTGFolderChildren(owner: Context, path: String): Array<DocumentFile>? =
+        owner.getDocumentFile(path)?.listFiles()
 }

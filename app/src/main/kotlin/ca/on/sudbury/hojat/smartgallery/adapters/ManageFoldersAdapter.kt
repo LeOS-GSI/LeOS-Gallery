@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.adapters
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.view.Menu
@@ -8,11 +9,12 @@ import android.view.Gravity
 import android.widget.PopupMenu
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.getPopupMenuTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.extensions.isWhiteTheme
+import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
 
 class ManageFoldersAdapter(
@@ -88,7 +90,7 @@ class ManageFoldersAdapter(
 
     private fun showPopupMenu(view: View, folder: String) {
         finishActMode()
-        val theme = activity.getPopupMenuTheme()
+        val theme = getPopupMenuTheme(activity)
         val contextTheme = ContextThemeWrapper(activity, theme)
 
         PopupMenu(contextTheme, view, Gravity.END).apply {
@@ -131,6 +133,16 @@ class ManageFoldersAdapter(
         removeSelectedItems(positions)
         if (folders.isEmpty()) {
             listener?.refreshItems()
+        }
+    }
+
+    private fun getPopupMenuTheme(owner: Context): Int {
+        return if (IsSPlusUseCase() && baseConfig.isUsingSystemTheme) {
+            R.style.AppTheme_YouPopupMenuStyle
+        } else if (owner.isWhiteTheme()) {
+            R.style.AppTheme_PopupMenuLightStyle
+        } else {
+            R.style.AppTheme_PopupMenuDarkStyle
         }
     }
 }

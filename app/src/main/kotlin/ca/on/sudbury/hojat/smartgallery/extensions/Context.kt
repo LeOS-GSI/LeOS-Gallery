@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -543,7 +542,7 @@ fun getFileUri(path: String): Uri = when {
 }
 
 fun Context.getFileUrisFromFileDirItems(fileDirItems: List<FileDirItem>): List<Uri> {
-    val fileUris = getUrisPathsFromFileDirItems(fileDirItems).second
+    val fileUris = getUrisPathsFromFileDirItems(this, fileDirItems).second
     if (fileUris.isEmpty()) {
         fileDirItems.map { fileDirItem ->
             fileUris.add(fileDirItem.assembleContentUri())
@@ -1954,11 +1953,8 @@ private fun getOTGFastDocumentFile(
     return DocumentFile.fromSingleUri(owner, Uri.parse(fullUri))
 }
 
-fun Context.getOTGFolderChildren(path: String): Array<DocumentFile>? =
-    getDocumentFile(path)?.listFiles()
-
-fun Context.getOTGFolderChildrenNames(path: String) =
-    getOTGFolderChildren(path)?.map { it.name }?.toMutableList()
+private fun getOTGFolderChildren(owner: Context, path: String): Array<DocumentFile>? =
+    owner.getDocumentFile(path)?.listFiles()
 
 fun Context.getFavoritePaths(): ArrayList<String> {
     return try {
@@ -1975,10 +1971,13 @@ fun getFavoriteFromPath(path: String) =
 // Convert paths like /storage/emulated/0/Pictures/Screenshots/first.jpg to content://media/external/images/media/131799
 // so that we can refer to the file in the MediaStore.
 // If we found no mediastore uri for a given file, do not return its path either to avoid some mismatching
-fun Context.getUrisPathsFromFileDirItems(fileDirItems: List<FileDirItem>): Pair<ArrayList<String>, ArrayList<Uri>> {
+private fun getUrisPathsFromFileDirItems(
+    owner: Context,
+    fileDirItems: List<FileDirItem>
+): Pair<ArrayList<String>, ArrayList<Uri>> {
     val fileUris = ArrayList<Uri>()
     val successfulFilePaths = ArrayList<String>()
-    val allIds = getMediaStoreIds(this)
+    val allIds = getMediaStoreIds(owner)
     val filePaths = fileDirItems.map { it.path }
     filePaths.forEach { path ->
         for ((filePath, mediaStoreId) in allIds) {
@@ -1993,8 +1992,6 @@ fun Context.getUrisPathsFromFileDirItems(fileDirItems: List<FileDirItem>): Pair<
 
     return Pair(successfulFilePaths, fileUris)
 }
-
-val Context.notificationManager: NotificationManager get() = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
 val Context.portrait get() = resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 
@@ -2044,12 +2041,12 @@ fun Context.getResolution(path: String): Point? {
 }
 
 fun Context.deleteDBPath(path: String) {
-    deleteMediumWithPath(path.replaceFirst(recycleBinPath, RECYCLE_BIN))
+    deleteMediumWithPath(this, path.replaceFirst(recycleBinPath, RECYCLE_BIN))
 }
 
-fun Context.deleteMediumWithPath(path: String) {
+private fun deleteMediumWithPath(owner: Context, path: String) {
     try {
-        mediaDB.deleteMediumPath(path)
+        owner.mediaDB.deleteMediumPath(path)
     } catch (ignored: Exception) {
     }
 }
@@ -2285,15 +2282,15 @@ fun Context.createFirstParentTreeUriUsingRootTree(fullPath: String): Uri {
     return DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
 }
 
-
-fun Context.getDataColumn(
+private fun getDataColumn(
+    owner: Context,
     uri: Uri,
     selection: String? = null,
     selectionArgs: Array<String>? = null
 ): String? {
     try {
         val projection = arrayOf(Files.FileColumns.DATA)
-        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        val cursor = owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
         cursor?.use {
             if (cursor.moveToFirst()) {
                 val data = cursor.getStringValue(Files.FileColumns.DATA)
@@ -2367,16 +2364,6 @@ fun Context.getDuration(path: String): Int? {
             .toInt() / 1000f).roundToInt()
     } catch (ignored: Exception) {
         null
-    }
-}
-
-fun Context.getPopupMenuTheme(): Int {
-    return if (IsSPlusUseCase() && baseConfig.isUsingSystemTheme) {
-        R.style.AppTheme_YouPopupMenuStyle
-    } else if (isWhiteTheme()) {
-        R.style.AppTheme_PopupMenuLightStyle
-    } else {
-        R.style.AppTheme_PopupMenuDarkStyle
     }
 }
 
@@ -2634,7 +2621,7 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
                 Uri.parse("content://downloads/public_downloads"),
                 id.toLong()
             )
-            val path = getDataColumn(newUri)
+            val path = getDataColumn(this, newUri)
             if (path != null) {
                 return path
             }
@@ -2657,13 +2644,13 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
 
         val selection = "_id=?"
         val selectionArgs = arrayOf(split[1])
-        val path = getDataColumn(contentUri, selection, selectionArgs)
+        val path = getDataColumn(this, contentUri, selection, selectionArgs)
         if (path != null) {
             return path
         }
     }
 
-    return getDataColumn(uri)
+    return getDataColumn(this, uri)
 }
 
 fun Context.getSharedTheme(callback: (sharedTheme: SharedTheme?) -> Unit) {
