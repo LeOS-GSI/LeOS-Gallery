@@ -13,10 +13,8 @@ import androidx.core.net.toUri
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidSAFDocumentId
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFDirectChildrenCount
-import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidTreeUri
-import ca.on.sudbury.hojat.smartgallery.extensions.getArtist
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
@@ -149,7 +147,8 @@ open class FileDirItem(
 
     fun getProperFileCount(context: Context, countHidden: Boolean): Int {
         return when {
-            context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileCount(
+            context.isRestrictedSAFOnlyRoot(path) -> getAndroidSAFFileCount(
+                context,
                 path,
                 countHidden
             )
@@ -192,7 +191,7 @@ open class FileDirItem(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun getDuration(context: Context) = context.getDuration(path)?.getFormattedDuration()
 
-    fun getArtist(context: Context) = context.getArtist(path)
+    fun getArtist(context: Context) = getArtist(context ,path)
 
     fun getAlbum(context: Context) = getAlbum(context, path)
 
@@ -352,4 +351,35 @@ open class FileDirItem(
             ) "%3AAndroid%2Fdata" else "%3AAndroid%2Fobb"
         ).substringAfterLast('/').trimEnd('/')
 
+    private fun getArtist(owner: Context, path: String): String? {
+        val projection = arrayOf(
+            MediaStore.Audio.Media.ARTIST
+        )
+
+        val uri = getFileUri(path)
+        val selection =
+            if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
+        val selectionArgs =
+            if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(
+                path
+            )
+
+        try {
+            val cursor = owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            cursor?.use {
+                if (cursor.moveToFirst()) {
+                    return cursor.getStringValue(MediaStore.Audio.Media.ARTIST)
+                }
+            }
+        } catch (ignored: Exception) {
+        }
+
+        return try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(path)
+            retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+        } catch (ignored: Exception) {
+            null
+        }
+    }
 }

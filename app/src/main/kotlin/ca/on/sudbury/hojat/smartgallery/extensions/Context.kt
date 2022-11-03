@@ -793,15 +793,22 @@ val Context.widgetsDB: WidgetsDao
 
 val Context.mediaDB: MediumDao get() = GalleryDatabase.getInstance(applicationContext).MediumDao()
 
-val Context.navigationBarHeight: Int get() = if ((usableScreenSize.y < realScreenSize.y) && navigationBarSize.y != usableScreenSize.y) navigationBarSize.y else 0
+val Context.navigationBarHeight: Int
+    get() = if ((usableScreenSize(this).y < realScreenSize.y) && navigationBarSize.y != usableScreenSize(
+            this
+        ).y
+    ) navigationBarSize.y else 0
 
-val Context.navigationBarRight: Boolean get() = usableScreenSize.x < realScreenSize.x && usableScreenSize.x > usableScreenSize.y
+val Context.navigationBarRight: Boolean
+    get() = usableScreenSize(this).x < realScreenSize.x && usableScreenSize(
+        this
+    ).x > usableScreenSize(this).y
 
 val Context.navigationBarSize: Point
     get() = when {
-        navigationBarRight -> Point(newNavigationBarHeight(this), usableScreenSize.y)
-        (usableScreenSize.y < realScreenSize.y) -> Point(
-            usableScreenSize.x,
+        navigationBarRight -> Point(newNavigationBarHeight(this), usableScreenSize(this).y)
+        (usableScreenSize(this).y < realScreenSize.y) -> Point(
+            usableScreenSize(this).x,
             newNavigationBarHeight(this)
         )
         else -> Point()
@@ -2757,12 +2764,11 @@ val Context.actionBarHeight: Int
         return actionBarHeight.toInt()
     }
 
-val Context.usableScreenSize: Point
-    get() {
-        val size = Point()
-        windowManager(this).defaultDisplay.getSize(size)
-        return size
-    }
+private fun usableScreenSize(owner: Context): Point {
+    val size = Point()
+    windowManager(owner).defaultDisplay.getSize(size)
+    return size
+}
 
 fun Context.copyToClipboard(text: String) {
     val clip = ClipData.newPlainText(getString(R.string.simple_commons), text)
@@ -2795,17 +2801,6 @@ private fun getMediaStoreIds(context: Context): HashMap<String, Long> {
     }
 
     return ids
-}
-
-fun Context.getAndroidSAFFileCount(path: String, countHidden: Boolean): Int {
-    val treeUri = getAndroidTreeUri(path).toUri()
-    if (treeUri == Uri.EMPTY) {
-        return 0
-    }
-
-    val documentId = createAndroidSAFDocumentId(path)
-    val rootDocId = getStorageRootIdForAndroidDir(this, path)
-    return getProperChildrenCount(rootDocId, treeUri, documentId, countHidden)
 }
 
 fun Context.getAndroidSAFLastModified(path: String): Long {
@@ -2887,10 +2882,7 @@ fun Context.rescanAndDeletePath(path: String, callback: () -> Unit) {
 
     MediaScannerConnection.scanFile(applicationContext, arrayOf(path), null) { path, uri ->
         scanFileHandler.removeCallbacksAndMessages(null)
-        try {
-            applicationContext.contentResolver.delete(uri, null, null)
-        } catch (_: Exception) {
-        }
+        applicationContext.contentResolver.delete(uri, null, null)
         callback()
     }
 }
