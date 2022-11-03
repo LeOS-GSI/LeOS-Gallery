@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Environment
 import android.os.Parcelable
+import android.provider.MediaStore
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Toast
@@ -21,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
-import ca.on.sudbury.hojat.smartgallery.extensions.getFolderLastModifieds
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
 import ca.on.sudbury.hojat.smartgallery.extensions.getOTGItems
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
@@ -45,6 +45,8 @@ import ca.on.sudbury.hojat.smartgallery.adapters.FilePickerItemsAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFilepickerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentSdk30
+import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
+import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
@@ -320,7 +322,7 @@ class FilePickerDialog(
                 callback
             )
             else -> {
-                val lastModifieds = activity.getFolderLastModifieds(path)
+                val lastModifieds = getFolderLastModifieds(activity, path)
                 getRegularItems(path, lastModifieds, callback)
             }
         }
@@ -415,5 +417,42 @@ class FilePickerDialog(
 
     private fun getSomeDocumentSdk30(owner: Context, path: String): DocumentFile? =
         owner.getFastDocumentSdk30(path) ?: owner.getDocumentSdk30(path)
+
+    private fun getFolderLastModifieds(owner: Context, folder: String): HashMap<String, Long> {
+        val lastModifieds = java.util.HashMap<String, Long>()
+        val projection = arrayOf(
+            MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media.DATE_MODIFIED
+        )
+
+        val uri = MediaStore.Files.getContentUri("external")
+        val selection =
+            "${MediaStore.Images.Media.DATA} LIKE ? AND ${MediaStore.Images.Media.DATA} NOT LIKE ? AND ${MediaStore.Images.Media.MIME_TYPE} IS NOT NULL" // avoid selecting folders
+        val selectionArgs = arrayOf("$folder/%", "$folder/%/%")
+
+        try {
+            val cursor =
+                owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            cursor?.use {
+                if (cursor.moveToFirst()) {
+                    do {
+                        try {
+                            val lastModified =
+                                cursor.getLongValue(MediaStore.Images.Media.DATE_MODIFIED) * 1000
+                            if (lastModified != 0L) {
+                                val name =
+                                    cursor.getStringValue(MediaStore.Images.Media.DISPLAY_NAME)
+                                lastModifieds["$folder/$name"] = lastModified
+                            }
+                        } catch (_: Exception) {
+                        }
+                    } while (cursor.moveToNext())
+                }
+            }
+        } catch (_: Exception) {
+        }
+
+        return lastModifieds
+    }
 
 }

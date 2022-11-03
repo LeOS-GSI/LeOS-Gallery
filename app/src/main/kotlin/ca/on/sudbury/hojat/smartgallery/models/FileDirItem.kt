@@ -9,25 +9,30 @@ import android.provider.BaseColumns
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
+import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidSAFDocumentId
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileCount
-import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFLastModified
+import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getArtist
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
+import ca.on.sudbury.hojat.smartgallery.extensions.getFileSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
+import ca.on.sudbury.hojat.smartgallery.extensions.isAndroidDataDir
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedSAFOnlyRoot
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
@@ -127,7 +132,7 @@ open class FileDirItem(
     @SuppressLint("Recycle")
     fun getProperSize(context: Context, countHidden: Boolean): Long {
         return when {
-            context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFFileSize(path)
+            context.isRestrictedSAFOnlyRoot(path) -> getAndroidSAFFileSize(context, path)
             IsPathOnOtgUseCase(context, path) ->
                 GetFileSizeUseCase(context.getDocumentFile(path), countHidden)
             IsNougatPlusUseCase() && path.startsWith("content://") -> {
@@ -317,4 +322,34 @@ open class FileDirItem(
         }
         return 0
     }
+
+    private fun getAndroidSAFFileSize(owner: Context, path: String): Long {
+        val treeUri = owner.getAndroidTreeUri(path).toUri()
+        val documentId = owner.createAndroidSAFDocumentId(path)
+        return owner.getFileSize(treeUri, documentId)
+    }
+
+    private fun getAndroidSAFFileCount(
+        owner: Context,
+        path: String,
+        countHidden: Boolean
+    ): Int {
+        val treeUri = owner.getAndroidTreeUri(path).toUri()
+        if (treeUri == Uri.EMPTY) {
+            return 0
+        }
+
+        val documentId = owner.createAndroidSAFDocumentId(path)
+        val rootDocId = getStorageRootIdForAndroidDir(owner, path)
+        return owner.getProperChildrenCount(rootDocId, treeUri, documentId, countHidden)
+    }
+
+    private fun getStorageRootIdForAndroidDir(owner: Context, path: String) =
+        owner.getAndroidTreeUri(path).removeSuffix(
+            if (isAndroidDataDir(
+                    path
+                )
+            ) "%3AAndroid%2Fdata" else "%3AAndroid%2Fobb"
+        ).substringAfterLast('/').trimEnd('/')
+
 }

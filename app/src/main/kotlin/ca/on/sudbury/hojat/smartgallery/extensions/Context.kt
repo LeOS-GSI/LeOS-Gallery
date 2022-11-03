@@ -672,9 +672,7 @@ private fun getSAFStorageId(owner: Context, fullPath: String): String {
 
 private fun getStorageRootIdForAndroidDir(owner: Context, path: String) =
     owner.getAndroidTreeUri(path).removeSuffix(
-        if (isAndroidDataDir(
-                path
-            )
+        if (isAndroidDataDir(path)
         ) "%3AAndroid%2Fdata" else "%3AAndroid%2Fobb"
     ).substringAfterLast('/').trimEnd('/')
 
@@ -2773,41 +2771,7 @@ fun Context.copyToClipboard(text: String) {
     ShowSafeToastUseCase(this, toastText)
 }
 
-fun Context.getFolderLastModifieds(folder: String): java.util.HashMap<String, Long> {
-    val lastModifieds = java.util.HashMap<String, Long>()
-    val projection = arrayOf(
-        Images.Media.DISPLAY_NAME,
-        Images.Media.DATE_MODIFIED
-    )
-
-    val uri = Files.getContentUri("external")
-    val selection =
-        "${Images.Media.DATA} LIKE ? AND ${Images.Media.DATA} NOT LIKE ? AND ${Images.Media.MIME_TYPE} IS NOT NULL" // avoid selecting folders
-    val selectionArgs = arrayOf("$folder/%", "$folder/%/%")
-
-    try {
-        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
-        cursor?.use {
-            if (cursor.moveToFirst()) {
-                do {
-                    try {
-                        val lastModified = cursor.getLongValue(Images.Media.DATE_MODIFIED) * 1000
-                        if (lastModified != 0L) {
-                            val name = cursor.getStringValue(Images.Media.DISPLAY_NAME)
-                            lastModifieds["$folder/$name"] = lastModified
-                        }
-                    } catch (_: Exception) {
-                    }
-                } while (cursor.moveToNext())
-            }
-        }
-    } catch (_: Exception) {
-    }
-
-    return lastModifieds
-}
-
-fun getMediaStoreIds(context: Context): java.util.HashMap<String, Long> {
+private fun getMediaStoreIds(context: Context): HashMap<String, Long> {
     val ids = java.util.HashMap<String, Long>()
     val projection = arrayOf(
         Images.Media.DATA,
@@ -2831,12 +2795,6 @@ fun getMediaStoreIds(context: Context): java.util.HashMap<String, Long> {
     }
 
     return ids
-}
-
-fun Context.getAndroidSAFFileSize(path: String): Long {
-    val treeUri = getAndroidTreeUri(path).toUri()
-    val documentId = createAndroidSAFDocumentId(path)
-    return getFileSize(treeUri, documentId)
 }
 
 fun Context.getAndroidSAFFileCount(path: String, countHidden: Boolean): Int {
