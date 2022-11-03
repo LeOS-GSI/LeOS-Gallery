@@ -655,9 +655,9 @@ fun Context.getPicturesDirectoryPath(fullPath: String): String {
     return File(basePath, Environment.DIRECTORY_PICTURES).absolutePath
 }
 
-fun Context.getSAFOnlyDirs(): List<String> {
-    return DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$internalStoragePath$it" } +
-            DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "$baseConfig.sdCardPath$it" }
+private fun getSAFOnlyDirs(owner: Context): List<String> {
+    return DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "${owner.internalStoragePath}$it" } +
+            DIRS_ACCESSIBLE_ONLY_WITH_SAF.map { "${owner.baseConfig.sdCardPath}$it" }
 }
 
 fun Context.getSAFStorageId(fullPath: String): String {
@@ -865,7 +865,7 @@ fun Context.isInSubFolderInDownloadDir(path: String): Boolean {
 }
 
 fun Context.isRestrictedSAFOnlyRoot(path: String): Boolean {
-    return IsRPlusUseCase() && getSAFOnlyDirs().any { "${path.trimEnd('/')}/".startsWith(it) }
+    return IsRPlusUseCase() && getSAFOnlyDirs(this).any { "${path.trimEnd('/')}/".startsWith(it) }
 }
 
 fun Context.isRestrictedWithSAFSdk30(path: String): Boolean {
