@@ -802,21 +802,23 @@ val Context.navigationBarRight: Boolean get() = usableScreenSize.x < realScreenS
 
 val Context.navigationBarSize: Point
     get() = when {
-        navigationBarRight -> Point(newNavigationBarHeight, usableScreenSize.y)
-        (usableScreenSize.y < realScreenSize.y) -> Point(usableScreenSize.x, newNavigationBarHeight)
+        navigationBarRight -> Point(newNavigationBarHeight(this), usableScreenSize.y)
+        (usableScreenSize.y < realScreenSize.y) -> Point(
+            usableScreenSize.x,
+            newNavigationBarHeight(this)
+        )
         else -> Point()
     }
 
-val Context.newNavigationBarHeight: Int
-    @SuppressLint("InternalInsetResource")
-    get() {
-        var navigationBarHeight = 0
-        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        if (resourceId > 0) {
-            navigationBarHeight = resources.getDimensionPixelSize(resourceId)
-        }
-        return navigationBarHeight
+@SuppressLint("DiscouragedApi", "InternalInsetResource")
+private fun newNavigationBarHeight(owner: Context): Int {
+    var navigationBarHeight = 0
+    val resourceId = owner.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    if (resourceId > 0) {
+        navigationBarHeight = owner.resources.getDimensionPixelSize(resourceId)
     }
+    return navigationBarHeight
+}
 
 fun Context.isInDownloadDir(path: String): Boolean {
     if (path.startsWith(recycleBinPath)) {
