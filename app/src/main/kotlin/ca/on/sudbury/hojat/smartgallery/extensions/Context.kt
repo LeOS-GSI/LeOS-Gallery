@@ -458,7 +458,10 @@ fun Context.getDoesFilePathExist(path: String, otgPathToUse: String? = null): Bo
     val otgPath = otgPathToUse ?: baseConfig.OTGPath
     return when {
         isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(path)?.exists() ?: false
-        otgPath.isNotEmpty() && path.startsWith(otgPath) -> getOTGFastDocumentFile(path)?.exists()
+        otgPath.isNotEmpty() && path.startsWith(otgPath) -> getOTGFastDocumentFile(
+            this,
+            path
+        )?.exists()
             ?: false
         else -> File(path).exists()
     }
@@ -1229,7 +1232,7 @@ private fun getDirectParentSubfolders(
 
 fun Context.getFastDocumentFile(path: String): DocumentFile? {
     if (IsPathOnOtgUseCase(this, path)) {
-        return getOTGFastDocumentFile(path)
+        return getOTGFastDocumentFile(this, path)
     }
 
     if (baseConfig.sdCardPath.isEmpty()) {
@@ -1375,6 +1378,7 @@ fun Context.loadImage(
     } else if (type == TYPE_GIFS) {
         if (!animateGifs) {
             loadStaticGIF(
+                this,
                 path,
                 target,
                 cropThumbnails,
@@ -1394,6 +1398,7 @@ fun Context.loadImage(
                 if (cropThumbnails) ImageView.ScaleType.CENTER_CROP else ImageView.ScaleType.FIT_CENTER
         } catch (e: Exception) {
             loadStaticGIF(
+                this,
                 path,
                 target,
                 cropThumbnails,
@@ -1403,6 +1408,7 @@ fun Context.loadImage(
             )
         } catch (e: OutOfMemoryError) {
             loadStaticGIF(
+                this,
                 path,
                 target,
                 cropThumbnails,
@@ -1412,7 +1418,7 @@ fun Context.loadImage(
             )
         }
     } else if (type == TYPE_SVGS) {
-        loadSVG(path, target, cropThumbnails, roundCorners, signature)
+        loadSVG(this, path, target, cropThumbnails, roundCorners, signature)
     }
 }
 
@@ -1478,7 +1484,7 @@ private fun loadPng(
                 targetBitmap: Target<Bitmap>?,
                 isFirstResource: Boolean
             ): Boolean {
-                owner.tryLoadingWithPicasso(path, target, cropThumbnails, roundCorners, signature)
+                tryLoadingWithPicasso(owner, path, target, cropThumbnails, roundCorners, signature)
                 return true
             }
 
@@ -1535,7 +1541,8 @@ fun Context.loadJpg(
 }
 
 @SuppressLint("CheckResult")
-fun Context.loadStaticGIF(
+private fun loadStaticGIF(
+    owner: Context,
     path: String,
     target: MySquareImageView,
     cropThumbnails: Boolean,
@@ -1550,7 +1557,7 @@ fun Context.loadStaticGIF(
         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 
     if (cropThumbnails) options.centerCrop() else options.fitCenter()
-    var builder = Glide.with(applicationContext)
+    var builder = Glide.with(owner.applicationContext)
         .asBitmap() // make sure the GIF wont animate
         .load(path)
         .apply(options)
@@ -1558,14 +1565,15 @@ fun Context.loadStaticGIF(
     if (roundCorners != ROUNDED_CORNERS_NONE) {
         val cornerSize =
             if (roundCorners == ROUNDED_CORNERS_SMALL) R.dimen.rounded_corner_radius_small else R.dimen.rounded_corner_radius_big
-        val cornerRadius = resources.getDimension(cornerSize).toInt()
+        val cornerRadius = owner.resources.getDimension(cornerSize).toInt()
         builder = builder.transform(CenterCrop(), RoundedCorners(cornerRadius))
     }
 
     builder.into(target)
 }
 
-fun Context.loadSVG(
+private fun loadSVG(
+    owner: Context,
     path: String,
     target: MySquareImageView,
     cropThumbnails: Boolean,
@@ -1576,7 +1584,7 @@ fun Context.loadSVG(
         if (cropThumbnails) ImageView.ScaleType.CENTER_CROP else ImageView.ScaleType.FIT_CENTER
 
     val options = RequestOptions().signature(signature)
-    var builder = Glide.with(applicationContext)
+    var builder = Glide.with(owner.applicationContext)
         .`as`(PictureDrawable::class.java)
         .listener(SvgSoftwareLayerSetter())
         .load(path)
@@ -1586,7 +1594,7 @@ fun Context.loadSVG(
     if (roundCorners != ROUNDED_CORNERS_NONE) {
         val cornerSize =
             if (roundCorners == ROUNDED_CORNERS_SMALL) R.dimen.rounded_corner_radius_small else R.dimen.rounded_corner_radius_big
-        val cornerRadius = resources.getDimension(cornerSize).toInt()
+        val cornerRadius = owner.resources.getDimension(cornerSize).toInt()
         builder = builder.transform(CenterCrop(), RoundedCorners(cornerRadius))
     }
 
@@ -1594,7 +1602,8 @@ fun Context.loadSVG(
 }
 
 // intended mostly for Android 11 issues, that fail loading PNG files bigger than 10 MB
-fun Context.tryLoadingWithPicasso(
+private fun tryLoadingWithPicasso(
+    owner: Context,
     path: String,
     view: MySquareImageView,
     cropThumbnails: Boolean,
@@ -1618,7 +1627,7 @@ fun Context.tryLoadingWithPicasso(
         if (roundCorners != ROUNDED_CORNERS_NONE) {
             val cornerSize =
                 if (roundCorners == ROUNDED_CORNERS_SMALL) R.dimen.rounded_corner_radius_small else R.dimen.rounded_corner_radius_big
-            val cornerRadius = resources.getDimension(cornerSize).toInt()
+            val cornerRadius = owner.resources.getDimension(cornerSize).toInt()
             builder = builder.transform(PicassoRoundedCornersTransformation(cornerRadius.toFloat()))
         }
 
@@ -1828,11 +1837,15 @@ fun Context.removeInvalidDBDirectories(dirs: ArrayList<Directory>? = null) {
     }
 }
 
-fun Context.tryFastDocumentDelete(path: String, allowDeleteFolder: Boolean): Boolean {
-    val document = getFastDocumentFile(path)
+private fun tryFastDocumentDelete(
+    owner: Context,
+    path: String,
+    allowDeleteFolder: Boolean
+): Boolean {
+    val document = owner.getFastDocumentFile(path)
     return if (document?.isFile == true || allowDeleteFolder) {
         try {
-            DocumentsContract.deleteDocument(contentResolver, document?.uri!!)
+            DocumentsContract.deleteDocument(owner.contentResolver, document?.uri!!)
         } catch (e: Exception) {
             false
         }
@@ -1846,7 +1859,7 @@ fun Context.trySAFFileDelete(
     allowDeleteFolder: Boolean = false,
     callback: ((wasSuccess: Boolean) -> Unit)? = null
 ) {
-    var fileDeleted = tryFastDocumentDelete(fileDirItem.path, allowDeleteFolder)
+    var fileDeleted = tryFastDocumentDelete(this, fileDirItem.path, allowDeleteFolder)
     if (!fileDeleted) {
         val document = getDocumentFile(fileDirItem.path)
         if (document != null && (fileDirItem.isDirectory == document.isDirectory)) {
@@ -1919,21 +1932,26 @@ fun Context.deleteDocumentWithSAFSdk30(
     }
 }
 
-fun Context.getOTGFastDocumentFile(path: String, otgPathToUse: String? = null): DocumentFile? {
-    if (baseConfig.OTGTreeUri.isEmpty()) {
+private fun getOTGFastDocumentFile(
+    owner: Context,
+    path: String,
+    otgPathToUse: String? = null
+): DocumentFile? {
+    if (owner.baseConfig.OTGTreeUri.isEmpty()) {
         return null
     }
 
-    val otgPath = otgPathToUse ?: baseConfig.OTGPath
-    if (baseConfig.OTGPartition.isEmpty()) {
-        baseConfig.OTGPartition =
-            baseConfig.OTGTreeUri.removeSuffix("%3A").substringAfterLast('/').trimEnd('/')
-        updateOTGPathFromPartition()
+    val otgPath = otgPathToUse ?: owner.baseConfig.OTGPath
+    if (owner.baseConfig.OTGPartition.isEmpty()) {
+        owner.baseConfig.OTGPartition =
+            owner.baseConfig.OTGTreeUri.removeSuffix("%3A").substringAfterLast('/').trimEnd('/')
+        owner.updateOTGPathFromPartition()
     }
 
     val relativePath = Uri.encode(path.substring(otgPath.length).trim('/'))
-    val fullUri = "${baseConfig.OTGTreeUri}/document/${baseConfig.OTGPartition}%3A$relativePath"
-    return DocumentFile.fromSingleUri(this, Uri.parse(fullUri))
+    val fullUri =
+        "${owner.baseConfig.OTGTreeUri}/document/${owner.baseConfig.OTGPartition}%3A$relativePath"
+    return DocumentFile.fromSingleUri(owner, Uri.parse(fullUri))
 }
 
 fun Context.getOTGFolderChildren(path: String): Array<DocumentFile>? =
@@ -2010,7 +2028,7 @@ fun Context.getUpdatedDeletedMedia(): ArrayList<Medium> {
 fun Context.getIsPathDirectory(path: String): Boolean {
     return when {
         isRestrictedSAFOnlyRoot(path) -> getFastAndroidSAFDocument(path)?.isDirectory ?: false
-        IsPathOnOtgUseCase(this, path) -> getOTGFastDocumentFile(path)?.isDirectory ?: false
+        IsPathOnOtgUseCase(this, path) -> getOTGFastDocumentFile(this, path)?.isDirectory ?: false
         else -> File(path).isDirectory
     }
 }
@@ -3045,7 +3063,7 @@ fun Context.deleteAndroidSAFDirectory(
 
 fun Context.updateOTGPathFromPartition() {
     val otgPath = "/storage/${baseConfig.OTGPartition}"
-    baseConfig.OTGPath = if (getOTGFastDocumentFile(otgPath, otgPath)?.exists() == true) {
+    baseConfig.OTGPath = if (getOTGFastDocumentFile(this, otgPath, otgPath)?.exists() == true) {
         "/storage/${baseConfig.OTGPartition}"
     } else {
         "/mnt/media_rw/${baseConfig.OTGPartition}"
