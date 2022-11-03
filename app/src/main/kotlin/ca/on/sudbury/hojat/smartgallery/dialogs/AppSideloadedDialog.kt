@@ -7,7 +7,6 @@ import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogTextviewBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import ca.on.sudbury.hojat.smartgallery.extensions.getStringsPackageName
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import timber.log.Timber
@@ -23,7 +22,7 @@ class AppSideloadedDialog(
 
     private var dialog: AlertDialog? = null
     private val url =
-        "https://play.google.com/store/apps/details?id=${activity.getStringsPackageName()}"
+        "https://play.google.com/store/apps/details?id=${activity.getString(R.string.package_name)}"
 
     init {
         Timber.d("Hojat Ghasemi : AppSideloadedDialog was called")

@@ -281,8 +281,6 @@ private fun getMediaContent(owner: Context, path: String, uri: Uri): Uri? {
 fun Context.getMyContentProviderCursorLoader() =
     CursorLoader(this, MyContentProvider.MY_CONTENT_URI, null, null, null, null)
 
-fun Context.getStringsPackageName() = getString(R.string.package_name)
-
 fun Context.queryCursor(
     uri: Uri,
     projection: Array<String>,
