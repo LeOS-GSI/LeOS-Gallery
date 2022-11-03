@@ -125,7 +125,6 @@ open class FileDirItem(
             else -> name
         }
 
-
     @SuppressLint("Recycle")
     fun getProperSize(context: Context, countHidden: Boolean): Long {
         return when {

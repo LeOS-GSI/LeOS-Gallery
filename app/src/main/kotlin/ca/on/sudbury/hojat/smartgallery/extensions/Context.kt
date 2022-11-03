@@ -2586,13 +2586,6 @@ fun Context.getRealPathFromURI(uri: Uri): String? {
     return getDataColumn(this, uri)
 }
 
-fun Context.getSharedTheme(callback: (sharedTheme: SharedTheme?) -> Unit) {
-    val cursorLoader = getMyContentProviderCursorLoader()
-    RunOnBackgroundThreadUseCase {
-        callback(getSharedThemeSync(cursorLoader))
-    }
-}
-
 fun getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
     val cursor = cursorLoader.loadInBackground()
     cursor?.use {
