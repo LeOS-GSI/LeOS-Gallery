@@ -24,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getImageResolution
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
-import ca.on.sudbury.hojat.smartgallery.extensions.getMediaStoreLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getResolution
@@ -47,7 +46,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import com.bumptech.glide.signature.ObjectKey
 import java.io.File
-import java.util.*
+import java.util.Locale
 
 open class FileDirItem(
     val path: String,
@@ -175,7 +174,8 @@ open class FileDirItem(
             context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFLastModified(path)
             IsPathOnOtgUseCase(context, path) ->
                 context.getFastDocumentFile(path)?.lastModified() ?: 0L
-            IsNougatPlusUseCase() && path.startsWith("content://") -> context.getMediaStoreLastModified(
+            IsNougatPlusUseCase() && path.startsWith("content://") -> getMediaStoreLastModified(
+                context,
                 path
             )
             else -> File(path).lastModified()
@@ -294,5 +294,27 @@ open class FileDirItem(
         } catch (ignored: Exception) {
             null
         }
+    }
+
+    private fun getMediaStoreLastModified(owner: Context, path: String): Long {
+        val projection = arrayOf(
+            MediaStore.MediaColumns.DATE_MODIFIED
+        )
+
+        val uri = getFileUri(path)
+        val selection = "${BaseColumns._ID} = ?"
+        val selectionArgs = arrayOf(path.substringAfterLast("/"))
+
+        try {
+            val cursor =
+                owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            cursor?.use {
+                if (cursor.moveToFirst()) {
+                    return cursor.getLongValue(MediaStore.MediaColumns.DATE_MODIFIED) * 1000
+                }
+            }
+        } catch (ignored: Exception) {
+        }
+        return 0
     }
 }

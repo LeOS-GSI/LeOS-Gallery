@@ -2616,27 +2616,6 @@ fun getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
     return null
 }
 
-fun Context.getMediaStoreLastModified(path: String): Long {
-    val projection = arrayOf(
-        MediaStore.MediaColumns.DATE_MODIFIED
-    )
-
-    val uri = getFileUri(path)
-    val selection = "${BaseColumns._ID} = ?"
-    val selectionArgs = arrayOf(path.substringAfterLast("/"))
-
-    try {
-        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
-        cursor?.use {
-            if (cursor.moveToFirst()) {
-                return cursor.getLongValue(MediaStore.MediaColumns.DATE_MODIFIED) * 1000
-            }
-        }
-    } catch (ignored: Exception) {
-    }
-    return 0
-}
-
 fun Context.hasOTGConnected(): Boolean {
     return try {
         (getSystemService(Context.USB_SERVICE) as UsbManager).deviceList.any {
