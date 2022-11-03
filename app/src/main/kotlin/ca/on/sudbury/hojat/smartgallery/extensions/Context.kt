@@ -2789,24 +2789,6 @@ private fun getMediaStoreIds(context: Context): HashMap<String, Long> {
     return ids
 }
 
-fun Context.getAndroidSAFLastModified(path: String): Long {
-    val treeUri = getAndroidTreeUri(path).toUri()
-    if (treeUri == Uri.EMPTY) {
-        return 0L
-    }
-
-    val documentId = createAndroidSAFDocumentId(path)
-    val projection = arrayOf(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
-    val documentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
-    return contentResolver.query(documentUri, projection, null, null, null)?.use { cursor ->
-        if (cursor.moveToFirst()) {
-            cursor.getLongValue(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
-        } else {
-            0L
-        }
-    } ?: 0L
-}
-
 fun Context.deleteAndroidSAFDirectory(
     path: String,
     allowDeleteFolder: Boolean = false,

@@ -6,6 +6,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.provider.BaseColumns
+import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import androidx.annotation.RequiresApi
@@ -13,7 +14,6 @@ import androidx.core.net.toUri
 import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidSAFDocumentId
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFDirectChildrenCount
-import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFLastModified
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
@@ -175,7 +175,7 @@ open class FileDirItem(
 
     fun getLastModified(context: Context): Long {
         return when {
-            context.isRestrictedSAFOnlyRoot(path) -> context.getAndroidSAFLastModified(path)
+            context.isRestrictedSAFOnlyRoot(path) -> getAndroidSAFLastModified(context, path)
             IsPathOnOtgUseCase(context, path) ->
                 context.getFastDocumentFile(path)?.lastModified() ?: 0L
             IsNougatPlusUseCase() && path.startsWith("content://") -> getMediaStoreLastModified(
@@ -191,7 +191,7 @@ open class FileDirItem(
     @RequiresApi(Build.VERSION_CODES.Q)
     fun getDuration(context: Context) = context.getDuration(path)?.getFormattedDuration()
 
-    fun getArtist(context: Context) = getArtist(context ,path)
+    fun getArtist(context: Context) = getArtist(context, path)
 
     fun getAlbum(context: Context) = getAlbum(context, path)
 
@@ -365,7 +365,8 @@ open class FileDirItem(
             )
 
         try {
-            val cursor = owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            val cursor =
+                owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
             cursor?.use {
                 if (cursor.moveToFirst()) {
                     return cursor.getStringValue(MediaStore.Audio.Media.ARTIST)
@@ -382,4 +383,24 @@ open class FileDirItem(
             null
         }
     }
+
+    private fun getAndroidSAFLastModified(owner: Context, path: String): Long {
+        val treeUri = owner.getAndroidTreeUri(path).toUri()
+        if (treeUri == Uri.EMPTY) {
+            return 0L
+        }
+
+        val documentId = owner.createAndroidSAFDocumentId(path)
+        val projection = arrayOf(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
+        val documentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, documentId)
+        return owner.contentResolver.query(documentUri, projection, null, null, null)
+            ?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    cursor.getLongValue(DocumentsContract.Document.COLUMN_LAST_MODIFIED)
+                } else {
+                    0L
+                }
+            } ?: 0L
+    }
+
 }
