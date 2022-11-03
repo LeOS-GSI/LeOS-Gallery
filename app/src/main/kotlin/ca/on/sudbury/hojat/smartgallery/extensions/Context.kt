@@ -557,16 +557,14 @@ fun Context.getFirstParentLevel(path: String): Int {
     }
 }
 
-fun Context.getHumanReadablePath(path: String): String {
-    return getString(
-        when (path) {
-            "/" -> R.string.root
-            internalStoragePath -> R.string.internal
-            baseConfig.OTGPath -> R.string.usb
-            else -> R.string.sd_card
-        }
-    )
-}
+private fun getHumanReadablePath(owner: Context, path: String) = owner.getString(
+    when (path) {
+        "/" -> R.string.root
+        owner.internalStoragePath -> R.string.internal
+        owner.baseConfig.OTGPath -> R.string.usb
+        else -> R.string.sd_card
+    }
+)
 
 fun Context.getImageResolution(path: String): Point? {
     val options = BitmapFactory.Options()
@@ -757,8 +755,8 @@ fun Context.getVideoResolution(path: String): Point? {
 fun Context.humanizePath(path: String): String {
     val trimmedPath = path.trimEnd('/')
     return when (val basePath = path.getBasePath(this)) {
-        "/" -> "${getHumanReadablePath(basePath)}$trimmedPath"
-        else -> trimmedPath.replaceFirst(basePath, getHumanReadablePath(basePath))
+        "/" -> "${getHumanReadablePath(this, basePath)}$trimmedPath"
+        else -> trimmedPath.replaceFirst(basePath, getHumanReadablePath(this, basePath))
     }
 }
 
