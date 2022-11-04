@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.graphics.Color
-import android.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import java.util.Locale
 import kotlin.math.roundToInt
