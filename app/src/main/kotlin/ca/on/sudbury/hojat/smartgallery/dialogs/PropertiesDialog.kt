@@ -36,7 +36,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.getDigest
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
@@ -56,6 +55,8 @@ import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
 import java.io.File
+import java.io.InputStream
+import java.security.MessageDigest
 
 class PropertiesDialog() {
     private lateinit var mInflater: LayoutInflater
@@ -284,8 +285,13 @@ class PropertiesDialog() {
                 addProperty(R.string.md5, "…", R.id.properties_md5)
                 RunOnBackgroundThreadUseCase {
                     val md5 = if (mActivity.isRestrictedSAFOnlyRoot(path)) {
-                        mActivity.contentResolver.openInputStream(mActivity.getAndroidSAFUri(path))
-                            ?.getDigest(MD5)
+                        getDigest(
+                            mActivity.contentResolver.openInputStream(
+                                mActivity.getAndroidSAFUri(
+                                    path
+                                )
+                            ), MD5
+                        )
                     } else {
                         getDigest(File(path), MD5)
                     }
@@ -305,7 +311,7 @@ class PropertiesDialog() {
 
     private fun getDigest(inputFile: File, algorithm: String): String? {
         return try {
-            inputFile.inputStream().getDigest(algorithm)
+            getDigest(inputFile.inputStream(), algorithm)
         } catch (e: Exception) {
             null
         }
@@ -546,5 +552,20 @@ class PropertiesDialog() {
 
     private fun canModifyEXIF(extensionName: String) =
         extensionsSupportingEXIF.any { extensionName.endsWith(it, true) }
+
+    private fun getDigest(input: InputStream?, algorithm: String): String {
+        return input?.use { fis ->
+            val md = MessageDigest.getInstance(algorithm)
+            val buffer = ByteArray(8192)
+            generateSequence {
+                when (val bytesRead = fis.read(buffer)) {
+                    -1 -> null
+                    else -> bytesRead
+                }
+            }.forEach { bytesRead -> md.update(buffer, 0, bytesRead) }
+            md.digest().joinToString("") { "%02x".format(it) }
+        }
+            ?: ""
+    }
 
 }
