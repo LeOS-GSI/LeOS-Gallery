@@ -20,7 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFFileItems
 import ca.on.sudbury.hojat.smartgallery.extensions.getColoredDrawableWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
-import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getIsPathDirectory
@@ -49,6 +48,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectChildrenUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -358,7 +358,9 @@ class FilePickerDialog(
                     0    // we don't actually need the real lastModified that badly, do not check file.lastModified()
             }
 
-            val children = if (isDirectory) file.getDirectChildrenCount(activity, showHidden) else 0
+            val children =
+                if (isDirectory) CalculateDirectChildrenUseCase(file, activity, showHidden)
+                else 0
             items.add(FileDirItem(curPath, curName, isDirectory, children, size, lastModified))
         }
         callback(items)

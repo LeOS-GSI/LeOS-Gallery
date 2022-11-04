@@ -15,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.createAndroidSAFDocumentId
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidSAFDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getAndroidTreeUri
-import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentFile
@@ -41,6 +40,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectChildrenUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectoryFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
@@ -169,7 +169,7 @@ open class FileDirItem(
             IsPathOnOtgUseCase(context, path) -> context.getDocumentFile(path)?.listFiles()
                 ?.filter { if (countHiddenItems) true else !it.name!!.startsWith(".") }?.size
                 ?: 0
-            else -> File(path).getDirectChildrenCount(context, countHiddenItems)
+            else -> CalculateDirectChildrenUseCase(File(path), context, countHiddenItems)
         }
     }
 

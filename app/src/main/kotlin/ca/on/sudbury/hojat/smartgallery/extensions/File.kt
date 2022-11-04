@@ -6,25 +6,6 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import java.io.File
 import java.util.HashMap
 
-fun File.getDirectChildrenCount(context: Context, countHiddenItems: Boolean): Int {
-    val fileCount = if (context.isRestrictedSAFOnlyRoot(path)) {
-        context.getAndroidSAFDirectChildrenCount(
-            path,
-            countHiddenItems
-        )
-    } else {
-        listFiles()?.filter {
-            if (countHiddenItems) {
-                true
-            } else {
-                !it.name.startsWith('.')
-            }
-        }?.size ?: 0
-    }
-
-    return fileCount
-}
-
 fun File.toFileDirItem(context: Context) = FileDirItem(
     absolutePath,
     name,
@@ -34,8 +15,12 @@ fun File.toFileDirItem(context: Context) = FileDirItem(
     lastModified()
 )
 
+/**
+ * returns true if this directory contains a ".nomedia" file.
+ */
 fun File.containsNoMedia(): Boolean {
     return if (!isDirectory) {
+        // if this file isn't a directory, it means it doesn't contain ".nomedia"
         false
     } else {
         File(this, NOMEDIA).exists()
