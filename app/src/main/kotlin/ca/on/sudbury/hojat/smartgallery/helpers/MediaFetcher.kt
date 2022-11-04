@@ -41,6 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
@@ -260,7 +261,7 @@ class MediaFetcher(val context: Context) {
     private fun getSelectionQuery(filterMedia: Int): String {
         val query = StringBuilder()
         if (filterMedia and TYPE_IMAGES != 0) {
-            photoExtensions.forEach {
+            SupportedExtensionsRepository.photoExtensions.forEach {
                 query.append("${Images.Media.DATA} LIKE ? OR ")
             }
         }
@@ -271,7 +272,7 @@ class MediaFetcher(val context: Context) {
         }
 
         if (filterMedia and TYPE_VIDEOS != 0) {
-            videoExtensions.forEach { _ ->
+            SupportedExtensionsRepository.videoExtensions.forEach { _ ->
                 query.append("${Images.Media.DATA} LIKE ? OR ")
             }
         }
@@ -281,7 +282,7 @@ class MediaFetcher(val context: Context) {
         }
 
         if (filterMedia and TYPE_RAWS != 0) {
-            rawExtensions.forEach {
+            SupportedExtensionsRepository.rawExtensions.forEach {
                 query.append("${Images.Media.DATA} LIKE ? OR ")
             }
         }
@@ -296,7 +297,7 @@ class MediaFetcher(val context: Context) {
     private fun getSelectionArgsQuery(filterMedia: Int): ArrayList<String> {
         val args = ArrayList<String>()
         if (filterMedia and TYPE_IMAGES != 0) {
-            photoExtensions.forEach {
+            SupportedExtensionsRepository.photoExtensions.forEach {
                 args.add("%$it")
             }
         }
@@ -307,7 +308,7 @@ class MediaFetcher(val context: Context) {
         }
 
         if (filterMedia and TYPE_VIDEOS != 0) {
-            videoExtensions.forEach {
+            SupportedExtensionsRepository.videoExtensions.forEach {
                 args.add("%$it")
             }
         }
@@ -317,7 +318,7 @@ class MediaFetcher(val context: Context) {
         }
 
         if (filterMedia and TYPE_RAWS != 0) {
-            rawExtensions.forEach {
+            SupportedExtensionsRepository.rawExtensions.forEach {
                 args.add("%$it")
             }
         }

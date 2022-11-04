@@ -134,11 +134,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
-import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectoryFileCountUseCase
@@ -871,17 +869,18 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             val files = File(it.path).listFiles()
             files?.filter {
                 it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
-                        ((photoExtensions.any { extension ->
+                        ((
+                                SupportedExtensionsRepository.photoExtensions.any { extension ->
                             it.absolutePath.endsWith(extension, true)
                         } && filter and TYPE_IMAGES != 0) ||
-                                (videoExtensions.any { extension ->
+                                (SupportedExtensionsRepository.videoExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
                                 } && filter and TYPE_VIDEOS != 0) ||
                                 (it.absolutePath.endsWith(
                                     ".gif",
                                     true
                                 ) && filter and TYPE_GIFS != 0) ||
-                                (rawExtensions.any { extension ->
+                                (SupportedExtensionsRepository.rawExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
                                 } && filter and TYPE_RAWS != 0) ||
                                 (IsSvgUseCase(it.absolutePath) && filter and TYPE_SVGS != 0))

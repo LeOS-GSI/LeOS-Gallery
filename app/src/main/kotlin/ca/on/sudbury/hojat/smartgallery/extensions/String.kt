@@ -7,12 +7,9 @@ import android.graphics.Point
 import android.os.Environment
 import android.provider.MediaStore
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.normalizeRegex
-import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.videoExtensions
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
@@ -121,7 +118,7 @@ private fun isThisOrParentExcluded(path: String, excludedPaths: MutableSet<Strin
     }
 
 private fun isAudioFast(path: String) =
-    audioExtensions.any { audioExtension -> path.endsWith(audioExtension, true) }
+    SupportedExtensionsRepository.audioExtensions.any { audioExtension -> path.endsWith(audioExtension, true) }
 
 fun String.isAudioSlow() =
     isAudioFast(this) || getMimeType().startsWith("audio") || startsWith(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString())
@@ -139,7 +136,7 @@ fun String.isAValidFilename(): Boolean {
 fun String.isMediaFile() =
     isImageFast() || isVideoFast() || IsGifUseCase(this) || isRawFast() || IsSvgUseCase(this) || isPortrait()
 
-fun String.isImageFast() = photoExtensions.any { endsWith(it, true) }
+fun String.isImageFast() = SupportedExtensionsRepository.photoExtensions.any { endsWith(it, true) }
 
 fun String.isPortrait() = getFilenameFromPath().contains(
     "portrait",
@@ -149,7 +146,7 @@ fun String.isPortrait() = getFilenameFromPath().contains(
 fun String.isImageSlow() =
     isImageFast() || getMimeType().startsWith("image") || startsWith(MediaStore.Images.Media.EXTERNAL_CONTENT_URI.toString())
 
-fun String.isRawFast() = rawExtensions.any { endsWith(it, true) }
+fun String.isRawFast() = SupportedExtensionsRepository.rawExtensions.any { endsWith(it, true) }
 
 fun String.isVideoSlow() = isVideoFast() || getMimeType().startsWith("video") || startsWith(
     MediaStore.Video.Media.EXTERNAL_CONTENT_URI.toString()
@@ -253,7 +250,7 @@ fun String.isDownloadsFolder() = equals(
 )
 
 // fast extension checks, not guaranteed to be accurate
-fun String.isVideoFast() = videoExtensions.any { endsWith(it, true) }
+fun String.isVideoFast() = SupportedExtensionsRepository.videoExtensions.any { endsWith(it, true) }
 
 // remove diacritics, for example č -> c
 fun String.normalizeString() = Normalizer.normalize(this, Normalizer.Form.NFD).replace(
