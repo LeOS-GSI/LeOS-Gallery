@@ -57,7 +57,7 @@ class SecurityDialog(
                 scrollView = dialogScrollview,
                 biometricPromptHost = AuthPromptHost(activity as FragmentActivity),
                 showBiometricIdTab = shouldShowBiometricIdTab(),
-                showBiometricAuthentication = showTabIndex == ProtectionState.ProtectionFingerPrint.id && IsRPlusUseCase()
+                showBiometricAuthentication = showTabIndex == ProtectionState.FingerPrint.id && IsRPlusUseCase()
             )
             viewPager.adapter = tabsAdapter
 
@@ -90,7 +90,7 @@ class SecurityDialog(
                         if (IsRPlusUseCase()) R.string.biometrics else R.string.fingerprint
                     dialogTabLayout.addTab(
                         dialogTabLayout.newTab().setText(tabTitle),
-                        ProtectionState.ProtectionFingerPrint.id
+                        ProtectionState.FingerPrint.id
                     )
                 }
 
@@ -107,10 +107,10 @@ class SecurityDialog(
                         it.text.toString().equals(
                             root.resources.getString(R.string.pattern),
                             true
-                        ) -> ProtectionState.ProtectionPattern.id
+                        ) -> ProtectionState.Pattern.id
                         it.text.toString()
-                            .equals(root.resources.getString(R.string.pin), true) -> ProtectionState.ProtectionPin.id
-                        else -> ProtectionState.ProtectionFingerPrint.id
+                            .equals(root.resources.getString(R.string.pin), true) -> ProtectionState.Pin.id
+                        else -> ProtectionState.FingerPrint.id
                     }
                     updateTabVisibility()
                 })

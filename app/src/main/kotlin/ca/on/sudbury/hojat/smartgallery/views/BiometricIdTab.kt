@@ -68,7 +68,7 @@ class BiometricIdTab(context: Context, attrs: AttributeSet) : ConstraintLayout(c
                         activity: FragmentActivity?,
                         result: BiometricPrompt.AuthenticationResult
                     ) {
-                        successCallback?.invoke("", ProtectionState.ProtectionFingerPrint.id)
+                        successCallback?.invoke("", ProtectionState.FingerPrint.id)
                     }
 
                     override fun onAuthenticationError(

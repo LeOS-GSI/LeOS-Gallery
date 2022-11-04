@@ -485,7 +485,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isHiddenPasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.hiddenProtectionType == ProtectionState.ProtectionFingerPrint.id)
+                            if (config.hiddenProtectionType == ProtectionState.FingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }
@@ -515,7 +515,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isExcludedPasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.excludedProtectionType == ProtectionState.ProtectionFingerPrint.id)
+                            if (config.excludedProtectionType == ProtectionState.FingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }
@@ -539,7 +539,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isAppPasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.appProtectionType == ProtectionState.ProtectionFingerPrint.id)
+                            if (config.appProtectionType == ProtectionState.FingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }
@@ -565,7 +565,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isDeletePasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.deleteProtectionType == ProtectionState.ProtectionFingerPrint.id)
+                            if (config.deleteProtectionType == ProtectionState.FingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }

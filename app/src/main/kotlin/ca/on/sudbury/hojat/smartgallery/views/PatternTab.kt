@@ -81,7 +81,7 @@ class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context
             hash == newHash -> {
                 pattern_lock_view.setViewMode(PatternLockView.PatternViewMode.CORRECT)
                 Handler().postDelayed({
-                    hashListener.receivedHash(hash, ProtectionState.ProtectionPattern.id)
+                    hashListener.receivedHash(hash, ProtectionState.Pattern.id)
                 }, 300)
             }
             else -> {

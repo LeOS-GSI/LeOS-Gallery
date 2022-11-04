@@ -81,7 +81,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
             resetPin()
             pin_lock_title.setText(R.string.repeat_pin)
         } else if (hash == newHash) {
-            hashListener.receivedHash(hash, ProtectionState.ProtectionPin.id)
+            hashListener.receivedHash(hash, ProtectionState.Pin.id)
         } else {
             resetPin()
             ShowSafeToastUseCase(context, R.string.wrong_pin)
@@ -101,7 +101,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
     private fun updatePinCode() {
         pin_lock_current_pin.text = "*".repeat(pin.length)
         if (hash.isNotEmpty() && hash == getHashedPin()) {
-            hashListener.receivedHash(hash, ProtectionState.ProtectionPin.id)
+            hashListener.receivedHash(hash, ProtectionState.Pin.id)
         }
     }
 

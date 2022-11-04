@@ -66,7 +66,7 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
 
         Reprint.authenticate(object : AuthenticationListener {
             override fun onSuccess(moduleTag: Int) {
-                hashListener.receivedHash("", ProtectionState.ProtectionFingerPrint.id)
+                hashListener.receivedHash("", ProtectionState.FingerPrint.id)
             }
 
             override fun onFailure(

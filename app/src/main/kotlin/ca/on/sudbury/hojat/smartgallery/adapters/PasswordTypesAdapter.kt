@@ -49,9 +49,9 @@ class PasswordTypesAdapter(
     override fun isViewFromObject(view: View, item: Any) = view == item
 
     private fun layoutSelection(position: Int): Int = when (position) {
-        ProtectionState.ProtectionPattern.id -> R.layout.tab_pattern
-        ProtectionState.ProtectionPin.id -> R.layout.tab_pin
-        ProtectionState.ProtectionFingerPrint.id -> if (IsRPlusUseCase()) R.layout.tab_biometric_id else R.layout.tab_fingerprint
+        ProtectionState.Pattern.id -> R.layout.tab_pattern
+        ProtectionState.Pin.id -> R.layout.tab_pin
+        ProtectionState.FingerPrint.id -> if (IsRPlusUseCase()) R.layout.tab_biometric_id else R.layout.tab_fingerprint
         else -> throw RuntimeException("Only 3 tabs allowed")
     }
 

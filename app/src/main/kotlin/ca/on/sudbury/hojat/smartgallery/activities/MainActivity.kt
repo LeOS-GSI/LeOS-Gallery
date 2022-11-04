@@ -564,13 +564,13 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(ProtectionState.WasProtectionHandled.id, mWasProtectionHandled)
+        outState.putBoolean(ProtectionState.WasHandled.id, mWasProtectionHandled)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         mWasProtectionHandled =
-            savedInstanceState.getBoolean(ProtectionState.WasProtectionHandled.id, false)
+            savedInstanceState.getBoolean(ProtectionState.WasHandled.id, false)
     }
 
     private fun getRecyclerAdapter() = binding.directoriesGrid.adapter as? DirectoryAdapter
