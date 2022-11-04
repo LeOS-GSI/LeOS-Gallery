@@ -66,11 +66,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.loadImage
 import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_LINE
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_ROUNDED_CORNERS
@@ -87,6 +82,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
@@ -629,18 +625,18 @@ class DirectoryAdapter(
                         it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
                         ((SupportedExtensionsRepository.photoExtensions.any { extension ->
                             it.absolutePath.endsWith(extension, true)
-                        } && filter and TYPE_IMAGES != 0) ||
+                        } && filter and MediaType.Image.id != 0) ||
                                 (SupportedExtensionsRepository.videoExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
-                                } && filter and TYPE_VIDEOS != 0) ||
+                                } && filter and MediaType.Video.id != 0) ||
                                 (it.absolutePath.endsWith(
                                     ".gif",
                                     true
-                                ) && filter and TYPE_GIFS != 0) ||
+                                ) && filter and MediaType.Gif.id != 0) ||
                                 (SupportedExtensionsRepository.rawExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
-                                } && filter and TYPE_RAWS != 0) ||
-                                (IsSvgUseCase(it.absolutePath) && filter and TYPE_SVGS != 0))
+                                } && filter and MediaType.Raw.id != 0) ||
+                                (IsSvgUseCase(it.absolutePath) && filter and MediaType.Svg.id != 0))
             }?.mapTo(paths) { it.absolutePath }
         }
 
@@ -894,11 +890,11 @@ class DirectoryAdapter(
         view.apply {
             dir_path?.text = "${directory.path.substringBeforeLast("/")}/"
             val thumbnailType = when {
-                directory.tmb.isVideoFast() -> TYPE_VIDEOS
-                IsGifUseCase(directory.tmb) -> TYPE_GIFS
-                directory.tmb.isRawFast() -> TYPE_RAWS
-                IsSvgUseCase(directory.tmb) -> TYPE_SVGS
-                else -> TYPE_IMAGES
+                directory.tmb.isVideoFast() -> MediaType.Video.id
+                IsGifUseCase(directory.tmb) -> MediaType.Gif.id
+                directory.tmb.isRawFast() -> MediaType.Raw.id
+                IsSvgUseCase(directory.tmb) -> MediaType.Svg.id
+                else -> MediaType.Image.id
             }
 
             BeVisibleOrGoneUseCase(dir_check, isSelected)

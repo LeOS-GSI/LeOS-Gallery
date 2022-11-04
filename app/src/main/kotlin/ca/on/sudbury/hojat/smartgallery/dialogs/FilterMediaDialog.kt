@@ -6,12 +6,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
 
 class FilterMediaDialog(
@@ -25,12 +20,12 @@ class FilterMediaDialog(
     init {
         val filterMedia = activity.config.filterMedia
         binding.apply {
-            filterMediaImages.isChecked = filterMedia and TYPE_IMAGES != 0
-            filterMediaVideos.isChecked = filterMedia and TYPE_VIDEOS != 0
-            filterMediaGifs.isChecked = filterMedia and TYPE_GIFS != 0
-            filterMediaRaws.isChecked = filterMedia and TYPE_RAWS != 0
-            filterMediaSvgs.isChecked = filterMedia and TYPE_SVGS != 0
-            filterMediaPortraits.isChecked = filterMedia and TYPE_PORTRAITS != 0
+            filterMediaImages.isChecked = filterMedia and MediaType.Image.id != 0
+            filterMediaVideos.isChecked = filterMedia and MediaType.Video.id != 0
+            filterMediaGifs.isChecked = filterMedia and MediaType.Gif.id != 0
+            filterMediaRaws.isChecked = filterMedia and MediaType.Raw.id != 0
+            filterMediaSvgs.isChecked = filterMedia and MediaType.Svg.id != 0
+            filterMediaPortraits.isChecked = filterMedia and MediaType.Portrait.id != 0
         }
 
         activity.getAlertDialogBuilder()
@@ -44,17 +39,17 @@ class FilterMediaDialog(
     private fun dialogConfirmed() {
         var result = 0
         if (binding.filterMediaImages.isChecked)
-            result += TYPE_IMAGES
+            result += MediaType.Image.id
         if (binding.filterMediaVideos.isChecked)
-            result += TYPE_VIDEOS
+            result += MediaType.Video.id
         if (binding.filterMediaGifs.isChecked)
-            result += TYPE_GIFS
+            result += MediaType.Gif.id
         if (binding.filterMediaRaws.isChecked)
-            result += TYPE_RAWS
+            result += MediaType.Raw.id
         if (binding.filterMediaSvgs.isChecked)
-            result += TYPE_SVGS
+            result += MediaType.Svg.id
         if (binding.filterMediaPortraits.isChecked)
-            result += TYPE_PORTRAITS
+            result += MediaType.Portrait.id
 
         if (result == 0) {
             result = getDefaultFileFilter()

@@ -100,12 +100,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_PRINT_SIDE_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_CHANGE_ORIENTATION
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_START_ON_ENTER
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_FADE
 import ca.on.sudbury.hojat.smartgallery.helpers.FadePageTransformer
@@ -168,6 +162,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -594,7 +589,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                     val type = getTypeFromPath(mPath)
                     val isFavorite = GalleryDatabase.getInstance(applicationContext).FavoritesDao()
                         .isFavorite(mPath)
-                    val duration = if (type == TYPE_VIDEOS) getDuration(mPath) ?: 0 else 0
+                    val duration = if (type == MediaType.Video.id) getDuration(mPath) ?: 0 else 0
                     val ts = System.currentTimeMillis()
                     val medium = Medium(
                         null,
@@ -618,12 +613,12 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun getTypeFromPath(path: String): Int {
         return when {
-            path.isVideoFast() -> TYPE_VIDEOS
-            IsGifUseCase(path) -> TYPE_GIFS
-            IsSvgUseCase(path) -> TYPE_SVGS
-            path.isRawFast() -> TYPE_RAWS
-            path.isPortrait() -> TYPE_PORTRAITS
-            else -> TYPE_IMAGES
+            path.isVideoFast() -> MediaType.Video.id
+            IsGifUseCase(path) -> MediaType.Gif.id
+            IsSvgUseCase(path) -> MediaType.Svg.id
+            path.isRawFast() -> MediaType.Raw.id
+            path.isPortrait() -> MediaType.Portrait.id
+            else -> MediaType.Image.id
         }
     }
 

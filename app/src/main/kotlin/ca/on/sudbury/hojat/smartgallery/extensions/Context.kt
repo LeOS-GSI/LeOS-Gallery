@@ -105,12 +105,10 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Gif.id
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Portrait.id
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Raw.id
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Svg.id
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
@@ -133,6 +131,7 @@ import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -1357,8 +1356,8 @@ fun Context.loadImage(
     skipMemoryCacheAtPaths: ArrayList<String>? = null
 ) {
     target.isHorizontalScrolling = horizontalScroll
-    if (type == TYPE_IMAGES || type == TYPE_VIDEOS || type == TYPE_RAWS || type == TYPE_PORTRAITS) {
-        if (type == TYPE_IMAGES && IsPngUseCase(path)) {
+    if (type == MediaType.Image.id || type == MediaType.Video.id || type == MediaType.Raw.id || type == MediaType.Portrait.id) {
+        if (type == MediaType.Image.id && IsPngUseCase(path)) {
             loadPng(
                 this,
                 path,
@@ -1371,7 +1370,7 @@ fun Context.loadImage(
         } else {
             loadJpg(path, target, cropThumbnails, roundCorners, signature, skipMemoryCacheAtPaths)
         }
-    } else if (type == TYPE_GIFS) {
+    } else if (type == MediaType.Gif.id) {
         if (!animateGifs) {
             loadStaticGIF(
                 this,
@@ -1413,7 +1412,7 @@ fun Context.loadImage(
                 skipMemoryCacheAtPaths
             )
         }
-    } else if (type == TYPE_SVGS) {
+    } else if (type == MediaType.Svg.id) {
         loadSVG(this, path, target, cropThumbnails, roundCorners, signature)
     }
 }
@@ -1684,15 +1683,15 @@ fun Context.getCachedDirectories(
         val filterMedia = config.filterMedia
 
         filteredDirectories = (when {
-            getVideosOnly -> filteredDirectories.filter { it.types and TYPE_VIDEOS != 0 }
-            getImagesOnly -> filteredDirectories.filter { it.types and TYPE_IMAGES != 0 }
+            getVideosOnly -> filteredDirectories.filter { it.types and MediaType.Video.id != 0 }
+            getImagesOnly -> filteredDirectories.filter { it.types and MediaType.Image.id != 0 }
             else -> filteredDirectories.filter {
-                (filterMedia and TYPE_IMAGES != 0 && it.types and TYPE_IMAGES != 0) ||
-                        (filterMedia and TYPE_VIDEOS != 0 && it.types and TYPE_VIDEOS != 0) ||
-                        (filterMedia and TYPE_GIFS != 0 && it.types and TYPE_GIFS != 0) ||
-                        (filterMedia and TYPE_RAWS != 0 && it.types and TYPE_RAWS != 0) ||
-                        (filterMedia and TYPE_SVGS != 0 && it.types and TYPE_SVGS != 0) ||
-                        (filterMedia and TYPE_PORTRAITS != 0 && it.types and TYPE_PORTRAITS != 0)
+                (filterMedia and MediaType.Image.id != 0 && it.types and MediaType.Image.id != 0) ||
+                        (filterMedia and MediaType.Video.id != 0 && it.types and MediaType.Video.id != 0) ||
+                        (filterMedia and MediaType.Gif.id != 0 && it.types and MediaType.Gif.id != 0) ||
+                        (filterMedia and MediaType.Raw.id != 0 && it.types and MediaType.Raw.id != 0) ||
+                        (filterMedia and MediaType.Svg.id != 0 && it.types and MediaType.Svg.id != 0) ||
+                        (filterMedia and MediaType.Portrait.id != 0 && it.types and MediaType.Portrait.id != 0)
             }
         }) as ArrayList<Directory>
 
@@ -1743,7 +1742,7 @@ fun Context.getCachedMedia(
             media.addAll(getUpdatedDeletedMedia())
         }
 
-        if (config.filterMedia and TYPE_PORTRAITS != 0) {
+        if (config.filterMedia and MediaType.Portrait.id != 0) {
             val foldersToAdd = ArrayList<String>()
             for (folder in foldersToScan) {
                 val allFiles = File(folder).listFiles() ?: continue
@@ -1769,15 +1768,15 @@ fun Context.getCachedMedia(
 
         val filterMedia = config.filterMedia
         media = (when {
-            getVideosOnly -> media.filter { it.type == TYPE_VIDEOS }
-            getImagesOnly -> media.filter { it.type == TYPE_IMAGES }
+            getVideosOnly -> media.filter { it.type == MediaType.Video.id }
+            getImagesOnly -> media.filter { it.type == MediaType.Image.id }
             else -> media.filter {
-                (filterMedia and TYPE_IMAGES != 0 && it.type == TYPE_IMAGES) ||
-                        (filterMedia and TYPE_VIDEOS != 0 && it.type == TYPE_VIDEOS) ||
-                        (filterMedia and TYPE_GIFS != 0 && it.type == TYPE_GIFS) ||
-                        (filterMedia and TYPE_RAWS != 0 && it.type == TYPE_RAWS) ||
-                        (filterMedia and TYPE_SVGS != 0 && it.type == TYPE_SVGS) ||
-                        (filterMedia and TYPE_PORTRAITS != 0 && it.type == TYPE_PORTRAITS)
+                (filterMedia and MediaType.Image.id != 0 && it.type == MediaType.Image.id) ||
+                        (filterMedia and MediaType.Video.id != 0 && it.type == MediaType.Video.id) ||
+                        (filterMedia and MediaType.Gif.id != 0 && it.type == MediaType.Gif.id) ||
+                        (filterMedia and MediaType.Raw.id != 0 && it.type == MediaType.Raw.id) ||
+                        (filterMedia and MediaType.Svg.id != 0 && it.type == MediaType.Svg.id) ||
+                        (filterMedia and MediaType.Portrait.id != 0 && it.type == MediaType.Portrait.id)
             }
         }) as ArrayList<Medium>
 
@@ -2134,18 +2133,18 @@ fun Context.addPathToDB(path: String) {
         }
 
         val type = when {
-            path.isVideoFast() -> TYPE_VIDEOS
-            IsGifUseCase(path) -> TYPE_GIFS
-            path.isRawFast() -> TYPE_RAWS
-            IsSvgUseCase(path) -> TYPE_SVGS
-            path.isPortrait() -> TYPE_PORTRAITS
-            else -> TYPE_IMAGES
+            path.isVideoFast() -> MediaType.Video.id
+            IsGifUseCase(path) -> MediaType.Gif.id
+            path.isRawFast() -> MediaType.Raw.id
+            IsSvgUseCase(path) -> MediaType.Svg.id
+            path.isPortrait() -> MediaType.Portrait.id
+            else -> MediaType.Image.id
         }
 
         try {
             val isFavorite =
                 GalleryDatabase.getInstance(applicationContext).FavoritesDao().isFavorite(path)
-            val videoDuration = if (type == TYPE_VIDEOS) getDuration(path) ?: 0 else 0
+            val videoDuration = if (type == MediaType.Video.id) getDuration(path) ?: 0 else 0
             val medium = Medium(
                 null,
                 path.getFilenameFromPath(),
@@ -2225,27 +2224,27 @@ fun Context.createDirectoryFromMedia(
     val mediaTypes = with(curMedia) {
         var types = 0
         if (any { it.isImage() }) {
-            types += TYPE_IMAGES
+            types += MediaType.Image.id
         }
 
         if (any { it.isVideo() }) {
-            types += TYPE_VIDEOS
+            types += MediaType.Video.id
         }
 
         if (any { it.isGIF() }) {
-            types += TYPE_GIFS
+            types += MediaType.Gif.id
         }
 
         if (any { it.isRaw() }) {
-            types += TYPE_RAWS
+            types += MediaType.Raw.id
         }
 
         if (any { it.isSVG() }) {
-            types += TYPE_SVGS
+            types += MediaType.Svg.id
         }
 
         if (any { it.isPortrait() }) {
-            types += TYPE_PORTRAITS
+            types += MediaType.Portrait.id
         }
 
         types

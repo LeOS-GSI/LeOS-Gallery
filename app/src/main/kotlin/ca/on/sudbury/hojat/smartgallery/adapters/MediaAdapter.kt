@@ -56,8 +56,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getShortcutImage
 import ca.on.sudbury.hojat.smartgallery.extensions.loadImage
 import ca.on.sudbury.hojat.smartgallery.extensions.updateFavorite
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_BIG
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
@@ -74,6 +72,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathsIntent
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
@@ -724,8 +723,8 @@ class MediaAdapter(
             if (showFileTypes && (medium.isGIF() || medium.isRaw() || medium.isSVG())) {
                 file_type.setText(
                     when (medium.type) {
-                        TYPE_GIFS -> R.string.gif
-                        TYPE_RAWS -> R.string.raw
+                        MediaType.Gif.id -> R.string.gif
+                        MediaType.Raw.id -> R.string.raw
                         else -> R.string.svg
                     }
                 )

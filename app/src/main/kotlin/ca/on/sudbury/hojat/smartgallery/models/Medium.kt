@@ -6,12 +6,6 @@ import androidx.room.PrimaryKey
 import androidx.room.Index
 import androidx.room.ColumnInfo
 import androidx.room.Ignore
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
@@ -21,6 +15,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_EXTENSION
 import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
@@ -61,17 +56,17 @@ data class Medium(
 
     fun isWebP() = IsWebpUseCase(name)
 
-    fun isGIF() = type == TYPE_GIFS
+    fun isGIF() = type == MediaType.Gif.id
 
-    fun isImage() = type == TYPE_IMAGES
+    fun isImage() = type == MediaType.Image.id
 
-    fun isVideo() = type == TYPE_VIDEOS
+    fun isVideo() = type == MediaType.Video.id
 
-    fun isRaw() = type == TYPE_RAWS
+    fun isRaw() = type == MediaType.Raw.id
 
-    fun isSVG() = type == TYPE_SVGS
+    fun isSVG() = type == MediaType.Svg.id
 
-    fun isPortrait() = type == TYPE_PORTRAITS
+    fun isPortrait() = type == MediaType.Portrait.id
 
     fun isApng() = IsApngUseCase(name)
 

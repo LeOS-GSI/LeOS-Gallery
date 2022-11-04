@@ -61,18 +61,13 @@ import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHOW_ON_MAP
 import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SET_AS
 import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_EDIT
 import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_PROPERTIES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_PORTRAITS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SKIP_AUTHENTICATION
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_IN_RECYCLE_BIN
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -293,15 +288,15 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         val file = File(mUri.toString())
         val intentType = intent.type ?: ""
         val type = when {
-            filename.isVideoFast() || intentType.startsWith("video/") -> TYPE_VIDEOS
-            IsGifUseCase(filename) || intentType.equals("image/gif", true) -> TYPE_GIFS
-            filename.isRawFast() -> TYPE_RAWS
-            IsSvgUseCase(filename) -> TYPE_SVGS
-            file.absolutePath.isPortrait() -> TYPE_PORTRAITS
-            else -> TYPE_IMAGES
+            filename.isVideoFast() || intentType.startsWith("video/") -> MediaType.Video.id
+            IsGifUseCase(filename) || intentType.equals("image/gif", true) -> MediaType.Gif.id
+            filename.isRawFast() -> MediaType.Raw.id
+            IsSvgUseCase(filename) -> MediaType.Svg.id
+            file.absolutePath.isPortrait() -> MediaType.Portrait.id
+            else -> MediaType.Image.id
         }
 
-        mIsVideo = type == TYPE_VIDEOS
+        mIsVideo = type == MediaType.Video.id
         mMedium = Medium(
             null,
             filename,
@@ -464,12 +459,12 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
     private fun isFileTypeVisible(path: String): Boolean {
         val filter = config.filterMedia
-        return !(path.isImageFast() && filter and TYPE_IMAGES == 0 ||
-                path.isVideoFast() && filter and TYPE_VIDEOS == 0 ||
-                IsGifUseCase(path) && filter and TYPE_GIFS == 0 ||
-                path.isRawFast() && filter and TYPE_RAWS == 0 ||
-                IsSvgUseCase(path) && filter and TYPE_SVGS == 0 ||
-                path.isPortrait() && filter and TYPE_PORTRAITS == 0)
+        return !(path.isImageFast() && filter and MediaType.Image.id == 0 ||
+                path.isVideoFast() && filter and MediaType.Video.id == 0 ||
+                IsGifUseCase(path) && filter and MediaType.Gif.id == 0 ||
+                path.isRawFast() && filter and MediaType.Raw.id == 0 ||
+                IsSvgUseCase(path) && filter and MediaType.Svg.id == 0 ||
+                path.isPortrait() && filter and MediaType.Portrait.id == 0)
     }
 
     private fun initBottomActions() {

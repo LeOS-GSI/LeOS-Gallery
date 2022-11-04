@@ -314,7 +314,6 @@ const val FONT_SIZE_SMALL = 0
 const val FONT_SIZE_MEDIUM = 1
 const val FONT_SIZE_LARGE = 2
 
-
 const val SIDELOADING_UNCHECKED = 0
 const val SIDELOADING_TRUE = 1
 const val SIDELOADING_FALSE = 2
@@ -487,15 +486,8 @@ const val EXT_CAMERA_MODEL = 64
 const val EXT_EXIF_PROPERTIES = 128
 const val EXT_GPS = 2048
 
-// media types
-const val TYPE_IMAGES = 1
-const val TYPE_VIDEOS = 2
-const val TYPE_GIFS = 4
-const val TYPE_RAWS = 8
-const val TYPE_SVGS = 16
-const val TYPE_PORTRAITS = 32
-
-fun getDefaultFileFilter() = TYPE_IMAGES or TYPE_VIDEOS or TYPE_GIFS or TYPE_RAWS or TYPE_SVGS
+fun getDefaultFileFilter() =
+    MediaType.Image.id or MediaType.Video.id or MediaType.Gif.id or MediaType.Raw.id or MediaType.Svg.id
 
 const val LOCATION_INTERNAL = 1
 const val LOCATION_SD = 2

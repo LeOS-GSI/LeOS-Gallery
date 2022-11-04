@@ -108,11 +108,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_GIFS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_IMAGES
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_RAWS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
-import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
@@ -131,6 +126,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
@@ -311,8 +307,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
         if (!config.wasSVGShowingHandled) {
             config.wasSVGShowingHandled = true
-            if (config.filterMedia and TYPE_SVGS == 0) {
-                config.filterMedia += TYPE_SVGS
+            if (config.filterMedia and MediaType.Svg.id == 0) {
+                config.filterMedia += MediaType.Svg.id
             }
         }
 
@@ -873,18 +869,18 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                         ((
                                 SupportedExtensionsRepository.photoExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
-                                } && filter and TYPE_IMAGES != 0) ||
+                                } && filter and MediaType.Image.id != 0) ||
                                 (SupportedExtensionsRepository.videoExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
-                                } && filter and TYPE_VIDEOS != 0) ||
+                                } && filter and MediaType.Video.id != 0) ||
                                 (it.absolutePath.endsWith(
                                     ".gif",
                                     true
-                                ) && filter and TYPE_GIFS != 0) ||
+                                ) && filter and MediaType.Gif.id != 0) ||
                                 (SupportedExtensionsRepository.rawExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
-                                } && filter and TYPE_RAWS != 0) ||
-                                (IsSvgUseCase(it.absolutePath) && filter and TYPE_SVGS != 0))
+                                } && filter and MediaType.Raw.id != 0) ||
+                                (IsSvgUseCase(it.absolutePath) && filter and MediaType.Svg.id != 0))
             }?.mapTo(itemsToDelete) { it.toFileDirItem(applicationContext) }
         }
 
