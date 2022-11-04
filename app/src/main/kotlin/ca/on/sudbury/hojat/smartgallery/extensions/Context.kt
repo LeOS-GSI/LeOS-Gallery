@@ -2485,36 +2485,6 @@ fun Context.updateTextColors(viewGroup: ViewGroup) {
     }
 }
 
-fun Context.getArtist(path: String): String? {
-    val projection = arrayOf(
-        MediaStore.Audio.Media.ARTIST
-    )
-
-    val uri = getFileUri(path)
-    val selection =
-        if (path.startsWith("content://")) "${BaseColumns._ID} = ?" else "${MediaStore.MediaColumns.DATA} = ?"
-    val selectionArgs =
-        if (path.startsWith("content://")) arrayOf(path.substringAfterLast("/")) else arrayOf(path)
-
-    try {
-        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
-        cursor?.use {
-            if (cursor.moveToFirst()) {
-                return cursor.getStringValue(MediaStore.Audio.Media.ARTIST)
-            }
-        }
-    } catch (ignored: Exception) {
-    }
-
-    return try {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(path)
-        retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-    } catch (ignored: Exception) {
-        null
-    }
-}
-
 fun Context.getFileDateTaken(path: String): Long {
     val projection = arrayOf(
         Images.Media.DATE_TAKEN
@@ -2662,13 +2632,6 @@ fun Context.rescanPaths(paths: List<String>, callback: (() -> Unit)? = null) {
             callback?.invoke()
         }
     }
-}
-
-private fun getDegreesFromOrientation(orientation: Int) = when (orientation) {
-    ExifInterface.ORIENTATION_ROTATE_270 -> 270
-    ExifInterface.ORIENTATION_ROTATE_180 -> 180
-    ExifInterface.ORIENTATION_ROTATE_90 -> 90
-    else -> 0
 }
 
 fun Context.scanPathRecursively(path: String, callback: (() -> Unit)? = null) {
