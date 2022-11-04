@@ -37,8 +37,6 @@ fun Int.getFormattedDuration(forceShowHours: Boolean = false): String {
     return sb.toString()
 }
 
-fun Int.isSortingAscending() = this and SORT_DESCENDING == 0
-
 fun Int.toHex() = String.format("#%06X", 0xFFFFFF and this).uppercase(Locale.getDefault())
 
 fun Int.orientationFromDegrees() = when (this) {

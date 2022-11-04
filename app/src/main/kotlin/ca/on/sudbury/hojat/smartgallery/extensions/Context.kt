@@ -1140,7 +1140,7 @@ private fun getDirectParentSubfolders(
             val parent = File(path).parent
             if (parent != null && !folders.contains(parent) && dirs.none { it.path == parent }) {
                 currentPaths.add(parent)
-                val isSortingAscending = owner.config.sorting.isSortingAscending()
+                val isSortingAscending = isSortingAscending(owner.config.sorting)
                 val subDirs = dirs.filter {
                     File(it.path).parent.equals(
                         File(path).parent,
@@ -2209,7 +2209,7 @@ fun Context.createDirectoryFromMedia(
         thumbnail = thumbnail!!.getOTGPublicPath(applicationContext)
     }
 
-    val isSortingAscending = config.directorySorting.isSortingAscending()
+    val isSortingAscending = isSortingAscending(config.directorySorting)
     val defaultMedium = Medium(0, "", "", "", 0L, 0L, 0L, 0, 0, false, 0L, 0L)
     val firstItem = curMedia.firstOrNull() ?: defaultMedium
     val lastItem = curMedia.lastOrNull() ?: defaultMedium
@@ -2315,7 +2315,7 @@ fun Context.getDirectorySortingValue(
         else -> media
     }
 
-    val relevantMedium = if (sorting.isSortingAscending()) {
+    val relevantMedium = if (isSortingAscending(sorting)) {
         sorted.firstOrNull() ?: return ""
     } else {
         sorted.lastOrNull() ?: return ""
@@ -3181,3 +3181,5 @@ fun Context.getFileUrisFromFileDirItemsTuple(fileDirItems: List<FileDirItem>): P
 
     return Pair(successfulFilePaths, fileUris)
 }
+
+private fun isSortingAscending(sort: Int) = sort and SORT_DESCENDING == 0
