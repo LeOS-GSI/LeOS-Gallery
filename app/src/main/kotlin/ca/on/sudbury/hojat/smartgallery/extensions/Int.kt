@@ -3,7 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 import android.graphics.Color
 import android.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -38,10 +37,3 @@ fun Int.getFormattedDuration(forceShowHours: Boolean = false): String {
 }
 
 fun Int.toHex() = String.format("#%06X", 0xFFFFFF and this).uppercase(Locale.getDefault())
-
-fun Int.orientationFromDegrees() = when (this) {
-    270 -> ExifInterface.ORIENTATION_ROTATE_270
-    180 -> ExifInterface.ORIENTATION_ROTATE_180
-    90 -> ExifInterface.ORIENTATION_ROTATE_90
-    else -> ExifInterface.ORIENTATION_NORMAL
-}.toString()

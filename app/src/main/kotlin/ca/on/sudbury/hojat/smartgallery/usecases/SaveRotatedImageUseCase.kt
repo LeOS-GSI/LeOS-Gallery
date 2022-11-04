@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getSomeDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
-import ca.on.sudbury.hojat.smartgallery.extensions.orientationFromDegrees
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
@@ -207,7 +206,7 @@ object SaveRotatedImageUseCase {
         val orientationDegrees = (getDegreesFromOrientation(orientation) + degrees) % 360
         exif.setAttribute(
             ExifInterface.TAG_ORIENTATION,
-            orientationDegrees.orientationFromDegrees()
+            orientationFromDegrees(orientationDegrees)
         )
         exif.saveAttributes()
     }
@@ -218,4 +217,12 @@ object SaveRotatedImageUseCase {
         ExifInterface.ORIENTATION_ROTATE_90 -> 90
         else -> 0
     }
+
+    private fun orientationFromDegrees(degree: Int) = when (degree) {
+        270 -> ExifInterface.ORIENTATION_ROTATE_270
+        180 -> ExifInterface.ORIENTATION_ROTATE_180
+        90 -> ExifInterface.ORIENTATION_ROTATE_90
+        else -> ExifInterface.ORIENTATION_NORMAL
+    }.toString()
+
 }
