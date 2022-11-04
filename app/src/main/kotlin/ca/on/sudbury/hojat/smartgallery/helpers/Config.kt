@@ -143,7 +143,7 @@ class Config(context: Context) : BaseConfig(context) {
             .putString(EXCLUDED_PASSWORD_HASH, excludedPasswordHash).apply()
 
     var excludedProtectionType: Int
-        get() = prefs.getInt(EXCLUDED_PROTECTION_TYPE, ProtectionState.Pattern.id)
+        get() = prefs.getInt(EXCLUDED_PROTECTION_TYPE, ProtectionType.Pattern.id)
         set(excludedProtectionType) = prefs.edit()
             .putInt(EXCLUDED_PROTECTION_TYPE, excludedProtectionType).apply()
 

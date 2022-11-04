@@ -11,7 +11,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.hojat.palette.views.MyScrollView
-import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 
 class PasswordTypesAdapter(
@@ -49,9 +49,9 @@ class PasswordTypesAdapter(
     override fun isViewFromObject(view: View, item: Any) = view == item
 
     private fun layoutSelection(position: Int): Int = when (position) {
-        ProtectionState.Pattern.id -> R.layout.tab_pattern
-        ProtectionState.Pin.id -> R.layout.tab_pin
-        ProtectionState.FingerPrint.id -> if (IsRPlusUseCase()) R.layout.tab_biometric_id else R.layout.tab_fingerprint
+        ProtectionType.Pattern.id -> R.layout.tab_pattern
+        ProtectionType.Pin.id -> R.layout.tab_pin
+        ProtectionType.FingerPrint.id -> if (IsRPlusUseCase()) R.layout.tab_biometric_id else R.layout.tab_fingerprint
         else -> throw RuntimeException("Only 3 tabs allowed")
     }
 

@@ -273,7 +273,7 @@ open class BaseConfig(val context: Context) {
     var hiddenProtectionType: Int
         get() = prefs.getInt(
             PROTECTION_TYPE,
-            ProtectionState.Pattern.id
+            ProtectionType.Pattern.id
         )
         set(hiddenProtectionType) = prefs.edit()
             .putInt(PROTECTION_TYPE, hiddenProtectionType)
@@ -299,7 +299,7 @@ open class BaseConfig(val context: Context) {
     var appProtectionType: Int
         get() = prefs.getInt(
             APP_PROTECTION_TYPE,
-            ProtectionState.Pattern.id
+            ProtectionType.Pattern.id
         )
         set(appProtectionType) = prefs.edit()
             .putInt(APP_PROTECTION_TYPE, appProtectionType)
@@ -326,7 +326,7 @@ open class BaseConfig(val context: Context) {
     var deleteProtectionType: Int
         get() = prefs.getInt(
             DELETE_PROTECTION_TYPE,
-            ProtectionState.Pattern.id
+            ProtectionType.Pattern.id
         )
         set(deleteProtectionType) = prefs.edit().putInt(
             DELETE_PROTECTION_TYPE,
@@ -349,7 +349,7 @@ open class BaseConfig(val context: Context) {
     }
 
     fun isFolderProtected(path: String) =
-        getFolderProtectionType(path) != ProtectionState.None.id
+        getFolderProtectionType(path) != ProtectionType.None.id
 
     fun getFolderProtectionHash(path: String) =
         prefs.getString("${PROTECTED_FOLDER_HASH}$path", "")
@@ -357,7 +357,7 @@ open class BaseConfig(val context: Context) {
 
     fun getFolderProtectionType(path: String) = prefs.getInt(
         "${PROTECTED_FOLDER_TYPE}$path",
-        ProtectionState.None.id
+        ProtectionType.None.id
     )
 
     var keepLastModified: Boolean

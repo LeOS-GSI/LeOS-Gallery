@@ -8,7 +8,7 @@ import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
-import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
@@ -81,7 +81,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
             resetPin()
             pin_lock_title.setText(R.string.repeat_pin)
         } else if (hash == newHash) {
-            hashListener.receivedHash(hash, ProtectionState.Pin.id)
+            hashListener.receivedHash(hash, ProtectionType.Pin.id)
         } else {
             resetPin()
             ShowSafeToastUseCase(context, R.string.wrong_pin)
@@ -101,7 +101,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
     private fun updatePinCode() {
         pin_lock_current_pin.text = "*".repeat(pin.length)
         if (hash.isNotEmpty() && hash == getHashedPin()) {
-            hashListener.receivedHash(hash, ProtectionState.Pin.id)
+            hashListener.receivedHash(hash, ProtectionType.Pin.id)
         }
     }
 

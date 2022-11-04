@@ -131,7 +131,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
-import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
@@ -564,13 +564,13 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(ProtectionState.WasHandled.id, mWasProtectionHandled)
+        outState.putBoolean(ProtectionType.WasHandled.id, mWasProtectionHandled)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         mWasProtectionHandled =
-            savedInstanceState.getBoolean(ProtectionState.WasHandled.id, false)
+            savedInstanceState.getBoolean(ProtectionType.WasHandled.id, false)
     }
 
     private fun getRecyclerAdapter() = binding.directoriesGrid.adapter as? DirectoryAdapter
