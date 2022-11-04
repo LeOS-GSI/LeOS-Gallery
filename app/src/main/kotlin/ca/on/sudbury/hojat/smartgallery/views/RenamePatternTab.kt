@@ -12,7 +12,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.copySingleFileSdk30
-import ca.on.sudbury.hojat.smartgallery.extensions.ensureTwoDigits
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItemsTuple
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -161,11 +160,12 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
             val cal = Calendar.getInstance()
             cal.time = dt
             val year = cal.get(Calendar.YEAR).toString()
-            val month = (cal.get(Calendar.MONTH) + 1).ensureTwoDigits()
-            val day = (cal.get(Calendar.DAY_OF_MONTH)).ensureTwoDigits()
-            val hours = (cal.get(Calendar.HOUR_OF_DAY)).ensureTwoDigits()
-            val minutes = (cal.get(Calendar.MINUTE)).ensureTwoDigits()
-            val seconds = (cal.get(Calendar.SECOND)).ensureTwoDigits()
+            val month = ensureTwoDigits(cal.get(Calendar.MONTH) + 1)
+
+            val day = ensureTwoDigits(cal.get(Calendar.DAY_OF_MONTH))
+            val hours = ensureTwoDigits(cal.get(Calendar.HOUR_OF_DAY))
+            val minutes = ensureTwoDigits(cal.get(Calendar.MINUTE))
+            val seconds = ensureTwoDigits(cal.get(Calendar.SECOND))
 
             var newName = rename_items_value.text.toString().trim()
                 .replace("%Y", year, false)
@@ -279,4 +279,13 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
             }
         }
     }
+
+    private fun ensureTwoDigits(number: Int): String {
+        return if (number.toString().length == 1) {
+            "0$number"
+        } else {
+            number.toString()
+        }
+    }
+
 }
