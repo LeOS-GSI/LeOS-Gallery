@@ -39,7 +39,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
-import ca.on.sudbury.hojat.smartgallery.extensions.containsNoMedia
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
@@ -98,6 +97,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.DoesContainNoMediaUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
@@ -410,7 +410,7 @@ class DirectoryAdapter(
                 val path = it
                 activity.handleLockedFolderOpening(path) { success ->
                     if (success) {
-                        if (path.containsNoMedia()) {
+                        if (DoesContainNoMediaUseCase(path)) {
                             activity.removeNoMedia(path) {
                                 if (config.shouldShowHidden) {
                                     updateFolderNames()

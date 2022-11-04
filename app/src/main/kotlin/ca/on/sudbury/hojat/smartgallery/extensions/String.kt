@@ -8,7 +8,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.audioExtensions
-import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
 import ca.on.sudbury.hojat.smartgallery.helpers.normalizeRegex
 import ca.on.sudbury.hojat.smartgallery.helpers.photoExtensions
 import ca.on.sudbury.hojat.smartgallery.helpers.rawExtensions
@@ -883,8 +882,6 @@ fun String.getGenericMimeType(): String {
     val type = substring(0, indexOf("/"))
     return "$type/*"
 }
-
-fun String.containsNoMedia() = File(this).containsNoMedia()
 
 fun String.doesThisOrParentHaveNoMedia(
     folderNoMediaStatuses: java.util.HashMap<String, Boolean>,
