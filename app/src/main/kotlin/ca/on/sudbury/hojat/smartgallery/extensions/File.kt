@@ -7,6 +7,9 @@ import ca.on.sudbury.hojat.smartgallery.usecases.DoesContainNoMediaUseCase
 import java.io.File
 import java.util.HashMap
 
+/**
+ * Converts a [File] to [FileDirItem].
+ */
 fun File.toFileDirItem(context: Context) = FileDirItem(
     absolutePath,
     name,
