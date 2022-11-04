@@ -24,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_USING_SHARED_THEME
@@ -137,6 +136,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
@@ -485,7 +485,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isHiddenPasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.hiddenProtectionType == PROTECTION_FINGERPRINT)
+                            if (config.hiddenProtectionType == ProtectionState.ProtectionFingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }
@@ -515,7 +515,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isExcludedPasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.excludedProtectionType == PROTECTION_FINGERPRINT)
+                            if (config.excludedProtectionType == ProtectionState.ProtectionFingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }
@@ -539,7 +539,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isAppPasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.appProtectionType == PROTECTION_FINGERPRINT)
+                            if (config.appProtectionType == ProtectionState.ProtectionFingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }
@@ -565,7 +565,7 @@ class SettingsActivity : SimpleActivity() {
 
                     if (config.isDeletePasswordProtectionOn) {
                         val confirmationTextId =
-                            if (config.deleteProtectionType == PROTECTION_FINGERPRINT)
+                            if (config.deleteProtectionType == ProtectionState.ProtectionFingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
                         ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
                     }

@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -68,7 +68,7 @@ class BiometricIdTab(context: Context, attrs: AttributeSet) : ConstraintLayout(c
                         activity: FragmentActivity?,
                         result: BiometricPrompt.AuthenticationResult
                     ) {
-                        successCallback?.invoke("", PROTECTION_FINGERPRINT)
+                        successCallback?.invoke("", ProtectionState.ProtectionFingerPrint.id)
                     }
 
                     override fun onAuthenticationError(

@@ -115,7 +115,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_SVGS
 import ca.on.sudbury.hojat.smartgallery.helpers.TYPE_VIDEOS
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
-import ca.on.sudbury.hojat.smartgallery.helpers.WAS_PROTECTION_HANDLED
 import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
 import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
 import ca.on.sudbury.hojat.smartgallery.models.Directory
@@ -132,6 +131,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
@@ -564,12 +564,13 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(WAS_PROTECTION_HANDLED, mWasProtectionHandled)
+        outState.putBoolean(ProtectionState.WasProtectionHandled.id, mWasProtectionHandled)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        mWasProtectionHandled = savedInstanceState.getBoolean(WAS_PROTECTION_HANDLED, false)
+        mWasProtectionHandled =
+            savedInstanceState.getBoolean(ProtectionState.WasProtectionHandled.id, false)
     }
 
     private fun getRecyclerAdapter() = binding.directoriesGrid.adapter as? DirectoryAdapter
@@ -871,8 +872,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
                         ((
                                 SupportedExtensionsRepository.photoExtensions.any { extension ->
-                            it.absolutePath.endsWith(extension, true)
-                        } && filter and TYPE_IMAGES != 0) ||
+                                    it.absolutePath.endsWith(extension, true)
+                                } && filter and TYPE_IMAGES != 0) ||
                                 (SupportedExtensionsRepository.videoExtensions.any { extension ->
                                     it.absolutePath.endsWith(extension, true)
                                 } && filter and TYPE_VIDEOS != 0) ||

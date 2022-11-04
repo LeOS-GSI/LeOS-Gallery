@@ -3,8 +3,6 @@ package ca.on.sudbury.hojat.smartgallery.helpers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
-import androidx.annotation.ChecksSdkIntAtLeast
 import ca.on.sudbury.hojat.smartgallery.R
 
 // shared preferences
@@ -139,16 +137,10 @@ const val HIGHER_ALPHA = 0.75f
 
 const val HOUR_MINUTES = 60
 const val DAY_MINUTES = 24 * HOUR_MINUTES
-const val WEEK_MINUTES = DAY_MINUTES * 7
 const val MONTH_MINUTES = DAY_MINUTES * 30
-const val YEAR_MINUTES = DAY_MINUTES * 365
 
-const val MINUTE_SECONDS = 60
-const val HOUR_SECONDS = HOUR_MINUTES * 60
 const val DAY_SECONDS = DAY_MINUTES * 60
-const val WEEK_SECONDS = WEEK_MINUTES * 60
 const val MONTH_SECONDS = MONTH_MINUTES * 60
-const val YEAR_SECONDS = YEAR_MINUTES * 60
 
 // shared preferences
 const val PREFS_KEY = "Prefs"
@@ -204,7 +196,6 @@ const val WAS_SHARED_THEME_FORCED = "was_shared_theme_forced"
 const val WAS_CUSTOM_THEME_SWITCH_DESCRIPTION_SHOWN = "was_custom_theme_switch_description_shown"
 const val LAST_CONFLICT_RESOLUTION = "last_conflict_resolution"
 const val LAST_CONFLICT_APPLY_TO_ALL = "last_conflict_apply_to_all"
-const val HAD_THANK_YOU_INSTALLED = "had_thank_you_installed"
 const val SKIP_DELETE_CONFIRMATION = "skip_delete_confirmation"
 const val ENABLE_PULL_TO_REFRESH = "enable_pull_to_refresh"
 const val SCROLL_HORIZONTALLY = "scroll_horizontally"
@@ -287,13 +278,6 @@ const val SORT_DESCENDING = 1024
 const val SORT_BY_RANDOM = 16384
 const val SORT_USE_NUMERIC_VALUE = 32768
 const val SORT_BY_CUSTOM = 131072
-
-// security
-const val WAS_PROTECTION_HANDLED = "was_protection_handled"
-const val PROTECTION_NONE = -1
-const val PROTECTION_PATTERN = 0
-const val PROTECTION_PIN = 1
-const val PROTECTION_FINGERPRINT = 2
 
 // renaming
 const val RENAME_SIMPLE = 0
@@ -393,8 +377,6 @@ fun getConflictResolution(resolutions: LinkedHashMap<String, Int>, path: String)
         CONFLICT_SKIP
     }
 }
-
-val proPackages = arrayListOf("draw", "gallery", "filemanager", "contacts", "notes", "calendar")
 
 @SuppressLint("UseCompatLoadingForDrawables")
 fun getFilePlaceholderDrawables(context: Context): HashMap<String, Drawable> {

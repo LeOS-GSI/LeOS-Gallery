@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import androidx.biometric.auth.AuthPromptHost
 import androidx.viewpager.widget.PagerAdapter
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.hojat.palette.views.MyScrollView
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 
 class PasswordTypesAdapter(
@@ -51,9 +49,9 @@ class PasswordTypesAdapter(
     override fun isViewFromObject(view: View, item: Any) = view == item
 
     private fun layoutSelection(position: Int): Int = when (position) {
-        PROTECTION_PATTERN -> R.layout.tab_pattern
-        PROTECTION_PIN -> R.layout.tab_pin
-        PROTECTION_FINGERPRINT -> if (IsRPlusUseCase()) R.layout.tab_biometric_id else R.layout.tab_fingerprint
+        ProtectionState.ProtectionPattern.id -> R.layout.tab_pattern
+        ProtectionState.ProtectionPin.id -> R.layout.tab_pin
+        ProtectionState.ProtectionFingerPrint.id -> if (IsRPlusUseCase()) R.layout.tab_biometric_id else R.layout.tab_fingerprint
         else -> throw RuntimeException("Only 3 tabs allowed")
     }
 

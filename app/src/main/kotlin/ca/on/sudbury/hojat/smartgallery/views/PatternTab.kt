@@ -16,7 +16,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -81,7 +81,7 @@ class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context
             hash == newHash -> {
                 pattern_lock_view.setViewMode(PatternLockView.PatternViewMode.CORRECT)
                 Handler().postDelayed({
-                    hashListener.receivedHash(hash, PROTECTION_PATTERN)
+                    hashListener.receivedHash(hash, ProtectionState.ProtectionPattern.id)
                 }, 300)
             }
             else -> {

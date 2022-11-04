@@ -17,9 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PATTERN
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_PIN
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
@@ -27,6 +24,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogSecurityBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.hojat.palette.views.MyDialogViewPager
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 
@@ -59,7 +57,7 @@ class SecurityDialog(
                 scrollView = dialogScrollview,
                 biometricPromptHost = AuthPromptHost(activity as FragmentActivity),
                 showBiometricIdTab = shouldShowBiometricIdTab(),
-                showBiometricAuthentication = showTabIndex == PROTECTION_FINGERPRINT && IsRPlusUseCase()
+                showBiometricAuthentication = showTabIndex == ProtectionState.ProtectionFingerPrint.id && IsRPlusUseCase()
             )
             viewPager.adapter = tabsAdapter
 
@@ -92,7 +90,7 @@ class SecurityDialog(
                         if (IsRPlusUseCase()) R.string.biometrics else R.string.fingerprint
                     dialogTabLayout.addTab(
                         dialogTabLayout.newTab().setText(tabTitle),
-                        PROTECTION_FINGERPRINT
+                        ProtectionState.ProtectionFingerPrint.id
                     )
                 }
 
@@ -109,10 +107,10 @@ class SecurityDialog(
                         it.text.toString().equals(
                             root.resources.getString(R.string.pattern),
                             true
-                        ) -> PROTECTION_PATTERN
+                        ) -> ProtectionState.ProtectionPattern.id
                         it.text.toString()
-                            .equals(root.resources.getString(R.string.pin), true) -> PROTECTION_PIN
-                        else -> PROTECTION_FINGERPRINT
+                            .equals(root.resources.getString(R.string.pin), true) -> ProtectionState.ProtectionPin.id
+                        else -> ProtectionState.ProtectionFingerPrint.id
                     }
                     updateTabVisibility()
                 })

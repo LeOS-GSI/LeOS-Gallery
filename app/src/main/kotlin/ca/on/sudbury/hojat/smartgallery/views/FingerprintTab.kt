@@ -14,7 +14,7 @@ import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
-import ca.on.sudbury.hojat.smartgallery.helpers.PROTECTION_FINGERPRINT
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionState
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
@@ -66,7 +66,7 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
 
         Reprint.authenticate(object : AuthenticationListener {
             override fun onSuccess(moduleTag: Int) {
-                hashListener.receivedHash("", PROTECTION_FINGERPRINT)
+                hashListener.receivedHash("", ProtectionState.ProtectionFingerPrint.id)
             }
 
             override fun onFailure(
