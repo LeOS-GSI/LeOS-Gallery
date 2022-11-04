@@ -49,7 +49,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
 import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
-import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilePublicUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLatestMediaByDateId
@@ -142,6 +141,7 @@ import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectoryFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
@@ -641,9 +641,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         if (config.tempFolderPath.isNotEmpty()) {
             val newFolder = File(config.tempFolderPath)
             if (getDoesFilePathExist(newFolder.absolutePath) && newFolder.isDirectory) {
-                if (CalculateDirectorySizeUseCase(newFolder, true) == 0L && newFolder.getFileCount(
-                        true
-                    ) == 0 && newFolder.list()
+                if (CalculateDirectorySizeUseCase(newFolder, true) == 0L &&
+                    CalculateDirectoryFileCountUseCase(newFolder, true) == 0 && newFolder.list()
                         ?.isEmpty() == true
                 ) {
                     ShowSafeToastUseCase(

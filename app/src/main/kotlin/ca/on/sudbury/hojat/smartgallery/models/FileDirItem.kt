@@ -19,7 +19,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDirectChildrenCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getDuration
 import ca.on.sudbury.hojat.smartgallery.extensions.getFastDocumentFile
-import ca.on.sudbury.hojat.smartgallery.extensions.getFileCount
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileSize
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUri
 import ca.on.sudbury.hojat.smartgallery.extensions.getFormattedDuration
@@ -42,6 +41,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
 import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectoryFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileCountUseCase
@@ -156,7 +156,7 @@ open class FileDirItem(
                 context.getDocumentFile(path),
                 countHidden
             )
-            else -> File(path).getFileCount(countHidden)
+            else -> CalculateDirectoryFileCountUseCase(File(path), countHidden)
         }
     }
 
