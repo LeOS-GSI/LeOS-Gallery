@@ -44,7 +44,6 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
-import androidx.exifinterface.media.ExifInterface
 import androidx.loader.content.CursorLoader
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
@@ -71,7 +70,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
-import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.BaseContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
@@ -269,7 +268,7 @@ private fun getMediaContent(owner: Context, path: String, uri: Uri): Uri? {
 }
 
 fun Context.getMyContentProviderCursorLoader() =
-    CursorLoader(this, MyContentProvider.MY_CONTENT_URI, null, null, null, null)
+    CursorLoader(this, BaseContentProvider.MY_CONTENT_URI, null, null, null, null)
 
 fun Context.queryCursor(
     uri: Uri,
@@ -2557,15 +2556,15 @@ fun getSharedThemeSync(cursorLoader: CursorLoader): SharedTheme? {
     cursor?.use {
         if (cursor.moveToFirst()) {
             try {
-                val textColor = cursor.getIntValue(MyContentProvider.COL_TEXT_COLOR)
-                val backgroundColor = cursor.getIntValue(MyContentProvider.COL_BACKGROUND_COLOR)
-                val primaryColor = cursor.getIntValue(MyContentProvider.COL_PRIMARY_COLOR)
-                val accentColor = cursor.getIntValue(MyContentProvider.COL_ACCENT_COLOR)
-                val appIconColor = cursor.getIntValue(MyContentProvider.COL_APP_ICON_COLOR)
+                val textColor = cursor.getIntValue(BaseContentProvider.COL_TEXT_COLOR)
+                val backgroundColor = cursor.getIntValue(BaseContentProvider.COL_BACKGROUND_COLOR)
+                val primaryColor = cursor.getIntValue(BaseContentProvider.COL_PRIMARY_COLOR)
+                val accentColor = cursor.getIntValue(BaseContentProvider.COL_ACCENT_COLOR)
+                val appIconColor = cursor.getIntValue(BaseContentProvider.COL_APP_ICON_COLOR)
                 val navigationBarColor =
-                    cursor.getIntValueOrNull(MyContentProvider.COL_NAVIGATION_BAR_COLOR)
+                    cursor.getIntValueOrNull(BaseContentProvider.COL_NAVIGATION_BAR_COLOR)
                         ?: INVALID_NAVIGATION_BAR_COLOR
-                val lastUpdatedTS = cursor.getIntValue(MyContentProvider.COL_LAST_UPDATED_TS)
+                val lastUpdatedTS = cursor.getIntValue(BaseContentProvider.COL_LAST_UPDATED_TS)
                 return SharedTheme(
                     textColor,
                     backgroundColor,

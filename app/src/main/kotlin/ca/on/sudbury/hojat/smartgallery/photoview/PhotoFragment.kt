@@ -61,7 +61,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOULD_INIT_FRAGMENT
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM
-import ca.on.sudbury.hojat.smartgallery.helpers.MyGlideImageDecoder
+import ca.on.sudbury.hojat.smartgallery.helpers.GlideImageDecoder
 import ca.on.sudbury.hojat.smartgallery.helpers.PicassoRegionDecoder
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.WEIRD_TILE_DPI
@@ -706,7 +706,7 @@ class PhotoFragment : ViewPagerFragment() {
         val minTileDpi = if (showHighestQuality) -1 else getMinTileDpi()
 
         val bitmapDecoder = object : DecoderFactory<ImageDecoder> {
-            override fun make() = MyGlideImageDecoder(rotation, mMedium.getKey())
+            override fun make() = GlideImageDecoder(rotation, mMedium.getKey())
         }
 
         val regionDecoder = object : DecoderFactory<ImageRegionDecoder> {

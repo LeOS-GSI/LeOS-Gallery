@@ -30,7 +30,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
-import ca.on.sudbury.hojat.smartgallery.helpers.MyContentProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.BaseContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.SAVE_DISCARD_PROMPT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.models.MyTheme
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
@@ -486,7 +486,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             )
             updateSharedTheme(newSharedTheme)
             Intent().apply {
-                action = MyContentProvider.SHARED_THEME_UPDATED
+                action = BaseContentProvider.SHARED_THEME_UPDATED
                 sendBroadcast(this)
             }
         }
@@ -748,7 +748,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
         ConfirmationDialog(this, "", R.string.share_colors_success, R.string.ok, 0) {
             Intent().apply {
-                action = MyContentProvider.SHARED_THEME_ACTIVATED
+                action = BaseContentProvider.SHARED_THEME_ACTIVATED
                 sendBroadcast(this)
             }
 
@@ -820,9 +820,9 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun updateSharedTheme(sharedTheme: SharedTheme) {
         try {
-            val contentValues = MyContentProvider.fillThemeContentValues(sharedTheme)
+            val contentValues = BaseContentProvider.fillThemeContentValues(sharedTheme)
             applicationContext.contentResolver.update(
-                MyContentProvider.MY_CONTENT_URI,
+                BaseContentProvider.MY_CONTENT_URI,
                 contentValues,
                 null,
                 null

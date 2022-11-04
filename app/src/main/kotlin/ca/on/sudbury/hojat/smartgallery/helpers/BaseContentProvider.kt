@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.net.Uri
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 
-class MyContentProvider {
+class BaseContentProvider {
     companion object {
         private const val AUTHORITY = "com.simplemobiletools.commons.provider"
         const val SHARED_THEME_ACTIVATED = "com.simplemobiletools.commons.SHARED_THEME_ACTIVATED"
