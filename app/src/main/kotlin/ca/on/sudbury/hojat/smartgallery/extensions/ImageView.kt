@@ -2,12 +2,14 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.graphics.drawable.GradientDrawable
 import android.widget.ImageView
+import timber.log.Timber
 
 fun ImageView.setFillWithStroke(
     fillColor: Int,
     backgroundColor: Int,
     drawRectangle: Boolean = false
 ) {
+    Timber.d("Hojat Ghasemi : setFillWithStroke was called")
     GradientDrawable().apply {
         shape = if (drawRectangle) GradientDrawable.RECTANGLE else GradientDrawable.OVAL
         setColor(fillColor)
