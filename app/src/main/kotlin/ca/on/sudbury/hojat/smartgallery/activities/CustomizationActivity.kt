@@ -22,7 +22,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getSharedThemeSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
-import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
+import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
@@ -530,12 +530,12 @@ class CustomizationActivity : BaseSimpleActivity() {
         val backgroundColor = getCurrentBackgroundColor()
         val primaryColor = getCurrentPrimaryColor()
         with(binding) {
-            customizationTextColor.setFillWithStroke(textColor, backgroundColor)
-            customizationPrimaryColor.setFillWithStroke(primaryColor, backgroundColor)
-            customizationAccentColor.setFillWithStroke(curAccentColor, backgroundColor)
-            customizationBackgroundColor.setFillWithStroke(backgroundColor, backgroundColor)
-            customizationAppIconColor.setFillWithStroke(curAppIconColor, backgroundColor)
-            customizationNavigationBarColor.setFillWithStroke(
+            customizationTextColor.fillWithColor(textColor, backgroundColor)
+            customizationPrimaryColor.fillWithColor(primaryColor, backgroundColor)
+            customizationAccentColor.fillWithColor(curAccentColor, backgroundColor)
+            customizationBackgroundColor.fillWithColor(backgroundColor, backgroundColor)
+            customizationAppIconColor.fillWithColor(curAppIconColor, backgroundColor)
+            customizationNavigationBarColor.fillWithColor(
                 curNavigationBarColor,
                 backgroundColor
             )

@@ -18,7 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
+import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.R
@@ -71,8 +71,8 @@ class ColorPickerDialog(
 
             viewSatVal.setHue(getHue())
 
-            viewNewColor.setFillWithStroke(getColor(), backgroundColor)
-            colorPickerOldColor.setFillWithStroke(color, backgroundColor)
+            viewNewColor.fillWithColor(getColor(), backgroundColor)
+            colorPickerOldColor.fillWithColor(color, backgroundColor)
 
             val hexCode = getHexCode(color)
             colorPickerOldHex.text = "#$hexCode"
@@ -132,7 +132,7 @@ class ColorPickerDialog(
                 currentColorHsv[2] = 1f - 1f / viewSatVal.measuredHeight * y
 
                 moveColorPicker()
-                viewNewColor.setFillWithStroke(getColor(), backgroundColor)
+                viewNewColor.fillWithColor(getColor(), backgroundColor)
                 newHexField.setText(getHexCode(getColor()))
                 return@OnTouchListener true
             }
@@ -187,7 +187,7 @@ class ColorPickerDialog(
                 val recentColorView = ImageView(context)
                 recentColorView.id = View.generateViewId()
                 recentColorView.layoutParams = ViewGroup.LayoutParams(squareSize, squareSize)
-                recentColorView.setFillWithStroke(recentColor, backgroundColor)
+                recentColorView.fillWithColor(recentColor, backgroundColor)
                 recentColorView.setOnClickListener { newHexField.setText(getHexCode(recentColor)) }
                 findViewById<ViewGroup>(R.id.recent_colors).addView(recentColorView)
                 findViewById<ConstraintHelper>(R.id.recent_colors_flow).addView(recentColorView)
@@ -236,7 +236,7 @@ class ColorPickerDialog(
     private fun updateHue() {
         viewSatVal.setHue(getHue())
         moveHuePicker()
-        viewNewColor.setFillWithStroke(getColor(), backgroundColor)
+        viewNewColor.fillWithColor(getColor(), backgroundColor)
         if (removeDimmedBackground && !wasDimmedBackgroundRemoved) {
             dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             wasDimmedBackgroundRemoved = true

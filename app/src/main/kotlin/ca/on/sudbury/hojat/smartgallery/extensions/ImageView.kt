@@ -4,7 +4,10 @@ import android.graphics.drawable.GradientDrawable
 import android.widget.ImageView
 import timber.log.Timber
 
-fun ImageView.setFillWithStroke(
+/**
+ * When user wants to choose the color for their editing brush on the image, the dialog which is being created, has 7 circles with colors inside them. Those are in fact some [ImageView]s which are filled with color. I'm leaving this extension function to be in here for now. Will replace it with composables later.
+ */
+fun ImageView.fillWithColor(
     fillColor: Int,
     backgroundColor: Int,
     drawRectangle: Boolean = false

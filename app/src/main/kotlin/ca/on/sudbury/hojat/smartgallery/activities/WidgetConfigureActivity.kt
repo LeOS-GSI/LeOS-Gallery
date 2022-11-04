@@ -13,7 +13,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
-import ca.on.sudbury.hojat.smartgallery.extensions.setFillWithStroke
+import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -169,13 +169,13 @@ class WidgetConfigureActivity : SimpleActivity() {
     private fun updateBackgroundColor() {
         mBgColor = mBgColorWithoutTransparency.adjustAlpha(mBgAlpha)
         ApplyColorFilterUseCase(binding.configImageHolder.background, mBgColor)
-        binding.configBgColor.setFillWithStroke(mBgColor, mBgColor)
+        binding.configBgColor.fillWithColor(mBgColor, mBgColor)
         binding.configSave.backgroundTintList = ColorStateList.valueOf(getProperPrimaryColor())
     }
 
     private fun updateTextColor() {
         binding.configFolderName.setTextColor(mTextColor)
-        binding.configTextColor.setFillWithStroke(mTextColor, mTextColor)
+        binding.configTextColor.fillWithColor(mTextColor, mTextColor)
         binding.configSave.setTextColor(getProperPrimaryColor().getContrastColor())
     }
 
