@@ -231,7 +231,7 @@ fun String.getBasePath(context: Context): String {
     return when {
         startsWith(context.internalStoragePath) -> context.internalStoragePath
         IsPathOnSdUseCase(context, this) -> context.baseConfig.sdCardPath
-        IsPathOnOtgUseCase(context, this) -> context.baseConfig.OTGPath
+        IsPathOnOtgUseCase(context, this) -> context.baseConfig.otgPath
         else -> "/"
     }
 }
@@ -864,9 +864,9 @@ fun String.getMimeType(): String {
 }
 
 fun String.getOTGPublicPath(context: Context) =
-    "${context.baseConfig.OTGTreeUri}/document/${context.baseConfig.OTGPartition}%3A${
+    "${context.baseConfig.otgTreeUri}/document/${context.baseConfig.otgPartition}%3A${
         substring(
-            context.baseConfig.OTGPath.length
+            context.baseConfig.otgPath.length
         ).replace("/", "%2F")
     }"
 

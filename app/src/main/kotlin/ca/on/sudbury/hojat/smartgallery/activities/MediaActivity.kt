@@ -480,7 +480,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 val dirName = when {
                     mPath == FAVORITES -> getString(R.string.favorites)
                     mPath == RECYCLE_BIN -> getString(R.string.recycle_bin)
-                    mPath == config.OTGPath -> getString(R.string.usb)
+                    mPath == config.otgPath -> getString(R.string.usb)
                     else -> getHumanizedFilename(mPath)
                 }
 

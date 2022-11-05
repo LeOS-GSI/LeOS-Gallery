@@ -103,7 +103,7 @@ class StoragePickerDialog(
             otgButton.apply {
                 id = idOtg
                 text = resources.getString(R.string.usb)
-                isChecked = basePath == context.baseConfig.OTGPath
+                isChecked = basePath == context.baseConfig.otgPath
                 setOnClickListener { otgPicked() }
                 if (isChecked) {
                     defaultSelectedId = id
@@ -147,7 +147,7 @@ class StoragePickerDialog(
     private fun otgPicked() {
         activity.handleOTGPermission {
             if (it) {
-                callback(activity.baseConfig.OTGPath)
+                callback(activity.baseConfig.otgPath)
                 dialog?.dismiss()
             } else {
                 radioGroup.check(defaultSelectedId)

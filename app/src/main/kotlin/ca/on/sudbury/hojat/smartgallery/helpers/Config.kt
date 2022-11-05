@@ -11,7 +11,6 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
 import java.util.Locale
 
-
 class Config(context: Context) : BaseConfig(context) {
     companion object {
         fun newInstance(context: Context) = Config(context)

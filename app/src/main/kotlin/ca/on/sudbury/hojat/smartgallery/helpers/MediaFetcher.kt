@@ -154,7 +154,7 @@ class MediaFetcher(val context: Context) {
     @SuppressLint("Recycle")
     fun getFoldersToScan(): ArrayList<String> {
         return try {
-            val OTGPath = context.config.OTGPath
+            val OTGPath = context.config.otgPath
             val folders = getLatestFileFolders()
             folders.addAll(arrayListOf(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
@@ -334,7 +334,7 @@ class MediaFetcher(val context: Context) {
         val foldersToIgnore = arrayListOf("/storage/emulated/legacy")
         val config = context.config
         val includedFolders = config.includedFolders
-        val OTGPath = config.OTGPath
+        val OTGPath = config.otgPath
         val foldersToScan = config.everShownFolders.filter {
             it == FAVORITES || it == RECYCLE_BIN || context.getDoesFilePathExist(
                 it,
@@ -686,7 +686,7 @@ class MediaFetcher(val context: Context) {
         val files = context.getDocumentFile(folder)?.listFiles() ?: return media
         val checkFileExistence = context.config.fileLoadingPriority == PRIORITY_VALIDITY
         val showHidden = context.config.shouldShowHidden
-        val oTGPath = context.config.OTGPath
+        val oTGPath = context.config.otgPath
 
         for (file in files) {
             if (shouldStop) {
@@ -742,8 +742,8 @@ class MediaFetcher(val context: Context) {
 
             val path = Uri.decode(
                 file.uri.toString().replaceFirst(
-                    "${context.config.OTGTreeUri}/document/${context.config.OTGPartition}%3A",
-                    "${context.config.OTGPath}/"
+                    "${context.config.otgTreeUri}/document/${context.config.otgPartition}%3A",
+                    "${context.config.otgPath}/"
                 )
             )
             val videoDuration = if (getVideoDurations) context.getDuration(path) ?: 0 else 0

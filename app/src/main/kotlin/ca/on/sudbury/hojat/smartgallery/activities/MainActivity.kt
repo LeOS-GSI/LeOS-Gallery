@@ -1643,7 +1643,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     private fun checkInvalidDirectories(dirs: ArrayList<Directory>) {
         val invalidDirs = ArrayList<Directory>()
-        val otgPath = config.OTGPath
+        val otgPath = config.otgPath
         dirs.filter { !it.areFavorites() && !it.isRecycleBin() }.forEach { it ->
             if (!getDoesFilePathExist(it.path, otgPath)) {
                 invalidDirs.add(it)
@@ -1788,7 +1788,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 }
 
                 oftenRepeatedPaths.removeAll(substringToRemove)
-                val OTGPath = config.OTGPath
+                val OTGPath = config.otgPath
                 oftenRepeatedPaths.forEach {
                     val file = File("$internalPath/$it")
                     if (getDoesFilePathExist(file.absolutePath, OTGPath)) {
