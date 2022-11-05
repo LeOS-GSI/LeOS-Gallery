@@ -26,7 +26,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.signature.ObjectKey
 
-class MyWidgetProvider : AppWidgetProvider() {
+class SmartGalleryWidgetProvider : AppWidgetProvider() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setupAppOpenIntent(context: Context, views: RemoteViews, id: Int, widget: Widget) {
         val intent = Intent(context, MediaActivity::class.java).apply {

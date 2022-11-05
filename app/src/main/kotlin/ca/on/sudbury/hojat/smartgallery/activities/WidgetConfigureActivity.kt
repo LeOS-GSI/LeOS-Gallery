@@ -27,7 +27,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.loadJpg
 import ca.on.sudbury.hojat.smartgallery.extensions.getCachedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.widgetsDB
-import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.Widget
@@ -159,7 +159,7 @@ class WidgetConfigureActivity : SimpleActivity() {
             AppWidgetManager.ACTION_APPWIDGET_UPDATE,
             null,
             this,
-            MyWidgetProvider::class.java
+            SmartGalleryWidgetProvider::class.java
         ).apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(mWidgetId))
             sendBroadcast(this)

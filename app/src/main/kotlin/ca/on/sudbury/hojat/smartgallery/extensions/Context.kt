@@ -71,7 +71,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
 import ca.on.sudbury.hojat.smartgallery.helpers.BaseContentProvider
-import ca.on.sudbury.hojat.smartgallery.helpers.MyWidgetProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CAMERA
@@ -1604,27 +1604,25 @@ private fun tryLoadingWithPicasso(
     var pathToLoad = "file://$path"
     pathToLoad = pathToLoad.replace("%", "%25").replace("#", "%23")
 
-    try {
-        var builder = Picasso.get()
-            .load(pathToLoad)
-            .stableKey(signature.toString())
 
-        builder = if (cropThumbnails) {
-            builder.centerCrop().fit()
-        } else {
-            builder.centerInside()
-        }
+    var builder = Picasso.get()
+        .load(pathToLoad)
+        .stableKey(signature.toString())
 
-        if (roundCorners != ROUNDED_CORNERS_NONE) {
-            val cornerSize =
-                if (roundCorners == ROUNDED_CORNERS_SMALL) R.dimen.rounded_corner_radius_small else R.dimen.rounded_corner_radius_big
-            val cornerRadius = owner.resources.getDimension(cornerSize).toInt()
-            builder = builder.transform(PicassoRoundedCornersTransformation(cornerRadius.toFloat()))
-        }
-
-        builder.into(view)
-    } catch (_: Exception) {
+    builder = if (cropThumbnails) {
+        builder.centerCrop().fit()
+    } else {
+        builder.centerInside()
     }
+
+    if (roundCorners != ROUNDED_CORNERS_NONE) {
+        val cornerSize =
+            if (roundCorners == ROUNDED_CORNERS_SMALL) R.dimen.rounded_corner_radius_small else R.dimen.rounded_corner_radius_big
+        val cornerRadius = owner.resources.getDimension(cornerSize).toInt()
+        builder = builder.transform(PicassoRoundedCornersTransformation(cornerRadius.toFloat()))
+    }
+
+    builder.into(view)
 }
 
 fun Context.getCachedDirectories(
@@ -2042,10 +2040,10 @@ private fun deleteMediumWithPath(owner: Context, path: String) {
 
 fun Context.updateWidgets() {
     val widgetIDs = AppWidgetManager.getInstance(applicationContext)
-        ?.getAppWidgetIds(ComponentName(applicationContext, MyWidgetProvider::class.java))
+        ?.getAppWidgetIds(ComponentName(applicationContext, SmartGalleryWidgetProvider::class.java))
         ?: return
     if (widgetIDs.isNotEmpty()) {
-        Intent(applicationContext, MyWidgetProvider::class.java).apply {
+        Intent(applicationContext, SmartGalleryWidgetProvider::class.java).apply {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIDs)
             sendBroadcast(this)
