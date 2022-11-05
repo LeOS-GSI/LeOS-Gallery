@@ -346,7 +346,7 @@ class Config(context: Context) : BaseConfig(context) {
             .putBoolean(SLIDESHOW_MOVE_BACKWARDS, slideshowMoveBackwards).apply()
 
     var slideshowAnimation: Int
-        get() = prefs.getInt(SLIDESHOW_ANIMATION, SLIDESHOW_ANIMATION_SLIDE)
+        get() = prefs.getInt(SLIDESHOW_ANIMATION, SlideshowAnimation.Slide.id)
         set(slideshowAnimation) = prefs.edit().putInt(SLIDESHOW_ANIMATION, slideshowAnimation)
             .apply()
 

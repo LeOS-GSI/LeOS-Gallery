@@ -101,7 +101,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_PRINT_SIDE_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_CHANGE_ORIENTATION
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_START_ON_ENTER
-import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_FADE
 import ca.on.sudbury.hojat.smartgallery.helpers.FadePageTransformer
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
@@ -118,8 +117,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.DefaultPageTransformer
 import ca.on.sudbury.hojat.smartgallery.helpers.HIDE_SYSTEM_UI_DELAY
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_FADE_DURATION
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_SLIDE_DURATION
-import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_SLIDE
-import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_NONE
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_DEFAULT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
@@ -163,6 +160,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
+import ca.on.sudbury.hojat.smartgallery.helpers.SlideshowAnimation
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
@@ -674,7 +672,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         if (getMediaForSlideshow()) {
             binding.viewPager.onGlobalLayout {
                 if (!isDestroyed) {
-                    if (config.slideshowAnimation == SLIDESHOW_ANIMATION_FADE) {
+                    if (config.slideshowAnimation == SlideshowAnimation.Fade.id) {
                         binding.viewPager.setPageTransformer(false, FadePageTransformer())
                     }
 
@@ -728,7 +726,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             }
         })
 
-        if (config.slideshowAnimation == SLIDESHOW_ANIMATION_SLIDE) {
+        if (config.slideshowAnimation == SlideshowAnimation.Slide.id) {
             animator.interpolator = DecelerateInterpolator()
             animator.duration = SLIDESHOW_SLIDE_DURATION
         } else {
@@ -795,7 +793,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     }
 
     private fun swipeToNextMedium() {
-        if (config.slideshowAnimation == SLIDESHOW_ANIMATION_NONE) {
+        if (config.slideshowAnimation == SlideshowAnimation.None.id) {
             goToNextMedium(!mSlideshowMoveBackwards)
         } else {
             animatePagerTransition(!mSlideshowMoveBackwards)

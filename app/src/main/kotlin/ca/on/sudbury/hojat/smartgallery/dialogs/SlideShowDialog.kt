@@ -10,10 +10,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_FADE
-import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_NONE
-import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_ANIMATION_SLIDE
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_DEFAULT_INTERVAL
+import ca.on.sudbury.hojat.smartgallery.helpers.SlideshowAnimation
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 
 @SuppressLint("InflateParams")
@@ -39,9 +37,12 @@ class SlideShowDialog(
 
             animationHolder.setOnClickListener {
                 val items = arrayListOf(
-                    RadioItem(SLIDESHOW_ANIMATION_NONE, activity.getString(R.string.no_animation)),
-                    RadioItem(SLIDESHOW_ANIMATION_SLIDE, activity.getString(R.string.slide)),
-                    RadioItem(SLIDESHOW_ANIMATION_FADE, activity.getString(R.string.fade))
+                    RadioItem(
+                        SlideshowAnimation.None.id,
+                        activity.getString(R.string.no_animation)
+                    ),
+                    RadioItem(SlideshowAnimation.Slide.id, activity.getString(R.string.slide)),
+                    RadioItem(SlideshowAnimation.Fade.id, activity.getString(R.string.fade))
                 )
 
                 RadioGroupDialog(activity, items, activity.config.slideshowAnimation) {
@@ -123,17 +124,17 @@ class SlideShowDialog(
 
     private fun getAnimationText(): String {
         return when (activity.config.slideshowAnimation) {
-            SLIDESHOW_ANIMATION_SLIDE -> activity.getString(R.string.slide)
-            SLIDESHOW_ANIMATION_FADE -> activity.getString(R.string.fade)
+            SlideshowAnimation.Slide.id -> activity.getString(R.string.slide)
+            SlideshowAnimation.Fade.id -> activity.getString(R.string.fade)
             else -> activity.getString(R.string.no_animation)
         }
     }
 
     private fun getAnimationValue(text: String): Int {
         return when (text) {
-            activity.getString(R.string.slide) -> SLIDESHOW_ANIMATION_SLIDE
-            activity.getString(R.string.fade) -> SLIDESHOW_ANIMATION_FADE
-            else -> SLIDESHOW_ANIMATION_NONE
+            activity.getString(R.string.slide) -> SlideshowAnimation.Slide.id
+            activity.getString(R.string.fade) -> SlideshowAnimation.Fade.id
+            else -> SlideshowAnimation.None.id
         }
     }
 }

@@ -423,11 +423,6 @@ fun getFilePlaceholderDrawables(context: Context): HashMap<String, Drawable> {
     return fileDrawables
 }
 
-// slideshow animations
-const val SLIDESHOW_ANIMATION_NONE = 0
-const val SLIDESHOW_ANIMATION_SLIDE = 1
-const val SLIDESHOW_ANIMATION_FADE = 2
-
 const val RECYCLE_BIN = "recycle_bin"
 const val SHOW_FAVORITES = "show_favorites"
 const val SHOW_RECYCLE_BIN = "show_recycle_bin"
