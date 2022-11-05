@@ -6,22 +6,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_TOGGLE_FAVORITE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_EDIT
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHARE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_DELETE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_ROTATE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_PROPERTIES
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_CHANGE_ORIENTATION
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SLIDESHOW
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHOW_ON_MAP
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_TOGGLE_VISIBILITY
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_RENAME
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SET_AS
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_COPY
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_MOVE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_RESIZE
-
+import ca.on.sudbury.hojat.smartgallery.helpers.BottomAction
 
 class ManageBottomActionsDialog(
     val activity: BaseSimpleActivity,
@@ -35,23 +20,23 @@ class ManageBottomActionsDialog(
         val actions = activity.config.visibleBottomActions
         binding.apply {
             manageBottomActionsToggleFavorite.isChecked =
-                actions and BOTTOM_ACTION_TOGGLE_FAVORITE != 0
-            manageBottomActionsEdit.isChecked = actions and BOTTOM_ACTION_EDIT != 0
-            manageBottomActionsShare.isChecked = actions and BOTTOM_ACTION_SHARE != 0
-            manageBottomActionsDelete.isChecked = actions and BOTTOM_ACTION_DELETE != 0
-            manageBottomActionsRotate.isChecked = actions and BOTTOM_ACTION_ROTATE != 0
-            manageBottomActionsProperties.isChecked = actions and BOTTOM_ACTION_PROPERTIES != 0
+                actions and BottomAction.ToggleFavorite.id != 0
+            manageBottomActionsEdit.isChecked = actions and BottomAction.Edit.id != 0
+            manageBottomActionsShare.isChecked = actions and BottomAction.Share.id != 0
+            manageBottomActionsDelete.isChecked = actions and BottomAction.Delete.id != 0
+            manageBottomActionsRotate.isChecked = actions and BottomAction.Rotate.id != 0
+            manageBottomActionsProperties.isChecked = actions and BottomAction.Properties.id != 0
             manageBottomActionsChangeOrientation.isChecked =
-                actions and BOTTOM_ACTION_CHANGE_ORIENTATION != 0
-            manageBottomActionsSlideshow.isChecked = actions and BOTTOM_ACTION_SLIDESHOW != 0
-            manageBottomActionsShowOnMap.isChecked = actions and BOTTOM_ACTION_SHOW_ON_MAP != 0
+                actions and BottomAction.ChangeOrientation.id != 0
+            manageBottomActionsSlideshow.isChecked = actions and BottomAction.SlideShow.id != 0
+            manageBottomActionsShowOnMap.isChecked = actions and BottomAction.ShowOnMap.id != 0
             manageBottomActionsToggleVisibility.isChecked =
-                actions and BOTTOM_ACTION_TOGGLE_VISIBILITY != 0
-            manageBottomActionsRename.isChecked = actions and BOTTOM_ACTION_RENAME != 0
-            manageBottomActionsSetAs.isChecked = actions and BOTTOM_ACTION_SET_AS != 0
-            manageBottomActionsCopy.isChecked = actions and BOTTOM_ACTION_COPY != 0
-            manageBottomActionsMove.isChecked = actions and BOTTOM_ACTION_MOVE != 0
-            manageBottomActionsResize.isChecked = actions and BOTTOM_ACTION_RESIZE != 0
+                actions and BottomAction.ToggleVisibility.id != 0
+            manageBottomActionsRename.isChecked = actions and BottomAction.Rename.id != 0
+            manageBottomActionsSetAs.isChecked = actions and BottomAction.SetAs.id != 0
+            manageBottomActionsCopy.isChecked = actions and BottomAction.Copy.id != 0
+            manageBottomActionsMove.isChecked = actions and BottomAction.Move.id != 0
+            manageBottomActionsResize.isChecked = actions and BottomAction.Resize.id != 0
         }
 
         activity.getAlertDialogBuilder()
@@ -66,35 +51,35 @@ class ManageBottomActionsDialog(
         var result = 0
         binding.apply {
             if (manageBottomActionsToggleFavorite.isChecked)
-                result += BOTTOM_ACTION_TOGGLE_FAVORITE
+                result += BottomAction.ToggleFavorite.id
             if (manageBottomActionsEdit.isChecked)
-                result += BOTTOM_ACTION_EDIT
+                result += BottomAction.Edit.id
             if (manageBottomActionsShare.isChecked)
-                result += BOTTOM_ACTION_SHARE
+                result += BottomAction.Share.id
             if (manageBottomActionsDelete.isChecked)
-                result += BOTTOM_ACTION_DELETE
+                result += BottomAction.Delete.id
             if (manageBottomActionsRotate.isChecked)
-                result += BOTTOM_ACTION_ROTATE
+                result += BottomAction.Rotate.id
             if (manageBottomActionsProperties.isChecked)
-                result += BOTTOM_ACTION_PROPERTIES
+                result += BottomAction.Properties.id
             if (manageBottomActionsChangeOrientation.isChecked)
-                result += BOTTOM_ACTION_CHANGE_ORIENTATION
+                result += BottomAction.ChangeOrientation.id
             if (manageBottomActionsSlideshow.isChecked)
-                result += BOTTOM_ACTION_SLIDESHOW
+                result += BottomAction.SlideShow.id
             if (manageBottomActionsShowOnMap.isChecked)
-                result += BOTTOM_ACTION_SHOW_ON_MAP
+                result += BottomAction.ShowOnMap.id
             if (manageBottomActionsToggleVisibility.isChecked)
-                result += BOTTOM_ACTION_TOGGLE_VISIBILITY
+                result += BottomAction.ToggleVisibility.id
             if (manageBottomActionsRename.isChecked)
-                result += BOTTOM_ACTION_RENAME
+                result += BottomAction.Rename.id
             if (manageBottomActionsSetAs.isChecked)
-                result += BOTTOM_ACTION_SET_AS
+                result += BottomAction.SetAs.id
             if (manageBottomActionsCopy.isChecked)
-                result += BOTTOM_ACTION_COPY
+                result += BottomAction.Copy.id
             if (manageBottomActionsMove.isChecked)
-                result += BOTTOM_ACTION_MOVE
+                result += BottomAction.Move.id
             if (manageBottomActionsResize.isChecked)
-                result += BOTTOM_ACTION_RESIZE
+                result += BottomAction.Resize.id
         }
 
         activity.config.visibleBottomActions = result

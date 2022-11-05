@@ -80,26 +80,12 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateDBMediaPath
 import ca.on.sudbury.hojat.smartgallery.photoview.PhotoFragment
 import ca.on.sudbury.hojat.smartgallery.video.VideoFragment
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SET_AS
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_ROTATE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_RESIZE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_TOGGLE_VISIBILITY
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_MOVE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_RENAME
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHOW_ON_MAP
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SLIDESHOW
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_PROPERTIES
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_DELETE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHARE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_EDIT
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_COPY
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_PRINT_SIDE_SIZE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_CHANGE_ORIENTATION
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_START_ON_ENTER
 import ca.on.sudbury.hojat.smartgallery.helpers.FadePageTransformer
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
@@ -107,7 +93,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_ASPECT_RATIO
 import ca.on.sudbury.hojat.smartgallery.helpers.GO_TO_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.GO_TO_PREV_ITEM
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_TOGGLE_FAVORITE
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.SKIP_AUTHENTICATION
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
@@ -159,6 +144,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
+import ca.on.sudbury.hojat.smartgallery.helpers.BottomAction
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.SlideshowAnimation
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
@@ -298,49 +284,49 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             val rotationDegrees = getCurrentPhotoFragment()?.mCurrentRotationDegrees ?: 0
             binding.mediumViewerToolbar.menu.apply {
                 findItem(R.id.menu_show_on_map).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP == 0
+                    visibleBottomActions and BottomAction.ShowOnMap.id == 0
                 findItem(R.id.menu_slideshow).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_SLIDESHOW == 0
+                    visibleBottomActions and BottomAction.SlideShow.id == 0
                 findItem(R.id.menu_properties).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_PROPERTIES == 0
+                    visibleBottomActions and BottomAction.Properties.id == 0
                 findItem(R.id.menu_delete).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_DELETE == 0
+                    visibleBottomActions and BottomAction.Delete.id == 0
                 findItem(R.id.menu_share).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_SHARE == 0
+                    visibleBottomActions and BottomAction.Share.id == 0
                 findItem(R.id.menu_edit).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_EDIT == 0 && !currentMedium.isSVG()
+                    visibleBottomActions and BottomAction.Edit.id == 0 && !currentMedium.isSVG()
                 findItem(R.id.menu_rename).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_RENAME == 0 && !currentMedium.getIsInRecycleBin()
+                    visibleBottomActions and BottomAction.Rename.id == 0 && !currentMedium.getIsInRecycleBin()
                 findItem(R.id.menu_rotate).isVisible =
-                    currentMedium.isImage() && visibleBottomActions and BOTTOM_ACTION_ROTATE == 0
+                    currentMedium.isImage() && visibleBottomActions and BottomAction.Rotate.id == 0
                 findItem(R.id.menu_set_as).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_SET_AS == 0
+                    visibleBottomActions and BottomAction.SetAs.id == 0
                 findItem(R.id.menu_copy_to).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_COPY == 0
+                    visibleBottomActions and BottomAction.Copy.id == 0
                 findItem(R.id.menu_move_to).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_MOVE == 0
+                    visibleBottomActions and BottomAction.Move.id == 0
                 findItem(R.id.menu_save_as).isVisible = rotationDegrees != 0
                 findItem(R.id.menu_print).isVisible =
                     currentMedium.isImage() || currentMedium.isRaw()
                 findItem(R.id.menu_resize).isVisible =
-                    visibleBottomActions and BOTTOM_ACTION_RESIZE == 0 && currentMedium.isImage()
+                    visibleBottomActions and BottomAction.Resize.id == 0 && currentMedium.isImage()
                 findItem(R.id.menu_hide).isVisible =
-                    (!IsRPlusUseCase() || isExternalStorageManager()) && !currentMedium.isHidden() && visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY == 0 && !currentMedium.getIsInRecycleBin()
+                    (!IsRPlusUseCase() || isExternalStorageManager()) && !currentMedium.isHidden() && visibleBottomActions and BottomAction.ToggleVisibility.id == 0 && !currentMedium.getIsInRecycleBin()
 
                 findItem(R.id.menu_unhide).isVisible =
-                    (!IsRPlusUseCase() || isExternalStorageManager()) && currentMedium.isHidden() && visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY == 0 && !currentMedium.getIsInRecycleBin()
+                    (!IsRPlusUseCase() || isExternalStorageManager()) && currentMedium.isHidden() && visibleBottomActions and BottomAction.ToggleVisibility.id == 0 && !currentMedium.getIsInRecycleBin()
 
                 findItem(R.id.menu_add_to_favorites).isVisible =
-                    !currentMedium.isFavorite && visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE == 0 && !currentMedium.getIsInRecycleBin()
+                    !currentMedium.isFavorite && visibleBottomActions and BottomAction.ToggleFavorite.id == 0 && !currentMedium.getIsInRecycleBin()
 
                 findItem(R.id.menu_remove_from_favorites).isVisible =
-                    currentMedium.isFavorite && visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE == 0 && !currentMedium.getIsInRecycleBin()
+                    currentMedium.isFavorite && visibleBottomActions and BottomAction.ToggleFavorite.id == 0 && !currentMedium.getIsInRecycleBin()
 
                 findItem(R.id.menu_restore_file).isVisible =
                     currentMedium.path.startsWith(recycleBinPath)
                 findItem(R.id.menu_create_shortcut).isVisible = IsOreoPlusUseCase()
                 findItem(R.id.menu_change_orientation).isVisible =
-                    rotationDegrees == 0 && visibleBottomActions and BOTTOM_ACTION_CHANGE_ORIENTATION == 0
+                    rotationDegrees == 0 && visibleBottomActions and BottomAction.ChangeOrientation.id == 0
                 findItem(R.id.menu_change_orientation).icon =
                     resources.getDrawable(getChangeOrientationIcon())
                 findItem(R.id.menu_rotate).setShowAsAction(
@@ -1039,7 +1025,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         with(binding.bottomActions.bottomFavorite) {
             BeVisibleOrGoneUseCase(
                 this,
-                visibleBottomActions and BOTTOM_ACTION_TOGGLE_FAVORITE != 0 && currentMedium?.getIsInRecycleBin() == false
+                visibleBottomActions and BottomAction.ToggleFavorite.id != 0 && currentMedium?.getIsInRecycleBin() == false
             )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
@@ -1055,7 +1041,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         with(binding.bottomActions.bottomEdit) {
             BeVisibleOrGoneUseCase(
                 this,
-                visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && currentMedium?.isSVG() == false
+                visibleBottomActions and BottomAction.Edit.id != 0 && currentMedium?.isSVG() == false
             )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
@@ -1067,7 +1053,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomShare) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SHARE != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.Share.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1080,7 +1066,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomDelete) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_DELETE != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.Delete.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1093,7 +1079,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         with(binding.bottomActions.bottomRotate) {
             BeVisibleOrGoneUseCase(
                 this,
-                config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true
+                config.visibleBottomActions and BottomAction.Rotate.id != 0 && getCurrentMedium()?.isImage() == true
             )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
@@ -1105,7 +1091,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomProperties) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_PROPERTIES != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.Properties.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1118,7 +1104,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         with(binding.bottomActions.bottomChangeOrientation) {
             BeVisibleOrGoneUseCase(
                 this,
-                visibleBottomActions and BOTTOM_ACTION_CHANGE_ORIENTATION != 0
+                visibleBottomActions and BottomAction.ChangeOrientation.id != 0
             )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
@@ -1139,7 +1125,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomSlideshow) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SLIDESHOW != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.SlideShow.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1150,7 +1136,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomShowOnMap) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.ShowOnMap.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1163,7 +1149,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         with(binding.bottomActions.bottomToggleFileVisibility) {
             BeVisibleOrGoneUseCase(
                 this,
-                visibleBottomActions and BOTTOM_ACTION_TOGGLE_VISIBILITY != 0
+                visibleBottomActions and BottomAction.ToggleVisibility.id != 0
             )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
@@ -1183,7 +1169,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         with(binding.bottomActions.bottomRename) {
             BeVisibleOrGoneUseCase(
                 this,
-                visibleBottomActions and BOTTOM_ACTION_RENAME != 0 && currentMedium?.getIsInRecycleBin() == false
+                visibleBottomActions and BottomAction.Rename.id != 0 && currentMedium?.getIsInRecycleBin() == false
             )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
@@ -1195,7 +1181,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomSetAs) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_SET_AS != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.SetAs.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1206,7 +1192,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomCopy) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_COPY != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.Copy.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1217,7 +1203,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         with(binding.bottomActions.bottomMove) {
-            BeVisibleOrGoneUseCase(this, visibleBottomActions and BOTTOM_ACTION_MOVE != 0)
+            BeVisibleOrGoneUseCase(this, visibleBottomActions and BottomAction.Move.id != 0)
             setOnLongClickListener {
                 ShowSafeToastUseCase(
                     this@ViewPagerActivity,
@@ -1230,7 +1216,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         with(binding.bottomActions.bottomResize) {
             BeVisibleOrGoneUseCase(
                 this,
-                visibleBottomActions and BOTTOM_ACTION_RESIZE != 0 && currentMedium?.isImage() == true
+                visibleBottomActions and BottomAction.Resize.id != 0 && currentMedium?.isImage() == true
             )
             setOnLongClickListener {
                 ShowSafeToastUseCase(
@@ -1257,7 +1243,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             bottomToggleFileVisibility.setImageResource(hideIcon)
             BeVisibleOrGoneUseCase(
                 bottomRotate,
-                config.visibleBottomActions and BOTTOM_ACTION_ROTATE != 0 && getCurrentMedium()?.isImage() == true
+                config.visibleBottomActions and BottomAction.Rotate.id != 0 && getCurrentMedium()?.isImage() == true
             )
             bottomChangeOrientation.setImageResource(getChangeOrientationIcon())
         }

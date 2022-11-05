@@ -56,11 +56,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
 import ca.on.sudbury.hojat.smartgallery.photoview.PhotoFragment
 import ca.on.sudbury.hojat.smartgallery.video.VideoFragment
 import ca.on.sudbury.hojat.smartgallery.fragments.ViewPagerFragment
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHARE
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SHOW_ON_MAP
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_SET_AS
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_EDIT
-import ca.on.sudbury.hojat.smartgallery.helpers.BOTTOM_ACTION_PROPERTIES
+import ca.on.sudbury.hojat.smartgallery.helpers.BottomAction
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.SKIP_AUTHENTICATION
@@ -136,14 +132,14 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
         binding.fragmentViewerToolbar.menu.apply {
             findItem(R.id.menu_set_as).isVisible =
-                mMedium?.isImage() == true && visibleBottomActions and BOTTOM_ACTION_SET_AS == 0
+                mMedium?.isImage() == true && visibleBottomActions and BottomAction.SetAs.id == 0
             findItem(R.id.menu_edit).isVisible =
-                mMedium?.isImage() == true && mUri?.scheme == "file" && visibleBottomActions and BOTTOM_ACTION_EDIT == 0
+                mMedium?.isImage() == true && mUri?.scheme == "file" && visibleBottomActions and BottomAction.Edit.id == 0
             findItem(R.id.menu_properties).isVisible =
-                mUri?.scheme == "file" && visibleBottomActions and BOTTOM_ACTION_PROPERTIES == 0
-            findItem(R.id.menu_share).isVisible = visibleBottomActions and BOTTOM_ACTION_SHARE == 0
+                mUri?.scheme == "file" && visibleBottomActions and BottomAction.Properties.id == 0
+            findItem(R.id.menu_share).isVisible = visibleBottomActions and BottomAction.Share.id == 0
             findItem(R.id.menu_show_on_map).isVisible =
-                visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP == 0
+                visibleBottomActions and BottomAction.ShowOnMap.id == 0
         }
     }
 
@@ -503,7 +499,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
         val visibleBottomActions = if (config.bottomActions) config.visibleBottomActions else 0
         BeVisibleOrGoneUseCase(
             binding.bottomActions.bottomEdit,
-            visibleBottomActions and BOTTOM_ACTION_EDIT != 0 && mMedium?.isImage() == true
+            visibleBottomActions and BottomAction.Edit.id != 0 && mMedium?.isImage() == true
         )
         binding.bottomActions.bottomEdit.setOnClickListener {
             if (mUri != null && binding.bottomActions.root.alpha == 1f) {
@@ -513,7 +509,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
         BeVisibleOrGoneUseCase(
             binding.bottomActions.bottomShare,
-            visibleBottomActions and BOTTOM_ACTION_SHARE != 0
+            visibleBottomActions and BottomAction.Share.id != 0
         )
         binding.bottomActions.bottomShare.setOnClickListener {
             if (mUri != null && binding.bottomActions.root.alpha == 1f) {
@@ -523,7 +519,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
         BeVisibleOrGoneUseCase(
             binding.bottomActions.bottomSetAs,
-            visibleBottomActions and BOTTOM_ACTION_SET_AS != 0 && mMedium?.isImage() == true
+            visibleBottomActions and BottomAction.SetAs.id != 0 && mMedium?.isImage() == true
         )
         binding.bottomActions.bottomSetAs.setOnClickListener {
             setAs(mUri!!.toString())
@@ -531,7 +527,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
         BeVisibleOrGoneUseCase(
             binding.bottomActions.bottomShowOnMap,
-            visibleBottomActions and BOTTOM_ACTION_SHOW_ON_MAP != 0
+            visibleBottomActions and BottomAction.ShowOnMap.id != 0
         )
         binding.bottomActions.bottomShowOnMap.setOnClickListener {
             showFileOnMap(mUri!!.toString())

@@ -495,25 +495,8 @@ const val GROUP_BY_DATE_TAKEN_MONTHLY = 128
 const val GROUP_DESCENDING = 1024
 const val GROUP_SHOW_FILE_COUNT = 2048
 
-// bottom actions
-const val BOTTOM_ACTION_TOGGLE_FAVORITE = 1
-const val BOTTOM_ACTION_EDIT = 2
-const val BOTTOM_ACTION_SHARE = 4
-const val BOTTOM_ACTION_DELETE = 8
-const val BOTTOM_ACTION_ROTATE = 16
-const val BOTTOM_ACTION_PROPERTIES = 32
-const val BOTTOM_ACTION_CHANGE_ORIENTATION = 64
-const val BOTTOM_ACTION_SLIDESHOW = 128
-const val BOTTOM_ACTION_SHOW_ON_MAP = 256
-const val BOTTOM_ACTION_TOGGLE_VISIBILITY = 512
-const val BOTTOM_ACTION_RENAME = 1024
-const val BOTTOM_ACTION_SET_AS = 2048
-const val BOTTOM_ACTION_COPY = 4096
-const val BOTTOM_ACTION_MOVE = 8192
-const val BOTTOM_ACTION_RESIZE = 16384
-
 const val DEFAULT_BOTTOM_ACTIONS =
-    BOTTOM_ACTION_TOGGLE_FAVORITE or BOTTOM_ACTION_EDIT or BOTTOM_ACTION_SHARE or BOTTOM_ACTION_DELETE
+    BottomAction.ToggleFavorite.id or BottomAction.Edit.id or BottomAction.Share.id or BottomAction.Delete.id
 
 // aspect ratios used at the editor for cropping
 const val ASPECT_RATIO_FREE = 0
