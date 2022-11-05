@@ -1233,7 +1233,7 @@ class SettingsActivity : SimpleActivity() {
                     val listType = object : TypeToken<List<AlbumCover>>() {}.type
                     val covers = Gson().fromJson<ArrayList<AlbumCover>>(value.toString(), listType)
                         ?: ArrayList(1)
-                    covers.filter { !existingCoverPaths.contains(it.path) && getDoesFilePathExist(it.tmb) }
+                    covers.filter { !existingCoverPaths.contains(it.path) && getDoesFilePathExist(it.thumbnail) }
                         .forEach {
                             existingCovers.add(it)
                         }

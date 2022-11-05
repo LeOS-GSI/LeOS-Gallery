@@ -105,10 +105,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Gif.id
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Portrait.id
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Raw.id
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaType.Svg.id
 import ca.on.sudbury.hojat.smartgallery.helpers.appIconColorStrings
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
@@ -2193,8 +2189,8 @@ fun Context.createDirectoryFromMedia(
     var thumbnail: String? = null
 
     albumCovers.forEach {
-        if (it.path == path && getDoesFilePathExist(it.tmb, otgPath)) {
-            thumbnail = it.tmb
+        if (it.path == path && getDoesFilePathExist(it.thumbnail, otgPath)) {
+            thumbnail = it.thumbnail
         }
     }
 
