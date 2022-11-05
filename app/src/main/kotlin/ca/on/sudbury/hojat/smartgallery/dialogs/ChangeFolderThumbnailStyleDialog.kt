@@ -14,15 +14,14 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_LINE
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_BRACKETS
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_NONE
+import ca.on.sudbury.hojat.smartgallery.helpers.FolderMediaCount
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import kotlinx.android.synthetic.main.dialog_change_folder_thumbnail_style.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 
 /**
- * where it's called?
+ * In the settings page when you click on "Folder thumbnail style" the resulting
+ * dialog is created by this class.
  */
 class ChangeFolderThumbnailStyleDialog(
     val activity: BaseSimpleActivity,
@@ -70,8 +69,8 @@ class ChangeFolderThumbnailStyleDialog(
         }
 
         val countBtn = when (config.showFolderMediaCount) {
-            FOLDER_MEDIA_CNT_LINE -> countRadio.dialog_radio_folder_count_line
-            FOLDER_MEDIA_CNT_BRACKETS -> countRadio.dialog_radio_folder_count_brackets
+            FolderMediaCount.SeparateLine.id -> countRadio.dialog_radio_folder_count_line
+            FolderMediaCount.Brackets.id -> countRadio.dialog_radio_folder_count_brackets
             else -> countRadio.dialog_radio_folder_count_none
         }
 
@@ -135,9 +134,9 @@ class ChangeFolderThumbnailStyleDialog(
         }
 
         val count = when (view.dialog_radio_folder_count_holder.checkedRadioButtonId) {
-            R.id.dialog_radio_folder_count_line -> FOLDER_MEDIA_CNT_LINE
-            R.id.dialog_radio_folder_count_brackets -> FOLDER_MEDIA_CNT_BRACKETS
-            else -> FOLDER_MEDIA_CNT_NONE
+            R.id.dialog_radio_folder_count_line -> FolderMediaCount.SeparateLine.id
+            R.id.dialog_radio_folder_count_brackets -> FolderMediaCount.Brackets.id
+            else -> FolderMediaCount.None.id
         }
 
         config.folderStyle = style

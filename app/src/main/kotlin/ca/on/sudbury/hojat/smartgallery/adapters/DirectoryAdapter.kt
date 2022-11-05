@@ -67,19 +67,18 @@ import ca.on.sudbury.hojat.smartgallery.extensions.loadImage
 import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_LINE
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_BIG
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_BRACKETS
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.FolderMediaCount
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
@@ -917,7 +916,7 @@ class DirectoryAdapter(
                 val nameParams = (dir_name.layoutParams as RelativeLayout.LayoutParams)
                 nameParams.removeRule(RelativeLayout.BELOW)
 
-                if (config.showFolderMediaCount == FOLDER_MEDIA_CNT_LINE) {
+                if (config.showFolderMediaCount == FolderMediaCount.SeparateLine.id) {
                     nameParams.addRule(RelativeLayout.ABOVE, photo_cnt.id)
                     nameParams.removeRule(RelativeLayout.ALIGN_PARENT_BOTTOM)
 
@@ -963,7 +962,7 @@ class DirectoryAdapter(
             }
 
             photo_cnt.text = directory.subfoldersMediaCount.toString()
-            BeVisibleOrGoneUseCase(photo_cnt, showMediaCount == FOLDER_MEDIA_CNT_LINE)
+            BeVisibleOrGoneUseCase(photo_cnt, showMediaCount == FolderMediaCount.SeparateLine.id)
 
             if (limitFolderTitle) {
                 dir_name.setSingleLine()
@@ -971,7 +970,7 @@ class DirectoryAdapter(
             }
 
             var nameCount = directory.name
-            if (showMediaCount == FOLDER_MEDIA_CNT_BRACKETS) {
+            if (showMediaCount == FolderMediaCount.Brackets.id) {
                 nameCount += " (${directory.subfoldersMediaCount})"
             }
 

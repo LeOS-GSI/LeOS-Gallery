@@ -583,7 +583,7 @@ class Config(context: Context) : BaseConfig(context) {
             .putBoolean(WERE_FAVORITES_MIGRATED, wereFavoritesMigrated).apply()
 
     var showFolderMediaCount: Int
-        get() = prefs.getInt(FOLDER_MEDIA_COUNT, FOLDER_MEDIA_CNT_LINE)
+        get() = prefs.getInt(FOLDER_MEDIA_COUNT, FolderMediaCount.SeparateLine.id)
         set(showFolderMediaCount) = prefs.edit().putInt(FOLDER_MEDIA_COUNT, showFolderMediaCount)
             .apply()
 
