@@ -519,9 +519,6 @@ const val FOLDER_MEDIA_CNT_LINE = 1
 const val FOLDER_MEDIA_CNT_BRACKETS = 2
 const val FOLDER_MEDIA_CNT_NONE = 3
 
-const val FOLDER_STYLE_SQUARE = 1
-const val FOLDER_STYLE_ROUNDED_CORNERS = 2
-
 // possible icons at the top left corner
 enum class NavigationIcon {
     Cross,

@@ -56,7 +56,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialog
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_SQUARE
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
 import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_ASPECT_RATIO
@@ -136,6 +135,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
+import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
@@ -642,7 +642,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun getFolderStyleText() = getString(
         when (config.folderStyle) {
-            FOLDER_STYLE_SQUARE -> R.string.square
+            FolderStyle.Square.id -> R.string.square
             else -> R.string.rounded_corners
         }
     )

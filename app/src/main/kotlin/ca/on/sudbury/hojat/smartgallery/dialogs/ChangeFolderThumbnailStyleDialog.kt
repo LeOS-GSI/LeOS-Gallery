@@ -14,11 +14,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_SQUARE
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_LINE
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_BRACKETS
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_ROUNDED_CORNERS
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_NONE
+import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import kotlinx.android.synthetic.main.dialog_change_folder_thumbnail_style.view.*
 import kotlinx.android.synthetic.main.directory_item_grid_square.view.*
 
@@ -57,7 +56,7 @@ class ChangeFolderThumbnailStyleDialog(
         }
 
         val styleBtn = when (config.folderStyle) {
-            FOLDER_STYLE_SQUARE -> styleRadio.dialog_radio_folder_square
+            FolderStyle.Square.id -> styleRadio.dialog_radio_folder_square
             else -> styleRadio.dialog_radio_folder_rounded_corners
         }
 
@@ -131,8 +130,8 @@ class ChangeFolderThumbnailStyleDialog(
 
     override fun onClick(dialog: DialogInterface, which: Int) {
         val style = when (view.dialog_radio_folder_style.checkedRadioButtonId) {
-            R.id.dialog_radio_folder_square -> FOLDER_STYLE_SQUARE
-            else -> FOLDER_STYLE_ROUNDED_CORNERS
+            R.id.dialog_radio_folder_square -> FolderStyle.Square.id
+            else -> FolderStyle.RoundedCorners.id
         }
 
         val count = when (view.dialog_radio_folder_count_holder.checkedRadioButtonId) {

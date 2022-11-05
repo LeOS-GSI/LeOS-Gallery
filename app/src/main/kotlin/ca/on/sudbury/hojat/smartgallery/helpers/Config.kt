@@ -588,7 +588,7 @@ class Config(context: Context) : BaseConfig(context) {
             .apply()
 
     var folderStyle: Int
-        get() = prefs.getInt(FOLDER_THUMBNAIL_STYLE, FOLDER_STYLE_SQUARE)
+        get() = prefs.getInt(FOLDER_THUMBNAIL_STYLE, FolderStyle.Square.id)
         set(folderStyle) = prefs.edit().putInt(FOLDER_THUMBNAIL_STYLE, folderStyle).apply()
 
     var limitFolderTitle: Boolean

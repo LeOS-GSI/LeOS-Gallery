@@ -68,10 +68,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.removeNoMedia
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
 import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_MEDIA_CNT_LINE
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_ROUNDED_CORNERS
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
-import ca.on.sudbury.hojat.smartgallery.helpers.FOLDER_STYLE_SQUARE
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_BIG
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
@@ -82,6 +80,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
@@ -154,7 +153,7 @@ class DirectoryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutType = when {
             isListViewType -> R.layout.directory_item_list
-            folderStyle == FOLDER_STYLE_SQUARE -> R.layout.directory_item_grid_square
+            folderStyle == FolderStyle.Square.id -> R.layout.directory_item_grid_square
             else -> R.layout.directory_item_grid_rounded_corners
         }
 
@@ -677,7 +676,8 @@ class DirectoryAdapter(
             val path = dir.path
             val drawable = resources.getDrawable(R.drawable.shortcut_image).mutate()
             val coverThumbnail =
-                config.parseAlbumCovers().firstOrNull { it.thumbnail == dir.path }?.thumbnail ?: dir.tmb
+                config.parseAlbumCovers().firstOrNull { it.thumbnail == dir.path }?.thumbnail
+                    ?: dir.tmb
             activity.getShortcutImage(coverThumbnail, drawable) {
                 val intent = Intent(activity, MediaActivity::class.java)
                 intent.action = Intent.ACTION_VIEW
@@ -907,7 +907,7 @@ class DirectoryAdapter(
                 dir_holder.isSelected = isSelected
             }
 
-            if (scrollHorizontally && !isListViewType && folderStyle == FOLDER_STYLE_ROUNDED_CORNERS) {
+            if (scrollHorizontally && !isListViewType && folderStyle == FolderStyle.RoundedCorners.id) {
                 (dir_thumbnail.layoutParams as RelativeLayout.LayoutParams).addRule(
                     RelativeLayout.ABOVE,
                     dir_name.id
@@ -939,7 +939,7 @@ class DirectoryAdapter(
                 dir_lock.visibility = View.GONE
                 val roundedCorners = when {
                     isListViewType -> ROUNDED_CORNERS_SMALL
-                    folderStyle == FOLDER_STYLE_SQUARE -> ROUNDED_CORNERS_NONE
+                    folderStyle == FolderStyle.Square.id -> ROUNDED_CORNERS_NONE
                     else -> ROUNDED_CORNERS_BIG
                 }
 
@@ -983,7 +983,7 @@ class DirectoryAdapter(
 
             dir_name.text = nameCount
 
-            if (isListViewType || folderStyle == FOLDER_STYLE_ROUNDED_CORNERS) {
+            if (isListViewType || folderStyle == FolderStyle.RoundedCorners.id) {
                 photo_cnt.setTextColor(textColor)
                 dir_name.setTextColor(textColor)
                 ApplyColorFilterUseCase(dir_location, textColor)
