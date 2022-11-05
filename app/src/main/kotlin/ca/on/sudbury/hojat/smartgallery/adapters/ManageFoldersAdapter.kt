@@ -14,7 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.isWhiteTheme
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import kotlinx.android.synthetic.main.item_manage_folder.view.*
 
 class ManageFoldersAdapter(

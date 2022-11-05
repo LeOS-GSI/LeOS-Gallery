@@ -24,7 +24,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogColorPickerBinding
 import ca.on.hojat.palette.views.ColorPickerSquare
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import java.util.LinkedList
 

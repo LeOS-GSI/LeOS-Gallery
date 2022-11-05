@@ -19,7 +19,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isInSubFolderInDownloadDir
 import ca.on.sudbury.hojat.smartgallery.extensions.toFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase

@@ -12,7 +12,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.hojat.palette.views.MyScrollView
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 
 class PasswordTypesAdapter(
     private val context: Context,

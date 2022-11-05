@@ -100,11 +100,11 @@ import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase

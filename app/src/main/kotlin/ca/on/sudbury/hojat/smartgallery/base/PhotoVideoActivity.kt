@@ -69,7 +69,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_IN_RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.models.Medium
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase

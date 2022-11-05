@@ -130,8 +130,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase

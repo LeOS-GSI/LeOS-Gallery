@@ -69,7 +69,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.HIGH_TILE_DPI
 import ca.on.sudbury.hojat.smartgallery.helpers.NORMAL_TILE_DPI
 import ca.on.sudbury.hojat.smartgallery.helpers.LOW_TILE_DPI
 import ca.on.sudbury.hojat.smartgallery.models.Medium
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase

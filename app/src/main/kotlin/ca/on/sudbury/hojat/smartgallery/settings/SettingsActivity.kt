@@ -137,9 +137,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPiePlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase

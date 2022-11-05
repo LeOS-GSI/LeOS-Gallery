@@ -14,7 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.scanPathRecursively
 import ca.on.sudbury.hojat.smartgallery.extensions.addPathToDB
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDirectoryPath
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsPiePlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 /**

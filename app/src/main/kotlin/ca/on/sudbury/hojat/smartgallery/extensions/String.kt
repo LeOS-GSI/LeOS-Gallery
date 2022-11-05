@@ -8,7 +8,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.normalizeRegex
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase

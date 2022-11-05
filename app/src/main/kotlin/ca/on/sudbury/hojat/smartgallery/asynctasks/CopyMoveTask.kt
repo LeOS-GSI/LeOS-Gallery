@@ -40,9 +40,9 @@ import ca.on.sudbury.hojat.smartgallery.helpers.CONFLICT_SKIP
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase

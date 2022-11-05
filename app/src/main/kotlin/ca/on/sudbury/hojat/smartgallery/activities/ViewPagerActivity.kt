@@ -163,9 +163,9 @@ import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase

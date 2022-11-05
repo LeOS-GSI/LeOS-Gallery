@@ -87,9 +87,9 @@ import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase

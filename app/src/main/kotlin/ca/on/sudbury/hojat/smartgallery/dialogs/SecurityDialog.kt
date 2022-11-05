@@ -25,8 +25,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.hojat.palette.views.MyDialogViewPager
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 
 /**
  * In the settings page, there's section named "Security" with 3 check boxes.

@@ -39,7 +39,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectChildrenUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectoryFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase

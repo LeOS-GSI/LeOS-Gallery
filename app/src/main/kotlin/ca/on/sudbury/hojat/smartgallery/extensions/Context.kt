@@ -128,9 +128,9 @@ import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsMarshmallowPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsQPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase

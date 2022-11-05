@@ -42,8 +42,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.MD5
 import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetCameraModelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetDateTakenUseCase

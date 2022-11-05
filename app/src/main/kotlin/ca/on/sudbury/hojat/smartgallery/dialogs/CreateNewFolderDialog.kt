@@ -19,7 +19,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isAStorageRootFolder
 import ca.on.sudbury.hojat.smartgallery.extensions.isAValidFilename
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase

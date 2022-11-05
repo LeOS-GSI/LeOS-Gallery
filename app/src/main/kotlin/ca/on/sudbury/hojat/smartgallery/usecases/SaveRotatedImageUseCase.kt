@@ -27,8 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.rescanPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.tryDeleteFileDirItem
 import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
 import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
 import java.io.File

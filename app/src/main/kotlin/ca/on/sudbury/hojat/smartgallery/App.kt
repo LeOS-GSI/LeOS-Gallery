@@ -3,7 +3,7 @@ package ca.on.sudbury.hojat.smartgallery
 import android.app.Application
 import ca.on.hojat.fingerprint.core.Reprint
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import com.squareup.picasso.Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.Request

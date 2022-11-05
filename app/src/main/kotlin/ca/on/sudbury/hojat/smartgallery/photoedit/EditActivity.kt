@@ -66,7 +66,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_FREE
 import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_OTHER
 import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsNougatPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CopyNonDimensionExifAttributesUseCase

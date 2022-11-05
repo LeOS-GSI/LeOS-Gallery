@@ -12,7 +12,7 @@ import ca.on.sudbury.hojat.smartgallery.adapters.ManageFoldersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {

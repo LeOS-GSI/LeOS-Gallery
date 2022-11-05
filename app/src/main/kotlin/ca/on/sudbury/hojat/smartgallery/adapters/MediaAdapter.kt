@@ -75,8 +75,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.sharePathsIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
 import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsOreoPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertDrawableToBitmapUseCase

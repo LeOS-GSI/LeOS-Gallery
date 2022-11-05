@@ -35,7 +35,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SAVE_DISCARD_PROMPT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.models.MyTheme
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
-import ca.on.sudbury.hojat.smartgallery.photoedit.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase

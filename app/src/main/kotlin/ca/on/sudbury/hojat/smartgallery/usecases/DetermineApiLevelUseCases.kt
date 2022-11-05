@@ -1,4 +1,4 @@
-package ca.on.sudbury.hojat.smartgallery.photoedit.usecases
+package ca.on.sudbury.hojat.smartgallery.usecases
 
 import android.os.Build
 
