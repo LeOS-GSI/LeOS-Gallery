@@ -10,6 +10,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 object IsPathOnOtgUseCase {
     operator fun invoke(owner: Context?, path: String): Boolean {
         if (owner == null) return false // if owner is null, we say path is not on OTG
-        return (owner.baseConfig.OTGPath.isNotEmpty() && path.startsWith(owner.baseConfig.OTGPath))
+        return (owner.baseConfig.otgPath.isNotEmpty() && path.startsWith(owner.baseConfig.otgPath))
     }
 }

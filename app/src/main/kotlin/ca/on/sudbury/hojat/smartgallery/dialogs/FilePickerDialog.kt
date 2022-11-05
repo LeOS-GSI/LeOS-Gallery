@@ -468,14 +468,14 @@ class FilePickerDialog(
         callback: (ArrayList<FileDirItem>) -> Unit
     ) {
         val items = java.util.ArrayList<FileDirItem>()
-        val otgTreeUri = owner.baseConfig.OTGTreeUri
+        val otgTreeUri = owner.baseConfig.otgTreeUri
         var rootUri = try {
             DocumentFile.fromTreeUri(owner.applicationContext, Uri.parse(otgTreeUri))
         } catch (e: Exception) {
             ShowSafeToastUseCase(owner, e.toString())
-            owner.baseConfig.OTGPath = ""
-            owner.baseConfig.OTGTreeUri = ""
-            owner.baseConfig.OTGPartition = ""
+            owner.baseConfig.otgPath = ""
+            owner.baseConfig.otgTreeUri = ""
+            owner.baseConfig.otgPartition = ""
             null
         }
 
@@ -486,7 +486,7 @@ class FilePickerDialog(
 
         val parts = path.split("/").dropLastWhile { it.isEmpty() }
         for (part in parts) {
-            if (path == owner.baseConfig.OTGPath) {
+            if (path == owner.baseConfig.otgPath) {
                 break
             }
 
@@ -502,7 +502,7 @@ class FilePickerDialog(
 
         val files = rootUri!!.listFiles().filter { it.exists() }
 
-        val basePath = "${owner.baseConfig.OTGTreeUri}/document/${owner.baseConfig.OTGPartition}%3A"
+        val basePath = "${owner.baseConfig.otgTreeUri}/document/${owner.baseConfig.otgPartition}%3A"
         for (file in files) {
             val name = file.name ?: continue
             if (!shouldShowHidden && name.startsWith(".")) {
@@ -511,7 +511,7 @@ class FilePickerDialog(
 
             val isDirectory = file.isDirectory
             val filePath = file.uri.toString().substring(basePath.length)
-            val decodedPath = owner.baseConfig.OTGPath + "/" + URLDecoder.decode(filePath, "UTF-8")
+            val decodedPath = owner.baseConfig.otgPath + "/" + URLDecoder.decode(filePath, "UTF-8")
             val fileSize = when {
                 getProperFileSize -> GetFileSizeUseCase(file, shouldShowHidden)
                 isDirectory -> 0L

@@ -658,7 +658,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     private fun checkOTGPath() {
         RunOnBackgroundThreadUseCase {
-            if (!config.wasOTGHandled && hasPermission(PERMISSION_WRITE_STORAGE) && hasOTGConnected() && config.OTGPath.isEmpty()) {
+            if (!config.wasOTGHandled && hasPermission(PERMISSION_WRITE_STORAGE) && hasOTGConnected() && config.otgPath.isEmpty()) {
                 getStorageDirectories().firstOrNull {
                     it.trimEnd('/') != internalStoragePath && it.trimEnd(
                         '/'
@@ -666,7 +666,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 }?.apply {
                     config.wasOTGHandled = true
                     val otgPath = trimEnd('/')
-                    config.OTGPath = otgPath
+                    config.otgPath = otgPath
                     config.addIncludedFolder(otgPath)
                 }
             }
@@ -680,7 +680,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 "/storage/emulated/0/Android/data/com.facebook.orca/files/stickers"
             )
 
-            val otgPath = config.OTGPath
+            val otgPath = config.otgPath
             spamFolders.forEach {
                 if (getDoesFilePathExist(it, otgPath)) {
                     config.addExcludedFolder(it)
@@ -904,7 +904,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         fileDirItems: ArrayList<FileDirItem>,
         folders: ArrayList<File>
     ) {
-        val otgPath = config.OTGPath
+        val otgPath = config.otgPath
         deleteFiles(fileDirItems) {
             runOnUiThread {
                 refreshItems()

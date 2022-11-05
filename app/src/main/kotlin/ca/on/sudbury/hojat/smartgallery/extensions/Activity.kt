@@ -1162,7 +1162,7 @@ fun BaseSimpleActivity.movePathsInRecycleBin(
     RunOnBackgroundThreadUseCase {
 
         var pathsCnt = paths.size
-        val otgPath = config.OTGPath
+        val otgPath = config.otgPath
 
         for (source in paths) {
             if (otgPath.isNotEmpty() && source.startsWith(otgPath)) {
