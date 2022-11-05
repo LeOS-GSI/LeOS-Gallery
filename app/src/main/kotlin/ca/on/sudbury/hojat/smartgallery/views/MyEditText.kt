@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
+import ca.on.sudbury.hojat.smartgallery.helpers.Alpha
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 
 class MyEditText : AppCompatEditText {
@@ -24,7 +24,7 @@ class MyEditText : AppCompatEditText {
 
         // requires android:textCursorDrawable="@null" in xml to color the cursor too
         setTextColor(textColor)
-        setHintTextColor(textColor.adjustAlpha(MEDIUM_ALPHA))
+        setHintTextColor(textColor.adjustAlpha(Alpha.Medium.level))
         setLinkTextColor(accentColor)
     }
 }

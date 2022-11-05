@@ -132,9 +132,6 @@ const val SD_OTG_SHORT = "^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$"
 const val MD5 = "MD5"
 const val DARK_GREY = 0xFF333333.toInt()
 
-const val MEDIUM_ALPHA = 0.5f
-const val HIGHER_ALPHA = 0.75f
-
 const val HOUR_MINUTES = 60
 const val DAY_MINUTES = 24 * HOUR_MINUTES
 const val MONTH_MINUTES = DAY_MINUTES * 30
