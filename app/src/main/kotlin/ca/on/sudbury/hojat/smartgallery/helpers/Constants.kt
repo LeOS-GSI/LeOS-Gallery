@@ -466,17 +466,6 @@ const val PRIORITY_SPEED = 0
 const val PRIORITY_COMPROMISE = 1
 const val PRIORITY_VALIDITY = 2
 
-// extended details values
-const val EXT_NAME = 1
-const val EXT_PATH = 2
-const val EXT_SIZE = 4
-const val EXT_RESOLUTION = 8
-const val EXT_LAST_MODIFIED = 16
-const val EXT_DATE_TAKEN = 32
-const val EXT_CAMERA_MODEL = 64
-const val EXT_EXIF_PROPERTIES = 128
-const val EXT_GPS = 2048
-
 fun getDefaultFileFilter() =
     MediaType.Image.id or MediaType.Video.id or MediaType.Gif.id or MediaType.Raw.id or MediaType.Svg.id
 

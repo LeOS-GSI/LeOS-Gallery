@@ -379,7 +379,7 @@ class Config(context: Context) : BaseConfig(context) {
     var extendedDetails: Int
         get() = prefs.getInt(
             EXTENDED_DETAILS,
-            EXT_RESOLUTION or EXT_LAST_MODIFIED or EXT_EXIF_PROPERTIES
+            ExtendedDetails.Resolution.id or ExtendedDetails.LastModified.id or ExtendedDetails.ExifProperties.id
         )
         set(extendedDetails) = prefs.edit().putInt(EXTENDED_DETAILS, extendedDetails).apply()
 

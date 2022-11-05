@@ -13,15 +13,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getOTGPublicPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getLongValue
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_GPS
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_EXIF_PROPERTIES
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_CAMERA_MODEL
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_DATE_TAKEN
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_RESOLUTION
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_SIZE
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_PATH
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_NAME
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_LAST_MODIFIED
+import ca.on.sudbury.hojat.smartgallery.helpers.ExtendedDetails
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_CLOSE_DOWN_GESTURE_DURATION
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
@@ -73,19 +65,19 @@ abstract class ViewPagerFragment : Fragment() {
 
         val details = StringBuilder()
         val detailsFlag = requireContext().config.extendedDetails
-        if (detailsFlag and EXT_NAME != 0) {
+        if (detailsFlag and ExtendedDetails.Name.id != 0) {
             medium.name.let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
-        if (detailsFlag and EXT_PATH != 0) {
+        if (detailsFlag and ExtendedDetails.Path.id != 0) {
             path.let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
-        if (detailsFlag and EXT_SIZE != 0) {
+        if (detailsFlag and ExtendedDetails.Size.id != 0) {
             FormatFileSizeUseCase(file.length()).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
-        if (detailsFlag and EXT_RESOLUTION != 0) {
+        if (detailsFlag and ExtendedDetails.Resolution.id != 0) {
             with(requireContext().getResolution(file.absolutePath)) {
                 "${this?.x} x ${this?.y} ${GetMegaPixelUseCase(this)}".let {
                     if (it.isNotEmpty()) details.appendLine(
@@ -95,24 +87,24 @@ abstract class ViewPagerFragment : Fragment() {
             }
         }
 
-        if (detailsFlag and EXT_LAST_MODIFIED != 0) {
+        if (detailsFlag and ExtendedDetails.LastModified.id != 0) {
             getFileLastModified(file).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
-        if (detailsFlag and EXT_DATE_TAKEN != 0) {
+        if (detailsFlag and ExtendedDetails.DateTaken.id != 0) {
             GetDateTakenUseCase(requireContext(), exif)
                 .let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
-        if (detailsFlag and EXT_CAMERA_MODEL != 0) {
+        if (detailsFlag and ExtendedDetails.CameraModel.id != 0) {
             GetCameraModelUseCase(exif).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
-        if (detailsFlag and EXT_EXIF_PROPERTIES != 0) {
+        if (detailsFlag and ExtendedDetails.ExifProperties.id != 0) {
             GetGeneralPropertiesUseCase(exif).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
 
-        if (detailsFlag and EXT_GPS != 0) {
+        if (detailsFlag and ExtendedDetails.Gps.id != 0) {
             getLatLonAltitude(medium.path).let { if (it.isNotEmpty()) details.appendLine(it) }
         }
         return details.toString().trim()

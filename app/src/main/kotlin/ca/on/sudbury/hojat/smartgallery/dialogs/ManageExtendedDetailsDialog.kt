@@ -6,17 +6,11 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_NAME
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_PATH
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_SIZE
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_RESOLUTION
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_LAST_MODIFIED
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_DATE_TAKEN
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_CAMERA_MODEL
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_EXIF_PROPERTIES
-import ca.on.sudbury.hojat.smartgallery.helpers.EXT_GPS
+import ca.on.sudbury.hojat.smartgallery.helpers.ExtendedDetails
 
-
+/**
+ * In "settings" page, in the "Extended details" section, The dialog is created by this class.
+ */
 class ManageExtendedDetailsDialog(
     val activity: BaseSimpleActivity,
     val callback: (result: Int) -> Unit
@@ -28,15 +22,17 @@ class ManageExtendedDetailsDialog(
     init {
         val details = activity.config.extendedDetails
         binding.apply {
-            manageExtendedDetailsName.isChecked = details and EXT_NAME != 0
-            manageExtendedDetailsPath.isChecked = details and EXT_PATH != 0
-            manageExtendedDetailsSize.isChecked = details and EXT_SIZE != 0
-            manageExtendedDetailsResolution.isChecked = details and EXT_RESOLUTION != 0
-            manageExtendedDetailsLastModified.isChecked = details and EXT_LAST_MODIFIED != 0
-            manageExtendedDetailsDateTaken.isChecked = details and EXT_DATE_TAKEN != 0
-            manageExtendedDetailsCamera.isChecked = details and EXT_CAMERA_MODEL != 0
-            manageExtendedDetailsExif.isChecked = details and EXT_EXIF_PROPERTIES != 0
-            manageExtendedDetailsGpsCoordinates.isChecked = details and EXT_GPS != 0
+            manageExtendedDetailsName.isChecked = details and ExtendedDetails.Name.id != 0
+            manageExtendedDetailsPath.isChecked = details and ExtendedDetails.Path.id != 0
+            manageExtendedDetailsSize.isChecked = details and ExtendedDetails.Size.id != 0
+            manageExtendedDetailsResolution.isChecked =
+                details and ExtendedDetails.Resolution.id != 0
+            manageExtendedDetailsLastModified.isChecked =
+                details and ExtendedDetails.LastModified.id != 0
+            manageExtendedDetailsDateTaken.isChecked = details and ExtendedDetails.DateTaken.id != 0
+            manageExtendedDetailsCamera.isChecked = details and ExtendedDetails.CameraModel.id != 0
+            manageExtendedDetailsExif.isChecked = details and ExtendedDetails.ExifProperties.id != 0
+            manageExtendedDetailsGpsCoordinates.isChecked = details and ExtendedDetails.Gps.id != 0
         }
 
         activity.getAlertDialogBuilder()
@@ -51,23 +47,23 @@ class ManageExtendedDetailsDialog(
         var result = 0
         binding.apply {
             if (manageExtendedDetailsName.isChecked)
-                result += EXT_NAME
+                result += ExtendedDetails.Name.id
             if (manageExtendedDetailsPath.isChecked)
-                result += EXT_PATH
+                result += ExtendedDetails.Path.id
             if (manageExtendedDetailsSize.isChecked)
-                result += EXT_SIZE
+                result += ExtendedDetails.Size.id
             if (manageExtendedDetailsResolution.isChecked)
-                result += EXT_RESOLUTION
+                result += ExtendedDetails.Resolution.id
             if (manageExtendedDetailsLastModified.isChecked)
-                result += EXT_LAST_MODIFIED
+                result += ExtendedDetails.LastModified.id
             if (manageExtendedDetailsDateTaken.isChecked)
-                result += EXT_DATE_TAKEN
+                result += ExtendedDetails.DateTaken.id
             if (manageExtendedDetailsCamera.isChecked)
-                result += EXT_CAMERA_MODEL
+                result += ExtendedDetails.CameraModel.id
             if (manageExtendedDetailsExif.isChecked)
-                result += EXT_EXIF_PROPERTIES
+                result += ExtendedDetails.ExifProperties.id
             if (manageExtendedDetailsGpsCoordinates.isChecked)
-                result += EXT_GPS
+                result += ExtendedDetails.Gps.id
         }
 
         activity.config.extendedDetails = result
