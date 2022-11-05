@@ -17,6 +17,9 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 
+/**
+ * Contains all the directories that our app is referring to.
+ */
 @Entity(tableName = "directories", indices = [Index(value = ["path"], unique = true)])
 data class Directory(
     @PrimaryKey(autoGenerate = true) var id: Long?,
