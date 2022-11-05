@@ -1245,7 +1245,7 @@ fun Context.getNoMediaFoldersSync(): ArrayList<String> {
     val selection = "${Files.FileColumns.MEDIA_TYPE} = ? AND ${Files.FileColumns.TITLE} LIKE ?"
     val selectionArgs = arrayOf(Files.FileColumns.MEDIA_TYPE_NONE.toString(), "%$NOMEDIA%")
     val sortOrder = "${Files.FileColumns.DATE_MODIFIED} DESC"
-    val OTGPath = config.otgPath
+    val otgPath = config.otgPath
 
     var cursor: Cursor? = null
     try {
@@ -1256,7 +1256,7 @@ fun Context.getNoMediaFoldersSync(): ArrayList<String> {
                 val noMediaFile = File(path)
                 if (getDoesFilePathExist(
                         noMediaFile.absolutePath,
-                        OTGPath
+                        otgPath
                     ) && noMediaFile.name == NOMEDIA
                 ) {
                     noMediaFile.parent?.let { folders.add(it) }
@@ -2686,7 +2686,7 @@ fun Context.checkAppIconColor() {
 }
 
 val Context.statusBarHeight: Int
-    @SuppressLint("DiscouragedApi")
+    @SuppressLint("DiscouragedApi", "InternalInsetResource")
     get() {
         var statusBarHeight = 0
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
