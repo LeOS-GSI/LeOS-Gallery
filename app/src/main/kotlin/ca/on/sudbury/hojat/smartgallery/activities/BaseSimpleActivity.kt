@@ -95,7 +95,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.hasProperStoredTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.showOTGPermissionDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
 import ca.on.sudbury.hojat.smartgallery.helpers.MEDIUM_ALPHA
-import ca.on.sudbury.hojat.smartgallery.helpers.MyContextWrapper
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
@@ -200,11 +199,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        if (newBase.baseConfig.useEnglish) {
-            super.attachBaseContext(MyContextWrapper(newBase).wrap(newBase, "en"))
-        } else {
-            super.attachBaseContext(newBase)
-        }
+        super.attachBaseContext(newBase)
     }
 
     fun updateBackgroundColor(color: Int = baseConfig.backgroundColor) {
