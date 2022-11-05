@@ -10,8 +10,12 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.LinkedList
 
+/**
+ * All the shared prefs of the app are controlled here.
+ */
 open class BaseConfig(val context: Context) {
-    protected val prefs = getSharedPrefs(context)
+    protected val prefs: SharedPreferences =
+        context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
 
     companion object {
         fun newInstance(context: Context) = BaseConfig(context)
@@ -719,8 +723,5 @@ open class BaseConfig(val context: Context) {
             COLOR_PICKER_RECENT_COLORS,
             recentColors.joinToString(separator = "\n")
         ).apply()
-
-    private fun getSharedPrefs(owner: Context): SharedPreferences =
-        owner.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE)
 
 }
