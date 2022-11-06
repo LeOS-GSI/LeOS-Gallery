@@ -611,15 +611,15 @@ open class BaseConfig(val context: Context) {
         val format = DateFormat.getDateFormat(context)
         val pattern = (format as SimpleDateFormat).toLocalizedPattern()
         return when (pattern.lowercase(Locale.getDefault()).replace(" ", "")) {
-            "d.M.y" -> DATE_FORMAT_ONE
-            "dd/mm/y" -> DATE_FORMAT_TWO
-            "mm/dd/y" -> DATE_FORMAT_THREE
-            "y-mm-dd" -> DATE_FORMAT_FOUR
-            "dmmmmy" -> DATE_FORMAT_FIVE
-            "mmmmdy" -> DATE_FORMAT_SIX
-            "mm-dd-y" -> DATE_FORMAT_SEVEN
-            "dd-mm-y" -> DATE_FORMAT_EIGHT
-            else -> DATE_FORMAT_ONE
+            "d.M.y" -> SmartGalleryDateFormat.One.format
+            "dd/mm/y" -> SmartGalleryDateFormat.Two.format
+            "mm/dd/y" -> SmartGalleryDateFormat.Three.format
+            "y-mm-dd" -> SmartGalleryDateFormat.Four.format
+            "dmmmmy" -> SmartGalleryDateFormat.Five.format
+            "mmmmdy" -> SmartGalleryDateFormat.Six.format
+            "mm-dd-y" -> SmartGalleryDateFormat.Seven.format
+            "dd-mm-y" -> SmartGalleryDateFormat.Eight.format
+            else -> SmartGalleryDateFormat.One.format
         }
     }
 

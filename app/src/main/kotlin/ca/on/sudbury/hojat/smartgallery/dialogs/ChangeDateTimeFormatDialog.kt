@@ -2,14 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.app.Activity
 import android.text.format.DateFormat
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_EIGHT
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_FIVE
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_FOUR
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_ONE
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_SEVEN
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_SIX
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_THREE
-import ca.on.sudbury.hojat.smartgallery.helpers.DATE_FORMAT_TWO
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.R.id.change_date_time_dialog_radio_one
 import ca.on.sudbury.hojat.smartgallery.R.id.change_date_time_dialog_radio_two
@@ -22,6 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeDateTimeFormatBi
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryDateFormat
 import java.util.Calendar
 import java.util.Locale
 
@@ -37,24 +30,29 @@ class ChangeDateTimeFormatDialog(
 
     init {
         binding.apply {
-            changeDateTimeDialogRadioOne.text = formatDateSample(DATE_FORMAT_ONE)
-            changeDateTimeDialogRadioTwo.text = formatDateSample(DATE_FORMAT_TWO)
-            changeDateTimeDialogRadioThree.text = formatDateSample(DATE_FORMAT_THREE)
-            changeDateTimeDialogRadioFour.text = formatDateSample(DATE_FORMAT_FOUR)
-            changeDateTimeDialogRadioFive.text = formatDateSample(DATE_FORMAT_FIVE)
-            changeDateTimeDialogRadioSix.text = formatDateSample(DATE_FORMAT_SIX)
-            changeDateTimeDialogRadioSeven.text = formatDateSample(DATE_FORMAT_SEVEN)
-            changeDateTimeDialogRadioEight.text = formatDateSample(DATE_FORMAT_EIGHT)
+            changeDateTimeDialogRadioOne.text = formatDateSample(SmartGalleryDateFormat.One.format)
+            changeDateTimeDialogRadioTwo.text = formatDateSample(SmartGalleryDateFormat.Two.format)
+            changeDateTimeDialogRadioThree.text =
+                formatDateSample(SmartGalleryDateFormat.Three.format)
+            changeDateTimeDialogRadioFour.text =
+                formatDateSample(SmartGalleryDateFormat.Four.format)
+            changeDateTimeDialogRadioFive.text =
+                formatDateSample(SmartGalleryDateFormat.Five.format)
+            changeDateTimeDialogRadioSix.text = formatDateSample(SmartGalleryDateFormat.Six.format)
+            changeDateTimeDialogRadioSeven.text =
+                formatDateSample(SmartGalleryDateFormat.Seven.format)
+            changeDateTimeDialogRadioEight.text =
+                formatDateSample(SmartGalleryDateFormat.Eight.format)
             changeDateTimeDialog24Hour.isChecked = activity.baseConfig.use24HourFormat
 
             val formatButton = when (activity.baseConfig.dateFormat) {
-                DATE_FORMAT_ONE -> changeDateTimeDialogRadioOne
-                DATE_FORMAT_TWO -> changeDateTimeDialogRadioTwo
-                DATE_FORMAT_THREE -> changeDateTimeDialogRadioThree
-                DATE_FORMAT_FOUR -> changeDateTimeDialogRadioFour
-                DATE_FORMAT_FIVE -> changeDateTimeDialogRadioFive
-                DATE_FORMAT_SIX -> changeDateTimeDialogRadioSix
-                DATE_FORMAT_SEVEN -> changeDateTimeDialogRadioSeven
+                SmartGalleryDateFormat.One.format -> changeDateTimeDialogRadioOne
+                SmartGalleryDateFormat.Two.format -> changeDateTimeDialogRadioTwo
+                SmartGalleryDateFormat.Three.format -> changeDateTimeDialogRadioThree
+                SmartGalleryDateFormat.Four.format -> changeDateTimeDialogRadioFour
+                SmartGalleryDateFormat.Five.format -> changeDateTimeDialogRadioFive
+                SmartGalleryDateFormat.Six.format -> changeDateTimeDialogRadioSix
+                SmartGalleryDateFormat.Seven.format -> changeDateTimeDialogRadioSeven
                 else -> changeDateTimeDialogRadioEight
             }
             formatButton.isChecked = true
@@ -70,14 +68,14 @@ class ChangeDateTimeFormatDialog(
     private fun dialogConfirmed() {
         activity.baseConfig.dateFormat =
             when (binding.changeDateTimeDialogRadioGroup.checkedRadioButtonId) {
-                change_date_time_dialog_radio_one -> DATE_FORMAT_ONE
-                change_date_time_dialog_radio_two -> DATE_FORMAT_TWO
-                change_date_time_dialog_radio_three -> DATE_FORMAT_THREE
-                change_date_time_dialog_radio_four -> DATE_FORMAT_FOUR
-                change_date_time_dialog_radio_five -> DATE_FORMAT_FIVE
-                change_date_time_dialog_radio_six -> DATE_FORMAT_SIX
-                change_date_time_dialog_radio_seven -> DATE_FORMAT_SEVEN
-                else -> DATE_FORMAT_EIGHT
+                change_date_time_dialog_radio_one -> SmartGalleryDateFormat.One.format
+                change_date_time_dialog_radio_two -> SmartGalleryDateFormat.Two.format
+                change_date_time_dialog_radio_three -> SmartGalleryDateFormat.Three.format
+                change_date_time_dialog_radio_four -> SmartGalleryDateFormat.Four.format
+                change_date_time_dialog_radio_five -> SmartGalleryDateFormat.Five.format
+                change_date_time_dialog_radio_six -> SmartGalleryDateFormat.Six.format
+                change_date_time_dialog_radio_seven -> SmartGalleryDateFormat.Seven.format
+                else -> SmartGalleryDateFormat.Eight.format
             }
 
         activity.baseConfig.use24HourFormat = binding.changeDateTimeDialog24Hour.isChecked
