@@ -323,28 +323,6 @@ val extensionsSupportingEXIF: Array<String>
         ".dng"
     )
 
-val appIconColorStrings = arrayListOf(
-    ".Red",
-    ".Pink",
-    ".Purple",
-    ".Deep_purple",
-    ".Indigo",
-    ".Blue",
-    ".Light_blue",
-    ".Cyan",
-    ".Teal",
-    ".Green",
-    ".Light_green",
-    ".Lime",
-    ".Yellow",
-    ".Amber",
-    ".Orange",
-    ".Deep_orange",
-    ".Brown",
-    ".Blue_grey",
-    ".Grey_black"
-)
-
 // view types
 const val VIEW_TYPE_GRID = 1
 const val VIEW_TYPE_LIST = 2
