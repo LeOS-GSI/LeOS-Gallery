@@ -138,6 +138,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ToggleAppIconColorUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -2638,22 +2639,6 @@ fun Context.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = 
     rescanPaths(allPaths, callback)
 }
 
-fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enable: Boolean) {
-    val className =
-        "${appId.removeSuffix(".debug")}.activities.SplashActivity${AppIconRepository.appIconColorStrings[colorIndex]}"
-    val state =
-        if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-    packageManager.setComponentEnabledSetting(
-        ComponentName(appId, className),
-        state,
-        PackageManager.DONT_KILL_APP
-    )
-    if (enable) {
-        baseConfig.lastIconColor = color
-    }
-
-}
-
 private fun windowManager(owner: Context) =
     owner.getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
@@ -2671,13 +2656,13 @@ fun Context.checkAppIconColor() {
     if (appId.isNotEmpty() && baseConfig.lastIconColor != baseConfig.appIconColor) {
         resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
             .forEachIndexed { index, color ->
-                toggleAppIconColor(appId, index, color, false)
+                ToggleAppIconColorUseCase(this, appId, index, color, false)
             }
 
         resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
             .forEachIndexed { index, color ->
                 if (baseConfig.appIconColor == color) {
-                    toggleAppIconColor(appId, index, color, true)
+                    ToggleAppIconColorUseCase(this, appId, index, color, true)
                 }
             }
     }

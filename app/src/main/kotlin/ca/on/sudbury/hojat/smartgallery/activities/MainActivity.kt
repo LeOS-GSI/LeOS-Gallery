@@ -124,7 +124,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
-import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
@@ -142,6 +141,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.LaunchCameraUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.ToggleAppIconColorUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import java.io.File
 import java.io.FileInputStream
@@ -225,7 +225,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             if (baseConfig.appIconColor != primaryColor) {
                 resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
                     .forEachIndexed { index, color ->
-                        toggleAppIconColor(appId, index, color, false)
+                        ToggleAppIconColorUseCase(this, appId, index, color, false)
                     }
 
                 val defaultClassName =
