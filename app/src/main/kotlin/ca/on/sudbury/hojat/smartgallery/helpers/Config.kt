@@ -509,7 +509,7 @@ class Config(context: Context) : BaseConfig(context) {
             .apply()
 
     var lastEditorCropAspectRatio: Int
-        get() = prefs.getInt(LAST_EDITOR_CROP_ASPECT_RATIO, ASPECT_RATIO_FREE)
+        get() = prefs.getInt(LAST_EDITOR_CROP_ASPECT_RATIO, AspectRatio.Free.id)
         set(lastEditorCropAspectRatio) = prefs.edit()
             .putInt(LAST_EDITOR_CROP_ASPECT_RATIO, lastEditorCropAspectRatio).apply()
 

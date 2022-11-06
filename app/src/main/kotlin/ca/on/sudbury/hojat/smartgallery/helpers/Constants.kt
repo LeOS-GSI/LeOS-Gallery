@@ -439,13 +439,6 @@ const val GROUP_SHOW_FILE_COUNT = 2048
 const val DEFAULT_BOTTOM_ACTIONS =
     BottomAction.ToggleFavorite.id or BottomAction.Edit.id or BottomAction.Share.id or BottomAction.Delete.id
 
-// aspect ratios used at the editor for cropping
-const val ASPECT_RATIO_FREE = 0
-const val ASPECT_RATIO_ONE_ONE = 1
-const val ASPECT_RATIO_FOUR_THREE = 2
-const val ASPECT_RATIO_SIXTEEN_NINE = 3
-const val ASPECT_RATIO_OTHER = 4
-
 // constants related to image quality
 const val LOW_TILE_DPI = 160
 const val NORMAL_TILE_DPI = 220

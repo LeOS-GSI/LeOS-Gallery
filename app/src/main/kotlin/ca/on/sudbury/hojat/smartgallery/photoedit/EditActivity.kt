@@ -59,11 +59,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.fixDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
-import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_SIXTEEN_NINE
-import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_FOUR_THREE
-import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_ONE_ONE
-import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_FREE
-import ca.on.sudbury.hojat.smartgallery.helpers.ASPECT_RATIO_OTHER
+import ca.on.sudbury.hojat.smartgallery.helpers.AspectRatio
 import ca.on.sudbury.hojat.smartgallery.helpers.FilterThumbnailsManager
 import ca.on.sudbury.hojat.smartgallery.models.FilterItem
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
@@ -114,7 +110,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
     private var lastOtherAspectRatio: Pair<Float, Float>? = null
     private var currPrimaryAction = PRIMARY_ACTION_NONE
     private var currCropRotateAction = CROP_ROTATE_ASPECT_RATIO
-    private var currAspectRatio = ASPECT_RATIO_FREE
+    private var currAspectRatio = AspectRatio.Free.id
     private var isCropIntent = false
     private var isEditingWithThirdParty = false
     private var isSharingBitmap = false
@@ -217,7 +213,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         loadDefaultImageView()
         setupBottomActions()
 
-        if (config.lastEditorCropAspectRatio == ASPECT_RATIO_OTHER) {
+        if (config.lastEditorCropAspectRatio == AspectRatio.Other.id) {
             if (config.lastEditorCropOtherAspectRatioX == 0f) {
                 config.lastEditorCropOtherAspectRatioX = 1f
             }
@@ -308,7 +304,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             guidelines = CropImageView.Guidelines.ON
 
             if (isCropIntent && shouldCropSquare()) {
-                currAspectRatio = ASPECT_RATIO_ONE_ONE
+                currAspectRatio = AspectRatio.OneOne.id
                 setFixedAspectRatio(true)
                 binding.bottomEditorCropRotateActions.bottomAspectRatio.visibility = View.GONE
             }
@@ -571,19 +567,19 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
 
     private fun setupAspectRatioButtons() {
         binding.bottomAspectRatios.bottomAspectRatioFree.setOnClickListener {
-            updateAspectRatio(ASPECT_RATIO_FREE)
+            updateAspectRatio(AspectRatio.Free.id)
         }
 
         binding.bottomAspectRatios.bottomAspectRatioOneOne.setOnClickListener {
-            updateAspectRatio(ASPECT_RATIO_ONE_ONE)
+            updateAspectRatio(AspectRatio.OneOne.id)
         }
 
         binding.bottomAspectRatios.bottomAspectRatioFourThree.setOnClickListener {
-            updateAspectRatio(ASPECT_RATIO_FOUR_THREE)
+            updateAspectRatio(AspectRatio.FourThree.id)
         }
 
         binding.bottomAspectRatios.bottomAspectRatioSixteenNine.setOnClickListener {
-            updateAspectRatio(ASPECT_RATIO_SIXTEEN_NINE)
+            updateAspectRatio(AspectRatio.SixteenNine.id)
         }
 
         binding.bottomAspectRatios.bottomAspectRatioOther.setOnClickListener {
@@ -591,7 +587,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 lastOtherAspectRatio = it
                 config.lastEditorCropOtherAspectRatioX = it.first
                 config.lastEditorCropOtherAspectRatioY = it.second
-                updateAspectRatio(ASPECT_RATIO_OTHER)
+                updateAspectRatio(AspectRatio.Other.id)
             }
         }
 
@@ -766,13 +762,13 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         updateAspectRatioButtons()
 
         binding.cropImageView.apply {
-            if (aspectRatio == ASPECT_RATIO_FREE) {
+            if (aspectRatio == AspectRatio.Free.id) {
                 setFixedAspectRatio(false)
             } else {
                 val newAspectRatio = when (aspectRatio) {
-                    ASPECT_RATIO_ONE_ONE -> Pair(1f, 1f)
-                    ASPECT_RATIO_FOUR_THREE -> Pair(4f, 3f)
-                    ASPECT_RATIO_SIXTEEN_NINE -> Pair(16f, 9f)
+                    AspectRatio.OneOne.id -> Pair(1f, 1f)
+                    AspectRatio.FourThree.id -> Pair(4f, 3f)
+                    AspectRatio.SixteenNine.id -> Pair(16f, 9f)
                     else -> Pair(lastOtherAspectRatio!!.first, lastOtherAspectRatio!!.second)
                 }
 
@@ -793,10 +789,10 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
 
         val currentAspectRatioButton = when (currAspectRatio) {
-            ASPECT_RATIO_FREE -> binding.bottomAspectRatios.bottomAspectRatioFree
-            ASPECT_RATIO_ONE_ONE -> binding.bottomAspectRatios.bottomAspectRatioOneOne
-            ASPECT_RATIO_FOUR_THREE -> binding.bottomAspectRatios.bottomAspectRatioFourThree
-            ASPECT_RATIO_SIXTEEN_NINE -> binding.bottomAspectRatios.bottomAspectRatioSixteenNine
+            AspectRatio.Free.id -> binding.bottomAspectRatios.bottomAspectRatioFree
+            AspectRatio.OneOne.id -> binding.bottomAspectRatios.bottomAspectRatioOneOne
+            AspectRatio.FourThree.id -> binding.bottomAspectRatios.bottomAspectRatioFourThree
+            AspectRatio.SixteenNine.id -> binding.bottomAspectRatios.bottomAspectRatioSixteenNine
             else -> binding.bottomAspectRatios.bottomAspectRatioOther
         }
 
