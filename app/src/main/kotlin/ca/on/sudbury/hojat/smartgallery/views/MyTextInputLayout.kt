@@ -5,7 +5,7 @@ import android.content.res.ColorStateList
 import android.util.AttributeSet
 import com.google.android.material.textfield.TextInputLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
-import ca.on.sudbury.hojat.smartgallery.helpers.Alpha
+import ca.on.sudbury.hojat.smartgallery.helpers.AlphaLevel
 
 class MyTextInputLayout : TextInputLayout {
     constructor(context: Context) : super(context)
@@ -25,7 +25,7 @@ class MyTextInputLayout : TextInputLayout {
         val hintColor =
             if (editText!!.text.toString().trim()
                     .isEmpty()
-            ) textColor.adjustAlpha(Alpha.High.level) else textColor
+            ) textColor.adjustAlpha(AlphaLevel.High.amount) else textColor
         val defaultTextColor =
             TextInputLayout::class.java.getDeclaredField("defaultHintTextColor")
         defaultTextColor.isAccessible = true
@@ -41,7 +41,7 @@ class MyTextInputLayout : TextInputLayout {
             ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(accentColor))
         )
 
-        val defaultHintTextColor = textColor.adjustAlpha(Alpha.Medium.level)
+        val defaultHintTextColor = textColor.adjustAlpha(AlphaLevel.Medium.amount)
         val boxColorState = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_active),

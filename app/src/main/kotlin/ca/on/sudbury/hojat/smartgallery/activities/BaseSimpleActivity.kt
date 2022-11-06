@@ -94,7 +94,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.hasProperStoredTreeUri
 import ca.on.sudbury.hojat.smartgallery.extensions.showOTGPermissionDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
-import ca.on.sudbury.hojat.smartgallery.helpers.Alpha
+import ca.on.sudbury.hojat.smartgallery.helpers.AlphaLevel
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.interfaces.CopyMoveListener
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
@@ -1198,7 +1198,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         searchMenuItem?.actionView?.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
             ?.apply {
                 setTextColor(contrastColor)
-                setHintTextColor(contrastColor.adjustAlpha(Alpha.Medium.level))
+                setHintTextColor(contrastColor.adjustAlpha(AlphaLevel.Medium.amount))
                 hint = "${getString(R.string.search)}…"
 
                 if (IsQPlusUseCase()) {
