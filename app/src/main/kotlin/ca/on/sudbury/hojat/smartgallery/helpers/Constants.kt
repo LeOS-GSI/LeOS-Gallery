@@ -314,15 +314,6 @@ const val SIDELOADING_UNCHECKED = 0
 const val SIDELOADING_TRUE = 1
 const val SIDELOADING_FALSE = 2
 
-val extensionsSupportingEXIF: Array<String>
-    get() = arrayOf(
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".webp",
-        ".dng"
-    )
-
 // view types
 const val VIEW_TYPE_GRID = 1
 const val VIEW_TYPE_LIST = 2

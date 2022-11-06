@@ -40,8 +40,8 @@ import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.helpers.MD5
-import ca.on.sudbury.hojat.smartgallery.helpers.extensionsSupportingEXIF
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
@@ -551,7 +551,7 @@ class PropertiesDialog() {
     }
 
     private fun canModifyEXIF(extensionName: String) =
-        extensionsSupportingEXIF.any { extensionName.endsWith(it, true) }
+        SupportedExtensionsRepository.exifExtensions.any { extensionName.endsWith(it, true) }
 
     private fun getDigest(input: InputStream?, algorithm: String): String {
         return input?.use { fis ->

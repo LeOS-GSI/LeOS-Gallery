@@ -50,4 +50,14 @@ object SupportedExtensionsRepository {
             ".cr2",
             ".cr3"
         )
+
+    // All the extensions that support EXIF protocol.
+    val exifExtensions: Array<String>
+        get() = arrayOf(
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".webp",
+            ".dng"
+        )
 }
