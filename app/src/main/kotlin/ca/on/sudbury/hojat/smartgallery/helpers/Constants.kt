@@ -418,11 +418,6 @@ const val ROTATE_BY_SYSTEM_SETTING = 0
 const val ROTATE_BY_DEVICE_ROTATION = 1
 const val ROTATE_BY_ASPECT_RATIO = 2
 
-// file loading priority
-const val PRIORITY_SPEED = 0
-const val PRIORITY_COMPROMISE = 1
-const val PRIORITY_VALIDITY = 2
-
 fun getDefaultFileFilter() =
     MediaType.Image.id or MediaType.Video.id or MediaType.Gif.id or MediaType.Raw.id or MediaType.Svg.id
 

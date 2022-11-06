@@ -125,15 +125,13 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LIMIT_FOLDER_TITLE
 import ca.on.sudbury.hojat.smartgallery.helpers.THUMBNAIL_SPACING
 import ca.on.sudbury.hojat.smartgallery.helpers.FILE_ROUNDED_CORNERS
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
-import ca.on.sudbury.hojat.smartgallery.helpers.PRIORITY_SPEED
-import ca.on.sudbury.hojat.smartgallery.helpers.PRIORITY_COMPROMISE
-import ca.on.sudbury.hojat.smartgallery.helpers.PRIORITY_VALIDITY
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
 import ca.on.sudbury.hojat.smartgallery.extensions.handleMediaManagementPrompt
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
+import ca.on.sudbury.hojat.smartgallery.helpers.FileLoadingPriority
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPiePlusUseCase
@@ -315,9 +313,9 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsFileLoadingPriority.text = getFileLoadingPriorityText()
         binding.settingsFileLoadingPriorityHolder.setOnClickListener {
             val items = arrayListOf(
-                RadioItem(PRIORITY_SPEED, getString(R.string.speed)),
-                RadioItem(PRIORITY_COMPROMISE, getString(R.string.compromise)),
-                RadioItem(PRIORITY_VALIDITY, getString(R.string.avoid_showing_invalid_files))
+                RadioItem(FileLoadingPriority.Speed.id, getString(R.string.speed)),
+                RadioItem(FileLoadingPriority.Compromise.id, getString(R.string.compromise)),
+                RadioItem(FileLoadingPriority.Validity.id, getString(R.string.avoid_showing_invalid_files))
             )
 
             RadioGroupDialog(this@SettingsActivity, items, config.fileLoadingPriority) {
@@ -329,8 +327,8 @@ class SettingsActivity : SimpleActivity() {
 
     private fun getFileLoadingPriorityText() = getString(
         when (config.fileLoadingPriority) {
-            PRIORITY_SPEED -> R.string.speed
-            PRIORITY_COMPROMISE -> R.string.compromise
+            FileLoadingPriority.Speed.id -> R.string.speed
+            FileLoadingPriority.Compromise.id -> R.string.compromise
             else -> R.string.avoid_showing_invalid_files
         }
     )
