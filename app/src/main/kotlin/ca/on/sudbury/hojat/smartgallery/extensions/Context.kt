@@ -2643,17 +2643,15 @@ fun Context.toggleAppIconColor(appId: String, colorIndex: Int, color: Int, enabl
         "${appId.removeSuffix(".debug")}.activities.SplashActivity${appIconColorStrings[colorIndex]}"
     val state =
         if (enable) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-    try {
-        packageManager.setComponentEnabledSetting(
-            ComponentName(appId, className),
-            state,
-            PackageManager.DONT_KILL_APP
-        )
-        if (enable) {
-            baseConfig.lastIconColor = color
-        }
-    } catch (_: Exception) {
+    packageManager.setComponentEnabledSetting(
+        ComponentName(appId, className),
+        state,
+        PackageManager.DONT_KILL_APP
+    )
+    if (enable) {
+        baseConfig.lastIconColor = color
     }
+
 }
 
 private fun windowManager(owner: Context) =

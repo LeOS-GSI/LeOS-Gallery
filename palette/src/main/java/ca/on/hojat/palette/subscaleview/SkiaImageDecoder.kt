@@ -25,10 +25,7 @@ class SkiaImageDecoder : ImageDecoder {
                     inputStream = contentResolver.openInputStream(uri)
                     bitmap = BitmapFactory.decodeStream(inputStream, null, options)
                 } finally {
-                    try {
-                        inputStream?.close()
-                    } catch (_: Exception) {
-                    }
+                    inputStream?.close()
                 }
             }
         }

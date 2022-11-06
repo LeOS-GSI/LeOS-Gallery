@@ -9,9 +9,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.Alpha
 
 class MyTextInputLayout : TextInputLayout {
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
         context,
         attrs,
@@ -20,47 +18,45 @@ class MyTextInputLayout : TextInputLayout {
 
     // we need to use reflection to make some colors work well
     fun setColors(textColor: Int, accentColor: Int) {
-        try {
-            editText!!.setTextColor(textColor)
-            editText!!.backgroundTintList = ColorStateList.valueOf(accentColor)
 
-            val hintColor =
-                if (editText!!.text.toString().trim()
-                        .isEmpty()
-                ) textColor.adjustAlpha(Alpha.High.level) else textColor
-            val defaultTextColor =
-                TextInputLayout::class.java.getDeclaredField("defaultHintTextColor")
-            defaultTextColor.isAccessible = true
-            defaultTextColor.set(
-                this,
-                ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(hintColor))
-            )
+        editText!!.setTextColor(textColor)
+        editText!!.backgroundTintList = ColorStateList.valueOf(accentColor)
 
-            val focusedTextColor = TextInputLayout::class.java.getDeclaredField("focusedTextColor")
-            focusedTextColor.isAccessible = true
-            focusedTextColor.set(
-                this,
-                ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(accentColor))
-            )
+        val hintColor =
+            if (editText!!.text.toString().trim()
+                    .isEmpty()
+            ) textColor.adjustAlpha(Alpha.High.level) else textColor
+        val defaultTextColor =
+            TextInputLayout::class.java.getDeclaredField("defaultHintTextColor")
+        defaultTextColor.isAccessible = true
+        defaultTextColor.set(
+            this,
+            ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(hintColor))
+        )
 
-            val defaultHintTextColor = textColor.adjustAlpha(Alpha.Medium.level)
-            val boxColorState = ColorStateList(
-                arrayOf(
-                    intArrayOf(android.R.attr.state_active),
-                    intArrayOf(android.R.attr.state_focused)
-                ),
-                intArrayOf(
-                    defaultHintTextColor,
-                    accentColor
-                )
-            )
+        val focusedTextColor = TextInputLayout::class.java.getDeclaredField("focusedTextColor")
+        focusedTextColor.isAccessible = true
+        focusedTextColor.set(
+            this,
+            ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(accentColor))
+        )
 
-            setBoxStrokeColorStateList(boxColorState)
-            defaultTextColor.set(
-                this,
-                ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(defaultHintTextColor))
+        val defaultHintTextColor = textColor.adjustAlpha(Alpha.Medium.level)
+        val boxColorState = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_active),
+                intArrayOf(android.R.attr.state_focused)
+            ),
+            intArrayOf(
+                defaultHintTextColor,
+                accentColor
             )
-        } catch (_: Exception) {
-        }
+        )
+
+        setBoxStrokeColorStateList(boxColorState)
+        defaultTextColor.set(
+            this,
+            ColorStateList(arrayOf(intArrayOf(0)), intArrayOf(defaultHintTextColor))
+        )
     }
 }

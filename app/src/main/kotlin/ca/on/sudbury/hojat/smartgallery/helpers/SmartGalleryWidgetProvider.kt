@@ -90,23 +90,16 @@ class SmartGalleryWidgetProvider : AppWidgetProvider() {
                 val height = appWidgetOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
 
                 val widgetSize = (width.coerceAtLeast(height) * density).toInt()
-                try {
-                    val image = Glide.with(context)
-                        .asBitmap()
-                        .load(path)
-                        .apply(options)
-                        .submit(widgetSize, widgetSize)
-                        .get()
-                    views.setImageViewBitmap(R.id.widget_imageview, image)
-                } catch (_: Exception) {
-                }
+                val image = Glide.with(context)
+                    .asBitmap()
+                    .load(path)
+                    .apply(options)
+                    .submit(widgetSize, widgetSize)
+                    .get()
 
+                views.setImageViewBitmap(R.id.widget_imageview, image)
                 setupAppOpenIntent(context, views, R.id.widget_holder, it)
-
-                try {
-                    appWidgetManager.updateAppWidget(it.widgetId, views)
-                } catch (ignored: Exception) {
-                }
+                appWidgetManager.updateAppWidget(it.widgetId, views)
             }
         }
     }

@@ -38,10 +38,7 @@ class SkiaImageRegionDecoder : ImageRegionDecoder {
                     inputStream = contentResolver.openInputStream(uri)!!
                     decoder = BitmapRegionDecoder.newInstance(inputStream, false)
                 } finally {
-                    try {
-                        inputStream?.close()
-                    } catch (_: Exception) {
-                    }
+                    inputStream?.close()
                 }
             }
         }

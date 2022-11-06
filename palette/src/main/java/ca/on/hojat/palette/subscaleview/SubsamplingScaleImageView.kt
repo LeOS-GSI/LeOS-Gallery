@@ -18,7 +18,6 @@ import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.MotionEvent
 import java.io.File
-import java.io.UnsupportedEncodingException
 import java.lang.ref.WeakReference
 import java.net.URLDecoder
 import java.util.Locale
@@ -197,10 +196,7 @@ open class SubsamplingScaleImageView @JvmOverloads constructor(
         if (newPath.startsWith(FILE_SCHEME)) {
             val uriFile = File(newPath.substring(FILE_SCHEME.length))
             if (!uriFile.exists()) {
-                try {
-                    newPath = URLDecoder.decode(newPath, "UTF-8")
-                } catch (_: UnsupportedEncodingException) {
-                }
+                newPath = URLDecoder.decode(newPath, "UTF-8")
             }
         }
 

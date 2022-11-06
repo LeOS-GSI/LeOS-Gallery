@@ -3,11 +3,17 @@ package ca.on.hojat.fingerprint.core;
 import android.content.Context;
 import android.os.Build;
 import android.annotation.SuppressLint;
+
 import java.util.concurrent.atomic.AtomicReference;
+
 import androidx.core.os.CancellationSignal;
+
 import java.lang.reflect.Constructor;
+
 import ca.on.hojat.fingerprint.module.MarshmallowReprintModule;
 import ca.on.hojat.fingerprint.R;
+
+import android.util.Log;
 
 /**
  * Methods for performing fingerprint authentication.
@@ -60,7 +66,8 @@ enum ReprintInternal {
             final Constructor<?> constructor = spassModuleClass.getConstructor(Context.class, Reprint.Logger.class);
             ReprintModule module = (ReprintModule) constructor.newInstance(context, logger);
             registerModule(module);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            Log.e("ReprintInternal", e.getMessage());
         }
     }
 

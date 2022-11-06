@@ -143,13 +143,10 @@ class ColorPickerDialog(
         newHexField.addTextChangedListener { editable ->
             val finalString = editable.toString()
             if (finalString.length == 6 && !isHueBeingDragged) {
-                try {
-                    val newColor = Color.parseColor("#$finalString")
-                    Color.colorToHSV(newColor, currentColorHsv)
-                    updateHue()
-                    moveColorPicker()
-                } catch (ignored: Exception) {
-                }
+                val newColor = Color.parseColor("#$finalString")
+                Color.colorToHSV(newColor, currentColorHsv)
+                updateHue()
+                moveColorPicker()
             }
         }
 

@@ -435,27 +435,23 @@ class FilePickerDialog(
             "${MediaStore.Images.Media.DATA} LIKE ? AND ${MediaStore.Images.Media.DATA} NOT LIKE ? AND ${MediaStore.Images.Media.MIME_TYPE} IS NOT NULL" // avoid selecting folders
         val selectionArgs = arrayOf("$folder/%", "$folder/%/%")
 
-        try {
-            val cursor =
-                owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
-            cursor?.use {
-                if (cursor.moveToFirst()) {
-                    do {
-                        try {
-                            val lastModified =
-                                cursor.getLongValue(MediaStore.Images.Media.DATE_MODIFIED) * 1000
-                            if (lastModified != 0L) {
-                                val name =
-                                    cursor.getStringValue(MediaStore.Images.Media.DISPLAY_NAME)
-                                lastModifieds["$folder/$name"] = lastModified
-                            }
-                        } catch (_: Exception) {
-                        }
-                    } while (cursor.moveToNext())
-                }
+
+        val cursor =
+            owner.contentResolver.query(uri, projection, selection, selectionArgs, null)
+        cursor?.use {
+            if (cursor.moveToFirst()) {
+                do {
+                    val lastModified =
+                        cursor.getLongValue(MediaStore.Images.Media.DATE_MODIFIED) * 1000
+                    if (lastModified != 0L) {
+                        val name =
+                            cursor.getStringValue(MediaStore.Images.Media.DISPLAY_NAME)
+                        lastModifieds["$folder/$name"] = lastModified
+                    }
+                } while (cursor.moveToNext())
             }
-        } catch (_: Exception) {
         }
+
 
         return lastModifieds
     }

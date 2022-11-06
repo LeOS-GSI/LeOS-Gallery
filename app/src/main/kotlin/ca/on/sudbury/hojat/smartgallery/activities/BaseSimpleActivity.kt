@@ -243,33 +243,29 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
     fun updateNavigationBarColor(color: Int = baseConfig.navigationBarColor) {
         if (baseConfig.navigationBarColor != INVALID_NAVIGATION_BAR_COLOR) {
-            try {
-                val colorToUse = if (color == -2) -1 else color
-                window.navigationBarColor = colorToUse
+            val colorToUse = if (color == -2) -1 else color
+            window.navigationBarColor = colorToUse
 
-                if (IsOreoPlusUseCase()) {
-                    if (color.getContrastColor() == 0xFF333333.toInt()) {
-                        window.decorView.systemUiVisibility =
-                            addBit(
-                                window.decorView.systemUiVisibility,
-                                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                            )
+            if (IsOreoPlusUseCase()) {
+                if (color.getContrastColor() == 0xFF333333.toInt()) {
+                    window.decorView.systemUiVisibility =
+                        addBit(
+                            window.decorView.systemUiVisibility,
+                            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                        )
 
-
-                    } else {
-                        window.decorView.systemUiVisibility =
-                            removeBit(
-                                window.decorView.systemUiVisibility,
-                                View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                            )
-                    }
+                } else {
+                    window.decorView.systemUiVisibility =
+                        removeBit(
+                            window.decorView.systemUiVisibility,
+                            View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                        )
                 }
-            } catch (ignored: Exception) {
             }
         }
     }
 
-    fun updateRecentsAppIcon() {
+    private fun updateRecentsAppIcon() {
         if (baseConfig.isUsingModifiedAppIcon) {
             val appIconIDs = getAppIconIDs()
             val currentAppIconColorIndex = getCurrentAppIconColorIndex()
@@ -309,10 +305,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
 
         for (i in 0 until menu.size()) {
-            try {
-                menu.getItem(i)?.icon?.setTint(color)
-            } catch (ignored: Exception) {
-            }
+            menu.getItem(i)?.icon?.setTint(color)
         }
 
         if (updateHomeAsUpColor && !isContextualMenu) {

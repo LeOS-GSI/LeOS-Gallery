@@ -126,25 +126,24 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun textChanged(text: String) {
         RunOnBackgroundThreadUseCase {
-            try {
-                val filtered =
-                    mAllMedia.filter { it is Medium && it.name.contains(text, true) } as ArrayList
-                filtered.sortBy { it is Medium && !it.name.startsWith(text, true) }
-                val grouped =
-                    MediaFetcher(applicationContext).groupMedia(filtered as ArrayList<Medium>, "")
-                runOnUiThread {
-                    if (grouped.isEmpty()) {
-                        binding.searchEmptyTextPlaceholder.text = getString(R.string.no_items_found)
-                        binding.searchEmptyTextPlaceholder.visibility = View.VISIBLE
-                    } else {
-                        binding.searchEmptyTextPlaceholder.visibility = View.GONE
-                    }
 
-                    handleGridSpacing(grouped)
-                    getMediaAdapter()?.updateMedia(grouped)
+            val filtered =
+                mAllMedia.filter { it is Medium && it.name.contains(text, true) } as ArrayList
+            filtered.sortBy { it is Medium && !it.name.startsWith(text, true) }
+            val grouped =
+                MediaFetcher(applicationContext).groupMedia(filtered as ArrayList<Medium>, "")
+            runOnUiThread {
+                if (grouped.isEmpty()) {
+                    binding.searchEmptyTextPlaceholder.text = getString(R.string.no_items_found)
+                    binding.searchEmptyTextPlaceholder.visibility = View.VISIBLE
+                } else {
+                    binding.searchEmptyTextPlaceholder.visibility = View.GONE
                 }
-            } catch (ignored: Exception) {
+
+                handleGridSpacing(grouped)
+                getMediaAdapter()?.updateMedia(grouped)
             }
+
         }
     }
 

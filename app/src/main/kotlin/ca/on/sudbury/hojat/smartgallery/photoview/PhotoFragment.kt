@@ -300,12 +300,8 @@ class PhotoFragment : ViewPagerFragment() {
         super.onDestroyView()
         if (activity?.isDestroyed == false) {
             binding.subsamplingView.recycle()
-
-            try {
-                if (context != null) {
-                    Glide.with(requireContext()).clear(binding.gesturesView)
-                }
-            } catch (ignored: Exception) {
+            if (context != null) {
+                Glide.with(requireContext()).clear(binding.gesturesView)
             }
         }
         mLoadZoomableViewHandler.removeCallbacksAndMessages(null)
@@ -538,38 +534,35 @@ class PhotoFragment : ViewPagerFragment() {
             if (getFilePathToShow().startsWith("content://")) getFilePathToShow() else "file://${getFilePathToShow()}"
         pathToLoad = pathToLoad.replace("%", "%25").replace("#", "%23")
 
-        try {
-            val picasso = Picasso.get()
-                .load(pathToLoad)
-                .centerInside()
-                .stableKey(mMedium.getSignature())
-                .resize(mScreenWidth, mScreenHeight)
+        val picasso = Picasso.get()
+            .load(pathToLoad)
+            .centerInside()
+            .stableKey(mMedium.getSignature())
+            .resize(mScreenWidth, mScreenHeight)
 
-            if (mCurrentRotationDegrees != 0) {
-                picasso.rotate(mCurrentRotationDegrees.toFloat())
-            } else {
-                viewModel.degreesForRotation(mImageOrientation).toFloat()
+        if (mCurrentRotationDegrees != 0) {
+            picasso.rotate(mCurrentRotationDegrees.toFloat())
+        } else {
+            viewModel.degreesForRotation(mImageOrientation).toFloat()
+        }
+
+        picasso.into(binding.gesturesView, object : Callback {
+            override fun onSuccess() {
+                binding.gesturesView.controller.settings.isZoomEnabled =
+                    mMedium.isRaw() || mCurrentRotationDegrees != 0 || context?.config?.allowZoomingImages == false
+                if (mIsFragmentVisible && addZoomableView) {
+                    scheduleZoomableView()
+                }
             }
 
-            picasso.into(binding.gesturesView, object : Callback {
-                override fun onSuccess() {
-                    binding.gesturesView.controller.settings.isZoomEnabled =
-                        mMedium.isRaw() || mCurrentRotationDegrees != 0 || context?.config?.allowZoomingImages == false
-                    if (mIsFragmentVisible && addZoomableView) {
-                        scheduleZoomableView()
-                    }
+            override fun onError(e: Exception?) {
+                if (mMedium.path != mOriginalPath) {
+                    mMedium.path = mOriginalPath
+                    loadImage()
+                    checkIfPanorama()
                 }
-
-                override fun onError(e: Exception?) {
-                    if (mMedium.path != mOriginalPath) {
-                        mMedium.path = mOriginalPath
-                        loadImage()
-                        checkIfPanorama()
-                    }
-                }
-            })
-        } catch (ignored: Exception) {
-        }
+            }
+        })
     }
 
     private fun showPortraitStripe() {
@@ -830,33 +823,30 @@ class PhotoFragment : ViewPagerFragment() {
         val defaultOrientation = -1
         var orient = defaultOrientation
 
-        try {
-            val path = getFilePathToShow()
-            orient = if (path.startsWith("content:/")) {
-                val inputStream = requireContext().contentResolver.openInputStream(Uri.parse(path))
-                val exif = ExifInterface()
-                exif.readExif(inputStream, ExifInterface.Options.OPTION_ALL)
-                val tag = exif.getTag(ExifInterface.TAG_ORIENTATION)
-                tag?.getValueAsInt(defaultOrientation) ?: defaultOrientation
-            } else {
-                val exif = androidx.exifinterface.media.ExifInterface(path)
-                exif.getAttributeInt(TAG_ORIENTATION, defaultOrientation)
-            }
 
-            if (orient == defaultOrientation ||
-                IsPathOnOtgUseCase(requireContext(), getFilePathToShow())
-            ) {
-                val uri =
-                    if (path.startsWith("content:/")) Uri.parse(path) else Uri.fromFile(File(path))
-                val inputStream = requireContext().contentResolver.openInputStream(uri)
-                val exif2 = ExifInterface()
-                exif2.readExif(inputStream, ExifInterface.Options.OPTION_ALL)
-                orient =
-                    exif2.getTag(ExifInterface.TAG_ORIENTATION)?.getValueAsInt(defaultOrientation)
-                        ?: defaultOrientation
-            }
-        } catch (ignored: Exception) {
-        } catch (ignored: OutOfMemoryError) {
+        val path = getFilePathToShow()
+        orient = if (path.startsWith("content:/")) {
+            val inputStream = requireContext().contentResolver.openInputStream(Uri.parse(path))
+            val exif = ExifInterface()
+            exif.readExif(inputStream, ExifInterface.Options.OPTION_ALL)
+            val tag = exif.getTag(ExifInterface.TAG_ORIENTATION)
+            tag?.getValueAsInt(defaultOrientation) ?: defaultOrientation
+        } else {
+            val exif = androidx.exifinterface.media.ExifInterface(path)
+            exif.getAttributeInt(TAG_ORIENTATION, defaultOrientation)
+        }
+
+        if (orient == defaultOrientation ||
+            IsPathOnOtgUseCase(requireContext(), getFilePathToShow())
+        ) {
+            val uri =
+                if (path.startsWith("content:/")) Uri.parse(path) else Uri.fromFile(File(path))
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val exif2 = ExifInterface()
+            exif2.readExif(inputStream, ExifInterface.Options.OPTION_ALL)
+            orient =
+                exif2.getTag(ExifInterface.TAG_ORIENTATION)?.getValueAsInt(defaultOrientation)
+                    ?: defaultOrientation
         }
         return orient
     }
