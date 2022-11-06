@@ -15,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getMyContentProviderCursorLoader
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
@@ -38,6 +37,7 @@ import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CheckAppIconColorUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlin.math.abs
 
@@ -471,7 +471,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         }
 
         if (didAppIconColorChange) {
-            checkAppIconColor()
+            CheckAppIconColorUseCase(this)
         }
 
         if (curSelectedThemeId == THEME_SHARED) {

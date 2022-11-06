@@ -120,7 +120,6 @@ import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
@@ -135,6 +134,7 @@ import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectoryFileCountUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CheckAppIconColorUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
@@ -218,7 +218,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         baseConfig.appId = appId
         if (baseConfig.appRunCount == 0) {
             baseConfig.wasOrangeIconChecked = true
-            checkAppIconColor()
+            CheckAppIconColorUseCase(this)
         } else if (!baseConfig.wasOrangeIconChecked) {
             baseConfig.wasOrangeIconChecked = true
             val primaryColor = resources.getColor(R.color.color_primary)

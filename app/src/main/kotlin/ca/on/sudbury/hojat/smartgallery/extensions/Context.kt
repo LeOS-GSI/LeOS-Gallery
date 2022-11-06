@@ -127,7 +127,6 @@ import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
-import ca.on.sudbury.hojat.smartgallery.repositories.AppIconRepository
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
@@ -2649,23 +2648,6 @@ fun isAndroidDataDir(path: String): Boolean {
 
 fun isExternalStorageManager(): Boolean {
     return IsRPlusUseCase() && Environment.isExternalStorageManager()
-}
-
-fun Context.checkAppIconColor() {
-    val appId = baseConfig.appId
-    if (appId.isNotEmpty() && baseConfig.lastIconColor != baseConfig.appIconColor) {
-        resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
-            .forEachIndexed { index, color ->
-                ToggleAppIconColorUseCase(this, appId, index, color, false)
-            }
-
-        resources.getIntArray(R.array.md_app_icon_colors).toCollection(ArrayList())
-            .forEachIndexed { index, color ->
-                if (baseConfig.appIconColor == color) {
-                    ToggleAppIconColorUseCase(this, appId, index, color, true)
-                }
-            }
-    }
 }
 
 val Context.statusBarHeight: Int

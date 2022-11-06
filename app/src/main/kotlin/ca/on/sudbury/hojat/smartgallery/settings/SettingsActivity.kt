@@ -21,7 +21,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
-import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
@@ -143,6 +142,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.CheckAppIconColorUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToBooleanUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToIntUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToStringSetUseCase
@@ -1125,7 +1125,7 @@ class SettingsActivity : SimpleActivity() {
                             .contains(ConvertToIntUseCase(value))
                     ) {
                         config.appIconColor = ConvertToIntUseCase(value)
-                        checkAppIconColor()
+                        CheckAppIconColorUseCase(this)
                     }
                 }
                 USE_ENGLISH -> config.useEnglish = ConvertToBooleanUseCase(value)

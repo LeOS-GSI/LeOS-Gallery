@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.checkAppIconColor
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.showSideloadingDialog
@@ -14,6 +13,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getSharedThemeSync
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_UNCHECKED
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
+import ca.on.sudbury.hojat.smartgallery.usecases.CheckAppIconColorUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
 abstract class BaseSplashActivity : AppCompatActivity() {
@@ -60,7 +60,8 @@ abstract class BaseSplashActivity : AppCompatActivity() {
 
                     if (baseConfig.appIconColor != it.appIconColor) {
                         baseConfig.appIconColor = it.appIconColor
-                        checkAppIconColor()
+                        CheckAppIconColorUseCase(this)
+
                     }
                 }
                 initActivity()
