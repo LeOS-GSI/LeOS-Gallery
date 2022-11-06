@@ -96,8 +96,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -238,7 +237,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         binding.mediaRefreshLayout.isEnabled = config.enablePullToRefresh
         getMediaAdapter()?.apply {
             dateFormat = config.dateFormat
-            timeFormat = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
+            timeFormat = if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format
         }
 
         binding.mediaEmptyTextPlaceholder.setTextColor(getProperTextColor())

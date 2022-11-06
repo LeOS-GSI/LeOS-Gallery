@@ -323,9 +323,6 @@ val extensionsSupportingEXIF: Array<String>
         ".dng"
     )
 
-const val TIME_FORMAT_12 = "hh:mm a"
-const val TIME_FORMAT_24 = "HH:mm"
-
 val appIconColorStrings = arrayListOf(
     ".Red",
     ".Pink",

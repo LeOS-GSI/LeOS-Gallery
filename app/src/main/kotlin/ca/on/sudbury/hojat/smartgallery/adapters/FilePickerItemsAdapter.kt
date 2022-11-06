@@ -25,8 +25,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.helpers.getFilePlaceholderDrawables
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
@@ -50,7 +49,7 @@ class FilePickerItemsAdapter(
     private val cornerRadius = resources.getDimension(R.dimen.rounded_corner_radius_small).toInt()
     private val dateFormat = activity.baseConfig.dateFormat
     private val timeFormat =
-        with(activity) { if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12 }
+        with(activity) { if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format }
 
     init {
         initDrawables()

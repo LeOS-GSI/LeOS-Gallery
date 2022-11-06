@@ -128,8 +128,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.toggleAppIconColor
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
@@ -355,7 +354,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         super.onResume()
         config.isThirdPartyIntent = false
         mDateFormat = config.dateFormat
-        mTimeFormat = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
+        mTimeFormat =
+            if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format
 
         setupToolbar(binding.directoriesToolbar, searchMenuItem = mSearchMenuItem)
         refreshMenuItems()
@@ -393,7 +393,8 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         binding.directoriesRefreshLayout.isEnabled = config.enablePullToRefresh
         getRecyclerAdapter()?.apply {
             dateFormat = config.dateFormat
-            timeFormat = if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
+            timeFormat =
+                if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format
         }
 
         binding.directoriesEmptyPlaceholder.setTextColor(getProperTextColor())

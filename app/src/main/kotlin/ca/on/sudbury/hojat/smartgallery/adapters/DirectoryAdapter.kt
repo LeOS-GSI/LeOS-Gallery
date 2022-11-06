@@ -81,8 +81,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderMediaCount
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
 import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
@@ -140,7 +139,7 @@ class DirectoryAdapter(
     var directorySorting = config.directorySorting
     var dateFormat = config.dateFormat
     var timeFormat =
-        with(activity) { if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12 }
+        with(activity) { if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format }
 
     init {
         setupDragListener(true)

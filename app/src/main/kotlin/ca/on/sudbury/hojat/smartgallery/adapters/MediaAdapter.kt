@@ -73,8 +73,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathsIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_12
-import ca.on.sudbury.hojat.smartgallery.helpers.TIME_FORMAT_24
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
 import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
@@ -133,7 +132,7 @@ class MediaAdapter(
     var sorting = config.getFolderSorting(if (config.showAll) SHOW_ALL else path)
     var dateFormat = config.dateFormat
     var timeFormat = with(activity) {
-        if (baseConfig.use24HourFormat) TIME_FORMAT_24 else TIME_FORMAT_12
+        if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format
     }
 
     init {
