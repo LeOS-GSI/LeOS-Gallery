@@ -55,9 +55,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialog
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_ASPECT_RATIO
 import ca.on.sudbury.hojat.smartgallery.helpers.DEFAULT_BOTTOM_ACTIONS
 import ca.on.sudbury.hojat.smartgallery.helpers.INCLUDED_FOLDERS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXCLUDED_FOLDERS
@@ -134,6 +131,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FileLoadingPriority
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
+import ca.on.sudbury.hojat.smartgallery.helpers.RotationRule
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPiePlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
@@ -795,15 +793,15 @@ class SettingsActivity : SimpleActivity() {
             settingsScreenRotationHolder.setOnClickListener {
                 val items = arrayListOf(
                     RadioItem(
-                        ROTATE_BY_SYSTEM_SETTING,
+                        RotationRule.SystemSetting.id,
                         getString(R.string.screen_rotation_system_setting)
                     ),
                     RadioItem(
-                        ROTATE_BY_DEVICE_ROTATION,
+                        RotationRule.DeviceRotation.id,
                         getString(R.string.screen_rotation_device_rotation)
                     ),
                     RadioItem(
-                        ROTATE_BY_ASPECT_RATIO,
+                        RotationRule.AspectRatio.id,
                         getString(R.string.screen_rotation_aspect_ratio)
                     )
                 )
@@ -817,8 +815,8 @@ class SettingsActivity : SimpleActivity() {
 
     private fun getScreenRotationText() = getString(
         when (config.screenRotation) {
-            ROTATE_BY_SYSTEM_SETTING -> R.string.screen_rotation_system_setting
-            ROTATE_BY_DEVICE_ROTATION -> R.string.screen_rotation_device_rotation
+            RotationRule.SystemSetting.id -> R.string.screen_rotation_system_setting
+            RotationRule.DeviceRotation.id -> R.string.screen_rotation_device_rotation
             else -> R.string.screen_rotation_aspect_ratio
         }
     )

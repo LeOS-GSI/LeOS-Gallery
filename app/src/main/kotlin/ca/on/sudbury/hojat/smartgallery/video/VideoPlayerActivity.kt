@@ -56,15 +56,13 @@ import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.hasNavBar
 import ca.on.sudbury.hojat.smartgallery.extensions.navigationBarSize
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_ASPECT_RATIO
 import ca.on.sudbury.hojat.smartgallery.helpers.FAST_FORWARD_VIDEO_MS
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_CLOSE_DOWN_GESTURE_DURATION
 import ca.on.sudbury.hojat.smartgallery.helpers.GO_TO_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.GO_TO_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.DRAG_THRESHOLD
 import ca.on.sudbury.hojat.smartgallery.helpers.HIDE_SYSTEM_UI_DELAY
+import ca.on.sudbury.hojat.smartgallery.helpers.RotationRule
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -221,9 +219,9 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
 
     private fun setupOrientation() {
         if (!mIsOrientationLocked) {
-            if (config.screenRotation == ROTATE_BY_DEVICE_ROTATION) {
+            if (config.screenRotation == RotationRule.DeviceRotation.id) {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
-            } else if (config.screenRotation == ROTATE_BY_SYSTEM_SETTING) {
+            } else if (config.screenRotation == RotationRule.SystemSetting.id) {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             }
         }
@@ -545,7 +543,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         val multiplier = if (screenWidth > screenHeight) 0.5 else 0.8
         mScreenWidth = (screenWidth * multiplier).toInt()
 
-        if (config.screenRotation == ROTATE_BY_ASPECT_RATIO) {
+        if (config.screenRotation == RotationRule.AspectRatio.id) {
             if (mVideoSize.x > mVideoSize.y) {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             } else if (mVideoSize.x < mVideoSize.y) {

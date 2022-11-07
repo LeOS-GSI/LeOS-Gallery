@@ -409,11 +409,6 @@ const val SHOULD_INIT_FRAGMENT = "should_init_fragment"
 const val PORTRAIT_PATH = "portrait_path"
 const val SKIP_AUTHENTICATION = "skip_authentication"
 
-// rotations
-const val ROTATE_BY_SYSTEM_SETTING = 0
-const val ROTATE_BY_DEVICE_ROTATION = 1
-const val ROTATE_BY_ASPECT_RATIO = 2
-
 fun getDefaultFileFilter() =
     MediaType.Image.id or MediaType.Video.id or MediaType.Gif.id or MediaType.Raw.id or MediaType.Svg.id
 

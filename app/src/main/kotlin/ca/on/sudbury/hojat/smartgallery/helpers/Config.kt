@@ -201,7 +201,7 @@ class Config(context: Context) : BaseConfig(context) {
             .apply()
 
     var screenRotation: Int
-        get() = prefs.getInt(SCREEN_ROTATION, ROTATE_BY_SYSTEM_SETTING)
+        get() = prefs.getInt(SCREEN_ROTATION, RotationRule.SystemSetting.id)
         set(screenRotation) = prefs.edit().putInt(SCREEN_ROTATION, screenRotation).apply()
 
     var fileLoadingPriority: Int

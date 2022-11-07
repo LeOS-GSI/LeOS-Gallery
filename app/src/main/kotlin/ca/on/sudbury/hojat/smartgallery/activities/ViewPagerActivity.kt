@@ -90,13 +90,10 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_START_ON_ENTER
 import ca.on.sudbury.hojat.smartgallery.helpers.FadePageTransformer
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_NEXT_ITEM
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_ASPECT_RATIO
 import ca.on.sudbury.hojat.smartgallery.helpers.GO_TO_NEXT_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.GO_TO_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_VIEW_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.SKIP_AUTHENTICATION
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_DEVICE_ROTATION
-import ca.on.sudbury.hojat.smartgallery.helpers.ROTATE_BY_SYSTEM_SETTING
 import ca.on.sudbury.hojat.smartgallery.helpers.PORTRAIT_PATH
 import ca.on.sudbury.hojat.smartgallery.helpers.DefaultPageTransformer
 import ca.on.sudbury.hojat.smartgallery.helpers.HIDE_SYSTEM_UI_DELAY
@@ -146,6 +143,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
 import ca.on.sudbury.hojat.smartgallery.helpers.BottomAction
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
+import ca.on.sudbury.hojat.smartgallery.helpers.RotationRule
 import ca.on.sudbury.hojat.smartgallery.helpers.SlideshowAnimation
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
@@ -619,9 +617,9 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun setupOrientation() {
         if (!mIsOrientationLocked) {
-            if (config.screenRotation == ROTATE_BY_DEVICE_ROTATION) {
+            if (config.screenRotation == RotationRule.DeviceRotation.id) {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
-            } else if (config.screenRotation == ROTATE_BY_SYSTEM_SETTING) {
+            } else if (config.screenRotation == RotationRule.SystemSetting.id) {
                 requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             }
         }
@@ -1676,7 +1674,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     @SuppressLint("SourceLockedOrientationActivity")
     private fun checkOrientation() {
-        if (!mIsOrientationLocked && config.screenRotation == ROTATE_BY_ASPECT_RATIO) {
+        if (!mIsOrientationLocked && config.screenRotation == RotationRule.AspectRatio.id) {
             var flipSides = false
             try {
                 val pathToLoad = getCurrentPath()
