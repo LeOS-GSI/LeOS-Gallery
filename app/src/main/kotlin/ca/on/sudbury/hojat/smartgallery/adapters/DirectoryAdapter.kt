@@ -42,7 +42,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtectio
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.interfaces.ItemMoveCallback
 import ca.on.sudbury.hojat.smartgallery.interfaces.ItemTouchHelperContract
 import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
@@ -82,6 +81,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FolderMediaCount
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
+import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.usecases.IsOreoPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
@@ -122,7 +122,7 @@ class DirectoryAdapter(
     RecyclerViewFastScroller.OnPopupTextUpdate {
 
     private val config = activity.config
-    private val isListViewType = config.viewTypeFolders == VIEW_TYPE_LIST
+    private val isListViewType = config.viewTypeFolders == ViewType.List.id
     private var pinnedFolders = config.pinnedFolders
     private var scrollHorizontally = config.scrollHorizontally
     private var animateGifs = config.animateGifs

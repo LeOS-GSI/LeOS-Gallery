@@ -5,10 +5,9 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeViewTypeBinding
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
 class ChangeViewTypeDialog(
@@ -27,14 +26,14 @@ class ChangeViewTypeDialog(
     init {
         binding.apply {
             val viewToCheck = if (fromFoldersView) {
-                if (config.viewTypeFolders == VIEW_TYPE_GRID) {
+                if (config.viewTypeFolders == ViewType.Grid.id) {
                     changeViewTypeDialogRadioGrid.id
                 } else {
                     changeViewTypeDialogRadioList.id
                 }
             } else {
                 val currViewType = config.getFolderViewType(pathToUse)
-                if (currViewType == VIEW_TYPE_GRID) {
+                if (currViewType == ViewType.Grid.id) {
                     changeViewTypeDialogRadioGrid.id
                 } else {
                     changeViewTypeDialogRadioList.id
@@ -64,9 +63,9 @@ class ChangeViewTypeDialog(
     private fun dialogConfirmed() {
         val viewType =
             if (binding.changeViewTypeDialogRadio.checkedRadioButtonId == binding.changeViewTypeDialogRadioGrid.id) {
-                VIEW_TYPE_GRID
+                ViewType.Grid.id
             } else {
-                VIEW_TYPE_LIST
+                ViewType.List.id
             }
 
         if (fromFoldersView) {

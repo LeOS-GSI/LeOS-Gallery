@@ -26,8 +26,6 @@ import com.bumptech.glide.request.transition.Transition
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
@@ -97,6 +95,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
+import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -333,10 +332,10 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
             val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
             findItem(R.id.increase_column_count).isVisible =
-                viewType == VIEW_TYPE_GRID && config.mediaColumnCnt < MAX_COLUMN_COUNT
+                viewType == ViewType.Grid.id && config.mediaColumnCnt < MAX_COLUMN_COUNT
             findItem(R.id.reduce_column_count).isVisible =
-                viewType == VIEW_TYPE_GRID && config.mediaColumnCnt > 1
-            findItem(R.id.toggle_filename).isVisible = viewType == VIEW_TYPE_GRID
+                viewType == ViewType.Grid.id && config.mediaColumnCnt > 1
+            findItem(R.id.toggle_filename).isVisible = viewType == ViewType.Grid.id
         }
     }
 
@@ -522,7 +521,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             }
 
             val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
-            if (viewType == VIEW_TYPE_LIST && areSystemAnimationsEnabled) {
+            if (viewType == ViewType.List.id && areSystemAnimationsEnabled) {
                 binding.mediaGrid.scheduleLayoutAnimation()
             }
 
@@ -540,7 +539,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun setupScrollDirection() {
         val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
-        val scrollHorizontally = config.scrollHorizontally && viewType == VIEW_TYPE_GRID
+        val scrollHorizontally = config.scrollHorizontally && viewType == ViewType.Grid.id
         binding.mediaFastscroller.setScrollVertically(!scrollHorizontally)
     }
 
@@ -777,7 +776,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun setupLayoutManager() {
         val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
-        if (viewType == VIEW_TYPE_GRID) {
+        if (viewType == ViewType.Grid.id) {
             setupGridLayoutManager()
         } else {
             setupListLayoutManager()
@@ -826,7 +825,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun handleGridSpacing(media: ArrayList<ThumbnailItem> = mMedia) {
         val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
-        if (viewType == VIEW_TYPE_GRID) {
+        if (viewType == ViewType.Grid.id) {
             val spanCount = config.mediaColumnCnt
             val spacing = config.thumbnailSpacing
             val useGridPosition = media.firstOrNull() is ThumbnailSection
@@ -857,7 +856,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun initZoomListener() {
         val viewType = config.getFolderViewType(if (mShowAll) SHOW_ALL else mPath)
-        if (viewType == VIEW_TYPE_GRID) {
+        if (viewType == ViewType.Grid.id) {
             val layoutManager = binding.mediaGrid.layoutManager as MyGridLayoutManager
             mZoomListener = object : MyRecyclerView.MyZoomListener {
                 override fun zoomIn() {

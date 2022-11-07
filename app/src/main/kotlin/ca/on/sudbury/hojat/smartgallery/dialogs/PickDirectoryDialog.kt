@@ -15,7 +15,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordPro
 import ca.on.sudbury.hojat.smartgallery.extensions.handleLockedFolderOpening
 import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.extensions.isInDownloadDir
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogDirectoryPickerBinding
@@ -25,6 +24,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
+import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
@@ -48,7 +48,7 @@ class PickDirectoryDialog(
     private var allDirectories = ArrayList<Directory>()
     private var openedSubfolders = arrayListOf("")
 
-    private var isGridViewType = activity.config.viewTypeFolders == VIEW_TYPE_GRID
+    private var isGridViewType = activity.config.viewTypeFolders == ViewType.Grid.id
     private var showHidden = activity.config.shouldShowHidden
     private var currentPathPrefix = ""
 

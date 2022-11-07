@@ -108,8 +108,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_LIST
 import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
 import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
 import ca.on.sudbury.hojat.smartgallery.models.Directory
@@ -127,6 +125,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
+import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
@@ -491,9 +490,9 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             val useBin = config.useRecycleBin
             binding.directoriesToolbar.menu.apply {
                 findItem(R.id.increase_column_count).isVisible =
-                    config.viewTypeFolders == VIEW_TYPE_GRID && config.dirColumnCnt < MAX_COLUMN_COUNT
+                    config.viewTypeFolders == ViewType.Grid.id && config.dirColumnCnt < MAX_COLUMN_COUNT
                 findItem(R.id.reduce_column_count).isVisible =
-                    config.viewTypeFolders == VIEW_TYPE_GRID && config.dirColumnCnt > 1
+                    config.viewTypeFolders == ViewType.Grid.id && config.dirColumnCnt > 1
                 findItem(R.id.hide_the_recycle_bin).isVisible =
                     useBin && config.showRecycleBinAtFolders
                 findItem(R.id.show_the_recycle_bin).isVisible =
@@ -937,7 +936,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun setupLayoutManager() {
-        if (config.viewTypeFolders == VIEW_TYPE_GRID) {
+        if (config.viewTypeFolders == ViewType.Grid.id) {
             setupGridLayoutManager()
         } else {
             setupListLayoutManager()
@@ -982,7 +981,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun initZoomListener() {
-        if (config.viewTypeFolders == VIEW_TYPE_GRID) {
+        if (config.viewTypeFolders == ViewType.Grid.id) {
             val layoutManager = binding.directoriesGrid.layoutManager as MyGridLayoutManager
             mZoomListener = object : MyRecyclerView.MyZoomListener {
                 override fun zoomIn() {
@@ -1612,7 +1611,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     binding.directoriesGrid.adapter = this
                     setupScrollDirection()
 
-                    if (config.viewTypeFolders == VIEW_TYPE_LIST && areSystemAnimationsEnabled) {
+                    if (config.viewTypeFolders == ViewType.List.id && areSystemAnimationsEnabled) {
                         binding.directoriesGrid.scheduleLayoutAnimation()
                     }
                 }
@@ -1638,7 +1637,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     private fun setupScrollDirection() {
         val scrollHorizontally =
-            config.scrollHorizontally && config.viewTypeFolders == VIEW_TYPE_GRID
+            config.scrollHorizontally && config.viewTypeFolders == ViewType.Grid.id
         binding.directoriesFastscroller.setScrollVertically(!scrollHorizontally)
     }
 

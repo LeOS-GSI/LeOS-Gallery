@@ -21,7 +21,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isMediaFile
 import ca.on.sudbury.hojat.smartgallery.extensions.deleteFiles
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
-import ca.on.sudbury.hojat.smartgallery.helpers.VIEW_TYPE_GRID
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
@@ -38,6 +37,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.deleteDBPath
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.movePathsInRecycleBin
+import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -179,7 +179,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun handleGridSpacing(media: ArrayList<ThumbnailItem>) {
         val viewType = config.getFolderViewType(SHOW_ALL)
-        if (viewType == VIEW_TYPE_GRID) {
+        if (viewType == ViewType.Grid.id) {
             if (binding.searchGrid.itemDecorationCount > 0) {
                 binding.searchGrid.removeItemDecorationAt(0)
             }
@@ -220,7 +220,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun setupLayoutManager() {
         val viewType = config.getFolderViewType(SHOW_ALL)
-        if (viewType == VIEW_TYPE_GRID) {
+        if (viewType == ViewType.Grid.id) {
             setupGridLayoutManager()
         } else {
             setupListLayoutManager()
@@ -264,7 +264,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
 
     private fun setupScrollDirection() {
         val viewType = config.getFolderViewType(SHOW_ALL)
-        val scrollHorizontally = config.scrollHorizontally && viewType == VIEW_TYPE_GRID
+        val scrollHorizontally = config.scrollHorizontally && viewType == ViewType.Grid.id
         binding.searchFastscroller.setScrollVertically(!scrollHorizontally)
     }
 

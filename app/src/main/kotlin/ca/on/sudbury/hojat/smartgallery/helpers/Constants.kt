@@ -314,10 +314,6 @@ const val SIDELOADING_UNCHECKED = 0
 const val SIDELOADING_TRUE = 1
 const val SIDELOADING_FALSE = 2
 
-// view types
-const val VIEW_TYPE_GRID = 1
-const val VIEW_TYPE_LIST = 2
-
 val normalizeRegex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
 
 fun getConflictResolution(resolutions: LinkedHashMap<String, Int>, path: String): Int {
