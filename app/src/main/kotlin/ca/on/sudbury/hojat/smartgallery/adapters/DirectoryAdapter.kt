@@ -69,14 +69,13 @@ import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_SMALL
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_NONE
 import ca.on.sudbury.hojat.smartgallery.helpers.ROUNDED_CORNERS_BIG
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderMediaCount
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderStyle
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
@@ -954,10 +953,10 @@ class DirectoryAdapter(
             }
 
             BeVisibleOrGoneUseCase(dir_pin, pinnedFolders.contains(directory.path))
-            BeVisibleOrGoneUseCase(dir_location, directory.location != LOCATION_INTERNAL)
+            BeVisibleOrGoneUseCase(dir_location, directory.location != FileLocation.Internal.id)
 
             if (dir_location.visibility == View.VISIBLE) {
-                dir_location.setImageResource(if (directory.location == LOCATION_SD) R.drawable.ic_sd_card_vector else R.drawable.ic_usb_vector)
+                dir_location.setImageResource(if (directory.location == FileLocation.SdCard.id) R.drawable.ic_sd_card_vector else R.drawable.ic_usb_vector)
             }
 
             photo_cnt.text = directory.subfoldersMediaCount.toString()

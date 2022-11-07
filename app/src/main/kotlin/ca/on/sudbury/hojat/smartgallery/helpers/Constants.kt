@@ -412,10 +412,6 @@ const val SKIP_AUTHENTICATION = "skip_authentication"
 fun getDefaultFileFilter() =
     MediaType.Image.id or MediaType.Video.id or MediaType.Gif.id or MediaType.Raw.id or MediaType.Svg.id
 
-const val LOCATION_INTERNAL = 1
-const val LOCATION_SD = 2
-const val LOCATION_OTG = 3
-
 const val DEFAULT_BOTTOM_ACTIONS =
     BottomAction.ToggleFavorite.id or BottomAction.Edit.id or BottomAction.Share.id or BottomAction.Delete.id
 

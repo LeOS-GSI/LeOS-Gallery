@@ -62,9 +62,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_SMALL
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IsoTypeReader
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_OTG
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_SD
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
 import ca.on.sudbury.hojat.smartgallery.helpers.BaseContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryWidgetProvider
@@ -122,6 +119,7 @@ import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
 import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
@@ -1437,9 +1435,9 @@ fun Context.addTempFolderIfNeeded(dirs: ArrayList<Directory>): ArrayList<Directo
 
 private fun getPathLocation(owner: Context, path: String): Int {
     return when {
-        IsPathOnSdUseCase(owner, path) -> LOCATION_SD
-        IsPathOnOtgUseCase(owner, path) -> LOCATION_OTG
-        else -> LOCATION_INTERNAL
+        IsPathOnSdUseCase(owner, path) -> FileLocation.SdCard.id
+        IsPathOnOtgUseCase(owner, path) -> FileLocation.Otg.id
+        else -> FileLocation.Internal.id
     }
 }
 

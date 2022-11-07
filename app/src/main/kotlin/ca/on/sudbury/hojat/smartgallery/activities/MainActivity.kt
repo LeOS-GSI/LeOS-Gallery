@@ -86,7 +86,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_ANY_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_IMAGE_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_VIDEO_INTENT
-import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_COLUMN_COUNT
 import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_MILLISECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
@@ -116,6 +115,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
+import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
 import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
@@ -1244,7 +1244,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     val recycleBin = Directory().apply {
                         path = RECYCLE_BIN
                         name = getString(R.string.recycle_bin)
-                        location = LOCATION_INTERNAL
+                        location = FileLocation.Internal.id
                     }
 
                     dirs.add(0, recycleBin)
@@ -1258,7 +1258,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 val favorites = Directory().apply {
                     path = FAVORITES
                     name = getString(R.string.favorites)
-                    location = LOCATION_INTERNAL
+                    location = FileLocation.Internal.id
                 }
 
                 dirs.add(0, favorites)
