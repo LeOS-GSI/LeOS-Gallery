@@ -30,8 +30,8 @@ class Config(context: Context) : BaseConfig(context) {
 
     fun getFolderGrouping(path: String): Int {
         var groupBy = prefs.getInt(GROUP_FOLDER_PREFIX + path.lowercase(Locale.ROOT), groupBy)
-        if (path != SHOW_ALL && groupBy and GROUP_BY_FOLDER != 0) {
-            groupBy -= GROUP_BY_FOLDER + 1
+        if (path != SHOW_ALL && groupBy and GroupBy.Folder.id != 0) {
+            groupBy -= GroupBy.Folder.id + 1
         }
         return groupBy
     }
@@ -409,7 +409,7 @@ class Config(context: Context) : BaseConfig(context) {
             .putBoolean(WAS_SVG_SHOWING_HANDLED, wasSVGShowingHandled).apply()
 
     var groupBy: Int
-        get() = prefs.getInt(GROUP_BY, GROUP_BY_NONE)
+        get() = prefs.getInt(GROUP_BY, GroupBy.None.id)
         set(groupBy) = prefs.edit().putInt(GROUP_BY, groupBy).apply()
 
     var useRecycleBin: Boolean

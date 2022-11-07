@@ -86,11 +86,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_ANY_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_IMAGE_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_VIDEO_INTENT
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_COLUMN_COUNT
 import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_MILLISECONDS
@@ -121,6 +116,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
+import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
@@ -300,7 +296,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         if (!config.wasRecycleBinPinned) {
             config.addPinnedFolders(hashSetOf(RECYCLE_BIN))
             config.wasRecycleBinPinned = true
-            config.saveFolderGrouping(SHOW_ALL, GROUP_BY_DATE_TAKEN_DAILY or GROUP_DESCENDING)
+            config.saveFolderGrouping(SHOW_ALL, GroupBy.DateTakenDaily.id or GroupBy.Descending.id)
         }
 
         if (!config.wasSVGShowingHandled) {
@@ -1288,14 +1284,14 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 val grouping = config.getFolderGrouping(directory.path)
                 val getProperDateTaken = config.directorySorting and SORT_BY_DATE_TAKEN != 0 ||
                         sorting and SORT_BY_DATE_TAKEN != 0 ||
-                        grouping and GROUP_BY_DATE_TAKEN_DAILY != 0 ||
-                        grouping and GROUP_BY_DATE_TAKEN_MONTHLY != 0
+                        grouping and GroupBy.DateTakenDaily.id != 0 ||
+                        grouping and GroupBy.DateTakenMonthly.id != 0
 
                 val getProperLastModified =
                     config.directorySorting and SORT_BY_DATE_MODIFIED != 0 ||
                             sorting and SORT_BY_DATE_MODIFIED != 0 ||
-                            grouping and GROUP_BY_LAST_MODIFIED_DAILY != 0 ||
-                            grouping and GROUP_BY_LAST_MODIFIED_MONTHLY != 0
+                            grouping and GroupBy.LastModifiedDaily.id != 0 ||
+                            grouping and GroupBy.LastModifiedMonthly.id != 0
 
                 val curMedia = mLastMediaFetcher!!.getFilesFrom(
                     directory.path,
@@ -1414,13 +1410,13 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             val grouping = config.getFolderGrouping(folder)
             val getProperDateTaken = config.directorySorting and SORT_BY_DATE_TAKEN != 0 ||
                     sorting and SORT_BY_DATE_TAKEN != 0 ||
-                    grouping and GROUP_BY_DATE_TAKEN_DAILY != 0 ||
-                    grouping and GROUP_BY_DATE_TAKEN_MONTHLY != 0
+                    grouping and GroupBy.DateTakenDaily.id != 0 ||
+                    grouping and GroupBy.DateTakenMonthly.id != 0
 
             val getProperLastModified = config.directorySorting and SORT_BY_DATE_MODIFIED != 0 ||
                     sorting and SORT_BY_DATE_MODIFIED != 0 ||
-                    grouping and GROUP_BY_LAST_MODIFIED_DAILY != 0 ||
-                    grouping and GROUP_BY_LAST_MODIFIED_MONTHLY != 0
+                    grouping and GroupBy.LastModifiedDaily.id != 0 ||
+                    grouping and GroupBy.LastModifiedMonthly.id != 0
 
             val newMedia = mLastMediaFetcher!!.getFilesFrom(
                 folder, getImagesOnly, getVideosOnly, getProperDateTaken, getProperLastModified,

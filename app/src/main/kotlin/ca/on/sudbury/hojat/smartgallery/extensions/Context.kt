@@ -60,10 +60,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_LARGE
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_SMALL
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IsoTypeReader
 import ca.on.sudbury.hojat.smartgallery.helpers.LOCATION_INTERNAL
@@ -126,6 +122,7 @@ import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
 import ca.on.hojat.palette.views.MyTextView
+import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
@@ -2407,13 +2404,13 @@ fun Context.updateDirectoryPath(path: String) {
     val grouping = config.getFolderGrouping(path)
     val getProperDateTaken = config.directorySorting and SORT_BY_DATE_TAKEN != 0 ||
             sorting and SORT_BY_DATE_TAKEN != 0 ||
-            grouping and GROUP_BY_DATE_TAKEN_DAILY != 0 ||
-            grouping and GROUP_BY_DATE_TAKEN_MONTHLY != 0
+            grouping and GroupBy.DateTakenDaily.id != 0 ||
+            grouping and GroupBy.DateTakenMonthly.id != 0
 
     val getProperLastModified = config.directorySorting and SORT_BY_DATE_MODIFIED != 0 ||
             sorting and SORT_BY_DATE_MODIFIED != 0 ||
-            grouping and GROUP_BY_LAST_MODIFIED_DAILY != 0 ||
-            grouping and GROUP_BY_LAST_MODIFIED_MONTHLY != 0
+            grouping and GroupBy.LastModifiedDaily.id != 0 ||
+            grouping and GroupBy.LastModifiedMonthly.id != 0
 
     val getProperFileSize = config.directorySorting and SORT_BY_SIZE != 0
 

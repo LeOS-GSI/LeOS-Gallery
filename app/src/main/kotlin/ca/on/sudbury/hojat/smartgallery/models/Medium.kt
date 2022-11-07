@@ -6,15 +6,9 @@ import androidx.room.PrimaryKey
 import androidx.room.Index
 import androidx.room.ColumnInfo
 import androidx.room.Ignore
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FILE_TYPE
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_EXTENSION
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_FOLDER
 import com.bumptech.glide.signature.ObjectKey
 import ca.on.sudbury.hojat.smartgallery.extensions.formatDate
+import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
@@ -91,13 +85,13 @@ data class Medium(
 
     fun getGroupingKey(groupBy: Int): String {
         return when {
-            groupBy and GROUP_BY_LAST_MODIFIED_DAILY != 0 -> getDayStartTS(modified, false)
-            groupBy and GROUP_BY_LAST_MODIFIED_MONTHLY != 0 -> getDayStartTS(modified, true)
-            groupBy and GROUP_BY_DATE_TAKEN_DAILY != 0 -> getDayStartTS(taken, false)
-            groupBy and GROUP_BY_DATE_TAKEN_MONTHLY != 0 -> getDayStartTS(taken, true)
-            groupBy and GROUP_BY_FILE_TYPE != 0 -> type.toString()
-            groupBy and GROUP_BY_EXTENSION != 0 -> GetFileExtensionUseCase(name).lowercase(Locale.ROOT)
-            groupBy and GROUP_BY_FOLDER != 0 -> parentPath
+            groupBy and GroupBy.LastModifiedDaily.id != 0 -> getDayStartTS(modified, false)
+            groupBy and GroupBy.LastModifiedMonthly.id != 0 -> getDayStartTS(modified, true)
+            groupBy and GroupBy.DateTakenDaily.id != 0 -> getDayStartTS(taken, false)
+            groupBy and GroupBy.DateTakenMonthly.id != 0 -> getDayStartTS(taken, true)
+            groupBy and GroupBy.FileType.id != 0 -> type.toString()
+            groupBy and GroupBy.Extension.id != 0 -> GetFileExtensionUseCase(name).lowercase(Locale.ROOT)
+            groupBy and GroupBy.Folder.id != 0 -> parentPath
             else -> ""
         }
     }

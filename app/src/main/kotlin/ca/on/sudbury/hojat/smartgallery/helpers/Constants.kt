@@ -416,17 +416,6 @@ const val LOCATION_INTERNAL = 1
 const val LOCATION_SD = 2
 const val LOCATION_OTG = 3
 
-const val GROUP_BY_NONE = 1
-const val GROUP_BY_LAST_MODIFIED_DAILY = 2
-const val GROUP_BY_DATE_TAKEN_DAILY = 4
-const val GROUP_BY_FILE_TYPE = 8
-const val GROUP_BY_EXTENSION = 16
-const val GROUP_BY_FOLDER = 32
-const val GROUP_BY_LAST_MODIFIED_MONTHLY = 64
-const val GROUP_BY_DATE_TAKEN_MONTHLY = 128
-const val GROUP_DESCENDING = 1024
-const val GROUP_SHOW_FILE_COUNT = 2048
-
 const val DEFAULT_BOTTOM_ACTIONS =
     BottomAction.ToggleFavorite.id or BottomAction.Edit.id or BottomAction.Share.id or BottomAction.Delete.id
 

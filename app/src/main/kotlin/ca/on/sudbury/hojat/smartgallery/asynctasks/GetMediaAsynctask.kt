@@ -11,10 +11,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_DATE_TAKEN_MONTHLY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_DAILY
-import ca.on.sudbury.hojat.smartgallery.helpers.GROUP_BY_LAST_MODIFIED_MONTHLY
+import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
@@ -36,12 +33,12 @@ class GetMediaAsynctask(
         val folderGrouping = context.config.getFolderGrouping(pathToUse)
         val fileSorting = context.config.getFolderSorting(pathToUse)
         val getProperDateTaken = fileSorting and SORT_BY_DATE_TAKEN != 0 ||
-                folderGrouping and GROUP_BY_DATE_TAKEN_DAILY != 0 ||
-                folderGrouping and GROUP_BY_DATE_TAKEN_MONTHLY != 0
+                folderGrouping and GroupBy.DateTakenDaily.id != 0 ||
+                folderGrouping and GroupBy.DateTakenMonthly.id != 0
 
         val getProperLastModified = fileSorting and SORT_BY_DATE_MODIFIED != 0 ||
-                folderGrouping and GROUP_BY_LAST_MODIFIED_DAILY != 0 ||
-                folderGrouping and GROUP_BY_LAST_MODIFIED_MONTHLY != 0
+                folderGrouping and GroupBy.LastModifiedDaily.id != 0 ||
+                folderGrouping and GroupBy.LastModifiedMonthly.id != 0
 
         val getProperFileSize = fileSorting and SORT_BY_SIZE != 0
         val favoritePaths = context.getFavoritePaths()
