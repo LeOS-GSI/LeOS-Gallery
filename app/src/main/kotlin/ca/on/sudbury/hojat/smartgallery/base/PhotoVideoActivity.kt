@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.text.Html
 import android.view.View
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
@@ -72,7 +73,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.video.VideoPlayerActivity
 import java.io.File
@@ -107,7 +107,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
             if (it) {
                 checkIntent(savedInstanceState)
             } else {
-                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
+                Toast.makeText(this, R.string.no_storage_permissions, Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -137,7 +137,8 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
                 mMedium?.isImage() == true && mUri?.scheme == "file" && visibleBottomActions and BottomAction.Edit.id == 0
             findItem(R.id.menu_properties).isVisible =
                 mUri?.scheme == "file" && visibleBottomActions and BottomAction.Properties.id == 0
-            findItem(R.id.menu_share).isVisible = visibleBottomActions and BottomAction.Share.id == 0
+            findItem(R.id.menu_share).isVisible =
+                visibleBottomActions and BottomAction.Share.id == 0
             findItem(R.id.menu_show_on_map).isVisible =
                 visibleBottomActions and BottomAction.ShowOnMap.id == 0
         }
@@ -340,7 +341,7 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
     private fun launchVideoPlayer() {
         val newUri = getFinalUriFromPath(mUri.toString(), BuildConfig.APPLICATION_ID)
         if (newUri == null) {
-            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+            Toast.makeText(this, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
             return
         }
 

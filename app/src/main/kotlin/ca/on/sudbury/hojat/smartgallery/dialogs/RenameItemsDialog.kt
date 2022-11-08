@@ -1,5 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -13,7 +14,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 
 /**
@@ -51,7 +51,7 @@ class RenameItemsDialog(
                         }
 
                         if (!valueToAdd.isAValidFilename()) {
-                            ShowSafeToastUseCase(activity, R.string.invalid_name)
+                            Toast.makeText(activity, R.string.invalid_name, Toast.LENGTH_LONG).show()
                             return@setOnClickListener
                         }
 
@@ -59,7 +59,7 @@ class RenameItemsDialog(
                         val sdFilePath = validPaths.firstOrNull { IsPathOnSdUseCase(activity, it) }
                             ?: validPaths.firstOrNull()
                         if (sdFilePath == null) {
-                            ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
+                            Toast.makeText(activity, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
                             dismiss()
                             return@setOnClickListener
                         }
@@ -107,10 +107,10 @@ class RenameItemsDialog(
                                         }
                                     } else {
                                         ignoreClicks = false
-                                        ShowSafeToastUseCase(
+                                        Toast.makeText(
                                             activity,
-                                            R.string.unknown_error_occurred
-                                        )
+                                            R.string.unknown_error_occurred, Toast.LENGTH_LONG
+                                        ).show()
                                         dismiss()
                                     }
                                 }

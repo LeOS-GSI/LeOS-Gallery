@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
+import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -145,7 +146,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.ConvertToStringSetUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.FormatFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.InputStream
 import java.util.Locale
@@ -313,7 +313,10 @@ class SettingsActivity : SimpleActivity() {
             val items = arrayListOf(
                 RadioItem(FileLoadingPriority.Speed.id, getString(R.string.speed)),
                 RadioItem(FileLoadingPriority.Compromise.id, getString(R.string.compromise)),
-                RadioItem(FileLoadingPriority.Validity.id, getString(R.string.avoid_showing_invalid_files))
+                RadioItem(
+                    FileLoadingPriority.Validity.id,
+                    getString(R.string.avoid_showing_invalid_files)
+                )
             )
 
             RadioGroupDialog(this@SettingsActivity, items, config.fileLoadingPriority) {
@@ -940,7 +943,7 @@ class SettingsActivity : SimpleActivity() {
 
         binding.settingsEmptyRecycleBinHolder.setOnClickListener {
             if (mRecycleBinContentSize == 0L) {
-                ShowSafeToastUseCase(this, R.string.recycle_bin_empty)
+                Toast.makeText(this, R.string.recycle_bin_empty, Toast.LENGTH_LONG).show()
             } else {
                 showRecycleBinEmptyingDialog {
                     EmptyTheRecycleBinUseCase(this)
@@ -1088,7 +1091,7 @@ class SettingsActivity : SimpleActivity() {
 
     private fun parseFile(inputStream: InputStream?) {
         if (inputStream == null) {
-            ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+            Toast.makeText(this, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
             return
         }
 
@@ -1104,7 +1107,7 @@ class SettingsActivity : SimpleActivity() {
                     }
                     importedItems++
                 } catch (e: Exception) {
-                    ShowSafeToastUseCase(this, e.toString())
+                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -1239,10 +1242,11 @@ class SettingsActivity : SimpleActivity() {
             }
         }
 
-        ShowSafeToastUseCase(
+        Toast.makeText(
             this,
-            if (configValues.size > 0) R.string.settings_imported_successfully else R.string.no_entries_for_importing
-        )
+            if (configValues.size > 0) R.string.settings_imported_successfully else R.string.no_entries_for_importing,
+            Toast.LENGTH_LONG
+        ).show()
         runOnUiThread {
             setupSettingItems()
         }

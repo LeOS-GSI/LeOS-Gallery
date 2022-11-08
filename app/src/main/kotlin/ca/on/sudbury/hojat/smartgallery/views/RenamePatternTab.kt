@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -27,7 +28,6 @@ import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_rename_items_pattern.view.*
 import timber.log.Timber
 import java.io.File
@@ -76,7 +76,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
         val firstPath = validPaths.firstOrNull()
         val sdFilePath = validPaths.firstOrNull { IsPathOnSdUseCase(activity, it) } ?: firstPath
         if (firstPath == null || sdFilePath == null) {
-            ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
+            Toast.makeText(activity, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
             return
         }
 
@@ -119,7 +119,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
                                         callback
                                     )
                                 } else {
-                                    ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
+                                    Toast.makeText(activity, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
                                 }
                             }
                         }
@@ -272,7 +272,7 @@ class RenamePatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(c
                     }
                 } catch (e: Exception) {
                     activity.runOnUiThread {
-                        ShowSafeToastUseCase(activity, e.toString())
+                        Toast.makeText(activity, e.toString(),Toast.LENGTH_LONG).show()
                         callback(false)
                     }
                 }

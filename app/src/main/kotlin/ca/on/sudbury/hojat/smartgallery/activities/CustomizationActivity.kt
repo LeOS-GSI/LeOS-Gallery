@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
@@ -23,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
@@ -106,7 +106,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                     )
                 }
             } catch (e: Exception) {
-                ShowSafeToastUseCase(this, R.string.update_thank_you)
+                Toast.makeText(this, R.string.update_thank_you, Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -267,7 +267,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateColorTheme(it as Int, true)
             if (it != THEME_CUSTOM && it != THEME_SHARED && it != THEME_AUTO && it != THEME_SYSTEM && !baseConfig.wasCustomThemeSwitchDescriptionShown) {
                 baseConfig.wasCustomThemeSwitchDescriptionShown = true
-                ShowSafeToastUseCase(this, R.string.changing_color_description)
+                Toast.makeText(this, R.string.changing_color_description,Toast.LENGTH_LONG).show()
             }
 
             val hideGoogleRelations = resources.getBoolean(R.bool.hide_google_relations)
@@ -828,7 +828,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                 null
             )
         } catch (e: Exception) {
-            ShowSafeToastUseCase(this, e.toString())
+            Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show()
         }
     }
 }

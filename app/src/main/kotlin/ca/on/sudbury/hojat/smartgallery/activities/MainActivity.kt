@@ -135,7 +135,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.LaunchCameraUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ToggleAppIconColorUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import java.io.File
@@ -321,7 +320,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         // just request the permission, tryLoadGallery will then trigger in onResume
         handleMediaPermissions {
             if (!it) {
-                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
+                Toast.makeText(this, R.string.no_storage_permissions,Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -636,11 +635,11 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     CalculateDirectoryFileCountUseCase(newFolder, true) == 0 && newFolder.list()
                         ?.isEmpty() == true
                 ) {
-                    ShowSafeToastUseCase(
+                    Toast.makeText(
                         this,
                         String.format(getString(R.string.deleting_folder), config.tempFolderPath),
                         Toast.LENGTH_LONG
-                    )
+                    ).show()
                     tryDeleteFileDirItem(
                         newFolder.toFileDirItem(applicationContext),
                         allowDeleteFolder = true,
@@ -712,7 +711,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
                 setupLayoutManager()
             } else {
-                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
+                Toast.makeText(this, R.string.no_storage_permissions, Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -835,15 +834,15 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             fileDirItems.isEmpty() -> return
             fileDirItems.size == 1 -> {
                 try {
-                    ShowSafeToastUseCase(
+                    Toast.makeText(
                         this,
                         String.format(
                             getString(R.string.deleting_folder),
                             fileDirItems.first().name
-                        )
-                    )
+                        ), Toast.LENGTH_LONG
+                    ).show()
                 } catch (e: Exception) {
-                    ShowSafeToastUseCase(this, e.toString())
+                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
                 }
             }
             else -> {
@@ -851,7 +850,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     if (config.useRecycleBin) R.plurals.moving_items_into_bin else R.plurals.delete_items
                 val deletingItems =
                     resources.getQuantityString(baseString, fileDirItems.size, fileDirItems.size)
-                ShowSafeToastUseCase(this, deletingItems)
+                Toast.makeText(this, deletingItems, Toast.LENGTH_LONG).show()
             }
         }
 
@@ -888,7 +887,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 if (it) {
                     deleteFilteredFileDirItems(itemsToDelete, folders)
                 } else {
-                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+                    Toast.makeText(this, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
                 }
             }
         } else {
@@ -1131,7 +1130,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             outputStream = contentResolver.openOutputStream(output)
             inputStream.copyTo(outputStream!!)
         } catch (e: SecurityException) {
-            ShowSafeToastUseCase(this, e.toString())
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         } catch (ignored: FileNotFoundException) {
             return getFilePublicUri(file, BuildConfig.APPLICATION_ID)
         } finally {

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import ca.on.hojat.renderer.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
@@ -17,7 +18,6 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySetWallpaperBinding
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 private const val RATIO_PORTRAIT = 0
 private const val RATIO_LANDSCAPE = 1
@@ -87,7 +87,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
     private fun handleImage(intent: Intent) {
         uri = intent.data!!
         if (uri.scheme != "file" && uri.scheme != "content") {
-            ShowSafeToastUseCase(this ,R.string.unknown_file_location)
+            Toast.makeText(this, R.string.unknown_file_location, Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -155,7 +155,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
             return
 
         if (result.error == null) {
-            ShowSafeToastUseCase(this ,R.string.setting_wallpaper)
+            Toast.makeText(this, R.string.setting_wallpaper, Toast.LENGTH_LONG).show()
             RunOnBackgroundThreadUseCase {
                 val bitmap = result.bitmap
                 val wantedHeight = wallpaperManager.desiredMinimumHeight
@@ -171,13 +171,17 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
                     }
                     setResult(Activity.RESULT_OK)
                 } catch (e: OutOfMemoryError) {
-                    ShowSafeToastUseCase(this ,R.string.out_of_memory_error)
+                    Toast.makeText(this, R.string.out_of_memory_error, Toast.LENGTH_LONG).show()
                     setResult(Activity.RESULT_CANCELED)
                 }
                 finish()
             }
         } else {
-            ShowSafeToastUseCase(this ,"${getString(R.string.image_editing_failed)}: ${result.error.message}")
+            Toast.makeText(
+                this,
+                "${getString(R.string.image_editing_failed)}: ${result.error.message}",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 }

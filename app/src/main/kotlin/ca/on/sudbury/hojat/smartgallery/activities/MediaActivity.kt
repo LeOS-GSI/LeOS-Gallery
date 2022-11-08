@@ -14,6 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -103,7 +104,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.LaunchCameraUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.IOException
 
@@ -160,7 +160,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         try {
             mPath = intent.getStringExtra(DIRECTORY) ?: ""
         } catch (e: Exception) {
-            ShowSafeToastUseCase(this, e.toString())
+            Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -236,7 +236,8 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         binding.mediaRefreshLayout.isEnabled = config.enablePullToRefresh
         getMediaAdapter()?.apply {
             dateFormat = config.dateFormat
-            timeFormat = if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format
+            timeFormat =
+                if (baseConfig.use24HourFormat) SmartGalleryTimeFormat.FullDay.format else SmartGalleryTimeFormat.HalfDay.format
         }
 
         binding.mediaEmptyTextPlaceholder.setTextColor(getProperTextColor())
@@ -487,7 +488,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 getMedia()
                 setupLayoutManager()
             } else {
-                ShowSafeToastUseCase(this, R.string.no_storage_permissions)
+                Toast.makeText(this, R.string.no_storage_permissions,Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -911,7 +912,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun itemClicked(path: String) {
         HideKeyboardUseCase(this)
         if (isSetWallpaperIntent()) {
-            ShowSafeToastUseCase(this, R.string.setting_wallpaper)
+            Toast.makeText(this, R.string.setting_wallpaper,Toast.LENGTH_LONG).show()
 
             val wantedWidth = wallpaperDesiredMinimumWidth
             val wantedHeight = wallpaperDesiredMinimumHeight
@@ -1026,19 +1027,19 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 filtered.size,
                 filtered.size
             )
-            ShowSafeToastUseCase(this, movingItems)
+            Toast.makeText(this, movingItems, Toast.LENGTH_LONG).show()
 
             movePathsInRecycleBin(filtered.map { it.path } as ArrayList<String>) {
                 if (it) {
                     deleteFilteredFiles(filtered)
                 } else {
-                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+                    Toast.makeText(this, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
                 }
             }
         } else {
             val deletingItems =
                 resources.getQuantityString(R.plurals.deleting_items, filtered.size, filtered.size)
-            ShowSafeToastUseCase(this, deletingItems)
+            Toast.makeText(this, deletingItems,Toast.LENGTH_LONG).show()
             deleteFilteredFiles(filtered)
         }
     }
@@ -1048,7 +1049,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun deleteFilteredFiles(filtered: ArrayList<FileDirItem>) {
         deleteFiles(filtered) {
             if (!it) {
-                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+                Toast.makeText(this, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
                 return@deleteFiles
             }
 
@@ -1110,7 +1111,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         refreshMenuItems()
     }
 
-   private fun getHumanizedFilename(path: String): String {
+    private fun getHumanizedFilename(path: String): String {
         val humanized = humanizePath(path)
         return humanized.substring(humanized.lastIndexOf("/") + 1)
     }

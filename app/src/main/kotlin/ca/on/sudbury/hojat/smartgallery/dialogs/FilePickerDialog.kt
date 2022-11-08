@@ -52,7 +52,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectChildrenUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
 import timber.log.Timber
 import java.io.File
@@ -268,11 +267,11 @@ class FilePickerDialog(
                     if (activity.isInDownloadDir(currPath)) {
                         sendSuccessForDirectFile()
                     } else {
-                        ShowSafeToastUseCase(
+                        Toast.makeText(
                             activity,
                             R.string.system_folder_restriction,
                             Toast.LENGTH_LONG
-                        )
+                        ).show()
                     }
                 } else {
                     sendSuccessForDirectFile()
@@ -468,7 +467,7 @@ class FilePickerDialog(
         var rootUri = try {
             DocumentFile.fromTreeUri(owner.applicationContext, Uri.parse(otgTreeUri))
         } catch (e: Exception) {
-            ShowSafeToastUseCase(owner, e.toString())
+            Timber.e("FilePickerDialog : ${e.message}")// TODO: to be replaced by Toast when this was converted to DialogFragment.
             owner.baseConfig.otgPath = ""
             owner.baseConfig.otgTreeUri = ""
             owner.baseConfig.otgPartition = ""

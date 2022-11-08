@@ -27,7 +27,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
 import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 @SuppressLint("InflateParams")
 class PickDirectoryDialog(
@@ -158,17 +157,21 @@ class PickDirectoryDialog(
             val path = clickedDir.path
             if (clickedDir.subfoldersCount == 1 || !activity.config.groupDirectSubfolders) {
                 if (isPickingCopyMoveDestination && path.trimEnd('/') == sourcePath) {
-                    ShowSafeToastUseCase(activity, R.string.source_and_destination_same)
+                    Toast.makeText(
+                        activity,
+                        R.string.source_and_destination_same,
+                        Toast.LENGTH_LONG
+                    ).show()
                     return@DirectoryAdapter
                 } else if (isPickingCopyMoveDestination && activity.isRestrictedWithSAFSdk30(path) && !activity.isInDownloadDir(
                         path
                     )
                 ) {
-                    ShowSafeToastUseCase(
+                    Toast.makeText(
                         activity,
                         R.string.system_folder_copy_restriction,
                         Toast.LENGTH_LONG
-                    )
+                    ).show()
                     return@DirectoryAdapter
                 } else {
                     activity.handleLockedFolderOpening(path) { success ->

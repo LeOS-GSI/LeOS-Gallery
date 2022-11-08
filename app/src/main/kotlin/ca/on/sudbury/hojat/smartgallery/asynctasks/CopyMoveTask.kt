@@ -8,6 +8,7 @@ import android.content.Context
 import android.os.AsyncTask
 import android.os.Handler
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.util.Pair
 import androidx.documentfile.provider.DocumentFile
@@ -45,7 +46,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -137,7 +137,7 @@ class CopyMoveTask(
 
                 copy(file, newFileDirItem)
             } catch (e: Exception) {
-                ShowSafeToastUseCase(activity, e.toString())
+                Toast.makeText(activity, e.toString(),Toast.LENGTH_LONG).show()
                 return false
             }
         }
@@ -220,7 +220,7 @@ class CopyMoveTask(
         if (!activity.createDirectorySync(destinationPath)) {
             val error =
                 String.format(activity.getString(R.string.could_not_create_folder), destinationPath)
-            ShowSafeToastUseCase(activity, error)
+            Toast.makeText(activity, error,Toast.LENGTH_LONG).show()
             return
         }
 
@@ -298,7 +298,7 @@ class CopyMoveTask(
         if (!activity.createDirectorySync(directory)) {
             val error =
                 String.format(activity.getString(R.string.could_not_create_folder), directory)
-            ShowSafeToastUseCase(activity, error)
+            Toast.makeText(activity, error,Toast.LENGTH_LONG).show()
             mCurrentProgress += source.size
             return
         }
@@ -359,7 +359,7 @@ class CopyMoveTask(
                 }
             }
         } catch (e: Exception) {
-            ShowSafeToastUseCase(activity, e.toString())
+            Toast.makeText(activity, e.toString(),Toast.LENGTH_LONG).show()
         } finally {
             inputStream?.close()
             out?.close()

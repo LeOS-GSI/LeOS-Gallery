@@ -131,8 +131,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ToggleAppIconColorUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -148,6 +146,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.signature.ObjectKey
 import com.squareup.picasso.Picasso
 import pl.droidsonroids.gif.GifDrawable
+import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
@@ -228,7 +227,8 @@ fun Context.createSAFDirectorySdk30(path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        ShowSafeToastUseCase(this, e.toString())
+
+        Timber.e(e)
         false
     }
 }
@@ -280,7 +280,7 @@ fun Context.queryCursor(
         }
     } catch (e: Exception) {
         if (showErrors) {
-            ShowSafeToastUseCase(this, e.toString())
+            Timber.e(e)
         }
     }
 }
@@ -1912,7 +1912,8 @@ fun Context.deleteDocumentWithSAFSdk30(
 
     } catch (e: Exception) {
         callback?.invoke(false)
-        ShowSafeToastUseCase(this, e.toString())
+
+        Timber.e(e)
     }
 }
 
@@ -1986,7 +1987,7 @@ fun Context.updateFavorite(path: String, isFavorite: Boolean) {
             GalleryDatabase.getInstance(applicationContext).FavoritesDao().deleteFavoritePath(path)
         }
     } catch (e: Exception) {
-        ShowSafeToastUseCase(this@updateFavorite, R.string.unknown_error_occurred)
+        Timber.e(e)
     }
 }
 
@@ -2675,7 +2676,7 @@ fun Context.copyToClipboard(text: String) {
     val clip = ClipData.newPlainText(getString(R.string.simple_commons), text)
     (getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).setPrimaryClip(clip)
     val toastText = String.format(getString(R.string.value_copied_to_clipboard_show), text)
-    ShowSafeToastUseCase(this, toastText)
+    Timber.d(toastText)
 }
 
 private fun getMediaStoreIds(context: Context): HashMap<String, Long> {
@@ -2721,7 +2722,7 @@ fun Context.deleteAndroidSAFDirectory(
             )
         callback?.invoke(fileDeleted)
     } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
+        Timber.e(e)
         callback?.invoke(false)
         storeAndroidTreeUri(path, "")
     }
@@ -2803,7 +2804,8 @@ fun Context.getAndroidSAFFileItems(
     val childrenUri = try {
         DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, documentId)
     } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
+
+        Timber.e(e)
         storeAndroidTreeUri(path, "")
         null
     }
@@ -2866,7 +2868,8 @@ fun Context.getAndroidSAFFileItems(
             }
         }
     } catch (e: Exception) {
-        ShowSafeToastUseCase(this, e.toString())
+
+        Timber.e(e)
     }
     callback(items)
 }
@@ -2973,7 +2976,8 @@ fun Context.createAndroidSAFDirectory(path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        ShowSafeToastUseCase(this, e.toString())
+
+        Timber.e(e)
         false
     }
 }
@@ -2995,7 +2999,7 @@ fun Context.createAndroidSAFFile(path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        ShowSafeToastUseCase(this, e.toString())
+        Timber.e(e)
         false
     }
 }

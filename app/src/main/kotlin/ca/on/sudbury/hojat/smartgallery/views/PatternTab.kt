@@ -19,8 +19,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_pattern.view.*
+import timber.log.Timber
 
 class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
     SecurityTab {
@@ -86,7 +86,7 @@ class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context
             }
             else -> {
                 pattern_lock_view.setViewMode(PatternLockView.PatternViewMode.WRONG)
-                ShowSafeToastUseCase(context, R.string.wrong_pattern)
+                Timber.w("wrong pattern")
                 Handler().postDelayed({
                     pattern_lock_view.clearPattern()
                     if (requiredHash.isEmpty()) {

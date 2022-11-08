@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.exifinterface.media.ExifInterface
@@ -51,7 +52,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.GetGeneralPropertiesUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
 import java.io.File
@@ -77,13 +77,13 @@ class PropertiesDialog() {
     @SuppressLint("InflateParams")
     constructor(activity: Activity, path: String, countHiddenItems: Boolean = false) : this() {
         if (!activity.getDoesFilePathExist(path) && !path.startsWith("content://")) {
-            ShowSafeToastUseCase(
+            Toast.makeText(
                 activity,
                 String.format(
                     activity.getString(R.string.source_file_doesnt_exist),
                     path
-                )
-            )
+                ), Toast.LENGTH_LONG
+            ).show()
             return
         }
 
@@ -277,7 +277,7 @@ class PropertiesDialog() {
             try {
                 addExifProperties(path, mActivity)
             } catch (e: Exception) {
-                ShowSafeToastUseCase(mActivity, e.toString())
+                Toast.makeText(mActivity, e.toString(), Toast.LENGTH_LONG).show()
                 return
             }
 
@@ -449,11 +449,11 @@ class PropertiesDialog() {
         ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
             try {
                 removeValues(ExifInterface(path))
-                ShowSafeToastUseCase(mActivity, R.string.exif_removed)
+                Toast.makeText(mActivity, R.string.exif_removed, Toast.LENGTH_LONG).show()
                 mPropertyView.properties_holder.removeAllViews()
                 addProperties(path)
             } catch (e: Exception) {
-                ShowSafeToastUseCase(mActivity, e.toString())
+                Toast.makeText(mActivity, e.toString(), Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -465,9 +465,9 @@ class PropertiesDialog() {
                     .forEach {
                         removeValues(ExifInterface(it))
                     }
-                ShowSafeToastUseCase(mActivity, R.string.exif_removed)
+                Toast.makeText(mActivity, R.string.exif_removed, Toast.LENGTH_LONG).show()
             } catch (e: Exception) {
-                ShowSafeToastUseCase(mActivity, e.toString())
+                Toast.makeText(mActivity, e.toString(), Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -3,6 +3,7 @@ package ca.on.sudbury.hojat.smartgallery.views
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
+import android.widget.Toast
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.auth.AuthPromptCallback
 import androidx.biometric.auth.AuthPromptHost
@@ -15,7 +16,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_biometric_id.view.*
 
 class BiometricIdTab(context: Context, attrs: AttributeSet) : ConstraintLayout(context, attrs),
@@ -79,16 +79,16 @@ class BiometricIdTab(context: Context, attrs: AttributeSet) : ConstraintLayout(c
                         val isCanceledByUser =
                             errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON || errorCode == BiometricPrompt.ERROR_USER_CANCELED
                         if (!isCanceledByUser) {
-                            ShowSafeToastUseCase(owner, errString.toString())
+                            Toast.makeText(owner, errString.toString(), Toast.LENGTH_LONG).show()
                         }
                         failureCallback?.invoke()
                     }
 
                     override fun onAuthenticationFailed(activity: FragmentActivity?) {
-                        ShowSafeToastUseCase(
+                        Toast.makeText(
                             owner,
-                            R.string.authentication_failed
-                        )
+                            R.string.authentication_failed, Toast.LENGTH_LONG
+                        ).show()
                         failureCallback?.invoke()
                     }
                 }

@@ -12,6 +12,7 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.vr.sdk.widgets.video.VrVideoEventListener
 import com.google.vr.sdk.widgets.video.VrVideoView
@@ -28,7 +29,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.MIN_SKIP_LENGTH
 import ca.on.sudbury.hojat.smartgallery.helpers.PATH
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import java.io.File
 import kotlin.math.roundToInt
@@ -105,7 +105,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
     private fun checkIntent() {
         val path = intent.getStringExtra(PATH)
         if (path == null) {
-            ShowSafeToastUseCase(this, R.string.invalid_image_path)
+            Toast.makeText(this, R.string.invalid_image_path, Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -173,7 +173,7 @@ open class PanoramaVideoActivity : SimpleActivity(), SeekBar.OnSeekBarChangeList
                 togglePlayPause()
             }
         } catch (e: Exception) {
-            ShowSafeToastUseCase(this, e.toString())
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
 
         window.decorView.setOnSystemUiVisibilityChangeListener { visibility ->

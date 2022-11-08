@@ -2,6 +2,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -23,7 +24,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 import java.io.File
 
@@ -54,20 +54,30 @@ class CreateNewFolderDialog(
                         .setOnClickListener(View.OnClickListener {
                             val name = binding.folderName.text.toString().trim()
                             when {
-                                name.isEmpty() -> ShowSafeToastUseCase(
-                                    activity,
-                                    R.string.empty_name
-                                )
+                                name.isEmpty() -> {
+                                    Toast.makeText(
+                                        activity,
+                                        R.string.empty_name, Toast.LENGTH_LONG
+                                    ).show()
+                                }
                                 name.isAValidFilename() -> {
                                     val file = File(path, name)
                                     if (file.exists()) {
-                                        ShowSafeToastUseCase(activity, R.string.name_taken)
+                                        Toast.makeText(
+                                            activity,
+                                            R.string.name_taken,
+                                            Toast.LENGTH_LONG
+                                        ).show()
                                         return@OnClickListener
                                     }
 
                                     createFolder("$path/$name", alertDialog)
                                 }
-                                else -> ShowSafeToastUseCase(activity, R.string.invalid_name)
+                                else -> Toast.makeText(
+                                    activity,
+                                    R.string.invalid_name,
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         })
                 }
@@ -102,10 +112,14 @@ class CreateNewFolderDialog(
                             if (newDir != null) {
                                 sendSuccess(alertDialog, path)
                             } else {
-                                ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
+                                Toast.makeText(
+                                    activity,
+                                    R.string.unknown_error_occurred,
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         } catch (e: SecurityException) {
-                            ShowSafeToastUseCase(activity, e.toString())
+                            Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -117,16 +131,17 @@ class CreateNewFolderDialog(
                         sendSuccess(alertDialog, path)
                     }
                 }
-                else -> ShowSafeToastUseCase(
-                    activity,
-                    activity.getString(
-                        R.string.could_not_create_folder,
-                        path.getFilenameFromPath()
-                    )
-                )
+                else ->
+                    Toast.makeText(
+                        activity,
+                        activity.getString(
+                            R.string.could_not_create_folder,
+                            path.getFilenameFromPath()
+                        ), Toast.LENGTH_LONG
+                    ).show()
             }
         } catch (e: Exception) {
-            ShowSafeToastUseCase(activity, e.toString())
+            Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show()
         }
     }
 

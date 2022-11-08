@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
@@ -10,7 +11,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRateStarsBinding
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 
 /**
@@ -54,7 +54,7 @@ class RateStarsDialog(val activity: Activity) {
     private fun dialogCancelled(showThankYou: Boolean) {
         dialog?.dismiss()
         if (showThankYou) {
-            ShowSafeToastUseCase(activity, R.string.thank_you)
+            Toast.makeText(activity, R.string.thank_you, Toast.LENGTH_LONG).show()
             activity.baseConfig.wasAppRated = true
         }
     }

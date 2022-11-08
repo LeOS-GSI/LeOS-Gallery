@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.usecases
 
-import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.mediaDB
@@ -18,10 +17,9 @@ object EmptyTheRecycleBinUseCase {
                 owner.mediaDB.clearRecycleBin()
                 GalleryDatabase.getInstance(owner.applicationContext).DirectoryDao()
                     .deleteRecycleBin()
-                ShowSafeToastUseCase(owner, R.string.recycle_bin_emptied)
+                Timber.d("Emptied the recycle bin") // TODO : to be replaced by Toast later on.
                 callback?.invoke()
             } catch (e: Exception) {
-                ShowSafeToastUseCase(owner, R.string.unknown_error_occurred)
                 Timber.e(e)
             }
         }

@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -41,7 +42,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 
 class SearchActivity : SimpleActivity(), MediaOperationsListener {
@@ -309,19 +309,19 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
                 filtered.size,
                 filtered.size
             )
-            ShowSafeToastUseCase(this, movingItems)
+            Toast.makeText(this, movingItems,Toast.LENGTH_LONG).show()
 
             movePathsInRecycleBin(filtered.map { it.path } as ArrayList<String>) {
                 if (it) {
                     deleteFilteredFiles(filtered)
                 } else {
-                    ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+                    Toast.makeText(this, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
                 }
             }
         } else {
             val deletingItems =
                 resources.getQuantityString(R.plurals.deleting_items, filtered.size, filtered.size)
-            ShowSafeToastUseCase(this, deletingItems)
+            Toast.makeText(this, deletingItems,Toast.LENGTH_LONG).show()
             deleteFilteredFiles(filtered)
         }
     }
@@ -329,7 +329,7 @@ class SearchActivity : SimpleActivity(), MediaOperationsListener {
     private fun deleteFilteredFiles(filtered: ArrayList<FileDirItem>) {
         deleteFiles(filtered) {
             if (!it) {
-                ShowSafeToastUseCase(this, R.string.unknown_error_occurred)
+                Toast.makeText(this, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
                 return@deleteFiles
             }
 

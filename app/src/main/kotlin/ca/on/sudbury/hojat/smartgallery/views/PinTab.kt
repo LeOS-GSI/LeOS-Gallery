@@ -13,8 +13,8 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.PerformHapticFeedbackUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_pin.view.*
+import timber.log.Timber
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.util.Locale
@@ -75,7 +75,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
     private fun confirmPIN() {
         val newHash = getHashedPin()
         if (pin.isEmpty()) {
-            ShowSafeToastUseCase(context, R.string.please_enter_pin)
+            Timber.d("Please enter pin")
         } else if (hash.isEmpty()) {
             hash = newHash
             resetPin()
@@ -84,7 +84,7 @@ class PinTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, at
             hashListener.receivedHash(hash, ProtectionType.Pin.id)
         } else {
             resetPin()
-            ShowSafeToastUseCase(context, R.string.wrong_pin)
+            Timber.d("wrong pin entered")
             if (requiredHash.isEmpty()) {
                 hash = ""
                 pin_lock_title.setText(R.string.enter_pin)

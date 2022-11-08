@@ -21,6 +21,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
 import androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION
@@ -76,7 +77,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsWebpUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.SaveRotatedImageUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import org.apache.sanselan.common.byteSources.ByteSourceInputStream
@@ -237,7 +237,11 @@ class PhotoFragment : ViewPagerFragment() {
                         mMedium.path = file.absolutePath
                     }
                 } catch (e: Exception) {
-                    ShowSafeToastUseCase(requireActivity(), R.string.unknown_error_occurred)
+                    Toast.makeText(
+                        requireActivity(),
+                        R.string.unknown_error_occurred,
+                        Toast.LENGTH_LONG
+                    ).show()
                     return binding.root
                 } finally {
                     out?.close()

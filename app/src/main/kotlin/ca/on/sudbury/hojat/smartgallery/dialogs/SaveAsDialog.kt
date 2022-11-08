@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogSaveAsBinding
@@ -22,7 +23,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import java.io.File
 
 // TODO: this dialog should be replaced by DialogFragment.
@@ -91,19 +91,31 @@ class SaveAsDialog(
                         val extension = binding.extensionValue.text.toString().trim()
 
                         if (filename.isEmpty()) {
-                            ShowSafeToastUseCase(activity, R.string.filename_cannot_be_empty)
+                            Toast.makeText(
+                                activity,
+                                R.string.filename_cannot_be_empty,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 
                         if (extension.isEmpty()) {
-                            ShowSafeToastUseCase(activity, R.string.extension_cannot_be_empty)
+                            Toast.makeText(
+                                activity,
+                                R.string.extension_cannot_be_empty,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 
                         val newFilename = "$filename.$extension"
                         val newPath = "${realPath.trimEnd('/')}/$newFilename"
                         if (!newFilename.isAValidFilename()) {
-                            ShowSafeToastUseCase(activity, R.string.filename_invalid_characters)
+                            Toast.makeText(
+                                activity,
+                                R.string.filename_invalid_characters,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 

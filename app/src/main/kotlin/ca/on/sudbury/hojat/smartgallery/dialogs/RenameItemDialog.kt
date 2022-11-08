@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -13,7 +14,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 /**
  * The dialog for renaming pictures, videos, and folders is created via this class.
@@ -55,12 +55,12 @@ class RenameItemDialog(
                         val newExtension = binding.renameItemExtension.text.toString().trim()
 
                         if (newName.isEmpty()) {
-                            ShowSafeToastUseCase(activity, R.string.empty_name)
+                            Toast.makeText(activity, R.string.empty_name,Toast.LENGTH_LONG).show()
                             return@setOnClickListener
                         }
 
                         if (!newName.isAValidFilename()) {
-                            ShowSafeToastUseCase(activity, R.string.invalid_name)
+                            Toast.makeText(activity, R.string.invalid_name,Toast.LENGTH_LONG).show()
                             return@setOnClickListener
                         }
 
@@ -71,20 +71,19 @@ class RenameItemDialog(
                         }
 
                         if (!activity.getDoesFilePathExist(path)) {
-                            ShowSafeToastUseCase(
+                            Toast.makeText(
                                 activity,
                                 String.format(
                                     activity.getString(R.string.source_file_doesnt_exist),
                                     path
-                                )
-                            )
+                                ),Toast.LENGTH_LONG).show()
                             return@setOnClickListener
                         }
 
                         val newPath = "${path.getParentPath()}/$newName"
 
                         if (path == newPath) {
-                            ShowSafeToastUseCase(activity, R.string.name_taken)
+                            Toast.makeText(activity, R.string.name_taken,Toast.LENGTH_LONG).show()
                             return@setOnClickListener
                         }
 
@@ -93,7 +92,7 @@ class RenameItemDialog(
                                 ignoreCase = true
                             ) && activity.getDoesFilePathExist(newPath)
                         ) {
-                            ShowSafeToastUseCase(activity, R.string.name_taken)
+                            Toast.makeText(activity, R.string.name_taken,Toast.LENGTH_LONG).show()
                             return@setOnClickListener
                         }
 
@@ -105,7 +104,7 @@ class RenameItemDialog(
                                 callback(newPath)
                                 dismiss()
                             } else {
-                                ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
+                                Toast.makeText(activity, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
                             }
                         }
                     }

@@ -13,6 +13,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -46,7 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.ItemMoveCallback
 import ca.on.sudbury.hojat.smartgallery.interfaces.ItemTouchHelperContract
 import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmDeleteFolderDialog
@@ -329,8 +329,7 @@ class DirectoryAdapter(
             val sourcePath = firstDir.path
             val dir = File(sourcePath)
             if (activity.isAStorageRootFolder(dir.absolutePath)) {
-
-                ShowSafeToastUseCase(activity, R.string.rename_folder_root)
+                Toast.makeText(activity, R.string.rename_folder_root, Toast.LENGTH_LONG).show()
                 return
             }
 
@@ -355,7 +354,7 @@ class DirectoryAdapter(
                                         )
                                     listener?.refreshItems()
                                 } catch (e: Exception) {
-                                    ShowSafeToastUseCase(activity, e.toString())
+                                    Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show()
                                 }
                             }
                         }

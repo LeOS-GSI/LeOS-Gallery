@@ -19,8 +19,8 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_fingerprint.view.*
+import timber.log.Timber
 
 class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
     SecurityTab {
@@ -77,14 +77,9 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
                 errorCode: Int
             ) {
                 when (failureReason) {
-                    AuthenticationFailureReason.AUTHENTICATION_FAILED -> ShowSafeToastUseCase(
-                        context,
-                        R.string.authentication_failed
-                    )
-                    AuthenticationFailureReason.LOCKED_OUT -> ShowSafeToastUseCase(
-                        context,
-                        R.string.authentication_blocked
-                    )
+                    AuthenticationFailureReason.AUTHENTICATION_FAILED -> Timber.e("Authentication failed")
+                    AuthenticationFailureReason.LOCKED_OUT -> Timber.e("Authentication blocked. please try again later.")
+                    else -> {}
                 }
             }
         })

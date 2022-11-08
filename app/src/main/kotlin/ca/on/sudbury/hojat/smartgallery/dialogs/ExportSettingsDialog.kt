@@ -1,6 +1,7 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
@@ -13,7 +14,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogExportSettingsBinding
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import timber.log.Timber
 
 /**
@@ -65,14 +65,22 @@ class ExportSettingsDialog(
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         var filename = binding.exportSettingsFilename.text.toString().trim()
                         if (filename.isEmpty()) {
-                            ShowSafeToastUseCase(activity, R.string.filename_cannot_be_empty)
+                            Toast.makeText(
+                                activity,
+                                R.string.filename_cannot_be_empty,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 
                         filename += ".txt"
                         val newPath = "${folder.trimEnd('/')}/$filename"
                         if (!newPath.getFilenameFromPath().isAValidFilename()) {
-                            ShowSafeToastUseCase(activity, R.string.filename_invalid_characters)
+                            Toast.makeText(
+                                activity,
+                                R.string.filename_invalid_characters,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 

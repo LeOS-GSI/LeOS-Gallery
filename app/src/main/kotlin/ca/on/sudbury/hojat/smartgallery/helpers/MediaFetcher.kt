@@ -45,7 +45,7 @@ import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsReposito
 import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
+import timber.log.Timber
 import java.io.File
 import java.util.Locale
 import java.util.Calendar
@@ -250,7 +250,7 @@ class MediaFetcher(val context: Context) {
                 }
             }
         } catch (e: Exception) {
-            ShowSafeToastUseCase(context, e.toString())
+            Timber.e("MediaFetcher : ${e.message}")
         } finally {
             cursor?.close()
         }
@@ -684,7 +684,8 @@ class MediaFetcher(val context: Context) {
     ): ArrayList<Medium> {
         val media = ArrayList<Medium>()
         val files = context.getDocumentFile(folder)?.listFiles() ?: return media
-        val checkFileExistence = context.config.fileLoadingPriority == FileLoadingPriority.Validity.id
+        val checkFileExistence =
+            context.config.fileLoadingPriority == FileLoadingPriority.Validity.id
         val showHidden = context.config.shouldShowHidden
         val oTGPath = context.config.otgPath
 

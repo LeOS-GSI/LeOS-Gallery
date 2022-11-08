@@ -3,6 +3,7 @@ package ca.on.sudbury.hojat.smartgallery.dialogs
 import android.annotation.SuppressLint
 import android.graphics.Point
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import ca.on.sudbury.hojat.smartgallery.R
@@ -11,7 +12,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 @SuppressLint("InflateParams")
 class ResizeDialog(
@@ -70,7 +70,7 @@ class ResizeDialog(
                         val width = getViewValue(binding.resizeImageWidth)
                         val height = getViewValue(binding.resizeImageHeight)
                         if (width <= 0 || height <= 0) {
-                            ShowSafeToastUseCase(activity, R.string.invalid_values)
+                            Toast.makeText(activity, R.string.invalid_values, Toast.LENGTH_LONG).show()
                             return@setOnClickListener
                         }
 

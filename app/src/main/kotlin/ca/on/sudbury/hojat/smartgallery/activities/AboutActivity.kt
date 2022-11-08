@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.View
+import android.widget.Toast
 import androidx.core.net.toUri
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -38,7 +39,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 
 class AboutActivity : BaseSimpleActivity() {
 
@@ -203,9 +203,9 @@ class AboutActivity : BaseSimpleActivity() {
                 try {
                     startActivity(emailIntent)
                 } catch (e: ActivityNotFoundException) {
-                    ShowSafeToastUseCase(this, R.string.no_app_found)
+                    Toast.makeText(this, R.string.no_app_found, Toast.LENGTH_LONG).show()
                 } catch (e: Exception) {
-                    ShowSafeToastUseCase(this, e.toString())
+                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -400,7 +400,7 @@ class AboutActivity : BaseSimpleActivity() {
 
             clicksSinceFirstClick++
             if (clicksSinceFirstClick >= easterEggRequiredClicks) {
-                ShowSafeToastUseCase(this, R.string.hello)
+                Toast.makeText(this, R.string.hello, Toast.LENGTH_LONG).show()
                 firstVersionClickTS = 0L
                 clicksSinceFirstClick = 0
             }

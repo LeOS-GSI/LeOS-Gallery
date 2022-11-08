@@ -21,6 +21,7 @@ import android.view.TextureView
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.SeekBar
+import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.android.exoplayer2.PlaybackParameters
@@ -68,7 +69,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_PREV_ITEM
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideSystemUiUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowSystemUiUseCase
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -326,7 +326,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
         try {
             fileDataSource.open(dataSpec)
         } catch (e: Exception) {
-            ShowSafeToastUseCase(this, e.toString())
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
 
         val factory = DataSource.Factory { fileDataSource }

@@ -10,7 +10,6 @@ import android.graphics.Matrix
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.exifinterface.media.ExifInterface
-import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getCompressionFormat
@@ -29,6 +28,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateLastModified
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import com.bumptech.glide.Glide
 import com.squareup.picasso.Picasso
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -64,9 +64,6 @@ object SaveRotatedImageUseCase {
         try {
             owner.getFileOutputStream(tmpFileDirItem) {
                 if (it == null) {
-                    if (showToasts) {
-                        ShowSafeToastUseCase(owner, R.string.unknown_error_occurred)
-                    }
                     return@getFileOutputStream
                 }
 
@@ -91,13 +88,9 @@ object SaveRotatedImageUseCase {
                 callback.invoke()
             }
         } catch (e: OutOfMemoryError) {
-            if (showToasts) {
-                ShowSafeToastUseCase(owner, R.string.out_of_memory_error)
-            }
+           Timber.e(e)
         } catch (e: Exception) {
-            if (showToasts) {
-                ShowSafeToastUseCase(owner, e.toString())
-            }
+            Timber.e(e)
         } finally {
             owner.tryDeleteFileDirItem(
                 tmpFileDirItem,
@@ -122,9 +115,6 @@ object SaveRotatedImageUseCase {
             if (saveImageRotation(owner, path, degrees)) {
                 fileRotatedSuccessfully(owner, path, oldLastModified)
                 callback.invoke()
-                if (showToasts) {
-                    ShowSafeToastUseCase(owner, R.string.file_saved)
-                }
                 true
             } else {
                 false
@@ -132,7 +122,7 @@ object SaveRotatedImageUseCase {
         } catch (e: Exception) {
             // lets not show IOExceptions, rotating is saved just fine even with them
             if (showToasts && e !is IOException) {
-                ShowSafeToastUseCase(owner, e.toString())
+                Timber.e(e)
             }
             false
         }
@@ -161,7 +151,7 @@ object SaveRotatedImageUseCase {
             inputStream = owner.getFileInputStreamSync(source)
             inputStream!!.copyTo(out!!)
         } catch (e: Exception) {
-            ShowSafeToastUseCase(owner, e.toString())
+            Timber.e(e)
         } finally {
             inputStream?.close()
             out?.close()

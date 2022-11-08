@@ -5,6 +5,7 @@ import android.content.Context
 import android.provider.MediaStore
 import android.util.AttributeSet
 import android.widget.RelativeLayout
+import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
@@ -24,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.ShowSafeToastUseCase
 import kotlinx.android.synthetic.main.tab_rename_simple.view.*
 import java.io.File
 
@@ -60,7 +60,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
         }
 
         if (!valueToAdd.isAValidFilename()) {
-            ShowSafeToastUseCase(activity, R.string.invalid_name)
+            Toast.makeText(activity, R.string.invalid_name, Toast.LENGTH_LONG).show()
             return
         }
 
@@ -68,7 +68,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
         val firstPath = validPaths.firstOrNull()
         val sdFilePath = validPaths.firstOrNull { IsPathOnSdUseCase(activity, it) } ?: firstPath
         if (firstPath == null || sdFilePath == null) {
-            ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
+            Toast.makeText(activity, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
             return
         }
 
@@ -129,7 +129,11 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                                     callback
                                 )
                             } else {
-                                ShowSafeToastUseCase(activity, R.string.unknown_error_occurred)
+                                Toast.makeText(
+                                    activity,
+                                    R.string.unknown_error_occurred,
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                     }
@@ -213,7 +217,7 @@ class RenameSimpleTab(context: Context, attrs: AttributeSet) : RelativeLayout(co
                     }
                 } catch (e: Exception) {
                     activity.runOnUiThread {
-                        ShowSafeToastUseCase(activity, e.toString())
+                        Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show()
                         callback(false)
                     }
                 }
