@@ -13,7 +13,6 @@ import com.google.gson.reflect.TypeToken
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
@@ -52,6 +51,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.HiddenFoldersActivity
 import ca.on.sudbury.hojat.smartgallery.activities.IncludedFoldersActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySettingsBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
@@ -299,7 +299,10 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupChangeDateTimeFormat() {
         binding.settingsChangeDateTimeFormatHolder.setOnClickListener {
-            ChangeDateTimeFormatDialog(this) {}
+            ChangeDateTimeFormatDialogFragment().show(
+                supportFragmentManager,
+                "ChangeDateTimeFormatDialogFragment"
+            )
         }
     }
 
