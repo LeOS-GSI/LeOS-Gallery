@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/change_date_time_dialog_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/change_date_time_dialog_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp">
+
+        <RadioGroup
+            android:id="@+id/change_date_time_dialog_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textAllCaps="true"
+                tools:text="dd.MM.yyyy" />
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textAllCaps="true"
+                tools:text="dd/MM/yyyy" />
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_three"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textAllCaps="true"
+                tools:text="MM/dd/yyyy" />
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_eight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                tools:text="dd-MM-yyyy" />
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_seven"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                tools:text="MM-dd-yyyy" />
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_four"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textAllCaps="true"
+                tools:text="yyyy-MM-dd" />
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_five"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                tools:text="d MMMM yyyy" />
+
+            <ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
+                android:id="@+id/change_date_time_dialog_radio_six"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                tools:text="MMMM d yyyy" />
+
+        </RadioGroup>
+
+        <include
+            android:id="@+id/sorting_dialog_order_divider"
+            layout="@layout/divider" />
+
+        <ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
+            android:id="@+id/change_date_time_dialog_24_hour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/use_24_hour_time_format" />
+
+        <include
+            android:id="@+id/date_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons" />
+
+    </LinearLayout>
+</ScrollView>
