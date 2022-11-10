@@ -32,7 +32,6 @@ import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
@@ -109,6 +108,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
@@ -320,7 +320,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         // just request the permission, tryLoadGallery will then trigger in onResume
         handleMediaPermissions {
             if (!it) {
-                Toast.makeText(this, R.string.no_storage_permissions,Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.no_storage_permissions, Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -781,12 +781,17 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun changeViewType() {
-        ChangeViewTypeDialog(this, true) {
+
+        val callback = {
             refreshMenuItems()
             setupLayoutManager()
             binding.directoriesGrid.adapter = null
             setupAdapter(getRecyclerAdapter()?.dirs ?: mDirs)
         }
+        ChangeViewTypeDialogFragment(fromFoldersView = true, callback = callback).show(
+            supportFragmentManager,
+            "ChangeViewTypeDialogFragment"
+        )
     }
 
     private fun tryToggleTemporarilyShowHidden() {

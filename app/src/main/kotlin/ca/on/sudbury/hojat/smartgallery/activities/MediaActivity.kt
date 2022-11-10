@@ -40,11 +40,11 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeGroupingDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.database.MediaOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediaBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
@@ -160,7 +160,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         try {
             mPath = intent.getStringExtra(DIRECTORY) ?: ""
         } catch (e: Exception) {
-            Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show()
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
             finish()
             return
         }
@@ -488,7 +488,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 getMedia()
                 setupLayoutManager()
             } else {
-                Toast.makeText(this, R.string.no_storage_permissions,Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.no_storage_permissions, Toast.LENGTH_LONG).show()
                 finish()
             }
         }
@@ -629,12 +629,20 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun changeViewType() {
-        ChangeViewTypeDialog(this, false, mPath) {
+        val callback = {
             refreshMenuItems()
             setupLayoutManager()
             binding.mediaGrid.adapter = null
             setupAdapter()
         }
+        ChangeViewTypeDialogFragment(
+            fromFoldersView = false,
+            path = mPath,
+            callback = callback
+        ).show(
+            supportFragmentManager,
+            "ChangeViewTypeDialogFragment"
+        )
     }
 
     private fun showGroupByDialog() {
@@ -912,7 +920,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun itemClicked(path: String) {
         HideKeyboardUseCase(this)
         if (isSetWallpaperIntent()) {
-            Toast.makeText(this, R.string.setting_wallpaper,Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.setting_wallpaper, Toast.LENGTH_LONG).show()
 
             val wantedWidth = wallpaperDesiredMinimumWidth
             val wantedHeight = wallpaperDesiredMinimumHeight
@@ -1033,13 +1041,13 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                 if (it) {
                     deleteFilteredFiles(filtered)
                 } else {
-                    Toast.makeText(this, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
                 }
             }
         } else {
             val deletingItems =
                 resources.getQuantityString(R.plurals.deleting_items, filtered.size, filtered.size)
-            Toast.makeText(this, deletingItems,Toast.LENGTH_LONG).show()
+            Toast.makeText(this, deletingItems, Toast.LENGTH_LONG).show()
             deleteFilteredFiles(filtered)
         }
     }
@@ -1049,7 +1057,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     private fun deleteFilteredFiles(filtered: ArrayList<FileDirItem>) {
         deleteFiles(filtered) {
             if (!it) {
-                Toast.makeText(this, R.string.unknown_error_occurred,Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
                 return@deleteFiles
             }
 
