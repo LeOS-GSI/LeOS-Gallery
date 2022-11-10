@@ -53,7 +53,7 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySettingsBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.DEFAULT_BOTTOM_ACTIONS
@@ -639,9 +639,11 @@ class SettingsActivity : SimpleActivity() {
         with(binding) {
             settingsFolderThumbnailStyle.text = getFolderStyleText()
             settingsFolderThumbnailStyleHolder.setOnClickListener {
-                ChangeFolderThumbnailStyleDialog(this@SettingsActivity) {
-                    settingsFolderThumbnailStyle.text = getFolderStyleText()
-                }
+                val callback = { settingsFolderThumbnailStyle.text = getFolderStyleText() }
+                ChangeFolderThumbnailStyleDialogFragment(callback).show(
+                    supportFragmentManager,
+                    "ChangeFolderThumbnailStyleDialogFragment"
+                )
             }
         }
     }
