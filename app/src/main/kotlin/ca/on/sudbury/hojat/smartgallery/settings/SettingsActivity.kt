@@ -52,7 +52,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.IncludedFoldersActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySettingsBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialog
@@ -627,7 +627,11 @@ class SettingsActivity : SimpleActivity() {
 
     private fun setupFileThumbnailStyle() {
         binding.settingsFileThumbnailStyleHolder.setOnClickListener {
-            ChangeFileThumbnailStyleDialog(this)
+//            ChangeFileThumbnailStyleDialog(this)
+            ChangeFileThumbnailStyleDialogFragment().show(
+                supportFragmentManager,
+                "ChangeFileThumbnailStyleDialogFragment"
+            )
         }
     }
 
