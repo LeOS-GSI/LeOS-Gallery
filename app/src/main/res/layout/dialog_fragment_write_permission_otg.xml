@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/write_permissions_dialog_otg_holder"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_margin">
+
+    <ca.on.hojat.palette.views.MyTextView
+        android:id="@+id/write_permissions_dialog_otg_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:text="@string/confirm_usb_storage_access_text"/>
+
+    <ImageView
+        android:id="@+id/write_permissions_dialog_otg_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/write_permission_otg" />
+
+    <include
+        android:id="@+id/otg_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons" />
+
+</LinearLayout>

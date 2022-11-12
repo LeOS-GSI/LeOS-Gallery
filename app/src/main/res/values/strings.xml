@@ -1416,4 +1416,7 @@
     <string name="four_star_rating_str">Four star rating</string>
     <string name="five_star_rating_str">Five star rating</string>
     <string name="divider">divider</string>
+    <string name="write_permission_dialog">write permission dialog</string>
+    <string name="write_permission_sd_card">write permission on SD card</string>
+    <string name="write_permission_otg">Write permission on OTG</string>
 </resources>
