@@ -73,4 +73,8 @@
         android:paddingBottom="@dimen/activity_margin"
         android:text="@string/apply_to_all" />
 
+    <include
+        android:id="@+id/file_conflict_dialog_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons" />
+
 </LinearLayout>

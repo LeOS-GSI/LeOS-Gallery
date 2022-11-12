@@ -86,7 +86,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialog
 import com.google.android.material.appbar.MaterialToolbar
-import ca.on.sudbury.hojat.smartgallery.dialogs.FileConflictDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.FileConflictDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog.Mode
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
@@ -982,7 +982,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         val newFileDirItem =
             FileDirItem("$destinationPath/${file.name}", file.name, file.isDirectory)
         if (getDoesFilePathExist(newFileDirItem.path)) {
-            FileConflictDialog(this, newFileDirItem, files.size > 1) { resolution, applyForAll ->
+            val fileConflictDialogCallback = { resolution: Int, applyForAll: Boolean ->
                 if (applyForAll) {
                     conflictResolutions.clear()
                     conflictResolutions[""] = resolution
@@ -998,6 +998,14 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     checkConflicts(files, destinationPath, index + 1, conflictResolutions, callback)
                 }
             }
+            FileConflictDialogFragment(
+                newFileDirItem,
+                files.size > 1,
+                fileConflictDialogCallback
+            ).show(
+                supportFragmentManager,
+                "FileConflictDialogFragment"
+            )
         } else {
             checkConflicts(files, destinationPath, index + 1, conflictResolutions, callback)
         }
