@@ -9,7 +9,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import timber.log.Timber
 
 /**
- * similar fo ConfirmationDialog, but has a callback for negative button too.
+ * similar to ConfirmationDialog, but has a callback for negative button too.
  * Couldn't find the place it's called.
  */
 class ConfirmationAdvancedDialog(
