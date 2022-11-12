@@ -1,41 +1,82 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import android.content.DialogInterface
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.databinding.DialogChangeSortingBinding
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentChangeSortingBinding
+import ca.on.sudbury.hojat.smartgallery.extensions.config
+import ca.on.sudbury.hojat.smartgallery.helpers.Config
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_CUSTOM
-import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_NAME
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_PATH
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
+import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
-import ca.on.sudbury.hojat.smartgallery.extensions.config
-import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
-class ChangeSortingDialog(
-    val activity: BaseSimpleActivity,
+class ChangeSortingDialogFragment(
     val isDirectorySorting: Boolean,
     val showFolderCheckbox: Boolean,
     val path: String = "",
     val callback: () -> Unit
-) : DialogInterface.OnClickListener {
+) : DialogFragment() {
 
-    // we create the binding by referencing the owner Activity
-    var binding = DialogChangeSortingBinding.inflate(activity.layoutInflater)
+    // the binding
+    private var _binding: DialogFragmentChangeSortingBinding? = null
+    private val binding get() = _binding!!
 
+    // configuration related variables
     private var currSorting = 0
-    private var config = activity.config
     private var pathToUse = if (!isDirectorySorting && path.isEmpty()) SHOW_ALL else path
+    private lateinit var config: Config
 
-    init {
+    /**
+     * Create the UI of the dialog
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DialogFragmentChangeSortingBinding.inflate(inflater, container, false)
+
+        // load config (I have to do it here cause it's used for loading UI)
+        config = requireActivity().config
+
+        loadDialogUi()
+        return binding.root
+    }
+
+    /**
+     * Register listeners for views.
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.changeSortingDialogBottomRow.btnOk.setOnClickListener {
+            dialogConfirmed()
+            dismiss()
+        }
+        binding.changeSortingDialogBottomRow.btnCancel.setOnClickListener { dismiss() }
+    }
+
+    /**
+     * Cleaning the stuff
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun loadDialogUi() {
+
         currSorting =
             if (isDirectorySorting) config.directorySorting else config.getFolderSorting(pathToUse)
         binding.apply {
@@ -55,14 +96,6 @@ class ChangeSortingDialog(
             BeVisibleOrGoneUseCase(sortingDialogBottomNote, !isDirectorySorting)
             BeVisibleOrGoneUseCase(sortingDialogRadioCustom, isDirectorySorting)
         }
-
-        activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok, this)
-            .setNegativeButton(R.string.cancel, null)
-            .apply {
-                activity.setupDialogStuff(binding.root, this, R.string.sort_by)
-            }
-
         setupSortRadio()
         setupOrderRadio()
     }
@@ -104,7 +137,8 @@ class ChangeSortingDialog(
         orderBtn.isChecked = true
     }
 
-    override fun onClick(dialog: DialogInterface, which: Int) {
+    private fun dialogConfirmed() {
+
         val sortingRadio = binding.sortingDialogRadioSorting
         var sorting = when (sortingRadio.checkedRadioButtonId) {
             R.id.sorting_dialog_radio_name -> SORT_BY_NAME
@@ -139,4 +173,5 @@ class ChangeSortingDialog(
             callback()
         }
     }
+
 }

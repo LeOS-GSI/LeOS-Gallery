@@ -116,5 +116,9 @@
             android:text="@string/grouping_and_sorting"
             android:textSize="@dimen/smaller_text_size" />
 
+        <include
+            android:id="@+id/change_sorting_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons" />
+
     </LinearLayout>
 </ScrollView>

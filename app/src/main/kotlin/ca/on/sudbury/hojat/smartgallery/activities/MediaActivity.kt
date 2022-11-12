@@ -38,12 +38,12 @@ import ca.on.sudbury.hojat.smartgallery.adapters.MediaAdapter
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.database.MediaOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediaBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeGroupingDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
@@ -568,16 +568,16 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun showSortingDialog() {
-        ChangeSortingDialog(
-            this,
-            isDirectorySorting = false,
-            showFolderCheckbox = true,
-            path = mPath
-        ) {
+        val callback = {
             mLoadedInitialPhotos = false
             binding.mediaGrid.adapter = null
             getMedia()
         }
+        ChangeSortingDialogFragment(
+            isDirectorySorting = false,
+            showFolderCheckbox = true,
+            path = mPath, callback = callback
+        ).show(supportFragmentManager, "ChangeSortingDialogFragment")
     }
 
     private fun showFilterMediaDialog() {

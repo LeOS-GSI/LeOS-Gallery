@@ -31,7 +31,6 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
@@ -108,6 +107,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
@@ -742,7 +742,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
 
     private fun showSortingDialog() {
-        ChangeSortingDialog(this, isDirectorySorting = true, showFolderCheckbox = false) {
+        val callback = {
             binding.directoriesGrid.adapter = null
             if (config.directorySorting and SORT_BY_DATE_MODIFIED != 0 || config.directorySorting and SORT_BY_DATE_TAKEN != 0) {
                 getDirectories()
@@ -754,6 +754,11 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
             getRecyclerAdapter()?.directorySorting = config.directorySorting
         }
+        ChangeSortingDialogFragment(
+            isDirectorySorting = true,
+            showFolderCheckbox = false,
+            callback = callback
+        ).show(supportFragmentManager, "ChangeSortingDialogFragment")
     }
 
     private fun showFilterMediaDialog() {
