@@ -988,7 +988,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         showSavingToast: Boolean
     ) {
         if (showSavingToast) {
-            Toast.makeText(this, R.string.saving, Toast.LENGTH_LONG).show()
+            runOnUiThread { Toast.makeText(this, R.string.saving, Toast.LENGTH_LONG).show() }
         }
 
         if (resizeWidth > 0 && resizeHeight > 0) {
