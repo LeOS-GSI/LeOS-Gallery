@@ -7,11 +7,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogWritePermissionBinding
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogWritePermissionOtgBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import kotlinx.android.synthetic.main.dialog_write_permission.view.*
-import kotlinx.android.synthetic.main.dialog_write_permission_otg.view.*
+import timber.log.Timber
 
 class WritePermissionDialog(activity: Activity, val mode: Mode, val callback: () -> Unit) {
     sealed class Mode {
@@ -23,30 +24,36 @@ class WritePermissionDialog(activity: Activity, val mode: Mode, val callback: ()
 
     private var dialog: AlertDialog? = null
 
+    // we create the binding by referencing the owner Activity
+    private var dialogWritePermissionBinding =
+        DialogWritePermissionBinding.inflate(activity.layoutInflater)
+    private var dialogWritePermissionOtgBinding =
+        DialogWritePermissionOtgBinding.inflate(activity.layoutInflater)
+
     init {
-        val layout =
-            if (mode == Mode.SdCard) R.layout.dialog_write_permission else R.layout.dialog_write_permission_otg
-        val view = activity.layoutInflater.inflate(layout, null)
+        Timber.d("Hojat Ghasemi : WritePermissionDialog was called")
+        val binding =
+            if (mode == Mode.SdCard) dialogWritePermissionBinding else dialogWritePermissionOtgBinding
         var dialogTitle = R.string.confirm_storage_access_title
 
         val glide = Glide.with(activity)
         val crossFade = DrawableTransitionOptions.withCrossFade()
         when (mode) {
             Mode.Otg -> {
-                view.write_permissions_dialog_otg_text.setText(R.string.confirm_usb_storage_access_text)
+                dialogWritePermissionOtgBinding.writePermissionsDialogOtgText.setText(R.string.confirm_usb_storage_access_text)
                 glide.load(R.drawable.img_write_storage_otg).transition(crossFade)
-                    .into(view.write_permissions_dialog_otg_image)
+                    .into(dialogWritePermissionOtgBinding.writePermissionsDialogOtgImage)
             }
             Mode.SdCard -> {
                 glide.load(R.drawable.img_write_storage).transition(crossFade)
-                    .into(view.write_permissions_dialog_image)
+                    .into(dialogWritePermissionBinding.writePermissionsDialogImage)
                 glide.load(R.drawable.img_write_storage_sd).transition(crossFade)
-                    .into(view.write_permissions_dialog_image_sd)
+                    .into(dialogWritePermissionBinding.writePermissionsDialogImageSd)
             }
             is Mode.OpenDocumentTreeSDK30 -> {
                 dialogTitle = R.string.confirm_folder_access_title
                 val humanizedPath = activity.humanizePath(mode.path)
-                view.write_permissions_dialog_otg_text.text =
+                dialogWritePermissionOtgBinding.writePermissionsDialogOtgText.text =
                     Html.fromHtml(
                         activity.getString(
                             R.string.confirm_storage_access_android_text_specific,
@@ -54,20 +61,20 @@ class WritePermissionDialog(activity: Activity, val mode: Mode, val callback: ()
                         )
                     )
                 glide.load(R.drawable.img_write_storage_sdk_30).transition(crossFade)
-                    .into(view.write_permissions_dialog_otg_image)
+                    .into(dialogWritePermissionOtgBinding.writePermissionsDialogOtgImage)
 
-                view.write_permissions_dialog_otg_image.setOnClickListener {
+                dialogWritePermissionOtgBinding.writePermissionsDialogOtgImage.setOnClickListener {
                     dialogConfirmed()
                 }
             }
             Mode.CreateDocumentSDK30 -> {
                 dialogTitle = R.string.confirm_folder_access_title
-                view.write_permissions_dialog_otg_text.text =
+                dialogWritePermissionOtgBinding.writePermissionsDialogOtgText.text =
                     Html.fromHtml(activity.getString(R.string.confirm_create_doc_for_new_folder_text))
                 glide.load(R.drawable.img_write_storage_create_doc_sdk_30).transition(crossFade)
-                    .into(view.write_permissions_dialog_otg_image)
+                    .into(dialogWritePermissionOtgBinding.writePermissionsDialogOtgImage)
 
-                view.write_permissions_dialog_otg_image.setOnClickListener {
+                dialogWritePermissionOtgBinding.writePermissionsDialogOtgImage.setOnClickListener {
                     dialogConfirmed()
                 }
             }
@@ -80,7 +87,7 @@ class WritePermissionDialog(activity: Activity, val mode: Mode, val callback: ()
                 BaseSimpleActivity.funAfterSAFPermission = null
             }
             .apply {
-                activity.setupDialogStuff(view, this, dialogTitle) { alertDialog ->
+                activity.setupDialogStuff(binding.root, this, dialogTitle) { alertDialog ->
                     dialog = alertDialog
                 }
             }
