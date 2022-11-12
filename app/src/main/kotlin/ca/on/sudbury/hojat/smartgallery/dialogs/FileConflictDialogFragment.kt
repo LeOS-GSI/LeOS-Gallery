@@ -28,8 +28,6 @@ class FileConflictDialogFragment(
     private var _binding: DialogFragmentFileConflictBinding? = null
     private val binding get() = _binding!!
 
-    // configuration related variables
-
     /**
      * Create the UI of the dialog
      */
