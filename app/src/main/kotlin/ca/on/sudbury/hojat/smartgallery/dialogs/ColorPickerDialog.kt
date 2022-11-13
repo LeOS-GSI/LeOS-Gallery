@@ -26,6 +26,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogColorPickerBinding
 import ca.on.hojat.palette.views.ColorPickerSquare
 import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
+import timber.log.Timber
 import java.util.LinkedList
 
 private const val RECENT_COLORS_NUMBER = 5
@@ -54,6 +55,7 @@ class ColorPickerDialog(
     private var dialog: AlertDialog? = null
 
     init {
+        Timber.d("Hojat Ghasemi : ColorPickerDialog was called")
         Color.colorToHSV(color, currentColorHsv)
         val binding = DialogColorPickerBinding.inflate(activity.layoutInflater).apply {
             if (IsQPlusUseCase()) {
