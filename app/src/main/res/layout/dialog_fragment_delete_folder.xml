@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <ca.on.hojat.palette.views.MyTextView
-        android:id="@+id/message"
+        android:id="@+id/confirmation_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/big_margin"
@@ -14,15 +14,22 @@
         android:textSize="@dimen/bigger_text_size" />
 
     <TextView
-        android:id="@+id/message_warning"
+        android:id="@+id/warning_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/message"
+        android:layout_below="@+id/confirmation_message"
         android:paddingLeft="@dimen/big_margin"
         android:paddingTop="@dimen/big_margin"
         android:paddingRight="@dimen/big_margin"
         android:paddingBottom="@dimen/activity_margin"
         android:textColor="@color/md_red_700"
         android:textSize="@dimen/bigger_text_size" />
+
+    <include
+        android:id="@+id/dialog_delete_folder_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/warning_message" />
 
 </RelativeLayout>

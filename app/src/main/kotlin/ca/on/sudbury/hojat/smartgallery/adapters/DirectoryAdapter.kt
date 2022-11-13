@@ -49,7 +49,6 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmDeleteFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExcludeFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickMediumDialog
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
@@ -74,6 +73,7 @@ import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
+import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderMediaCount
@@ -731,9 +731,16 @@ class DirectoryAdapter(
                 val question = String.format(resources.getString(baseString), items)
                 val warning =
                     resources.getQuantityString(R.plurals.delete_warning, itemsCnt, itemsCnt)
-                ConfirmDeleteFolderDialog(activity, question, warning) {
-                    deleteFolders()
-                }
+
+                val callbackAfterConfirmDeleteFolder = { deleteFolders() }
+                DeleteFolderDialogFragment(
+                    question,
+                    warning,
+                    callbackAfterConfirmDeleteFolder
+                ).show(
+                    activity.supportFragmentManager,
+                    "DeleteFolderDialogFragment"
+                )
             }
         }
     }
