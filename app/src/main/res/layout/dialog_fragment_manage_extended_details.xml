@@ -85,5 +85,9 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/gps_coordinates" />
 
+        <include
+            android:id="@+id/manage_extended_details_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons" />
+
     </LinearLayout>
 </ScrollView>

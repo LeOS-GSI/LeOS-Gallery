@@ -55,7 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialogFragme
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.DEFAULT_BOTTOM_ACTIONS
 import ca.on.sudbury.hojat.smartgallery.helpers.INCLUDED_FOLDERS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXCLUDED_FOLDERS
@@ -765,11 +765,16 @@ class SettingsActivity : SimpleActivity() {
     private fun setupManageExtendedDetails() {
         with(binding) {
             settingsManageExtendedDetailsHolder.setOnClickListener {
-                ManageExtendedDetailsDialog(this@SettingsActivity) {
+
+                val callbackAfterDialogConfirmed: (Int) -> Unit = {
                     if (config.extendedDetails == 0) {
                         settingsShowExtendedDetailsHolder.callOnClick()
                     }
                 }
+                ManageExtendedDetailsDialogFragment(callbackAfterDialogConfirmed).show(
+                    supportFragmentManager,
+                    "ManageExtendedDetailsDialogFragment"
+                )
             }
         }
     }

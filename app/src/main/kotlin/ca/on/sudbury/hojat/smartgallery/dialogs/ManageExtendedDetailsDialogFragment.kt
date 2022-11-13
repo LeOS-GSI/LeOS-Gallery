@@ -1,26 +1,65 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.databinding.DialogManageExtendedDetailsBinding
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentManageExtendedDetailsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.ExtendedDetails
 
 /**
- * In "settings" page, in the "Extended details" section, The dialog is created by this class.
+ * In "settings" page, in the "Extended details" section, click on "manage extended details"
+ * and the resulting dialog is created by this class.
  */
-class ManageExtendedDetailsDialog(
-    val activity: BaseSimpleActivity,
-    val callback: (result: Int) -> Unit
-) {
+class ManageExtendedDetailsDialogFragment(val callback: (result: Int) -> Unit) : DialogFragment() {
 
-    // we create the binding by referencing the owner Activity
-    var binding = DialogManageExtendedDetailsBinding.inflate(activity.layoutInflater)
+    // the binding
+    private var _binding: DialogFragmentManageExtendedDetailsBinding? = null
+    private val binding get() = _binding!!
 
-    init {
-        val details = activity.config.extendedDetails
+    /**
+     * Create the UI of the dialog
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // load the binding
+        _binding = DialogFragmentManageExtendedDetailsBinding.inflate(inflater, container, false)
+
+        loadDialogUi()
+        return binding.root
+    }
+
+    /**
+     * Register listeners for views.
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.manageExtendedDetailsDialogBottomRow.btnOk.setOnClickListener {
+            dialogConfirmed()
+            dismiss()
+        }
+        binding.manageExtendedDetailsDialogBottomRow.btnCancel.setOnClickListener {
+            dismiss()
+        }
+    }
+
+    /**
+     * Clean all used resources.
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun loadDialogUi() {
+
+        val details = requireActivity().config.extendedDetails
         binding.apply {
             manageExtendedDetailsName.isChecked = details and ExtendedDetails.Name.id != 0
             manageExtendedDetailsPath.isChecked = details and ExtendedDetails.Path.id != 0
@@ -34,16 +73,10 @@ class ManageExtendedDetailsDialog(
             manageExtendedDetailsExif.isChecked = details and ExtendedDetails.ExifProperties.id != 0
             manageExtendedDetailsGpsCoordinates.isChecked = details and ExtendedDetails.Gps.id != 0
         }
-
-        activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
-            .setNegativeButton(R.string.cancel, null)
-            .apply {
-                activity.setupDialogStuff(binding.root, this)
-            }
     }
 
     private fun dialogConfirmed() {
+
         var result = 0
         binding.apply {
             if (manageExtendedDetailsName.isChecked)
@@ -66,7 +99,8 @@ class ManageExtendedDetailsDialog(
                 result += ExtendedDetails.Gps.id
         }
 
-        activity.config.extendedDetails = result
+        requireActivity().config.extendedDetails = result
         callback(result)
     }
+
 }
