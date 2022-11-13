@@ -12,6 +12,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getBasePath
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import timber.log.Timber
 
 
 @SuppressLint("InflateParams")
@@ -28,6 +29,7 @@ class ExcludeFolderDialog(
     private var radioGroup: RadioGroup? = null
 
     init {
+        Timber.d("Hojat Ghasemi : ExcludeFolderDialog was called")
         binding.apply {
             BeVisibleOrGoneUseCase(excludeFolderParent, alternativePaths.size > 1)
 

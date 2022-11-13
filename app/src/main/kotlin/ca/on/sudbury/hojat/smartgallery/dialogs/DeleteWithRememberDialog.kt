@@ -6,6 +6,7 @@ import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogDeleteWithRememberBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
+import timber.log.Timber
 
 class DeleteWithRememberDialog(
     val activity: Activity,
@@ -20,6 +21,7 @@ class DeleteWithRememberDialog(
 
 
     init {
+        Timber.d("Hojat Ghasemi : DeleteWithRememberDialog was called")
         binding.deleteRememberTitle.text = message
         activity.getAlertDialogBuilder()
             .setPositiveButton(R.string.yes) { _, _ -> dialogConfirmed() }

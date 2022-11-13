@@ -12,13 +12,14 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogLineColorPickerBinding
 import ca.on.sudbury.hojat.smartgallery.interfaces.LineColorPickerListener
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import timber.log.Timber
 
 class LineColorPickerDialog(
     val activity: BaseSimpleActivity,
     val color: Int,
     val isPrimaryColorPicker: Boolean,
     private val primaryColors: Int = R.array.md_primary_colors,
-    val appIconIDs: ArrayList<Int>? = null,
+    private val appIconIDs: ArrayList<Int>? = null,
     val menu: Menu? = null,
     val callback: (wasPositivePressed: Boolean, color: Int) -> Unit
 ) {
@@ -33,6 +34,7 @@ class LineColorPickerDialog(
     private var binding = DialogLineColorPickerBinding.inflate(activity.layoutInflater)
 
     init {
+        Timber.d("Hojat Ghasemi : LineColorPickerDialog was called")
         binding.apply {
             hexCode.text = color.toHex()
             hexCode.setOnLongClickListener {

@@ -7,6 +7,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.BottomAction
+import timber.log.Timber
 
 class ManageBottomActionsDialog(
     val activity: BaseSimpleActivity,
@@ -17,6 +18,7 @@ class ManageBottomActionsDialog(
     var binding = DialogManageBottomActionsBinding.inflate(activity.layoutInflater)
 
     init {
+        Timber.d("Hojat Ghasemi : ManageBottomActionsDialog was called")
         val actions = activity.config.visibleBottomActions
         binding.apply {
             manageBottomActionsToggleFavorite.isChecked =
