@@ -69,7 +69,6 @@ import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideloadedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
 import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
@@ -86,6 +85,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
+import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
@@ -1774,7 +1774,7 @@ fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
     ) {
         runOnUiThread {
             if (!isDestroyed && !isFinishing) {
-                WritePermissionDialog(this, WritePermissionDialog.Mode.SdCard) {
+                val funAfterPermissionGranted: () -> Unit = {
                     Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                         putExtra(EXTRA_SHOW_ADVANCED, true)
                         try {
@@ -1802,6 +1802,13 @@ fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
                         }
                     }
                 }
+                WritePermissionDialogFragment(
+                    WritePermissionDialogFragment.Mode.SdCard,
+                    funAfterPermissionGranted
+                ).show(
+                    supportFragmentManager,
+                    "WritePermissionDialogFragment"
+                )
             }
         }
         true
@@ -1821,15 +1828,8 @@ fun BaseSimpleActivity.isShowingSAFDialogSdk30(path: String): Boolean {
         runOnUiThread {
             if (!isDestroyed && !isFinishing) {
                 val level = getFirstParentLevel(path)
-                WritePermissionDialog(
-                    this,
-                    WritePermissionDialog.Mode.OpenDocumentTreeSDK30(
-                        path.getFirstParentPath(
-                            this,
-                            level
-                        )
-                    )
-                ) {
+
+                val funAfterPermissionGranted: () -> Unit = {
                     Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                         putExtra(EXTRA_SHOW_ADVANCED, true)
                         putExtra(
@@ -1861,6 +1861,17 @@ fun BaseSimpleActivity.isShowingSAFDialogSdk30(path: String): Boolean {
                         }
                     }
                 }
+                WritePermissionDialogFragment(
+                    WritePermissionDialogFragment.Mode.OpenDocumentTreeSDK30(
+                        path.getFirstParentPath(
+                            this,
+                            level
+                        )
+                    ), funAfterPermissionGranted
+                ).show(
+                    supportFragmentManager,
+                    "WritePermissionDialogFragment"
+                )
             }
         }
         true
@@ -1874,7 +1885,7 @@ fun BaseSimpleActivity.isShowingSAFCreateDocumentDialogSdk30(path: String): Bool
     return if (!hasProperStoredDocumentUriSdk30(path)) {
         runOnUiThread {
             if (!isDestroyed && !isFinishing) {
-                WritePermissionDialog(this, WritePermissionDialog.Mode.CreateDocumentSDK30) {
+                val funAfterPermissionGranted: () -> Unit = {
                     Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                         type = DocumentsContract.Document.MIME_TYPE_DIR
                         putExtra(EXTRA_SHOW_ADVANCED, true)
@@ -1910,6 +1921,13 @@ fun BaseSimpleActivity.isShowingSAFCreateDocumentDialogSdk30(path: String): Bool
                         }
                     }
                 }
+                WritePermissionDialogFragment(
+                    WritePermissionDialogFragment.Mode.CreateDocumentSDK30,
+                    funAfterPermissionGranted
+                ).show(
+                    supportFragmentManager,
+                    "WritePermissionDialogFragment"
+                )
             }
         }
         true
@@ -1983,7 +2001,7 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
 fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
     runOnUiThread {
         if (!isDestroyed && !isFinishing) {
-            WritePermissionDialog(this, WritePermissionDialog.Mode.Otg) {
+            val funAfterPermissionGranted: () -> Unit = {
                 Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                     try {
                         startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
@@ -2011,6 +2029,10 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
                     }
                 }
             }
+            WritePermissionDialogFragment(
+                WritePermissionDialogFragment.Mode.Otg,
+                funAfterPermissionGranted
+            ).show(supportFragmentManager, "WritePermissionDialogFragment")
         }
     }
 }

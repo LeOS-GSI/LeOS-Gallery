@@ -87,8 +87,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialog
 import com.google.android.material.appbar.MaterialToolbar
 import ca.on.sudbury.hojat.smartgallery.dialogs.FileConflictDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialog.Mode
+import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.adjustAlpha
 import ca.on.sudbury.hojat.smartgallery.extensions.getThemeId
 import ca.on.sudbury.hojat.smartgallery.extensions.hasProperStoredTreeUri
@@ -694,7 +693,8 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         }
 
         funAfterSAFPermission = callback
-        WritePermissionDialog(this, Mode.Otg) {
+
+        val funAfterWritePermissionGranted: () -> Unit = {
             Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                 try {
                     startActivityForResult(this, OPEN_DOCUMENT_TREE_OTG)
@@ -720,6 +720,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 }
             }
         }
+        WritePermissionDialogFragment(
+            WritePermissionDialogFragment.Mode.Otg,
+            funAfterWritePermissionGranted
+        ).show(supportFragmentManager, "WritePermissionDialogFragment")
     }
 
     @SuppressLint("NewApi")
