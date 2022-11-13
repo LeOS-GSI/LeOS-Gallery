@@ -33,7 +33,6 @@ import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
@@ -109,6 +108,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
@@ -762,12 +762,17 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
     }
 
     private fun showFilterMediaDialog() {
-        FilterMediaDialog(this) {
+
+        val callbackAfterDialogConfirmed: (Int) -> Unit = { _ ->
             mShouldStopFetching = true
             binding.directoriesRefreshLayout.isRefreshing = true
             binding.directoriesGrid.adapter = null
             getDirectories()
         }
+        FilterMediaDialogFragment(callbackAfterDialogConfirmed).show(
+            supportFragmentManager,
+            "FilterMediaDialogFragment"
+        )
     }
 
     private fun showAllMedia() {

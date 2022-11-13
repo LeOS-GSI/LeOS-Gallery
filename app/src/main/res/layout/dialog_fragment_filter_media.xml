@@ -60,5 +60,9 @@
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/portraits" />
 
+        <include
+            android:id="@+id/filter_media_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons" />
+
     </LinearLayout>
 </ScrollView>

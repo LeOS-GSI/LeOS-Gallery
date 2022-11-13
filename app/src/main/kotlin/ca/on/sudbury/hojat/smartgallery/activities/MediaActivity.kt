@@ -39,12 +39,12 @@ import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialog
 import ca.on.sudbury.hojat.smartgallery.database.MediaOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediaBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeGroupingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
 import ca.on.sudbury.hojat.smartgallery.extensions.restoreRecycleBinPaths
@@ -581,12 +581,16 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun showFilterMediaDialog() {
-        FilterMediaDialog(this) {
+        val callbackAfterDialogConfirmed: (Int) -> Unit = {
             mLoadedInitialPhotos = false
             binding.mediaRefreshLayout.isRefreshing = true
             binding.mediaGrid.adapter = null
             getMedia()
         }
+        FilterMediaDialogFragment(callbackAfterDialogConfirmed).show(
+            supportFragmentManager,
+            "FilterMediaDialogFragment"
+        )
     }
 
     private fun emptyRecycleBin() {
