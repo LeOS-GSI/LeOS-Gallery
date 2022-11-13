@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentDeleteFolderBinding
-import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
-
 
 /**
- * When user wants to delete a whole folder, this dialog will be shown
- * and ask them to confirm this operation. It's only called from [DirectoryAdapter]
- * so I guess it refers to when user searches through all directories of the device
- * not in normal gallery of the app.
+ * Whenever user wants to delete a whole folder of the gallery (other than recycle bin folder),
+ * this dialog will be shown and will ask them to confirm the deletion operation.
  */
 class DeleteFolderDialogFragment(
     private val confirmationString: String,
