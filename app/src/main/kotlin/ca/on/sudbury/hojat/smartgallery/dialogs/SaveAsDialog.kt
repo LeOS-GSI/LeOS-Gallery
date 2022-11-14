@@ -23,9 +23,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getFileUrisFromFileDirItems
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
+import timber.log.Timber
 import java.io.File
-
-// TODO: this dialog should be replaced by DialogFragment.
 
 @SuppressLint("InflateParams", "SetTextI18n")
 class SaveAsDialog(
@@ -37,6 +36,7 @@ class SaveAsDialog(
 ) {
     init {
 
+        Timber.d("Hojat Ghasemi : SaveAsDialog was called.")
         // we create the binding by referencing the owner Activity
         val binding = DialogSaveAsBinding.inflate(activity.layoutInflater)
 

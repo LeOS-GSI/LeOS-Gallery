@@ -109,7 +109,10 @@ class SecurityDialog(
                             true
                         ) -> ProtectionType.Pattern.id
                         it.text.toString()
-                            .equals(root.resources.getString(R.string.pin), true) -> ProtectionType.Pin.id
+                            .equals(
+                                root.resources.getString(R.string.pin),
+                                true
+                            ) -> ProtectionType.Pin.id
                         else -> ProtectionType.FingerPrint.id
                     }
                     updateTabVisibility()
