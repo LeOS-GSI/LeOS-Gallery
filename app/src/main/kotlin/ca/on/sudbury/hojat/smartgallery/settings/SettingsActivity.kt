@@ -11,7 +11,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -56,6 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialogFr
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.DEFAULT_BOTTOM_ACTIONS
 import ca.on.sudbury.hojat.smartgallery.helpers.INCLUDED_FOLDERS
 import ca.on.sudbury.hojat.smartgallery.helpers.EXCLUDED_FOLDERS
@@ -477,22 +477,30 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsHiddenItemPasswordProtectionHolder.setOnClickListener {
             val tabToShow =
                 if (config.isHiddenPasswordProtectionOn) config.hiddenProtectionType else SHOW_ALL_TABS
-            SecurityDialog(this, config.hiddenPasswordHash, tabToShow) { hash, type, success ->
-                if (success) {
-                    val hasPasswordProtection = config.isHiddenPasswordProtectionOn
-                    binding.settingsHiddenItemPasswordProtection.isChecked = !hasPasswordProtection
-                    config.isHiddenPasswordProtectionOn = !hasPasswordProtection
-                    config.hiddenPasswordHash = if (hasPasswordProtection) "" else hash
-                    config.hiddenProtectionType = type
 
-                    if (config.isHiddenPasswordProtectionOn) {
-                        val confirmationTextId =
-                            if (config.hiddenProtectionType == ProtectionType.FingerPrint.id)
-                                R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
-                        ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+            val callback: (hash: String, type: Int, success: Boolean) -> Unit =
+                { hash, type, success ->
+                    if (success) {
+                        val hasPasswordProtection = config.isHiddenPasswordProtectionOn
+                        binding.settingsHiddenItemPasswordProtection.isChecked =
+                            !hasPasswordProtection
+                        config.isHiddenPasswordProtectionOn = !hasPasswordProtection
+                        config.hiddenPasswordHash = if (hasPasswordProtection) "" else hash
+                        config.hiddenProtectionType = type
+
+                        if (config.isHiddenPasswordProtectionOn) {
+                            val confirmationTextId =
+                                if (config.hiddenProtectionType == ProtectionType.FingerPrint.id)
+                                    R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
+                            ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+                        }
                     }
                 }
-            }
+            SecurityDialogFragment(
+                config.hiddenPasswordHash,
+                tabToShow,
+                callback
+            ).show(supportFragmentManager, "SecurityDialogFragment")
         }
     }
 
@@ -506,7 +514,11 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsExcludedItemPasswordProtectionHolder.setOnClickListener {
             val tabToShow =
                 if (config.isExcludedPasswordProtectionOn) config.excludedProtectionType else SHOW_ALL_TABS
-            SecurityDialog(this, config.excludedPasswordHash, tabToShow) { hash, type, success ->
+            val callback: (
+                hash: String,
+                type: Int,
+                success: Boolean
+            ) -> Unit = { hash, type, success ->
                 if (success) {
                     val hasPasswordProtection = config.isExcludedPasswordProtectionOn
                     binding.settingsExcludedItemPasswordProtection.isChecked =
@@ -523,6 +535,10 @@ class SettingsActivity : SimpleActivity() {
                     }
                 }
             }
+            SecurityDialogFragment(config.excludedPasswordHash, tabToShow, callback).show(
+                supportFragmentManager,
+                "SecurityDialogFragment"
+            )
         }
     }
 
@@ -531,7 +547,12 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsAppPasswordProtectionHolder.setOnClickListener {
             val tabToShow =
                 if (config.isAppPasswordProtectionOn) config.appProtectionType else SHOW_ALL_TABS
-            SecurityDialog(this, config.appPasswordHash, tabToShow) { hash, type, success ->
+
+            val callback: (
+                hash: String,
+                type: Int,
+                success: Boolean
+            ) -> Unit = { hash, type, success ->
                 if (success) {
                     val hasPasswordProtection = config.isAppPasswordProtectionOn
                     binding.settingsAppPasswordProtection.isChecked = !hasPasswordProtection
@@ -547,6 +568,10 @@ class SettingsActivity : SimpleActivity() {
                     }
                 }
             }
+            SecurityDialogFragment(config.appPasswordHash, tabToShow, callback).show(
+                supportFragmentManager,
+                "SecurityDialogFragment"
+            )
         }
     }
 
@@ -556,23 +581,29 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsFileDeletionPasswordProtectionHolder.setOnClickListener {
             val tabToShow =
                 if (config.isDeletePasswordProtectionOn) config.deleteProtectionType else SHOW_ALL_TABS
-            SecurityDialog(this, config.deletePasswordHash, tabToShow) { hash, type, success ->
-                if (success) {
-                    val hasPasswordProtection = config.isDeletePasswordProtectionOn
-                    binding.settingsFileDeletionPasswordProtection.isChecked =
-                        !hasPasswordProtection
-                    config.isDeletePasswordProtectionOn = !hasPasswordProtection
-                    config.deletePasswordHash = if (hasPasswordProtection) "" else hash
-                    config.deleteProtectionType = type
+            val callback: (hash: String, type: Int, success: Boolean) -> Unit =
+                { hash, type, success ->
+                    if (success) {
+                        val hasPasswordProtection = config.isDeletePasswordProtectionOn
+                        binding.settingsFileDeletionPasswordProtection.isChecked =
+                            !hasPasswordProtection
+                        config.isDeletePasswordProtectionOn = !hasPasswordProtection
+                        config.deletePasswordHash = if (hasPasswordProtection) "" else hash
+                        config.deleteProtectionType = type
 
-                    if (config.isDeletePasswordProtectionOn) {
-                        val confirmationTextId =
-                            if (config.deleteProtectionType == ProtectionType.FingerPrint.id)
-                                R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
-                        ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+                        if (config.isDeletePasswordProtectionOn) {
+                            val confirmationTextId =
+                                if (config.deleteProtectionType == ProtectionType.FingerPrint.id)
+                                    R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
+                            ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+                        }
                     }
                 }
-            }
+            SecurityDialogFragment(config.deletePasswordHash, tabToShow, callback).show(
+                supportFragmentManager,
+                "SecurityDialogFragment"
+            )
+
         }
     }
 

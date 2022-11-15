@@ -1,61 +1,103 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AlertDialog
+import android.view.ViewGroup
 import androidx.biometric.BiometricManager
 import androidx.biometric.auth.AuthPromptHost
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.DialogFragment
 import androidx.viewpager.widget.ViewPager
 import ca.on.hojat.fingerprint.core.Reprint
+import ca.on.hojat.palette.views.MyDialogViewPager
+import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentSecurityBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
-import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
-import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.adapters.PasswordTypesAdapter
-import ca.on.sudbury.hojat.smartgallery.databinding.DialogSecurityBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.onTabSelectionChanged
-import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
-import ca.on.hojat.palette.views.MyDialogViewPager
 import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
+import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL_TABS
+import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 
 /**
- * In the settings page, there's section named "Security" with 3 check boxes.
- * Any of the dialogs that you'll see after clicking on those checkboxes,
- * are created by this class.
+ * In the settings page, there's a section named "Security" with 3 check boxes.
+ * Any of the dialogs that you'll see after clicking on those checkboxes are created
+ * by this DialogFragment.
  *
  */
-class SecurityDialog(
-    private val activity: Activity,
+class SecurityDialogFragment(
     private val requiredHash: String,
     private val showTabIndex: Int,
     private val callback: (hash: String, type: Int, success: Boolean) -> Unit
-) : HashListener {
+) : DialogFragment(), HashListener {
 
-    private var dialog: AlertDialog? = null
-    private var tabsAdapter: PasswordTypesAdapter
-    private var viewPager: MyDialogViewPager
+    // the binding
+    private var _binding: DialogFragmentSecurityBinding? = null
+    private val binding get() = _binding!!
 
-    init {
-        val binding = DialogSecurityBinding.inflate(activity.layoutInflater)
+    // configuration
+    private lateinit var tabsAdapter: PasswordTypesAdapter
+    private lateinit var viewPager: MyDialogViewPager
+
+    /**
+     * Create the UI of the dialog
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+
+        // load the binding
+        _binding = DialogFragmentSecurityBinding.inflate(inflater, container, false)
+
+        loadDialogUi()
+        return binding.root
+    }
+
+    /**
+     * Clean all used resources.
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        callback("", 0, false)
+    }
+
+    /**
+     * I have no idea why we're using this interface and what it's been used for.
+     */
+    override fun receivedHash(hash: String, type: Int) {
+        callback(hash, type, true)
+        if (!requireActivity().isFinishing) {
+            dismiss()
+        }
+
+    }
+
+    private fun loadDialogUi() {
         binding.apply {
             viewPager = binding.dialogTabViewPager
             viewPager.offscreenPageLimit = 2
             tabsAdapter = PasswordTypesAdapter(
                 context = root.context,
                 requiredHash = requiredHash,
-                hashListener = this@SecurityDialog,
+                hashListener = this@SecurityDialogFragment,
                 scrollView = dialogScrollview,
-                biometricPromptHost = AuthPromptHost(activity as FragmentActivity),
+                biometricPromptHost = AuthPromptHost(requireActivity()),
                 showBiometricIdTab = shouldShowBiometricIdTab(),
                 showBiometricAuthentication = showTabIndex == ProtectionType.FingerPrint.id && IsRPlusUseCase()
             )
@@ -74,7 +116,6 @@ class SecurityDialog(
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {
-
                 }
             })
 
@@ -94,8 +135,8 @@ class SecurityDialog(
                     )
                 }
 
-                if (activity.baseConfig.isUsingSystemTheme) {
-                    dialogTabLayout.setBackgroundColor(activity.resources.getColor(R.color.you_dialog_background_color))
+                if (requireActivity().baseConfig.isUsingSystemTheme) {
+                    dialogTabLayout.setBackgroundColor(requireActivity().resources.getColor(R.color.you_dialog_background_color))
                 } else {
                     dialogTabLayout.setBackgroundColor(root.context.getProperBackgroundColor())
                 }
@@ -123,44 +164,14 @@ class SecurityDialog(
                 viewPager.allowSwiping = false
             }
         }
-        activity.getAlertDialogBuilder()
-            .setOnCancelListener { onCancelFail() }
-            .setNegativeButton(R.string.cancel) { _, _ -> onCancelFail() }
-            .apply {
-                activity.setupDialogStuff(binding.root, this) { alertDialog ->
-                    dialog = alertDialog
-                }
-            }
     }
 
-    private fun onCancelFail() {
-        callback("", 0, false)
-        dialog?.dismiss()
+    private fun shouldShowBiometricIdTab() = if (IsRPlusUseCase()) {
+        isBiometricIdAvailable(requireActivity())
+    } else {
+        isFingerPrintSensorAvailable()
     }
 
-    override fun receivedHash(hash: String, type: Int) {
-        callback(hash, type, true)
-        if (!activity.isFinishing) {
-            dialog?.dismiss()
-        }
-    }
-
-    private fun updateTabVisibility() {
-        for (i in 0..2) {
-            tabsAdapter.isTabVisible(i, viewPager.currentItem == i)
-        }
-    }
-
-    private fun shouldShowBiometricIdTab(): Boolean {
-        return if (IsRPlusUseCase()) {
-            isBiometricIdAvailable(activity)
-        } else {
-            isFingerPrintSensorAvailable()
-        }
-    }
-
-    private fun isFingerPrintSensorAvailable() =
-        IsMarshmallowPlusUseCase() && Reprint.isHardwarePresent()
 
     @SuppressLint("WrongConstant")
     private fun isBiometricIdAvailable(owner: Context): Boolean =
@@ -170,4 +181,13 @@ class SecurityDialog(
             BiometricManager.BIOMETRIC_SUCCESS, BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> true
             else -> false
         }
+
+    private fun isFingerPrintSensorAvailable() =
+        IsMarshmallowPlusUseCase() && Reprint.isHardwarePresent()
+
+    private fun updateTabVisibility() {
+        for (i in 0..2) {
+            tabsAdapter.isTabVisible(i, viewPager.currentItem == i)
+        }
+    }
 }

@@ -23,7 +23,6 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
@@ -74,6 +73,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
 import ca.on.sudbury.hojat.smartgallery.helpers.FolderMediaCount
@@ -539,7 +539,7 @@ class DirectoryAdapter(
     }
 
     private fun lockFolder() {
-        SecurityDialog(activity, "", SHOW_ALL_TABS) { hash, type, success ->
+        val callback: (hash: String, type: Int, success: Boolean) -> Unit = { hash, type, success ->
             if (success) {
                 getSelectedPaths().filter { !config.isFolderProtected(it) }.forEach {
                     config.addFolderProtection(it, hash, type)
@@ -550,6 +550,10 @@ class DirectoryAdapter(
                 finishActMode()
             }
         }
+        SecurityDialogFragment("", SHOW_ALL_TABS, callback).show(
+            activity.supportFragmentManager,
+            "SecurityDialogFragment"
+        )
     }
 
     private fun unlockFolder() {
@@ -557,7 +561,8 @@ class DirectoryAdapter(
         val firstPath = paths.first()
         val tabToShow = config.getFolderProtectionType(firstPath)
         val hashToCheck = config.getFolderProtectionHash(firstPath)
-        SecurityDialog(activity, hashToCheck, tabToShow) { _, _, success ->
+
+        val callback: (hash: String, type: Int, success: Boolean) -> Unit = { _, _, success ->
             if (success) {
                 paths.filter {
                     config.isFolderProtected(it) && config.getFolderProtectionType(it) == tabToShow && config.getFolderProtectionHash(
@@ -573,6 +578,11 @@ class DirectoryAdapter(
                 finishActMode()
             }
         }
+        SecurityDialogFragment(hashToCheck, tabToShow, callback).show(
+            activity.supportFragmentManager,
+            "SecurityDialogFragment"
+        )
+
     }
 
     private fun pinFolders(pin: Boolean) {

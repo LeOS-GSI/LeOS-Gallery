@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.exifinterface.media.ExifInterface
+import androidx.fragment.app.FragmentActivity
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
@@ -43,7 +44,6 @@ import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GLIDE
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_CROPPER
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_RTL
@@ -85,6 +85,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
@@ -662,15 +663,25 @@ fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
 
 fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
     if (baseConfig.isDeletePasswordProtectionOn) {
-        SecurityDialog(
-            this,
-            baseConfig.deletePasswordHash,
-            baseConfig.deleteProtectionType
-        ) { _, _, success ->
+
+        val callbackAfterSecurityReceived: (
+            hash: String,
+            type: Int,
+            success: Boolean
+        ) -> Unit = { _, _, success ->
             if (success) {
                 callback()
             }
         }
+        SecurityDialogFragment(
+            baseConfig.deletePasswordHash,
+            baseConfig.deleteProtectionType,
+            callbackAfterSecurityReceived
+        ).show(
+            (this as FragmentActivity).supportFragmentManager,
+            "SecurityDialogFragment"
+        )
+
     } else {
         callback()
     }
@@ -678,15 +689,22 @@ fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
 
 fun Activity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
     if (baseConfig.isHiddenPasswordProtectionOn) {
-        SecurityDialog(
-            this,
-            baseConfig.hiddenPasswordHash,
-            baseConfig.hiddenProtectionType
-        ) { _, _, success ->
-            if (success) {
-                callback()
+
+        val callbackAfterSecurityReceived: (hash: String, type: Int, success: Boolean) -> Unit =
+            { _, _, success ->
+                if (success) {
+                    callback()
+                }
             }
-        }
+        SecurityDialogFragment(
+            baseConfig.hiddenPasswordHash,
+            baseConfig.hiddenProtectionType,
+            callbackAfterSecurityReceived
+        ).show(
+            (this as FragmentActivity).supportFragmentManager,
+            "SecurityDialogFragment"
+        )
+
     } else {
         callback()
     }
@@ -694,13 +712,19 @@ fun Activity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
 
 fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean) -> Unit) {
     if (baseConfig.isFolderProtected(path)) {
-        SecurityDialog(
-            this,
+        val callbackAfterSecurityReceived: (hash: String, type: Int, success: Boolean) -> Unit =
+            { _, _, success ->
+                callback(success)
+            }
+        SecurityDialogFragment(
             baseConfig.getFolderProtectionHash(path),
-            baseConfig.getFolderProtectionType(path)
-        ) { _, _, success ->
-            callback(success)
-        }
+            baseConfig.getFolderProtectionType(path),
+            callbackAfterSecurityReceived
+        ).show(
+            (this as FragmentActivity).supportFragmentManager,
+            "SecurityDialogFragment"
+        )
+
     } else {
         callback(true)
     }
@@ -1751,15 +1775,17 @@ fun Activity.tryGenericMimeType(intent: Intent, mimeType: String, uri: Uri): Boo
 
 fun Activity.handleExcludedFolderPasswordProtection(callback: () -> Unit) {
     if (config.isExcludedPasswordProtectionOn) {
-        SecurityDialog(
-            this,
-            config.excludedPasswordHash,
-            config.excludedProtectionType
-        ) { _, _, success ->
-            if (success) {
-                callback()
+        val callbackAfterSecurityReceived: (hash: String, type: Int, success: Boolean) -> Unit =
+            { _, _, success ->
+                if (success) {
+                    callback()
+                }
             }
-        }
+        SecurityDialogFragment(
+            config.excludedPasswordHash,
+            config.excludedProtectionType,
+            callbackAfterSecurityReceived
+        ).show((this as FragmentActivity).supportFragmentManager, "SecurityDialogFragment")
     } else {
         callback()
     }

@@ -110,7 +110,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
@@ -401,19 +401,21 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             refreshMenuItems()
             if (mIsPasswordProtectionPending && !mWasProtectionHandled) {
                 if (baseConfig.isAppPasswordProtectionOn) {
-                    SecurityDialog(
-                        this,
-                        baseConfig.appPasswordHash,
-                        baseConfig.appProtectionType
-                    ) { _, _, success ->
-                        mWasProtectionHandled = success
-                        if (success) {
-                            mIsPasswordProtectionPending = false
-                            tryLoadGallery()
-                        } else {
-                            finish()
+                    val callback: (hash: String, type: Int, success: Boolean) -> Unit =
+                        { _, _, success ->
+                            mWasProtectionHandled = success
+                            if (success) {
+                                mIsPasswordProtectionPending = false
+                                tryLoadGallery()
+                            } else {
+                                finish()
+                            }
                         }
-                    }
+                    SecurityDialogFragment(
+                        baseConfig.appPasswordHash,
+                        baseConfig.appProtectionType,
+                        callback
+                    ).show(supportFragmentManager, "SecurityDialogFragment")
                 } else {
                     mWasProtectionHandled = true
                     mIsPasswordProtectionPending = false

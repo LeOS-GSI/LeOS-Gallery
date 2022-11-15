@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <!--            never define an ID for a TabItem while you're using ViewBinding; otherwise,
             you will face run time errors -->
             <com.google.android.material.tabs.TabItem
