@@ -71,4 +71,11 @@
         android:paddingBottom="@dimen/activity_margin"
         android:text="@string/keep_aspect_ratio" />
 
+    <include
+        android:id="@+id/resize_image_dialog_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/keep_aspect_ratio" />
+
 </RelativeLayout>

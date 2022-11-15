@@ -43,7 +43,6 @@ class DeleteWithRememberDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding.deleteWithRememberDialogBottomRow) {
-
             btnOk.setOnClickListener {
                 dismiss()
                 callback(binding.deleteRememberCheckbox.isChecked)

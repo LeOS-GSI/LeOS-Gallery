@@ -55,7 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.adapters.FiltersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityEditBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.fixDateTaken
@@ -131,7 +131,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         setupOptionsMenu()
         handlePermission(PERMISSION_WRITE_STORAGE) {
             if (!it) {
-                Toast.makeText(this, R.string.no_storage_permissions,Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.no_storage_permissions, Toast.LENGTH_LONG).show()
                 finish()
             }
             initEditActivity()
@@ -826,12 +826,12 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             Toast.makeText(this, R.string.unknown_error_occurred, Toast.LENGTH_LONG).show()
             return
         }
-
-        ResizeDialog(this, point) {
-            resizeWidth = it.x
-            resizeHeight = it.y
+        val callback: (Point) -> Unit = { newSize ->
+            resizeWidth = newSize.x
+            resizeHeight = newSize.y
             binding.cropImageView.getCroppedImageAsync()
         }
+        ResizeDialogFragment(point, callback).show(supportFragmentManager, "ResizeDialogFragment")
     }
 
     private fun shouldCropSquare(): Boolean {
