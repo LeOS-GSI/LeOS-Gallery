@@ -55,7 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediumBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SlideShowDialog
@@ -1446,10 +1446,15 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
 
         val message = String.format(resources.getString(baseString), filenameAndSize)
-        DeleteWithRememberDialog(this, message) {
-            config.tempSkipDeleteConfirmation = it
+
+        val callback: (Boolean) -> Unit = { remember ->
+            config.tempSkipDeleteConfirmation = remember
             deleteConfirmed()
         }
+        DeleteWithRememberDialogFragment(message, callback).show(
+            supportFragmentManager,
+            "DeleteWithRememberDialogFragment"
+        )
     }
 
     private fun deleteConfirmed() {

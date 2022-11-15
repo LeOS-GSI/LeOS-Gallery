@@ -37,7 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.ViewPagerActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialog
 import ca.on.sudbury.hojat.smartgallery.database.MediaOperationsListener
 import ca.on.sudbury.hojat.smartgallery.extensions.setAs
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
@@ -67,6 +66,7 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
+import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
@@ -589,10 +589,16 @@ class MediaAdapter(
         val baseString =
             if (config.useRecycleBin && !isRecycleBin) R.string.move_to_recycle_bin_confirmation else R.string.deletion_confirmation
         val question = String.format(resources.getString(baseString), itemsAndSize)
-        DeleteWithRememberDialog(activity, question) {
-            config.tempSkipDeleteConfirmation = it
+
+        val callback: (Boolean) -> Unit = { remember ->
+            config.tempSkipDeleteConfirmation = remember
             deleteFiles()
         }
+        DeleteWithRememberDialogFragment(question, callback).show(
+            activity.supportFragmentManager,
+            "DeleteWithRememberDialogFragment"
+        )
+
     }
 
     private fun deleteFiles() {

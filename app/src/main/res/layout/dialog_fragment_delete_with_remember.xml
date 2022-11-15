@@ -25,4 +25,11 @@
         android:layout_below="@+id/delete_remember_title"
         android:text="@string/do_not_ask_again" />
 
+    <include
+        android:id="@+id/delete_with_remember_dialog_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/delete_remember_checkbox" />
+
 </RelativeLayout>
