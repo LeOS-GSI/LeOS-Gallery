@@ -13,6 +13,7 @@
         android:layout_marginBottom="@dimen/activity_margin"
         android:hint="@string/path">
 
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/folder_value"
             android:layout_width="match_parent"
@@ -53,4 +54,11 @@
             android:textSize="@dimen/bigger_text_size" />
 
     </ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout>
+
+    <include
+        android:id="@+id/save_as_dialog_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

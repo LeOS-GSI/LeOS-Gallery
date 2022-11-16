@@ -57,7 +57,7 @@ import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediumBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SlideShowDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.setAs
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
@@ -901,7 +901,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun saveImageAs() {
         val currPath = getCurrentPath()
-        SaveAsDialog(this, currPath, false) {
+        val callback: (savePath: String) -> Unit = {
             val newPath = it
             handleSAFDialog(it) {
                 if (!it) {
@@ -926,6 +926,11 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 }
             }
         }
+        SaveAsDialogFragment(
+            path = currPath,
+            appendFilename = false,
+            callback = callback
+        ).show(supportFragmentManager, "SaveAsDialogFragment")
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

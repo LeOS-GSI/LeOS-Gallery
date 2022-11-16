@@ -56,7 +56,7 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityEditBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.fixDateTaken
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
@@ -366,19 +366,27 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         } else if (binding.editorDrawCanvas.visibility == View.VISIBLE) {
             val bitmap = binding.editorDrawCanvas.getBitmap()
             if (saveUri.scheme == "file") {
-                SaveAsDialog(this, saveUri.path!!, true) {
-                    saveBitmapToFile(bitmap, it, true)
+                val callback: (String) -> Unit = { savePath ->
+                    saveBitmapToFile(bitmap, savePath, true)
                 }
+                SaveAsDialogFragment(
+                    path = saveUri.path!!,
+                    appendFilename = true,
+                    callback = callback
+                ).show(supportFragmentManager, "SaveAsDialogFragment")
             } else if (saveUri.scheme == "content") {
                 val filePathGetter = getNewFilePath()
-                SaveAsDialog(this, filePathGetter.first, filePathGetter.second) {
-                    saveBitmapToFile(bitmap, it, true)
-                }
+                val callback: (savePath: String) -> Unit = { saveBitmapToFile(bitmap, it, true) }
+                SaveAsDialogFragment(
+                    path = filePathGetter.first,
+                    appendFilename = filePathGetter.second,
+                    callback = callback
+                ).show(supportFragmentManager, "SaveAsDialogFragment")
             }
         } else {
             val currentFilter = getFiltersAdapter()?.getCurrentFilter() ?: return
             val filePathGetter = getNewFilePath()
-            SaveAsDialog(this, filePathGetter.first, filePathGetter.second) {
+            val callback: (String) -> Unit = { savePath ->
                 Toast.makeText(this, R.string.saving, Toast.LENGTH_LONG).show()
                 // clean up everything to free as much memory as possible
                 binding.defaultImageView.setImageResource(0)
@@ -391,12 +399,17 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                         val originalBitmap = Glide.with(applicationContext).asBitmap().load(uri)
                             .submit(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL).get()
                         currentFilter.filter.processFilter(originalBitmap)
-                        saveBitmapToFile(originalBitmap, it, false)
+                        saveBitmapToFile(originalBitmap, savePath, false)
                     } catch (e: OutOfMemoryError) {
                         Toast.makeText(this, R.string.out_of_memory_error, Toast.LENGTH_LONG).show()
                     }
                 }
             }
+            SaveAsDialogFragment(
+                path = filePathGetter.first,
+                appendFilename = filePathGetter.second,
+                callback = callback
+            ).show(supportFragmentManager, "SaveAsDialogFragment")
         }
     }
 
@@ -892,14 +905,24 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     finish()
                 }
             } else if (saveUri.scheme == "file") {
-                SaveAsDialog(this, saveUri.path!!, true) {
+                val callback: (savePath: String) -> Unit = {
                     saveBitmapToFile(bitmap, it, true)
                 }
+                SaveAsDialogFragment(
+                    path = saveUri.path!!,
+                    appendFilename = true,
+                    callback = callback
+                ).show(supportFragmentManager, "SaveAsDialogFragment")
             } else if (saveUri.scheme == "content") {
                 val filePathGetter = getNewFilePath()
-                SaveAsDialog(this, filePathGetter.first, filePathGetter.second) {
-                    saveBitmapToFile(bitmap, it, true)
+                val callback: (String) -> Unit = { savePath ->
+                    saveBitmapToFile(bitmap, savePath, true)
                 }
+                SaveAsDialogFragment(
+                    path = filePathGetter.first,
+                    appendFilename = filePathGetter.second,
+                    callback = callback
+                ).show(supportFragmentManager, "SaveAsDialogFragment")
             } else {
                 Toast.makeText(this, R.string.unknown_file_location, Toast.LENGTH_LONG).show()
             }
