@@ -23,7 +23,6 @@ import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialog
@@ -73,6 +72,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
@@ -532,9 +532,11 @@ class DirectoryAdapter(
         if (config.wasFolderLockingNoticeShown) {
             lockFolder()
         } else {
-            FolderLockingNoticeDialog(activity) {
-                lockFolder()
-            }
+            val callback = { lockFolder() }
+            FolderLockingNoticeDialogFragment(callback).show(
+                activity.supportFragmentManager,
+                "FolderLockingNoticeDialogFragment"
+            )
         }
     }
 

@@ -7,3 +7,4 @@
     android:paddingTop="@dimen/activity_margin"
     android:paddingRight="@dimen/activity_margin"
     android:textSize="@dimen/bigger_text_size" />
+
