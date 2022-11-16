@@ -7,12 +7,16 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogWhatsNewBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.models.Release
+import timber.log.Timber
 
 class WhatsNewDialog(
     val activity: Activity,
-    val releases: List<Release>
+    private val releases: List<Release>
 ) {
     init {
+
+        Timber.d("Hojat Ghasemi : WhatsNewDialog was called")
+
         val binding = DialogWhatsNewBinding.inflate(LayoutInflater.from(activity))
         binding.whatsNewContent.text = getNewReleases()
 

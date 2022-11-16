@@ -7,6 +7,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.DialogOtherAspectRatioBindin
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
+import timber.log.Timber
 
 @SuppressLint("InflateParams")
 class OtherAspectRatioDialog(
@@ -21,6 +22,7 @@ class OtherAspectRatioDialog(
     private var dialog: AlertDialog? = null
 
     init {
+        Timber.d("Hojat Ghasemi : OtherAspectRatioDialog was called.")
         binding.apply {
             otherAspectRatio21.setOnClickListener { ratioPicked(Pair(2f, 1f)) }
             otherAspectRatio32.setOnClickListener { ratioPicked(Pair(3f, 2f)) }
@@ -63,7 +65,6 @@ class OtherAspectRatioDialog(
                 otherAspectRatioDialogRadio1.check(otherAspectRatioCustom.id)
             }
         }
-
         activity.getAlertDialogBuilder()
             .setNegativeButton(R.string.cancel, null)
             .apply {

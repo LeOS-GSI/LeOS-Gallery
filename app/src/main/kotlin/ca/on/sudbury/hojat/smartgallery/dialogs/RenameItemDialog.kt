@@ -14,6 +14,7 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogRenameItemBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.renameFile
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
+import timber.log.Timber
 
 /**
  * The dialog for renaming pictures, videos, and folders is created via this class.
@@ -24,6 +25,8 @@ class RenameItemDialog(
     val callback: (newPath: String) -> Unit
 ) {
     init {
+        Timber.d("Hojat Ghasemi : RenameItemDialog was called")
+
         var ignoreClicks = false
         val fullName = path.getFilenameFromPath()
         val dotAt = fullName.lastIndexOf(".")

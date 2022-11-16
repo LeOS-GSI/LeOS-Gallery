@@ -18,6 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.humanizePath
 import ca.on.sudbury.hojat.smartgallery.usecases.ShowKeyboardUseCase
+import timber.log.Timber
 
 @SuppressLint("SetTextI18n", "InflateParams")
 class ResizeWithPathDialog(
@@ -30,6 +31,8 @@ class ResizeWithPathDialog(
     var binding = DialogResizeImageWithPathBinding.inflate(activity.layoutInflater)
 
     init {
+        Timber.d("Hojat Ghasemi : ResizeWithPathDialog was called")
+
         var realPath = path.getParentPath()
         binding.apply {
             folder.setText("${activity.humanizePath(realPath).trimEnd('/')}/")
@@ -102,7 +105,8 @@ class ResizeWithPathDialog(
                         val width = getViewValue(widthView)
                         val height = getViewValue(heightView)
                         if (width <= 0 || height <= 0) {
-                            Toast.makeText(activity, R.string.invalid_values,Toast.LENGTH_LONG).show()
+                            Toast.makeText(activity, R.string.invalid_values, Toast.LENGTH_LONG)
+                                .show()
                             return@setOnClickListener
                         }
 
@@ -111,19 +115,31 @@ class ResizeWithPathDialog(
                         val filename = binding.filenameValue.text.toString().trim()
                         val extension = binding.extensionValue.text.toString().trim()
                         if (filename.isEmpty()) {
-                            Toast.makeText(activity, R.string.filename_cannot_be_empty,Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                activity,
+                                R.string.filename_cannot_be_empty,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 
                         if (extension.isEmpty()) {
-                            Toast.makeText(activity, R.string.extension_cannot_be_empty,Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                activity,
+                                R.string.extension_cannot_be_empty,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 
                         val newFilename = "$filename.$extension"
                         val newPath = "${realPath.trimEnd('/')}/$newFilename"
                         if (!newFilename.isAValidFilename()) {
-                            Toast.makeText(activity, R.string.filename_invalid_characters,Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                activity,
+                                R.string.filename_invalid_characters,
+                                Toast.LENGTH_LONG
+                            ).show()
                             return@setOnClickListener
                         }
 

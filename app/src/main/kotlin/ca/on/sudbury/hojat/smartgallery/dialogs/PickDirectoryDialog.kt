@@ -27,6 +27,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
 import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
+import timber.log.Timber
 
 @SuppressLint("InflateParams")
 class PickDirectoryDialog(
@@ -52,6 +53,7 @@ class PickDirectoryDialog(
     private var currentPathPrefix = ""
 
     init {
+        Timber.d("Hojat Ghasemi : PickDirectoryDialog was called")
         (binding.directoriesGrid.layoutManager as MyGridLayoutManager).apply {
             orientation =
                 if (activity.config.scrollHorizontally && isGridViewType) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL

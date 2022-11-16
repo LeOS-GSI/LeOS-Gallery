@@ -13,6 +13,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.SLIDESHOW_DEFAULT_INTERVAL
 import ca.on.sudbury.hojat.smartgallery.helpers.SlideshowAnimation
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import timber.log.Timber
 
 @SuppressLint("InflateParams")
 class SlideShowDialog(
@@ -23,6 +24,9 @@ class SlideShowDialog(
     var binding = DialogSlideshowBinding.inflate(activity.layoutInflater)
 
     init {
+
+        Timber.d("Hojat Ghasemi : SlideShowDialog was called")
+
         binding.apply {
             intervalHint.hint =
                 activity.getString(R.string.seconds_raw).replaceFirstChar { it.uppercaseChar() }

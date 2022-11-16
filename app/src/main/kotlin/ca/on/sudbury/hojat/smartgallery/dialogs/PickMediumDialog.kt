@@ -20,6 +20,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
+import timber.log.Timber
 
 @SuppressLint("InflateParams")
 class PickMediumDialog(
@@ -38,12 +39,13 @@ class PickMediumDialog(
     private var isGridViewType = viewType == ViewType.Grid.id
 
     init {
+        Timber.d("Hojat Ghasemi : PickMediumDialog was called")
+
         (binding.mediaGrid.layoutManager as MyGridLayoutManager).apply {
             orientation =
                 if (config.scrollHorizontally && isGridViewType) RecyclerView.HORIZONTAL else RecyclerView.VERTICAL
             spanCount = if (isGridViewType) config.mediaColumnCnt else 1
         }
-
         binding.mediaFastscroller.updateColors(activity.getProperPrimaryColor())
 
         activity.getAlertDialogBuilder()
