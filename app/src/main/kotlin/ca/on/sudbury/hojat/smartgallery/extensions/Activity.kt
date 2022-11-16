@@ -67,7 +67,6 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideloadedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
@@ -85,6 +84,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
 import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
+import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideLoadedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
@@ -2370,9 +2370,11 @@ private fun isAppSideloaded(owner: Activity): Boolean {
 }
 
 fun Activity.showSideloadingDialog() {
-    AppSideloadedDialog(this) {
-        finish()
-    }
+    val funAfterDialogCancelled = { finish() }
+    AppSideLoadedDialogFragment(funAfterDialogCancelled).show(
+        (this as FragmentActivity).supportFragmentManager,
+        "AppSideLoadedDialogFragment"
+    )
 }
 
 fun BaseSimpleActivity.copySingleFileSdk30(source: FileDirItem, destination: FileDirItem): Boolean {
