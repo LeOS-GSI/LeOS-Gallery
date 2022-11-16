@@ -13,7 +13,6 @@ import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -25,6 +24,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
@@ -66,7 +66,6 @@ class CustomizationActivity : BaseSimpleActivity() {
     private var curNavigationBarColor = INVALID_NAVIGATION_BAR_COLOR
     private var hasUnsavedChanges = false
     private var predefinedThemes = LinkedHashMap<Int, MyTheme>()
-    private var curPrimaryLineColorPicker: LineColorPickerDialog? = null
     private var storedSharedTheme: SharedTheme? = null
     private var menu: Menu? = null
 
@@ -134,11 +133,6 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateBackgroundColor(getCurrentBackgroundColor())
             updateActionbarColor(getCurrentStatusBarColor())
             updateNavigationBarColor(curNavigationBarColor)
-        }
-
-        curPrimaryLineColorPicker?.getSpecificColor()?.apply {
-            updateActionbarColor(this)
-            setTheme(getThemeId(this))
         }
     }
 
@@ -267,7 +261,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateColorTheme(it as Int, true)
             if (it != THEME_CUSTOM && it != THEME_SHARED && it != THEME_AUTO && it != THEME_SYSTEM && !baseConfig.wasCustomThemeSwitchDescriptionShown) {
                 baseConfig.wasCustomThemeSwitchDescriptionShown = true
-                Toast.makeText(this, R.string.changing_color_description,Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.changing_color_description, Toast.LENGTH_LONG).show()
             }
 
             val hideGoogleRelations = resources.getBoolean(R.bool.hide_google_relations)
@@ -662,7 +656,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun pickPrimaryColor() {
         if (!packageName.startsWith(
-                "com.simplemobiletools.",
+                "ca.on.",
                 true
             ) && baseConfig.appRunCount > 50
         ) {
@@ -670,13 +664,8 @@ class CustomizationActivity : BaseSimpleActivity() {
             return
         }
 
-        curPrimaryLineColorPicker = LineColorPickerDialog(
-            this,
-            curPrimaryColor,
-            true,
-            menu = menu
-        ) { wasPositivePressed, color ->
-            curPrimaryLineColorPicker = null
+
+        val callback: (Boolean, Int) -> Unit = { wasPositivePressed, color ->
             if (wasPositivePressed) {
                 if (hasColorChanged(curPrimaryColor, color)) {
                     setCurrentPrimaryColor(color)
@@ -691,6 +680,16 @@ class CustomizationActivity : BaseSimpleActivity() {
                 updateMenuItemColors(menu, true, curPrimaryColor)
             }
         }
+
+        LineColorPickerDialogFragment(
+            color = curPrimaryColor,
+            isPrimaryColorPicker = true,
+            menu = menu,
+            callback = callback
+        ).show(
+            supportFragmentManager,
+            "LineColorPickerDialogFragment"
+        )
     }
 
     private fun pickAccentColor() {
@@ -724,13 +723,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun pickAppIconColor() {
-        LineColorPickerDialog(
-            this,
-            curAppIconColor,
-            false,
-            R.array.md_app_icon_colors,
-            getAppIconIDs()
-        ) { wasPositivePressed, color ->
+        val callback: (Boolean, Int) -> Unit = { wasPositivePressed, color ->
             if (wasPositivePressed) {
                 if (hasColorChanged(curAppIconColor, color)) {
                     curAppIconColor = color
@@ -739,6 +732,14 @@ class CustomizationActivity : BaseSimpleActivity() {
                 }
             }
         }
+        LineColorPickerDialogFragment(
+            color = curAppIconColor,
+            isPrimaryColorPicker = false,
+            primaryColors = R.array.md_app_icon_colors,
+            appIconIDs = getAppIconIDs(),
+            callback = callback
+        ).show(supportFragmentManager, "LineColorPickerDialogFragment")
+
     }
 
     private fun getUpdatedTheme() =
@@ -828,7 +829,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                 null
             )
         } catch (e: Exception) {
-            Toast.makeText(this, e.toString(),Toast.LENGTH_LONG).show()
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
         }
     }
 }
