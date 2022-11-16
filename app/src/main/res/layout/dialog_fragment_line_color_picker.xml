@@ -38,4 +38,12 @@
         android:textSize="@dimen/bigger_text_size"
         tools:text="#FF0000" />
 
+    <include
+        android:id="@+id/line_color_picker_dialog_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hex_code"
+        android:layout_marginTop="10dp" />
+
 </RelativeLayout>
