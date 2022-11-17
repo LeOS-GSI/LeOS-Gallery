@@ -31,7 +31,6 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
@@ -108,6 +107,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
@@ -1037,13 +1037,17 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             config.shouldShowHidden,
             showFAB = false,
             canAddShowHiddenButton = true
-        ) { it ->
-            CreateNewFolderDialog(this, it) {
-                config.tempFolderPath = it
+        ) { pickedPath ->
+            val callback: (String) -> Unit = { path ->
+                config.tempFolderPath = path
                 RunOnBackgroundThreadUseCase {
                     gotDirectories(addTempFolderIfNeeded(getCurrentlyDisplayedDirs()))
                 }
             }
+            CreateNewFolderDialogFragment(pickedPath, callback).show(
+                supportFragmentManager,
+                "CreateNewFolderDialogFragment"
+            )
         }
     }
 

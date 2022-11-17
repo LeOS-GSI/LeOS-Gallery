@@ -182,10 +182,14 @@ class FilePickerDialog(
     private fun getTitle() = if (pickFile) R.string.select_file else R.string.select_folder
 
     private fun createNewFolder() {
-        CreateNewFolderDialog(activity, currPath) {
-            callback(it)
+        val callback: (path: String) -> Unit = { path ->
+            callback(path)
             mDialog?.dismiss()
         }
+        CreateNewFolderDialogFragment(currPath, callback).show(
+            activity.supportFragmentManager,
+            "CreateNewFolderDialogFragment"
+        )
     }
 
     private fun tryUpdateItems() {

@@ -24,7 +24,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
@@ -44,6 +43,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediaBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeGroupingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.launchAbout
@@ -769,9 +769,13 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     }
 
     private fun createNewFolder() {
-        CreateNewFolderDialog(this, mPath) {
-            config.tempFolderPath = it
+        val callback: (String) -> Unit = { path ->
+            config.tempFolderPath = path
         }
+        CreateNewFolderDialogFragment(mPath, callback).show(
+            supportFragmentManager,
+            "CreateNewFolderDialogFragment"
+        )
     }
 
     private fun tryToggleTemporarilyShowHidden() {

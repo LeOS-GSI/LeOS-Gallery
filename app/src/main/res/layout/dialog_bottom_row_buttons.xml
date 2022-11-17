@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="cancel" />
+        android:text="@string/cancel" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_ok"
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="OK" />
+        android:text="@string/ok" />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>
