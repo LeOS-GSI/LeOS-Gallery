@@ -58,7 +58,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediumBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.SlideShowDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.SlideShowDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.setAs
 import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
@@ -646,9 +646,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     }
 
     private fun initSlideshow() {
-        SlideShowDialog(this) {
-            startSlideshow()
-        }
+        SlideShowDialogFragment(callbackAfterDialogConfirmed = { startSlideshow() }).show(
+            supportFragmentManager,
+            "SlideShowDialogFragment"
+        )
     }
 
     private fun startSlideshow() {

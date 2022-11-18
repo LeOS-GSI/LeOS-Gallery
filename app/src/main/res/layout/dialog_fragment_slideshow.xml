@@ -15,11 +15,11 @@
             android:id="@+id/interval_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/interval_hint"
+            android:layout_alignBottom="@+id/interval_hint"
             android:layout_marginTop="@dimen/medium_margin"
             android:paddingStart="@dimen/activity_margin"
             android:paddingTop="@dimen/bigger_margin"
-            android:layout_alignTop="@+id/interval_hint"
-            android:layout_alignBottom="@+id/interval_hint"
             android:paddingBottom="@dimen/activity_margin"
             android:text="@string/interval"
             tools:ignore="RelativeOverlap,RtlSymmetry" />
@@ -164,5 +164,13 @@
                 android:text="@string/loop_slideshow" />
 
         </RelativeLayout>
+
+        <include
+            android:id="@+id/slideshow_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/loop_slideshow_holder"
+            android:layout_marginTop="10dp" />
     </RelativeLayout>
 </ScrollView>
