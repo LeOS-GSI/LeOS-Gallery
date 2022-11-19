@@ -46,7 +46,6 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.ExcludeFolderDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickMediumDialog
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
@@ -71,6 +70,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.ExcludeFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
@@ -519,10 +519,13 @@ class DirectoryAdapter(
         }
 
         if (paths.size == 1) {
-            ExcludeFolderDialog(activity, paths.toMutableList()) {
+            val callbackAfterDialogConfirmed = {
                 listener?.refreshItems()
                 finishActMode()
             }
+            ExcludeFolderDialogFragment(paths.toMutableList(), callbackAfterDialogConfirmed).show(
+                activity.supportFragmentManager, "ExcludeFolderDialogFragment"
+            )
         } else if (paths.size > 1) {
             config.addExcludedFolders(paths)
             listener?.refreshItems()

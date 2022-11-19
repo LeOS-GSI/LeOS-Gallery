@@ -55,6 +55,9 @@ class ChangeFileThumbnailStyleDialogFragment : DialogFragment() {
         }
     }
 
+    /**
+     * Cleaning the stuff
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -32,5 +32,13 @@
             android:layout_height="wrap_content">
 
         </RadioGroup>
+
+        <include
+            android:id="@+id/exclude_folder_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp" />
+
     </LinearLayout>
 </ScrollView>
