@@ -54,7 +54,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.FiltersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityEditBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -596,12 +596,15 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         }
 
         binding.bottomAspectRatios.bottomAspectRatioOther.setOnClickListener {
-            OtherAspectRatioDialog(this, lastOtherAspectRatio) {
-                lastOtherAspectRatio = it
-                config.lastEditorCropOtherAspectRatioX = it.first
-                config.lastEditorCropOtherAspectRatioY = it.second
+            val callbackAfterRatioPicked: (Pair<Float, Float>) -> Unit = { aspectRatioPair ->
+                lastOtherAspectRatio = aspectRatioPair
+                config.lastEditorCropOtherAspectRatioX = aspectRatioPair.first
+                config.lastEditorCropOtherAspectRatioY = aspectRatioPair.second
                 updateAspectRatio(AspectRatio.Other.id)
             }
+            OtherAspectRatioDialogFragment(lastOtherAspectRatio, callbackAfterRatioPicked).show(
+                supportFragmentManager, "OtherAspectRatioDialogFragment"
+            )
         }
 
         updateAspectRatioButtons()
