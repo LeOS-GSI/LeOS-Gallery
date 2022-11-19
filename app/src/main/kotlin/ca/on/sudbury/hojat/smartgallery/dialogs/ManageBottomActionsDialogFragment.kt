@@ -1,25 +1,48 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.databinding.DialogManageBottomActionsBinding
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
-import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentManageBottomActionsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.helpers.BottomAction
-import timber.log.Timber
 
-class ManageBottomActionsDialog(
-    val activity: BaseSimpleActivity,
-    val callback: (result: Int) -> Unit
-) {
 
-    // we create the binding by referencing the owner Activity
-    var binding = DialogManageBottomActionsBinding.inflate(activity.layoutInflater)
+/**
+ * In the settings page, in the section "Bottom Actions" click on "Manage visible bottom actions".
+ * The resulting dialog is created via this class.
+ */
+class ManageBottomActionsDialogFragment(
+    val callbackAfterDialogConfirmed: (result: Int) -> Unit
+) :
+    DialogFragment() {
 
-    init {
-        Timber.d("Hojat Ghasemi : ManageBottomActionsDialog was called")
-        val actions = activity.config.visibleBottomActions
+    // the binding
+    private var _binding: DialogFragmentManageBottomActionsBinding? = null
+    private val binding get() = _binding!!
+
+    /**
+     * Create the UI of the dialog
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        // load the binding
+        _binding = DialogFragmentManageBottomActionsBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        loadDialogUI()
+        return binding.root
+    }
+
+    private fun loadDialogUI() {
+        val actions = requireActivity().config.visibleBottomActions
         binding.apply {
             manageBottomActionsToggleFavorite.isChecked =
                 actions and BottomAction.ToggleFavorite.id != 0
@@ -40,13 +63,21 @@ class ManageBottomActionsDialog(
             manageBottomActionsMove.isChecked = actions and BottomAction.Move.id != 0
             manageBottomActionsResize.isChecked = actions and BottomAction.Resize.id != 0
         }
+    }
 
-        activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { _, _ -> dialogConfirmed() }
-            .setNegativeButton(R.string.cancel, null)
-            .apply {
-                activity.setupDialogStuff(binding.root, this)
+    /**
+     * Register listeners for views.
+     */
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding.manageBottomActionsDialogBottomRow) {
+            btnOk.setOnClickListener {
+                dialogConfirmed()
+                dismiss()
             }
+            btnCancel.setOnClickListener { dismiss() }
+        }
     }
 
     private fun dialogConfirmed() {
@@ -84,7 +115,16 @@ class ManageBottomActionsDialog(
                 result += BottomAction.Resize.id
         }
 
-        activity.config.visibleBottomActions = result
-        callback(result)
+        requireActivity().config.visibleBottomActions = result
+        callbackAfterDialogConfirmed(result)
+    }
+
+
+    /**
+     * Clean all used resources.
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

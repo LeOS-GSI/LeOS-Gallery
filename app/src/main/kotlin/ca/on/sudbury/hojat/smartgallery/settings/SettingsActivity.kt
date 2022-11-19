@@ -53,7 +53,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySettingsBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.DEFAULT_BOTTOM_ACTIONS
@@ -884,13 +884,17 @@ class SettingsActivity : SimpleActivity() {
     private fun setupManageBottomActions() {
         with(binding) {
             settingsManageBottomActionsHolder.setOnClickListener {
-                ManageBottomActionsDialog(this@SettingsActivity) {
+                val callbackAfterDialogConfirmed: (Int) -> Unit = {
                     if (config.visibleBottomActions == 0) {
                         settingsBottomActionsCheckboxHolder.callOnClick()
                         config.bottomActions = false
                         config.visibleBottomActions = DEFAULT_BOTTOM_ACTIONS
                     }
                 }
+                ManageBottomActionsDialogFragment(callbackAfterDialogConfirmed).show(
+                    supportFragmentManager,
+                    "ManageBottomActionsDialogFragment"
+                )
             }
         }
     }
