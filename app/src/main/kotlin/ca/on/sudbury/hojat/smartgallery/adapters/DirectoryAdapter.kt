@@ -25,7 +25,6 @@ import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -73,6 +72,7 @@ import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
@@ -365,9 +365,11 @@ class DirectoryAdapter(
             val paths = getSelectedPaths().filter {
                 !activity.isAStorageRootFolder(it) && !config.isFolderProtected(it)
             } as ArrayList<String>
-            RenameItemsDialog(activity, paths) {
-                listener?.refreshItems()
-            }
+            val callback: () -> Unit = { listener?.refreshItems() }
+            RenameItemsDialogFragment(paths, callback).show(
+                activity.supportFragmentManager,
+                "RenameItemsDialogFragment"
+            )
         }
     }
 
