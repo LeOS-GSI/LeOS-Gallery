@@ -29,8 +29,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import timber.log.Timber
 import java.util.LinkedList
 
-private const val RECENT_COLORS_NUMBER = 5
-
 @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
 class ColorPickerDialog(
     val activity: Activity,
@@ -40,6 +38,7 @@ class ColorPickerDialog(
     val currentColorCallback: ((color: Int) -> Unit)? = null,
     val callback: (wasPositivePressed: Boolean, color: Int) -> Unit
 ) {
+    private val recentColorsId = 5
     private var viewHue: View
     private var viewSatVal: ColorPickerSquare
     private var viewCursor: ImageView
@@ -183,7 +182,7 @@ class ColorPickerDialog(
             root.findViewById<View>(R.id.recent_colors).visibility = View.VISIBLE
             val squareSize =
                 root.context.resources.getDimensionPixelSize(R.dimen.colorpicker_hue_width)
-            recentColors.take(RECENT_COLORS_NUMBER).forEach { recentColor ->
+            recentColors.take(recentColorsId).forEach { recentColor ->
                 val recentColorView = ImageView(root.context)
                 recentColorView.id = View.generateViewId()
                 recentColorView.layoutParams = ViewGroup.LayoutParams(squareSize, squareSize)
@@ -223,8 +222,8 @@ class ColorPickerDialog(
         var recentColors = baseConfig.colorPickerRecentColors
 
         recentColors.remove(color)
-        if (recentColors.size >= RECENT_COLORS_NUMBER) {
-            val numberOfColorsToDrop = recentColors.size - RECENT_COLORS_NUMBER + 1
+        if (recentColors.size >= recentColorsId) {
+            val numberOfColorsToDrop = recentColors.size - recentColorsId + 1
             recentColors = LinkedList(recentColors.dropLast(numberOfColorsToDrop))
         }
         recentColors.addFirst(color)
