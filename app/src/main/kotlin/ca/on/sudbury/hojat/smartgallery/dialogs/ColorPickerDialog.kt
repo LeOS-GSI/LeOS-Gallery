@@ -83,7 +83,7 @@ class ColorPickerDialog(
                 true
             }
             newHexField.setText(hexCode)
-            root.setupRecentColors()
+            setupRecentColors(root)
         }
 
         viewHue.setOnTouchListener(OnTouchListener { _, event ->
@@ -177,19 +177,21 @@ class ColorPickerDialog(
         }
     }
 
-    private fun View.setupRecentColors() {
+    private fun setupRecentColors(root: View) {
         val recentColors = baseConfig.colorPickerRecentColors
         if (recentColors.isNotEmpty()) {
-            findViewById<View>(R.id.recent_colors).visibility = View.VISIBLE
-            val squareSize = context.resources.getDimensionPixelSize(R.dimen.colorpicker_hue_width)
+            root.findViewById<View>(R.id.recent_colors).visibility = View.VISIBLE
+            val squareSize =
+                root.context.resources.getDimensionPixelSize(R.dimen.colorpicker_hue_width)
             recentColors.take(RECENT_COLORS_NUMBER).forEach { recentColor ->
-                val recentColorView = ImageView(context)
+                val recentColorView = ImageView(root.context)
                 recentColorView.id = View.generateViewId()
                 recentColorView.layoutParams = ViewGroup.LayoutParams(squareSize, squareSize)
                 recentColorView.fillWithColor(recentColor, backgroundColor)
                 recentColorView.setOnClickListener { newHexField.setText(getHexCode(recentColor)) }
-                findViewById<ViewGroup>(R.id.recent_colors).addView(recentColorView)
-                findViewById<ConstraintHelper>(R.id.recent_colors_flow).addView(recentColorView)
+                root.findViewById<ViewGroup>(R.id.recent_colors).addView(recentColorView)
+                root.findViewById<ConstraintHelper>(R.id.recent_colors_flow)
+                    .addView(recentColorView)
             }
         }
     }
