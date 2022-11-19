@@ -16,14 +16,15 @@ import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import timber.log.Timber
 
 /**
- * I couldn't find the place this class is being used.
+ * There are various dialogs that use this class. I need to firstly force them to use a pre-created XML UI
+ * and then delete this class.
  */
 @SuppressLint("InflateParams")
 class RadioGroupDialog(
     val activity: Activity,
     val items: ArrayList<RadioItem>,
     private val checkedItemId: Int = -1,
-    val titleId: Int = 0,
+    private val titleId: Int = 0,
     showOKButton: Boolean = false,
     private val cancelCallback: (() -> Unit)? = null,
     val callback: (newValue: Any) -> Unit
