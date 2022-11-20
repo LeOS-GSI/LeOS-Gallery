@@ -109,7 +109,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
@@ -247,7 +247,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
         if (baseConfig.appRunCount % 40 == 0 && !baseConfig.wasAppRated) {
             if (!resources.getBoolean(R.bool.hide_google_relations)) {
-                RateStarsDialog(this)
+                RateStarsDialogFragment().show(supportFragmentManager, "RateStarsDialogFragment")
             }
         }
 

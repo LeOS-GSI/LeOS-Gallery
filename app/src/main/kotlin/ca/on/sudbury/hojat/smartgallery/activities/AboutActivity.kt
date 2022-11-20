@@ -36,7 +36,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
@@ -221,7 +221,10 @@ class AboutActivity : BaseSimpleActivity() {
                 if (baseConfig.wasAppRated) {
                     redirectToRateUs()
                 } else {
-                    RateStarsDialog(this)
+                    RateStarsDialogFragment().show(
+                        supportFragmentManager,
+                        "RateStarsDialogFragment"
+                    )
                 }
             } else {
                 baseConfig.wasBeforeRateShown = true

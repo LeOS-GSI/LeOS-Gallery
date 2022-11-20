@@ -18,8 +18,9 @@
         android:textSize="@dimen/bigger_text_size" />
 
     <LinearLayout
+        android:layout_gravity="center_horizontal"
         android:id="@+id/rate_stars_holder"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
@@ -71,4 +72,12 @@
             android:src="@drawable/ic_star_outline_vector" />
 
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_cancel_rate_us_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="5dp"
+        android:text="@string/later" />
 </LinearLayout>
