@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
@@ -67,6 +66,7 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
 import ca.on.sudbury.hojat.smartgallery.extensions.sharePathIntent
@@ -330,9 +330,9 @@ class MediaAdapter(
         }
 
         if (selectedKeys.size == 1) {
-            RenameItemDialog(activity, firstPath) {
+            val callback: (String) -> Unit = { newPath ->
                 RunOnBackgroundThreadUseCase {
-                    activity.updateDBMediaPath(firstPath, it)
+                    activity.updateDBMediaPath(firstPath, newPath)
                     activity.runOnUiThread {
                         enableInstantLoad()
                         listener?.refreshItems()
@@ -340,6 +340,10 @@ class MediaAdapter(
                     }
                 }
             }
+            RenameItemDialogFragment(firstPath, callback).show(
+                activity.supportFragmentManager,
+                "RenameItemDialogFragment"
+            )
         } else {
             RenameDialog(activity, getSelectedPaths(), true) {
                 enableInstantLoad()

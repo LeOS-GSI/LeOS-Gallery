@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
@@ -72,6 +71,7 @@ import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExcludeFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
@@ -335,12 +335,12 @@ class DirectoryAdapter(
 
             activity.handleLockedFolderOpening(sourcePath) { success ->
                 if (success) {
-                    RenameItemDialog(activity, dir.absolutePath) {
+                    val callback: (String) -> Unit = { newPath ->
                         activity.runOnUiThread {
                             firstDir.apply {
-                                path = it
-                                name = it.getFilenameFromPath()
-                                tmb = File(it, tmb.getFilenameFromPath()).absolutePath
+                                path = newPath
+                                name = newPath.getFilenameFromPath()
+                                tmb = File(newPath, tmb.getFilenameFromPath()).absolutePath
                             }
                             updateDirs(dirs)
                             RunOnBackgroundThreadUseCase {
@@ -359,6 +359,10 @@ class DirectoryAdapter(
                             }
                         }
                     }
+                    RenameItemDialogFragment(dir.absolutePath, callback).show(
+                        activity.supportFragmentManager,
+                        "RenameItemDialogFragment"
+                    )
                 }
             }
         } else {

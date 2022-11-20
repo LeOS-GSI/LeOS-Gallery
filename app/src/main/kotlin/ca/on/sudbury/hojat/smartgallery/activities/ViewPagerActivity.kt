@@ -40,7 +40,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
@@ -56,6 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediumBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SlideShowDialogFragment
@@ -1576,16 +1576,21 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             return
         }
 
-        RenameItemDialog(this, oldPath) {
+        val callback: (String) -> Unit = { newPath ->
             getCurrentMedia().getOrNull(mPos)?.apply {
-                path = it
-                name = it.getFilenameFromPath()
+                path = newPath
+                name = newPath.getFilenameFromPath()
             }
             RunOnBackgroundThreadUseCase {
-                updateDBMediaPath(oldPath, it)
+                updateDBMediaPath(oldPath, newPath)
             }
             updateActionbarTitle()
         }
+        RenameItemDialogFragment(oldPath, callback).show(
+            supportFragmentManager,
+            "RenameItemDialogFragment"
+        )
+
     }
 
     private fun refreshViewPager(refetchPosition: Boolean = false) {
