@@ -84,7 +84,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialogFragment
 import com.google.android.material.appbar.MaterialToolbar
 import ca.on.sudbury.hojat.smartgallery.dialogs.FileConflictDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
@@ -1091,7 +1091,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
     fun exportSettings(configItems: LinkedHashMap<String, Any>) {
         if (IsQPlusUseCase()) {
             configItemsToExport = configItems
-            ExportSettingsDialog(this, getExportSettingsFilename(), true) { _, filename ->
+            val callback: (path: String, filename: String) -> Unit = { _, filename ->
                 Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_TITLE, filename)
@@ -1111,19 +1111,24 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     }
                 }
             }
+            ExportSettingsDialogFragment(
+                getExportSettingsFilename(),
+                true,
+                callback
+            ).show(supportFragmentManager, "ExportSettingsDialogFragment")
         } else {
             handlePermission(PERMISSION_WRITE_STORAGE) { it ->
                 if (it) {
-                    ExportSettingsDialog(
-                        this,
-                        getExportSettingsFilename(),
-                        false
-                    ) { path, _ ->
+                    val callback: (path: String, filename: String) -> Unit = { path, _ ->
                         val file = File(path)
                         getFileOutputStream(file.toFileDirItem(this), true) {
                             exportSettingsTo(it, configItems)
                         }
                     }
+                    ExportSettingsDialogFragment(
+                        getExportSettingsFilename(),
+                        false, callback
+                    ).show(supportFragmentManager, "ExportSettingsDialogFragment")
                 }
             }
         }

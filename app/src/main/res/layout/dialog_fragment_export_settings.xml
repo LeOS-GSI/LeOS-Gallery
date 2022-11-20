@@ -47,5 +47,13 @@
                 android:textCursorDrawable="@null"
                 android:textSize="@dimen/normal_text_size" />
         </ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout>
+
+        <include
+            android:id="@+id/export_settings_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp" />
+
     </LinearLayout>
 </ScrollView>
