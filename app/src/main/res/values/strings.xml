@@ -1420,4 +1420,5 @@
     <string name="write_permission_sd_card">write permission on SD card</string>
     <string name="write_permission_otg">Write permission on OTG</string>
     <string name="icon_of_the_color_picker">icon of the color picker</string>
+    <string name="colon">:</string>
 </resources>

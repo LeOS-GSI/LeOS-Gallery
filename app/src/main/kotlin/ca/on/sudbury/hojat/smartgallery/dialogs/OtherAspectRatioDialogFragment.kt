@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentOtherAspectRatioBinding
 
 
@@ -106,10 +105,14 @@ class OtherAspectRatioDialogFragment(
     }
 
     private fun customRatioPicked() {
-        CustomAspectRatioDialog(requireActivity() as BaseSimpleActivity, lastOtherAspectRatio) {
-            callbackAfterRatioPicked(it)
+        val callbackAfterDialogConfirmed: (Pair<Float, Float>) -> Unit = { aspectRatio ->
+            callbackAfterRatioPicked(aspectRatio)
             dismiss()
         }
+        CustomAspectRatioDialogFragment(lastOtherAspectRatio, callbackAfterDialogConfirmed).show(
+            requireActivity().supportFragmentManager,
+            "CustomAspectRatioDialogFragment"
+        )
     }
 
     private fun ratioPicked(pair: Pair<Float, Float>) {
