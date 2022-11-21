@@ -17,7 +17,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.RenameDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
@@ -66,6 +65,7 @@ import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RenameDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.isSDCardSetAsDefaultStorage
@@ -345,11 +345,19 @@ class MediaAdapter(
                 "RenameItemDialogFragment"
             )
         } else {
-            RenameDialog(activity, getSelectedPaths(), true) {
+            val callback = {
                 enableInstantLoad()
                 listener?.refreshItems()
                 finishActMode()
             }
+            RenameDialogFragment(
+                getSelectedPaths(),
+                true,
+                callback
+            ).show(
+                activity.supportFragmentManager,
+                "RenameDialogFragment"
+            )
         }
     }
 

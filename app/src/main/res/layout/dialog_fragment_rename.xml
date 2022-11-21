@@ -32,5 +32,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/dialog_tab_layout" />
 
+        <include
+            android:id="@+id/rename_dialog_bottom_row"
+            layout="@layout/dialog_bottom_row_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_tab_view_pager"
+            android:layout_marginTop="2dp" />
+
     </RelativeLayout>
 </ca.on.hojat.palette.views.MyScrollView>
