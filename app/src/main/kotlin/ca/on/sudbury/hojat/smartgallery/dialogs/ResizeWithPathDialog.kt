@@ -63,35 +63,32 @@ class ResizeWithPathDialog(
             }
         }
 
-        val widthView = binding.resizeImageWidth
-        val heightView = binding.resizeImageHeight
-
-        widthView.setText(size.x.toString())
-        heightView.setText(size.y.toString())
+        binding.resizeImageWidth.setText(size.x.toString())
+        binding.resizeImageHeight.setText(size.y.toString())
 
         val ratio = size.x / size.y.toFloat()
 
-        widthView.addTextChangedListener {
-            if (widthView.hasFocus()) {
-                var width = getViewValue(widthView)
+        binding.resizeImageWidth.addTextChangedListener {
+            if (binding.resizeImageWidth.hasFocus()) {
+                var width = getViewValue(binding.resizeImageWidth)
                 if (width > size.x) {
-                    widthView.setText(size.x.toString())
+                    binding.resizeImageWidth.setText(size.x.toString())
                     width = size.x
                 }
 
-                heightView.setText((width / ratio).toInt().toString())
+                binding.resizeImageHeight.setText((width / ratio).toInt().toString())
             }
         }
 
-        heightView.addTextChangedListener {
-            if (heightView.hasFocus()) {
-                var height = getViewValue(heightView)
+        binding.resizeImageHeight.addTextChangedListener {
+            if (binding.resizeImageHeight.hasFocus()) {
+                var height = getViewValue(binding.resizeImageHeight)
                 if (height > size.y) {
-                    heightView.setText(size.y.toString())
+                    binding.resizeImageHeight.setText(size.y.toString())
                     height = size.y
                 }
 
-                widthView.setText((height * ratio).toInt().toString())
+                binding.resizeImageWidth.setText((height * ratio).toInt().toString())
             }
         }
 
@@ -102,15 +99,19 @@ class ResizeWithPathDialog(
                 activity.setupDialogStuff(binding.root, this) { alertDialog ->
                     ShowKeyboardUseCase(alertDialog, binding.resizeImageWidth)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                        val width = getViewValue(widthView)
-                        val height = getViewValue(heightView)
+                        val width = getViewValue(binding.resizeImageWidth)
+                        val height = getViewValue(binding.resizeImageHeight)
                         if (width <= 0 || height <= 0) {
                             Toast.makeText(activity, R.string.invalid_values, Toast.LENGTH_LONG)
                                 .show()
                             return@setOnClickListener
                         }
 
-                        val newSize = Point(getViewValue(widthView), getViewValue(heightView))
+                        val newSize =
+                            Point(
+                                getViewValue(binding.resizeImageWidth),
+                                getViewValue(binding.resizeImageHeight)
+                            )
 
                         val filename = binding.filenameValue.text.toString().trim()
                         val extension = binding.extensionValue.text.toString().trim()
