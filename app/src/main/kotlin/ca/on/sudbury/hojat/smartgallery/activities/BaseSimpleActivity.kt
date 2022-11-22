@@ -83,7 +83,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SELECT_EXPORT_SETTINGS_FILE_INTE
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.helpers.getConflictResolution
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExportSettingsDialogFragment
 import com.google.android.material.appbar.MaterialToolbar
 import ca.on.sudbury.hojat.smartgallery.dialogs.FileConflictDialogFragment
@@ -598,9 +598,18 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             if (baseConfig.appRunCount > 100) {
                 val label =
                     "You are using a fake version of the app. For your own safety download the original one from www.simplemobiletools.com. Thanks"
-                ConfirmationDialog(this, label, positive = R.string.ok, negative = 0) {
-                    launchViewIntent("https://play.google.com/store/apps/dev?id=9070296388022589266")
-                }
+
+                val callback: () -> Unit =
+                    { launchViewIntent("https://play.google.com/store/apps/dev?id=9070296388022589266") }
+                ConfirmationDialogFragment(
+                    message = label,
+                    positive = R.string.ok,
+                    negative = 0,
+                    callbackAfterDialogConfirmed = callback
+                ).show(
+                    supportFragmentManager,
+                    "ConfirmationDialogFragment"
+                )
                 return
             }
         }

@@ -43,7 +43,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GLIDE
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_CROPPER
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_RTL
@@ -84,6 +83,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideLoadedDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
@@ -814,9 +814,16 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
     } else if (IsSPlusUseCase() && !MediaStore.canManageMedia(this) && !isExternalStorageManager()) {
         val message =
             "${getString(R.string.media_management_prompt)}\n\n${getString(R.string.media_management_note)}"
-        ConfirmationDialog(this, message, 0, R.string.ok, 0) {
+        val callbackAfterDialogConfirmed: () -> Unit = {
             launchMediaManagementIntent(callback)
         }
+        ConfirmationDialogFragment(
+            message = message,
+            messageId = 0,
+            positive = R.string.ok,
+            negative = 0,
+            callbackAfterDialogConfirmed = callbackAfterDialogConfirmed
+        ).show(supportFragmentManager, "ConfirmationDialogFragment")
     } else {
         callback()
     }
@@ -1371,15 +1378,14 @@ fun BaseSimpleActivity.emptyAndDisableTheRecycleBin(callback: () -> Unit) {
 }
 
 fun BaseSimpleActivity.showRecycleBinEmptyingDialog(callback: () -> Unit) {
-    ConfirmationDialog(
-        this,
-        "",
-        R.string.empty_recycle_bin_confirmation,
-        R.string.yes,
-        R.string.no
-    ) {
-        callback()
-    }
+    val callbackAfterDialogConfirmed: () -> Unit = { callback() }
+    ConfirmationDialogFragment(
+        message = "",
+        messageId = R.string.empty_recycle_bin_confirmation,
+        positive = R.string.yes,
+        negative = R.string.no,
+        callbackAfterDialogConfirmed = callbackAfterDialogConfirmed
+    ).show(supportFragmentManager, "ConfirmationDialogFragment")
 }
 
 fun BaseSimpleActivity.updateFavoritePaths(

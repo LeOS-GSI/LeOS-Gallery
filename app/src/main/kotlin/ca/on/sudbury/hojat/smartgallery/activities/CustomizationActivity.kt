@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -24,6 +23,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
@@ -236,10 +236,17 @@ class CustomizationActivity : BaseSimpleActivity() {
             if (baseConfig.wasAppIconCustomizationWarningShown) {
                 themePickerClicked()
             } else {
-                ConfirmationDialog(this, "", R.string.app_icon_color_warning, R.string.ok, 0) {
+                val callback: () -> Unit = {
                     baseConfig.wasAppIconCustomizationWarningShown = true
                     themePickerClicked()
                 }
+                ConfirmationDialogFragment(
+                    message = "",
+                    messageId = R.string.app_icon_color_warning,
+                    positive = R.string.ok,
+                    negative = 0,
+                    callbackAfterDialogConfirmed = callback
+                ).show(supportFragmentManager, "ConfirmationDialogFragment")
             }
         }
 
@@ -550,16 +557,20 @@ class CustomizationActivity : BaseSimpleActivity() {
                 if (baseConfig.wasAppIconCustomizationWarningShown) {
                     pickAppIconColor()
                 } else {
-                    ConfirmationDialog(
-                        this@CustomizationActivity,
-                        "",
-                        R.string.app_icon_color_warning,
-                        R.string.ok,
-                        0
-                    ) {
+                    val callback = {
                         baseConfig.wasAppIconCustomizationWarningShown = true
                         pickAppIconColor()
                     }
+                    ConfirmationDialogFragment(
+                        message = "",
+                        messageId = R.string.app_icon_color_warning,
+                        positive = R.string.ok,
+                        negative = 0,
+                        callbackAfterDialogConfirmed = callback
+                    ).show(
+                        supportFragmentManager,
+                        "ConfirmationDialogFragment"
+                    )
                 }
             }
         }
@@ -746,8 +757,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         if (curSelectedThemeId == THEME_SHARED) THEME_SHARED else getCurrentThemeId()
 
     private fun applyToAll() {
-
-        ConfirmationDialog(this, "", R.string.share_colors_success, R.string.ok, 0) {
+        val callback: () -> Unit = {
             Intent().apply {
                 action = BaseContentProvider.SHARED_THEME_ACTIVATED
                 sendBroadcast(this)
@@ -761,7 +771,13 @@ class CustomizationActivity : BaseSimpleActivity() {
             updateColorTheme(THEME_SHARED)
             saveChanges(false)
         }
-
+        ConfirmationDialogFragment(
+            message = "",
+            messageId = R.string.share_colors_success,
+            positive = R.string.ok,
+            negative = 0,
+            callbackAfterDialogConfirmed = callback
+        ).show(supportFragmentManager, "ConfirmationDialogFragment")
     }
 
     private fun updateLabelColors(textColor: Int) {

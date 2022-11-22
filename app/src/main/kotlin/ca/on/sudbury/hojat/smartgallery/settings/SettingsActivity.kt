@@ -10,7 +10,6 @@ import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -53,6 +52,7 @@ import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySettingsBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
@@ -492,7 +492,14 @@ class SettingsActivity : SimpleActivity() {
                             val confirmationTextId =
                                 if (config.hiddenProtectionType == ProtectionType.FingerPrint.id)
                                     R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
-                            ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+                            val callback = { }
+                            ConfirmationDialogFragment(
+                                message = "",
+                                messageId = confirmationTextId,
+                                positive = R.string.ok,
+                                negative = 0,
+                                callbackAfterDialogConfirmed = callback
+                            ).show(supportFragmentManager, "ConfirmationDialogFragment")
                         }
                     }
                 }
@@ -531,7 +538,14 @@ class SettingsActivity : SimpleActivity() {
                         val confirmationTextId =
                             if (config.excludedProtectionType == ProtectionType.FingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
-                        ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+                        val callback = { }
+                        ConfirmationDialogFragment(
+                            message = "",
+                            messageId = confirmationTextId,
+                            positive = R.string.ok,
+                            negative = 0,
+                            callbackAfterDialogConfirmed = callback
+                        ).show(supportFragmentManager, "ConfirmationDialogFragment")
                     }
                 }
             }
@@ -564,7 +578,14 @@ class SettingsActivity : SimpleActivity() {
                         val confirmationTextId =
                             if (config.appProtectionType == ProtectionType.FingerPrint.id)
                                 R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
-                        ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+                        val callback = { }
+                        ConfirmationDialogFragment(
+                            message = "",
+                            messageId = confirmationTextId,
+                            positive = R.string.ok,
+                            negative = 0,
+                            callbackAfterDialogConfirmed = callback
+                        ).show(supportFragmentManager, "ConfirmationDialogFragment")
                     }
                 }
             }
@@ -595,7 +616,14 @@ class SettingsActivity : SimpleActivity() {
                             val confirmationTextId =
                                 if (config.deleteProtectionType == ProtectionType.FingerPrint.id)
                                     R.string.fingerprint_setup_successfully else R.string.protection_setup_successfully
-                            ConfirmationDialog(this, "", confirmationTextId, R.string.ok, 0) { }
+                            val callback = { }
+                            ConfirmationDialogFragment(
+                                message = "",
+                                messageId = confirmationTextId,
+                                positive = R.string.ok,
+                                negative = 0,
+                                callbackAfterDialogConfirmed = callback
+                            ).show(supportFragmentManager, "ConfirmationDialogFragment")
                         }
                     }
                 }

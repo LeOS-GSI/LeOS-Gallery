@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
@@ -68,6 +67,7 @@ import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.hojat.palette.recyclerviewfastscroller.RecyclerViewFastScroller
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExcludeFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialogFragment
@@ -392,9 +392,13 @@ class DirectoryAdapter(
                 hideFolders(selectedPaths)
             } else {
                 config.wasHideFolderTooltipShown = true
-                ConfirmationDialog(activity, activity.getString(R.string.hide_folder_description)) {
+                val callback: () -> Unit = {
                     hideFolders(selectedPaths)
                 }
+                ConfirmationDialogFragment(
+                    message = activity.getString(R.string.hide_folder_description),
+                    callbackAfterDialogConfirmed = callback
+                ).show(activity.supportFragmentManager, "ConfirmationDialogFragment")
             }
         } else {
             selectedPaths.filter {
@@ -722,15 +726,16 @@ class DirectoryAdapter(
             else -> {
                 val itemsCnt = selectedKeys.size
                 if (itemsCnt == 1 && getSelectedItems().first().isRecycleBin()) {
-                    ConfirmationDialog(
-                        activity,
-                        "",
-                        R.string.empty_recycle_bin_confirmation,
-                        R.string.yes,
-                        R.string.no
-                    ) {
+                    val callback = {
                         deleteFolders()
                     }
+                    ConfirmationDialogFragment(
+                        message = "",
+                        messageId = R.string.empty_recycle_bin_confirmation,
+                        positive = R.string.yes,
+                        negative = R.string.no,
+                        callbackAfterDialogConfirmed = callback
+                    ).show(activity.supportFragmentManager, "ConfirmationDialogFragment")
                     return
                 }
 

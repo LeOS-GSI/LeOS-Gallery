@@ -177,9 +177,13 @@ class ResizeWithPathDialogFragment(
                 getString(R.string.file_already_exists_overwrite),
                 newFilename
             )
-            ConfirmationDialog(requireActivity(), title) {
+            val callback = {
                 callback(newSize, newPath)
             }
+            ConfirmationDialogFragment(
+                message = title,
+                callbackAfterDialogConfirmed = callback
+            ).show(requireActivity().supportFragmentManager, "ConfirmationDialogFragment")
         } else {
             callback(newSize, newPath)
         }

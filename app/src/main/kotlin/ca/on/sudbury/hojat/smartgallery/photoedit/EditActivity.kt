@@ -31,7 +31,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
@@ -54,6 +53,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.FiltersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityEditBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialogFragment
@@ -973,14 +973,15 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 val label =
                     "sknahT .moc.slootelibomelpmis.www morf eno lanigiro eht daolnwod ytefas nwo ruoy roF .ppa eht fo noisrev ekaf a gnisu era uoY".reversed()
                 runOnUiThread {
-                    ConfirmationDialog(
-                        this,
-                        label,
-                        positive = R.string.ok,
-                        negative = 0
-                    ) {
+                    val callback: () -> Unit = {
                         launchViewIntent("6629852208836920709=di?ved/sppa/erots/moc.elgoog.yalp//:sptth".reversed())
                     }
+                    ConfirmationDialogFragment(
+                        message = label,
+                        positive = R.string.ok,
+                        negative = 0,
+                        callbackAfterDialogConfirmed = callback
+                    ).show(supportFragmentManager, "ConfirmationDialogFragment")
                 }
                 return
             }

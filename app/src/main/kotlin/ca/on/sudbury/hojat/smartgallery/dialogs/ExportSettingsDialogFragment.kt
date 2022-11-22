@@ -126,10 +126,14 @@ class ExportSettingsDialogFragment(
                 getString(R.string.file_already_exists_overwrite),
                 newPath.getFilenameFromPath()
             )
-            ConfirmationDialog(requireActivity(), title) {
+            val callback = {
                 callback(newPath, filename)
                 dismiss()
             }
+            ConfirmationDialogFragment(
+                message = title,
+                callbackAfterDialogConfirmed = callback
+            ).show(requireActivity().supportFragmentManager, "ConfirmationDialogFragment")
         } else {
             callback(newPath, filename)
             dismiss()

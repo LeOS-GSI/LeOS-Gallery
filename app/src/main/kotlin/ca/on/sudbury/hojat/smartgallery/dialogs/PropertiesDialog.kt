@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
@@ -455,7 +456,7 @@ class PropertiesDialog() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun removeEXIFFromPath(path: String) {
-        ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
+        val callback: () -> Unit = {
             try {
                 removeValues(ExifInterface(path))
                 Toast.makeText(mActivity, R.string.exif_removed, Toast.LENGTH_LONG).show()
@@ -465,10 +466,18 @@ class PropertiesDialog() {
                 Toast.makeText(mActivity, e.toString(), Toast.LENGTH_LONG).show()
             }
         }
+        ConfirmationDialogFragment(
+            message = "",
+            messageId = R.string.remove_exif_confirmation,
+            callbackAfterDialogConfirmed = callback
+        ).show(
+            (mActivity as AppCompatActivity).supportFragmentManager,
+            "ConfirmationDialogFragment"
+        )
     }
 
     private fun removeEXIFFromPaths(paths: List<String>) {
-        ConfirmationDialog(mActivity, "", R.string.remove_exif_confirmation) {
+        val callback: () -> Unit = {
             try {
                 paths.filter { mActivity.isPathOnInternalStorage(it) && canModifyEXIF(it) }
                     .forEach {
@@ -479,6 +488,14 @@ class PropertiesDialog() {
                 Toast.makeText(mActivity, e.toString(), Toast.LENGTH_LONG).show()
             }
         }
+        ConfirmationDialogFragment(
+            message = "",
+            messageId = R.string.remove_exif_confirmation,
+            callbackAfterDialogConfirmed = callback
+        ).show(
+            (mActivity as AppCompatActivity).supportFragmentManager,
+            "ConfirmationDialogFragment"
+        )
     }
 
     private fun isSameParent(fileDirItems: List<FileDirItem>): Boolean {

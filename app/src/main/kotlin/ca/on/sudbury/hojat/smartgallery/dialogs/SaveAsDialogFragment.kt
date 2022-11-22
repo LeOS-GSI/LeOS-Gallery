@@ -174,7 +174,7 @@ class SaveAsDialogFragment(
                 requireActivity().getString(R.string.file_already_exists_overwrite),
                 newFilename
             )
-            ConfirmationDialog(requireActivity(), title) {
+            val callback = {
                 val newFile = File(newPath)
                 val isInDownloadDir = requireActivity().isInDownloadDir(newPath)
                 val isInSubFolderInDownloadDir =
@@ -192,6 +192,10 @@ class SaveAsDialogFragment(
                     selectPath(newPath)
                 }
             }
+            ConfirmationDialogFragment(
+                message = title,
+                callbackAfterDialogConfirmed = callback
+            ).show(requireActivity().supportFragmentManager, "ConfirmationDialogFragment")
         } else {
             selectPath(newPath)
         }
