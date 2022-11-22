@@ -9,7 +9,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -37,6 +36,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogPropertiesBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
@@ -52,7 +52,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.GetGeneralPropertiesUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
 import timber.log.Timber
 import java.io.File
@@ -61,11 +60,12 @@ import java.security.MessageDigest
 
 class PropertiesDialog() {
     private lateinit var mInflater: LayoutInflater
-    private lateinit var mPropertyView: ViewGroup
     private lateinit var mResources: Resources
     private lateinit var mActivity: Activity
-    private lateinit var mDialogView: View
     private var mCountHiddenItems = false
+
+    // the binding
+    private lateinit var binding: DialogPropertiesBinding
 
     /**
      * A File Properties dialog constructor with an optional parameter, usable at 1 file selected
@@ -92,9 +92,8 @@ class PropertiesDialog() {
         mActivity = activity
         mInflater = LayoutInflater.from(activity)
         mResources = activity.resources
-        mDialogView = mInflater.inflate(R.layout.dialog_properties, null)
+        binding = DialogPropertiesBinding.inflate(mInflater)
         mCountHiddenItems = countHiddenItems
-        mPropertyView = mDialogView.properties_holder!!
         addProperties(path)
 
         val builder = activity.getAlertDialogBuilder()
@@ -113,7 +112,7 @@ class PropertiesDialog() {
         }
 
         builder.apply {
-            mActivity.setupDialogStuff(mDialogView, this, R.string.properties) { alertDialog ->
+            mActivity.setupDialogStuff(binding.root, this, R.string.properties) { alertDialog ->
                 alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
                     removeEXIFFromPath(path)
                 }
@@ -144,13 +143,13 @@ class PropertiesDialog() {
             }
 
             this.mActivity.runOnUiThread {
-                (mDialogView.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
+                (binding.root.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
                     size
 
                 if (fileDirItem.isDirectory) {
-                    (mDialogView.findViewById<LinearLayout>(R.id.properties_file_count).property_value as TextView).text =
+                    (binding.root.findViewById<LinearLayout>(R.id.properties_file_count).property_value as TextView).text =
                         fileCount.toString()
-                    (mDialogView.findViewById<LinearLayout>(R.id.properties_direct_children_count).property_value as TextView).text =
+                    (binding.root.findViewById<LinearLayout>(R.id.properties_direct_children_count).property_value as TextView).text =
                         directChildrenCount.toString()
                 }
             }
@@ -166,11 +165,11 @@ class PropertiesDialog() {
                     if (cursor.moveToFirst()) {
                         val dateModified =
                             cursor.getLongValue(MediaStore.Images.Media.DATE_MODIFIED) * 1000L
-                        updateLastModified(mActivity, mDialogView, dateModified)
+                        updateLastModified(mActivity, binding.root, dateModified)
                     } else {
                         updateLastModified(
                             mActivity,
-                            mDialogView,
+                            binding.root,
                             fileDirItem.getLastModified(mActivity)
                         )
                     }
@@ -299,10 +298,10 @@ class PropertiesDialog() {
                     }
                     mActivity.runOnUiThread {
                         if (md5 != null) {
-                            (mDialogView.findViewById<LinearLayout>(R.id.properties_md5).property_value as TextView).text =
+                            (binding.root.findViewById<LinearLayout>(R.id.properties_md5).property_value as TextView).text =
                                 md5
                         } else {
-                            mDialogView.findViewById<LinearLayout>(R.id.properties_md5).visibility =
+                            binding.root.findViewById<LinearLayout>(R.id.properties_md5).visibility =
                                 View.GONE
                         }
                     }
@@ -342,10 +341,9 @@ class PropertiesDialog() {
         Timber.d("Hojat Ghasemi : PropertiesDialog was called on multiple selected files.")
         mActivity = activity
         mInflater = LayoutInflater.from(activity)
+        binding = DialogPropertiesBinding.inflate(mInflater)
         mResources = activity.resources
-        mDialogView = mInflater.inflate(R.layout.dialog_properties, null)
         mCountHiddenItems = countHiddenItems
-        mPropertyView = mDialogView.properties_holder
 
         val fileDirItems = ArrayList<FileDirItem>(paths.size)
         paths.forEach {
@@ -374,9 +372,9 @@ class PropertiesDialog() {
                 )
             })
             activity.runOnUiThread {
-                (mDialogView.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
+                (binding.root.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
                     size
-                (mDialogView.findViewById<LinearLayout>(R.id.properties_file_count).property_value as TextView).text =
+                (binding.root.findViewById<LinearLayout>(R.id.properties_file_count).property_value as TextView).text =
                     fileCount.toString()
             }
         }
@@ -398,7 +396,7 @@ class PropertiesDialog() {
         }
 
         builder.apply {
-            mActivity.setupDialogStuff(mDialogView, this, R.string.properties) { alertDialog ->
+            mActivity.setupDialogStuff(binding.root, this, R.string.properties) { alertDialog ->
                 alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
                     removeEXIFFromPaths(paths)
                 }
@@ -453,7 +451,7 @@ class PropertiesDialog() {
             try {
                 removeValues(ExifInterface(path))
                 Toast.makeText(mActivity, R.string.exif_removed, Toast.LENGTH_LONG).show()
-                mPropertyView.properties_holder.removeAllViews()
+                binding.propertiesHolder.removeAllViews()
                 addProperties(path)
             } catch (e: Exception) {
                 Toast.makeText(mActivity, e.toString(), Toast.LENGTH_LONG).show()
@@ -493,13 +491,13 @@ class PropertiesDialog() {
             return
         }
 
-        mInflater.inflate(R.layout.item_property, mPropertyView, false).apply {
+        mInflater.inflate(R.layout.item_property, binding.propertiesHolder, false).apply {
             property_value.setTextColor(mActivity.getProperTextColor())
             property_label.setTextColor(mActivity.getProperTextColor())
 
             property_label.text = mResources.getString(labelId)
             property_value.text = value
-            mPropertyView.properties_holder.addView(this)
+            binding.propertiesHolder.addView(this)
 
             setOnLongClickListener {
                 mActivity.copyToClipboard(property_value.text.toString().trim())
