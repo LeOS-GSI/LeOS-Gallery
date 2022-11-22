@@ -29,6 +29,19 @@ import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import timber.log.Timber
 import java.util.LinkedList
 
+/**
+ * This dialog can be called in various User stories of the app.
+ *
+ * 1- In the settings page, by clicking on "customize colors" you will go to customization page.
+ * In that page, by clicking on "Text color", "Background color", or "Bottom navigation bar color",
+ * the resulting dialog is created via this class.
+ *
+ * 2- While configuring the app widget on the launcher, if you click on either of the colored circles
+ * in the bottom left of widget configuration page, the resulting dialog is created via this class.
+ *
+ * 3- In the editing page, when you want to choose the color of your pen to draw on the picture,
+ * the resulting dialog is created via this class.
+ */
 @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
 class ColorPickerDialog(
     val activity: Activity,
