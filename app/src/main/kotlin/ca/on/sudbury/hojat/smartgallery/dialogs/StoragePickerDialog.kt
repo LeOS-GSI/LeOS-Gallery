@@ -19,7 +19,11 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import timber.log.Timber
 
 /**
- * A dialog for choosing between internal, root, SD card (optional) storage
+ * A dialog for choosing between internal, root, SD card (optional) storage.
+ * In the main page of the app click on 3 dots icon, from the dropdown menu
+ * click on "Create new folder". From the resulting dialog click on the button
+ * on top of dialog (which usually shows "Internal"). The resulting dialog is
+ * created via this class.
  *
  * @param activity has to be activity to avoid some Theme.AppCompat issues
  * @param currPath current path to decide which storage should be preselected
