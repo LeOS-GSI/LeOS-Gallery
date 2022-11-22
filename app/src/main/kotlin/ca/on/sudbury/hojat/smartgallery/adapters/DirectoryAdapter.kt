@@ -44,7 +44,6 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.StartReorderDragListener
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.views.MyRecyclerView
 import ca.on.sudbury.hojat.smartgallery.activities.MediaActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.PickMediumDialog
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.extensions.showRecycleBinEmptyingDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.emptyAndDisableTheRecycleBin
@@ -71,6 +70,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ExcludeFolderDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FolderLockingNoticeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.PickMediumDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
@@ -638,32 +638,33 @@ class DirectoryAdapter(
     private fun copyMoveTo(isCopyOperation: Boolean) {
         val paths = ArrayList<String>()
         val showHidden = config.shouldShowHidden
-        getSelectedPaths().forEach {
+        getSelectedPaths().forEach { selectedPathString ->
             val filter = config.filterMedia
-            File(it).listFiles()?.filter {
-                !File(it.absolutePath).isDirectory &&
-                        it.absolutePath.isMediaFile() && (showHidden || !it.name.startsWith('.')) &&
+            File(selectedPathString).listFiles()?.filter { fileInSelectedPath ->
+                !File(fileInSelectedPath.absolutePath).isDirectory &&
+                        fileInSelectedPath.absolutePath.isMediaFile() && (showHidden || !fileInSelectedPath.name.startsWith(
+                    '.'
+                )) &&
                         ((SupportedExtensionsRepository.photoExtensions.any { extension ->
-                            it.absolutePath.endsWith(extension, true)
+                            fileInSelectedPath.absolutePath.endsWith(extension, true)
                         } && filter and MediaType.Image.id != 0) ||
                                 (SupportedExtensionsRepository.videoExtensions.any { extension ->
-                                    it.absolutePath.endsWith(extension, true)
+                                    fileInSelectedPath.absolutePath.endsWith(extension, true)
                                 } && filter and MediaType.Video.id != 0) ||
-                                (it.absolutePath.endsWith(
+                                (fileInSelectedPath.absolutePath.endsWith(
                                     ".gif",
                                     true
                                 ) && filter and MediaType.Gif.id != 0) ||
                                 (SupportedExtensionsRepository.rawExtensions.any { extension ->
-                                    it.absolutePath.endsWith(extension, true)
+                                    fileInSelectedPath.absolutePath.endsWith(extension, true)
                                 } && filter and MediaType.Raw.id != 0) ||
-                                (IsSvgUseCase(it.absolutePath) && filter and MediaType.Svg.id != 0))
+                                (IsSvgUseCase(fileInSelectedPath.absolutePath) && filter and MediaType.Svg.id != 0))
             }?.mapTo(paths) { it.absolutePath }
         }
 
         val fileDirItems =
             paths.map { FileDirItem(it, it.getFilenameFromPath()) } as ArrayList<FileDirItem>
-        activity.tryCopyMoveFilesTo(fileDirItems, isCopyOperation) {
-            val destinationPath = it
+        activity.tryCopyMoveFilesTo(fileDirItems, isCopyOperation) { destinationPath ->
             val newPaths = fileDirItems.map { "$destinationPath/${it.name}" }
                 .toMutableList() as ArrayList<String>
             activity.applicationContext.rescanPaths(newPaths) {
@@ -789,9 +790,9 @@ class DirectoryAdapter(
                 }
 
                 var foldersToDelete = ArrayList<File>(selectedKeys.size)
-                selectedDirs.forEach {
-                    if (it.areFavorites() || it.isRecycleBin()) {
-                        if (it.isRecycleBin()) {
+                selectedDirs.forEach { specifiedDirectory ->
+                    if (specifiedDirectory.areFavorites() || specifiedDirectory.isRecycleBin()) {
+                        if (specifiedDirectory.isRecycleBin()) {
                             tryEmptyRecycleBin(false)
                         } else {
                             RunOnBackgroundThreadUseCase {
@@ -806,7 +807,7 @@ class DirectoryAdapter(
                             finishActMode()
                         }
                     } else {
-                        foldersToDelete.add(File(it.path))
+                        foldersToDelete.add(File(specifiedDirectory.path))
                     }
                 }
 
@@ -818,7 +819,11 @@ class DirectoryAdapter(
                     }
                 } else {
                     foldersToDelete =
-                        foldersToDelete.filter { !config.isFolderProtected(it.absolutePath) }
+                        foldersToDelete.filter { folderToBeDeleted ->
+                            !config.isFolderProtected(
+                                folderToBeDeleted.absolutePath
+                            )
+                        }
                             .toMutableList() as ArrayList<File>
                     listener?.deleteFolders(foldersToDelete)
                 }
@@ -849,16 +854,19 @@ class DirectoryAdapter(
     }
 
     private fun pickMediumFrom(targetFolder: String, path: String) {
-        PickMediumDialog(activity, path) {
-            if (File(it).isDirectory) {
-                pickMediumFrom(targetFolder, it)
+        val callback: (String) -> Unit = { selectedPath ->
+            if (File(selectedPath).isDirectory) {
+                pickMediumFrom(targetFolder, selectedPath)
             } else {
-                val albumCovers = getAlbumCoversWithout(path)
-                val cover = AlbumCover(targetFolder, it)
+                val albumCovers = getAlbumCoversWithout(selectedPath)
+                val cover = AlbumCover(targetFolder, selectedPath)
                 albumCovers.add(cover)
                 storeCovers(albumCovers)
             }
         }
+        PickMediumDialogFragment(path, callback).show(
+            activity.supportFragmentManager, "PickMediumDialogFragment"
+        )
     }
 
     private fun getAlbumCoversWithout(path: String) =
