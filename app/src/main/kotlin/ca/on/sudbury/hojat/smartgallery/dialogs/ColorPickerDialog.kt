@@ -275,7 +275,10 @@ class ColorPickerDialog(
     }
 
     private fun getColor() = Color.HSVToColor(currentColorHsv)
+
     private fun getHue() = currentColorHsv[0]
+
     private fun getSat() = currentColorHsv[1]
+
     private fun getVal() = currentColorHsv[2]
 }
