@@ -54,6 +54,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import kotlinx.android.synthetic.main.dialog_properties.view.*
 import kotlinx.android.synthetic.main.item_property.view.*
+import timber.log.Timber
 import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
@@ -76,6 +77,7 @@ class PropertiesDialog() {
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("InflateParams")
     constructor(activity: Activity, path: String, countHiddenItems: Boolean = false) : this() {
+        Timber.d("Hojat Ghasemi : PropertiesDialog was called.")
         if (!activity.getDoesFilePathExist(path) && !path.startsWith("content://")) {
             Toast.makeText(
                 activity,
@@ -337,6 +339,7 @@ class PropertiesDialog() {
         paths: List<String>,
         countHiddenItems: Boolean = false
     ) : this() {
+        Timber.d("Hojat Ghasemi : PropertiesDialog was called.")
         mActivity = activity
         mInflater = LayoutInflater.from(activity)
         mResources = activity.resources
