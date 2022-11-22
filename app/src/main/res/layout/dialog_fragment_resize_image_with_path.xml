@@ -37,7 +37,7 @@
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/resize_image_width_hint"
         android:gravity="center"
-        android:text=":"
+        android:text="@string/colon"
         android:textStyle="bold" />
 
     <ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
@@ -111,5 +111,13 @@
             android:textSize="@dimen/bigger_text_size" />
 
     </ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout>
+
+    <include
+        android:id="@+id/resize_image_with_path_dialog_bottom_row"
+        layout="@layout/dialog_bottom_row_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/extension_hint"
+        android:layout_marginTop="2dp" />
 
 </RelativeLayout>

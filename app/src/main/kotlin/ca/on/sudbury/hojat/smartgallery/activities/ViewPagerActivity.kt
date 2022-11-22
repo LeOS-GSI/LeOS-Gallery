@@ -14,6 +14,7 @@ import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Icon
 import android.net.Uri
@@ -56,7 +57,7 @@ import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMediumBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.DeleteWithRememberDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RenameItemDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeWithPathDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SaveAsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SlideShowDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.setAs
@@ -1347,7 +1348,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     private fun resizeImage() {
         val oldPath = getCurrentPath()
         val originalSize = oldPath.getImageResolution(this) ?: return
-        ResizeWithPathDialog(this, originalSize, oldPath) { newSize, newPath ->
+        val callback: (newSize: Point, newPath: String) -> Unit = { newSize, newPath ->
             RunOnBackgroundThreadUseCase {
                 try {
                     var oldExif: ExifInterface? = null
@@ -1383,6 +1384,10 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
                 }
             }
         }
+        ResizeWithPathDialogFragment(originalSize, oldPath, callback).show(
+            supportFragmentManager,
+            "ResizeWithPathDialogFragment"
+        )
     }
 
     @TargetApi(Build.VERSION_CODES.N)
