@@ -77,7 +77,7 @@ class PropertiesDialog() {
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("InflateParams")
     constructor(activity: Activity, path: String, countHiddenItems: Boolean = false) : this() {
-        Timber.d("Hojat Ghasemi : PropertiesDialog was called.")
+        Timber.d("Hojat Ghasemi : PropertiesDialog was called on a single file.")
         if (!activity.getDoesFilePathExist(path) && !path.startsWith("content://")) {
             Toast.makeText(
                 activity,
@@ -339,7 +339,7 @@ class PropertiesDialog() {
         paths: List<String>,
         countHiddenItems: Boolean = false
     ) : this() {
-        Timber.d("Hojat Ghasemi : PropertiesDialog was called.")
+        Timber.d("Hojat Ghasemi : PropertiesDialog was called on multiple selected files.")
         mActivity = activity
         mInflater = LayoutInflater.from(activity)
         mResources = activity.resources
