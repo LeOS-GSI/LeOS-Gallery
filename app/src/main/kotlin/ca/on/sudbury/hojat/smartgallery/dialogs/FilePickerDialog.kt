@@ -410,10 +410,19 @@ class FilePickerDialog(
 
     override fun breadcrumbClicked(id: Int) {
         if (id == 0) {
-            StoragePickerDialog(activity, currPath, forceShowRoot, true) {
-                currPath = it
+            val callback: (String) -> Unit = { pickedPath ->
+                currPath = pickedPath
                 tryUpdateItems()
             }
+            StoragePickerDialogFragment(
+                currPath,
+                forceShowRoot,
+                true,
+                callback
+            ).show(
+                activity.supportFragmentManager,
+                "StoragePickerDialogFragment"
+            )
         } else {
             val item = binding.filepickerBreadcrumbs.getItem(id)
             if (currPath != item.path.trimEnd('/')) {
