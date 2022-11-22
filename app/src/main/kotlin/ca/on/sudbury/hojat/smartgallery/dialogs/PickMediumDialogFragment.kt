@@ -22,6 +22,11 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailSection
 
+/**
+ * In the main page, long click on a folder and from context menu
+ * choose "Change cover image/select photo". The resulting dialog
+ * is created via this class.
+ */
 class PickMediumDialogFragment(
     val path: String,
     val callback: (path: String) -> Unit
