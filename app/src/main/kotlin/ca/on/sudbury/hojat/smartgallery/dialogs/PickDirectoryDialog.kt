@@ -30,6 +30,9 @@ import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import timber.log.Timber
 
 /**
+ *
+ * TODO: This one is hard as well, I'm going to convert it later.
+ *
  * This dialog is meant to allow the user to choose a folder; and is being called from
  * various places in the app:
  *
