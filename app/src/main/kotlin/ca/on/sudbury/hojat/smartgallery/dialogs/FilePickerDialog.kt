@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
@@ -61,16 +60,19 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 /**
- * This is the only filepicker constructor with a couple of optional parameters
  *
- * @param activity has to be activity to avoid some Theme.AppCompat issues
+ * TODO : This one is too hard, I need more information before converting it into
+ * DialogFragment.
+ *
+ * This is the only file-picker constructor with a couple of optional parameters
+ *
+ * The collor should be an activity to avoid some Theme.AppCompat issues
  * @param currPath initial path of the dialog, defaults to the external storage
  * @param pickFile toggle used to determine if we are picking a file or a folder
  * @param showHidden toggle for showing hidden items, whose name starts with a dot
  * @param showFAB toggle the displaying of a Floating Action Button for creating new folders
  * @param callback the callback used for returning the selected file/folder
  */
-
 @SuppressLint("SetTextI18n")
 class FilePickerDialog(
     val activity: BaseSimpleActivity,
