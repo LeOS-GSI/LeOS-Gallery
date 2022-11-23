@@ -59,6 +59,19 @@ import java.io.File
 import java.io.InputStream
 import java.security.MessageDigest
 
+/**
+ *
+ * TODO: this class has various constructor, it'll be hard to convert it to DialogFragment as is.
+ * I need to find a way to make it simpler.
+ *
+ * This dialog is being called from so many places, such as :
+ *
+ * 1- long-click on a single or multiple mediums and from context menu choose "properties".
+ * 2- long click on a single or multiple folders and from context menu choose the icon for properties.
+ * 3- while viewing a medium, click on icon for properties.
+ *
+ *
+ */
 class PropertiesDialog() {
     private lateinit var mInflater: LayoutInflater
     private lateinit var mResources: Resources
