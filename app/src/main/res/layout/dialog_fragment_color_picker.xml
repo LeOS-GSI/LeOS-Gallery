@@ -68,6 +68,7 @@
                 android:src="@drawable/ic_chevron_right_unpadded_vector"
                 tools:ignore="ContentDescription" />
 
+
             <ImageView
                 android:id="@+id/color_picker_cursor"
                 android:layout_width="@dimen/activity_margin"
@@ -168,5 +169,35 @@
                 android:background="@android:color/white"
                 android:contentDescription="@string/chosen_color" />
         </RelativeLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/color_picker_bottom_holder"
+            android:layout_marginTop="7dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_positive_color_picker_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ok" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_negative_color_picker_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_neutral_color_picker_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/use_default"
+                android:visibility="gone" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </RelativeLayout>
 </ScrollView>

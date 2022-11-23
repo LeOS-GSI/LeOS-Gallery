@@ -11,7 +11,6 @@ import android.widget.RemoteViews
 import android.widget.SeekBar
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.signature.ObjectKey
-import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -21,6 +20,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateTextColors
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityWidgetConfigBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
@@ -180,21 +180,34 @@ class WidgetConfigureActivity : SimpleActivity() {
     }
 
     private fun pickBackgroundColor() {
-        ColorPickerDialog(this, mBgColorWithoutTransparency) { wasPositivePressed, color ->
-            if (wasPositivePressed) {
-                mBgColorWithoutTransparency = color
-                updateBackgroundColor()
+        val callback: (wasPositivePressed: Boolean, color: Int) -> Unit =
+            { wasPositivePressed, color ->
+                if (wasPositivePressed) {
+                    mBgColorWithoutTransparency = color
+                    updateBackgroundColor()
+                }
             }
-        }
+        ColorPickerDialogFragment(
+            color = mBgColorWithoutTransparency,
+            callback = callback
+        ).show(
+            supportFragmentManager,
+            "ColorPickerDialogFragment"
+        )
     }
 
     private fun pickTextColor() {
-        ColorPickerDialog(this, mTextColor) { wasPositivePressed, color ->
-            if (wasPositivePressed) {
-                mTextColor = color
-                updateTextColor()
+        val callback: (wasPositivePressed: Boolean, color: Int) -> Unit =
+            { wasPositivePressed, color ->
+                if (wasPositivePressed) {
+                    mTextColor = color
+                    updateTextColor()
+                }
             }
-        }
+        ColorPickerDialogFragment(color = mTextColor, callback = callback).show(
+            supportFragmentManager,
+            "ColorPickerDialogFragment"
+        )
     }
 
     private fun changeSelectedFolder() {

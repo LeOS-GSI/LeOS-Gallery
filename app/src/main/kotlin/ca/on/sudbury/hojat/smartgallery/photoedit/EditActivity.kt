@@ -30,7 +30,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.extensions.getFileOutputStream
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromContentUri
@@ -53,6 +52,7 @@ import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.adapters.FiltersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityEditBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.OtherAspectRatioDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ResizeDialogFragment
@@ -616,11 +616,16 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         updateBrushSize(config.lastEditorBrushSize)
 
         binding.bottomEditorDrawActions.bottomDrawColorClickable.setOnClickListener {
-            ColorPickerDialog(this, drawColor) { wasPositivePressed, color ->
-                if (wasPositivePressed) {
-                    updateDrawColor(color)
+            val callback: (wasPositivePressed: Boolean, color: Int) -> Unit =
+                { wasPositivePressed, color ->
+                    if (wasPositivePressed) {
+                        updateDrawColor(color)
+                    }
                 }
-            }
+            ColorPickerDialogFragment(color = drawColor, callback = callback).show(
+                supportFragmentManager,
+                "ColorPickerDialogFragment"
+            )
         }
 
         binding.bottomEditorDrawActions.bottomDrawWidth.setOnSeekBarChangeListener(object :

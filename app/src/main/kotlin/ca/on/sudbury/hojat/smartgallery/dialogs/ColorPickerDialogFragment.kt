@@ -1,33 +1,33 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.graphics.Color
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnTouchListener
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintHelper
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.DialogFragment
+import ca.on.hojat.palette.views.ColorPickerSquare
+import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentColorPickerBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.copyToClipboard
-import ca.on.sudbury.hojat.smartgallery.extensions.getAlertDialogBuilder
+import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
-import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
-import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.toHex
-import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.databinding.DialogColorPickerBinding
-import ca.on.hojat.palette.views.ColorPickerSquare
-import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.helpers.BaseConfig
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
-import timber.log.Timber
-import java.util.LinkedList
+import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
+import java.util.*
 
 /**
  * This dialog can be called in various User stories of the app.
@@ -42,34 +42,59 @@ import java.util.LinkedList
  * 3- In the editing page, when you want to choose the color of your pen to draw on the picture,
  * the resulting dialog is created via this class.
  */
-@SuppressLint("ClickableViewAccessibility", "SetTextI18n")
-class ColorPickerDialog(
-    val activity: Activity,
-    color: Int,
+class ColorPickerDialogFragment(
+    val color: Int,
     private val removeDimmedBackground: Boolean = false,
-    showUseDefaultButton: Boolean = false,
-    val currentColorCallback: ((color: Int) -> Unit)? = null,
-    val callback: (wasPositivePressed: Boolean, color: Int) -> Unit
-) {
+    private val showUseDefaultButton: Boolean = false,
+    private val currentColorCallback: ((color: Int) -> Unit)? = null,
+   private val callback: (wasPositivePressed: Boolean, color: Int) -> Unit
+) : DialogFragment() {
+
+    // The binding
+    private var _binding: DialogFragmentColorPickerBinding? = null
+    private val binding get() = _binding!!
+
+    // The configuration needed throughout the class
     private val recentColorsId = 5
-    private var viewHue: View
-    private var viewSatVal: ColorPickerSquare
-    private var viewCursor: ImageView
-    private var viewNewColor: ImageView
-    private var viewTarget: ImageView
-    private var newHexField: EditText
-    private var viewContainer: ViewGroup
-    private val baseConfig = activity.baseConfig
+    private lateinit var viewHue: View
+    private lateinit var viewSatVal: ColorPickerSquare
+    private lateinit var viewCursor: ImageView
+    private lateinit var viewNewColor: ImageView
+    private lateinit var viewTarget: ImageView
+    private lateinit var newHexField: EditText
+    private lateinit var viewContainer: ViewGroup
+    private lateinit var baseConfig: BaseConfig
     private val currentColorHsv = FloatArray(3)
-    private val backgroundColor = baseConfig.backgroundColor
+    private var backgroundColor = -1
     private var isHueBeingDragged = false
     private var wasDimmedBackgroundRemoved = false
-    private var dialog: AlertDialog? = null
 
-    init {
-        Timber.d("Hojat Ghasemi : ColorPickerDialog was called")
+    /**
+     * Create the UI of the dialog
+     */
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DialogFragmentColorPickerBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        loadDialogUI()
+        return binding.root
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun loadDialogUI() {
+
+        // need to load the configurations before drawing the UI
+        baseConfig = requireActivity().baseConfig
+        backgroundColor = baseConfig.backgroundColor
         Color.colorToHSV(color, currentColorHsv)
-        val binding = DialogColorPickerBinding.inflate(activity.layoutInflater).apply {
+
+        with(binding) {
             if (IsQPlusUseCase()) {
                 root.isForceDarkAllowed = false
             }
@@ -90,14 +115,51 @@ class ColorPickerDialog(
 
             val hexCode = getHexCode(color)
             colorPickerOldHex.text = "#$hexCode"
-            colorPickerOldHex.setOnLongClickListener {
-                activity.copyToClipboard(hexCode)
-                true
-            }
+
             newHexField.setText(hexCode)
             setupRecentColors(root)
+            if (showUseDefaultButton) {
+                btnNeutralColorPickerDialog.visibility = VISIBLE
+            }
         }
 
+        val textColor = requireActivity().getProperTextColor()
+        ApplyColorFilterUseCase(binding.colorPickerArrow, textColor)
+        ApplyColorFilterUseCase(binding.colorPickerHexArrow, textColor)
+        ApplyColorFilterUseCase(viewCursor, textColor)
+        binding.root.onGlobalLayout {
+            moveHuePicker()
+            moveColorPicker()
+        }
+
+
+    }
+
+    /**
+     * Register listeners for views.
+     */
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding) {
+            colorPickerOldHex.setOnLongClickListener {
+                val hexCode = getHexCode(color)
+                requireActivity().copyToClipboard(hexCode)
+                true
+            }
+            btnPositiveColorPickerDialog.setOnClickListener {
+                confirmNewColor()
+                dismiss()
+            }
+            btnNegativeColorPickerDialog.setOnClickListener {
+                callback(false, 0)
+                dismiss()
+            }
+            if (showUseDefaultButton) {
+                btnNeutralColorPickerDialog.setOnClickListener { useDefault() }
+            }
+        }
         viewHue.setOnTouchListener(OnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_DOWN) {
                 isHueBeingDragged = true
@@ -127,7 +189,6 @@ class ColorPickerDialog(
             }
             false
         })
-
         viewSatVal.setOnTouchListener(OnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_MOVE || event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_UP) {
                 var x = event.x
@@ -152,8 +213,6 @@ class ColorPickerDialog(
             }
             false
         })
-
-
         newHexField.addTextChangedListener { editable ->
             val finalString = editable.toString()
             if (finalString.length == 6 && !isHueBeingDragged) {
@@ -164,37 +223,27 @@ class ColorPickerDialog(
             }
         }
 
-        val textColor = activity.getProperTextColor()
-        val builder = activity.getAlertDialogBuilder()
-            .setPositiveButton(R.string.ok) { _, _ -> confirmNewColor() }
-            .setNegativeButton(R.string.cancel) { _, _ -> dialogDismissed() }
-            .setOnCancelListener { dialogDismissed() }
-
-        if (showUseDefaultButton) {
-            builder.setNeutralButton(R.string.use_default) { _, _ -> useDefault() }
-        }
-
-        builder.apply {
-            activity.setupDialogStuff(binding.root, this) { alertDialog ->
-                dialog = alertDialog
-                ApplyColorFilterUseCase(binding.colorPickerArrow, textColor)
-                ApplyColorFilterUseCase(binding.colorPickerHexArrow, textColor)
-                ApplyColorFilterUseCase(viewCursor, textColor)
-            }
-        }
-
-        binding.root.onGlobalLayout {
-            moveHuePicker()
-            moveColorPicker()
-        }
     }
+
+    /**
+     * Cleaning the stuff
+     */
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    @JvmName("getColor1")
+    private fun getColor() = Color.HSVToColor(currentColorHsv)
+
+    private fun getHexCode(color: Int) = color.toHex().substring(1)
 
     private fun setupRecentColors(root: View) {
         val recentColors = baseConfig.colorPickerRecentColors
         if (recentColors.isNotEmpty()) {
-            root.findViewById<View>(R.id.recent_colors).visibility = View.VISIBLE
+            root.findViewById<View>(R.id.recent_colors).visibility = VISIBLE
             val squareSize =
-                root.context.resources.getDimensionPixelSize(R.dimen.colorpicker_hue_width)
+                resources.getDimensionPixelSize(R.dimen.colorpicker_hue_width)
             recentColors.take(recentColorsId).forEach { recentColor ->
                 val recentColorView = ImageView(root.context)
                 recentColorView.id = View.generateViewId()
@@ -207,44 +256,6 @@ class ColorPickerDialog(
             }
         }
     }
-
-    private fun dialogDismissed() {
-        callback(false, 0)
-    }
-
-    private fun confirmNewColor() {
-        val hexValue = newHexField.text.toString().trim()
-        val newColor = if (hexValue.length == 6) {
-            Color.parseColor("#$hexValue")
-        } else {
-            getColor()
-        }
-        addRecentColor(newColor)
-
-        callback(true, newColor)
-    }
-
-    private fun useDefault() {
-        val defaultColor = baseConfig.defaultNavigationBarColor
-        addRecentColor(defaultColor)
-
-        callback(true, defaultColor)
-    }
-
-    private fun addRecentColor(color: Int) {
-        var recentColors = baseConfig.colorPickerRecentColors
-
-        recentColors.remove(color)
-        if (recentColors.size >= recentColorsId) {
-            val numberOfColorsToDrop = recentColors.size - recentColorsId + 1
-            recentColors = LinkedList(recentColors.dropLast(numberOfColorsToDrop))
-        }
-        recentColors.addFirst(color)
-
-        baseConfig.colorPickerRecentColors = recentColors
-    }
-
-    private fun getHexCode(color: Int) = color.toHex().substring(1)
 
     private fun updateHue() {
         viewSatVal.setHue(getHue())
@@ -274,11 +285,41 @@ class ColorPickerDialog(
         viewTarget.y = viewSatVal.top + y - viewTarget.height / 2
     }
 
-    private fun getColor() = Color.HSVToColor(currentColorHsv)
-
     private fun getHue() = currentColorHsv[0]
 
     private fun getSat() = currentColorHsv[1]
 
     private fun getVal() = currentColorHsv[2]
+
+    private fun confirmNewColor() {
+        val hexValue = newHexField.text.toString().trim()
+        val newColor = if (hexValue.length == 6) {
+            Color.parseColor("#$hexValue")
+        } else {
+            getColor()
+        }
+        addRecentColor(newColor)
+
+        callback(true, newColor)
+    }
+
+    private fun addRecentColor(color: Int) {
+        var recentColors = baseConfig.colorPickerRecentColors
+
+        recentColors.remove(color)
+        if (recentColors.size >= recentColorsId) {
+            val numberOfColorsToDrop = recentColors.size - recentColorsId + 1
+            recentColors = LinkedList(recentColors.dropLast(numberOfColorsToDrop))
+        }
+        recentColors.addFirst(color)
+
+        baseConfig.colorPickerRecentColors = recentColors
+    }
+
+    private fun useDefault() {
+        val defaultColor = baseConfig.defaultNavigationBarColor
+        addRecentColor(defaultColor)
+        callback(true, defaultColor)
+    }
+
 }

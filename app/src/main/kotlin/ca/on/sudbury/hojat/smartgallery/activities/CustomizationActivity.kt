@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
@@ -23,6 +22,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
 import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
@@ -642,27 +642,40 @@ class CustomizationActivity : BaseSimpleActivity() {
         curTextColor == Color.WHITE && curPrimaryColor == Color.BLACK && curBackgroundColor == Color.BLACK
 
     private fun pickTextColor() {
-        ColorPickerDialog(this, curTextColor) { wasPositivePressed, color ->
-            if (wasPositivePressed) {
-                if (hasColorChanged(curTextColor, color)) {
-                    setCurrentTextColor(color)
-                    colorChanged()
-                    updateColorTheme(getUpdatedTheme())
+        val callback: (wasPositivePressed: Boolean, color: Int) -> Unit =
+            { wasPositivePressed, color ->
+                if (wasPositivePressed) {
+                    if (hasColorChanged(curTextColor, color)) {
+                        setCurrentTextColor(color)
+                        colorChanged()
+                        updateColorTheme(getUpdatedTheme())
+                    }
                 }
             }
-        }
+        ColorPickerDialogFragment(
+            color = curTextColor,
+            callback = callback
+        ).show(
+            supportFragmentManager,
+            "ColorPickerDialogFragment"
+        )
     }
 
     private fun pickBackgroundColor() {
-        ColorPickerDialog(this, curBackgroundColor) { wasPositivePressed, color ->
-            if (wasPositivePressed) {
-                if (hasColorChanged(curBackgroundColor, color)) {
-                    setCurrentBackgroundColor(color)
-                    colorChanged()
-                    updateColorTheme(getUpdatedTheme())
+        val callback: (wasPositivePressed: Boolean, color: Int) -> Unit =
+            { wasPositivePressed, color ->
+                if (wasPositivePressed) {
+                    if (hasColorChanged(curBackgroundColor, color)) {
+                        setCurrentBackgroundColor(color)
+                        colorChanged()
+                        updateColorTheme(getUpdatedTheme())
+                    }
                 }
             }
-        }
+        ColorPickerDialogFragment(color = curBackgroundColor, callback = callback).show(
+            supportFragmentManager,
+            "ColorPickerDialogFragment"
+        )
     }
 
     private fun pickPrimaryColor() {
@@ -704,25 +717,34 @@ class CustomizationActivity : BaseSimpleActivity() {
     }
 
     private fun pickAccentColor() {
-        ColorPickerDialog(this, curAccentColor) { wasPositivePressed, color ->
-            if (wasPositivePressed) {
-                if (hasColorChanged(curAccentColor, color)) {
-                    curAccentColor = color
-                    colorChanged()
+        val callback: (wasPositivePressed: Boolean, color: Int) -> Unit =
+            { wasPositivePressed, color ->
+                if (wasPositivePressed) {
+                    if (hasColorChanged(curAccentColor, color)) {
+                        curAccentColor = color
+                        colorChanged()
 
-                    if (isCurrentWhiteTheme() || isCurrentBlackAndWhiteTheme()) {
-                        updateActionbarColor(getCurrentStatusBarColor())
+                        if (isCurrentWhiteTheme() || isCurrentBlackAndWhiteTheme()) {
+                            updateActionbarColor(getCurrentStatusBarColor())
+                        }
                     }
                 }
             }
-        }
+        ColorPickerDialogFragment(color = curAccentColor, callback = callback).show(
+            supportFragmentManager,
+            "ColorPickerDialogFragment"
+        )
     }
 
     private fun pickNavigationBarColor() {
-        ColorPickerDialog(this, curNavigationBarColor, true,
-            showUseDefaultButton = true, currentColorCallback = {
+        ColorPickerDialogFragment(
+            curNavigationBarColor,
+            true,
+            showUseDefaultButton = true,
+            currentColorCallback = {
                 updateNavigationBarColor(it)
-            }, callback = { wasPositivePressed, color ->
+            },
+            callback = { wasPositivePressed, color ->
                 if (wasPositivePressed) {
                     setCurrentNavigationBarColor(color)
                     colorChanged()
@@ -730,7 +752,8 @@ class CustomizationActivity : BaseSimpleActivity() {
                 } else {
                     updateNavigationBarColor(curNavigationBarColor)
                 }
-            })
+            }
+        ).show(supportFragmentManager, "ColorPickerDialogFragment")
     }
 
     private fun pickAppIconColor() {
