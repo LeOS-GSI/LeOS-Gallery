@@ -35,7 +35,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -165,19 +165,20 @@ class AboutActivity : BaseSimpleActivity() {
                 ) && !baseConfig.wasBeforeAskingShown
             ) {
                 baseConfig.wasBeforeAskingShown = true
-                ConfirmationAdvancedDialog(
-                    this,
-                    msg,
-                    0,
-                    R.string.read_faq,
-                    R.string.skip
-                ) { success ->
-                    if (success) {
+                val callback: (Boolean) -> Unit = { result ->
+                    if (result) {
                         binding.aboutFaqHolder.performClick()
                     } else {
                         binding.aboutEmailHolder.performClick()
                     }
                 }
+                ConfirmationAdvancedDialogFragment(
+                    message = msg,
+                    messageId = 0,
+                    positive = R.string.read_faq,
+                    negative = R.string.skip,
+                    callback = callback
+                ).show(supportFragmentManager, "ConfirmationAdvancedDialogFragment")
             } else {
                 val appVersion = String.format(
                     getString(
@@ -230,19 +231,20 @@ class AboutActivity : BaseSimpleActivity() {
                 baseConfig.wasBeforeRateShown = true
                 val msg =
                     "${getString(R.string.before_rate_read_faq)}\n\n${getString(R.string.make_sure_latest)}"
-                ConfirmationAdvancedDialog(
-                    this,
-                    msg,
-                    0,
-                    R.string.read_faq,
-                    R.string.skip
-                ) { success ->
-                    if (success) {
+                val callback: (Boolean) -> Unit = { result ->
+                    if (result) {
                         binding.aboutFaqHolder.performClick()
                     } else {
                         binding.aboutRateUsHolder.performClick()
                     }
                 }
+                ConfirmationAdvancedDialogFragment(
+                    message = msg,
+                    messageId = 0,
+                    positive = R.string.read_faq,
+                    negative = R.string.skip,
+                    callback = callback
+                ).show(supportFragmentManager, "ConfirmationAdvancedDialogFragment")
             }
         }
     }

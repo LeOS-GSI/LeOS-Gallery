@@ -42,7 +42,6 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GLIDE
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_CROPPER
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_RTL
@@ -83,6 +82,7 @@ import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideLoadedDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialogFragment
@@ -789,9 +789,8 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
             if (IsSPlusUseCase()) {
                 messagePrompt += "\n\n${getString(R.string.media_management_alternative)}"
             }
-
-            ConfirmationAdvancedDialog(this, messagePrompt, 0, R.string.ok, 0, true) { success ->
-                if (success) {
+            val callbackAfterDialog: (Boolean) -> Unit = { result ->
+                if (result) {
                     try {
                         val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                         intent.addCategory("android.intent.category.DEFAULT")
@@ -810,6 +809,16 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
                     finish()
                 }
             }
+            ConfirmationAdvancedDialogFragment(
+                messagePrompt,
+                0,
+                R.string.ok,
+                0,
+                callbackAfterDialog
+            ).show(
+                supportFragmentManager,
+                "ConfirmationAdvancedDialogFragment"
+            )
         }
     } else if (IsSPlusUseCase() && !MediaStore.canManageMedia(this) && !isExternalStorageManager()) {
         val message =
@@ -1975,14 +1984,8 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
     ) {
         runOnUiThread {
             if (!isDestroyed && !isFinishing) {
-                ConfirmationAdvancedDialog(
-                    this,
-                    "",
-                    R.string.confirm_storage_access_android_text,
-                    R.string.ok,
-                    R.string.cancel
-                ) { success ->
-                    if (success) {
+                val callback: (Boolean) -> Unit = { result ->
+                    if (result) {
                         Intent(Intent.ACTION_OPEN_DOCUMENT_TREE).apply {
                             putExtra(EXTRA_SHOW_ADVANCED, true)
                             putExtra(
@@ -2022,6 +2025,16 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
                         }
                     }
                 }
+                ConfirmationAdvancedDialogFragment(
+                    message = "",
+                    messageId = R.string.confirm_storage_access_android_text,
+                    positive = R.string.ok,
+                    negative = R.string.cancel,
+                    callback = callback
+                ).show(
+                    supportFragmentManager,
+                    "ConfirmationAdvancedDialogFragment"
+                )
             }
         }
         true

@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
@@ -23,6 +22,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.fillWithColor
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityCustomizationBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
@@ -438,20 +438,24 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun promptSaveDiscard() {
         lastSavePromptTS = System.currentTimeMillis()
-        ConfirmationAdvancedDialog(
-            this,
-            "",
-            R.string.save_before_closing,
-            R.string.save,
-            R.string.discard
-        ) {
-            if (it) {
+        val callback: (Boolean) -> Unit = { result ->
+            if (result) {
                 saveChanges(true)
             } else {
                 resetColors()
                 finish()
             }
         }
+        ConfirmationAdvancedDialogFragment(
+            message = "",
+            messageId = R.string.save_before_closing,
+            positive = R.string.save,
+            negative = R.string.discard,
+            callback = callback
+        ).show(
+            supportFragmentManager,
+            "ConfirmationAdvancedDialogFragment"
+        )
     }
 
     private fun saveChanges(finishAfterSave: Boolean) {
