@@ -1421,4 +1421,8 @@
     <string name="write_permission_otg">Write permission on OTG</string>
     <string name="icon_of_the_color_picker">icon of the color picker</string>
     <string name="colon">:</string>
+    <string name="color_bar">color bar</string>
+    <string name="sharp">#</string>
+    <string name="current_color">The current color</string>
+    <string name="chosen_color">The color chosen by user</string>
 </resources>
