@@ -29,6 +29,20 @@ import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import timber.log.Timber
 
+/**
+ * This dialog is meant to allow the user to choose a folder; and is being called from
+ * various places in the app:
+ *
+ * 1- While you're adding the app widget of this app to your launcher, in the widget
+ * configuration page click on the button below "Folder shown on the widget:" and the
+ * resulting dialog is created via this class.
+ *
+ * 2- In any folders, long click on one or more of pics/vids and from context menu click
+ * on "copy to" or "move to". The resulting dialog is created via this class.
+ *
+ * 3- .....
+ *
+ */
 @SuppressLint("InflateParams")
 class PickDirectoryDialog(
     val activity: BaseSimpleActivity,
