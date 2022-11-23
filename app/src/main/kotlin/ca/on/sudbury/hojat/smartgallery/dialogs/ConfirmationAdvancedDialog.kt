@@ -10,7 +10,13 @@ import timber.log.Timber
 
 /**
  * similar to ConfirmationDialog, but has a callback for negative button too.
- * Couldn't find the place it's called.
+ *
+ * It's called from various places:
+ *
+ * 1- In the "About" page, click on "email"; the resulting dialog is created via this class.
+ *
+ *
+ *
  */
 class ConfirmationAdvancedDialog(
     activity: Activity,
