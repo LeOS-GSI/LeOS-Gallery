@@ -16,8 +16,8 @@ import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import timber.log.Timber
 
 /**
- * There are various dialogs that use this class. I need to firstly force them to use a pre-created XML UI
- * and then delete this class.
+ * There are various dialogs that use this class. I need to firstly force them to use
+ * a pre-created XML UI and then delete this class.
  */
 @SuppressLint("InflateParams")
 class RadioGroupDialog(
