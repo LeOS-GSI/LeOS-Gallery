@@ -20,8 +20,6 @@ import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 class RadioGroupDialogFragment(
     val items: ArrayList<RadioItem>,
     private val checkedItemId: Int = -1,
-    private val titleId: Int = 0,
-    showOKButton: Boolean = false,
     private val cancelCallback: (() -> Unit)? = null,
     val callback: (newValue: Any) -> Unit
 ) : DialogFragment() {
