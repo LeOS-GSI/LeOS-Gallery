@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getMyContentProviderCursorLoader
@@ -25,6 +24,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.LineColorPickerDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_ICON_IDS
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
@@ -263,10 +263,15 @@ class CustomizationActivity : BaseSimpleActivity() {
             items.add(RadioItem(key, getString(value.nameId)))
         }
 
-        RadioGroupDialog(this@CustomizationActivity, items, curSelectedThemeId) {
-
-            updateColorTheme(it as Int, true)
-            if (it != THEME_CUSTOM && it != THEME_SHARED && it != THEME_AUTO && it != THEME_SYSTEM && !baseConfig.wasCustomThemeSwitchDescriptionShown) {
+        val callback: (Any) -> Unit = { newValue ->
+            updateColorTheme(newValue as Int, true)
+            if (
+                newValue != THEME_CUSTOM &&
+                newValue != THEME_SHARED &&
+                newValue != THEME_AUTO &&
+                newValue != THEME_SYSTEM &&
+                !baseConfig.wasCustomThemeSwitchDescriptionShown
+            ) {
                 baseConfig.wasCustomThemeSwitchDescriptionShown = true
                 Toast.makeText(this, R.string.changing_color_description, Toast.LENGTH_LONG).show()
             }
@@ -278,6 +283,11 @@ class CustomizationActivity : BaseSimpleActivity() {
             )
             updateMenuItemColors(menu, true, getCurrentStatusBarColor())
         }
+        RadioGroupDialogFragment(
+            items = items,
+            checkedItemId = curSelectedThemeId,
+            callback = callback
+        ).show(supportFragmentManager, "RadioGroupDialogFragment")
     }
 
     private fun updateColorTheme(themeId: Int, useStored: Boolean = false) {

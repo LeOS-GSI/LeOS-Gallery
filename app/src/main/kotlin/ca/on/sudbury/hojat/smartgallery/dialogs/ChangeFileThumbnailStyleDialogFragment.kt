@@ -89,10 +89,15 @@ class ChangeFileThumbnailStyleDialogFragment : DialogFragment() {
                     RadioItem(64, "64x")
                 )
 
-                RadioGroupDialog(requireActivity(), items, thumbnailSpacing) {
-                    thumbnailSpacing = it as Int
+                val callback: (Any) -> Unit = { newValue ->
+                    thumbnailSpacing = newValue as Int
                     updateThumbnailSpacingText()
                 }
+                RadioGroupDialogFragment(
+                    items = items,
+                    checkedItemId = thumbnailSpacing,
+                    callback = callback
+                ).show(requireActivity().supportFragmentManager, "RadioGroupDialogFragment")
             }
         }
         updateThumbnailSpacingText()

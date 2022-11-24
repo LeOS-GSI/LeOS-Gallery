@@ -88,15 +88,15 @@ class SlideShowDialogFragment(val callbackAfterDialogConfirmed: () -> Unit) : Di
                     RadioItem(SlideshowAnimation.Slide.id, getString(R.string.slide)),
                     RadioItem(SlideshowAnimation.Fade.id, getString(R.string.fade))
                 )
-
-                RadioGroupDialog(
-                    requireActivity(),
-                    items,
-                    requireActivity().config.slideshowAnimation
-                ) {
-                    requireActivity().config.slideshowAnimation = it as Int
+                val callback: (Any) -> Unit = { newValue ->
+                    requireActivity().config.slideshowAnimation = newValue as Int
                     animationValue.text = getAnimationText()
                 }
+                RadioGroupDialogFragment(
+                    items = items,
+                    checkedItemId = requireActivity().config.slideshowAnimation,
+                    callback = callback
+                ).show(requireActivity().supportFragmentManager, "RadioGroupDialogFragment")
             }
             includeVideosHolder.setOnClickListener {
                 intervalValue.clearFocus()

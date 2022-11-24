@@ -10,7 +10,6 @@ import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
@@ -55,6 +54,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialog
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.helpers.DEFAULT_BOTTOM_ACTIONS
 import ca.on.sudbury.hojat.smartgallery.helpers.INCLUDED_FOLDERS
@@ -322,10 +322,15 @@ class SettingsActivity : SimpleActivity() {
                 )
             )
 
-            RadioGroupDialog(this@SettingsActivity, items, config.fileLoadingPriority) {
-                config.fileLoadingPriority = it as Int
+            val callback: (Any) -> Unit = { newValue ->
+                config.fileLoadingPriority = newValue as Int
                 binding.settingsFileLoadingPriority.text = getFileLoadingPriorityText()
             }
+            RadioGroupDialogFragment(
+                items = items,
+                checkedItemId = config.fileLoadingPriority,
+                callback = callback
+            ).show(supportFragmentManager, "RadioGroupDialogFragment")
         }
     }
 
@@ -881,10 +886,15 @@ class SettingsActivity : SimpleActivity() {
                         getString(R.string.screen_rotation_aspect_ratio)
                     )
                 )
-                RadioGroupDialog(this@SettingsActivity, items, config.screenRotation) {
-                    config.screenRotation = it as Int
+                val callback: (Any) -> Unit = { newValue ->
+                    config.screenRotation = newValue as Int
                     settingsScreenRotation.text = getScreenRotationText()
                 }
+                RadioGroupDialogFragment(
+                    items = items,
+                    checkedItemId = config.screenRotation,
+                    callback = callback
+                ).show(supportFragmentManager, "RadioGroupDialogFragment")
             }
         }
     }

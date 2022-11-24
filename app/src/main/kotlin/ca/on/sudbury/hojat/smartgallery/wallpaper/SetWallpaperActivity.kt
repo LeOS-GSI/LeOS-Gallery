@@ -9,13 +9,13 @@ import android.os.Bundle
 import android.widget.Toast
 import ca.on.hojat.renderer.cropper.CropImageView
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
 import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
 import ca.on.sudbury.hojat.smartgallery.models.RadioItem
 import ca.on.sudbury.hojat.smartgallery.activities.MainActivity
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivitySetWallpaperBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialogFragment
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
@@ -140,11 +140,14 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
                     getString(R.string.home_and_lock_screen)
                 )
             )
-
-            RadioGroupDialog(this, items) {
-                wallpaperFlag = it as Int
+            val callback: (Any) -> Unit = { newValue ->
+                wallpaperFlag = newValue as Int
                 binding.cropImageView.getCroppedImageAsync()
             }
+            RadioGroupDialogFragment(
+                items = items,
+                callback = callback
+            ).show(supportFragmentManager, "RadioGroupDialogFragment")
         } else {
             binding.cropImageView.getCroppedImageAsync()
         }
