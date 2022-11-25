@@ -61,7 +61,9 @@ import java.security.MessageDigest
 
 /**
  *
- * TODO: this class has various constructor, it'll be hard to convert it to DialogFragment as is.
+ * TODO: I don't really know how to get rid of kotlin synthetics in here.
+ *
+ * TODO: This class has various constructor, it'll be hard to convert it to DialogFragment as is.
  * I need to find a way to make it simpler.
  *
  * This dialog is being called from so many places, such as :
