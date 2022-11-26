@@ -63,7 +63,7 @@ import java.security.MessageDigest
  *
  * TODO: I don't really know how to get rid of kotlin synthetics in here.
  *
- * TODO: This class has various constructor, it'll be hard to convert it to DialogFragment as is.
+ * This class has various constructors, it'll be hard to convert it to DialogFragment as is.
  * I need to find a way to make it simpler.
  *
  * This dialog is being called from so many places, such as :
@@ -162,7 +162,7 @@ class PropertiesDialog() {
                 0
             }
 
-            this.mActivity.runOnUiThread {
+            mActivity.runOnUiThread {
                 (dialogBinding.root.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
                     size
 
