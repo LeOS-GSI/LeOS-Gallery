@@ -1161,7 +1161,10 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
                 }
             }
-            Toast.makeText(this, R.string.settings_exported_successfully, Toast.LENGTH_LONG).show()
+            runOnUiThread {
+                Toast.makeText(this, R.string.settings_exported_successfully, Toast.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 
