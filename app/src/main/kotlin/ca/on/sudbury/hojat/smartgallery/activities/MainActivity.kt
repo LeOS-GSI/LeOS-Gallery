@@ -31,7 +31,6 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
 import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
@@ -108,6 +107,7 @@ import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
@@ -1030,14 +1030,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
 
     private fun createNewFolder() {
-        FilePickerDialog(
-            this,
-            internalStoragePath,
-            false,
-            config.shouldShowHidden,
-            showFAB = false,
-            canAddShowHiddenButton = true
-        ) { pickedPath ->
+        val callback: (String) -> Unit = { pickedPath ->
             val callback: (String) -> Unit = { path ->
                 config.tempFolderPath = path
                 RunOnBackgroundThreadUseCase {
@@ -1049,6 +1042,14 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                 "CreateNewFolderDialogFragment"
             )
         }
+        FilePickerDialogFragment(
+            internalStoragePath,
+            false,
+            config.shouldShowHidden,
+            showFAB = false,
+            canAddShowHiddenButton = true,
+            callback = callback
+        ).show(supportFragmentManager, "FilePickerDialogFragment")
     }
 
     private fun increaseColumnCount() {

@@ -7,7 +7,7 @@ import android.provider.MediaStore.Video
 import android.view.WindowManager
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getRealPathFromURI
 import ca.on.sudbury.hojat.smartgallery.extensions.scanPathRecursively
@@ -90,20 +90,21 @@ open class SimpleActivity : BaseSimpleActivity() {
     }
 
     protected fun showAddIncludedFolderDialog(callback: () -> Unit) {
-        FilePickerDialog(
-            activity = this,
+        val callbackAfterDialogConfirmed: (String) -> Unit = { pickedPath ->
+            config.lastFilepickerPath = pickedPath
+            config.addIncludedFolder(pickedPath)
+            callback()
+            RunOnBackgroundThreadUseCase {
+                scanPathRecursively(pickedPath)
+            }
+        }
+        FilePickerDialogFragment(
             currPath = config.lastFilepickerPath,
             pickFile = false,
             showHidden = config.shouldShowHidden,
             showFAB = false,
-            canAddShowHiddenButton = true
-        ) {
-            config.lastFilepickerPath = it
-            config.addIncludedFolder(it)
-            callback()
-            RunOnBackgroundThreadUseCase {
-                scanPathRecursively(it)
-            }
-        }
+            canAddShowHiddenButton = true,
+            callback = callbackAfterDialogConfirmed
+        ).show(supportFragmentManager, "FilePickerDialogFragment")
     }
 }

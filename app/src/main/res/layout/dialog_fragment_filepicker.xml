@@ -117,7 +117,7 @@
         android:visibility="gone" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
         android:orientation="horizontal">
@@ -126,9 +126,13 @@
             android:id="@+id/btn_ok_file_picker_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:textColor="@color/color_primary_dark"
             android:text="@string/ok" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:background="@color/background"
+            android:textColor="@color/color_primary_dark"
             android:id="@+id/btn_cancel_file_picker_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

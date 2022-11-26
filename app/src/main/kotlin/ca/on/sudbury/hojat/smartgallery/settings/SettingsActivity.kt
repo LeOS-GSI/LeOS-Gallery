@@ -10,7 +10,6 @@ import android.widget.Toast
 import ca.on.sudbury.hojat.smartgallery.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
 import ca.on.sudbury.hojat.smartgallery.extensions.handleHiddenFolderPasswordProtection
@@ -52,6 +51,7 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeDateTimeFormatDialogFragme
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFileThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeFolderThumbnailStyleDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageBottomActionsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ManageExtendedDetailsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.RadioGroupDialogFragment
@@ -1165,11 +1165,15 @@ class SettingsActivity : SimpleActivity() {
             } else {
                 handlePermission(PERMISSION_READ_STORAGE) {
                     if (it) {
-                        FilePickerDialog(this) {
+                        val callback: (String) -> Unit = { pickedPath ->
                             RunOnBackgroundThreadUseCase {
-                                parseFile(File(it).inputStream())
+                                parseFile(File(pickedPath).inputStream())
                             }
                         }
+                        FilePickerDialogFragment(callback = callback).show(
+                            supportFragmentManager,
+                            "FilePickerDialogFragment"
+                        )
                     }
                 }
             }

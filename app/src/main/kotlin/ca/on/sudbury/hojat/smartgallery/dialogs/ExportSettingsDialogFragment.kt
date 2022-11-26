@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentExportSettingsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
@@ -78,15 +77,16 @@ class ExportSettingsDialogFragment(
             if (!hidePath) {
                 // the path is being shown, so we register a listener for it
                 exportSettingsPath.setOnClickListener {
-                    FilePickerDialog(
-                        requireActivity() as BaseSimpleActivity,
+                    val callback: (String) -> Unit = { pickedPath ->
+                        exportSettingsPath.text = requireActivity().humanizePath(pickedPath)
+                        folder = pickedPath
+                    }
+                    FilePickerDialogFragment(
                         folder,
                         false,
-                        showFAB = true
-                    ) {
-                        exportSettingsPath.text = requireActivity().humanizePath(it)
-                        folder = it
-                    }
+                        showFAB = true,
+                        callback = callback
+                    ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
                 }
 
             }

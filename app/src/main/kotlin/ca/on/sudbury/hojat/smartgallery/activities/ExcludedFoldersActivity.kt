@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
 import ca.on.sudbury.hojat.smartgallery.extensions.internalStoragePath
 import ca.on.sudbury.hojat.smartgallery.extensions.isExternalStorageManager
@@ -11,6 +10,7 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.adapters.ManageFoldersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -67,18 +67,19 @@ class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun addFolder() {
-        FilePickerDialog(
-            activity = this,
+        val callback: (String) -> Unit = { pickedPath ->
+            config.lastFilepickerPath = pickedPath
+            config.addExcludedFolder(pickedPath)
+            updateFolders()
+        }
+        FilePickerDialogFragment(
             internalStoragePath,
             pickFile = false,
             config.shouldShowHidden,
             showFAB = false,
             canAddShowHiddenButton = true,
             enforceStorageRestrictions = false,
-        ) {
-            config.lastFilepickerPath = it
-            config.addExcludedFolder(it)
-            updateFolders()
-        }
+            callback = callback
+        ).show(supportFragmentManager, "FilePickerDialogFragment")
     }
 }

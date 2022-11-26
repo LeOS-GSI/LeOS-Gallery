@@ -86,17 +86,18 @@ class SaveAsDialogFragment(
             binding.filenameValue.setText(name)
             binding.folderValue.setOnClickListener {
                 HideKeyboardUseCase(requireActivity(), binding.folderValue)
-                FilePickerDialog(
-                    requireActivity() as BaseSimpleActivity,
+                val callbackAfterDialogConfirmed: (String) -> Unit = { pickedPath ->
+                    binding.folderValue.setText(requireActivity().humanizePath(pickedPath))
+                    realPath = pickedPath
+                }
+                FilePickerDialogFragment(
                     realPath,
                     pickFile = false,
                     showHidden = false,
                     showFAB = true,
-                    canAddShowHiddenButton = true
-                ) {
-                    binding.folderValue.setText(requireActivity().humanizePath(it))
-                    realPath = it
-                }
+                    canAddShowHiddenButton = true,
+                    callback = callbackAfterDialogConfirmed
+                ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
             }
         }
     }
@@ -120,17 +121,18 @@ class SaveAsDialogFragment(
 
         binding.folderValue.setOnClickListener {
             HideKeyboardUseCase(requireActivity(), binding.folderValue)
-            FilePickerDialog(
-                requireActivity() as BaseSimpleActivity,
+            val callbackAfterDialogConfirmed: (String) -> Unit = { pickedPath ->
+                binding.folderValue.setText(requireActivity().humanizePath(pickedPath))
+                realPath = pickedPath
+            }
+            FilePickerDialogFragment(
                 realPath,
                 pickFile = false,
                 showHidden = false,
                 showFAB = true,
-                canAddShowHiddenButton = true
-            ) {
-                binding.folderValue.setText(requireActivity().humanizePath(it))
-                realPath = it
-            }
+                canAddShowHiddenButton = true,
+                callback = callbackAfterDialogConfirmed
+            ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
         }
 
     }

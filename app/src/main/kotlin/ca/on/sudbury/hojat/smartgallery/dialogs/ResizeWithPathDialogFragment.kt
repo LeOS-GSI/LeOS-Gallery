@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentResizeImageWithPathBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
@@ -83,17 +82,18 @@ class ResizeWithPathDialogFragment(
 
         with(binding) {
             folder.setOnClickListener {
-                FilePickerDialog(
-                    requireActivity() as BaseSimpleActivity,
+                val callback: (String) -> Unit = { pickedPath ->
+                    folder.setText(requireActivity().humanizePath(pickedPath))
+                    realPath = pickedPath
+                }
+                FilePickerDialogFragment(
                     realPath,
                     false,
                     requireActivity().config.shouldShowHidden,
                     showFAB = true,
-                    canAddShowHiddenButton = true
-                ) {
-                    folder.setText(requireActivity().humanizePath(it))
-                    realPath = it
-                }
+                    canAddShowHiddenButton = true,
+                    callback = callback
+                ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
             }
             resizeImageWithPathDialogBottomRow.btnOk.setOnClickListener {
                 dialogConfirmed()

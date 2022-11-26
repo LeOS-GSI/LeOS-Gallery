@@ -99,6 +99,7 @@ import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.OutputStream
@@ -2946,7 +2947,11 @@ private fun rescanAndDeletePath(owner: Context, path: String, callback: () -> Un
 
     MediaScannerConnection.scanFile(owner.applicationContext, arrayOf(path), null) { path, uri ->
         scanFileHandler.removeCallbacksAndMessages(null)
-        owner.applicationContext.contentResolver.delete(uri, null, null)
+        try {
+            owner.applicationContext.contentResolver.delete(uri, null, null)
+        } catch (exception: NullPointerException) {
+            Timber.e("error while deleting a folder: ${exception.message}")
+        }
         callback()
     }
 }
