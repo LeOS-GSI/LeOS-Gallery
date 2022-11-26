@@ -61,8 +61,9 @@ import kotlin.collections.HashMap
 
 /**
  *
- * TODO : This one is too hard, I need more information before converting it into
- * DialogFragment.
+ * It's been called from various places:
+ *
+ * 1- From menu in the main page choose "Create new folder".
  *
  * This is the only file-picker constructor with a couple of optional parameters
  *
