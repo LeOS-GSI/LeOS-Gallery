@@ -182,11 +182,10 @@ class PropertiesDialog() {
                     if (cursor.moveToFirst()) {
                         val dateModified =
                             cursor.getLongValue(MediaStore.Images.Media.DATE_MODIFIED) * 1000L
-                        updateLastModified(mActivity, dialogBinding.root, dateModified)
+                        updateLastModified(mActivity, dateModified)
                     } else {
                         updateLastModified(
                             mActivity,
-                            dialogBinding.root,
                             fileDirItem.getLastModified(mActivity)
                         )
                     }
@@ -308,10 +307,10 @@ class PropertiesDialog() {
                                 mActivity.getAndroidSAFUri(
                                     path
                                 )
-                            ), MD5
+                            )
                         )
                     } else {
-                        getDigest(File(path), MD5)
+                        getDigest(File(path))
                     }
                     mActivity.runOnUiThread {
                         if (md5 != null) {
@@ -326,15 +325,15 @@ class PropertiesDialog() {
         }
     }
 
-    private fun getDigest(inputFile: File, algorithm: String): String? {
+    private fun getDigest(inputFile: File): String? {
         return try {
-            getDigest(inputFile.inputStream(), algorithm)
+            getDigest(inputFile.inputStream())
         } catch (e: Exception) {
             null
         }
     }
 
-    private fun updateLastModified(activity: Activity, view: View, timestamp: Long) {
+    private fun updateLastModified(activity: Activity, timestamp: Long) {
         activity.runOnUiThread {
             itemsBinding.propertyValue.text = timestamp.formatDate(activity)
         }
@@ -583,9 +582,9 @@ class PropertiesDialog() {
     private fun canModifyEXIF(extensionName: String) =
         SupportedExtensionsRepository.exifExtensions.any { extensionName.endsWith(it, true) }
 
-    private fun getDigest(input: InputStream?, algorithm: String): String {
+    private fun getDigest(input: InputStream?): String {
         return input?.use { fis ->
-            val md = MessageDigest.getInstance(algorithm)
+            val md = MessageDigest.getInstance(MD5)
             val buffer = ByteArray(8192)
             generateSequence {
                 when (val bytesRead = fis.read(buffer)) {
