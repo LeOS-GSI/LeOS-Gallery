@@ -10,7 +10,6 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -36,8 +35,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isVideoSlow
 import ca.on.sudbury.hojat.smartgallery.extensions.setupDialogStuff
 import ca.on.sudbury.hojat.smartgallery.extensions.showLocationOnMap
 import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.R.id.properties_size
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogPropertiesBinding
+import ca.on.sudbury.hojat.smartgallery.databinding.ItemPropertyBinding
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByInt
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
@@ -53,7 +54,6 @@ import ca.on.sudbury.hojat.smartgallery.usecases.GetGeneralPropertiesUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMegaPixelUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
-import kotlinx.android.synthetic.main.item_property.view.*
 import timber.log.Timber
 import java.io.File
 import java.io.InputStream
@@ -61,7 +61,7 @@ import java.security.MessageDigest
 
 /**
  *
- * TODO: I don't really know how to get rid of kotlin synthetics in here.
+ *
  *
  * This class has various constructors, it'll be hard to convert it to DialogFragment as is.
  * I need to find a way to make it simpler.
@@ -80,8 +80,9 @@ class PropertiesDialog() {
     private lateinit var mActivity: Activity
     private var mCountHiddenItems = false
 
-    // the binding
+    // All the bindings
     private lateinit var dialogBinding: DialogPropertiesBinding
+    private lateinit var itemsBinding: ItemPropertyBinding
 
     /**
      * A File Properties dialog constructor with an optional parameter, usable at 1 file selected
@@ -147,7 +148,7 @@ class PropertiesDialog() {
             FileDirItem(path, path.getFilenameFromPath(), mActivity.getIsPathDirectory(path))
         addProperty(R.string.name, fileDirItem.name)
         addProperty(R.string.path, fileDirItem.getParentPath())
-        addProperty(R.string.size, "…", R.id.properties_size)
+        addProperty(R.string.size, "…", properties_size)
 
         RunOnBackgroundThreadUseCase {
 
@@ -163,14 +164,10 @@ class PropertiesDialog() {
             }
 
             mActivity.runOnUiThread {
-                (dialogBinding.root.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
-                    size
-
+                itemsBinding.propertyValue.text = size
                 if (fileDirItem.isDirectory) {
-                    (dialogBinding.root.findViewById<LinearLayout>(R.id.properties_file_count).property_value as TextView).text =
-                        fileCount.toString()
-                    (dialogBinding.root.findViewById<LinearLayout>(R.id.properties_direct_children_count).property_value as TextView).text =
-                        directChildrenCount.toString()
+                    itemsBinding.propertyValue.text = fileCount.toString()
+                    itemsBinding.propertyValue.text = directChildrenCount.toString()
                 }
             }
 
@@ -318,8 +315,7 @@ class PropertiesDialog() {
                     }
                     mActivity.runOnUiThread {
                         if (md5 != null) {
-                            (dialogBinding.root.findViewById<LinearLayout>(R.id.properties_md5).property_value as TextView).text =
-                                md5
+                            itemsBinding.propertyValue.text = md5
                         } else {
                             dialogBinding.root.findViewById<LinearLayout>(R.id.properties_md5).visibility =
                                 View.GONE
@@ -340,8 +336,7 @@ class PropertiesDialog() {
 
     private fun updateLastModified(activity: Activity, view: View, timestamp: Long) {
         activity.runOnUiThread {
-            (view.findViewById<LinearLayout>(R.id.properties_last_modified).property_value as TextView).text =
-                timestamp.formatDate(activity)
+            itemsBinding.propertyValue.text = timestamp.formatDate(activity)
         }
     }
 
@@ -379,7 +374,7 @@ class PropertiesDialog() {
             addProperty(R.string.path, fileDirItems[0].getParentPath())
         }
 
-        addProperty(R.string.size, "…", R.id.properties_size)
+        addProperty(R.string.size, "…", properties_size)
         addProperty(R.string.files_count, "…", R.id.properties_file_count)
 
         RunOnBackgroundThreadUseCase {
@@ -392,10 +387,8 @@ class PropertiesDialog() {
                 )
             })
             activity.runOnUiThread {
-                (dialogBinding.root.findViewById<LinearLayout>(R.id.properties_size).property_value as TextView).text =
-                    size
-                (dialogBinding.root.findViewById<LinearLayout>(R.id.properties_file_count).property_value as TextView).text =
-                    fileCount.toString()
+                itemsBinding.propertyValue.text = size
+                itemsBinding.propertyValue.text = fileCount.toString()
             }
         }
 
@@ -531,29 +524,25 @@ class PropertiesDialog() {
             return
         }
 
-        mInflater.inflate(R.layout.item_property, dialogBinding.propertiesHolder, false).apply {
-            property_value.setTextColor(mActivity.getProperTextColor())
-            property_label.setTextColor(mActivity.getProperTextColor())
-
-            property_label.text = mResources.getString(labelId)
-            property_value.text = value
-            dialogBinding.propertiesHolder.addView(this)
-
-            setOnLongClickListener {
-                mActivity.copyToClipboard(property_value.text.toString().trim())
-                true
-            }
-
-            if (labelId == R.string.gps_coordinates) {
-                setOnClickListener {
-                    mActivity.showLocationOnMap(value)
-                }
-            }
-
-            if (viewId != 0) {
-                id = viewId
+        itemsBinding = ItemPropertyBinding.inflate(mInflater, dialogBinding.propertiesHolder, false)
+        itemsBinding.propertyValue.setTextColor(mActivity.getProperTextColor())
+        itemsBinding.propertyLabel.setTextColor(mActivity.getProperTextColor())
+        itemsBinding.propertyLabel.text = mResources.getString(labelId)
+        itemsBinding.propertyValue.text = value
+        dialogBinding.propertiesHolder.addView(itemsBinding.root)
+        itemsBinding.root.setOnLongClickListener {
+            mActivity.copyToClipboard(itemsBinding.propertyValue.text.toString().trim())
+            true
+        }
+        if (labelId == R.string.gps_coordinates) {
+            itemsBinding.root.setOnClickListener {
+                mActivity.showLocationOnMap(value)
             }
         }
+        if (viewId != 0) {
+            itemsBinding.root.id = viewId
+        }
+
     }
 
     private fun removeValues(exifInterface: ExifInterface) {
