@@ -21,7 +21,7 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityWidgetConfigBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ColorPickerDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
+import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getFolderNameFromPath
 import ca.on.sudbury.hojat.smartgallery.extensions.loadJpg
@@ -211,16 +211,17 @@ class WidgetConfigureActivity : SimpleActivity() {
     }
 
     private fun changeSelectedFolder() {
-        PickDirectoryDialog(
-            this,
+        val callback: (String) -> Unit = { path ->
+            updateFolderImage(path)
+        }
+        PickDirectoryDialogFragment(
             "",
             showOtherFolderButton = false,
             showFavoritesBin = true,
             isPickingCopyMoveDestination = false,
-            isPickingFolderForWidget = true
-        ) {
-            updateFolderImage(it)
-        }
+            isPickingFolderForWidget = true,
+            callback = callback
+        ).show(supportFragmentManager, "PickDirectoryDialogFragment")
     }
 
     private fun updateFolderImage(folderPath: String) {

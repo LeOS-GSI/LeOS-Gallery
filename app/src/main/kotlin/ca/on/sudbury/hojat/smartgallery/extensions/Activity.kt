@@ -61,7 +61,6 @@ import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogTitleBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.models.DateTaken
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -84,6 +83,7 @@ import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideLoadedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
@@ -1169,15 +1169,8 @@ fun BaseSimpleActivity.tryCopyMoveFilesTo(
     }
 
     val source = fileDirItems[0].getParentPath()
-    PickDirectoryDialog(
-        this,
-        source,
-        showOtherFolderButton = true,
-        showFavoritesBin = false,
-        isPickingCopyMoveDestination = true,
-        isPickingFolderForWidget = false
-    ) { it ->
-        val destination = it
+    val callbackAfterDialogConfirmed: (String) -> Unit = { path ->
+        val destination = path
         handleSAFDialog(source) {
             if (it) {
                 copyMoveFilesTo(
@@ -1192,6 +1185,14 @@ fun BaseSimpleActivity.tryCopyMoveFilesTo(
             }
         }
     }
+    PickDirectoryDialogFragment(
+        source,
+        showOtherFolderButton = true,
+        showFavoritesBin = false,
+        isPickingCopyMoveDestination = true,
+        isPickingFolderForWidget = false,
+        callback = callbackAfterDialogConfirmed
+    ).show(supportFragmentManager, "PickDirectoryDialogFragment")
 }
 
 fun BaseSimpleActivity.tryDeleteFileDirItem(

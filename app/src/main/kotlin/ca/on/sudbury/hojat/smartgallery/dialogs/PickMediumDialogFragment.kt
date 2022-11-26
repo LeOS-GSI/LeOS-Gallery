@@ -108,16 +108,17 @@ class PickMediumDialogFragment(
     }
 
     private fun showOtherFolder() {
-        PickDirectoryDialog(
-            requireActivity() as BaseSimpleActivity,
-            path,
+        val callbackAfterDialogConfirmed: (String) -> Unit = { path ->
+            callback(path)
+        }
+        PickDirectoryDialogFragment(
+            sourcePath = path,
             showOtherFolderButton = true,
             showFavoritesBin = true,
             isPickingCopyMoveDestination = false,
-            isPickingFolderForWidget = false
-        ) {
-            callback(it)
-        }
+            isPickingFolderForWidget = false,
+            callback = callbackAfterDialogConfirmed
+        ).show(requireActivity().supportFragmentManager, "PickDirectoryDialogFragment")
     }
 
     /**
