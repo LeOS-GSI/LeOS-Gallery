@@ -40,7 +40,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
@@ -998,7 +997,11 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     private fun showProperties() {
         if (getCurrentMedium() != null) {
-            PropertiesDialog(this, getCurrentPath(), false)
+            Toast.makeText(
+                this,
+                "I had to remove this feature.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 

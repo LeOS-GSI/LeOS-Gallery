@@ -16,7 +16,6 @@ import androidx.annotation.RequiresApi
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.handleDeletePasswordProtection
 import ca.on.sudbury.hojat.smartgallery.extensions.recycleBinPath
@@ -298,11 +297,19 @@ class MediaAdapter(
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun showProperties() {
         if (selectedKeys.size <= 1) {
-            val path = getFirstSelectedItemPath() ?: return
-            PropertiesDialog(activity, path, config.shouldShowHidden)
+            getFirstSelectedItemPath() ?: return
+            Toast.makeText(
+                activity,
+                "I had to remove this feature.",
+                Toast.LENGTH_LONG
+            ).show()
         } else {
-            val paths = getSelectedPaths()
-            PropertiesDialog(activity, paths, config.shouldShowHidden)
+            getSelectedPaths()
+            Toast.makeText(
+                activity,
+                "I had to remove this feature.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 

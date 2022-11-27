@@ -26,7 +26,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.openPath
 import ca.on.sudbury.hojat.smartgallery.extensions.openEditor
 import ca.on.sudbury.hojat.smartgallery.extensions.showFileOnMap
 import ca.on.sudbury.hojat.smartgallery.extensions.parseFileChannel
-import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isImageFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
@@ -451,7 +450,11 @@ open class PhotoVideoActivity : SimpleActivity(), ViewPagerFragment.FragmentList
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun showProperties() {
-        PropertiesDialog(this, mUri!!.path!!)
+        Toast.makeText(
+            this,
+            "I had to remove this feature.",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun isFileTypeVisible(path: String): Boolean {

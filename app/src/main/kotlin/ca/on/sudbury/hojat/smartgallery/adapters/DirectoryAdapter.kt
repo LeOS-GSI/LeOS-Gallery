@@ -22,7 +22,6 @@ import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.dialogs.PropertiesDialog
 import ca.on.sudbury.hojat.smartgallery.extensions.isVideoFast
 import ca.on.sudbury.hojat.smartgallery.extensions.isRawFast
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilenameFromPath
@@ -312,14 +311,20 @@ class DirectoryAdapter(
             if (path != FAVORITES && path != RECYCLE_BIN) {
                 activity.handleLockedFolderOpening(path) { success ->
                     if (success) {
-                        PropertiesDialog(activity, path, config.shouldShowHidden)
+                        Toast.makeText(
+                            activity,
+                            "I had to remove this feature.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
         } else {
-            PropertiesDialog(activity, getSelectedPaths().filter {
-                it != FAVORITES && it != RECYCLE_BIN && !config.isFolderProtected(it)
-            }.toMutableList(), config.shouldShowHidden)
+            Toast.makeText(
+                activity,
+                "I had to remove this feature.",
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 
