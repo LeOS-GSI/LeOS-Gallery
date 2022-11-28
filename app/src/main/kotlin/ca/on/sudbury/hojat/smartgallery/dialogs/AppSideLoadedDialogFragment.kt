@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.dialogs
 
-
 import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
@@ -33,6 +32,10 @@ class AppSideLoadedDialogFragment(val callback: () -> Unit) : DialogFragment() {
 
     private fun downloadApp() {
         requireActivity().launchViewIntent(url)
+    }
+
+    companion object {
+        const val TAG = "AppSideLoadedDialogFragment"
     }
 
 }

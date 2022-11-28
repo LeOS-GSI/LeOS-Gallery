@@ -246,7 +246,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                     positive = R.string.ok,
                     negative = 0,
                     callbackAfterDialogConfirmed = callback
-                ).show(supportFragmentManager, "ConfirmationDialogFragment")
+                ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
             }
         }
 
@@ -287,7 +287,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             items = items,
             checkedItemId = curSelectedThemeId,
             callback = callback
-        ).show(supportFragmentManager, "RadioGroupDialogFragment")
+        ).show(supportFragmentManager, RadioGroupDialogFragment.TAG)
     }
 
     private fun updateColorTheme(themeId: Int, useStored: Boolean = false) {
@@ -464,7 +464,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             callback = callback
         ).show(
             supportFragmentManager,
-            "ConfirmationAdvancedDialogFragment"
+            ConfirmationAdvancedDialogFragment.TAG
         )
     }
 
@@ -583,7 +583,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                         callbackAfterDialogConfirmed = callback
                     ).show(
                         supportFragmentManager,
-                        "ConfirmationDialogFragment"
+                        ConfirmationDialogFragment.TAG
                     )
                 }
             }
@@ -671,7 +671,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             callback = callback
         ).show(
             supportFragmentManager,
-            "ColorPickerDialogFragment"
+            ColorPickerDialogFragment.TAG
         )
     }
 
@@ -688,7 +688,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             }
         ColorPickerDialogFragment(color = curBackgroundColor, callback = callback).show(
             supportFragmentManager,
-            "ColorPickerDialogFragment"
+            ColorPickerDialogFragment.TAG
         )
     }
 
@@ -726,7 +726,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             callback = callback
         ).show(
             supportFragmentManager,
-            "LineColorPickerDialogFragment"
+            LineColorPickerDialogFragment.TAG
         )
     }
 
@@ -746,7 +746,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             }
         ColorPickerDialogFragment(color = curAccentColor, callback = callback).show(
             supportFragmentManager,
-            "ColorPickerDialogFragment"
+            ColorPickerDialogFragment.TAG
         )
     }
 
@@ -767,7 +767,7 @@ class CustomizationActivity : BaseSimpleActivity() {
                     updateNavigationBarColor(curNavigationBarColor)
                 }
             }
-        ).show(supportFragmentManager, "ColorPickerDialogFragment")
+        ).show(supportFragmentManager, ColorPickerDialogFragment.TAG)
     }
 
     private fun pickAppIconColor() {
@@ -786,7 +786,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             primaryColors = R.array.md_app_icon_colors,
             appIconIDs = getAppIconIDs(),
             callback = callback
-        ).show(supportFragmentManager, "LineColorPickerDialogFragment")
+        ).show(supportFragmentManager, LineColorPickerDialogFragment.TAG)
 
     }
 
@@ -814,7 +814,7 @@ class CustomizationActivity : BaseSimpleActivity() {
             positive = R.string.ok,
             negative = 0,
             callbackAfterDialogConfirmed = callback
-        ).show(supportFragmentManager, "ConfirmationDialogFragment")
+        ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
     }
 
     private fun updateLabelColors(textColor: Int) {

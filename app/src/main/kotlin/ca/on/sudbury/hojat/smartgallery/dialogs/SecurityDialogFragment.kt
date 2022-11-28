@@ -190,4 +190,8 @@ class SecurityDialogFragment(
             tabsAdapter.isTabVisible(i, viewPager.currentItem == i)
         }
     }
+
+    companion object{
+        const val TAG = "SecurityDialogFragment"
+    }
 }

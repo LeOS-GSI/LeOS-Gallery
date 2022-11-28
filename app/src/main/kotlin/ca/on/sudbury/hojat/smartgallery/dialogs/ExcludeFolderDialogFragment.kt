@@ -130,4 +130,8 @@ class ExcludeFolderDialogFragment(
 
         return pathsList.reversed()
     }
+
+    companion object {
+        const val TAG = "ExcludeFolderDialogFragment"
+    }
 }

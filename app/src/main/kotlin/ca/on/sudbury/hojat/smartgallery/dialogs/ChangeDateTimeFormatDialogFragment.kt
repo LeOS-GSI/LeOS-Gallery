@@ -108,4 +108,8 @@ class ChangeDateTimeFormatDialogFragment : DialogFragment() {
         requireActivity().baseConfig.use24HourFormat = binding.changeDateTimeDialog24Hour.isChecked
 
     }
+
+    companion object {
+        const val TAG = "ChangeDateTimeFormatDialogFragment"
+    }
 }

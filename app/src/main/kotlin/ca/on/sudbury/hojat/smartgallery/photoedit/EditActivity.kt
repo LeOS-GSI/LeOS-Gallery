@@ -373,7 +373,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     path = saveUri.path!!,
                     appendFilename = true,
                     callback = callback
-                ).show(supportFragmentManager, "SaveAsDialogFragment")
+                ).show(supportFragmentManager, SaveAsDialogFragment.TAG)
             } else if (saveUri.scheme == "content") {
                 val filePathGetter = getNewFilePath()
                 val callback: (savePath: String) -> Unit = { saveBitmapToFile(bitmap, it, true) }
@@ -381,7 +381,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     path = filePathGetter.first,
                     appendFilename = filePathGetter.second,
                     callback = callback
-                ).show(supportFragmentManager, "SaveAsDialogFragment")
+                ).show(supportFragmentManager, SaveAsDialogFragment.TAG)
             }
         } else {
             val currentFilter = getFiltersAdapter()?.getCurrentFilter() ?: return
@@ -409,7 +409,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 path = filePathGetter.first,
                 appendFilename = filePathGetter.second,
                 callback = callback
-            ).show(supportFragmentManager, "SaveAsDialogFragment")
+            ).show(supportFragmentManager, SaveAsDialogFragment.TAG)
         }
     }
 
@@ -603,7 +603,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 updateAspectRatio(AspectRatio.Other.id)
             }
             OtherAspectRatioDialogFragment(lastOtherAspectRatio, callbackAfterRatioPicked).show(
-                supportFragmentManager, "OtherAspectRatioDialogFragment"
+                supportFragmentManager, OtherAspectRatioDialogFragment.TAG
             )
         }
 
@@ -624,7 +624,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                 }
             ColorPickerDialogFragment(color = drawColor, callback = callback).show(
                 supportFragmentManager,
-                "ColorPickerDialogFragment"
+                ColorPickerDialogFragment.TAG
             )
         }
 
@@ -852,7 +852,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
             resizeHeight = newSize.y
             binding.cropImageView.getCroppedImageAsync()
         }
-        ResizeDialogFragment(point, callback).show(supportFragmentManager, "ResizeDialogFragment")
+        ResizeDialogFragment(point, callback).show(supportFragmentManager, ResizeDialogFragment.TAG)
     }
 
     private fun shouldCropSquare(): Boolean {
@@ -920,7 +920,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     path = saveUri.path!!,
                     appendFilename = true,
                     callback = callback
-                ).show(supportFragmentManager, "SaveAsDialogFragment")
+                ).show(supportFragmentManager, SaveAsDialogFragment.TAG)
             } else if (saveUri.scheme == "content") {
                 val filePathGetter = getNewFilePath()
                 val callback: (String) -> Unit = { savePath ->
@@ -930,7 +930,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                     path = filePathGetter.first,
                     appendFilename = filePathGetter.second,
                     callback = callback
-                ).show(supportFragmentManager, "SaveAsDialogFragment")
+                ).show(supportFragmentManager, SaveAsDialogFragment.TAG)
             } else {
                 Toast.makeText(this, R.string.unknown_file_location, Toast.LENGTH_LONG).show()
             }
@@ -986,7 +986,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
                         positive = R.string.ok,
                         negative = 0,
                         callbackAfterDialogConfirmed = callback
-                    ).show(supportFragmentManager, "ConfirmationDialogFragment")
+                    ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
                 }
                 return
             }

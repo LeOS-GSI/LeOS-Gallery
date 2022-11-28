@@ -176,4 +176,8 @@ class CreateNewFolderDialogFragment(
         callback(path.trimEnd('/'))
         dismiss()
     }
+
+    companion object {
+        const val TAG = "CreateNewFolderDialogFragment"
+    }
 }

@@ -322,4 +322,7 @@ class ColorPickerDialogFragment(
         callback(true, defaultColor)
     }
 
+    companion object {
+        const val TAG = "ColorPickerDialogFragment"
+    }
 }

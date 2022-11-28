@@ -116,4 +116,8 @@ class ChangeViewTypeDialogFragment(
         }
         callback()
     }
+
+    companion object {
+        const val TAG = "ChangeViewTypeDialogFragment"
+    }
 }

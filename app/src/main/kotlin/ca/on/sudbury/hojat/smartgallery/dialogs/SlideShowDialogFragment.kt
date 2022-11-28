@@ -96,7 +96,7 @@ class SlideShowDialogFragment(val callbackAfterDialogConfirmed: () -> Unit) : Di
                     items = items,
                     checkedItemId = requireActivity().config.slideshowAnimation,
                     callback = callback
-                ).show(requireActivity().supportFragmentManager, "RadioGroupDialogFragment")
+                ).show(requireActivity().supportFragmentManager, RadioGroupDialogFragment.TAG)
             }
             includeVideosHolder.setOnClickListener {
                 intervalValue.clearFocus()
@@ -161,5 +161,9 @@ class SlideShowDialogFragment(val callbackAfterDialogConfirmed: () -> Unit) : Di
             getString(R.string.fade) -> SlideshowAnimation.Fade.id
             else -> SlideshowAnimation.None.id
         }
+    }
+
+    companion object {
+        const val TAG = "SlideShowDialogFragment"
     }
 }

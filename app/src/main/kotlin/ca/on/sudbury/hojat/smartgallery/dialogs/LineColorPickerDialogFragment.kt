@@ -212,4 +212,7 @@ class LineColorPickerDialogFragment(
         }
     }
 
+    companion object{
+        const val TAG = "LineColorPickerDialogFragment"
+    }
 }

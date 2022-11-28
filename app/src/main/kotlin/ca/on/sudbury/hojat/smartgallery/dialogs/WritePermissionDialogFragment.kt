@@ -148,4 +148,8 @@ class WritePermissionDialogFragment(
         data class OpenDocumentTreeSDK30(val path: String) : Mode()
         object CreateDocumentSDK30 : Mode()
     }
+
+    companion object {
+        const val TAG = "WritePermissionDialogFragment"
+    }
 }

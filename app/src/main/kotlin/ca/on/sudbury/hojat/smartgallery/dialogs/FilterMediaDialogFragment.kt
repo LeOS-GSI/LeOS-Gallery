@@ -95,4 +95,8 @@ class FilterMediaDialogFragment(val callback: (result: Int) -> Unit) : DialogFra
             callback(result)
         }
     }
+
+    companion object{
+        const val TAG="FilterMediaDialogFragment"
+    }
 }

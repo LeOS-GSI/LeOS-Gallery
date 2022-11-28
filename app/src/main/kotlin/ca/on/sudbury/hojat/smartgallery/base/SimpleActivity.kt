@@ -105,6 +105,6 @@ open class SimpleActivity : BaseSimpleActivity() {
             showFAB = false,
             canAddShowHiddenButton = true,
             callback = callbackAfterDialogConfirmed
-        ).show(supportFragmentManager, "FilePickerDialogFragment")
+        ).show(supportFragmentManager, FilePickerDialogFragment.TAG)
     }
 }

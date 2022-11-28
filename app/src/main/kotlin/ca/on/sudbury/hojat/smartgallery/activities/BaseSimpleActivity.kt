@@ -608,7 +608,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     callbackAfterDialogConfirmed = callback
                 ).show(
                     supportFragmentManager,
-                    "ConfirmationDialogFragment"
+                    ConfirmationDialogFragment.TAG
                 )
                 return
             }
@@ -732,7 +732,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
         WritePermissionDialogFragment(
             WritePermissionDialogFragment.Mode.Otg,
             funAfterWritePermissionGranted
-        ).show(supportFragmentManager, "WritePermissionDialogFragment")
+        ).show(supportFragmentManager, WritePermissionDialogFragment.TAG)
     }
 
     @SuppressLint("NewApi")
@@ -1017,7 +1017,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 fileConflictDialogCallback
             ).show(
                 supportFragmentManager,
-                "FileConflictDialogFragment"
+                FileConflictDialogFragment.TAG
             )
         } else {
             checkConflicts(files, destinationPath, index + 1, conflictResolutions, callback)
@@ -1124,7 +1124,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 getExportSettingsFilename(),
                 true,
                 callback
-            ).show(supportFragmentManager, "ExportSettingsDialogFragment")
+            ).show(supportFragmentManager, ExportSettingsDialogFragment.TAG)
         } else {
             handlePermission(PERMISSION_WRITE_STORAGE) { it ->
                 if (it) {
@@ -1137,7 +1137,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     ExportSettingsDialogFragment(
                         getExportSettingsFilename(),
                         false, callback
-                    ).show(supportFragmentManager, "ExportSettingsDialogFragment")
+                    ).show(supportFragmentManager, ExportSettingsDialogFragment.TAG)
                 }
             }
         }

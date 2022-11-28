@@ -80,4 +80,8 @@ class ConfirmationDialogFragment(
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+        const val TAG = "ConfirmationDialogFragment"
+    }
 }

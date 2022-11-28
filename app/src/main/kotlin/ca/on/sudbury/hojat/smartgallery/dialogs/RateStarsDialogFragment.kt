@@ -86,4 +86,8 @@ class RateStarsDialogFragment : DialogFragment() {
         ).show()
         dismiss()
     }
+
+    companion object {
+        const val TAG = "RateStarsDialogFragment"
+    }
 }

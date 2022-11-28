@@ -141,4 +141,8 @@ class RenameItemDialogFragment(
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+        const val TAG = "RenameItemDialogFragment"
+    }
 }

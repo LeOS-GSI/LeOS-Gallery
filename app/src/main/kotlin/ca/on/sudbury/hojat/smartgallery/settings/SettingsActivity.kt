@@ -301,7 +301,7 @@ class SettingsActivity : SimpleActivity() {
         binding.settingsChangeDateTimeFormatHolder.setOnClickListener {
             ChangeDateTimeFormatDialogFragment().show(
                 supportFragmentManager,
-                "ChangeDateTimeFormatDialogFragment"
+                ChangeDateTimeFormatDialogFragment.TAG
             )
         }
     }
@@ -330,7 +330,7 @@ class SettingsActivity : SimpleActivity() {
                 items = items,
                 checkedItemId = config.fileLoadingPriority,
                 callback = callback
-            ).show(supportFragmentManager, "RadioGroupDialogFragment")
+            ).show(supportFragmentManager, RadioGroupDialogFragment.TAG)
         }
     }
 
@@ -504,7 +504,7 @@ class SettingsActivity : SimpleActivity() {
                                 positive = R.string.ok,
                                 negative = 0,
                                 callbackAfterDialogConfirmed = callback
-                            ).show(supportFragmentManager, "ConfirmationDialogFragment")
+                            ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
                         }
                     }
                 }
@@ -512,7 +512,7 @@ class SettingsActivity : SimpleActivity() {
                 config.hiddenPasswordHash,
                 tabToShow,
                 callback
-            ).show(supportFragmentManager, "SecurityDialogFragment")
+            ).show(supportFragmentManager, SecurityDialogFragment.TAG)
         }
     }
 
@@ -550,13 +550,13 @@ class SettingsActivity : SimpleActivity() {
                             positive = R.string.ok,
                             negative = 0,
                             callbackAfterDialogConfirmed = callback
-                        ).show(supportFragmentManager, "ConfirmationDialogFragment")
+                        ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
                     }
                 }
             }
             SecurityDialogFragment(config.excludedPasswordHash, tabToShow, callback).show(
                 supportFragmentManager,
-                "SecurityDialogFragment"
+                SecurityDialogFragment.TAG
             )
         }
     }
@@ -590,13 +590,13 @@ class SettingsActivity : SimpleActivity() {
                             positive = R.string.ok,
                             negative = 0,
                             callbackAfterDialogConfirmed = callback
-                        ).show(supportFragmentManager, "ConfirmationDialogFragment")
+                        ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
                     }
                 }
             }
             SecurityDialogFragment(config.appPasswordHash, tabToShow, callback).show(
                 supportFragmentManager,
-                "SecurityDialogFragment"
+                SecurityDialogFragment.TAG
             )
         }
     }
@@ -628,13 +628,13 @@ class SettingsActivity : SimpleActivity() {
                                 positive = R.string.ok,
                                 negative = 0,
                                 callbackAfterDialogConfirmed = callback
-                            ).show(supportFragmentManager, "ConfirmationDialogFragment")
+                            ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
                         }
                     }
                 }
             SecurityDialogFragment(config.deletePasswordHash, tabToShow, callback).show(
                 supportFragmentManager,
-                "SecurityDialogFragment"
+                SecurityDialogFragment.TAG
             )
 
         }
@@ -694,7 +694,7 @@ class SettingsActivity : SimpleActivity() {
 //            ChangeFileThumbnailStyleDialog(this)
             ChangeFileThumbnailStyleDialogFragment().show(
                 supportFragmentManager,
-                "ChangeFileThumbnailStyleDialogFragment"
+                ChangeFileThumbnailStyleDialogFragment.TAG
             )
         }
     }
@@ -706,7 +706,7 @@ class SettingsActivity : SimpleActivity() {
                 val callback = { settingsFolderThumbnailStyle.text = getFolderStyleText() }
                 ChangeFolderThumbnailStyleDialogFragment(callback).show(
                     supportFragmentManager,
-                    "ChangeFolderThumbnailStyleDialogFragment"
+                    ChangeFolderThumbnailStyleDialogFragment.TAG
                 )
             }
         }
@@ -837,7 +837,7 @@ class SettingsActivity : SimpleActivity() {
                 }
                 ManageExtendedDetailsDialogFragment(callbackAfterDialogConfirmed).show(
                     supportFragmentManager,
-                    "ManageExtendedDetailsDialogFragment"
+                    ManageExtendedDetailsDialogFragment.TAG
                 )
             }
         }
@@ -894,7 +894,7 @@ class SettingsActivity : SimpleActivity() {
                     items = items,
                     checkedItemId = config.screenRotation,
                     callback = callback
-                ).show(supportFragmentManager, "RadioGroupDialogFragment")
+                ).show(supportFragmentManager, RadioGroupDialogFragment.TAG)
             }
         }
     }
@@ -931,7 +931,7 @@ class SettingsActivity : SimpleActivity() {
                 }
                 ManageBottomActionsDialogFragment(callbackAfterDialogConfirmed).show(
                     supportFragmentManager,
-                    "ManageBottomActionsDialogFragment"
+                    ManageBottomActionsDialogFragment.TAG
                 )
             }
         }
@@ -1172,7 +1172,7 @@ class SettingsActivity : SimpleActivity() {
                         }
                         FilePickerDialogFragment(callback = callback).show(
                             supportFragmentManager,
-                            "FilePickerDialogFragment"
+                            FilePickerDialogFragment.TAG
                         )
                     }
                 }

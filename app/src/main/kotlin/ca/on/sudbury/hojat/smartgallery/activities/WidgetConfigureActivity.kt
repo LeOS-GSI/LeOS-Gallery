@@ -192,7 +192,7 @@ class WidgetConfigureActivity : SimpleActivity() {
             callback = callback
         ).show(
             supportFragmentManager,
-            "ColorPickerDialogFragment"
+            ColorPickerDialogFragment.TAG
         )
     }
 
@@ -206,7 +206,7 @@ class WidgetConfigureActivity : SimpleActivity() {
             }
         ColorPickerDialogFragment(color = mTextColor, callback = callback).show(
             supportFragmentManager,
-            "ColorPickerDialogFragment"
+            ColorPickerDialogFragment.TAG
         )
     }
 
@@ -221,7 +221,7 @@ class WidgetConfigureActivity : SimpleActivity() {
             isPickingCopyMoveDestination = false,
             isPickingFolderForWidget = true,
             callback = callback
-        ).show(supportFragmentManager, "PickDirectoryDialogFragment")
+        ).show(supportFragmentManager, PickDirectoryDialogFragment.TAG)
     }
 
     private fun updateFolderImage(folderPath: String) {

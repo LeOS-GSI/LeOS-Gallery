@@ -80,6 +80,6 @@ class ExcludedFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
             canAddShowHiddenButton = true,
             enforceStorageRestrictions = false,
             callback = callback
-        ).show(supportFragmentManager, "FilePickerDialogFragment")
+        ).show(supportFragmentManager, FilePickerDialogFragment.TAG)
     }
 }

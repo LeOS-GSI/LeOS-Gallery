@@ -78,4 +78,8 @@ class CustomAspectRatioDialogFragment(
         val textValue = view.text.toString().trim()
         return if (textValue.isEmpty()) 0f else textValue.toFloat()
     }
+
+    companion object {
+        const val TAG = "CustomAspectRatioDialogFragment"
+    }
 }

@@ -100,4 +100,8 @@ class FileConflictDialogFragment(
 
         callback(resolution, applyToAll)
     }
+
+    companion object {
+        const val TAG = "FileConflictDialogFragment"
+    }
 }

@@ -97,7 +97,7 @@ class ChangeFileThumbnailStyleDialogFragment : DialogFragment() {
                     items = items,
                     checkedItemId = thumbnailSpacing,
                     callback = callback
-                ).show(requireActivity().supportFragmentManager, "RadioGroupDialogFragment")
+                ).show(requireActivity().supportFragmentManager, RadioGroupDialogFragment.TAG)
             }
         }
         updateThumbnailSpacingText()
@@ -116,5 +116,9 @@ class ChangeFileThumbnailStyleDialogFragment : DialogFragment() {
         config.showThumbnailFileTypes = binding.dialogFileStyleShowThumbnailFileTypes.isChecked
         config.markFavoriteItems = binding.dialogFileStyleMarkFavoriteItems.isChecked
         config.thumbnailSpacing = thumbnailSpacing
+    }
+
+    companion object {
+        const val TAG = "ChangeFileThumbnailStyleDialogFragment"
     }
 }

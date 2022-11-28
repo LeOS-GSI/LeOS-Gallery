@@ -226,4 +226,8 @@ class PickDirectoryDialogFragment(
             }
         }
     }
+
+    companion object {
+        const val TAG = "PickDirectoryDialogFragment"
+    }
 }

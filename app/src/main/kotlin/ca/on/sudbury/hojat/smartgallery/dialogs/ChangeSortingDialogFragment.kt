@@ -174,4 +174,7 @@ class ChangeSortingDialogFragment(
         }
     }
 
+    companion object {
+        const val TAG = "ChangeSortingDialogFragment"
+    }
 }

@@ -93,7 +93,7 @@ class ResizeWithPathDialogFragment(
                     showFAB = true,
                     canAddShowHiddenButton = true,
                     callback = callback
-                ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
+                ).show(requireActivity().supportFragmentManager, FilePickerDialogFragment.TAG)
             }
             resizeImageWithPathDialogBottomRow.btnOk.setOnClickListener {
                 dialogConfirmed()
@@ -183,7 +183,7 @@ class ResizeWithPathDialogFragment(
             ConfirmationDialogFragment(
                 message = title,
                 callbackAfterDialogConfirmed = callback
-            ).show(requireActivity().supportFragmentManager, "ConfirmationDialogFragment")
+            ).show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.TAG)
         } else {
             callback(newSize, newPath)
         }
@@ -200,5 +200,9 @@ class ResizeWithPathDialogFragment(
     private fun getViewValue(view: EditText): Int {
         val textValue = view.text.toString().trim()
         return if (textValue.isEmpty()) 0 else textValue.toInt()
+    }
+
+    companion object{
+        const val TAG = "ResizeWithPathDialogFragment"
     }
 }

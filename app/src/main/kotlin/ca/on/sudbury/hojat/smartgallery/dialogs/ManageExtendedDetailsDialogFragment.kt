@@ -103,4 +103,7 @@ class ManageExtendedDetailsDialogFragment(val callback: (result: Int) -> Unit) :
         callback(result)
     }
 
+    companion object {
+        const val TAG = "ManageExtendedDetailsDialogFragment"
+    }
 }

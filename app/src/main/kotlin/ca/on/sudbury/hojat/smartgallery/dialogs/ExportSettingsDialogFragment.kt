@@ -86,7 +86,7 @@ class ExportSettingsDialogFragment(
                         false,
                         showFAB = true,
                         callback = callback
-                    ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
+                    ).show(requireActivity().supportFragmentManager, FilePickerDialogFragment.TAG)
                 }
 
             }
@@ -133,7 +133,7 @@ class ExportSettingsDialogFragment(
             ConfirmationDialogFragment(
                 message = title,
                 callbackAfterDialogConfirmed = callback
-            ).show(requireActivity().supportFragmentManager, "ConfirmationDialogFragment")
+            ).show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.TAG)
         } else {
             callback(newPath, filename)
             dismiss()
@@ -146,5 +146,9 @@ class ExportSettingsDialogFragment(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val TAG = "ExportSettingsDialogFragment"
     }
 }

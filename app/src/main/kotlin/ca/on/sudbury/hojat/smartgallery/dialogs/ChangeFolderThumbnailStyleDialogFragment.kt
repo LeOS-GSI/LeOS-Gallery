@@ -199,4 +199,8 @@ class ChangeFolderThumbnailStyleDialogFragment(val callback: () -> Unit) : Dialo
 
         countBtn.isChecked = true
     }
+
+    companion object {
+        const val TAG = "ChangeFolderThumbnailStyleDialogFragment"
+    }
 }

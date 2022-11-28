@@ -147,7 +147,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
             RadioGroupDialogFragment(
                 items = items,
                 callback = callback
-            ).show(supportFragmentManager, "RadioGroupDialogFragment")
+            ).show(supportFragmentManager, RadioGroupDialogFragment.TAG)
         } else {
             binding.cropImageView.getCroppedImageAsync()
         }

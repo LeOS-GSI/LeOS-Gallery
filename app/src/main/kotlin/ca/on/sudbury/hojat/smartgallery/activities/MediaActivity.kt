@@ -577,7 +577,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             isDirectorySorting = false,
             showFolderCheckbox = true,
             path = mPath, callback = callback
-        ).show(supportFragmentManager, "ChangeSortingDialogFragment")
+        ).show(supportFragmentManager, ChangeSortingDialogFragment.TAG)
     }
 
     private fun showFilterMediaDialog() {
@@ -589,7 +589,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         }
         FilterMediaDialogFragment(callbackAfterDialogConfirmed).show(
             supportFragmentManager,
-            "FilterMediaDialogFragment"
+            FilterMediaDialogFragment.TAG
         )
     }
 
@@ -645,7 +645,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
             callback = callback
         ).show(
             supportFragmentManager,
-            "ChangeViewTypeDialogFragment"
+            ChangeViewTypeDialogFragment.TAG
         )
     }
 
@@ -657,7 +657,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         }
         ChangeGroupingDialogFragment(mPath, callback).show(
             supportFragmentManager,
-            "ChangeGroupingDialogFragment"
+            ChangeGroupingDialogFragment.TAG
         )
     }
 
@@ -774,7 +774,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         }
         CreateNewFolderDialogFragment(mPath, callback).show(
             supportFragmentManager,
-            "CreateNewFolderDialogFragment"
+            CreateNewFolderDialogFragment.TAG
         )
     }
 

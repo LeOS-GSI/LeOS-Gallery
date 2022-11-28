@@ -247,7 +247,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
         if (baseConfig.appRunCount % 40 == 0 && !baseConfig.wasAppRated) {
             if (!resources.getBoolean(R.bool.hide_google_relations)) {
-                RateStarsDialogFragment().show(supportFragmentManager, "RateStarsDialogFragment")
+                RateStarsDialogFragment().show(supportFragmentManager, RateStarsDialogFragment.TAG)
             }
         }
 
@@ -415,7 +415,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                         baseConfig.appPasswordHash,
                         baseConfig.appProtectionType,
                         callback
-                    ).show(supportFragmentManager, "SecurityDialogFragment")
+                    ).show(supportFragmentManager, SecurityDialogFragment.TAG)
                 } else {
                     mWasProtectionHandled = true
                     mIsPasswordProtectionPending = false
@@ -760,7 +760,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             isDirectorySorting = true,
             showFolderCheckbox = false,
             callback = callback
-        ).show(supportFragmentManager, "ChangeSortingDialogFragment")
+        ).show(supportFragmentManager, ChangeSortingDialogFragment.TAG)
     }
 
     private fun showFilterMediaDialog() {
@@ -773,7 +773,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
         FilterMediaDialogFragment(callbackAfterDialogConfirmed).show(
             supportFragmentManager,
-            "FilterMediaDialogFragment"
+            FilterMediaDialogFragment.TAG
         )
     }
 
@@ -802,7 +802,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
         }
         ChangeViewTypeDialogFragment(fromFoldersView = true, callback = callback).show(
             supportFragmentManager,
-            "ChangeViewTypeDialogFragment"
+            ChangeViewTypeDialogFragment.TAG
         )
     }
 
@@ -1039,7 +1039,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             }
             CreateNewFolderDialogFragment(pickedPath, callback).show(
                 supportFragmentManager,
-                "CreateNewFolderDialogFragment"
+                CreateNewFolderDialogFragment.TAG
             )
         }
         FilePickerDialogFragment(
@@ -1049,7 +1049,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
             showFAB = false,
             canAddShowHiddenButton = true,
             callback = callback
-        ).show(supportFragmentManager, "FilePickerDialogFragment")
+        ).show(supportFragmentManager, FilePickerDialogFragment.TAG)
     }
 
     private fun increaseColumnCount() {

@@ -82,6 +82,6 @@ class HiddenFoldersActivity : SimpleActivity(), RefreshRecyclerViewListener {
             showFAB = false,
             canAddShowHiddenButton = true,
             callback = callback
-        ).show(supportFragmentManager, "FilePickerDialogFragment")
+        ).show(supportFragmentManager, FilePickerDialogFragment.TAG)
     }
 }

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentOtherAspectRatioBinding
 
-
 /**
  * While you're in the editing page, if you click on "other" in
  * the aspect ratio section, this dialog will be called.
@@ -111,7 +110,7 @@ class OtherAspectRatioDialogFragment(
         }
         CustomAspectRatioDialogFragment(lastOtherAspectRatio, callbackAfterDialogConfirmed).show(
             requireActivity().supportFragmentManager,
-            "CustomAspectRatioDialogFragment"
+            CustomAspectRatioDialogFragment.TAG
         )
     }
 
@@ -120,4 +119,7 @@ class OtherAspectRatioDialogFragment(
         dismiss()
     }
 
+    companion object{
+        const val TAG = "OtherAspectRatioDialogFragment"
+    }
 }

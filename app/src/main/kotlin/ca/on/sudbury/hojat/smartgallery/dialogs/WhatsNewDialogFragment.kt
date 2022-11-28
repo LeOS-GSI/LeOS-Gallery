@@ -61,4 +61,8 @@ class WhatsNewDialogFragment(private val releases: List<Release>) : DialogFragme
         }
         return sb.toString()
     }
+
+    companion object {
+        const val TAG = "WhatsNewDialogFragment"
+    }
 }

@@ -366,7 +366,7 @@ class DirectoryAdapter(
                     }
                     RenameItemDialogFragment(dir.absolutePath, callback).show(
                         activity.supportFragmentManager,
-                        "RenameItemDialogFragment"
+                        RenameItemDialogFragment.TAG
                     )
                 }
             }
@@ -377,7 +377,7 @@ class DirectoryAdapter(
             val callback: () -> Unit = { listener?.refreshItems() }
             RenameItemsDialogFragment(paths, callback).show(
                 activity.supportFragmentManager,
-                "RenameItemsDialogFragment"
+                RenameItemsDialogFragment.TAG
             )
         }
     }
@@ -403,7 +403,7 @@ class DirectoryAdapter(
                 ConfirmationDialogFragment(
                     message = activity.getString(R.string.hide_folder_description),
                     callbackAfterDialogConfirmed = callback
-                ).show(activity.supportFragmentManager, "ConfirmationDialogFragment")
+                ).show(activity.supportFragmentManager, ConfirmationDialogFragment.TAG)
             }
         } else {
             selectedPaths.filter {
@@ -537,7 +537,7 @@ class DirectoryAdapter(
                 finishActMode()
             }
             ExcludeFolderDialogFragment(paths.toMutableList(), callbackAfterDialogConfirmed).show(
-                activity.supportFragmentManager, "ExcludeFolderDialogFragment"
+                activity.supportFragmentManager, ExcludeFolderDialogFragment.TAG
             )
         } else if (paths.size > 1) {
             config.addExcludedFolders(paths)
@@ -553,7 +553,7 @@ class DirectoryAdapter(
             val callback = { lockFolder() }
             FolderLockingNoticeDialogFragment(callback).show(
                 activity.supportFragmentManager,
-                "FolderLockingNoticeDialogFragment"
+                FolderLockingNoticeDialogFragment.TAG
             )
         }
     }
@@ -572,7 +572,7 @@ class DirectoryAdapter(
         }
         SecurityDialogFragment("", SHOW_ALL_TABS, callback).show(
             activity.supportFragmentManager,
-            "SecurityDialogFragment"
+            SecurityDialogFragment.TAG
         )
     }
 
@@ -600,7 +600,7 @@ class DirectoryAdapter(
         }
         SecurityDialogFragment(hashToCheck, tabToShow, callback).show(
             activity.supportFragmentManager,
-            "SecurityDialogFragment"
+            SecurityDialogFragment.TAG
         )
 
     }
@@ -741,7 +741,7 @@ class DirectoryAdapter(
                         positive = R.string.yes,
                         negative = R.string.no,
                         callbackAfterDialogConfirmed = callback
-                    ).show(activity.supportFragmentManager, "ConfirmationDialogFragment")
+                    ).show(activity.supportFragmentManager, ConfirmationDialogFragment.TAG)
                     return
                 }
 
@@ -771,7 +771,7 @@ class DirectoryAdapter(
                     callbackAfterConfirmDeleteFolder
                 ).show(
                     activity.supportFragmentManager,
-                    "DeleteFolderDialogFragment"
+                    DeleteFolderDialogFragment.TAG
                 )
             }
         }
@@ -870,7 +870,7 @@ class DirectoryAdapter(
             }
         }
         PickMediumDialogFragment(path, callback).show(
-            activity.supportFragmentManager, "PickMediumDialogFragment"
+            activity.supportFragmentManager, PickMediumDialogFragment.TAG
         )
     }
 

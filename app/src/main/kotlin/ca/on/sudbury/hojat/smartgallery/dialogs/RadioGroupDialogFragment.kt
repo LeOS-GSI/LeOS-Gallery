@@ -112,4 +112,8 @@ class RadioGroupDialogFragment(
             dismiss()
         }
     }
+
+    companion object {
+        const val TAG = "RadioGroupDialogFragment"
+    }
 }

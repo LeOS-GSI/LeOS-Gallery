@@ -70,4 +70,8 @@ class DeleteFolderDialogFragment(
         dismiss()
         callback()
     }
+
+    companion object {
+        const val TAG = "DeleteFolderDialogFragment"
+    }
 }

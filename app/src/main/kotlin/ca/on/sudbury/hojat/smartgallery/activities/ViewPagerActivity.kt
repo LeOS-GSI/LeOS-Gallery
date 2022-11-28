@@ -648,7 +648,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
     private fun initSlideshow() {
         SlideShowDialogFragment(callbackAfterDialogConfirmed = { startSlideshow() }).show(
             supportFragmentManager,
-            "SlideShowDialogFragment"
+            SlideShowDialogFragment.TAG
         )
     }
 
@@ -931,7 +931,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
             path = currPath,
             appendFilename = false,
             callback = callback
-        ).show(supportFragmentManager, "SaveAsDialogFragment")
+        ).show(supportFragmentManager, SaveAsDialogFragment.TAG)
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -1389,7 +1389,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
         ResizeWithPathDialogFragment(originalSize, oldPath, callback).show(
             supportFragmentManager,
-            "ResizeWithPathDialogFragment"
+            ResizeWithPathDialogFragment.TAG
         )
     }
 
@@ -1467,7 +1467,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
         DeleteWithRememberDialogFragment(message, callback).show(
             supportFragmentManager,
-            "DeleteWithRememberDialogFragment"
+            DeleteWithRememberDialogFragment.TAG
         )
     }
 
@@ -1596,7 +1596,7 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
         }
         RenameItemDialogFragment(oldPath, callback).show(
             supportFragmentManager,
-            "RenameItemDialogFragment"
+            RenameItemDialogFragment.TAG
         )
 
     }

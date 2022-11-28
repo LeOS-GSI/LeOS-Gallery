@@ -97,7 +97,7 @@ class SaveAsDialogFragment(
                     showFAB = true,
                     canAddShowHiddenButton = true,
                     callback = callbackAfterDialogConfirmed
-                ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
+                ).show(requireActivity().supportFragmentManager, FilePickerDialogFragment.TAG)
             }
         }
     }
@@ -132,7 +132,7 @@ class SaveAsDialogFragment(
                 showFAB = true,
                 canAddShowHiddenButton = true,
                 callback = callbackAfterDialogConfirmed
-            ).show(requireActivity().supportFragmentManager, "FilePickerDialogFragment")
+            ).show(requireActivity().supportFragmentManager, FilePickerDialogFragment.TAG)
         }
 
     }
@@ -197,7 +197,7 @@ class SaveAsDialogFragment(
             ConfirmationDialogFragment(
                 message = title,
                 callbackAfterDialogConfirmed = callback
-            ).show(requireActivity().supportFragmentManager, "ConfirmationDialogFragment")
+            ).show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.TAG)
         } else {
             selectPath(newPath)
         }
@@ -221,4 +221,7 @@ class SaveAsDialogFragment(
         }
     }
 
+    companion object {
+        const val TAG = "SaveAsDialogFragment"
+    }
 }

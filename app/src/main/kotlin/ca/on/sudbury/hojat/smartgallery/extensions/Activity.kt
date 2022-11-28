@@ -680,7 +680,7 @@ fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
             callbackAfterSecurityReceived
         ).show(
             (this as FragmentActivity).supportFragmentManager,
-            "SecurityDialogFragment"
+            SecurityDialogFragment.TAG
         )
 
     } else {
@@ -703,7 +703,7 @@ fun Activity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
             callbackAfterSecurityReceived
         ).show(
             (this as FragmentActivity).supportFragmentManager,
-            "SecurityDialogFragment"
+            SecurityDialogFragment.TAG
         )
 
     } else {
@@ -723,7 +723,7 @@ fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean
             callbackAfterSecurityReceived
         ).show(
             (this as FragmentActivity).supportFragmentManager,
-            "SecurityDialogFragment"
+            SecurityDialogFragment.TAG
         )
 
     } else {
@@ -818,7 +818,7 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
                 callbackAfterDialog
             ).show(
                 supportFragmentManager,
-                "ConfirmationAdvancedDialogFragment"
+                ConfirmationAdvancedDialogFragment.TAG
             )
         }
     } else if (IsSPlusUseCase() && !MediaStore.canManageMedia(this) && !isExternalStorageManager()) {
@@ -833,7 +833,7 @@ fun BaseSimpleActivity.handleMediaManagementPrompt(callback: () -> Unit) {
             positive = R.string.ok,
             negative = 0,
             callbackAfterDialogConfirmed = callbackAfterDialogConfirmed
-        ).show(supportFragmentManager, "ConfirmationDialogFragment")
+        ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
     } else {
         callback()
     }
@@ -1193,7 +1193,7 @@ fun BaseSimpleActivity.tryCopyMoveFilesTo(
         isPickingCopyMoveDestination = true,
         isPickingFolderForWidget = false,
         callback = callbackAfterDialogConfirmed
-    ).show(supportFragmentManager, "PickDirectoryDialogFragment")
+    ).show(supportFragmentManager, PickDirectoryDialogFragment.TAG)
 }
 
 fun BaseSimpleActivity.tryDeleteFileDirItem(
@@ -1396,7 +1396,7 @@ fun BaseSimpleActivity.showRecycleBinEmptyingDialog(callback: () -> Unit) {
         positive = R.string.yes,
         negative = R.string.no,
         callbackAfterDialogConfirmed = callbackAfterDialogConfirmed
-    ).show(supportFragmentManager, "ConfirmationDialogFragment")
+    ).show(supportFragmentManager, ConfirmationDialogFragment.TAG)
 }
 
 fun BaseSimpleActivity.updateFavoritePaths(
@@ -1802,7 +1802,7 @@ fun Activity.handleExcludedFolderPasswordProtection(callback: () -> Unit) {
             config.excludedPasswordHash,
             config.excludedProtectionType,
             callbackAfterSecurityReceived
-        ).show((this as FragmentActivity).supportFragmentManager, "SecurityDialogFragment")
+        ).show((this as FragmentActivity).supportFragmentManager, SecurityDialogFragment.TAG)
     } else {
         callback()
     }
@@ -1850,7 +1850,7 @@ fun BaseSimpleActivity.isShowingSAFDialog(path: String): Boolean {
                     funAfterPermissionGranted
                 ).show(
                     supportFragmentManager,
-                    "WritePermissionDialogFragment"
+                    WritePermissionDialogFragment.TAG
                 )
             }
         }
@@ -1913,7 +1913,7 @@ fun BaseSimpleActivity.isShowingSAFDialogSdk30(path: String): Boolean {
                     ), funAfterPermissionGranted
                 ).show(
                     supportFragmentManager,
-                    "WritePermissionDialogFragment"
+                    WritePermissionDialogFragment.TAG
                 )
             }
         }
@@ -1969,7 +1969,7 @@ fun BaseSimpleActivity.isShowingSAFCreateDocumentDialogSdk30(path: String): Bool
                     funAfterPermissionGranted
                 ).show(
                     supportFragmentManager,
-                    "WritePermissionDialogFragment"
+                    WritePermissionDialogFragment.TAG
                 )
             }
         }
@@ -2035,7 +2035,7 @@ fun BaseSimpleActivity.isShowingAndroidSAFDialog(path: String): Boolean {
                     callback = callback
                 ).show(
                     supportFragmentManager,
-                    "ConfirmationAdvancedDialogFragment"
+                    ConfirmationAdvancedDialogFragment.TAG
                 )
             }
         }
@@ -2079,7 +2079,7 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
             WritePermissionDialogFragment(
                 WritePermissionDialogFragment.Mode.Otg,
                 funAfterPermissionGranted
-            ).show(supportFragmentManager, "WritePermissionDialogFragment")
+            ).show(supportFragmentManager, WritePermissionDialogFragment.TAG)
         }
     }
 }
@@ -2239,7 +2239,7 @@ fun BaseSimpleActivity.checkWhatsNew(releases: List<Release>, currVersion: Int) 
     releases.filterTo(newReleases) { it.id > baseConfig.lastVersion }
 
     if (newReleases.isNotEmpty()) {
-        WhatsNewDialogFragment(newReleases).show(supportFragmentManager, "WhatsNewDialogFragment")
+        WhatsNewDialogFragment(newReleases).show(supportFragmentManager, WhatsNewDialogFragment.TAG)
     }
 
     baseConfig.lastVersion = currVersion
@@ -2394,7 +2394,7 @@ fun Activity.showSideloadingDialog() {
     val funAfterDialogCancelled = { finish() }
     AppSideLoadedDialogFragment(funAfterDialogCancelled).show(
         (this as FragmentActivity).supportFragmentManager,
-        "AppSideLoadedDialogFragment"
+        AppSideLoadedDialogFragment.TAG
     )
 }
 

@@ -118,7 +118,7 @@ class PickMediumDialogFragment(
             isPickingCopyMoveDestination = false,
             isPickingFolderForWidget = false,
             callback = callbackAfterDialogConfirmed
-        ).show(requireActivity().supportFragmentManager, "PickDirectoryDialogFragment")
+        ).show(requireActivity().supportFragmentManager, PickDirectoryDialogFragment.TAG)
     }
 
     /**
@@ -128,7 +128,6 @@ class PickMediumDialogFragment(
         super.onDestroyView()
         _binding = null
     }
-
 
     private fun gotMedia(media: ArrayList<ThumbnailItem>) {
         if (media.hashCode() == shownMedia.hashCode())
@@ -186,6 +185,10 @@ class PickMediumDialogFragment(
                 binding.mediaGrid.addItemDecoration(newGridDecoration)
             }
         }
+    }
+
+    companion object {
+        const val TAG = "PickMediumDialogFragment"
     }
 
 }

@@ -67,4 +67,7 @@ class DeleteWithRememberDialogFragment(
         }
     }
 
+    companion object {
+        const val TAG = "DeleteWithRememberDialogFragment"
+    }
 }

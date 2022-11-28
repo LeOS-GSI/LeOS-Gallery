@@ -114,4 +114,8 @@ class ResizeDialogFragment(
         val textValue = view.text.toString().trim()
         return if (textValue.isEmpty()) 0 else textValue.toInt()
     }
+
+    companion object {
+        const val TAG = "ResizeDialogFragment"
+    }
 }

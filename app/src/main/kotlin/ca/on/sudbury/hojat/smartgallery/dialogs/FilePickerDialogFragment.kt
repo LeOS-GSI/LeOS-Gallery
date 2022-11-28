@@ -247,7 +247,7 @@ class FilePickerDialogFragment(
                 callback
             ).show(
                 requireActivity().supportFragmentManager,
-                "StoragePickerDialogFragment"
+                StoragePickerDialogFragment.TAG
             )
         } else {
             val item = binding.filepickerBreadcrumbs.getItem(id)
@@ -265,7 +265,7 @@ class FilePickerDialogFragment(
         }
         CreateNewFolderDialogFragment(currPath, callback).show(
             requireActivity().supportFragmentManager,
-            "CreateNewFolderDialogFragment"
+            CreateNewFolderDialogFragment.TAG
         )
     }
 
@@ -575,5 +575,9 @@ class FilePickerDialogFragment(
         if ((pickFile && document.isFile) || (!pickFile && document.isDirectory)) {
             sendSuccess()
         }
+    }
+
+    companion object {
+        const val TAG = "FilePickerDialogFragment"
     }
 }

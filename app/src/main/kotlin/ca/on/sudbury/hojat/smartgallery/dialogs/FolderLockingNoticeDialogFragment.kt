@@ -24,4 +24,8 @@ class FolderLockingNoticeDialogFragment(val callback: () -> Unit) : DialogFragme
                 dismiss()
             }
             .create()
+
+    companion object {
+        const val TAG = "FolderLockingNoticeDialogFragment"
+    }
 }

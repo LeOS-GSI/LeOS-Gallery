@@ -136,4 +136,8 @@ class ChangeGroupingDialogFragment(
         }
         orderBtn.isChecked = true
     }
+
+    companion object {
+        const val TAG = "ChangeGroupingDialogFragment"
+    }
 }

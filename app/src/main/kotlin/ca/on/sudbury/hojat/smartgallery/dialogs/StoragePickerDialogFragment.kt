@@ -184,4 +184,8 @@ class StoragePickerDialogFragment(
         dismiss()
         callback(requireActivity().baseConfig.sdCardPath)
     }
+
+    companion object {
+        const val TAG = "StoragePickerDialogFragment"
+    }
 }

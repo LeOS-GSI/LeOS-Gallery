@@ -178,7 +178,7 @@ class AboutActivity : BaseSimpleActivity() {
                     positive = R.string.read_faq,
                     negative = R.string.skip,
                     callback = callback
-                ).show(supportFragmentManager, "ConfirmationAdvancedDialogFragment")
+                ).show(supportFragmentManager, ConfirmationAdvancedDialogFragment.TAG)
             } else {
                 val appVersion = String.format(
                     getString(
@@ -224,7 +224,7 @@ class AboutActivity : BaseSimpleActivity() {
                 } else {
                     RateStarsDialogFragment().show(
                         supportFragmentManager,
-                        "RateStarsDialogFragment"
+                        RateStarsDialogFragment.TAG
                     )
                 }
             } else {
@@ -244,7 +244,7 @@ class AboutActivity : BaseSimpleActivity() {
                     positive = R.string.read_faq,
                     negative = R.string.skip,
                     callback = callback
-                ).show(supportFragmentManager, "ConfirmationAdvancedDialogFragment")
+                ).show(supportFragmentManager, ConfirmationAdvancedDialogFragment.TAG)
             }
         }
     }

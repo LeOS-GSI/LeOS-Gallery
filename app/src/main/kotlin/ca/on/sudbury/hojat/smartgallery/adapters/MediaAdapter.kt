@@ -349,7 +349,7 @@ class MediaAdapter(
             }
             RenameItemDialogFragment(firstPath, callback).show(
                 activity.supportFragmentManager,
-                "RenameItemDialogFragment"
+                RenameItemDialogFragment.TAG
             )
         } else {
             val callback = {
@@ -363,7 +363,7 @@ class MediaAdapter(
                 callback
             ).show(
                 activity.supportFragmentManager,
-                "RenameDialogFragment"
+                RenameDialogFragment.TAG
             )
         }
     }
@@ -615,7 +615,7 @@ class MediaAdapter(
         }
         DeleteWithRememberDialogFragment(question, callback).show(
             activity.supportFragmentManager,
-            "DeleteWithRememberDialogFragment"
+            DeleteWithRememberDialogFragment.TAG
         )
 
     }
