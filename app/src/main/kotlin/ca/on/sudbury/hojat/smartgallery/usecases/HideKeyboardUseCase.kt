@@ -1,19 +1,18 @@
 package ca.on.sudbury.hojat.smartgallery.usecases
 
-import android.app.Activity
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Receives an instance of Activity and an optional View. Hides the keyboard.
  */
 object HideKeyboardUseCase {
 
-    operator fun invoke(activity: Activity, view: View? = null) {
+    operator fun invoke(activity: AppCompatActivity, view: View? = null) {
         if (view == null) {
             if (IsMainThreadUseCase()) {
                 hideKeyboardSync(activity)
@@ -24,14 +23,14 @@ object HideKeyboardUseCase {
             }
         } else {
             val inputMethodManager =
-                activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 
-    private fun hideKeyboardSync(activity: Activity) {
+    private fun hideKeyboardSync(activity: AppCompatActivity) {
         val inputMethodManager =
-            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
             (activity.currentFocus ?: View(activity)).windowToken, 0
         )

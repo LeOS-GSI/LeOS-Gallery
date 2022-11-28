@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.video
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
@@ -730,7 +729,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
     private fun handleNextFile() {
         Intent().apply {
             putExtra(GO_TO_NEXT_ITEM, true)
-            setResult(Activity.RESULT_OK, this)
+            setResult(RESULT_OK, this)
         }
         finish()
     }
@@ -738,7 +737,7 @@ open class VideoPlayerActivity : SimpleActivity(), SeekBar.OnSeekBarChangeListen
     private fun handlePrevFile() {
         Intent().apply {
             putExtra(GO_TO_PREV_ITEM, true)
-            setResult(Activity.RESULT_OK, this)
+            setResult(RESULT_OK, this)
         }
         finish()
     }

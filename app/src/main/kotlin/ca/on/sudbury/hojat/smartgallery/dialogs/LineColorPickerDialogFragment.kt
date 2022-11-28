@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -65,7 +66,7 @@ class LineColorPickerDialogFragment(
 
         getSpecificColor().apply {
             (requireActivity() as BaseSimpleActivity).updateActionbarColor(this)
-            requireActivity().setTheme(requireActivity().getThemeId(this))
+            requireActivity().setTheme((requireActivity() as AppCompatActivity).getThemeId(this))
         }
 
     }
@@ -202,7 +203,7 @@ class LineColorPickerDialogFragment(
         binding.hexCode.text = color.toHex()
         if (isPrimaryColorPicker) {
             (requireActivity() as BaseSimpleActivity).updateActionbarColor(color)
-            requireActivity().setTheme(requireActivity().getThemeId(color))
+            requireActivity().setTheme((requireActivity() as AppCompatActivity).getThemeId(color))
             (requireActivity() as BaseSimpleActivity).updateMenuItemColors(menu, true, color)
 
             if (!wasDimmedBackgroundRemoved) {

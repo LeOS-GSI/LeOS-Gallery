@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Html
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
@@ -31,7 +32,7 @@ class AppSideLoadedDialogFragment(val callback: () -> Unit) : DialogFragment() {
             .create()
 
     private fun downloadApp() {
-        requireActivity().launchViewIntent(url)
+        (requireActivity() as AppCompatActivity).launchViewIntent(url)
     }
 
     companion object {

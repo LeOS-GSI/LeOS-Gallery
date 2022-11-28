@@ -2,13 +2,13 @@ package ca.on.sudbury.hojat.smartgallery.usecases
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
 import ca.on.sudbury.hojat.smartgallery.extensions.config
@@ -103,7 +103,7 @@ object SaveRotatedImageUseCase {
 
     @TargetApi(Build.VERSION_CODES.N)
     private fun tryRotateByExif(
-        owner: Activity,
+        owner: AppCompatActivity,
         path: String,
         degrees: Int,
         showToasts: Boolean,
@@ -128,7 +128,7 @@ object SaveRotatedImageUseCase {
         }
     }
 
-    private fun fileRotatedSuccessfully(owner: Activity, path: String, lastModified: Long) {
+    private fun fileRotatedSuccessfully(owner: AppCompatActivity, path: String, lastModified: Long) {
         if (owner.config.keepLastModified && lastModified != 0L) {
             File(path).setLastModified(lastModified)
             owner.updateLastModified(path, lastModified)

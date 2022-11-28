@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.ActivityManager
 import android.app.RecoverableSecurityException
 import android.app.role.RoleManager
@@ -343,7 +342,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
 
         val sdOtgPattern = Pattern.compile(SD_OTG_SHORT)
         if (requestCode == CREATE_DOCUMENT_SDK_30) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+            if (resultCode == RESULT_OK && resultData != null && resultData.data != null) {
 
                 val treeUri = resultData.data
                 val checkedUri = buildDocumentUriSdk30(checkedDocumentPath)
@@ -368,7 +367,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             }
 
         } else if (requestCode == OPEN_DOCUMENT_TREE_FOR_SDK_30) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+            if (resultCode == RESULT_OK && resultData != null && resultData.data != null) {
                 val treeUri = resultData.data
                 val checkedUri = createFirstParentTreeUri(checkedDocumentPath)
 
@@ -394,7 +393,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             }
 
         } else if (requestCode == OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+            if (resultCode == RESULT_OK && resultData != null && resultData.data != null) {
                 if (isProperAndroidRoot(checkedDocumentPath, resultData.data!!)) {
                     if (resultData.dataString == baseConfig.otgTreeUri || resultData.dataString == baseConfig.sdTreeUri) {
                         val pathToSelect = createAndroidDataOrObbPath(checkedDocumentPath)
@@ -446,7 +445,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 funAfterSAFPermission?.invoke(false)
             }
         } else if (requestCode == OPEN_DOCUMENT_TREE_SD) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+            if (resultCode == RESULT_OK && resultData != null && resultData.data != null) {
                 val isProperPartition = partition.isEmpty() || !sdOtgPattern.matcher(partition)
                     .matches() || (sdOtgPattern.matcher(partition)
                     .matches() && resultData.dataString!!.contains(partition))
@@ -474,7 +473,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                 funAfterSAFPermission?.invoke(false)
             }
         } else if (requestCode == OPEN_DOCUMENT_TREE_OTG) {
-            if (resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+            if (resultCode == RESULT_OK && resultData != null && resultData.data != null) {
                 val isProperPartition = partition.isEmpty() || !sdOtgPattern.matcher(partition)
                     .matches() || (sdOtgPattern.matcher(partition)
                     .matches() && resultData.dataString!!.contains(partition))
@@ -513,16 +512,16 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
             } else {
                 funAfterSAFPermission?.invoke(false)
             }
-        } else if (requestCode == SELECT_EXPORT_SETTINGS_FILE_INTENT && resultCode == Activity.RESULT_OK && resultData != null && resultData.data != null) {
+        } else if (requestCode == SELECT_EXPORT_SETTINGS_FILE_INTENT && resultCode == RESULT_OK && resultData != null && resultData.data != null) {
             val outputStream = contentResolver.openOutputStream(resultData.data!!)
             exportSettingsTo(outputStream, configItemsToExport)
         } else if (requestCode == DELETE_FILE_SDK_30_HANDLER) {
-            funAfterSdk30Action?.invoke(resultCode == Activity.RESULT_OK)
+            funAfterSdk30Action?.invoke(resultCode == RESULT_OK)
         } else if (requestCode == RECOVERABLE_SECURITY_HANDLER) {
-            funRecoverableSecurity?.invoke(resultCode == Activity.RESULT_OK)
+            funRecoverableSecurity?.invoke(resultCode == RESULT_OK)
             funRecoverableSecurity = null
         } else if (requestCode == UPDATE_FILE_SDK_30_HANDLER) {
-            funAfterUpdate30File?.invoke(resultCode == Activity.RESULT_OK)
+            funAfterUpdate30File?.invoke(resultCode == RESULT_OK)
         } else if (requestCode == MANAGE_MEDIA_RC) {
             funAfterManageMediaPermission?.invoke()
         }

@@ -21,6 +21,7 @@ import android.view.TextureView
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import ca.on.sudbury.hojat.smartgallery.R
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.Player
@@ -227,7 +228,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
 
             binding.apply {
                 videoBrightnessController.initialize(
-                    requireActivity(),
+                    requireActivity() as AppCompatActivity,
                     slideInfo,
                     true,
                     container,
@@ -243,7 +244,7 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
                     })
 
                 videoVolumeController.initialize(
-                    requireActivity(),
+                    requireActivity() as AppCompatActivity,
                     slideInfo,
                     false,
                     container,
@@ -533,7 +534,10 @@ class VideoFragment : ViewPagerFragment(), TextureView.SurfaceTextureListener,
             bottom += resources.getDimension(R.dimen.bottom_actions_height).toInt()
         }
 
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && activity?.hasNavBar() == true) {
+        if (
+            resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
+            (requireActivity() as AppCompatActivity).hasNavBar()
+        ) {
             right += with(requireActivity()) { if (navigationBarRight) navigationBarSize.x else 0 }
         }
 

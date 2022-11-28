@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.wallpaper
 
-import android.app.Activity
 import android.app.WallpaperManager
 import android.content.Intent
 import android.graphics.Bitmap
@@ -64,7 +63,7 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         if (requestCode == PICK_IMAGE) {
-            if (resultCode == Activity.RESULT_OK && resultData != null) {
+            if (resultCode == RESULT_OK && resultData != null) {
                 handleImage(resultData)
             } else {
                 finish()
@@ -172,10 +171,10 @@ class SetWallpaperActivity : SimpleActivity(), CropImageView.OnCropImageComplete
                     } else {
                         wallpaperManager.setBitmap(scaledBitmap)
                     }
-                    setResult(Activity.RESULT_OK)
+                    setResult(RESULT_OK)
                 } catch (e: OutOfMemoryError) {
                     Toast.makeText(this, R.string.out_of_memory_error, Toast.LENGTH_LONG).show()
-                    setResult(Activity.RESULT_CANCELED)
+                    setResult(RESULT_CANCELED)
                 }
                 finish()
             }

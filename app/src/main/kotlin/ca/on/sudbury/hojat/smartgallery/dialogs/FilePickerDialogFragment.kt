@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.DialogFragment
@@ -179,7 +180,7 @@ class FilePickerDialogFragment(
         binding.filepickerFabShowHidden.apply {
             BeVisibleOrGoneUseCase(this, !showHidden && canAddShowHiddenButton)
             setOnClickListener {
-                requireActivity().handleHiddenFolderPasswordProtection {
+                (requireActivity() as AppCompatActivity).handleHiddenFolderPasswordProtection {
                     visibility = View.GONE
                     showHidden = true
                     tryUpdateItems()
@@ -470,7 +471,7 @@ class FilePickerDialogFragment(
             binding.filepickerList
         ) {
             if ((it as FileDirItem).isDirectory) {
-                requireActivity().handleLockedFolderOpening(it.path) { success ->
+                (requireActivity() as AppCompatActivity).handleLockedFolderOpening(it.path) { success ->
                     if (success) {
                         currPath = it.path
                         tryUpdateItems()

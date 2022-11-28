@@ -1,9 +1,9 @@
 package ca.on.sudbury.hojat.smartgallery.views
 
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.auth.AuthPromptCallback
 import androidx.biometric.auth.AuthPromptHost
@@ -29,7 +29,7 @@ class BiometricIdTab(context: Context, attrs: AttributeSet) : ConstraintLayout(c
 
         open_biometric_dialog.setOnClickListener {
             showBiometricPrompt(
-                biometricPromptHost.activity!!,
+                biometricPromptHost.activity!! as AppCompatActivity,
                 successCallback = hashListener::receivedHash
             )
         }
@@ -52,7 +52,7 @@ class BiometricIdTab(context: Context, attrs: AttributeSet) : ConstraintLayout(c
     override fun visibilityChanged(isVisible: Boolean) {}
 
     private fun showBiometricPrompt(
-        owner: Activity,
+        owner: AppCompatActivity,
         successCallback: ((String, Int) -> Unit)? = null,
         failureCallback: (() -> Unit)? = null
     ) {

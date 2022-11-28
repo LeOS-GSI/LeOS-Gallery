@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
 import ca.on.hojat.palette.views.MyGridLayoutManager
@@ -112,7 +113,7 @@ class PickDirectoryDialogFragment(
             true
         }
         binding.directoriesShowHidden.setOnClickListener {
-            requireActivity().handleHiddenFolderPasswordProtection {
+            (requireActivity() as AppCompatActivity).handleHiddenFolderPasswordProtection {
                 binding.directoriesShowHidden.visibility = View.GONE
                 showHidden = true
                 fetchDirectories(true)
@@ -190,7 +191,7 @@ class PickDirectoryDialogFragment(
                     ).show()
                     return@DirectoryAdapter
                 } else {
-                    requireActivity().handleLockedFolderOpening(path) { success ->
+                    (requireActivity() as AppCompatActivity).handleLockedFolderOpening(path) { success ->
                         if (success) {
                             callback(path)
                         }

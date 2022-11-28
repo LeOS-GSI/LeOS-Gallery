@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270
 import androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90
 import androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION
@@ -151,7 +152,7 @@ class PhotoFragment : ViewPagerFragment() {
             instantNextItem.parentView = container
 
             photoBrightnessController.initialize(
-                requireActivity(),
+                requireActivity() as AppCompatActivity,
                 slideInfo,
                 true,
                 container,

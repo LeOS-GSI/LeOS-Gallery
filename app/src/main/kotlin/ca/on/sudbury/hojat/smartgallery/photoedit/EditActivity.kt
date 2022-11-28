@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.photoedit
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
@@ -1039,7 +1038,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         } catch (_: Exception) {
         }
 
-        setResult(Activity.RESULT_OK, intent)
+        setResult(RESULT_OK, intent)
         scanFinalPath(file.absolutePath)
         out.close()
     }
@@ -1053,7 +1052,7 @@ class EditActivity : SimpleActivity(), CropImageView.OnCropImageCompleteListener
         val paths = arrayListOf(path)
         applicationContext.rescanPaths(paths) {
             fixDateTaken(paths, false)
-            setResult(Activity.RESULT_OK, intent)
+            setResult(RESULT_OK, intent)
             Toast.makeText(this, R.string.file_saved, Toast.LENGTH_LONG).show()
             finish()
         }

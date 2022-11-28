@@ -1,6 +1,5 @@
 package ca.on.hojat.renderer.cropper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -14,8 +13,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
-
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -24,9 +23,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-
 import ca.on.hojat.renderer.R;
-
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
@@ -233,7 +230,7 @@ public class CropImageView extends FrameLayout {
         super(context, attrs);
 
         CropImageOptions options = null;
-        Intent intent = context instanceof Activity ? ((Activity) context).getIntent() : null;
+        Intent intent = context instanceof AppCompatActivity ? ((AppCompatActivity) context).getIntent() : null;
         if (intent != null) {
             Bundle bundle = intent.getBundleExtra(CropImage.CROP_IMAGE_EXTRA_BUNDLE);
             if (bundle != null) {

@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
-import android.app.Activity
 import android.app.SearchManager
 import android.app.WallpaperManager
 import android.content.Context
@@ -921,7 +920,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         if (requestCode == REQUEST_EDIT_IMAGE) {
-            if (resultCode == Activity.RESULT_OK && resultData != null) {
+            if (resultCode == RESULT_OK && resultData != null) {
                 mMedia.clear()
                 refreshItems()
             }
@@ -953,7 +952,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
                     ) {
                         try {
                             WallpaperManager.getInstance(applicationContext).setBitmap(resource)
-                            setResult(Activity.RESULT_OK)
+                            setResult(RESULT_OK)
                         } catch (ignored: IOException) {
                         }
 
@@ -963,7 +962,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
         } else if (mIsGetImageIntent || mIsGetVideoIntent || mIsGetAnyIntent) {
             Intent().apply {
                 data = Uri.parse(path)
-                setResult(Activity.RESULT_OK, this)
+                setResult(RESULT_OK, this)
             }
             finish()
         } else {
@@ -1099,7 +1098,7 @@ class MediaActivity : SimpleActivity(), MediaOperationsListener {
     override fun selectedPaths(paths: ArrayList<String>) {
         Intent().apply {
             putExtra(PICKED_PATHS, paths)
-            setResult(Activity.RESULT_OK, this)
+            setResult(RESULT_OK, this)
         }
         finish()
     }

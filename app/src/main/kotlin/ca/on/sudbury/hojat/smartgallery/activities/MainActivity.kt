@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
-import android.app.Activity
 import android.app.SearchManager
 import android.content.ClipData
 import android.content.ComponentName
@@ -1110,7 +1109,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == PICK_MEDIA && resultData != null) {
                 val resultIntent = Intent()
                 var resultUri: Uri? = null
@@ -1132,10 +1131,10 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
                     resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 }
 
-                setResult(Activity.RESULT_OK, resultIntent)
+                setResult(RESULT_OK, resultIntent)
                 finish()
             } else if (requestCode == PICK_WALLPAPER) {
-                setResult(Activity.RESULT_OK)
+                setResult(RESULT_OK)
                 finish()
             }
         }

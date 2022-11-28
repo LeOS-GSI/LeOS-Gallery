@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.ActivityInfo
@@ -401,13 +400,13 @@ class ViewPagerActivity : SimpleActivity(), ViewPager.OnPageChangeListener,
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
-        if (requestCode == REQUEST_EDIT_IMAGE && resultCode == Activity.RESULT_OK && resultData != null) {
+        if (requestCode == REQUEST_EDIT_IMAGE && resultCode == RESULT_OK && resultData != null) {
             mPos = -1
             mPrevHashcode = 0
             refreshViewPager()
-        } else if (requestCode == REQUEST_SET_AS && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == REQUEST_SET_AS && resultCode == RESULT_OK) {
             Toast.makeText(this, R.string.wallpaper_set_successfully, Toast.LENGTH_LONG).show()
-        } else if (requestCode == REQUEST_VIEW_VIDEO && resultCode == Activity.RESULT_OK && resultData != null) {
+        } else if (requestCode == REQUEST_VIEW_VIDEO && resultCode == RESULT_OK && resultData != null) {
             if (resultData.getBooleanExtra(GO_TO_NEXT_ITEM, false)) {
                 goToNextItem()
             } else if (resultData.getBooleanExtra(GO_TO_PREV_ITEM, false)) {

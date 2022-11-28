@@ -1,12 +1,24 @@
 package ca.on.hojat.renderer.cropper;
 
-import android.app.Activity;
+import static android.provider.MediaStore.ACTION_IMAGE_CAPTURE;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Parcelable;
+import android.provider.MediaStore;
+import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import ca.on.hojat.renderer.R;
-
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Helper to simplify crop image work like starting pick-image acitvity and handling camera/gallery
@@ -110,19 +122,19 @@ public final class CropImage {
      *
      * @param activity the activity to be used to start activity from
      */
-    public static void startPickImageActivity(@androidx.annotation.NonNull android.app.Activity activity) {
+    public static void startPickImageActivity(@androidx.annotation.NonNull AppCompatActivity activity) {
         activity.startActivityForResult(
                 getPickImageChooserIntent(activity), PICK_IMAGE_CHOOSER_REQUEST_CODE);
     }
 
     /**
-     * Same as {@link #startPickImageActivity(Activity) startPickImageActivity} method but instead of
+     * Same as {@link (AppCompatActivity) startPickImageActivity} method but instead of
      * being called and returning to an Activity, this method can be called and return to a Fragment.
      *
      * @param context  The Fragments context. Use getContext()
      * @param fragment The calling Fragment to start and return the image to
      */
-    public static void startPickImageActivity(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull androidx.fragment.app.Fragment fragment) {
+    public static void startPickImageActivity(@NonNull Context context, @NonNull Fragment fragment) {
         fragment.startActivityForResult(
                 getPickImageChooserIntent(context), PICK_IMAGE_CHOOSER_REQUEST_CODE);
     }
@@ -136,7 +148,7 @@ public final class CropImage {
      * @param context used to access Android APIs, like content resolve, it is your
      *                activity/fragment/widget.
      */
-    public static android.content.Intent getPickImageChooserIntent(@androidx.annotation.NonNull android.content.Context context) {
+    public static Intent getPickImageChooserIntent(@NonNull Context context) {
         return getPickImageChooserIntent(
                 context, context.getString(R.string.pick_image_intent_chooser_title), false, true);
     }
@@ -152,42 +164,42 @@ public final class CropImage {
      * @param includeDocuments if to include KitKat documents activity containing all sources
      * @param includeCamera    if to include camera intents
      */
-    public static android.content.Intent getPickImageChooserIntent(
-            @androidx.annotation.NonNull android.content.Context context,
+    public static Intent getPickImageChooserIntent(
+            @NonNull Context context,
             CharSequence title,
             boolean includeDocuments,
             boolean includeCamera) {
 
-        java.util.List<android.content.Intent> allIntents = new java.util.ArrayList<>();
-        android.content.pm.PackageManager packageManager = context.getPackageManager();
+        List<Intent> allIntents = new ArrayList<>();
+        PackageManager packageManager = context.getPackageManager();
 
         // collect all camera intents if Camera permission is available
         if (!isExplicitCameraPermissionRequired(context) && includeCamera) {
             allIntents.addAll(getCameraIntents(context, packageManager));
         }
 
-        java.util.List<android.content.Intent> galleryIntents =
-                getGalleryIntents(packageManager, android.content.Intent.ACTION_GET_CONTENT, includeDocuments);
+        List<Intent> galleryIntents =
+                getGalleryIntents(packageManager, Intent.ACTION_GET_CONTENT, includeDocuments);
         if (galleryIntents.size() == 0) {
             // if no intents found for get-content try pick intent action (Huawei P9).
-            galleryIntents = getGalleryIntents(packageManager, android.content.Intent.ACTION_PICK, includeDocuments);
+            galleryIntents = getGalleryIntents(packageManager,Intent.ACTION_PICK, includeDocuments);
         }
         allIntents.addAll(galleryIntents);
 
-        android.content.Intent target;
+        Intent target;
         if (allIntents.isEmpty()) {
-            target = new android.content.Intent();
+            target = new Intent();
         } else {
             target = allIntents.get(allIntents.size() - 1);
             allIntents.remove(allIntents.size() - 1);
         }
 
         // Create a chooser from the main  intent
-        android.content.Intent chooserIntent = android.content.Intent.createChooser(target, title);
+        Intent chooserIntent = Intent.createChooser(target, title);
 
         // Add all other intents
         chooserIntent.putExtra(
-                android.content.Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new android.os.Parcelable[0]));
+                Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[0]));
 
         return chooserIntent;
     }
@@ -202,34 +214,34 @@ public final class CropImage {
      *                      activity/fragment/widget.
      * @param outputFileUri the Uri where the picture will be placed.
      */
-    public static android.content.Intent getCameraIntent(@androidx.annotation.NonNull android.content.Context context, android.net.Uri outputFileUri) {
-        android.content.Intent intent = new android.content.Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+    public static Intent getCameraIntent(@NonNull Context context, Uri outputFileUri) {
+        Intent intent = new Intent(ACTION_IMAGE_CAPTURE);
         if (outputFileUri == null) {
             outputFileUri = getCaptureImageOutputUri(context);
         }
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, outputFileUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         return intent;
     }
 
     /**
      * Get all Camera intents for capturing image using device camera apps.
      */
-    public static java.util.List<android.content.Intent> getCameraIntents(
-            @androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull android.content.pm.PackageManager packageManager) {
+    public static List<Intent> getCameraIntents(
+            @NonNull Context context, @NonNull PackageManager packageManager) {
 
-        java.util.List<android.content.Intent> allIntents = new java.util.ArrayList<>();
+        List<Intent> allIntents = new ArrayList<>();
 
         // Determine Uri of camera image to  save.
-        android.net.Uri outputFileUri = getCaptureImageOutputUri(context);
+        Uri outputFileUri = getCaptureImageOutputUri(context);
 
-        android.content.Intent captureIntent = new android.content.Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        java.util.List<android.content.pm.ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
-        for (android.content.pm.ResolveInfo res : listCam) {
-            android.content.Intent intent = new android.content.Intent(captureIntent);
-            intent.setComponent(new android.content.ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+        Intent captureIntent = new Intent(ACTION_IMAGE_CAPTURE);
+        List<android.content.pm.ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+        for (ResolveInfo res : listCam) {
+            Intent intent = new Intent(captureIntent);
+            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
             intent.setPackage(res.activityInfo.packageName);
             if (outputFileUri != null) {
-                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, outputFileUri);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
             }
             allIntents.add(intent);
         }
@@ -241,25 +253,25 @@ public final class CropImage {
      * Get all Gallery intents for getting image from one of the apps of the device that handle
      * images.
      */
-    public static java.util.List<android.content.Intent> getGalleryIntents(
-            @androidx.annotation.NonNull android.content.pm.PackageManager packageManager, String action, boolean includeDocuments) {
-        java.util.List<android.content.Intent> intents = new java.util.ArrayList<>();
-        android.content.Intent galleryIntent =
-                java.util.Objects.equals(action, android.content.Intent.ACTION_GET_CONTENT)
-                        ? new android.content.Intent(action)
-                        : new android.content.Intent(action, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    public static List<Intent> getGalleryIntents(
+            @NonNull PackageManager packageManager, String action, boolean includeDocuments) {
+        List<Intent> intents = new ArrayList<>();
+        Intent galleryIntent =
+                java.util.Objects.equals(action, Intent.ACTION_GET_CONTENT)
+                        ? new Intent(action)
+                        : new Intent(action, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType("image/*");
-        java.util.List<android.content.pm.ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
-        for (android.content.pm.ResolveInfo res : listGallery) {
-            android.content.Intent intent = new android.content.Intent(galleryIntent);
-            intent.setComponent(new android.content.ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+        List<ResolveInfo> listGallery = packageManager.queryIntentActivities(galleryIntent, 0);
+        for (ResolveInfo res : listGallery) {
+            Intent intent = new Intent(galleryIntent);
+            intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
             intent.setPackage(res.activityInfo.packageName);
             intents.add(intent);
         }
 
         // remove documents intent
         if (!includeDocuments) {
-            for (android.content.Intent intent : intents) {
+            for (Intent intent : intents) {
                 if (intent
                         .getComponent()
                         .getClassName()
@@ -280,7 +292,7 @@ public final class CropImage {
      * href="http://stackoverflow.com/questions/32789027/android-m-camera-intent-permission-bug">StackOverflow
      * question</a>.
      */
-    public static boolean isExplicitCameraPermissionRequired(@androidx.annotation.NonNull android.content.Context context) {
+    public static boolean isExplicitCameraPermissionRequired(@NonNull Context context) {
         return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M
                 && hasPermissionInManifest(context, "android.permission.CAMERA")
                 && context.checkSelfPermission(android.Manifest.permission.CAMERA)
@@ -335,11 +347,11 @@ public final class CropImage {
      *                activity/fragment/widget.
      * @param data    the returned data of the activity result
      */
-    public static android.net.Uri getPickImageResultUri(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.Nullable android.content.Intent data) {
+    public static android.net.Uri getPickImageResultUri(@androidx.annotation.NonNull android.content.Context context, @Nullable android.content.Intent data) {
         boolean isCamera = true;
         if (data != null && data.getData() != null) {
             String action = data.getAction();
-            isCamera = action != null && action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            isCamera = action != null && action.equals(ACTION_IMAGE_CAPTURE);
         }
         return isCamera || data.getData() == null ? getCaptureImageOutputUri(context) : data.getData();
     }
@@ -357,7 +369,7 @@ public final class CropImage {
      * they are granted
      */
     public static boolean isReadExternalStoragePermissionsRequired(
-            @androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull android.net.Uri uri) {
+            @NonNull android.content.Context context, @NonNull android.net.Uri uri) {
         return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M
                 && context.checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -372,7 +384,7 @@ public final class CropImage {
      *                activity/fragment/widget.
      * @param uri     the result URI of image pick.
      */
-    public static boolean isUriRequiresPermissions(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull android.net.Uri uri) {
+    public static boolean isUriRequiresPermissions(@NonNull android.content.Context context, @NonNull android.net.Uri uri) {
         try {
             android.content.ContentResolver resolver = context.getContentResolver();
             java.io.InputStream stream = resolver.openInputStream(uri);
@@ -406,7 +418,7 @@ public final class CropImage {
      * @param uri the image Android uri source to crop or null to start a picker
      * @return builder for Crop Image Activity
      */
-    public static CropImage.ActivityBuilder activity(@androidx.annotation.Nullable android.net.Uri uri) {
+    public static CropImage.ActivityBuilder activity(@Nullable android.net.Uri uri) {
         return new CropImage.ActivityBuilder(uri);
     }
 
@@ -417,7 +429,7 @@ public final class CropImage {
      * @param data result data intent as received in .
      * @return Crop Image Activity Result object or null if none exists
      */
-    public static CropImage.ActivityResult getActivityResult(@androidx.annotation.Nullable android.content.Intent data) {
+    public static CropImage.ActivityResult getActivityResult(@Nullable android.content.Intent data) {
         return data != null ? (CropImage.ActivityResult) data.getParcelableExtra(CROP_IMAGE_EXTRA_RESULT) : null;
     }
 
@@ -431,7 +443,7 @@ public final class CropImage {
         /**
          * The image to crop source Android uri.
          */
-        @androidx.annotation.Nullable
+        @Nullable
         private final android.net.Uri mSource;
 
         /**
@@ -439,7 +451,7 @@ public final class CropImage {
          */
         private final CropImageOptions mOptions;
 
-        private ActivityBuilder(@androidx.annotation.Nullable android.net.Uri source) {
+        private ActivityBuilder(@Nullable android.net.Uri source) {
             mSource = source;
             mOptions = new CropImageOptions();
         }
@@ -447,14 +459,14 @@ public final class CropImage {
         /**
          * Get {@link CropImageActivity} intent to start the activity.
          */
-        public android.content.Intent getIntent(@androidx.annotation.NonNull android.content.Context context) {
+        public android.content.Intent getIntent(@NonNull android.content.Context context) {
             return getIntent(context, CropImageActivity.class);
         }
 
         /**
          * Get {@link CropImageActivity} intent to start the activity.
          */
-        public android.content.Intent getIntent(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.Nullable Class<?> cls) {
+        public android.content.Intent getIntent(@NonNull android.content.Context context, @Nullable Class<?> cls) {
             mOptions.validate();
 
             android.content.Intent intent = new android.content.Intent();
@@ -471,7 +483,7 @@ public final class CropImage {
          *
          * @param activity activity to receive result
          */
-        public void start(@androidx.annotation.NonNull android.app.Activity activity) {
+        public void start(@NonNull AppCompatActivity activity) {
             mOptions.validate();
             activity.startActivityForResult(getIntent(activity), CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         }
@@ -481,7 +493,7 @@ public final class CropImage {
          *
          * @param activity activity to receive result
          */
-        public void start(@androidx.annotation.NonNull android.app.Activity activity, @androidx.annotation.Nullable Class<?> cls) {
+        public void start(@NonNull AppCompatActivity activity, @Nullable Class<?> cls) {
             mOptions.validate();
             activity.startActivityForResult(getIntent(activity, cls), CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         }
@@ -491,7 +503,7 @@ public final class CropImage {
          *
          * @param fragment fragment to receive result
          */
-        public void start(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull androidx.fragment.app.Fragment fragment) {
+        public void start(@NonNull android.content.Context context, @NonNull Fragment fragment) {
             fragment.startActivityForResult(getIntent(context), CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         }
 
@@ -500,7 +512,7 @@ public final class CropImage {
          *
          * @param fragment fragment to receive result
          */
-        public void start(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull android.app.Fragment fragment) {
+        public void start(@NonNull android.content.Context context, @NonNull android.app.Fragment fragment) {
             fragment.startActivityForResult(getIntent(context), CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         }
 
@@ -510,17 +522,7 @@ public final class CropImage {
          * @param fragment fragment to receive result
          */
         public void start(
-                @androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull androidx.fragment.app.Fragment fragment, @androidx.annotation.Nullable Class<?> cls) {
-            fragment.startActivityForResult(getIntent(context, cls), CROP_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-
-        /**
-         * Start {@link CropImageActivity}.
-         *
-         * @param fragment fragment to receive result
-         */
-        public void start(
-                @androidx.annotation.NonNull android.content.Context context, @androidx.annotation.NonNull android.app.Fragment fragment, @androidx.annotation.Nullable Class<?> cls) {
+                @NonNull android.content.Context context, @NonNull Fragment fragment, @Nullable Class<?> cls) {
             fragment.startActivityForResult(getIntent(context, cls), CROP_IMAGE_ACTIVITY_REQUEST_CODE);
         }
 
@@ -529,7 +531,7 @@ public final class CropImage {
          * To set square/circle crop shape set aspect ratio to 1:1.<br>
          * <i>Default: RECTANGLE</i>
          */
-        public CropImage.ActivityBuilder setCropShape(@androidx.annotation.NonNull CropImageView.CropShape cropShape) {
+        public CropImage.ActivityBuilder setCropShape(@NonNull CropImageView.CropShape cropShape) {
             mOptions.cropShape = cropShape;
             return this;
         }
@@ -560,7 +562,7 @@ public final class CropImage {
          * whether the guidelines should be on, off, or only showing when resizing.<br>
          * <i>Default: ON_TOUCH</i>
          */
-        public CropImage.ActivityBuilder setGuidelines(@androidx.annotation.NonNull CropImageView.Guidelines guidelines) {
+        public CropImage.ActivityBuilder setGuidelines(@NonNull CropImageView.Guidelines guidelines) {
             mOptions.guidelines = guidelines;
             return this;
         }
@@ -569,7 +571,7 @@ public final class CropImage {
          * The initial scale type of the image in the crop image view<br>
          * <i>Default: FIT_CENTER</i>
          */
-        public CropImage.ActivityBuilder setScaleType(@androidx.annotation.NonNull CropImageView.ScaleType scaleType) {
+        public CropImage.ActivityBuilder setScaleType(@NonNull CropImageView.ScaleType scaleType) {
             mOptions.scaleType = scaleType;
             return this;
         }

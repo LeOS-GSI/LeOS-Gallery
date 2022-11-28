@@ -1,6 +1,5 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -142,7 +141,7 @@ class WidgetConfigureActivity : SimpleActivity() {
 
         Intent().apply {
             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mWidgetId)
-            setResult(Activity.RESULT_OK, this)
+            setResult(RESULT_OK, this)
         }
         finish()
     }

@@ -1,7 +1,6 @@
 package ca.on.sudbury.hojat.smartgallery.views
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.media.AudioManager
 import android.os.Handler
@@ -12,6 +11,7 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.onGlobalLayout
 import ca.on.sudbury.hojat.smartgallery.helpers.DRAG_THRESHOLD
@@ -34,14 +34,14 @@ class MediaSideScroll(context: Context, attrs: AttributeSet) : RelativeLayout(co
     private var mSlideInfoText = ""
     private var mSlideInfoFadeHandler = Handler()
     private var mParentView: ViewGroup? = null
-    private var activity: Activity? = null
+    private var activity: AppCompatActivity? = null
     private var doubleTap: ((Float, Float) -> Unit)? = null
 
     private lateinit var slideInfoView: TextView
     private lateinit var singleTap: (Float, Float) -> Unit
 
     fun initialize(
-        activity: Activity,
+        activity: AppCompatActivity,
         slideInfoView: TextView,
         isBrightness: Boolean,
         parentView: ViewGroup?,

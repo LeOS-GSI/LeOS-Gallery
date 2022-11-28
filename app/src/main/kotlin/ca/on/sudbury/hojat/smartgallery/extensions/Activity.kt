@@ -2,7 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.extensions
 
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ContentProviderOperation
 import android.content.ContentValues
@@ -25,11 +24,7 @@ import android.provider.MediaStore.Files
 import android.provider.MediaStore.Images
 import android.provider.Settings
 import android.util.DisplayMetrics
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
@@ -37,48 +32,8 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.FragmentActivity
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GLIDE
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_CROPPER
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_RTL
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SUBSAMPLING
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PATTERN
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_REPRINT
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GIF_DRAWABLE
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PICASSO
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_EXOPLAYER
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PANORAMA_VIEW
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SANSELAN
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_FILTERS
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GESTURE_VIEWS
-import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_APNG
-import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
-import ca.on.sudbury.hojat.smartgallery.models.FaqItem
-import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
-import ca.on.sudbury.hojat.smartgallery.databinding.DialogTitleBinding
-import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
-import ca.on.sudbury.hojat.smartgallery.models.DateTaken
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
-import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
-import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
-import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
-import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
-import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_OTG
-import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_SD
-import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
-import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
-import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_SET_AS
-import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
-import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
-import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
-import ca.on.sudbury.hojat.smartgallery.models.Release
-import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.dialogs.AppSideLoadedDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
@@ -87,25 +42,62 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.PickDirectoryDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WhatsNewDialogFragment
 import ca.on.sudbury.hojat.smartgallery.dialogs.WritePermissionDialogFragment
+import ca.on.sudbury.hojat.smartgallery.helpers.CREATE_DOCUMENT_SDK_30
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
-import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.helpers.EXTRA_SHOW_ADVANCED
+import ca.on.sudbury.hojat.smartgallery.helpers.IS_FROM_GALLERY
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_APNG
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_CROPPER
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_EXOPLAYER
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_FILTERS
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GESTURE_VIEWS
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GIF_DRAWABLE
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_GLIDE
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PANORAMA_VIEW
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PATTERN
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_PICASSO
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_REPRINT
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_RTL
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SANSELAN
+import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SUBSAMPLING
+import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_ANDROID_DATA_OR_OBB
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_FOR_SDK_30
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_OTG
+import ca.on.sudbury.hojat.smartgallery.helpers.OPEN_DOCUMENT_TREE_SD
+import ca.on.sudbury.hojat.smartgallery.helpers.REAL_FILE_PATH
+import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
+import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_EDIT_IMAGE
+import ca.on.sudbury.hojat.smartgallery.helpers.REQUEST_SET_AS
+import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_FALSE
+import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
+import ca.on.sudbury.hojat.smartgallery.models.Android30RenameFormat
+import ca.on.sudbury.hojat.smartgallery.models.DateTaken
+import ca.on.sudbury.hojat.smartgallery.models.FaqItem
+import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
+import ca.on.sudbury.hojat.smartgallery.models.Release
 import ca.on.sudbury.hojat.smartgallery.usecases.EmptyTheRecycleBinUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileExtensionUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.GetMimeTypeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
-import java.io.OutputStream
-import java.io.InputStream
-import java.io.IOException
 import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 import kotlin.collections.ArrayList
@@ -128,7 +120,7 @@ private fun createSAFFileSdk30(owner: Context, path: String): Boolean {
             path.getFilenameFromPath()
         ) != null
     } catch (e: IllegalStateException) {
-        if (owner is Activity) {
+        if (owner is AppCompatActivity) {
             Toast.makeText(owner, e.toString(), Toast.LENGTH_LONG).show()
         }
         false
@@ -347,12 +339,6 @@ private fun deleteRecursively(file: File): Boolean {
     return file.delete()
 }
 
-fun Activity.getAlertDialogBuilder() = if (baseConfig.isUsingSystemTheme) {
-    MaterialAlertDialogBuilder(this)
-} else {
-    AlertDialog.Builder(this)
-}
-
 fun BaseSimpleActivity.getFileOutputStream(
     fileDirItem: FileDirItem,
     allowCreatingNewFile: Boolean = false,
@@ -531,7 +517,7 @@ fun BaseSimpleActivity.getFileOutputStreamSync(
     }
 }
 
-fun Activity.sharePathIntent(path: String, applicationId: String) {
+fun AppCompatActivity.sharePathIntent(path: String, applicationId: String) {
     RunOnBackgroundThreadUseCase {
 
         val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
@@ -563,7 +549,7 @@ fun Activity.sharePathIntent(path: String, applicationId: String) {
     }
 }
 
-fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
+fun AppCompatActivity.sharePathsIntent(paths: List<String>, applicationId: String) {
     RunOnBackgroundThreadUseCase {
 
         if (paths.size == 1) {
@@ -612,7 +598,7 @@ fun Activity.sharePathsIntent(paths: List<String>, applicationId: String) {
     }
 }
 
-fun Activity.setAs(path: String) {
+fun AppCompatActivity.setAs(path: String) {
     val applicationId = BuildConfig.APPLICATION_ID
     RunOnBackgroundThreadUseCase {
         val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
@@ -633,7 +619,7 @@ fun Activity.setAs(path: String) {
     }
 }
 
-fun Activity.openPath(
+fun AppCompatActivity.openPath(
     path: String,
     forceChooser: Boolean,
     extras: HashMap<String, Boolean> = HashMap()
@@ -641,12 +627,12 @@ fun Activity.openPath(
     openPathIntent(path, forceChooser, BuildConfig.APPLICATION_ID, extras = extras)
 }
 
-fun Activity.openEditor(path: String, forceChooser: Boolean = false) {
+fun AppCompatActivity.openEditor(path: String, forceChooser: Boolean = false) {
     val newPath = path.removePrefix("file://")
     openEditorIntent(newPath, forceChooser, BuildConfig.APPLICATION_ID)
 }
 
-fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
+fun AppCompatActivity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
     val uri = try {
         ensurePublicUri(this, path, applicationId)
     } catch (e: Exception) {
@@ -662,7 +648,7 @@ fun Activity.getFinalUriFromPath(path: String, applicationId: String): Uri? {
     return uri
 }
 
-fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
+fun AppCompatActivity.handleDeletePasswordProtection(callback: () -> Unit) {
     if (baseConfig.isDeletePasswordProtectionOn) {
 
         val callbackAfterSecurityReceived: (
@@ -688,7 +674,7 @@ fun Activity.handleDeletePasswordProtection(callback: () -> Unit) {
     }
 }
 
-fun Activity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
+fun AppCompatActivity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
     if (baseConfig.isHiddenPasswordProtectionOn) {
 
         val callbackAfterSecurityReceived: (hash: String, type: Int, success: Boolean) -> Unit =
@@ -711,7 +697,10 @@ fun Activity.handleHiddenFolderPasswordProtection(callback: () -> Unit) {
     }
 }
 
-fun Activity.handleLockedFolderOpening(path: String, callback: (success: Boolean) -> Unit) {
+fun AppCompatActivity.handleLockedFolderOpening(
+    path: String,
+    callback: (success: Boolean) -> Unit
+) {
     if (baseConfig.isFolderProtected(path)) {
         val callbackAfterSecurityReceived: (hash: String, type: Int, success: Boolean) -> Unit =
             { _, _, success ->
@@ -1409,7 +1398,7 @@ fun BaseSimpleActivity.updateFavoritePaths(
     }
 }
 
-fun Activity.hasNavBar(): Boolean {
+fun AppCompatActivity.hasNavBar(): Boolean {
     val display = windowManager.defaultDisplay
 
     val realDisplayMetrics = DisplayMetrics()
@@ -1535,7 +1524,7 @@ fun AppCompatActivity.fixDateTaken(
     }
 }
 
-fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> Unit) {
+fun AppCompatActivity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> Unit) {
     RunOnBackgroundThreadUseCase {
 
         val options = RequestOptions()
@@ -1563,172 +1552,12 @@ fun Activity.getShortcutImage(tmb: String, drawable: Drawable, callback: () -> U
     }
 }
 
-fun Activity.scanPathRecursively(path: String, callback: (() -> Unit)? = null) {
+fun AppCompatActivity.scanPathRecursively(path: String, callback: (() -> Unit)? = null) {
     applicationContext.scanPathRecursively(path, callback)
 }
 
-fun Activity.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = null) {
+fun AppCompatActivity.scanPathsRecursively(paths: List<String>, callback: (() -> Unit)? = null) {
     applicationContext.scanPathsRecursively(paths, callback)
-}
-
-@SuppressLint("UseCompatLoadingForDrawables")
-fun Activity.setupDialogStuff(
-    view: View,
-    dialog: AlertDialog.Builder,
-    titleId: Int = 0,
-    titleText: String = "",
-    cancelOnTouchOutside: Boolean = true,
-    callback: ((alertDialog: AlertDialog) -> Unit)? = null
-) {
-    if (isDestroyed || isFinishing) {
-        return
-    }
-
-    val textColor = getProperTextColor()
-    val backgroundColor = getProperBackgroundColor()
-    val primaryColor = getProperPrimaryColor()
-    if (view is ViewGroup) {
-        updateTextColors(view)
-    } else if (view is MyTextView) {
-        view.setColors(textColor, primaryColor, backgroundColor)
-    }
-
-    if (dialog is MaterialAlertDialogBuilder) {
-        dialog.create().apply {
-            if (titleId != 0) {
-                setTitle(titleId)
-            } else if (titleText.isNotEmpty()) {
-                setTitle(titleText)
-            }
-
-            setView(view)
-            setCancelable(cancelOnTouchOutside)
-            show()
-            callback?.invoke(this)
-        }
-    } else {
-        var title: DialogTitleBinding? = null
-        if (titleId != 0 || titleText.isNotEmpty()) {
-            title = DialogTitleBinding.inflate(layoutInflater)
-            title.dialogTitleTextview.apply {
-                if (titleText.isNotEmpty()) {
-                    text = titleText
-                } else {
-                    setText(titleId)
-                }
-                setTextColor(textColor)
-            }
-        }
-
-        // if we use the same primary and background color, use the text color for dialog confirmation buttons
-        val dialogButtonColor = if (primaryColor == baseConfig.backgroundColor) {
-            textColor
-        } else {
-            primaryColor
-        }
-
-        dialog.create().apply {
-            setView(view)
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setCustomTitle(title?.root)
-            setCanceledOnTouchOutside(cancelOnTouchOutside)
-            show()
-            getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(dialogButtonColor)
-            getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(dialogButtonColor)
-            getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(dialogButtonColor)
-
-            val bgDrawable = when {
-                isBlackAndWhiteTheme() -> resources.getDrawable(
-                    R.drawable.black_dialog_background,
-                    theme
-                )
-                baseConfig.isUsingSystemTheme -> resources.getDrawable(
-                    R.drawable.dialog_you_background,
-                    theme
-                )
-                else -> resources.getColoredDrawableWithColor(
-                    R.drawable.dialog_bg,
-                    baseConfig.backgroundColor
-                )
-            }
-
-            window?.setBackgroundDrawable(bgDrawable)
-            callback?.invoke(this)
-        }
-    }
-}
-
-@SuppressLint("UseCompatLoadingForDrawables")
-fun Activity.setupDialogStuff(
-    view: View,
-    dialog: AlertDialog,
-    titleId: Int = 0,
-    titleText: String = "",
-    cancelOnTouchOutside: Boolean = true,
-    callback: (() -> Unit)? = null
-) {
-    if (isDestroyed || isFinishing) {
-        return
-    }
-
-    val textColor = getProperTextColor()
-    val backgroundColor = getProperBackgroundColor()
-    val primaryColor = getProperPrimaryColor()
-    if (view is ViewGroup) {
-        updateTextColors(view)
-    } else if (view is MyTextView) {
-        view.setColors(textColor, primaryColor, backgroundColor)
-    }
-
-    var title: DialogTitleBinding? = null
-    if (titleId != 0 || titleText.isNotEmpty()) {
-        title = DialogTitleBinding.inflate(layoutInflater)
-
-        title.dialogTitleTextview.apply {
-            if (titleText.isNotEmpty()) {
-                text = titleText
-            } else {
-                setText(titleId)
-            }
-            setTextColor(textColor)
-        }
-    }
-
-    // if we use the same primary and background color, use the text color for dialog confirmation buttons
-    val dialogButtonColor = if (primaryColor == baseConfig.backgroundColor) {
-        textColor
-    } else {
-        primaryColor
-    }
-
-    dialog.apply {
-        setView(view)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setCustomTitle(title?.root)
-        setCanceledOnTouchOutside(cancelOnTouchOutside)
-        show()
-        getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(dialogButtonColor)
-        getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(dialogButtonColor)
-        getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(dialogButtonColor)
-
-        val bgDrawable = when {
-            isBlackAndWhiteTheme() -> resources.getDrawable(
-                R.drawable.black_dialog_background,
-                theme
-            )
-            baseConfig.isUsingSystemTheme -> resources.getDrawable(
-                R.drawable.dialog_you_background,
-                theme
-            )
-            else -> resources.getColoredDrawableWithColor(
-                R.drawable.dialog_bg,
-                baseConfig.backgroundColor
-            )
-        }
-
-        window?.setBackgroundDrawable(bgDrawable)
-    }
-    callback?.invoke()
 }
 
 fun BaseSimpleActivity.showFileCreateError(path: String) {
@@ -1738,7 +1567,7 @@ fun BaseSimpleActivity.showFileCreateError(path: String) {
 }
 
 @TargetApi(Build.VERSION_CODES.N)
-fun Activity.showFileOnMap(path: String) {
+fun AppCompatActivity.showFileOnMap(path: String) {
     val exif = try {
         if (path.startsWith("content://") && IsNougatPlusUseCase()) {
             ExifInterface(contentResolver.openInputStream(Uri.parse(path))!!)
@@ -1758,7 +1587,7 @@ fun Activity.showFileOnMap(path: String) {
     }
 }
 
-fun Activity.showLocationOnMap(coordinates: String) {
+fun AppCompatActivity.showLocationOnMap(coordinates: String) {
     val uriBegin = "geo:${coordinates.replace(" ", "")}"
     val encodedQuery = Uri.encode(coordinates)
     val uriString = "$uriBegin?q=$encodedQuery&z=16"
@@ -1772,7 +1601,7 @@ fun Activity.showLocationOnMap(coordinates: String) {
     }
 }
 
-fun Activity.tryGenericMimeType(intent: Intent, mimeType: String, uri: Uri): Boolean {
+fun AppCompatActivity.tryGenericMimeType(intent: Intent, mimeType: String, uri: Uri): Boolean {
     var genericMimeType = mimeType.getGenericMimeType()
     if (genericMimeType.isEmpty()) {
         genericMimeType = "*/*"
@@ -1788,7 +1617,7 @@ fun Activity.tryGenericMimeType(intent: Intent, mimeType: String, uri: Uri): Boo
     }
 }
 
-fun Activity.handleExcludedFolderPasswordProtection(callback: () -> Unit) {
+fun AppCompatActivity.handleExcludedFolderPasswordProtection(callback: () -> Unit) {
     if (config.isExcludedPasswordProtectionOn) {
         val callbackAfterSecurityReceived: (hash: String, type: Int, success: Boolean) -> Unit =
             { _, _, success ->
@@ -2082,7 +1911,7 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
     }
 }
 
-fun Activity.launchViewIntent(url: String) {
+fun AppCompatActivity.launchViewIntent(url: String) {
     HideKeyboardUseCase(this)
     RunOnBackgroundThreadUseCase {
         Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply {
@@ -2105,7 +1934,7 @@ fun Activity.launchViewIntent(url: String) {
     }
 }
 
-fun Activity.redirectToRateUs() {
+fun AppCompatActivity.redirectToRateUs() {
     HideKeyboardUseCase(this)
     try {
         launchViewIntent("market://details?id=${packageName.removeSuffix(".debug")}")
@@ -2114,7 +1943,7 @@ fun Activity.redirectToRateUs() {
     }
 }
 
-fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId: String) {
+fun AppCompatActivity.openEditorIntent(path: String, forceChooser: Boolean, applicationId: String) {
     RunOnBackgroundThreadUseCase {
         val newUri = getFinalUriFromPath(path, applicationId) ?: return@RunOnBackgroundThreadUseCase
         Intent().apply {
@@ -2178,7 +2007,7 @@ fun Activity.openEditorIntent(path: String, forceChooser: Boolean, applicationId
     }
 }
 
-fun Activity.openPathIntent(
+fun AppCompatActivity.openPathIntent(
     path: String,
     forceChooser: Boolean,
     applicationId: String,
@@ -2363,7 +2192,7 @@ fun BaseSimpleActivity.createDirectorySync(directory: String): Boolean {
     return File(directory).mkdirs()
 }
 
-fun Activity.checkAppSideloading(): Boolean {
+fun AppCompatActivity.checkAppSideloading(): Boolean {
     val isSideloaded = when (baseConfig.appSideloadingStatus) {
         SIDELOADING_TRUE -> true
         SIDELOADING_FALSE -> false
@@ -2379,7 +2208,7 @@ fun Activity.checkAppSideloading(): Boolean {
 }
 
 @SuppressLint("UseCompatLoadingForDrawables")
-private fun isAppSideloaded(owner: Activity): Boolean {
+private fun isAppSideloaded(owner: AppCompatActivity): Boolean {
     return try {
         owner.getDrawable(R.drawable.ic_camera_vector)
         false
@@ -2388,10 +2217,10 @@ private fun isAppSideloaded(owner: Activity): Boolean {
     }
 }
 
-fun Activity.showSideloadingDialog() {
+fun AppCompatActivity.showSideloadingDialog() {
     val funAfterDialogCancelled = { finish() }
     AppSideLoadedDialogFragment(funAfterDialogCancelled).show(
-        (this as FragmentActivity).supportFragmentManager,
+        supportFragmentManager,
         AppSideLoadedDialogFragment.TAG
     )
 }
@@ -2475,7 +2304,10 @@ private fun copyOldLastModified(
     }
 }
 
-fun Activity.getThemeId(color: Int = baseConfig.primaryColor, showTransparentTop: Boolean = false) =
+fun AppCompatActivity.getThemeId(
+    color: Int = baseConfig.primaryColor,
+    showTransparentTop: Boolean = false
+) =
     when {
         baseConfig.isUsingSystemTheme -> if (isUsingSystemDarkTheme()) R.style.AppTheme_Base_System else R.style.AppTheme_Base_System_Light
         isBlackAndWhiteTheme() -> when {

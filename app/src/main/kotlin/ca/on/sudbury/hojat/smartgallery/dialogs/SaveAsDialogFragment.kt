@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.activities.BaseSimpleActivity
@@ -85,7 +86,7 @@ class SaveAsDialogFragment(
 
             binding.filenameValue.setText(name)
             binding.folderValue.setOnClickListener {
-                HideKeyboardUseCase(requireActivity(), binding.folderValue)
+                HideKeyboardUseCase(requireActivity() as AppCompatActivity, binding.folderValue)
                 val callbackAfterDialogConfirmed: (String) -> Unit = { pickedPath ->
                     binding.folderValue.setText(requireActivity().humanizePath(pickedPath))
                     realPath = pickedPath
@@ -120,7 +121,7 @@ class SaveAsDialogFragment(
         }
 
         binding.folderValue.setOnClickListener {
-            HideKeyboardUseCase(requireActivity(), binding.folderValue)
+            HideKeyboardUseCase(requireActivity() as AppCompatActivity, binding.folderValue)
             val callbackAfterDialogConfirmed: (String) -> Unit = { pickedPath ->
                 binding.folderValue.setText(requireActivity().humanizePath(pickedPath))
                 realPath = pickedPath

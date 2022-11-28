@@ -2,7 +2,6 @@ package ca.on.hojat.renderer.cropper;
 
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -191,12 +190,12 @@ public class CropImageActivity extends AppCompatActivity
         // handle result of pick image chooser
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_CANCELED) {
+            if (resultCode == RESULT_CANCELED) {
                 // User cancelled the picker. We don't have anything to crop
                 setResultCancel();
             }
 
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 mCropImageUri = CropImage.getPickImageResultUri(this, data);
 
                 // For API >= 23 we need to check specifically that we have permissions to read external

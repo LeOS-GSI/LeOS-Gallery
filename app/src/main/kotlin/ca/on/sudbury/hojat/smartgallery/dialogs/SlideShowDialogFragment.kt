@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentSlideshowBinding
@@ -77,7 +78,7 @@ class SlideShowDialogFragment(val callbackAfterDialogConfirmed: () -> Unit) : Di
             }
             intervalValue.setOnFocusChangeListener { v, hasFocus ->
                 if (!hasFocus)
-                    HideKeyboardUseCase(requireActivity(), v)
+                    HideKeyboardUseCase(requireActivity() as AppCompatActivity, v)
             }
             animationHolder.setOnClickListener {
                 val items = arrayListOf(
