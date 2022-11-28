@@ -7,17 +7,17 @@
         android:id="@+id/cab_delete"
         android:icon="@drawable/ic_delete_vector"
         android:title="@string/delete"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/cab_properties"
         android:icon="@drawable/ic_info_vector"
         android:title="@string/properties"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/cab_pin"
         android:icon="@drawable/ic_pin"
         android:title="@string/pin_to_the_top"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/cab_unpin"
         android:icon="@drawable/ic_pin"
