@@ -47,10 +47,8 @@ import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
  */
 class PickDirectoryDialogFragment(
     val sourcePath: String,
-    val showOtherFolderButton: Boolean,
     private val showFavoritesBin: Boolean,
     private val isPickingCopyMoveDestination: Boolean,
-    val isPickingFolderForWidget: Boolean,
     val callback: (path: String) -> Unit
 ) : DialogFragment() {
 

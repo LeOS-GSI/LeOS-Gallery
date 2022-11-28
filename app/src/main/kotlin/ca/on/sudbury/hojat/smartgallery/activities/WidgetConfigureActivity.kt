@@ -216,10 +216,8 @@ class WidgetConfigureActivity : SimpleActivity() {
         }
         PickDirectoryDialogFragment(
             "",
-            showOtherFolderButton = false,
             showFavoritesBin = true,
             isPickingCopyMoveDestination = false,
-            isPickingFolderForWidget = true,
             callback = callback
         ).show(supportFragmentManager, PickDirectoryDialogFragment.TAG)
     }

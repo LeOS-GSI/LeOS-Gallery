@@ -113,10 +113,8 @@ class PickMediumDialogFragment(
         }
         PickDirectoryDialogFragment(
             sourcePath = path,
-            showOtherFolderButton = true,
             showFavoritesBin = true,
             isPickingCopyMoveDestination = false,
-            isPickingFolderForWidget = false,
             callback = callbackAfterDialogConfirmed
         ).show(requireActivity().supportFragmentManager, PickDirectoryDialogFragment.TAG)
     }

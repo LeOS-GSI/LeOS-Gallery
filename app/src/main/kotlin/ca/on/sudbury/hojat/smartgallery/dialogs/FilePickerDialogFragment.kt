@@ -49,7 +49,6 @@ import ca.on.sudbury.hojat.smartgallery.extensions.isRestrictedWithSAFSdk30
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectChildrenUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.GetFileSizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.views.Breadcrumbs
@@ -293,7 +292,6 @@ class FilePickerDialogFragment(
                 requireActivity(),
                 path,
                 showHidden,
-                false,
                 callback
             )
             else -> {
@@ -307,7 +305,6 @@ class FilePickerDialogFragment(
         owner: Context,
         path: String,
         shouldShowHidden: Boolean,
-        getProperFileSize: Boolean,
         callback: (ArrayList<FileDirItem>) -> Unit
     ) {
         val items = java.util.ArrayList<FileDirItem>()
@@ -357,7 +354,6 @@ class FilePickerDialogFragment(
             val filePath = file.uri.toString().substring(basePath.length)
             val decodedPath = owner.baseConfig.otgPath + "/" + URLDecoder.decode(filePath, "UTF-8")
             val fileSize = when {
-                getProperFileSize -> GetFileSizeUseCase(file, shouldShowHidden)
                 isDirectory -> 0L
                 else -> file.length()
             }

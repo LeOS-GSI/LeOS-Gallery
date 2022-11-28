@@ -1188,10 +1188,8 @@ fun BaseSimpleActivity.tryCopyMoveFilesTo(
     }
     PickDirectoryDialogFragment(
         source,
-        showOtherFolderButton = true,
         showFavoritesBin = false,
         isPickingCopyMoveDestination = true,
-        isPickingFolderForWidget = false,
         callback = callbackAfterDialogConfirmed
     ).show(supportFragmentManager, PickDirectoryDialogFragment.TAG)
 }

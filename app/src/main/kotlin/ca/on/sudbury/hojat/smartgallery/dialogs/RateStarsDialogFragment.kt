@@ -8,9 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import ca.on.sudbury.hojat.smartgallery.databinding.DialogFragmentRateStarsBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
-import ca.on.sudbury.hojat.smartgallery.extensions.redirectToRateUs
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
-
 
 /**
  * In the "About" page, in the "Help us" section click on "Rate us".
