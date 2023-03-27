@@ -23,4 +23,22 @@ in <a href="https://trello.com/b/PkJ1D5pO/smart-gallery">here</a>.
 
 ## Video demo
 
+<details>
+<summary><b>Overall video demo</b></summary>
 
+
+https://user-images.githubusercontent.com/8706521/227848954-49983ef8-609a-4a19-ad26-8807ebd2f67b.mp4
+</details>
+
+## Screenshots
+
+<p>
+<img src="/media/screenshot1.png" width="32%"/>
+<img src="/media/screenshot2.png" width="32%"/>
+<img src="/media/screenshot3.png" width="32%"/>
+</p>
+<p>
+<img src="/media/screenshot4.png" width="32%"/>
+<img src="/media/screenshot5.png" width="32%"/>
+<img src="/media/screenshot6.png" width="32%"/>
+</p>
