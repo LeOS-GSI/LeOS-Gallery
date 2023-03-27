@@ -1,6 +1,7 @@
 package ca.on.hojat.renderer.svg;
 
 import android.graphics.Canvas;
+
 import ca.on.hojat.renderer.svg.utils.RenderOptionsBase;
 
 /**
@@ -33,16 +34,6 @@ public class RenderOptions extends RenderOptionsBase {
 
 
     /**
-     * Create a new <code>RenderOptions</code> instance.  This is just an alternative to <code>new RenderOptions()</code>.
-     *
-     * @return new instance of this class.
-     */
-    public static RenderOptions create() {
-        return new RenderOptions();
-    }
-
-
-    /**
      * Creates a copy of the given <code>RenderOptions</code> object.
      *
      * @param other the object to copy
@@ -51,6 +42,14 @@ public class RenderOptions extends RenderOptionsBase {
         super(other);
     }
 
+    /**
+     * Create a new <code>RenderOptions</code> instance.  This is just an alternative to <code>new RenderOptions()</code>.
+     *
+     * @return new instance of this class.
+     */
+    public static RenderOptions create() {
+        return new RenderOptions();
+    }
 
     /**
      * Specifies some additional CSS rules that will be applied during render in addition to
@@ -68,7 +67,7 @@ public class RenderOptions extends RenderOptionsBase {
      * Specifies some additional CSS that will be applied during render in
      * addition to any specified in the file itself.
      *
-     * @param css CSS rules to apply
+     * @param css CSSKotlin rules to apply
      * @return this same <code>RenderOptions</code> instance
      */
     public RenderOptions css(CSS css) {

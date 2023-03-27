@@ -1,6 +1,6 @@
-package ca.on.hojat.renderer.svg;
+package ca.on.hojat.renderer.svg
 
-import ca.on.hojat.renderer.svg.utils.CSSBase;
+import ca.on.hojat.renderer.svg.utils.CSSBase
 
 /**
  * This is a container for pre-parsed CSS that can be used to avoid parsing raw CSS string on each
@@ -16,16 +16,13 @@ import ca.on.hojat.renderer.svg.utils.CSSBase;
  * }
  * </pre>
  */
-public class CSS extends CSSBase {
-    private CSS(String css) {
-        super(css);
-    }
+class CSS(css: String) : CSSBase(css) {
 
     /**
      * @param css css string to parse
      * @return pre-parsed CSS
      */
-    public static CSS getFromString(String css) {
-        return new CSS(css);
+    fun getFromString(css: String): CSS {
+        return CSS(css)
     }
 }
