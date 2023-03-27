@@ -72,9 +72,7 @@ class SVGParserImpl implements SVGParser {
     // Special attribute keywords
     static final String NONE = "none";
     static final String CURRENTCOLOR = "currentColor";
-    static final String VALID_DISPLAY_VALUES = "|inline|block|list-item|run-in|compact|marker|table|inline-table" +
-            "|table-row-group|table-header-group|table-footer-group|table-row" +
-            "|table-column-group|table-column|table-cell|table-caption|none|";
+    static final String VALID_DISPLAY_VALUES = "|inline|block|list-item|run-in|compact|marker|table|inline-table" + "|table-row-group|table-header-group|table-footer-group|table-row" + "|table-column-group|table-column|table-cell|table-caption|none|";
     static final String VALID_VISIBILITY_VALUES = "|visible|hidden|collapse|";
     private static final String TAG = "SVGParser";
     private static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
@@ -112,18 +110,15 @@ class SVGParserImpl implements SVGParser {
             scan.skipWhitespace();
             String propertyName = scan.nextIdentifier();
             scan.skipWhitespace();
-            if (scan.consume(';'))
-                continue;  // Handle stray/extra separators gracefully
-            if (!scan.consume(':'))
-                break;  // Unrecoverable parse error
+            if (scan.consume(';')) continue;  // Handle stray/extra separators gracefully
+            if (!scan.consume(':')) break;  // Unrecoverable parse error
             scan.skipWhitespace();
             String propertyValue = scan.nextPropertyValue();
             if (propertyValue == null)
                 continue;  // Empty value. Just ignore this property and keep parsing
             scan.skipWhitespace();
             if (scan.empty() || scan.consume(';')) {
-                if (obj.style == null)
-                    obj.style = new Style();
+                if (obj.style == null) obj.style = new Style();
                 Style.processStyleProperty(obj.style, propertyName, propertyValue, false);
                 scan.skipWhitespace();
             }
@@ -135,8 +130,7 @@ class SVGParserImpl implements SVGParser {
      * Spec says: length ::= number ("em" | "ex" | "px" | "in" | "cm" | "mm" | "pt" | "pc" | "%")?
      */
     static Length parseLength(String val) throws SVGParseException {
-        if (val.length() == 0)
-            throw new SVGParseException("Invalid length value (empty string)");
+        if (val.length() == 0) throw new SVGParseException("Invalid length value (empty string)");
         int end = val.length();
         Unit unit = Unit.px;
         char lastChar = val.charAt(end - 1);
@@ -165,8 +159,7 @@ class SVGParserImpl implements SVGParser {
      * Parse a list of Length/Coords
      */
     private static List<Length> parseLengthList(String val) throws SVGParseException {
-        if (val.length() == 0)
-            throw new SVGParseException("Invalid length list (empty string)");
+        if (val.length() == 0) throw new SVGParseException("Invalid length list (empty string)");
 
         List<Length> coords = new ArrayList<>(1);
 
@@ -178,8 +171,7 @@ class SVGParserImpl implements SVGParser {
             if (Float.isNaN(scalar))
                 throw new SVGParseException("Invalid length list value: " + scan.ahead());
             Unit unit = scan.nextUnit();
-            if (unit == null)
-                unit = Unit.px;
+            if (unit == null) unit = Unit.px;
             coords.add(new Length(scalar, unit));
             scan.skipCommaWhitespace();
         }
@@ -191,8 +183,7 @@ class SVGParserImpl implements SVGParser {
      */
     static float parseFloat(String val) throws SVGParseException {
         int len = val.length();
-        if (len == 0)
-            throw new SVGParseException("Invalid float value (empty string)");
+        if (len == 0) throw new SVGParseException("Invalid float value (empty string)");
         return parseFloat(val, len);
     }
 
@@ -240,10 +231,8 @@ class SVGParserImpl implements SVGParser {
 
         if (Float.isNaN(minX) || Float.isNaN(minY) || Float.isNaN(width) || Float.isNaN(height))
             throw new SVGParseException("Invalid viewBox definition - should have four numbers");
-        if (width < 0)
-            throw new SVGParseException("Invalid viewBox. width cannot be negative");
-        if (height < 0)
-            throw new SVGParseException("Invalid viewBox. height cannot be negative");
+        if (width < 0) throw new SVGParseException("Invalid viewBox. width cannot be negative");
+        if (height < 0) throw new SVGParseException("Invalid viewBox. height cannot be negative");
 
         return new SVGBase.Box(minX, minY, width, height);
     }
@@ -270,8 +259,7 @@ class SVGParserImpl implements SVGParser {
                 SvgPaint fallback = null;
 
                 val = val.substring(closeBracket + 1).trim();
-                if (val.length() > 0)
-                    fallback = parseColourSpecifer(val);
+                if (val.length() > 0) fallback = parseColourSpecifer(val);
                 return new PaintReference(href, fallback);
             } else {
                 String href = val.substring(4).trim();
@@ -341,8 +329,7 @@ class SVGParserImpl implements SVGParser {
 
             float red = scan.nextFloat();
             if (!Float.isNaN(red)) {
-                if (scan.consume('%'))
-                    red = (red * 256) / 100;
+                if (scan.consume('%')) red = (red * 256) / 100;
 
                 // If there is a comma, then it is the "legacy" format: rgb(r, g, b, a?).
                 // Otherwise we assume it is the new format: rgb[a?](r g b / a?).
@@ -350,26 +337,22 @@ class SVGParserImpl implements SVGParser {
 
                 float green = scan.nextFloat();
                 if (!Float.isNaN(green)) {
-                    if (scan.consume('%'))
-                        green = (green * 256) / 100;
+                    if (scan.consume('%')) green = (green * 256) / 100;
 
                     if (isLegacyCSSColor3) {
-                        if (!scan.skipCommaWhitespace())
-                            return Colour.BLACK;   // Error
+                        if (!scan.skipCommaWhitespace()) return Colour.BLACK;   // Error
                     } else {
                         scan.skipWhitespace();
                     }
 
                     float blue = scan.nextFloat();
                     if (!Float.isNaN(blue)) {
-                        if (scan.consume('%'))
-                            blue = (blue * 256) / 100;
+                        if (scan.consume('%')) blue = (blue * 256) / 100;
 
                         // Now look for optional alpha
                         float alpha = Float.NaN;
                         if (isLegacyCSSColor3) {
-                            if (scan.skipCommaWhitespace())
-                                alpha = scan.nextFloat();
+                            if (scan.skipCommaWhitespace()) alpha = scan.nextFloat();
                         } else {
                             scan.skipWhitespace();
                             if (scan.consume('/')) {
@@ -378,8 +361,7 @@ class SVGParserImpl implements SVGParser {
                             }
                         }
                         scan.skipWhitespace();
-                        if (!scan.consume(')'))
-                            return Colour.BLACK;
+                        if (!scan.consume(')')) return Colour.BLACK;
                         if (Float.isNaN(alpha))
                             return new Colour(0xff000000 | clamp255(red) << 16 | clamp255(green) << 8 | clamp255(blue));
                         else
@@ -405,26 +387,22 @@ class SVGParserImpl implements SVGParser {
 
                     float saturation = scan.nextFloat();
                     if (!Float.isNaN(saturation)) {
-                        if (!scan.consume('%'))
-                            return Colour.BLACK;
+                        if (!scan.consume('%')) return Colour.BLACK;
 
                         if (isLegacyCSSColor3) {
-                            if (!scan.skipCommaWhitespace())
-                                return Colour.BLACK;
+                            if (!scan.skipCommaWhitespace()) return Colour.BLACK;
                         } else {
                             scan.skipWhitespace();
                         }
 
                         float lightness = scan.nextFloat();
                         if (!Float.isNaN(lightness)) {
-                            if (!scan.consume('%'))
-                                return Colour.BLACK;
+                            if (!scan.consume('%')) return Colour.BLACK;
 
                             // Now look for optional alpha
                             float alpha = Float.NaN;
                             if (isLegacyCSSColor3) {
-                                if (scan.skipCommaWhitespace())
-                                    alpha = scan.nextFloat();
+                                if (scan.skipCommaWhitespace()) alpha = scan.nextFloat();
                             } else {
                                 scan.skipWhitespace();
                                 if (scan.consume('/')) {
@@ -433,8 +411,7 @@ class SVGParserImpl implements SVGParser {
                                 }
                             }
                             scan.skipWhitespace();
-                            if (!scan.consume(')'))
-                                return Colour.BLACK;
+                            if (!scan.consume(')')) return Colour.BLACK;
                             if (Float.isNaN(alpha))
                                 return new Colour(0xff000000 | hslToRgb(hue, saturation, lightness));
                             else
@@ -521,10 +498,8 @@ class SVGParserImpl implements SVGParser {
         while (true) {
             item = scan.nextToken('/');
             scan.skipWhitespace();
-            if (item == null)
-                return;
-            if (fontWeight != null && fontStyle != null)
-                break;
+            if (item == null) return;
+            if (fontWeight != null && fontStyle != null) break;
             if (item.equals(NORMAL)) {
                 // indeterminate right now which of these this refers to
                 continue;
@@ -535,8 +510,7 @@ class SVGParserImpl implements SVGParser {
             }
             if (fontStyle == null) {
                 fontStyle = parseFontStyle(item);
-                if (fontStyle != null)
-                    continue;
+                if (fontStyle != null) continue;
             }
             // Must be a font-variant keyword?
             if (fontVariantSmallCaps == null && item.equals(CSSFontFeatureSettings.FONT_VARIANT_SMALL_CAPS)) {
@@ -586,9 +560,7 @@ class SVGParserImpl implements SVGParser {
         style.fontFeatureSettings = CSSFontFeatureSettings.FONT_FEATURE_SETTINGS_NORMAL;
         style.fontVariationSettings = null;
 
-        style.specifiedFlags |= (Style.SPECIFIED_FONT_FAMILY | Style.SPECIFIED_FONT_SIZE | Style.SPECIFIED_FONT_WEIGHT | Style.SPECIFIED_FONT_STYLE | Style.SPECIFIED_FONT_STRETCH |
-                Style.SPECIFIED_FONT_KERNING | Style.SPECIFIED_FONT_VARIANT_LIGATURES | Style.SPECIFIED_FONT_VARIANT_POSITION | Style.SPECIFIED_FONT_VARIANT_CAPS |
-                Style.SPECIFIED_FONT_VARIANT_NUMERIC | Style.SPECIFIED_FONT_VARIANT_EAST_ASIAN | Style.SPECIFIED_FONT_FEATURE_SETTINGS | Style.SPECIFIED_FONT_VARIATION_SETTINGS);
+        style.specifiedFlags |= (Style.SPECIFIED_FONT_FAMILY | Style.SPECIFIED_FONT_SIZE | Style.SPECIFIED_FONT_WEIGHT | Style.SPECIFIED_FONT_STYLE | Style.SPECIFIED_FONT_STRETCH | Style.SPECIFIED_FONT_KERNING | Style.SPECIFIED_FONT_VARIANT_LIGATURES | Style.SPECIFIED_FONT_VARIANT_POSITION | Style.SPECIFIED_FONT_VARIANT_CAPS | Style.SPECIFIED_FONT_VARIANT_NUMERIC | Style.SPECIFIED_FONT_VARIANT_EAST_ASIAN | Style.SPECIFIED_FONT_FEATURE_SETTINGS | Style.SPECIFIED_FONT_VARIATION_SETTINGS);
     }
 
     // Parse a font family list
@@ -597,16 +569,12 @@ class SVGParserImpl implements SVGParser {
         TextScanner scan = new TextScanner(val);
         while (true) {
             String item = scan.nextQuotedString();
-            if (item == null)
-                item = scan.nextTokenWithWhitespace();
-            if (item == null)
-                break;
-            if (fonts == null)
-                fonts = new ArrayList<>();
+            if (item == null) item = scan.nextTokenWithWhitespace();
+            if (item == null) break;
+            if (fonts == null) fonts = new ArrayList<>();
             fonts.add(item);
             scan.skipCommaWhitespace();
-            if (scan.empty())
-                break;
+            if (scan.empty()) break;
         }
         return fonts;
     }
@@ -615,8 +583,7 @@ class SVGParserImpl implements SVGParser {
     static Length parseFontSize(String val) {
         try {
             Length size = SVGParserImpl.FontSizeKeywords.get(val);
-            if (size == null)
-                size = parseLength(val);
+            if (size == null) size = parseLength(val);
             return size;
         } catch (SVGParseException e) {
             return null;
@@ -631,8 +598,7 @@ class SVGParserImpl implements SVGParser {
             TextScanner scan = new TextScanner(val);
             result = scan.nextFloat();
             scan.skipWhitespace();
-            if (!scan.empty())
-                return null;
+            if (!scan.empty()) return null;
             if (result < Style.FONT_WEIGHT_MIN || result > Style.FONT_WEIGHT_MAX)
                 return null;   // Invalid
         }
@@ -646,13 +612,10 @@ class SVGParserImpl implements SVGParser {
             // Check for a percentage value
             TextScanner scan = new TextScanner(val);
             result = scan.nextFloat();
-            if (!scan.consume('%'))
-                return null;
+            if (!scan.consume('%')) return null;
             scan.skipWhitespace();
-            if (!scan.empty())
-                return null;
-            if (result < Style.FONT_STRETCH_MIN)
-                return null;   // Invalid
+            if (!scan.empty()) return null;
+            if (result < Style.FONT_STRETCH_MIN) return null;   // Invalid
         }
         return result;
     }
@@ -707,10 +670,8 @@ class SVGParserImpl implements SVGParser {
 
     // Parse fill rule
     static Style.FillRule parseFillRule(String val) {
-        if ("nonzero".equals(val))
-            return Style.FillRule.NonZero;
-        if ("evenodd".equals(val))
-            return Style.FillRule.EvenOdd;
+        if ("nonzero".equals(val)) return Style.FillRule.NonZero;
+        if ("evenodd".equals(val)) return Style.FillRule.EvenOdd;
         return null;
     }
 
@@ -722,23 +683,17 @@ class SVGParserImpl implements SVGParser {
 
     // Parse stroke-linecap
     static Style.LineCap parseStrokeLineCap(String val) {
-        if ("butt".equals(val))
-            return Style.LineCap.Butt;
-        if ("round".equals(val))
-            return Style.LineCap.Round;
-        if ("square".equals(val))
-            return Style.LineCap.Square;
+        if ("butt".equals(val)) return Style.LineCap.Butt;
+        if ("round".equals(val)) return Style.LineCap.Round;
+        if ("square".equals(val)) return Style.LineCap.Square;
         return null;
     }
 
     // Parse stroke-linejoin
     static Style.LineJoin parseStrokeLineJoin(String val) {
-        if ("miter".equals(val))
-            return Style.LineJoin.Miter;
-        if ("round".equals(val))
-            return Style.LineJoin.Round;
-        if ("bevel".equals(val))
-            return Style.LineJoin.Bevel;
+        if ("miter".equals(val)) return Style.LineJoin.Miter;
+        if ("round".equals(val)) return Style.LineJoin.Round;
+        if ("bevel".equals(val)) return Style.LineJoin.Bevel;
         return null;
     }
 
@@ -751,14 +706,11 @@ class SVGParserImpl implements SVGParser {
         TextScanner scan = new TextScanner(val);
         scan.skipWhitespace();
 
-        if (scan.empty())
-            return null;
+        if (scan.empty()) return null;
 
         Length dash = scan.nextLength();
-        if (dash == null)
-            return null;
-        if (dash.isNegative())
-            return null;
+        if (dash == null) return null;
+        if (dash.isNegative()) return null;
 
         float sum = dash.floatValue();
 
@@ -769,16 +721,14 @@ class SVGParserImpl implements SVGParser {
             dash = scan.nextLength();
             if (dash == null)  // must have hit something unexpected
                 return null;
-            if (dash.isNegative())
-                return null;
+            if (dash.isNegative()) return null;
             dashes.add(dash);
             sum += dash.floatValue();
         }
 
         // Spec (section 11.4) says if the sum of dash lengths is zero, it should
         // be treated as "none" ie a solid stroke.
-        if (sum == 0f)
-            return null;
+        if (sum == 0f) return null;
 
         return dashes.toArray(new Length[0]);
     }
@@ -821,10 +771,8 @@ class SVGParserImpl implements SVGParser {
 
     // Parse CSS clip shape (always a rect())
     static CSSClipRect parseClip(String val) {
-        if ("auto".equals(val))
-            return null;
-        if (!val.startsWith("rect("))
-            return null;
+        if ("auto".equals(val)) return null;
+        if (!val.startsWith("rect(")) return null;
 
         TextScanner scan = new TextScanner(val.substring(5));
         scan.skipWhitespace();
@@ -849,8 +797,7 @@ class SVGParserImpl implements SVGParser {
     // <use> element
 
     private static Length parseLengthOrAuto(TextScanner scan) {
-        if (scan.consume("auto"))
-            return Length.ZERO;
+        if (scan.consume("auto")) return Length.ZERO;
 
         return scan.nextLength();
     }
@@ -902,8 +849,7 @@ class SVGParserImpl implements SVGParser {
     // <path> element
 
     static Length parseLetterOrWordSpacing(String val) {
-        if ("normal".equals(val))
-            return Length.ZERO;
+        if ("normal".equals(val)) return Length.ZERO;
         else {
             try {
                 Length result = parseLength(val);
@@ -928,8 +874,7 @@ class SVGParserImpl implements SVGParser {
 
         SVGBase.PathDefinition path = new SVGBase.PathDefinition();
 
-        if (scan.empty())
-            return path;
+        if (scan.empty()) return path;
 
         int pathCommand = scan.nextChar();
 
@@ -1147,8 +1092,7 @@ class SVGParserImpl implements SVGParser {
             }
 
             scan.skipCommaWhitespace();
-            if (scan.empty())
-                break;
+            if (scan.empty()) break;
 
             // Test to see if there is another set of coords for the current path command
             if (scan.hasLetter()) {
@@ -1223,14 +1167,10 @@ class SVGParserImpl implements SVGParser {
     }
 
     static String parseFunctionalIRI(String val) {
-        if (val.equals(NONE))
-            return null;
-        if (!val.startsWith("url("))
-            return null;
-        if (val.endsWith(")"))
-            return val.substring(4, val.length() - 1).trim();
-        else
-            return val.substring(4).trim();
+        if (val.equals(NONE)) return null;
+        if (!val.startsWith("url(")) return null;
+        if (val.endsWith(")")) return val.substring(4, val.length() - 1).trim();
+        else return val.substring(4).trim();
         // Unlike CSS, the SVG spec seems to indicate that quotes are not allowed in "url()" references
     }
 
@@ -1334,14 +1274,12 @@ class SVGParserImpl implements SVGParser {
                         break;
                     case XmlPullParser.START_TAG:
                         String qName = parser.getName();
-                        if (parser.getPrefix() != null)
-                            qName = parser.getPrefix() + ':' + qName;
+                        if (parser.getPrefix() != null) qName = parser.getPrefix() + ':' + qName;
                         startElement(parser.getNamespace(), parser.getName(), qName, attributes);
                         break;
                     case XmlPullParser.END_TAG:
                         qName = parser.getName();
-                        if (parser.getPrefix() != null)
-                            qName = parser.getPrefix() + ':' + qName;
+                        if (parser.getPrefix() != null) qName = parser.getPrefix() + ':' + qName;
                         endElement(parser.getNamespace(), parser.getName(), qName);
                         break;
                     case XmlPullParser.TEXT:
@@ -1528,8 +1466,7 @@ class SVGParserImpl implements SVGParser {
     // <text> element
 
     private void text(String characters) throws SVGParseException {
-        if (ignoring)
-            return;
+        if (ignoring) return;
 
         if (inMetadataElement) {
             if (metadataElementContents == null)
@@ -1545,16 +1482,14 @@ class SVGParserImpl implements SVGParser {
     }
 
     private void text(char[] ch, int start, int length) throws SVGParseException {
-        if (ignoring)
-            return;
+        if (ignoring) return;
 
         if (inMetadataElement) {
             if (metadataElementContents == null)
                 metadataElementContents = new StringBuilder(length);
             metadataElementContents.append(ch, start, length);
         } else if (inStyleElement) {
-            if (styleElementContents == null)
-                styleElementContents = new StringBuilder(length);
+            if (styleElementContents == null) styleElementContents = new StringBuilder(length);
             styleElementContents.append(ch, start, length);
         } else if (currentElement instanceof SVGBase.TextContainer) {
             appendToTextContainer(new String(ch, start, length));
@@ -1657,8 +1592,7 @@ class SVGParserImpl implements SVGParser {
 
     private void endDocument() {
         // Dump document
-        if (BuildConfig.DEBUG)
-            dumpNode(svgDocument.getRootElement(), "");
+        if (BuildConfig.DEBUG) dumpNode(svgDocument.getRootElement(), "");
     }
 
 
@@ -1669,8 +1603,7 @@ class SVGParserImpl implements SVGParser {
         if (instruction.equals(XML_STYLESHEET_PROCESSING_INSTRUCTION) && externalFileResolver != null) {
             // If a "type" is specified, make sure it is the CSS type
             String attr = attributes.get(XML_STYLESHEET_ATTR_TYPE);
-            if (attr != null && !CSSParser.CSS_MIME_TYPE.equals(attributes.get("type")))
-                return;
+            if (attr != null && !CSSParser.CSS_MIME_TYPE.equals(attributes.get("type"))) return;
             // Alternate stylesheets are not supported
             attr = attributes.get(XML_STYLESHEET_ATTR_ALTERNATE);
             if (attr != null && !XML_STYLESHEET_ATTR_ALTERNATE_NO.equals(attributes.get("alternate")))
@@ -1679,8 +1612,7 @@ class SVGParserImpl implements SVGParser {
             attr = attributes.get(XML_STYLESHEET_ATTR_HREF);
             if (attr != null) {
                 String css = externalFileResolver.resolveCSSStyleSheet(attr);
-                if (css == null)
-                    return;
+                if (css == null) return;
 
                 String mediaAttr = attributes.get(XML_STYLESHEET_ATTR_MEDIA);
                 if (mediaAttr != null && !XML_STYLESHEET_ATTR_MEDIA_ALL.equals(mediaAttr.trim())) {
@@ -1714,8 +1646,7 @@ class SVGParserImpl implements SVGParser {
     // <symbol> element
 
     private void dumpNode(SvgObject elem, String indent) {
-        if (!BuildConfig.DEBUG)
-            return;
+        if (!BuildConfig.DEBUG) return;
         Timber.tag(TAG).d("%s%s", indent, elem);
         if (elem instanceof SVGBase.SvgConditionalContainer) {
             indent = indent + "  ";
@@ -1730,8 +1661,7 @@ class SVGParserImpl implements SVGParser {
     // <marker> element
 
     private void debug(String format, Object... args) {
-        if (BuildConfig.DEBUG)
-            Timber.tag(TAG).d(format, args);
+        if (BuildConfig.DEBUG) Timber.tag(TAG).d(format, args);
     }
 
     private void svg(Attributes attributes) throws SVGParseException {
@@ -2309,10 +2239,8 @@ class SVGParserImpl implements SVGParser {
         parseAttributesTextPosition(obj, attributes);
         currentElement.addChild(obj);
         currentElement = obj;
-        if (obj.parent instanceof TextRoot)
-            obj.setTextRoot((TextRoot) obj.parent);
-        else
-            obj.setTextRoot(((TextChild) obj.parent).getTextRoot());
+        if (obj.parent instanceof TextRoot) obj.setTextRoot((TextRoot) obj.parent);
+        else obj.setTextRoot(((TextChild) obj.parent).getTextRoot());
     }
 
     private void tref(Attributes attributes) throws SVGParseException {
@@ -2330,10 +2258,8 @@ class SVGParserImpl implements SVGParser {
         parseAttributesConditional(obj, attributes);
         parseAttributesTRef(obj, attributes);
         currentElement.addChild(obj);
-        if (obj.parent instanceof TextRoot)
-            obj.setTextRoot((TextRoot) obj.parent);
-        else
-            obj.setTextRoot(((TextChild) obj.parent).getTextRoot());
+        if (obj.parent instanceof TextRoot) obj.setTextRoot((TextRoot) obj.parent);
+        else obj.setTextRoot(((TextChild) obj.parent).getTextRoot());
     }
 
     private void parseAttributesTRef(SVGBase.TRef obj, Attributes attributes) {
@@ -2631,8 +2557,7 @@ class SVGParserImpl implements SVGParser {
         }
         try {
             float scalar = parseFloat(val, end);
-            if (isPercent)
-                scalar /= 100f;
+            if (isPercent) scalar /= 100f;
             return (scalar < 0) ? 0 : (scalar > 100) ? 100 : scalar;
         } catch (NumberFormatException e) {
             throw new SVGParseException("Invalid offset value in <stop>: " + val, e);
@@ -2704,10 +2629,8 @@ class SVGParserImpl implements SVGParser {
         parseAttributesTextPath(obj, attributes);
         currentElement.addChild(obj);
         currentElement = obj;
-        if (obj.parent instanceof TextRoot)
-            obj.setTextRoot((TextRoot) obj.parent);
-        else
-            obj.setTextRoot(((TextChild) obj.parent).getTextRoot());
+        if (obj.parent instanceof TextRoot) obj.setTextRoot((TextRoot) obj.parent);
+        else obj.setTextRoot(((TextChild) obj.parent).getTextRoot());
     }
 
     private void parseAttributesTextPath(SVGBase.TextPath obj, Attributes attributes) throws SVGParseException {
@@ -2911,8 +2834,7 @@ class SVGParserImpl implements SVGParser {
                     break;
 
                 default:
-                    if (obj.baseStyle == null)
-                        obj.baseStyle = new Style();
+                    if (obj.baseStyle == null) obj.baseStyle = new Style();
                     Style.processStyleProperty(obj.baseStyle, attributes.getLocalName(i), attributes.getValue(i).trim(), true);
                     break;
             }
@@ -2988,10 +2910,8 @@ class SVGParserImpl implements SVGParser {
                     if (Float.isNaN(tx) || !scan.consume(')'))
                         throw new SVGParseException("Invalid transform list: " + val);
 
-                    if (Float.isNaN(ty))
-                        matrix.preTranslate(tx, 0f);
-                    else
-                        matrix.preTranslate(tx, ty);
+                    if (Float.isNaN(ty)) matrix.preTranslate(tx, 0f);
+                    else matrix.preTranslate(tx, ty);
                     break;
 
                 case "scale":
@@ -3003,10 +2923,8 @@ class SVGParserImpl implements SVGParser {
                     if (Float.isNaN(sx) || !scan.consume(')'))
                         throw new SVGParseException("Invalid transform list: " + val);
 
-                    if (Float.isNaN(sy))
-                        matrix.preScale(sx, sx);
-                    else
-                        matrix.preScale(sx, sy);
+                    if (Float.isNaN(sy)) matrix.preScale(sx, sx);
+                    else matrix.preScale(sx, sy);
                     break;
 
                 case "rotate": {
@@ -3057,8 +2975,7 @@ class SVGParserImpl implements SVGParser {
                     throw new SVGParseException("Invalid transform list fn: " + cmd + ")");
             }
 
-            if (scan.empty())
-                break;
+            if (scan.empty()) break;
             scan.skipCommaWhitespace();
         }
 
@@ -3105,38 +3022,7 @@ class SVGParserImpl implements SVGParser {
 
     // Define SVG tags
     private enum SVGElem {
-        svg,
-        a,
-        circle,
-        clipPath,
-        defs,
-        desc,
-        ellipse,
-        g,
-        image,
-        line,
-        linearGradient,
-        marker,
-        mask,
-        path,
-        pattern,
-        polygon,
-        polyline,
-        radialGradient,
-        rect,
-        solidColor,
-        stop,
-        style,
-        SWITCH,
-        symbol,
-        text,
-        textPath,
-        title,
-        tref,
-        tspan,
-        use,
-        view,
-        UNSUPPORTED;
+        svg, a, circle, clipPath, defs, desc, ellipse, g, image, line, linearGradient, marker, mask, path, pattern, polygon, polyline, radialGradient, rect, solidColor, stop, style, SWITCH, symbol, text, textPath, title, tref, tspan, use, view, UNSUPPORTED;
 
         private static final Map<String, SVGElem> cache = new HashMap<>();
 
@@ -3169,28 +3055,8 @@ class SVGParserImpl implements SVGParser {
     // Supported SVG attributes
     enum SVGAttr {
         CLASS,    // Upper case because 'class' is a reserved word. Handled as a special case.
-        clip,
-        clip_path,
-        clipPathUnits,
-        clip_rule,
-        color,
-        cx, cy,
-        direction,
-        dx, dy,
-        fx, fy, fr,
-        d,
-        display,
-        fill,
-        fill_rule,
-        fill_opacity,
-        font,
-        font_family,
-        font_feature_settings,
-        font_size,
-        font_stretch,                // @since 1.5
-        font_style,
-        font_weight,
-        // font_size_adjust, font_stretch,
+        clip, clip_path, clipPathUnits, clip_rule, color, cx, cy, direction, dx, dy, fx, fy, fr, d, display, fill, fill_rule, fill_opacity, font, font_family, font_feature_settings, font_size, font_stretch,                // @since 1.5
+        font_style, font_weight, // font_size_adjust, font_stretch,
         font_kerning,                // @since 1.5
         font_variant,                // @since 1.5
         font_variant_ligatures,      // @since 1.5
@@ -3200,65 +3066,14 @@ class SVGParserImpl implements SVGParser {
         font_variant_east_asian,     // @since 1.5
         font_variation_settings,     // @since 1.5
         glyph_orientation_vertical,  // @since 1.5
-        gradientTransform,
-        gradientUnits,
-        height,
-        href,
-        // id,
-        image_rendering,
-        isolation,       // @since 1.5
+        gradientTransform, gradientUnits, height, href, // id,
+        image_rendering, isolation,       // @since 1.5
         letter_spacing,  // @since 1.5
-        marker,
-        marker_start, marker_mid, marker_end,
-        markerHeight, markerUnits, markerWidth,
-        mask,
-        maskContentUnits, maskUnits,
-        media,
-        mix_blend_mode,  // @since 1.5
-        offset,
-        opacity,
-        orient,
-        overflow,
-        pathLength,
-        patternContentUnits, patternTransform, patternUnits,
-        points,
-        preserveAspectRatio,
-        r,
-        refX,
-        refY,
-        requiredFeatures, requiredExtensions, requiredFormats, requiredFonts,
-        rx, ry,
-        solid_color, solid_opacity,
-        spreadMethod,
-        startOffset,
-        stop_color, stop_opacity,
-        stroke,
-        stroke_dasharray,
-        stroke_dashoffset,
-        stroke_linecap,
-        stroke_linejoin,
-        stroke_miterlimit,
-        stroke_opacity,
-        stroke_width,
-        style,
-        systemLanguage,
-        text_anchor,
-        text_decoration,
-        text_orientation,  // @since 1.5
-        transform,
-        type,
-        vector_effect,
-        version,
-        viewBox,
-        width,
-        word_spacing,  // @since 1.5
+        marker, marker_start, marker_mid, marker_end, markerHeight, markerUnits, markerWidth, mask, maskContentUnits, maskUnits, media, mix_blend_mode,  // @since 1.5
+        offset, opacity, orient, overflow, pathLength, patternContentUnits, patternTransform, patternUnits, points, preserveAspectRatio, r, refX, refY, requiredFeatures, requiredExtensions, requiredFormats, requiredFonts, rx, ry, solid_color, solid_opacity, spreadMethod, startOffset, stop_color, stop_opacity, stroke, stroke_dasharray, stroke_dashoffset, stroke_linecap, stroke_linejoin, stroke_miterlimit, stroke_opacity, stroke_width, style, systemLanguage, text_anchor, text_decoration, text_orientation,  // @since 1.5
+        transform, type, vector_effect, version, viewBox, width, word_spacing,  // @since 1.5
         writing_mode,  // @since 1.5
-        x, y,
-        x1, y1,
-        x2, y2,
-        viewport_fill, viewport_fill_opacity,
-        visibility,
-        UNSUPPORTED;
+        x, y, x1, y1, x2, y2, viewport_fill, viewport_fill_opacity, visibility, UNSUPPORTED;
 
         private static final Map<String, SVGAttr> cache = new HashMap<>();
 

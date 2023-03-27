@@ -1,7 +1,7 @@
-package ca.on.hojat.renderer.svg;
+package ca.on.hojat.renderer.svg
 
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
+import android.graphics.Bitmap
+import android.graphics.Typeface
 
 /**
  * Resolver class used by the renderer when resolving font, image, and external CSS references.
@@ -29,8 +29,8 @@ import android.graphics.Typeface;
  * }
  * </pre>
  */
+open class SVGExternalFileResolver {
 
-public class SVGExternalFileResolver {
     /**
      * Called by renderer to resolve font references in &lt;text&gt; elements.
      * <p>
@@ -61,8 +61,13 @@ public class SVGExternalFileResolver {
      *                    between 50 ("ultra-condensed") and 200 ("ultra-expanded").
      * @return an Android Typeface instance, or null
      */
-    public Typeface resolveFont(String fontFamily, float fontWeight, String fontStyle, float fontStretch) {
-        return null;
+    fun resolveFont(
+        fontFamily: String,
+        fontWeight: Float,
+        fontStyle: String,
+        fontStretch: Float
+    ): Typeface? {
+        return null
     }
 
     /**
@@ -77,8 +82,8 @@ public class SVGExternalFileResolver {
      * @param filename the filename as provided in the xlink:href attribute of a &lt;image&gt; element.
      * @return an Android Bitmap object, or null if the image could not be found.
      */
-    public Bitmap resolveImage(String filename) {
-        return null;
+    fun resolveImage(filename: String): Bitmap? {
+        return null
     }
 
     /**
@@ -95,8 +100,8 @@ public class SVGExternalFileResolver {
      * @return a AndroidSVG CSSStyleSheet object, or null if the stylesheet could not be found.
      * @since 1.3
      */
-    public String resolveCSSStyleSheet(String url) {
-        return null;
+    fun resolveCSSStyleSheet(url: String): String? {
+        return null
     }
 
     /**
@@ -107,7 +112,7 @@ public class SVGExternalFileResolver {
      * @param mimeType A MIME type (such as "image/jpeg").
      * @return true if your {@code resolveImage()} implementation supports this file format.
      */
-    public boolean isFormatSupported(String mimeType) {
-        return false;
+    fun isFormatSupported(mimeType: String): Boolean {
+        return false
     }
 }

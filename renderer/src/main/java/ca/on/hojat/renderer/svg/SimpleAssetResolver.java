@@ -1,7 +1,5 @@
 package ca.on.hojat.renderer.svg;
 
-import timber.log.Timber;
-
 
 /**
  * A sample implementation of {@link SVGExternalFileResolver} that retrieves files from
@@ -36,76 +34,6 @@ public class SimpleAssetResolver extends SVGExternalFileResolver {
         supportedFormats.add("image/x-windows-bmp");
         // .webp supported in 4.0+ (ICE_CREAM_SANDWICH)
         supportedFormats.add("image/webp");
-    }
-
-
-    /**
-     * Attempt to find the specified font in the "assets" folder and return a Typeface object.
-     * For the font name "Foo", first the file "Foo.ttf" will be tried and if that fails, "Foo.otf".
-     */
-    @Override
-    public android.graphics.Typeface resolveFont(String fontFamily, float fontWeight, String fontStyle, float fontStretch) {
-        Timber.tag(TAG).i("resolveFont('" + fontFamily + "'," + fontWeight + ",'" + fontStyle + "'," + fontStretch + ")");
-
-        // Try font name with suffix ".ttf"
-        try {
-            return android.graphics.Typeface.createFromAsset(assetManager, fontFamily + ".ttf");
-        } catch (RuntimeException ignored) {
-        }
-
-        // That failed, so try ".otf"
-        try {
-            return android.graphics.Typeface.createFromAsset(assetManager, fontFamily + ".otf");
-        } catch (RuntimeException ignored) {
-        }
-
-        // That failed, so try ".ttc" (Truetype collection), if supported on this version of Android
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            android.graphics.Typeface.Builder builder = new android.graphics.Typeface.Builder(assetManager, fontFamily + ".ttc");
-            // Get the first font file in the collection
-            builder.setTtcIndex(0);
-            return builder.build();
-        }
-
-        return null;
-    }
-
-
-    /**
-     * Attempt to find the specified image file in the <code>assets</code> folder and return a decoded Bitmap.
-     */
-    @Override
-    public android.graphics.Bitmap resolveImage(String filename) {
-        timber.log.Timber.tag(TAG).i("resolveImage(" + filename + ")");
-
-        try {
-            java.io.InputStream istream = assetManager.open(filename);
-            return android.graphics.BitmapFactory.decodeStream(istream);
-        } catch (java.io.IOException e1) {
-            return null;
-        }
-    }
-
-
-    /**
-     * Returns true when passed the MIME types for SVG, JPEG, PNG or any of the
-     * other bitmap image formats supported by Android's BitmapFactory class.
-     */
-    @Override
-    public boolean isFormatSupported(String mimeType) {
-        return supportedFormats.contains(mimeType);
-    }
-
-
-    /**
-     * Attempt to find the specified stylesheet file in the "assets" folder and return its string contents.
-     *
-     * @since 1.3
-     */
-    @Override
-    public String resolveCSSStyleSheet(String url) {
-        timber.log.Timber.tag(TAG).i("resolveCSSStyleSheet(" + url + ")");
-        return getAssetAsString(url);
     }
 
 

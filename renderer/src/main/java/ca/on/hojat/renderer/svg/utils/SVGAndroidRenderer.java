@@ -1,46 +1,43 @@
 package ca.on.hojat.renderer.svg.utils;
 
-import ca.on.hojat.renderer.svg.PreserveAspectRatio;
-import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
-
-import android.graphics.Canvas;
-import android.graphics.RectF;
-import android.graphics.Matrix;
-import android.graphics.Path;
-import android.graphics.Paint;
-import android.graphics.Shader;
-import android.graphics.BlendMode;
-import android.graphics.BitmapFactory;
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BlendMode;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.ColorMatrix;
-import android.graphics.Typeface;
-import android.graphics.Rect;
-import android.graphics.LinearGradient;
-import android.graphics.Color;
 import android.graphics.RadialGradient;
-import android.graphics.PathMeasure;
-import android.graphics.DashPathEffect;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.Typeface;
 import android.os.Build;
-
-import ca.on.hojat.renderer.BuildConfig;
 
 import androidx.annotation.NonNull;
 
-import android.annotation.SuppressLint;
-
-import java.util.regex.Pattern;
-import java.util.Objects;
-import java.util.Iterator;
-import java.util.Stack;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Stack;
+import java.util.regex.Pattern;
 
+import ca.on.hojat.renderer.BuildConfig;
+import ca.on.hojat.renderer.svg.PreserveAspectRatio;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
 import timber.log.Timber;
 
 
@@ -49,8 +46,12 @@ import timber.log.Timber;
  */
 
 public class SVGAndroidRenderer {
+    // The feColorMatrix luminance-to-alpha coefficient. Used for <mask>s.
+    // Note we are using the CSS/SVG2 version of the coefficients here, rather than the older SVG1.1 coefficients.
+    public static final float LUMINANCE_TO_ALPHA_RED = 0.2127f;
+    public static final float LUMINANCE_TO_ALPHA_GREEN = 0.7151f;
+    public static final float LUMINANCE_TO_ALPHA_BLUE = 0.0722f;
     private static final String TAG = "SVGAndroidRenderer";
-
     private static final boolean SUPPORTS_FONT_HINTING = true;
     private static final boolean SUPPORTS_STROKED_UNDERLINES = true;
     private static final boolean SUPPORTS_PATH_OP = true;
@@ -61,103 +62,286 @@ public class SVGAndroidRenderer {
     private static final boolean SUPPORTS_PAINT_WORD_SPACING = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
     private static final boolean SUPPORTS_SAVE_LAYER_FLAGLESS = true;
     private static final boolean SUPPORTS_RADIAL_GRADIENT_WITH_FOCUS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
-
     private static final Pattern PATTERN_TABS_OR_LINE_BREAKS = Pattern.compile("[\\n\\t]");
     private static final Pattern PATTERN_TABS = Pattern.compile("\\t");
     private static final Pattern PATTERN_LINE_BREAKS = Pattern.compile("\\n");
     private static final Pattern PATTERN_START_SPACES = Pattern.compile("^\\s+");
     private static final Pattern PATTERN_END_SPACES = Pattern.compile("\\s+$");
     private static final Pattern PATTERN_DOUBLE_SPACES = Pattern.compile("\\s{2,}");
-
+    private static final float BEZIER_ARC_FACTOR = 0.5522847498f;
+    private static final String DEFAULT_FONT_FAMILY = "serif";
+    private static HashSet<String> supportedFeatures = null;
     private final Canvas canvas;
     private final float dpi;    // dots per inch. Needed for accurate conversion of length values that have real world units, such as "cm".
-
+    private final SVGExternalFileResolver externalFileResolver;
     // Renderer state
     private SVGBase document;
     private SVGAndroidRenderer.RendererState state;
     private Stack<SVGAndroidRenderer.RendererState> stateStack;  // Keeps track of render state as we render
-
     // Keep track of element stack while rendering.
     private Stack<SVGBase.SvgContainer> parentStack; // The 'render parent' for elements like Symbol cf. file parent
     private Stack<Matrix> matrixStack; // Keeps track of current transform as we descend into element tree
-
-    private static final float BEZIER_ARC_FACTOR = 0.5522847498f;
-
-    // The feColorMatrix luminance-to-alpha coefficient. Used for <mask>s.
-    // Note we are using the CSS/SVG2 version of the coefficients here, rather than the older SVG1.1 coefficients.
-    public static final float LUMINANCE_TO_ALPHA_RED = 0.2127f;
-    public static final float LUMINANCE_TO_ALPHA_GREEN = 0.7151f;
-    public static final float LUMINANCE_TO_ALPHA_BLUE = 0.0722f;
-
-    private static final String DEFAULT_FONT_FAMILY = "serif";
-
-    private static HashSet<String> supportedFeatures = null;
-
     private CSSParser.RuleMatchContext ruleMatchContext = null;
 
-    private final SVGExternalFileResolver externalFileResolver;
+
+    SVGAndroidRenderer(Canvas canvas, float defaultDPI, SVGExternalFileResolver externalFileResolver) {
+        this.canvas = canvas;
+        this.dpi = defaultDPI;
+        this.externalFileResolver = externalFileResolver;
+    }
+
+    private static void warn(String format, Object... args) {
+        Timber.w(format, args);
+    }
 
 
-    public static class RendererState {
-        Style style;
-        boolean hasFill;
-        boolean hasStroke;
-        SVGBase.Box viewPort;
-        SVGBase.Box viewBox;
-        boolean spacePreserve;
+    /*
+     * Create a new renderer instance.
+     *
+     * @param canvas the canvas to draw to.
+     * @param viewPort the default viewport to be rendered into. For example the dimensions of the bitmap.
+     * @param defaultDPI the DPI setting to use when converting real-world units such as centimetres.
+     */
 
-        final Paint fillPaint;
-        final Paint strokePaint;
+    private static void error(String format, Object... args) {
+        Timber.tag(TAG).e(String.format(format, args));
+    }
 
-        final CSSFontFeatureSettings fontFeatureSet;
-        final CSSFontVariationSettings fontVariationSet;
+    private static void debug(String format, Object... args) {
+        if (BuildConfig.DEBUG)
+            Timber.tag(TAG).d(String.format(format, args));
+    }
 
+    private static synchronized void initialiseSupportedFeaturesMap() {
+        supportedFeatures = new HashSet<>();
+        supportedFeatures.add("Structure");                   // YES (although desc title and metadata are ignored)
+        supportedFeatures.add("BasicStructure");              // YES (although desc title and metadata are ignored)
+        supportedFeatures.add("ConditionalProcessing");       // YES
+        supportedFeatures.add("Image");                       // YES (bitmaps only - not SVG files)
+        supportedFeatures.add("Style");                       // YES
+        supportedFeatures.add("ViewportAttribute");           // YES
+        supportedFeatures.add("Shape");                       // YES
+        supportedFeatures.add("BasicText");                   // YES
+        supportedFeatures.add("PaintAttribute");              // YES (except color-interpolation and color-rendering)
+        supportedFeatures.add("BasicPaintAttribute");         // YES (except color-rendering)
+        supportedFeatures.add("OpacityAttribute");            // YES
+        supportedFeatures.add("BasicGraphicsAttribute");      // YES
+        supportedFeatures.add("Marker");                      // YES
+        supportedFeatures.add("Gradient");                    // YES
+        supportedFeatures.add("Pattern");                     // YES
+        supportedFeatures.add("Clip");                        // YES
+        supportedFeatures.add("BasicClip");                   // YES
+        supportedFeatures.add("Mask");                        // YES
+        supportedFeatures.add("View");                        // YES
 
-        RendererState() {
-            fillPaint = new Paint();
-            fillPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
-            if (SUPPORTS_FONT_HINTING) {
-                fillPaint.setHinting(Paint.HINTING_OFF);
-            }
-            fillPaint.setStyle(Paint.Style.FILL);
-            fillPaint.setTypeface(Typeface.DEFAULT);
+    }
 
-            strokePaint = new Paint();
-            strokePaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
-            if (SUPPORTS_FONT_HINTING) {
-                strokePaint.setHinting(Paint.HINTING_OFF);
-            }
-            strokePaint.setStyle(Paint.Style.STROKE);
-            strokePaint.setTypeface(Typeface.DEFAULT);
+    // Convert a float in range 0..1 to an int in range 0..255.
+    private static int clamp255(float val) {
+        int i = (int) (val * 256f);
+        return (i < 0) ? 0 : Math.min(i, 255);
+    }
 
-            fontFeatureSet = new CSSFontFeatureSettings();
-            fontVariationSet = new CSSFontVariationSettings();
+    private static int colourWithOpacity(int colour, float opacity) {
+        int alpha = (colour >> 24) & 0xff;
+        alpha = Math.round(alpha * opacity);
+        alpha = (alpha < 0) ? 0 : Math.min(alpha, 255);
+        return (alpha << 24) | (colour & 0xffffff);
+    }
 
-            style = Style.getDefaultStyle();
+    private static void arcTo(float lastX, float lastY, float rx, float ry, float angle, boolean largeArcFlag, boolean sweepFlag, float x, float y, SVGBase.PathInterface pather) {
+        if (lastX == x && lastY == y) {
+            // If the endpoints (x, y) and (x0, y0) are identical, then this
+            // is equivalent to omitting the elliptical arc segment entirely.
+            // (behaviour specified by the spec)
+            return;
         }
 
-        RendererState(SVGAndroidRenderer.RendererState copy) {
-            hasFill = copy.hasFill;
-            hasStroke = copy.hasStroke;
-            fillPaint = new Paint(copy.fillPaint);
-            strokePaint = new Paint(copy.strokePaint);
-            if (copy.viewPort != null)
-                viewPort = new SVGBase.Box(copy.viewPort);
-            if (copy.viewBox != null)
-                viewBox = new SVGBase.Box(copy.viewBox);
-            spacePreserve = copy.spacePreserve;
-            fontFeatureSet = new CSSFontFeatureSettings(copy.fontFeatureSet);
-            fontVariationSet = new CSSFontVariationSettings(copy.fontVariationSet);
-            try {
-                style = (Style) copy.style.clone();
-            } catch (CloneNotSupportedException e) {
-                // Should never happen
-                Timber.tag(TAG).e(e, "Unexpected clone error");
-                style = Style.getDefaultStyle();
-            }
+        // Handle degenerate case (behaviour specified by the spec)
+        if (rx == 0 || ry == 0) {
+            pather.lineTo(x, y);
+            return;
+        }
+
+        // Sign of the radii is ignored (behaviour specified by the spec)
+        rx = Math.abs(rx);
+        ry = Math.abs(ry);
+
+        // Convert angle from degrees to radians
+        double angleRad = Math.toRadians(angle % 360.0);
+        double cosAngle = Math.cos(angleRad);
+        double sinAngle = Math.sin(angleRad);
+
+        // We simplify the calculations by transforming the arc so that the origin is at the
+        // midpoint calculated above followed by a rotation to line up the coordinate axes
+        // with the axes of the ellipse.
+
+        // Compute the midpoint of the line between the current and the end point
+        double dx2 = (lastX - x) / 2.0;
+        double dy2 = (lastY - y) / 2.0;
+
+        // Step 1 : Compute (x1', y1')
+        // x1,y1 is the midpoint vector rotated to take the arc's angle out of consideration
+        double x1 = (cosAngle * dx2 + sinAngle * dy2);
+        double y1 = (-sinAngle * dx2 + cosAngle * dy2);
+
+        double rx_sq = rx * rx;
+        double ry_sq = ry * ry;
+        double x1_sq = x1 * x1;
+        double y1_sq = y1 * y1;
+
+        // Check that radii are large enough.
+        // If they are not, the spec says to scale them up so they are.
+        // This is to compensate for potential rounding errors/differences between SVG implementations.
+        double radiiCheck = x1_sq / rx_sq + y1_sq / ry_sq;
+        if (radiiCheck > 0.99999) {
+            double radiiScale = Math.sqrt(radiiCheck) * 1.00001;
+            rx = (float) (radiiScale * rx);
+            ry = (float) (radiiScale * ry);
+            rx_sq = rx * rx;
+            ry_sq = ry * ry;
+        }
+
+        // Step 2 : Compute (cx1, cy1) - the transformed centre point
+        double sign = (largeArcFlag == sweepFlag) ? -1 : 1;
+        double sq = ((rx_sq * ry_sq) - (rx_sq * y1_sq) - (ry_sq * x1_sq)) / ((rx_sq * y1_sq) + (ry_sq * x1_sq));
+        sq = (sq < 0) ? 0 : sq;
+        double coef = (sign * Math.sqrt(sq));
+        double cx1 = coef * ((rx * y1) / ry);
+        double cy1 = coef * -((ry * x1) / rx);
+
+        // Step 3 : Compute (cx, cy) from (cx1, cy1)
+        double sx2 = (lastX + x) / 2.0;
+        double sy2 = (lastY + y) / 2.0;
+        double cx = sx2 + (cosAngle * cx1 - sinAngle * cy1);
+        double cy = sy2 + (sinAngle * cx1 + cosAngle * cy1);
+
+        // Step 4 : Compute the angleStart (angle1) and the angleExtent (dangle)
+        double ux = (x1 - cx1) / rx;
+        double uy = (y1 - cy1) / ry;
+        double vx = (-x1 - cx1) / rx;
+        double vy = (-y1 - cy1) / ry;
+        double p, n;
+
+        // Angle betwen two vectors is +/- acos( u.v / len(u) * len(v))
+        // Where '.' is the dot product. And +/- is calculated from the sign of the cross product (u x v)
+
+        final double TWO_PI = Math.PI * 2.0;
+
+        // Compute the start angle
+        // The angle between (ux,uy) and the 0deg angle (1,0)
+        n = Math.sqrt((ux * ux) + (uy * uy));  // len(u) * len(1,0) == len(u)
+        p = ux;                                // u.v == (ux,uy).(1,0) == (1 * ux) + (0 * uy) == ux
+        sign = (uy < 0) ? -1.0 : 1.0;          // u x v == (1 * uy - ux * 0) == uy
+        double angleStart = sign * Math.acos(p / n);  // No need for checkedArcCos() here. (p >= n) should always be true.
+
+        // Compute the angle extent
+        n = Math.sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
+        p = ux * vx + uy * vy;
+        sign = (ux * vy - uy * vx < 0) ? -1.0f : 1.0f;
+        double angleExtent = sign * checkedArcCos(p / n);
+
+        // Catch angleExtents of 0, which will cause problems later in arcToBeziers
+        if (angleExtent == 0f) {
+            pather.lineTo(x, y);
+            return;
+        }
+
+        if (!sweepFlag && angleExtent > 0) {
+            angleExtent -= TWO_PI;
+        } else if (sweepFlag && angleExtent < 0) {
+            angleExtent += TWO_PI;
+        }
+        angleExtent %= TWO_PI;
+        angleStart %= TWO_PI;
+
+        // Many elliptical arc implementations including the Java2D and Android ones, only
+        // support arcs that are axis aligned.  Therefore we need to substitute the arc
+        // with bezier curves.  The following method call will generate the beziers for
+        // a unit circle that covers the arc angles we want.
+        float[] bezierPoints = arcToBeziers(angleStart, angleExtent);
+
+        // Calculate a transformation matrix that will move and scale these bezier points to the correct location.
+        Matrix m = new Matrix();
+        m.postScale(rx, ry);
+        m.postRotate(angle);
+        m.postTranslate((float) cx, (float) cy);
+        m.mapPoints(bezierPoints);
+
+        // The last point in the bezier set should match exactly the last coord pair in the arc (ie: x,y). But
+        // considering all the mathematical manipulation we have been doing, it is bound to be off by a tiny
+        // fraction. Experiments show that it can be up to around 0.00002.  So why don't we just set it to
+        // exactly what it ought to be.
+        bezierPoints[bezierPoints.length - 2] = x;
+        bezierPoints[bezierPoints.length - 1] = y;
+
+        // Final step is to add the bezier curves to the path
+        for (int i = 0; i < bezierPoints.length; i += 6) {
+            pather.cubicTo(bezierPoints[i], bezierPoints[i + 1], bezierPoints[i + 2], bezierPoints[i + 3], bezierPoints[i + 4], bezierPoints[i + 5]);
         }
     }
 
+
+    //==============================================================================
+    // Render dispatcher
+
+    // Check input to Math.acos() in case rounding or other errors result in a val < -1 or > +1.
+    // For example, see the possible KitKat JIT error described in issue #62.
+    private static double checkedArcCos(double val) {
+        return (val < -1.0) ? Math.PI : (val > 1.0) ? 0 : Math.acos(val);
+    }
+
+
+    //==============================================================================
+
+    /*
+     * Generate the control points and endpoints for a set of bezier curves that match
+     * a circular arc starting from angle 'angleStart' and sweep the angle 'angleExtent'.
+     * The circle the arc follows will be centred on (0,0) and have a radius of 1.0.
+     *
+     * Each bezier can cover no more than 90 degrees, so the arc will be divided evenly
+     * into a maximum of four curves.
+     *
+     * The resulting control points will later be scaled and rotated to match the final
+     * arc required.
+     *
+     * The returned array has the format [x0,y0, x1,y1,...] and excludes the start point
+     * of the arc.
+     */
+    private static float[] arcToBeziers(double angleStart, double angleExtent) {
+        int numSegments = (int) Math.ceil(Math.abs(angleExtent) * 2.0 / Math.PI);  // (angleExtent / 90deg)
+
+        double angleIncrement = angleExtent / numSegments;
+
+        // The length of each control point vector is given by the following formula.
+        double controlLength = 4.0 / 3.0 * Math.sin(angleIncrement / 2.0) / (1.0 + Math.cos(angleIncrement / 2.0));
+
+        float[] coords = new float[numSegments * 6];
+        int pos = 0;
+
+        for (int i = 0; i < numSegments; i++) {
+            double angle = angleStart + i * angleIncrement;
+            // Calculate the control vector at this angle
+            double dx = Math.cos(angle);
+            double dy = Math.sin(angle);
+            // First control point
+            coords[pos++] = (float) (dx - controlLength * dy);
+            coords[pos++] = (float) (dy + controlLength * dx);
+            // Second control point
+            angle += angleIncrement;
+            dx = Math.cos(angle);
+            dy = Math.sin(angle);
+            coords[pos++] = (float) (dx + controlLength * dy);
+            coords[pos++] = (float) (dy - controlLength * dx);
+            // Endpoint of bezier
+            coords[pos++] = (float) dx;
+            coords[pos++] = (float) dy;
+        }
+        return coords;
+    }
+
+
+    //==============================================================================
 
     private void resetState() {
         state = new SVGAndroidRenderer.RendererState();
@@ -179,37 +363,18 @@ public class SVGAndroidRenderer {
         parentStack = new Stack<>();
     }
 
-
-    /*
-     * Create a new renderer instance.
-     *
-     * @param canvas the canvas to draw to.
-     * @param viewPort the default viewport to be rendered into. For example the dimensions of the bitmap.
-     * @param defaultDPI the DPI setting to use when converting real-world units such as centimetres.
-     */
-
-    SVGAndroidRenderer(Canvas canvas, float defaultDPI, SVGExternalFileResolver externalFileResolver) {
-        this.canvas = canvas;
-        this.dpi = defaultDPI;
-        this.externalFileResolver = externalFileResolver;
-    }
-
-
     float getDPI() {
         return dpi;
     }
-
 
     float getCurrentFontSize() {
         return state.fillPaint.getTextSize();
     }
 
-
     float getCurrentFontXHeight() {
         // The CSS3 spec says to use 0.5em if there is no way to determine true x-height;
         return state.fillPaint.getTextSize() / 2f;
     }
-
 
     /*
      * Get the current view port in user units.
@@ -222,7 +387,6 @@ public class SVGAndroidRenderer {
         else
             return state.viewPort;
     }
-
 
     /*
      * Render the whole document.
@@ -247,13 +411,13 @@ public class SVGAndroidRenderer {
         if (renderOptions.hasView()) {
             SVGBase.SvgObject obj = this.document.getElementById(renderOptions.viewId);
             if (!(obj instanceof SVGBase.View)) {
-                Timber.tag(TAG).w(String.format("View element with id \"%s\" not found.", renderOptions.viewId));
+                Timber.w("View element with id \"%s\" not found.", renderOptions.viewId);
                 return;
             }
             SVGBase.View view = (SVGBase.View) obj;
 
             if (view.viewBox == null) {
-                Timber.tag(TAG).w(String.format("View element with id \"%s\" is missing a viewBox attribute.", renderOptions.viewId));
+                Timber.w("View element with id \"%s\" is missing a viewBox attribute.", renderOptions.viewId);
                 return;
             }
             viewBox = view.viewBox;
@@ -303,11 +467,6 @@ public class SVGAndroidRenderer {
             document.clearRenderCSSRules();
     }
 
-
-    //==============================================================================
-    // Render dispatcher
-
-
     private void render(SVGBase.SvgObject obj) {
         if (obj instanceof SVGBase.NotDirectlyRendered)
             return;
@@ -349,10 +508,6 @@ public class SVGAndroidRenderer {
         statePop();
     }
 
-
-    //==============================================================================
-
-
     private void renderChildren(SVGBase.SvgContainer obj, boolean isContainer) {
         if (isContainer) {
             parentPush(obj);
@@ -366,10 +521,6 @@ public class SVGAndroidRenderer {
             parentPop();
         }
     }
-
-
-    //==============================================================================
-
 
     private void statePush() {
         statePush(false);
@@ -389,13 +540,14 @@ public class SVGAndroidRenderer {
     }
 
 
+    //==============================================================================
+
     private void statePop() {
         // Restore matrix and clip
         canvas.restore();
         // Restore style state
         state = stateStack.pop();
     }
-
 
     /*
      * Canvas#saveLayer(bounds, paint, flags) is deprecated in SDK 28 and might be
@@ -412,12 +564,14 @@ public class SVGAndroidRenderer {
         }
     }
 
-
     private void parentPush(SVGBase.SvgContainer obj) {
         parentStack.push(obj);
         matrixStack.push(canvas.getMatrix());
     }
 
+
+    //==============================================================================
+    // Renderers for each element type
 
     private void parentPop() {
         parentStack.pop();
@@ -446,7 +600,6 @@ public class SVGAndroidRenderer {
             updateStyle(state, obj.style);
     }
 
-
     /*
      * Check and update xml:space handling.
      */
@@ -458,7 +611,6 @@ public class SVGAndroidRenderer {
         if (bobj.spacePreserve != null)
             state.spacePreserve = bobj.spacePreserve;
     }
-
 
     /*
      * Fill a path with either the given paint, or if a pattern is set, with the pattern.
@@ -478,6 +630,8 @@ public class SVGAndroidRenderer {
         canvas.drawPath(path, state.fillPaint);
     }
 
+
+    //==============================================================================
 
     private void doStroke(Path path) {
         // TODO handle degenerate subpaths properly
@@ -520,27 +674,6 @@ public class SVGAndroidRenderer {
 
     //==============================================================================
 
-
-    private static void warn(String format, Object... args) {
-        Timber.tag(TAG).w(String.format(format, args));
-    }
-
-
-    private static void error(String format, Object... args) {
-        Timber.tag(TAG).e(String.format(format, args));
-    }
-
-
-    private static void debug(String format, Object... args) {
-        if (BuildConfig.DEBUG)
-            Timber.tag(TAG).d(String.format(format, args));
-    }
-
-
-    //==============================================================================
-    // Renderers for each element type
-
-
     private void render(SVGBase.Svg obj) {
         // <svg> elements establish a new viewport.
         SVGBase.Box viewPort = makeViewPort(obj.x, obj.y, obj.width, obj.height);
@@ -549,11 +682,12 @@ public class SVGAndroidRenderer {
     }
 
 
+    //==============================================================================
+
     // When referenced by a <use> element, it's width and height take precedence over the ones in the <svg> object.
     private void render(SVGBase.Svg obj, SVGBase.Box viewPort) {
         render(obj, viewPort, obj.viewBox, obj.preserveAspectRatio);
     }
-
 
     // When called from renderDocument, we pass in our own viewBox.
     // If rendering the whole document, it will be rootObj.viewBox.  When rendering a view
@@ -602,7 +736,6 @@ public class SVGAndroidRenderer {
         updateParentBoundingBox(obj);
     }
 
-
     // Derive the viewport from the x, y, width and height attributes of an object
     private SVGBase.Box makeViewPort(SVGBase.Length x, SVGBase.Length y, SVGBase.Length width, SVGBase.Length height) {
         float _x = (x != null) ? x.floatValueX(this) : 0f;
@@ -614,10 +747,6 @@ public class SVGAndroidRenderer {
 
         return new SVGBase.Box(_x, _y, _w, _h);
     }
-
-
-    //==============================================================================
-
 
     // Render <g> and <a> elements
     private void render(SVGBase.Group obj) {
@@ -643,10 +772,6 @@ public class SVGAndroidRenderer {
 
         updateParentBoundingBox(obj);
     }
-
-
-    //==============================================================================
-
 
     /*
      * Called by an object to update it's parent's bounding box.
@@ -688,14 +813,12 @@ public class SVGAndroidRenderer {
         }
     }
 
-
-    //==============================================================================
-
-
     private boolean pushLayer() {
         return pushLayer(1f);
     }
 
+
+    //==============================================================================
 
     private boolean pushLayer(float opacityAdjustment) {
         // opacityAdjustment is used by fillWithPattern() in order to apply the fillOpacity for the
@@ -733,11 +856,9 @@ public class SVGAndroidRenderer {
         return true;
     }
 
-
     private void popLayer(SVGBase.SvgElement obj) {
         popLayer(obj, obj.boundingBox);
     }
-
 
     /**
      * @param obj             The object we are compositing. Compositing happens if the obj is not fully opaque, or if it has a mask.
@@ -792,6 +913,8 @@ public class SVGAndroidRenderer {
     }
 
 
+    //==============================================================================
+
     private boolean requiresCompositing() {
         return (state.style.opacity < 1.0f) ||
                 (state.style.mask != null) ||
@@ -799,6 +922,8 @@ public class SVGAndroidRenderer {
                 (SUPPORTS_BLEND_MODE && state.style.mixBlendMode != Style.CSSBlendMode.normal);
     }
 
+
+    //==============================================================================
 
     @android.annotation.TargetApi(Build.VERSION_CODES.Q)
     private void setBlendMode(Paint paint) {
@@ -856,10 +981,6 @@ public class SVGAndroidRenderer {
         }
     }
 
-
-    //==============================================================================
-
-
     /*
      * Find the first child of the switch that passes the feature tests and render only that child.
      */
@@ -887,6 +1008,8 @@ public class SVGAndroidRenderer {
         updateParentBoundingBox(obj);
     }
 
+
+    //==============================================================================
 
     private void renderSwitchChild(SVGBase.Switch obj) {
         String deviceLanguage = Locale.getDefault().getLanguage();
@@ -945,33 +1068,7 @@ public class SVGAndroidRenderer {
     }
 
 
-    private static synchronized void initialiseSupportedFeaturesMap() {
-        supportedFeatures = new HashSet<>();
-        supportedFeatures.add("Structure");                   // YES (although desc title and metadata are ignored)
-        supportedFeatures.add("BasicStructure");              // YES (although desc title and metadata are ignored)
-        supportedFeatures.add("ConditionalProcessing");       // YES
-        supportedFeatures.add("Image");                       // YES (bitmaps only - not SVG files)
-        supportedFeatures.add("Style");                       // YES
-        supportedFeatures.add("ViewportAttribute");           // YES
-        supportedFeatures.add("Shape");                       // YES
-        supportedFeatures.add("BasicText");                   // YES
-        supportedFeatures.add("PaintAttribute");              // YES (except color-interpolation and color-rendering)
-        supportedFeatures.add("BasicPaintAttribute");         // YES (except color-rendering)
-        supportedFeatures.add("OpacityAttribute");            // YES
-        supportedFeatures.add("BasicGraphicsAttribute");      // YES
-        supportedFeatures.add("Marker");                      // YES
-        supportedFeatures.add("Gradient");                    // YES
-        supportedFeatures.add("Pattern");                     // YES
-        supportedFeatures.add("Clip");                        // YES
-        supportedFeatures.add("BasicClip");                   // YES
-        supportedFeatures.add("Mask");                        // YES
-        supportedFeatures.add("View");                        // YES
-
-    }
-
-
     //==============================================================================
-
 
     private void render(SVGBase.Use obj) {
         debug("Use render");
@@ -1037,7 +1134,6 @@ public class SVGAndroidRenderer {
 
     //==============================================================================
 
-
     private void render(SVGBase.Path obj) {
         debug("Path render");
 
@@ -1082,15 +1178,13 @@ public class SVGAndroidRenderer {
     }
 
 
+    //==============================================================================
+
     private SVGBase.Box calculatePathBounds(Path path) {
         RectF pathBounds = new RectF();
         path.computeBounds(pathBounds, true);
         return new SVGBase.Box(pathBounds.left, pathBounds.top, pathBounds.width(), pathBounds.height());
     }
-
-
-    //==============================================================================
-
 
     private void render(SVGBase.Rect obj) {
         debug("Rect render");
@@ -1129,7 +1223,6 @@ public class SVGAndroidRenderer {
 
     //==============================================================================
 
-
     private void render(SVGBase.Circle obj) {
         debug("Circle render");
 
@@ -1162,10 +1255,6 @@ public class SVGAndroidRenderer {
         if (compositing)
             popLayer(obj);
     }
-
-
-    //==============================================================================
-
 
     private void render(SVGBase.Ellipse obj) {
         debug("Ellipse render");
@@ -1203,7 +1292,6 @@ public class SVGAndroidRenderer {
 
     //==============================================================================
 
-
     private void render(SVGBase.Line obj) {
         debug("Line render");
 
@@ -1236,6 +1324,8 @@ public class SVGAndroidRenderer {
     }
 
 
+    //==============================================================================
+
     private List<SVGAndroidRenderer.MarkerVector> calculateMarkerPositions(SVGBase.Line obj) {
         float _x1, _y1, _x2, _y2;
         _x1 = (obj.x1 != null) ? obj.x1.floatValueX(this) : 0f;
@@ -1248,10 +1338,6 @@ public class SVGAndroidRenderer {
         markers.add(new SVGAndroidRenderer.MarkerVector(_x2, _y2, (_x2 - _x1), (_y2 - _y1)));
         return markers;
     }
-
-
-    //==============================================================================
-
 
     private void render(SVGBase.PolyLine obj) {
         debug("PolyLine render");
@@ -1295,7 +1381,6 @@ public class SVGAndroidRenderer {
             popLayer(obj);
     }
 
-
     private List<SVGAndroidRenderer.MarkerVector> calculateMarkerPositions(SVGBase.PolyLine obj) {
         int numPoints = (obj.points != null) ? obj.points.length : 0;
         if (numPoints < 2)
@@ -1332,10 +1417,6 @@ public class SVGAndroidRenderer {
         }
         return markers;
     }
-
-
-    //==============================================================================
-
 
     private void render(SVGBase.Polygon obj) {
         debug("Polygon render");
@@ -1377,7 +1458,7 @@ public class SVGAndroidRenderer {
 
 
     //==============================================================================
-
+    // Text sequence enumeration
 
     private void render(SVGBase.Text obj) {
         debug("Text render");
@@ -1427,7 +1508,6 @@ public class SVGAndroidRenderer {
             popLayer(obj);
     }
 
-
     private void selectTypefaceAndFontStyling() {
         Typeface font = null;
 
@@ -1474,7 +1554,6 @@ public class SVGAndroidRenderer {
         }
     }
 
-
     private Style.TextAnchor getAnchorPosition() {
         if (state.style.direction == Style.TextDirection.LTR || state.style.textAnchor == Style.TextAnchor.Middle)
             return state.style.textAnchor;
@@ -1484,47 +1563,7 @@ public class SVGAndroidRenderer {
     }
 
 
-    private class PlainTextDrawer extends SVGAndroidRenderer.TextProcessor {
-        float x;
-        float y;
-
-        PlainTextDrawer(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public void processText(String text) {
-            debug("TextSequence render");
-
-            if (visible()) {
-                // Android/Skia divides letterspacing and puts half before and after each letter.
-                // We need to readjust initial text X position to counter that.
-                float letterspacingAdj = SUPPORTS_PAINT_LETTER_SPACING ? state.style.letterSpacing.floatValue(SVGAndroidRenderer.this) / 2 : 0;
-                if (state.hasFill)
-                    canvas.drawText(text, x - letterspacingAdj, y, state.fillPaint);
-                if (state.hasStroke)
-                    canvas.drawText(text, x - letterspacingAdj, y, state.strokePaint);
-            }
-
-            // Update the current text position
-            x += measureText(text, state.fillPaint);
-        }
-    }
-
-
     //==============================================================================
-    // Text sequence enumeration
-
-
-    private static abstract class TextProcessor {
-        public boolean doTextContainer(SVGBase.TextContainer obj) {
-            return true;
-        }
-
-        public abstract void processText(String text);
-    }
-
 
     /*
      * Given a text container, recursively visit its children invoking the TextDrawer
@@ -1548,7 +1587,6 @@ public class SVGAndroidRenderer {
             isFirstChild = false;
         }
     }
-
 
     private void processTextChild(SVGBase.SvgObject obj, SVGAndroidRenderer.TextProcessor textprocessor) {
         // Ask the processor implementation if it wants to process this object
@@ -1648,7 +1686,6 @@ public class SVGAndroidRenderer {
 
     //==============================================================================
 
-
     private void renderTextPath(SVGBase.TextPath obj) {
         debug("TextPath render");
 
@@ -1698,36 +1735,6 @@ public class SVGAndroidRenderer {
             popLayer(obj);
     }
 
-
-    private class PathTextDrawer extends SVGAndroidRenderer.PlainTextDrawer {
-        private final Path path;
-
-        PathTextDrawer(Path path, float x, float y) {
-            super(x, y);
-            this.path = path;
-        }
-
-        @Override
-        public void processText(String text) {
-            if (visible()) {
-                // Android/Skia divides letterspacing and puts half before and after each letter.
-                // We need to readjust initial text X position to counter that.
-                float letterspacingAdj = SUPPORTS_PAINT_LETTER_SPACING ? state.style.letterSpacing.floatValue(SVGAndroidRenderer.this) / 2 : 0;
-                if (state.hasFill)
-                    canvas.drawTextOnPath(text, path, x - letterspacingAdj, y, state.fillPaint);
-                if (state.hasStroke)
-                    canvas.drawTextOnPath(text, path, x - letterspacingAdj, y, state.strokePaint);
-            }
-
-            // Update the current text position
-            x += measureText(text, state.fillPaint);
-        }
-    }
-
-
-    //==============================================================================
-
-
     /*
      * Calculate the approximate width of this line of text.
      * To simplify, we will ignore font changes and just assume that all the text
@@ -1738,16 +1745,6 @@ public class SVGAndroidRenderer {
         enumerateTextSpans(parentTextObj, proc);
         return proc.x;
     }
-
-    private class TextWidthCalculator extends SVGAndroidRenderer.TextProcessor {
-        float x = 0;
-
-        @Override
-        public void processText(String text) {
-            x += measureText(text, state.fillPaint);
-        }
-    }
-
 
     /*
      * Calculate an accurate text width.
@@ -1766,62 +1763,6 @@ public class SVGAndroidRenderer {
 
 
     //==============================================================================
-
-
-    /*
-     * Use the TextDrawer process to determine the bounds of a <text> element
-     */
-    private class TextBoundsCalculator extends SVGAndroidRenderer.TextProcessor {
-        float x;
-        float y;
-        final RectF bbox = new RectF();
-
-        TextBoundsCalculator(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        @Override
-        public boolean doTextContainer(SVGBase.TextContainer obj) {
-            if (obj instanceof SVGBase.TextPath) {
-                // Since we cheat a bit with our textPath rendering, we need
-                // to cheat a bit with our bbox calculation.
-                SVGBase.TextPath tpath = (SVGBase.TextPath) obj;
-                SVGBase.SvgObject ref = obj.document.resolveIRI(tpath.href);
-                if (ref == null) {
-                    error("TextPath path reference '%s' not found", tpath.href);
-                    return false;
-                }
-                SVGBase.Path pathObj = (SVGBase.Path) ref;
-                Path path = (new SVGAndroidRenderer.PathConverter(pathObj.d)).getPath();
-                if (pathObj.transform != null)
-                    path.transform(pathObj.transform);
-                RectF pathBounds = new RectF();
-                path.computeBounds(pathBounds, true);
-                bbox.union(pathBounds);
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public void processText(String text) {
-            if (visible()) {
-                Rect rect = new Rect();
-                // Get text bounding box (for offset 0)
-                state.fillPaint.getTextBounds(text, 0, text.length(), rect);
-                RectF textbounds = new RectF(rect);
-                // Adjust bounds to offset at text position
-                textbounds.offset(x, y);
-                // Merge with accumulated bounding box
-                bbox.union(textbounds);
-            }
-
-            // Update the current text position
-            x += measureText(text, state.fillPaint);
-        }
-    }
-
 
     /*
      * Extract the raw text from a TextContainer. Used by <tref> handler code.
@@ -1842,9 +1783,6 @@ public class SVGAndroidRenderer {
         }
     }
 
-
-    //==============================================================================
-
     // Process the text string according to the xml:space rules
     private String textXMLSpaceTransform(String text, boolean isFirstChild, boolean isLastChild) {
         if (state.spacePreserve)  // xml:space = "preserve"
@@ -1863,7 +1801,6 @@ public class SVGAndroidRenderer {
 
 
     //==============================================================================
-
 
     private void render(SVGBase.Symbol obj, SVGBase.Box viewPort) {
         debug("Symbol render");
@@ -1902,7 +1839,6 @@ public class SVGAndroidRenderer {
 
 
     //==============================================================================
-
 
     private void render(SVGBase.Image obj) {
         debug("Image render");
@@ -1978,7 +1914,6 @@ public class SVGAndroidRenderer {
 
     //==============================================================================
 
-
     /*
      * Check for and decode an image encoded in a data URL.
      * We don't handle all permutations of data URLs. Only base64 ones.
@@ -2004,19 +1939,19 @@ public class SVGAndroidRenderer {
     }
 
 
+    //==============================================================================
+
     private boolean display() {
         if (state.style.display != null)
             return state.style.display;
         return true;
     }
 
-
     private boolean visible() {
         if (state.style.visibility != null)
             return state.style.visibility;
         return true;
     }
-
 
     /*
      * Calculate the transform required to fit the supplied viewBox into the current viewPort.
@@ -2094,11 +2029,9 @@ public class SVGAndroidRenderer {
         return m;
     }
 
-
     private boolean isSpecified(Style style, long flag) {
         return (style.specifiedFlags & flag) != 0;
     }
-
 
     /*
      * Updates the global style state with the style defined by the current object.
@@ -2434,7 +2367,6 @@ public class SVGAndroidRenderer {
 
     }
 
-
     private void setPaintColour(SVGAndroidRenderer.RendererState state, boolean isFill, SVGBase.SvgPaint paint) {
         float paintOpacity = (isFill) ? state.style.fillOpacity : state.style.strokeOpacity;
         int col;
@@ -2451,7 +2383,6 @@ public class SVGAndroidRenderer {
         else
             state.strokePaint.setColor(col);
     }
-
 
     private Typeface checkGenericFont(String fontName, Float fontWeight, Style.FontStyle fontStyle) {
         Typeface font = null;
@@ -2477,29 +2408,12 @@ public class SVGAndroidRenderer {
         return font;
     }
 
-
-    // Convert a float in range 0..1 to an int in range 0..255.
-    private static int clamp255(float val) {
-        int i = (int) (val * 256f);
-        return (i < 0) ? 0 : Math.min(i, 255);
-    }
-
-
-    private static int colourWithOpacity(int colour, float opacity) {
-        int alpha = (colour >> 24) & 0xff;
-        alpha = Math.round(alpha * opacity);
-        alpha = (alpha < 0) ? 0 : Math.min(alpha, 255);
-        return (alpha << 24) | (colour & 0xffffff);
-    }
-
-
     private Path.FillType getFillTypeFromState() {
         if (state.style.fillRule != null && state.style.fillRule == Style.FillRule.EvenOdd)
             return Path.FillType.EVEN_ODD;
         else
             return Path.FillType.WINDING;
     }
-
 
     private void setClipRect(float minX, float minY, float width, float height) {
         float left = minX;
@@ -2516,7 +2430,6 @@ public class SVGAndroidRenderer {
 
         canvas.clipRect(left, top, right, bottom);
     }
-
 
     /*
      * Viewport fill colour. A new feature in SVG 1.2.
@@ -2535,445 +2448,6 @@ public class SVGAndroidRenderer {
 
         canvas.drawColor(col);
     }
-
-
-    //==============================================================================
-
-    /*
-     *  Convert an internal PathDefinition to an Path object
-     */
-    protected static class PathConverter implements SVGBase.PathInterface {
-        final Path path = new Path();
-        float lastX, lastY;
-
-        PathConverter(SVGBase.PathDefinition pathDef) {
-            if (pathDef == null)
-                return;
-            pathDef.enumeratePath(this);
-        }
-
-        Path getPath() {
-            return path;
-        }
-
-        @Override
-        public void moveTo(float x, float y) {
-            path.moveTo(x, y);
-            lastX = x;
-            lastY = y;
-        }
-
-        @Override
-        public void lineTo(float x, float y) {
-            path.lineTo(x, y);
-            lastX = x;
-            lastY = y;
-        }
-
-        @Override
-        public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
-            path.cubicTo(x1, y1, x2, y2, x3, y3);
-            lastX = x3;
-            lastY = y3;
-        }
-
-        @Override
-        public void quadTo(float x1, float y1, float x2, float y2) {
-            path.quadTo(x1, y1, x2, y2);
-            lastX = x2;
-            lastY = y2;
-        }
-
-        @Override
-        public void arcTo(float rx, float ry, float xAxisRotation, boolean largeArcFlag, boolean sweepFlag, float x, float y) {
-            SVGAndroidRenderer.arcTo(lastX, lastY, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y, this);
-            lastX = x;
-            lastY = y;
-        }
-
-        @Override
-        public void close() {
-            path.close();
-        }
-
-    }
-
-
-    //=========================================================================
-    // Handling of Arcs
-
-    /*
-     * SVG arc representation uses "endpoint parameterisation" where we specify the start and endpoint of the arc.
-     * This is to be consistent with the other path commands.  However we need to convert this to "centre point
-     * parameterisation" in order to calculate the arc. Handily, the SVG spec provides all the required maths
-     * in section "F.6 Elliptical arc implementation notes".
-     *
-     * Some of this code has been borrowed from the Batik library (Apache-2 license).
-     *
-     * Previously, to work around issue #62, we converted this function to use floats. However in issue #155,
-     * we discovered that there are some arcs that fail due of a lack of precision. So we have switched back to doubles.
-     */
-
-    private static void arcTo(float lastX, float lastY, float rx, float ry, float angle, boolean largeArcFlag, boolean sweepFlag, float x, float y, SVGBase.PathInterface pather) {
-        if (lastX == x && lastY == y) {
-            // If the endpoints (x, y) and (x0, y0) are identical, then this
-            // is equivalent to omitting the elliptical arc segment entirely.
-            // (behaviour specified by the spec)
-            return;
-        }
-
-        // Handle degenerate case (behaviour specified by the spec)
-        if (rx == 0 || ry == 0) {
-            pather.lineTo(x, y);
-            return;
-        }
-
-        // Sign of the radii is ignored (behaviour specified by the spec)
-        rx = Math.abs(rx);
-        ry = Math.abs(ry);
-
-        // Convert angle from degrees to radians
-        double angleRad = Math.toRadians(angle % 360.0);
-        double cosAngle = Math.cos(angleRad);
-        double sinAngle = Math.sin(angleRad);
-
-        // We simplify the calculations by transforming the arc so that the origin is at the
-        // midpoint calculated above followed by a rotation to line up the coordinate axes
-        // with the axes of the ellipse.
-
-        // Compute the midpoint of the line between the current and the end point
-        double dx2 = (lastX - x) / 2.0;
-        double dy2 = (lastY - y) / 2.0;
-
-        // Step 1 : Compute (x1', y1')
-        // x1,y1 is the midpoint vector rotated to take the arc's angle out of consideration
-        double x1 = (cosAngle * dx2 + sinAngle * dy2);
-        double y1 = (-sinAngle * dx2 + cosAngle * dy2);
-
-        double rx_sq = rx * rx;
-        double ry_sq = ry * ry;
-        double x1_sq = x1 * x1;
-        double y1_sq = y1 * y1;
-
-        // Check that radii are large enough.
-        // If they are not, the spec says to scale them up so they are.
-        // This is to compensate for potential rounding errors/differences between SVG implementations.
-        double radiiCheck = x1_sq / rx_sq + y1_sq / ry_sq;
-        if (radiiCheck > 0.99999) {
-            double radiiScale = Math.sqrt(radiiCheck) * 1.00001;
-            rx = (float) (radiiScale * rx);
-            ry = (float) (radiiScale * ry);
-            rx_sq = rx * rx;
-            ry_sq = ry * ry;
-        }
-
-        // Step 2 : Compute (cx1, cy1) - the transformed centre point
-        double sign = (largeArcFlag == sweepFlag) ? -1 : 1;
-        double sq = ((rx_sq * ry_sq) - (rx_sq * y1_sq) - (ry_sq * x1_sq)) / ((rx_sq * y1_sq) + (ry_sq * x1_sq));
-        sq = (sq < 0) ? 0 : sq;
-        double coef = (sign * Math.sqrt(sq));
-        double cx1 = coef * ((rx * y1) / ry);
-        double cy1 = coef * -((ry * x1) / rx);
-
-        // Step 3 : Compute (cx, cy) from (cx1, cy1)
-        double sx2 = (lastX + x) / 2.0;
-        double sy2 = (lastY + y) / 2.0;
-        double cx = sx2 + (cosAngle * cx1 - sinAngle * cy1);
-        double cy = sy2 + (sinAngle * cx1 + cosAngle * cy1);
-
-        // Step 4 : Compute the angleStart (angle1) and the angleExtent (dangle)
-        double ux = (x1 - cx1) / rx;
-        double uy = (y1 - cy1) / ry;
-        double vx = (-x1 - cx1) / rx;
-        double vy = (-y1 - cy1) / ry;
-        double p, n;
-
-        // Angle betwen two vectors is +/- acos( u.v / len(u) * len(v))
-        // Where '.' is the dot product. And +/- is calculated from the sign of the cross product (u x v)
-
-        final double TWO_PI = Math.PI * 2.0;
-
-        // Compute the start angle
-        // The angle between (ux,uy) and the 0deg angle (1,0)
-        n = Math.sqrt((ux * ux) + (uy * uy));  // len(u) * len(1,0) == len(u)
-        p = ux;                                // u.v == (ux,uy).(1,0) == (1 * ux) + (0 * uy) == ux
-        sign = (uy < 0) ? -1.0 : 1.0;          // u x v == (1 * uy - ux * 0) == uy
-        double angleStart = sign * Math.acos(p / n);  // No need for checkedArcCos() here. (p >= n) should always be true.
-
-        // Compute the angle extent
-        n = Math.sqrt((ux * ux + uy * uy) * (vx * vx + vy * vy));
-        p = ux * vx + uy * vy;
-        sign = (ux * vy - uy * vx < 0) ? -1.0f : 1.0f;
-        double angleExtent = sign * checkedArcCos(p / n);
-
-        // Catch angleExtents of 0, which will cause problems later in arcToBeziers
-        if (angleExtent == 0f) {
-            pather.lineTo(x, y);
-            return;
-        }
-
-        if (!sweepFlag && angleExtent > 0) {
-            angleExtent -= TWO_PI;
-        } else if (sweepFlag && angleExtent < 0) {
-            angleExtent += TWO_PI;
-        }
-        angleExtent %= TWO_PI;
-        angleStart %= TWO_PI;
-
-        // Many elliptical arc implementations including the Java2D and Android ones, only
-        // support arcs that are axis aligned.  Therefore we need to substitute the arc
-        // with bezier curves.  The following method call will generate the beziers for
-        // a unit circle that covers the arc angles we want.
-        float[] bezierPoints = arcToBeziers(angleStart, angleExtent);
-
-        // Calculate a transformation matrix that will move and scale these bezier points to the correct location.
-        Matrix m = new Matrix();
-        m.postScale(rx, ry);
-        m.postRotate(angle);
-        m.postTranslate((float) cx, (float) cy);
-        m.mapPoints(bezierPoints);
-
-        // The last point in the bezier set should match exactly the last coord pair in the arc (ie: x,y). But
-        // considering all the mathematical manipulation we have been doing, it is bound to be off by a tiny
-        // fraction. Experiments show that it can be up to around 0.00002.  So why don't we just set it to
-        // exactly what it ought to be.
-        bezierPoints[bezierPoints.length - 2] = x;
-        bezierPoints[bezierPoints.length - 1] = y;
-
-        // Final step is to add the bezier curves to the path
-        for (int i = 0; i < bezierPoints.length; i += 6) {
-            pather.cubicTo(bezierPoints[i], bezierPoints[i + 1], bezierPoints[i + 2], bezierPoints[i + 3], bezierPoints[i + 4], bezierPoints[i + 5]);
-        }
-    }
-
-
-    // Check input to Math.acos() in case rounding or other errors result in a val < -1 or > +1.
-    // For example, see the possible KitKat JIT error described in issue #62.
-    private static double checkedArcCos(double val) {
-        return (val < -1.0) ? Math.PI : (val > 1.0) ? 0 : Math.acos(val);
-    }
-
-
-    /*
-     * Generate the control points and endpoints for a set of bezier curves that match
-     * a circular arc starting from angle 'angleStart' and sweep the angle 'angleExtent'.
-     * The circle the arc follows will be centred on (0,0) and have a radius of 1.0.
-     *
-     * Each bezier can cover no more than 90 degrees, so the arc will be divided evenly
-     * into a maximum of four curves.
-     *
-     * The resulting control points will later be scaled and rotated to match the final
-     * arc required.
-     *
-     * The returned array has the format [x0,y0, x1,y1,...] and excludes the start point
-     * of the arc.
-     */
-    private static float[] arcToBeziers(double angleStart, double angleExtent) {
-        int numSegments = (int) Math.ceil(Math.abs(angleExtent) * 2.0 / Math.PI);  // (angleExtent / 90deg)
-
-        double angleIncrement = angleExtent / numSegments;
-
-        // The length of each control point vector is given by the following formula.
-        double controlLength = 4.0 / 3.0 * Math.sin(angleIncrement / 2.0) / (1.0 + Math.cos(angleIncrement / 2.0));
-
-        float[] coords = new float[numSegments * 6];
-        int pos = 0;
-
-        for (int i = 0; i < numSegments; i++) {
-            double angle = angleStart + i * angleIncrement;
-            // Calculate the control vector at this angle
-            double dx = Math.cos(angle);
-            double dy = Math.sin(angle);
-            // First control point
-            coords[pos++] = (float) (dx - controlLength * dy);
-            coords[pos++] = (float) (dy + controlLength * dx);
-            // Second control point
-            angle += angleIncrement;
-            dx = Math.cos(angle);
-            dy = Math.sin(angle);
-            coords[pos++] = (float) (dx + controlLength * dy);
-            coords[pos++] = (float) (dy - controlLength * dx);
-            // Endpoint of bezier
-            coords[pos++] = (float) dx;
-            coords[pos++] = (float) dy;
-        }
-        return coords;
-    }
-
-
-    //==============================================================================
-    // Marker handling
-    //==============================================================================
-
-
-    private static class MarkerVector {
-        final float x, y;
-        float dx = 0f, dy = 0f;
-        boolean isAmbiguous = false;
-
-        MarkerVector(float x, float y, float dx, float dy) {
-            this.x = x;
-            this.y = y;
-            // normalise direction vector
-            double len = Math.sqrt(dx * dx + dy * dy);
-            if (len != 0) {
-                this.dx = (float) (dx / len);
-                this.dy = (float) (dy / len);
-            }
-        }
-
-        void add(float x, float y) {
-            // In order to get accurate angles, we have to normalise
-            // all vectors before we add them.  As long as they are
-            // all the same length, the angles will work out correctly.
-            float dx = (x - this.x);
-            float dy = (y - this.y);
-            double len = Math.sqrt(dx * dx + dy * dy);
-            if (len != 0) {
-                dx = (float) (dx / len);
-                dy = (float) (dy / len);
-            }
-            // Check for degenerate result where the two unit vectors cancelled each other out
-            if (dx == -this.dx && dy == -this.dy) {
-                this.isAmbiguous = true;
-                // Choose one of the perpendiculars now. We will get a chance to switch it later.
-                this.dx = -dy;
-                this.dy = dx;
-            } else {
-                this.dx += dx;
-                this.dy += dy;
-            }
-        }
-
-        void add(SVGAndroidRenderer.MarkerVector v2) {
-            // Check for degenerate result where the two unit vectors cancelled each other out
-            if (v2.dx == -this.dx && v2.dy == -this.dy) {
-                this.isAmbiguous = true;
-                // Choose one of the perpendiculars now. We will get a chance to switch it later.
-                this.dx = -v2.dy;
-                this.dy = v2.dx;
-            } else {
-                this.dx += v2.dx;
-                this.dy += v2.dy;
-            }
-        }
-
-
-        @NonNull
-        @Override
-        public String toString() {
-            return "(" + x + "," + y + " " + dx + "," + dy + ")";
-        }
-    }
-
-
-    /*
-     *  Calculates the positions and orientations of any markers that should be placed on the given path.
-     */
-    private static class MarkerPositionCalculator implements SVGBase.PathInterface {
-        private final List<SVGAndroidRenderer.MarkerVector> markers = new ArrayList<>();
-
-        private float startX, startY;
-        private SVGAndroidRenderer.MarkerVector lastPos = null;
-        private boolean startArc = false, normalCubic = true;
-        private int subpathStartIndex = -1;
-        private boolean closepathReAdjustPending;
-
-
-        MarkerPositionCalculator(SVGBase.PathDefinition pathDef) {
-            if (pathDef == null)
-                return;
-
-            // Generate and add markers for the first N-1 points
-            pathDef.enumeratePath(this);
-
-            if (closepathReAdjustPending) {
-                // Now correct the start and end marker points of the subpath.
-                // They should both be oriented as if this was a midpoint (ie sum the vectors).
-                lastPos.add(markers.get(subpathStartIndex));
-                // Overwrite start marker. Other (end) marker will be written on exit or at start of next subpath.
-                markers.set(subpathStartIndex, lastPos);
-                closepathReAdjustPending = false;
-            }
-            // Add the marker for the pending last point
-            if (lastPos != null) {
-                markers.add(lastPos);
-            }
-        }
-
-        List<SVGAndroidRenderer.MarkerVector> getMarkers() {
-            return markers;
-        }
-
-        @Override
-        public void moveTo(float x, float y) {
-            if (closepathReAdjustPending) {
-                // Now correct the start and end marker points of the subpath.
-                // They should both be oriented as if this was a midpoint (ie sum the vectors).
-                lastPos.add(markers.get(subpathStartIndex));
-                // Overwrite start marker. Other (end) marker will be written on exit or at start of next subpath.
-                markers.set(subpathStartIndex, lastPos);
-                closepathReAdjustPending = false;
-            }
-            if (lastPos != null) {
-                markers.add(lastPos);
-            }
-            startX = x;
-            startY = y;
-            lastPos = new SVGAndroidRenderer.MarkerVector(x, y, 0, 0);
-            subpathStartIndex = markers.size();
-        }
-
-        @Override
-        public void lineTo(float x, float y) {
-            lastPos.add(x, y);
-            markers.add(lastPos);
-            lastPos = new SVGAndroidRenderer.MarkerVector(x, y, x - lastPos.x, y - lastPos.y);
-            closepathReAdjustPending = false;
-        }
-
-        @Override
-        public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
-            if (normalCubic || startArc) {
-                lastPos.add(x1, y1);
-                markers.add(lastPos);
-                startArc = false;
-            }
-            lastPos = new SVGAndroidRenderer.MarkerVector(x3, y3, x3 - x2, y3 - y2);
-            closepathReAdjustPending = false;
-        }
-
-        @Override
-        public void quadTo(float x1, float y1, float x2, float y2) {
-            lastPos.add(x1, y1);
-            markers.add(lastPos);
-            lastPos = new SVGAndroidRenderer.MarkerVector(x2, y2, x2 - x1, y2 - y1);
-            closepathReAdjustPending = false;
-        }
-
-        @Override
-        public void arcTo(float rx, float ry, float xAxisRotation, boolean largeArcFlag, boolean sweepFlag, float x, float y) {
-            // We'll piggy-back on the arc->bezier conversion to get our start and end vectors
-            startArc = true;
-            normalCubic = false;
-            SVGAndroidRenderer.arcTo(lastPos.x, lastPos.y, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y, this);
-            normalCubic = true;
-            closepathReAdjustPending = false;
-        }
-
-        @Override
-        public void close() {
-            markers.add(lastPos);
-            lineTo(startX, startY);
-            // We may need to readjust the first and last markers on this subpath so that
-            // the orientation is a sum of the inward and outward vectors.
-            // But this only happens if the path ends or the next subpath starts with a Move.
-            // See description of "orient" attribute in section 11.6.2.
-            closepathReAdjustPending = true;
-        }
-
-    }
-
 
     private void renderMarkers(SVGBase.GraphicsElement obj) {
         if (state.style.markerStart == null && state.style.markerMid == null && state.style.markerEnd == null)
@@ -3047,7 +2521,6 @@ public class SVGAndroidRenderer {
             renderMarker(_markerEnd, markers.get(markerCount - 1));
     }
 
-
     /*
      * This was one of the ambiguous markers. Try to see if we can find a better direction for
      * it, now that we have more info available on the neighbouring marker positions.
@@ -3073,7 +2546,6 @@ public class SVGAndroidRenderer {
         return thisPos;
     }
 
-
     /*
      * Calculate the dot product of two vectors.
      */
@@ -3081,6 +2553,8 @@ public class SVGAndroidRenderer {
         return x1 * x2 + y1 * y2;
     }
 
+
+    //==============================================================================
 
     /*
      * Render the given marker type at the given position
@@ -3206,6 +2680,21 @@ public class SVGAndroidRenderer {
     }
 
 
+    //=========================================================================
+    // Handling of Arcs
+
+    /*
+     * SVG arc representation uses "endpoint parameterisation" where we specify the start and endpoint of the arc.
+     * This is to be consistent with the other path commands.  However we need to convert this to "centre point
+     * parameterisation" in order to calculate the arc. Handily, the SVG spec provides all the required maths
+     * in section "F.6 Elliptical arc implementation notes".
+     *
+     * Some of this code has been borrowed from the Batik library (Apache-2 license).
+     *
+     * Previously, to work around issue #62, we converted this function to use floats. However in issue #155,
+     * we discovered that there are some arcs that fail due of a lack of precision. So we have switched back to doubles.
+     */
+
     /*
      * Determine an elements style based on it's ancestors in the tree rather than
      * it's render time ancestors.
@@ -3215,7 +2704,6 @@ public class SVGAndroidRenderer {
         updateStyle(newState, Style.getDefaultStyle());
         return findInheritFromAncestorState(obj, newState);
     }
-
 
     private SVGAndroidRenderer.RendererState findInheritFromAncestorState(SVGBase.SvgObject obj, SVGAndroidRenderer.RendererState newState) {
         List<SVGBase.SvgElementBase> ancestors = new ArrayList<>();
@@ -3241,12 +2729,6 @@ public class SVGAndroidRenderer {
         return newState;
     }
 
-
-    //==============================================================================
-    // Gradients
-    //==============================================================================
-
-
     /*
      * Check for gradient fills or strokes on this object.  These are always relative
      * to the object, so can't be preconfigured. They have to be initialised at the
@@ -3261,6 +2743,10 @@ public class SVGAndroidRenderer {
         }
     }
 
+
+    //==============================================================================
+    // Marker handling
+    //==============================================================================
 
     /*
      * Takes a PaintReference object and generates an appropriate Android Shader object from it.
@@ -3287,7 +2773,6 @@ public class SVGAndroidRenderer {
             setSolidColor(isFill, (SVGBase.SolidColor) ref);
         //if (ref instanceof Pattern) {}  // May be needed later if/when we do direct rendering
     }
-
 
     private void makeLinearGradient(boolean isFill, SVGBase.Box boundingBox, SVGBase.SvgLinearGradient gradient) {
         if (gradient.href != null)
@@ -3389,7 +2874,6 @@ public class SVGAndroidRenderer {
         paint.setShader(gr);
         paint.setAlpha(clamp255(state.style.fillOpacity));
     }
-
 
     private void makeRadialGradient(boolean isFill, SVGBase.Box boundingBox, SVGBase.SvgRadialGradient gradient) {
         if (gradient.href != null)
@@ -3520,7 +3004,6 @@ public class SVGAndroidRenderer {
         paint.setAlpha(clamp255(state.style.fillOpacity));
     }
 
-
     /*
      * Any unspecified fields in this gradient can be 'borrowed' from another
      * gradient specified by the href attribute.
@@ -3565,7 +3048,6 @@ public class SVGAndroidRenderer {
             fillInChainedGradientFields(gradient, grRef.href);
     }
 
-
     private void fillInChainedGradientFields(SVGBase.SvgLinearGradient gradient, SVGBase.SvgLinearGradient grRef) {
         if (gradient.x1 == null)
             gradient.x1 = grRef.x1;
@@ -3576,7 +3058,6 @@ public class SVGAndroidRenderer {
         if (gradient.y2 == null)
             gradient.y2 = grRef.y2;
     }
-
 
     private void fillInChainedGradientFields(SVGBase.SvgRadialGradient gradient, SVGBase.SvgRadialGradient grRef) {
         if (gradient.cx == null)
@@ -3592,7 +3073,6 @@ public class SVGAndroidRenderer {
         if (gradient.fr == null)
             gradient.fr = grRef.fr;
     }
-
 
     private void setSolidColor(boolean isFill, SVGBase.SolidColor ref) {
         // Make a Style object that has fill or stroke color values set depending on the value of isFill.
@@ -3630,16 +3110,14 @@ public class SVGAndroidRenderer {
 
     }
 
-
-    //==============================================================================
-    // Clip paths
-    //==============================================================================
-
-
     private void checkForClipPath(SVGBase.SvgElement obj) {
         checkForClipPath(obj, obj.boundingBox);
     }
 
+
+    //==============================================================================
+    // Gradients
+    //==============================================================================
 
     private void checkForClipPath(SVGBase.SvgElement obj, SVGBase.Box boundingBox) {
         if (state.style.clipPath == null)
@@ -3654,12 +3132,6 @@ public class SVGAndroidRenderer {
             checkForClipPath_OldStyle(obj, boundingBox);
         }
     }
-
-
-    //-----------------------------------------------------------------------------------------------
-    // New-style clippath handling (KitKat onwards).
-    // Used Path.op(Path, Path.Op) methods.
-    //
 
     private Path calculateClipPath(SVGBase.SvgElement obj, SVGBase.Box boundingBox) {
         // Locate the referenced object
@@ -3718,7 +3190,6 @@ public class SVGAndroidRenderer {
 
         return combinedPath;
     }
-
 
     /*
      * Convert the clipPath child element to a path. Transformed if need be, and clipped also if it has its own clippath.
@@ -3819,12 +3290,6 @@ public class SVGAndroidRenderer {
         return path;
     }
 
-
-    //-----------------------------------------------------------------------------------------------
-    // Old-style clippath handling.
-    // Pre-KitKat. Kept for backwards compatibility.
-
-
     private void checkForClipPath_OldStyle(SVGBase.SvgElement obj, SVGBase.Box boundingBox) {
         // Use the old/original method for clip paths
 
@@ -3882,7 +3347,6 @@ public class SVGAndroidRenderer {
         clipStatePop();
     }
 
-
     private void addObjectToClip(SVGBase.SvgObject obj, boolean allowUse, Path combinedPath, Matrix combinedPathMatrix) {
         if (!display())
             return;
@@ -3910,7 +3374,6 @@ public class SVGAndroidRenderer {
         clipStatePop();
     }
 
-
     // The clip state push and pop methods only save the matrix.
     // The normal push/pop save the clip region also which would
     // destroy the clip region we are trying to build.
@@ -3922,14 +3385,12 @@ public class SVGAndroidRenderer {
         state = new SVGAndroidRenderer.RendererState(state);
     }
 
-
     private void clipStatePop() {
         // Restore matrix and clip
         canvas.restore();
         // Restore style state
         state = stateStack.pop();
     }
-
 
     private Path.FillType getClipRuleFromState() {
         if (state.style.clipRule != null && state.style.clipRule == Style.FillRule.EvenOdd)
@@ -3938,6 +3399,10 @@ public class SVGAndroidRenderer {
             return Path.FillType.WINDING;
     }
 
+
+    //==============================================================================
+    // Clip paths
+    //==============================================================================
 
     private void addObjectToClip(SVGBase.Path obj, Path combinedPath, Matrix combinedPathMatrix) {
         updateStyleForElement(state, obj);
@@ -3961,7 +3426,6 @@ public class SVGAndroidRenderer {
         combinedPath.setFillType(getClipRuleFromState());
         combinedPath.addPath(path, combinedPathMatrix);
     }
-
 
     private void addObjectToClip(SVGBase.GraphicsElement obj, Path combinedPath, Matrix combinedPathMatrix) {
         updateStyleForElement(state, obj);
@@ -3996,6 +3460,11 @@ public class SVGAndroidRenderer {
     }
 
 
+    //-----------------------------------------------------------------------------------------------
+    // New-style clippath handling (KitKat onwards).
+    // Used Path.op(Path, Path.Op) methods.
+    //
+
     private void addObjectToClip(SVGBase.Use obj, Path combinedPath, Matrix combinedPathMatrix) {
         updateStyleForElement(state, obj);
 
@@ -4018,7 +3487,6 @@ public class SVGAndroidRenderer {
 
         addObjectToClip(ref, false, combinedPath, combinedPathMatrix);
     }
-
 
     private void addObjectToClip(SVGBase.Text obj, Path combinedPath, Matrix combinedPathMatrix) {
         updateStyleForElement(state, obj);
@@ -4061,47 +3529,8 @@ public class SVGAndroidRenderer {
 
 
     //-----------------------------------------------------------------------------------------------
-
-
-    private class PlainTextToPath extends SVGAndroidRenderer.TextProcessor {
-        float x;
-        float y;
-        final Path textAsPath;
-
-        PlainTextToPath(float x, float y, Path textAsPath) {
-            this.x = x;
-            this.y = y;
-            this.textAsPath = textAsPath;
-        }
-
-        @Override
-        public boolean doTextContainer(SVGBase.TextContainer obj) {
-            if (obj instanceof SVGBase.TextPath) {
-                warn("Using <textPath> elements in a clip path is not supported.");
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public void processText(String text) {
-            if (visible()) {
-                //state.fillPaint.getTextPath(text, 0, text.length(), x, y, textAsPath);
-                Path spanPath = new Path();
-                state.fillPaint.getTextPath(text, 0, text.length(), x, y, spanPath);
-                textAsPath.addPath(spanPath);
-            }
-
-            // Update the current text position
-            x += measureText(text, state.fillPaint);
-        }
-    }
-
-
-    //==============================================================================
-    // Convert the different shapes to paths
-    //==============================================================================
-
+    // Old-style clippath handling.
+    // Pre-KitKat. Kept for backwards compatibility.
 
     private Path makePathAndBoundingBox(SVGBase.Line obj) {
         float x1 = (obj.x1 == null) ? 0 : obj.x1.floatValueX(this);
@@ -4118,7 +3547,6 @@ public class SVGAndroidRenderer {
         p.lineTo(x2, y2);
         return p;
     }
-
 
     private Path makePathAndBoundingBox(SVGBase.Rect obj) {
         float x, y, w, h, rx, ry;
@@ -4177,7 +3605,6 @@ public class SVGAndroidRenderer {
         return p;
     }
 
-
     private Path makePathAndBoundingBox(SVGBase.Circle obj) {
         float cx = (obj.cx != null) ? obj.cx.floatValueX(this) : 0f;
         float cy = (obj.cy != null) ? obj.cy.floatValueY(this) : 0f;
@@ -4203,7 +3630,6 @@ public class SVGAndroidRenderer {
         p.close();
         return p;
     }
-
 
     private Path makePathAndBoundingBox(SVGBase.Ellipse obj) {
         float cx = (obj.cx != null) ? obj.cx.floatValueX(this) : 0f;
@@ -4233,7 +3659,6 @@ public class SVGAndroidRenderer {
         return p;
     }
 
-
     private Path makePathAndBoundingBox(SVGBase.PolyLine obj) {
         Path path = new Path();
 
@@ -4261,7 +3686,6 @@ public class SVGAndroidRenderer {
         }
         return path;
     }
-
 
     private Path makePathAndBoundingBox(SVGBase.Text obj) {
         // Get the first coordinate pair from the lists in the x and y properties.
@@ -4291,12 +3715,6 @@ public class SVGAndroidRenderer {
 
         return textAsPath;
     }
-
-
-    //==============================================================================
-    // Pattern fills
-    //==============================================================================
-
 
     /*
      * Fill a path with a pattern by setting the path as a clip path and
@@ -4426,7 +3844,6 @@ public class SVGAndroidRenderer {
         statePop();
     }
 
-
     /*
      * Any unspecified fields in this pattern can be 'borrowed' from another
      * pattern specified by the href attribute.
@@ -4476,12 +3893,6 @@ public class SVGAndroidRenderer {
         if (pRef.href != null)
             fillInChainedPatternFields(pattern, pRef.href);
     }
-
-
-    //==============================================================================
-    // Masks
-    //==============================================================================
-
 
     /*
      * Render the contents of a mask element.
@@ -4537,6 +3948,466 @@ public class SVGAndroidRenderer {
 
         // Pop the state
         statePop();
+    }
+
+
+    //-----------------------------------------------------------------------------------------------
+
+    public static class RendererState {
+        final Paint fillPaint;
+        final Paint strokePaint;
+        final CSSFontFeatureSettings fontFeatureSet;
+        final CSSFontVariationSettings fontVariationSet;
+        Style style;
+        boolean hasFill;
+        boolean hasStroke;
+        SVGBase.Box viewPort;
+        SVGBase.Box viewBox;
+        boolean spacePreserve;
+
+
+        RendererState() {
+            fillPaint = new Paint();
+            fillPaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+            if (SUPPORTS_FONT_HINTING) {
+                fillPaint.setHinting(Paint.HINTING_OFF);
+            }
+            fillPaint.setStyle(Paint.Style.FILL);
+            fillPaint.setTypeface(Typeface.DEFAULT);
+
+            strokePaint = new Paint();
+            strokePaint.setFlags(Paint.ANTI_ALIAS_FLAG | Paint.LINEAR_TEXT_FLAG | Paint.SUBPIXEL_TEXT_FLAG);
+            if (SUPPORTS_FONT_HINTING) {
+                strokePaint.setHinting(Paint.HINTING_OFF);
+            }
+            strokePaint.setStyle(Paint.Style.STROKE);
+            strokePaint.setTypeface(Typeface.DEFAULT);
+
+            fontFeatureSet = new CSSFontFeatureSettings();
+            fontVariationSet = new CSSFontVariationSettings();
+
+            style = Style.getDefaultStyle();
+        }
+
+        RendererState(SVGAndroidRenderer.RendererState copy) {
+            hasFill = copy.hasFill;
+            hasStroke = copy.hasStroke;
+            fillPaint = new Paint(copy.fillPaint);
+            strokePaint = new Paint(copy.strokePaint);
+            if (copy.viewPort != null)
+                viewPort = new SVGBase.Box(copy.viewPort);
+            if (copy.viewBox != null)
+                viewBox = new SVGBase.Box(copy.viewBox);
+            spacePreserve = copy.spacePreserve;
+            fontFeatureSet = new CSSFontFeatureSettings(copy.fontFeatureSet);
+            fontVariationSet = new CSSFontVariationSettings(copy.fontVariationSet);
+            try {
+                style = (Style) copy.style.clone();
+            } catch (CloneNotSupportedException e) {
+                // Should never happen
+                Timber.tag(TAG).e(e, "Unexpected clone error");
+                style = Style.getDefaultStyle();
+            }
+        }
+    }
+
+
+    //==============================================================================
+    // Convert the different shapes to paths
+    //==============================================================================
+
+    private static abstract class TextProcessor {
+        public boolean doTextContainer(SVGBase.TextContainer obj) {
+            return true;
+        }
+
+        public abstract void processText(String text);
+    }
+
+    /*
+     *  Convert an internal PathDefinition to an Path object
+     */
+    protected static class PathConverter implements SVGBase.PathInterface {
+        final Path path = new Path();
+        float lastX, lastY;
+
+        PathConverter(SVGBase.PathDefinition pathDef) {
+            if (pathDef == null)
+                return;
+            pathDef.enumeratePath(this);
+        }
+
+        Path getPath() {
+            return path;
+        }
+
+        @Override
+        public void moveTo(float x, float y) {
+            path.moveTo(x, y);
+            lastX = x;
+            lastY = y;
+        }
+
+        @Override
+        public void lineTo(float x, float y) {
+            path.lineTo(x, y);
+            lastX = x;
+            lastY = y;
+        }
+
+        @Override
+        public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
+            path.cubicTo(x1, y1, x2, y2, x3, y3);
+            lastX = x3;
+            lastY = y3;
+        }
+
+        @Override
+        public void quadTo(float x1, float y1, float x2, float y2) {
+            path.quadTo(x1, y1, x2, y2);
+            lastX = x2;
+            lastY = y2;
+        }
+
+        @Override
+        public void arcTo(float rx, float ry, float xAxisRotation, boolean largeArcFlag, boolean sweepFlag, float x, float y) {
+            SVGAndroidRenderer.arcTo(lastX, lastY, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y, this);
+            lastX = x;
+            lastY = y;
+        }
+
+        @Override
+        public void close() {
+            path.close();
+        }
+
+    }
+
+    private static class MarkerVector {
+        final float x, y;
+        float dx = 0f, dy = 0f;
+        boolean isAmbiguous = false;
+
+        MarkerVector(float x, float y, float dx, float dy) {
+            this.x = x;
+            this.y = y;
+            // normalise direction vector
+            double len = Math.sqrt(dx * dx + dy * dy);
+            if (len != 0) {
+                this.dx = (float) (dx / len);
+                this.dy = (float) (dy / len);
+            }
+        }
+
+        void add(float x, float y) {
+            // In order to get accurate angles, we have to normalise
+            // all vectors before we add them.  As long as they are
+            // all the same length, the angles will work out correctly.
+            float dx = (x - this.x);
+            float dy = (y - this.y);
+            double len = Math.sqrt(dx * dx + dy * dy);
+            if (len != 0) {
+                dx = (float) (dx / len);
+                dy = (float) (dy / len);
+            }
+            // Check for degenerate result where the two unit vectors cancelled each other out
+            if (dx == -this.dx && dy == -this.dy) {
+                this.isAmbiguous = true;
+                // Choose one of the perpendiculars now. We will get a chance to switch it later.
+                this.dx = -dy;
+                this.dy = dx;
+            } else {
+                this.dx += dx;
+                this.dy += dy;
+            }
+        }
+
+        void add(SVGAndroidRenderer.MarkerVector v2) {
+            // Check for degenerate result where the two unit vectors cancelled each other out
+            if (v2.dx == -this.dx && v2.dy == -this.dy) {
+                this.isAmbiguous = true;
+                // Choose one of the perpendiculars now. We will get a chance to switch it later.
+                this.dx = -v2.dy;
+                this.dy = v2.dx;
+            } else {
+                this.dx += v2.dx;
+                this.dy += v2.dy;
+            }
+        }
+
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "(" + x + "," + y + " " + dx + "," + dy + ")";
+        }
+    }
+
+    /*
+     *  Calculates the positions and orientations of any markers that should be placed on the given path.
+     */
+    private static class MarkerPositionCalculator implements SVGBase.PathInterface {
+        private final List<SVGAndroidRenderer.MarkerVector> markers = new ArrayList<>();
+
+        private float startX, startY;
+        private SVGAndroidRenderer.MarkerVector lastPos = null;
+        private boolean startArc = false, normalCubic = true;
+        private int subpathStartIndex = -1;
+        private boolean closepathReAdjustPending;
+
+
+        MarkerPositionCalculator(SVGBase.PathDefinition pathDef) {
+            if (pathDef == null)
+                return;
+
+            // Generate and add markers for the first N-1 points
+            pathDef.enumeratePath(this);
+
+            if (closepathReAdjustPending) {
+                // Now correct the start and end marker points of the subpath.
+                // They should both be oriented as if this was a midpoint (ie sum the vectors).
+                lastPos.add(markers.get(subpathStartIndex));
+                // Overwrite start marker. Other (end) marker will be written on exit or at start of next subpath.
+                markers.set(subpathStartIndex, lastPos);
+                closepathReAdjustPending = false;
+            }
+            // Add the marker for the pending last point
+            if (lastPos != null) {
+                markers.add(lastPos);
+            }
+        }
+
+        List<SVGAndroidRenderer.MarkerVector> getMarkers() {
+            return markers;
+        }
+
+        @Override
+        public void moveTo(float x, float y) {
+            if (closepathReAdjustPending) {
+                // Now correct the start and end marker points of the subpath.
+                // They should both be oriented as if this was a midpoint (ie sum the vectors).
+                lastPos.add(markers.get(subpathStartIndex));
+                // Overwrite start marker. Other (end) marker will be written on exit or at start of next subpath.
+                markers.set(subpathStartIndex, lastPos);
+                closepathReAdjustPending = false;
+            }
+            if (lastPos != null) {
+                markers.add(lastPos);
+            }
+            startX = x;
+            startY = y;
+            lastPos = new SVGAndroidRenderer.MarkerVector(x, y, 0, 0);
+            subpathStartIndex = markers.size();
+        }
+
+        @Override
+        public void lineTo(float x, float y) {
+            lastPos.add(x, y);
+            markers.add(lastPos);
+            lastPos = new SVGAndroidRenderer.MarkerVector(x, y, x - lastPos.x, y - lastPos.y);
+            closepathReAdjustPending = false;
+        }
+
+        @Override
+        public void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3) {
+            if (normalCubic || startArc) {
+                lastPos.add(x1, y1);
+                markers.add(lastPos);
+                startArc = false;
+            }
+            lastPos = new SVGAndroidRenderer.MarkerVector(x3, y3, x3 - x2, y3 - y2);
+            closepathReAdjustPending = false;
+        }
+
+        @Override
+        public void quadTo(float x1, float y1, float x2, float y2) {
+            lastPos.add(x1, y1);
+            markers.add(lastPos);
+            lastPos = new SVGAndroidRenderer.MarkerVector(x2, y2, x2 - x1, y2 - y1);
+            closepathReAdjustPending = false;
+        }
+
+        @Override
+        public void arcTo(float rx, float ry, float xAxisRotation, boolean largeArcFlag, boolean sweepFlag, float x, float y) {
+            // We'll piggy-back on the arc->bezier conversion to get our start and end vectors
+            startArc = true;
+            normalCubic = false;
+            SVGAndroidRenderer.arcTo(lastPos.x, lastPos.y, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y, this);
+            normalCubic = true;
+            closepathReAdjustPending = false;
+        }
+
+        @Override
+        public void close() {
+            markers.add(lastPos);
+            lineTo(startX, startY);
+            // We may need to readjust the first and last markers on this subpath so that
+            // the orientation is a sum of the inward and outward vectors.
+            // But this only happens if the path ends or the next subpath starts with a Move.
+            // See description of "orient" attribute in section 11.6.2.
+            closepathReAdjustPending = true;
+        }
+
+    }
+
+    private class PlainTextDrawer extends SVGAndroidRenderer.TextProcessor {
+        float x;
+        float y;
+
+        PlainTextDrawer(float x, float y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public void processText(String text) {
+            debug("TextSequence render");
+
+            if (visible()) {
+                // Android/Skia divides letterspacing and puts half before and after each letter.
+                // We need to readjust initial text X position to counter that.
+                float letterspacingAdj = SUPPORTS_PAINT_LETTER_SPACING ? state.style.letterSpacing.floatValue(SVGAndroidRenderer.this) / 2 : 0;
+                if (state.hasFill)
+                    canvas.drawText(text, x - letterspacingAdj, y, state.fillPaint);
+                if (state.hasStroke)
+                    canvas.drawText(text, x - letterspacingAdj, y, state.strokePaint);
+            }
+
+            // Update the current text position
+            x += measureText(text, state.fillPaint);
+        }
+    }
+
+    private class PathTextDrawer extends SVGAndroidRenderer.PlainTextDrawer {
+        private final Path path;
+
+        PathTextDrawer(Path path, float x, float y) {
+            super(x, y);
+            this.path = path;
+        }
+
+        @Override
+        public void processText(String text) {
+            if (visible()) {
+                // Android/Skia divides letterspacing and puts half before and after each letter.
+                // We need to readjust initial text X position to counter that.
+                float letterspacingAdj = SUPPORTS_PAINT_LETTER_SPACING ? state.style.letterSpacing.floatValue(SVGAndroidRenderer.this) / 2 : 0;
+                if (state.hasFill)
+                    canvas.drawTextOnPath(text, path, x - letterspacingAdj, y, state.fillPaint);
+                if (state.hasStroke)
+                    canvas.drawTextOnPath(text, path, x - letterspacingAdj, y, state.strokePaint);
+            }
+
+            // Update the current text position
+            x += measureText(text, state.fillPaint);
+        }
+    }
+
+
+    //==============================================================================
+    // Pattern fills
+    //==============================================================================
+
+    private class TextWidthCalculator extends SVGAndroidRenderer.TextProcessor {
+        float x = 0;
+
+        @Override
+        public void processText(String text) {
+            x += measureText(text, state.fillPaint);
+        }
+    }
+
+    /*
+     * Use the TextDrawer process to determine the bounds of a <text> element
+     */
+    private class TextBoundsCalculator extends SVGAndroidRenderer.TextProcessor {
+        final RectF bbox = new RectF();
+        float x;
+        float y;
+
+        TextBoundsCalculator(float x, float y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public boolean doTextContainer(SVGBase.TextContainer obj) {
+            if (obj instanceof SVGBase.TextPath) {
+                // Since we cheat a bit with our textPath rendering, we need
+                // to cheat a bit with our bbox calculation.
+                SVGBase.TextPath tpath = (SVGBase.TextPath) obj;
+                SVGBase.SvgObject ref = obj.document.resolveIRI(tpath.href);
+                if (ref == null) {
+                    error("TextPath path reference '%s' not found", tpath.href);
+                    return false;
+                }
+                SVGBase.Path pathObj = (SVGBase.Path) ref;
+                Path path = (new SVGAndroidRenderer.PathConverter(pathObj.d)).getPath();
+                if (pathObj.transform != null)
+                    path.transform(pathObj.transform);
+                RectF pathBounds = new RectF();
+                path.computeBounds(pathBounds, true);
+                bbox.union(pathBounds);
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public void processText(String text) {
+            if (visible()) {
+                Rect rect = new Rect();
+                // Get text bounding box (for offset 0)
+                state.fillPaint.getTextBounds(text, 0, text.length(), rect);
+                RectF textbounds = new RectF(rect);
+                // Adjust bounds to offset at text position
+                textbounds.offset(x, y);
+                // Merge with accumulated bounding box
+                bbox.union(textbounds);
+            }
+
+            // Update the current text position
+            x += measureText(text, state.fillPaint);
+        }
+    }
+
+
+    //==============================================================================
+    // Masks
+    //==============================================================================
+
+    private class PlainTextToPath extends SVGAndroidRenderer.TextProcessor {
+        final Path textAsPath;
+        float x;
+        float y;
+
+        PlainTextToPath(float x, float y, Path textAsPath) {
+            this.x = x;
+            this.y = y;
+            this.textAsPath = textAsPath;
+        }
+
+        @Override
+        public boolean doTextContainer(SVGBase.TextContainer obj) {
+            if (obj instanceof SVGBase.TextPath) {
+                warn("Using <textPath> elements in a clip path is not supported.");
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public void processText(String text) {
+            if (visible()) {
+                //state.fillPaint.getTextPath(text, 0, text.length(), x, y, textAsPath);
+                Path spanPath = new Path();
+                state.fillPaint.getTextPath(text, 0, text.length(), x, y, spanPath);
+                textAsPath.addPath(spanPath);
+            }
+
+            // Update the current text position
+            x += measureText(text, state.fillPaint);
+        }
     }
 
 

@@ -1,10 +1,5 @@
 package ca.on.hojat.renderer.svg;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import ca.on.hojat.renderer.R;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,9 +11,15 @@ import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
 
-import timber.log.Timber;
-
 import androidx.appcompat.widget.AppCompatImageView;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+
+import ca.on.hojat.renderer.R;
+import timber.log.Timber;
 
 /**
  * SVGImageView is a View widget that allows users to include SVG images in their layouts.
@@ -34,17 +35,16 @@ import androidx.appcompat.widget.AppCompatImageView;
  * </dl>
  */
 public class SVGImageView extends AppCompatImageView {
-    private SVG svg = null;
-    private final RenderOptions renderOptions = new RenderOptions();
-
     private static Method setLayerTypeMethod = null;
-
 
     static {
         try {
             setLayerTypeMethod = View.class.getMethod("setLayerType", Integer.TYPE, Paint.class);
         } catch (NoSuchMethodException e) { /* do nothing */ }
     }
+
+    private final RenderOptions renderOptions = new RenderOptions();
+    private SVG svg = null;
 
 
     public SVGImageView(Context context) {
@@ -227,6 +227,31 @@ public class SVGImageView extends AppCompatImageView {
 
     //===============================================================================================
 
+    /*
+     * Use reflection to call an API 11 method from this library (which is configured with a minSdkVersion of 8)
+     */
+    private void setSoftwareLayerType() {
+        if (setLayerTypeMethod == null)
+            return;
+
+        try {
+            int LAYER_TYPE_SOFTWARE = View.class.getField("LAYER_TYPE_SOFTWARE").getInt(new View(getContext()));
+            setLayerTypeMethod.invoke(this, LAYER_TYPE_SOFTWARE, null);
+        } catch (Exception e) {
+            Timber.tag("SVGImageView").w(e, "Unexpected failure calling setLayerType");
+        }
+    }
+
+    private void doRender() {
+        if (svg == null)
+            return;
+        Picture picture = this.svg.renderToPicture(renderOptions);
+        setSoftwareLayerType();
+        setImageDrawable(new PictureDrawable(picture));
+    }
+
+
+    //===============================================================================================
 
     @SuppressLint("StaticFieldLeak")
     private class LoadResourceTask extends AsyncTask<Integer, Integer, SVG> {
@@ -253,7 +278,6 @@ public class SVGImageView extends AppCompatImageView {
         }
     }
 
-
     @SuppressLint("StaticFieldLeak")
     private class LoadURITask extends AsyncTask<java.io.InputStream, Integer, SVG> {
         protected SVG doInBackground(InputStream... is) {
@@ -273,34 +297,6 @@ public class SVGImageView extends AppCompatImageView {
             SVGImageView.this.svg = svg;
             doRender();
         }
-    }
-
-
-    //===============================================================================================
-
-
-    /*
-     * Use reflection to call an API 11 method from this library (which is configured with a minSdkVersion of 8)
-     */
-    private void setSoftwareLayerType() {
-        if (setLayerTypeMethod == null)
-            return;
-
-        try {
-            int LAYER_TYPE_SOFTWARE = View.class.getField("LAYER_TYPE_SOFTWARE").getInt(new View(getContext()));
-            setLayerTypeMethod.invoke(this, LAYER_TYPE_SOFTWARE, null);
-        } catch (Exception e) {
-            Timber.tag("SVGImageView").w(e, "Unexpected failure calling setLayerType");
-        }
-    }
-
-
-    private void doRender() {
-        if (svg == null)
-            return;
-        Picture picture = this.svg.renderToPicture(renderOptions);
-        setSoftwareLayerType();
-        setImageDrawable(new PictureDrawable(picture));
     }
 
 }

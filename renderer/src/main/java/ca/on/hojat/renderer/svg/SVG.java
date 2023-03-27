@@ -125,7 +125,7 @@ public class SVG {
      * @param filename     the filename of the SVG document within assets.
      * @return an SVG instance on which you can call one of the render methods.
      * @throws SVGParseException if there is an error parsing the document.
-     * @throws IOException             if there is some IO error while reading the file.
+     * @throws IOException       if there is some IO error while reading the file.
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
     public static SVG getFromAsset(AssetManager assetManager, String filename) throws SVGParseException, IOException {
@@ -521,7 +521,7 @@ public class SVG {
      * of the root {@code <svg>} element.
      *
      * @param value A valid SVG 'length' attribute, such as "100px" or "10cm".
-     * @throws SVGParseException  if {@code value} cannot be parsed successfully.
+     * @throws SVGParseException        if {@code value} cannot be parsed successfully.
      * @throws IllegalArgumentException if there is no current SVG document loaded.
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
@@ -566,7 +566,7 @@ public class SVG {
      * of the root {@code <svg>} element.
      *
      * @param value A valid SVG 'length' attribute, such as "100px" or "10cm".
-     * @throws SVGParseException  if {@code value} cannot be parsed successfully.
+     * @throws SVGParseException        if {@code value} cannot be parsed successfully.
      * @throws IllegalArgumentException if there is no current SVG document loaded.
      */
     @SuppressWarnings({"WeakerAccess", "unused"})

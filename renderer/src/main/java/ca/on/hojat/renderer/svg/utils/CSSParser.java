@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
-import timber.log.Timber;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,21 +14,19 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
 
-import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
 import ca.on.hojat.renderer.BuildConfig;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
+import timber.log.Timber;
 
 /*
  * A very simple CSS parser that is not entirely compliant with the CSS spec but
  * hopefully parses almost all the CSS we are likely to strike in an SVG file.
  */
 public class CSSParser {
-    private static final String TAG = "CSSParser";
-
     static final String CSS_MIME_TYPE = "text/css";
-
     static final String ID = "id";
     static final String CLASS = "class";
-
+    private static final String TAG = "CSSParser";
     private static final int SPECIFICITY_ID_ATTRIBUTE = 1000000;
     private static final int SPECIFICITY_ATTRIBUTE_OR_PSEUDOCLASS = 1000;
     private static final int SPECIFICITY_ELEMENT_OR_PSEUDOELEMENT = 1;
@@ -41,6 +37,369 @@ public class CSSParser {
     private final SVGExternalFileResolver externalFileResolver;
 
     private boolean inMediaRule = false;
+
+
+    CSSParser(CSSParser.Source source, SVGExternalFileResolver externalFileResolver) {
+        this(CSSParser.MediaType.screen, source, externalFileResolver);
+    }
+
+    CSSParser(CSSParser.MediaType rendererMediaType, CSSParser.Source source, SVGExternalFileResolver externalFileResolver) {
+        this.deviceMediaType = rendererMediaType;
+        this.source = source;
+        this.externalFileResolver = externalFileResolver;
+    }
+
+    static boolean mediaMatches(String mediaListStr) {
+        CSSTextScanner scan = new CSSTextScanner(mediaListStr);
+        scan.skipWhitespace();
+        List<CSSParser.MediaType> mediaList = parseMediaList(scan);
+        return mediaMatches(mediaList, CSSParser.MediaType.screen);
+    }
+
+    @SuppressLint("TimberArgCount")
+    private static void warn(Object... args) {
+        Timber.tag(TAG).w("Ignoring @%s rule", args);
+    }
+
+    // Returns true if 'deviceMediaType' matches one of the media types in 'mediaList'
+    private static boolean mediaMatches(List<CSSParser.MediaType> mediaList, CSSParser.MediaType rendererMediaType) {
+        if (mediaList.size() == 0) // No specific media specified, so match all
+            return true;
+        for (CSSParser.MediaType type : mediaList) {
+            if (type == CSSParser.MediaType.all || type == rendererMediaType)
+                return true;
+        }
+        return false;
+    }
+
+    private static List<CSSParser.MediaType> parseMediaList(CSSTextScanner scan) {
+        ArrayList<CSSParser.MediaType> typeList = new ArrayList<>();
+        while (!scan.empty()) {
+            String type = scan.nextWord();
+            if (type == null)
+                break;
+            try {
+                typeList.add(CSSParser.MediaType.valueOf(type));
+            } catch (IllegalArgumentException e) {
+                // Ignore invalid media types
+            }
+            // If there is a comma, keep looping, otherwise break
+            if (!scan.skipCommaWhitespace())
+                break;
+        }
+        return typeList;
+    }
+
+    /*
+     * Used by SVGParser to parse the "class" attribute.
+     * Follows ordered set parser algorithm: https://dom.spec.whatwg.org/#concept-ordered-set-parser
+     */
+    public static List<String> parseClassAttribute(String val) {
+        CSSTextScanner scan = new CSSTextScanner(val);
+        List<String> classNameList = null;
+
+        while (!scan.empty()) {
+            String className = scan.nextToken();
+            if (className == null)
+                continue;
+            if (classNameList == null)
+                classNameList = new ArrayList<>();
+            classNameList.add(className);
+            scan.skipWhitespace();
+        }
+        return classNameList;
+    }
+
+    /*
+     * Used by renderer to check if a CSS rule matches the current element.
+     */
+    static boolean ruleMatch(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.Selector selector, SVGBase.SvgElementBase obj) {
+        // Check the most common case first as a shortcut.
+        if (selector.size() == 1)
+            return selectorMatch(ruleMatchContext, selector.get(0), obj);
+
+        // Build the list of ancestor objects
+        List<SVGBase.SvgContainer> ancestors = new ArrayList<>();
+        SVGBase.SvgContainer parent = obj.parent;
+        while (parent != null) {
+            ancestors.add(parent);
+            parent = ((SVGBase.SvgObject) parent).parent;
+        }
+
+        Collections.reverse(ancestors);
+
+        // We start at the last part of the simpleSelectors and loop back through the parts
+        // Get the next simpleSelectors part
+        return ruleMatch(ruleMatchContext, selector, selector.size() - 1, ancestors, ancestors.size() - 1, obj);
+    }
+
+    private static boolean ruleMatch(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.Selector selector, int selPartPos, List<SVGBase.SvgContainer> ancestors, int ancestorsPos, SVGBase.SvgElementBase obj) {
+        // We start at the last part of the simpleSelectors and loop back through the parts
+        // Get the next simpleSelectors part
+        CSSParser.SimpleSelector sel = selector.get(selPartPos);
+        if (!selectorMatch(ruleMatchContext, sel, obj))
+            return false;
+
+        // Selector part matched, check its combinator
+        if (sel.combinator == CSSParser.Combinator.DESCENDANT) {
+            if (selPartPos == 0)
+                return true;
+            // Search up the ancestors list for a node that matches the next simpleSelectors
+            while (ancestorsPos >= 0) {
+                if (ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos))
+                    return true;
+                ancestorsPos--;
+            }
+            return false;
+        } else if (sel.combinator == CSSParser.Combinator.CHILD) {
+            return ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos);
+        } else //if (sel.combinator == Combinator.FOLLOWS)
+        {
+            int childPos = getChildPosition(ancestors, ancestorsPos, obj);
+            if (childPos <= 0)
+                return false;
+            SVGBase.SvgElementBase prevSibling = (SVGBase.SvgElementBase) obj.parent.getChildren().get(childPos - 1);
+            return ruleMatch(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos, prevSibling);
+        }
+    }
+
+    private static boolean ruleMatchOnAncestors(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.Selector selector, int selPartPos, List<SVGBase.SvgContainer> ancestors, int ancestorsPos) {
+        CSSParser.SimpleSelector sel = selector.get(selPartPos);
+        SVGBase.SvgElementBase obj = (SVGBase.SvgElementBase) ancestors.get(ancestorsPos);
+
+        if (!selectorMatch(ruleMatchContext, sel, obj))
+            return false;
+
+        // Selector part matched, check its combinator
+        if (sel.combinator == CSSParser.Combinator.DESCENDANT) {
+            if (selPartPos == 0)
+                return true;
+            // Search up the ancestors list for a node that matches the next simpleSelectors
+            while (ancestorsPos > 0) {
+                if (ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, --ancestorsPos))
+                    return true;
+            }
+            return false;
+        } else if (sel.combinator == CSSParser.Combinator.CHILD) {
+            return ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos - 1);
+        } else //if (sel.combinator == Combinator.FOLLOWS)
+        {
+            int childPos = getChildPosition(ancestors, ancestorsPos, obj);
+            if (childPos <= 0)
+                return false;
+            SVGBase.SvgElementBase prevSibling = (SVGBase.SvgElementBase) obj.parent.getChildren().get(childPos - 1);
+            return ruleMatch(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos, prevSibling);
+        }
+    }
+
+    private static int getChildPosition(List<SVGBase.SvgContainer> ancestors, int ancestorsPos, SVGBase.SvgElementBase obj) {
+        if (ancestorsPos < 0)  // Has no parent, so must be only child of document
+            return 0;
+        if (ancestors.get(ancestorsPos) != obj.parent)  // parent doesn't match, so obj must be an indirect reference (eg. from a <use>)
+            return -1;
+        int childPos = 0;
+        for (SVGBase.SvgObject child : obj.parent.getChildren()) {
+            if (child == obj)
+                return childPos;
+            childPos++;
+        }
+        return -1;
+    }
+
+    private static boolean selectorMatch(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.SimpleSelector sel, SVGBase.SvgElementBase obj) {
+        // Check tag name. tag==null means tag is "*" which matches everything.
+        if (sel.tag != null && !sel.tag.equals(obj.getNodeName().toLowerCase(Locale.US)))
+            return false;
+
+        // If here, then tag part matched
+
+        // Check the attributes
+        if (sel.attribs != null) {
+            int count = sel.attribs.size();
+            for (int i = 0; i < count; i++) {
+                CSSParser.Attrib attr = sel.attribs.get(i);
+                switch (attr.name) {
+                    case ID:
+                        if (!attr.value.equals(obj.id))
+                            return false;
+                        break;
+                    case CLASS:
+                        if (obj.classNames == null)
+                            return false;
+                        if (!obj.classNames.contains(attr.value))
+                            return false;
+                        break;
+                    default:
+                        // Other attribute simpleSelectors not yet supported
+                        return false;
+                }
+            }
+        }
+
+        // Check the pseudo classes
+        if (sel.pseudos != null) {
+            int count = sel.pseudos.size();
+            for (int i = 0; i < count; i++) {
+                CSSParser.PseudoClass pseudo = sel.pseudos.get(i);
+                if (!pseudo.matches(ruleMatchContext, obj))
+                    return false;
+            }
+        }
+
+        // If w reached this point, the simpleSelectors matched
+        return true;
+    }
+
+    CSSParser.Ruleset parse(String sheet) {
+        CSSTextScanner scan = new CSSTextScanner(sheet);
+        scan.skipWhitespace();
+
+        return parseRuleset(scan);
+    }
+
+    private void parseAtRule(CSSParser.Ruleset ruleset, CSSTextScanner scan) throws CSSParseException {
+        String atKeyword = scan.nextIdentifier();
+        scan.skipWhitespace();
+        if (atKeyword == null)
+            throw new CSSParseException("Invalid '@' rule");
+        if (!inMediaRule && atKeyword.equals("media")) {
+            List<CSSParser.MediaType> mediaList = parseMediaList(scan);
+            if (!scan.consume('{'))
+                throw new CSSParseException("Invalid @media rule: missing rule set");
+
+            scan.skipWhitespace();
+            if (mediaMatches(mediaList, deviceMediaType)) {
+                inMediaRule = true;
+                ruleset.addAll(parseRuleset(scan));
+                inMediaRule = false;
+            } else {
+                parseRuleset(scan);  // parse and ignore accompanying ruleset
+            }
+
+            if (!scan.empty() && !scan.consume('}'))
+                throw new CSSParseException("Invalid @media rule: expected '}' at end of rule set");
+
+        } else if (!inMediaRule && atKeyword.equals("import")) {
+            String file = scan.nextURL();
+            if (file == null)
+                file = scan.nextCSSString();
+            if (file == null)
+                throw new CSSParseException("Invalid @import rule: expected string or url()");
+
+            scan.skipWhitespace();
+            List<CSSParser.MediaType> mediaList = parseMediaList(scan);
+
+            if (!scan.empty() && !scan.consume(';'))
+                throw new CSSParseException("Invalid @media rule: expected '}' at end of rule set");
+
+            if (externalFileResolver != null && mediaMatches(mediaList, deviceMediaType)) {
+                String css = externalFileResolver.resolveCSSStyleSheet(file);
+                if (css == null)
+                    return;
+                ruleset.addAll(parse(css));
+            }
+        }
+        //} else if (atKeyword.equals("charset")) {
+        else {
+            // Unknown/unsupported at-rule
+            warn(atKeyword);
+            skipAtRule(scan);
+        }
+        scan.skipWhitespace();
+    }
+
+
+    //==============================================================================
+
+    // Skip an unsupported at-rule: "ignore everything up to and including the next semicolon or block".
+    private void skipAtRule(CSSTextScanner scan) {
+        int depth = 0;
+        while (!scan.empty()) {
+            int ch = scan.nextChar();
+            if (ch == ';' && depth == 0)
+                return;
+            if (ch == '{')
+                depth++;
+            else if (ch == '}' && depth > 0) {
+                if (--depth == 0)
+                    return;
+            }
+        }
+    }
+
+    private CSSParser.Ruleset parseRuleset(CSSTextScanner scan) {
+        CSSParser.Ruleset ruleset = new CSSParser.Ruleset();
+        try {
+            while (!scan.empty()) {
+                if (scan.consume("<!--"))
+                    continue;
+                if (scan.consume("-->"))
+                    continue;
+
+                if (scan.consume('@')) {
+                    parseAtRule(ruleset, scan);
+                    continue;
+                }
+                if (parseRule(ruleset, scan))
+                    continue;
+
+                // Nothing recognisable found. Could be end of rule set. Return.
+                break;
+            }
+        } catch (CSSParseException e) {
+            timber.log.Timber.tag(TAG).e("CSS parser terminated early due to error: %s", e.getMessage());
+            if (BuildConfig.DEBUG)
+                Timber.tag(TAG).e(e, "Stacktrace:");
+        }
+        return ruleset;
+    }
+
+    private boolean parseRule(CSSParser.Ruleset ruleset, CSSTextScanner scan) throws CSSParseException {
+        List<CSSParser.Selector> selectors = scan.nextSelectorGroup();
+        if (selectors != null && !selectors.isEmpty()) {
+            if (!scan.consume('{'))
+                throw new CSSParseException("Malformed rule block: expected '{'");
+            scan.skipWhitespace();
+            Style ruleStyle = parseDeclarations(scan);
+            scan.skipWhitespace();
+            for (CSSParser.Selector selector : selectors) {
+                ruleset.add(new CSSParser.Rule(selector, ruleStyle, source));
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Parse a list of CSS declarations
+    private Style parseDeclarations(CSSTextScanner scan) throws CSSParseException {
+        Style ruleStyle = new Style();
+        do {
+            String propertyName = scan.nextIdentifier();
+            scan.skipWhitespace();
+            if (!scan.consume(':'))
+                throw new CSSParseException("Expected ':'");
+            scan.skipWhitespace();
+            String propertyValue = scan.nextPropertyValue();
+            if (propertyValue == null)
+                throw new CSSParseException("Expected property value");
+            // Check for !important flag.
+            scan.skipWhitespace();
+            if (scan.consume('!')) {
+                scan.skipWhitespace();
+                if (!scan.consume("important")) {
+                    throw new CSSParseException("Malformed rule set: found unexpected '!'");
+                }
+                // We don't do anything with these. We just ignore them. TODO
+                scan.skipWhitespace();
+            }
+            scan.consume(';');
+            // TODO: support CSS only values such as "inherit"
+            Style.processStyleProperty(ruleStyle, propertyName, propertyValue, false);
+            scan.skipWhitespace();
+        } while (!scan.empty() && !scan.consume('}'));
+        return ruleStyle;
+    }
 
 
     @SuppressWarnings("unused")
@@ -58,11 +417,13 @@ public class CSSParser {
         tv           // deprecated
     }
 
+
     enum Combinator {
         DESCENDANT,  // E F
         CHILD,       // E > F
         FOLLOWS      // E + F
     }
+
 
     enum AttribOp {
         EXISTS,     // *[foo]
@@ -70,6 +431,7 @@ public class CSSParser {
         INCLUDES,   // *[foo~=bar]
         DASHMATCH,  // *[foo|=bar]
     }
+
 
     // Supported SVG attributes
     enum PseudoClassIdents {
@@ -129,10 +491,24 @@ public class CSSParser {
     }
 
 
+    public enum Source {
+        Document,
+        RenderOptions
+    }
+
+
+    //==============================================================================
+    // Matching a selector against an object/element
+
+
+    interface PseudoClass {
+        boolean matches(CSSParser.RuleMatchContext ruleMatchContext, SVGBase.SvgElementBase obj);
+    }
+
     private static class Attrib {
         final public String name;
-        final CSSParser.AttribOp operation;
         final public String value;
+        final CSSParser.AttribOp operation;
 
         Attrib(String name, CSSParser.AttribOp op, String value) {
             this.name = name;
@@ -265,13 +641,6 @@ public class CSSParser {
         }
     }
 
-
-    public enum Source {
-        Document,
-        RenderOptions
-    }
-
-
     public static class Rule {
         final CSSParser.Selector selector;
         final Style style;
@@ -289,7 +658,6 @@ public class CSSParser {
             return selector + " {...} (src=" + this.source + ")";
         }
     }
-
 
     static class Selector {
         List<CSSParser.SimpleSelector> simpleSelectors = null;
@@ -341,243 +709,7 @@ public class CSSParser {
     }
 
 
-    CSSParser(CSSParser.Source source, SVGExternalFileResolver externalFileResolver) {
-        this(CSSParser.MediaType.screen, source, externalFileResolver);
-    }
-
-    CSSParser(CSSParser.MediaType rendererMediaType, CSSParser.Source source, SVGExternalFileResolver externalFileResolver) {
-        this.deviceMediaType = rendererMediaType;
-        this.source = source;
-        this.externalFileResolver = externalFileResolver;
-    }
-
-
-    CSSParser.Ruleset parse(String sheet) {
-        CSSTextScanner scan = new CSSTextScanner(sheet);
-        scan.skipWhitespace();
-
-        return parseRuleset(scan);
-    }
-
-
-    static boolean mediaMatches(String mediaListStr) {
-        CSSTextScanner scan = new CSSTextScanner(mediaListStr);
-        scan.skipWhitespace();
-        List<CSSParser.MediaType> mediaList = parseMediaList(scan);
-        return mediaMatches(mediaList, CSSParser.MediaType.screen);
-    }
-
-
     //==============================================================================
-
-
-    @SuppressLint("TimberArgCount")
-    private static void warn(Object... args) {
-        Timber.tag(TAG).w(String.format("Ignoring @%s rule", args));
-    }
-
-
-    // Returns true if 'deviceMediaType' matches one of the media types in 'mediaList'
-    private static boolean mediaMatches(List<CSSParser.MediaType> mediaList, CSSParser.MediaType rendererMediaType) {
-        if (mediaList.size() == 0) // No specific media specified, so match all
-            return true;
-        for (CSSParser.MediaType type : mediaList) {
-            if (type == CSSParser.MediaType.all || type == rendererMediaType)
-                return true;
-        }
-        return false;
-    }
-
-
-    private static List<CSSParser.MediaType> parseMediaList(CSSTextScanner scan) {
-        ArrayList<CSSParser.MediaType> typeList = new ArrayList<>();
-        while (!scan.empty()) {
-            String type = scan.nextWord();
-            if (type == null)
-                break;
-            try {
-                typeList.add(CSSParser.MediaType.valueOf(type));
-            } catch (IllegalArgumentException e) {
-                // Ignore invalid media types
-            }
-            // If there is a comma, keep looping, otherwise break
-            if (!scan.skipCommaWhitespace())
-                break;
-        }
-        return typeList;
-    }
-
-
-    private void parseAtRule(CSSParser.Ruleset ruleset, CSSTextScanner scan) throws CSSParseException {
-        String atKeyword = scan.nextIdentifier();
-        scan.skipWhitespace();
-        if (atKeyword == null)
-            throw new CSSParseException("Invalid '@' rule");
-        if (!inMediaRule && atKeyword.equals("media")) {
-            List<CSSParser.MediaType> mediaList = parseMediaList(scan);
-            if (!scan.consume('{'))
-                throw new CSSParseException("Invalid @media rule: missing rule set");
-
-            scan.skipWhitespace();
-            if (mediaMatches(mediaList, deviceMediaType)) {
-                inMediaRule = true;
-                ruleset.addAll(parseRuleset(scan));
-                inMediaRule = false;
-            } else {
-                parseRuleset(scan);  // parse and ignore accompanying ruleset
-            }
-
-            if (!scan.empty() && !scan.consume('}'))
-                throw new CSSParseException("Invalid @media rule: expected '}' at end of rule set");
-
-        } else if (!inMediaRule && atKeyword.equals("import")) {
-            String file = scan.nextURL();
-            if (file == null)
-                file = scan.nextCSSString();
-            if (file == null)
-                throw new CSSParseException("Invalid @import rule: expected string or url()");
-
-            scan.skipWhitespace();
-            List<CSSParser.MediaType> mediaList = parseMediaList(scan);
-
-            if (!scan.empty() && !scan.consume(';'))
-                throw new CSSParseException("Invalid @media rule: expected '}' at end of rule set");
-
-            if (externalFileResolver != null && mediaMatches(mediaList, deviceMediaType)) {
-                String css = externalFileResolver.resolveCSSStyleSheet(file);
-                if (css == null)
-                    return;
-                ruleset.addAll(parse(css));
-            }
-        }
-        //} else if (atKeyword.equals("charset")) {
-        else {
-            // Unknown/unsupported at-rule
-            warn(atKeyword);
-            skipAtRule(scan);
-        }
-        scan.skipWhitespace();
-    }
-
-
-    // Skip an unsupported at-rule: "ignore everything up to and including the next semicolon or block".
-    private void skipAtRule(CSSTextScanner scan) {
-        int depth = 0;
-        while (!scan.empty()) {
-            int ch = scan.nextChar();
-            if (ch == ';' && depth == 0)
-                return;
-            if (ch == '{')
-                depth++;
-            else if (ch == '}' && depth > 0) {
-                if (--depth == 0)
-                    return;
-            }
-        }
-    }
-
-
-    private CSSParser.Ruleset parseRuleset(CSSTextScanner scan) {
-        CSSParser.Ruleset ruleset = new CSSParser.Ruleset();
-        try {
-            while (!scan.empty()) {
-                if (scan.consume("<!--"))
-                    continue;
-                if (scan.consume("-->"))
-                    continue;
-
-                if (scan.consume('@')) {
-                    parseAtRule(ruleset, scan);
-                    continue;
-                }
-                if (parseRule(ruleset, scan))
-                    continue;
-
-                // Nothing recognisable found. Could be end of rule set. Return.
-                break;
-            }
-        } catch (CSSParseException e) {
-            timber.log.Timber.tag(TAG).e("CSS parser terminated early due to error: %s", e.getMessage());
-            if (BuildConfig.DEBUG)
-                Timber.tag(TAG).e(e, "Stacktrace:");
-        }
-        return ruleset;
-    }
-
-
-    private boolean parseRule(CSSParser.Ruleset ruleset, CSSTextScanner scan) throws CSSParseException {
-        List<CSSParser.Selector> selectors = scan.nextSelectorGroup();
-        if (selectors != null && !selectors.isEmpty()) {
-            if (!scan.consume('{'))
-                throw new CSSParseException("Malformed rule block: expected '{'");
-            scan.skipWhitespace();
-            Style ruleStyle = parseDeclarations(scan);
-            scan.skipWhitespace();
-            for (CSSParser.Selector selector : selectors) {
-                ruleset.add(new CSSParser.Rule(selector, ruleStyle, source));
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    // Parse a list of CSS declarations
-    private Style parseDeclarations(CSSTextScanner scan) throws CSSParseException {
-        Style ruleStyle = new Style();
-        do {
-            String propertyName = scan.nextIdentifier();
-            scan.skipWhitespace();
-            if (!scan.consume(':'))
-                throw new CSSParseException("Expected ':'");
-            scan.skipWhitespace();
-            String propertyValue = scan.nextPropertyValue();
-            if (propertyValue == null)
-                throw new CSSParseException("Expected property value");
-            // Check for !important flag.
-            scan.skipWhitespace();
-            if (scan.consume('!')) {
-                scan.skipWhitespace();
-                if (!scan.consume("important")) {
-                    throw new CSSParseException("Malformed rule set: found unexpected '!'");
-                }
-                // We don't do anything with these. We just ignore them. TODO
-                scan.skipWhitespace();
-            }
-            scan.consume(';');
-            // TODO: support CSS only values such as "inherit"
-            Style.processStyleProperty(ruleStyle, propertyName, propertyValue, false);
-            scan.skipWhitespace();
-        } while (!scan.empty() && !scan.consume('}'));
-        return ruleStyle;
-    }
-
-
-    /*
-     * Used by SVGParser to parse the "class" attribute.
-     * Follows ordered set parser algorithm: https://dom.spec.whatwg.org/#concept-ordered-set-parser
-     */
-    public static List<String> parseClassAttribute(String val) {
-        CSSTextScanner scan = new CSSTextScanner(val);
-        List<String> classNameList = null;
-
-        while (!scan.empty()) {
-            String className = scan.nextToken();
-            if (className == null)
-                continue;
-            if (classNameList == null)
-                classNameList = new ArrayList<>();
-            classNameList.add(className);
-            scan.skipWhitespace();
-        }
-        return classNameList;
-    }
-
-
-    //==============================================================================
-    // Matching a selector against an object/element
-
 
     static class RuleMatchContext {
         SVGBase.SvgElementBase targetElement;    // From RenderOptions.target() and used for the :target selector
@@ -591,160 +723,6 @@ public class CSSParser {
                 return "";
         }
     }
-
-
-    /*
-     * Used by renderer to check if a CSS rule matches the current element.
-     */
-    static boolean ruleMatch(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.Selector selector, SVGBase.SvgElementBase obj) {
-        // Check the most common case first as a shortcut.
-        if (selector.size() == 1)
-            return selectorMatch(ruleMatchContext, selector.get(0), obj);
-
-        // Build the list of ancestor objects
-        List<SVGBase.SvgContainer> ancestors = new ArrayList<>();
-        SVGBase.SvgContainer parent = obj.parent;
-        while (parent != null) {
-            ancestors.add(parent);
-            parent = ((SVGBase.SvgObject) parent).parent;
-        }
-
-        Collections.reverse(ancestors);
-
-        // We start at the last part of the simpleSelectors and loop back through the parts
-        // Get the next simpleSelectors part
-        return ruleMatch(ruleMatchContext, selector, selector.size() - 1, ancestors, ancestors.size() - 1, obj);
-    }
-
-
-    private static boolean ruleMatch(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.Selector selector, int selPartPos, List<SVGBase.SvgContainer> ancestors, int ancestorsPos, SVGBase.SvgElementBase obj) {
-        // We start at the last part of the simpleSelectors and loop back through the parts
-        // Get the next simpleSelectors part
-        CSSParser.SimpleSelector sel = selector.get(selPartPos);
-        if (!selectorMatch(ruleMatchContext, sel, obj))
-            return false;
-
-        // Selector part matched, check its combinator
-        if (sel.combinator == CSSParser.Combinator.DESCENDANT) {
-            if (selPartPos == 0)
-                return true;
-            // Search up the ancestors list for a node that matches the next simpleSelectors
-            while (ancestorsPos >= 0) {
-                if (ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos))
-                    return true;
-                ancestorsPos--;
-            }
-            return false;
-        } else if (sel.combinator == CSSParser.Combinator.CHILD) {
-            return ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos);
-        } else //if (sel.combinator == Combinator.FOLLOWS)
-        {
-            int childPos = getChildPosition(ancestors, ancestorsPos, obj);
-            if (childPos <= 0)
-                return false;
-            SVGBase.SvgElementBase prevSibling = (SVGBase.SvgElementBase) obj.parent.getChildren().get(childPos - 1);
-            return ruleMatch(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos, prevSibling);
-        }
-    }
-
-
-    private static boolean ruleMatchOnAncestors(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.Selector selector, int selPartPos, List<SVGBase.SvgContainer> ancestors, int ancestorsPos) {
-        CSSParser.SimpleSelector sel = selector.get(selPartPos);
-        SVGBase.SvgElementBase obj = (SVGBase.SvgElementBase) ancestors.get(ancestorsPos);
-
-        if (!selectorMatch(ruleMatchContext, sel, obj))
-            return false;
-
-        // Selector part matched, check its combinator
-        if (sel.combinator == CSSParser.Combinator.DESCENDANT) {
-            if (selPartPos == 0)
-                return true;
-            // Search up the ancestors list for a node that matches the next simpleSelectors
-            while (ancestorsPos > 0) {
-                if (ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, --ancestorsPos))
-                    return true;
-            }
-            return false;
-        } else if (sel.combinator == CSSParser.Combinator.CHILD) {
-            return ruleMatchOnAncestors(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos - 1);
-        } else //if (sel.combinator == Combinator.FOLLOWS)
-        {
-            int childPos = getChildPosition(ancestors, ancestorsPos, obj);
-            if (childPos <= 0)
-                return false;
-            SVGBase.SvgElementBase prevSibling = (SVGBase.SvgElementBase) obj.parent.getChildren().get(childPos - 1);
-            return ruleMatch(ruleMatchContext, selector, selPartPos - 1, ancestors, ancestorsPos, prevSibling);
-        }
-    }
-
-
-    private static int getChildPosition(List<SVGBase.SvgContainer> ancestors, int ancestorsPos, SVGBase.SvgElementBase obj) {
-        if (ancestorsPos < 0)  // Has no parent, so must be only child of document
-            return 0;
-        if (ancestors.get(ancestorsPos) != obj.parent)  // parent doesn't match, so obj must be an indirect reference (eg. from a <use>)
-            return -1;
-        int childPos = 0;
-        for (SVGBase.SvgObject child : obj.parent.getChildren()) {
-            if (child == obj)
-                return childPos;
-            childPos++;
-        }
-        return -1;
-    }
-
-
-    private static boolean selectorMatch(CSSParser.RuleMatchContext ruleMatchContext, CSSParser.SimpleSelector sel, SVGBase.SvgElementBase obj) {
-        // Check tag name. tag==null means tag is "*" which matches everything.
-        if (sel.tag != null && !sel.tag.equals(obj.getNodeName().toLowerCase(Locale.US)))
-            return false;
-
-        // If here, then tag part matched
-
-        // Check the attributes
-        if (sel.attribs != null) {
-            int count = sel.attribs.size();
-            for (int i = 0; i < count; i++) {
-                CSSParser.Attrib attr = sel.attribs.get(i);
-                switch (attr.name) {
-                    case ID:
-                        if (!attr.value.equals(obj.id))
-                            return false;
-                        break;
-                    case CLASS:
-                        if (obj.classNames == null)
-                            return false;
-                        if (!obj.classNames.contains(attr.value))
-                            return false;
-                        break;
-                    default:
-                        // Other attribute simpleSelectors not yet supported
-                        return false;
-                }
-            }
-        }
-
-        // Check the pseudo classes
-        if (sel.pseudos != null) {
-            int count = sel.pseudos.size();
-            for (int i = 0; i < count; i++) {
-                CSSParser.PseudoClass pseudo = sel.pseudos.get(i);
-                if (!pseudo.matches(ruleMatchContext, obj))
-                    return false;
-            }
-        }
-
-        // If w reached this point, the simpleSelectors matched
-        return true;
-    }
-
-
-    //==============================================================================
-
-
-    interface PseudoClass {
-        boolean matches(CSSParser.RuleMatchContext ruleMatchContext, SVGBase.SvgElementBase obj);
-    }
-
 
     static class PseudoClassAnPlusB implements CSSParser.PseudoClass {
         private final int a;
