@@ -1,10 +1,10 @@
 package ca.on.hojat.renderer.svg.utils;
 
-import ca.on.hojat.renderer.svg.SVGParseException;
-import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
-import ca.on.hojat.renderer.svg.SVG;
-
 import java.io.InputStream;
+
+import ca.on.hojat.renderer.svg.SVG;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
+import ca.on.hojat.renderer.svg.SVGParseException;
 
 
 interface SVGParser {

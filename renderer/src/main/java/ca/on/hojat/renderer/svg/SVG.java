@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Picture;
 import android.graphics.Path;
+import android.graphics.Picture;
 import android.graphics.RectF;
 
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class SVG {
 
     private static final String VERSION = "1.5";
 
-    private SVGBase base;
+    private final SVGBase base;
 
 
     // Users should use one of the getFromX() methods to create an instance of SVG
@@ -125,7 +125,7 @@ public class SVG {
      * @param filename     the filename of the SVG document within assets.
      * @return an SVG instance on which you can call one of the render methods.
      * @throws SVGParseException if there is an error parsing the document.
-     * @throws IOException       if there is some IO error while reading the file.
+     * @throws IOException             if there is some IO error while reading the file.
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
     public static SVG getFromAsset(AssetManager assetManager, String filename) throws SVGParseException, IOException {
@@ -167,6 +167,60 @@ public class SVG {
     //===============================================================================
 
     /**
+     * Register an {@link SVGExternalFileResolver} instance that the renderer should use when resolving
+     * external references such as images, fonts, and CSS stylesheets.
+     *
+     * <p>
+     * <em>Note: prior to release 1.3, this was an instance method of (@code SVG}.  In 1.3, it was
+     * changed to a static method so that users can resolve external references to CSS files while
+     * the SVG is being parsed.</em>
+     * </p>
+     *
+     * @param fileResolver the resolver to use.
+     * @since 1.3
+     */
+    @SuppressWarnings("unused")
+    public static void registerExternalFileResolver(SVGExternalFileResolver fileResolver) {
+        SVGBase.registerExternalFileResolver(fileResolver);
+    }
+
+    /**
+     * De-register the current {@link SVGExternalFileResolver} instance.
+     *
+     * @since 1.3
+     */
+    @SuppressWarnings("unused")
+    public static void deregisterExternalFileResolver() {
+        SVGBase.deregisterExternalFileResolver();
+    }
+
+    /**
+     * Returns the version number of this library.
+     *
+     * @return the version number in string format
+     */
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    public static String getVersion() {
+        return VERSION;
+    }
+
+    /**
+     * Indicates whether internal entities were enabled when this SVG was parsed.
+     *
+     * <p>
+     * <em>Note: prior to release 1.5, this was a static method of (@code SVG}.  In 1.5, it was
+     * changed to a instance method to coincide with the change making parsing settings thread safe.</em>
+     * </p>
+     *
+     * @return true if internal entity expansion is enabled in the parser
+     * @since 1.5
+     */
+    @SuppressWarnings("unused")
+    public boolean isInternalEntitiesEnabled() {
+        return base.isInternalEntitiesEnabled();
+    }
+
+    /**
      * Tells the parser whether to allow the expansion of internal entities.
      * An example of a document containing an internal entities is:
      * <p>
@@ -194,53 +248,6 @@ public class SVG {
     }
 
     /**
-     * Indicates whether internal entities were enabled when this SVG was parsed.
-     *
-     * <p>
-     * <em>Note: prior to release 1.5, this was a static method of (@code SVG}.  In 1.5, it was
-     * changed to a instance method to coincide with the change making parsing settings thread safe.</em>
-     * </p>
-     *
-     * @return true if internal entity expansion is enabled in the parser
-     * @since 1.5
-     */
-    @SuppressWarnings("unused")
-    public boolean isInternalEntitiesEnabled() {
-        return base.isInternalEntitiesEnabled();
-    }
-
-
-    /**
-     * Register an {@link SVGExternalFileResolver} instance that the renderer should use when resolving
-     * external references such as images, fonts, and CSS stylesheets.
-     *
-     * <p>
-     * <em>Note: prior to release 1.3, this was an instance method of (@code SVG}.  In 1.3, it was
-     * changed to a static method so that users can resolve external references to CSS files while
-     * the SVG is being parsed.</em>
-     * </p>
-     *
-     * @param fileResolver the resolver to use.
-     * @since 1.3
-     */
-    @SuppressWarnings("unused")
-    public static void registerExternalFileResolver(SVGExternalFileResolver fileResolver) {
-        SVGBase.registerExternalFileResolver(fileResolver);
-    }
-
-
-    /**
-     * De-register the current {@link SVGExternalFileResolver} instance.
-     *
-     * @since 1.3
-     */
-    @SuppressWarnings("unused")
-    public static void deregisterExternalFileResolver() {
-        SVGBase.deregisterExternalFileResolver();
-    }
-
-
-    /**
      * Get the {@link SVGExternalFileResolver} in effect when this SVG was parsed..
      *
      * @return the current external file resolver instance
@@ -250,22 +257,6 @@ public class SVG {
     public SVGExternalFileResolver getExternalFileResolver() {
         return base.getExternalFileResolver();
     }
-
-
-    /**
-     * Set the DPI (dots-per-inch) value to use when rendering.  The DPI setting is used in the
-     * conversion of "physical" units - such an "pt" or "cm" - to pixel values.  The default DPI is 96.
-     * <p>
-     * You should not normally need to alter the DPI from the default of 96 as recommended by the SVG
-     * and CSS specifications.
-     *
-     * @param dpi the DPI value that the renderer should use.
-     */
-    @SuppressWarnings({"WeakerAccess", "unused"})
-    public void setRenderDPI(float dpi) {
-        base.setRenderDPI(dpi);
-    }
-
 
     /**
      * Get the current render DPI setting.
@@ -281,6 +272,19 @@ public class SVG {
     //===============================================================================
     // SVG document rendering to a Picture object (indirect rendering)
 
+    /**
+     * Set the DPI (dots-per-inch) value to use when rendering.  The DPI setting is used in the
+     * conversion of "physical" units - such an "pt" or "cm" - to pixel values.  The default DPI is 96.
+     * <p>
+     * You should not normally need to alter the DPI from the default of 96 as recommended by the SVG
+     * and CSS specifications.
+     *
+     * @param dpi the DPI value that the renderer should use.
+     */
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    public void setRenderDPI(float dpi) {
+        base.setRenderDPI(dpi);
+    }
 
     /**
      * Renders this SVG document to a Picture object.
@@ -295,7 +299,6 @@ public class SVG {
         return base.renderToPicture(null);
     }
 
-
     /**
      * Renders this SVG document to a {@link Picture}.
      *
@@ -308,7 +311,6 @@ public class SVG {
         return renderToPicture(widthInPixels, heightInPixels, null);
     }
 
-
     /**
      * Renders this SVG document to a {@link Picture}.
      *
@@ -320,7 +322,6 @@ public class SVG {
     public Picture renderToPicture(RenderOptions renderOptions) {
         return base.renderToPicture(renderOptions);
     }
-
 
     /**
      * Renders this SVG document to a {@link Picture}.
@@ -336,6 +337,9 @@ public class SVG {
         return base.renderToPicture(widthInPixels, heightInPixels, renderOptions);
     }
 
+
+    //===============================================================================
+    // SVG document rendering to a canvas object (direct rendering)
 
     /**
      * Renders this SVG document to a {@link Picture} using the specified view defined in the document.
@@ -355,11 +359,6 @@ public class SVG {
         return base.renderViewToPicture(viewId, widthInPixels, heightInPixels);
     }
 
-
-    //===============================================================================
-    // SVG document rendering to a canvas object (direct rendering)
-
-
     /**
      * Renders this SVG document to a Canvas object.  The full width and height of the canvas
      * will be used as the viewport into which the document will be rendered.
@@ -372,7 +371,6 @@ public class SVG {
         renderToCanvas(canvas, (RenderOptions) null);
     }
 
-
     /**
      * Renders this SVG document to a Canvas object.
      *
@@ -383,7 +381,6 @@ public class SVG {
     public void renderToCanvas(Canvas canvas, RectF viewPort) {
         base.renderToCanvas(canvas, viewPort);
     }
-
 
     /**
      * Renders this SVG document to a Canvas object.
@@ -396,7 +393,6 @@ public class SVG {
     public void renderToCanvas(Canvas canvas, RenderOptions renderOptions) {
         base.renderToCanvas(canvas, renderOptions);
     }
-
 
     /**
      * Renders this SVG document to a Canvas using the specified view defined in the document.
@@ -417,6 +413,9 @@ public class SVG {
     }
 
 
+    //===============================================================================
+    // Other document utility API functions
+
     /**
      * Renders this SVG document to a Canvas using the specified view defined in the document.
      * <p>
@@ -435,22 +434,6 @@ public class SVG {
     public void renderViewToCanvas(String viewId, Canvas canvas, RectF viewPort) {
         base.renderViewToCanvas(viewId, canvas, viewPort);
     }
-
-
-    //===============================================================================
-    // Other document utility API functions
-
-
-    /**
-     * Returns the version number of this library.
-     *
-     * @return the version number in string format
-     */
-    @SuppressWarnings({"WeakerAccess", "unused"})
-    public static String getVersion() {
-        return VERSION;
-    }
-
 
     /**
      * Returns the contents of the {@code <title>} element in the SVG document.
@@ -538,7 +521,7 @@ public class SVG {
      * of the root {@code <svg>} element.
      *
      * @param value A valid SVG 'length' attribute, such as "100px" or "10cm".
-     * @throws SVGParseException        if {@code value} cannot be parsed successfully.
+     * @throws SVGParseException  if {@code value} cannot be parsed successfully.
      * @throws IllegalArgumentException if there is no current SVG document loaded.
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
@@ -583,7 +566,7 @@ public class SVG {
      * of the root {@code <svg>} element.
      *
      * @param value A valid SVG 'length' attribute, such as "100px" or "10cm".
-     * @throws SVGParseException        if {@code value} cannot be parsed successfully.
+     * @throws SVGParseException  if {@code value} cannot be parsed successfully.
      * @throws IllegalArgumentException if there is no current SVG document loaded.
      */
     @SuppressWarnings({"WeakerAccess", "unused"})
@@ -627,6 +610,17 @@ public class SVG {
         return base.getDocumentViewBox();
     }
 
+    /**
+     * Return the "preserveAspectRatio" attribute of the root {@code <svg>}
+     * element in the form of an {@link PreserveAspectRatio} object.
+     *
+     * @return the preserveAspectRatio setting of the document's root {@code <svg>} element.
+     * @throws IllegalArgumentException if there is no current SVG document loaded.
+     */
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    public PreserveAspectRatio getDocumentPreserveAspectRatio() {
+        return base.getDocumentPreserveAspectRatio();
+    }
 
     /**
      * Change the document positioning by altering the "preserveAspectRatio"
@@ -641,20 +635,6 @@ public class SVG {
     public void setDocumentPreserveAspectRatio(PreserveAspectRatio preserveAspectRatio) {
         base.setDocumentPreserveAspectRatio(preserveAspectRatio);
     }
-
-
-    /**
-     * Return the "preserveAspectRatio" attribute of the root {@code <svg>}
-     * element in the form of an {@link PreserveAspectRatio} object.
-     *
-     * @return the preserveAspectRatio setting of the document's root {@code <svg>} element.
-     * @throws IllegalArgumentException if there is no current SVG document loaded.
-     */
-    @SuppressWarnings({"WeakerAccess", "unused"})
-    public PreserveAspectRatio getDocumentPreserveAspectRatio() {
-        return base.getDocumentPreserveAspectRatio();
-    }
-
 
     /**
      * Returns the aspect ratio of the document as a width/height fraction.

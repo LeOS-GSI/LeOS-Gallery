@@ -1,100 +1,22 @@
 package ca.on.hojat.renderer.svg.utils;
 
 
+import androidx.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
-import androidx.annotation.NonNull;
+
 import ca.on.hojat.renderer.svg.SVGParseException;
 
 public class Style implements Cloneable {
-    // Which properties have been explicitly specified by this element
-    long specifiedFlags = 0;
-
-    SVGBase.SvgPaint fill;
-    Style.FillRule fillRule;
-    Float fillOpacity;
-
-    SVGBase.SvgPaint stroke;
-    Float strokeOpacity;
-    SVGBase.Length strokeWidth;
-    Style.LineCap strokeLineCap;
-    Style.LineJoin strokeLineJoin;
-    Float strokeMiterLimit;
-    SVGBase.Length[] strokeDashArray;
-    SVGBase.Length strokeDashOffset;
-
-    Float opacity; // master opacity of both stroke and fill
-
-    SVGBase.Colour color;
-
-    java.util.List<String> fontFamily;
-    SVGBase.Length fontSize;
-    Float fontWeight;
-    Style.FontStyle fontStyle;
-    Float fontStretch;
-    Style.TextDecoration textDecoration;
-    Style.TextDirection direction;
-
-    Style.TextAnchor textAnchor;
-
-    Boolean overflow;  // true if overflow visible
-    SVGBase.CSSClipRect clip;
-
-    String markerStart;
-    String markerMid;
-    String markerEnd;
-
-    Boolean display;    // true if we should display
-    Boolean visibility; // true if visible
-
-    SVGBase.SvgPaint stopColor;
-    Float stopOpacity;
-
-    String clipPath;
-    Style.FillRule clipRule;
-
-    String mask;
-
-    SVGBase.SvgPaint solidColor;
-    Float solidOpacity;
-
-    SVGBase.SvgPaint viewportFill;
-    Float viewportFillOpacity;
-
-    Style.VectorEffect vectorEffect;
-
-    Style.RenderQuality imageRendering;
-
-    Style.Isolation isolation;
-    Style.CSSBlendMode mixBlendMode;
-
-    Style.FontKerning fontKerning;
-    CSSFontFeatureSettings fontVariantLigatures;
-    CSSFontFeatureSettings fontVariantPosition;
-    CSSFontFeatureSettings fontVariantCaps;
-    CSSFontFeatureSettings fontVariantNumeric;
-    CSSFontFeatureSettings fontVariantEastAsian;
-    CSSFontFeatureSettings fontFeatureSettings;
-    CSSFontVariationSettings fontVariationSettings;
-    Style.WritingMode writingMode;
-    Style.GlypOrientationVertical glyphOrientationVertical;
-    Style.TextOrientation textOrientation;
-
-    SVGBase.Length letterSpacing;
-    SVGBase.Length wordSpacing;
-
-
     static final float FONT_WEIGHT_MIN = 1f;
     static final float FONT_WEIGHT_NORMAL = 400f;
     static final float FONT_WEIGHT_BOLD = 700f;
     static final float FONT_WEIGHT_MAX = 1000f;
     static final float FONT_WEIGHT_LIGHTER = Float.MIN_VALUE;
     static final float FONT_WEIGHT_BOLDER = Float.MAX_VALUE;
-
     static final float FONT_STRETCH_MIN = 0f;
     static final float FONT_STRETCH_NORMAL = 100f;
-
-
     static final long SPECIFIED_FILL = (1);
     static final long SPECIFIED_FILL_RULE = (1 << 1);
     static final long SPECIFIED_FILL_OPACITY = (1 << 2);
@@ -149,7 +71,6 @@ public class Style implements Cloneable {
     static final long SPECIFIED_FONT_STRETCH = (1L << 51);
     static final long SPECIFIED_LETTER_SPACING = (1L << 52);
     static final long SPECIFIED_WORD_SPACING = (1L << 53);
-
     // Flags for the settings that are applied to reset the root style
     private static final long SPECIFIED_RESET = ~(SPECIFIED_FONT_VARIANT_LIGATURES |
             SPECIFIED_FONT_VARIANT_POSITION |
@@ -157,144 +78,62 @@ public class Style implements Cloneable {
             SPECIFIED_FONT_VARIANT_NUMERIC |
             SPECIFIED_FONT_VARIANT_EAST_ASIAN |
             SPECIFIED_FONT_VARIATION_SETTINGS);
-
-
-    public enum FillRule {
-        NonZero,
-        EvenOdd
-    }
-
-    public enum LineCap {
-        Butt,
-        Round,
-        Square
-    }
-
-    public enum LineJoin {
-        Miter,
-        Round,
-        Bevel
-    }
-
-    public enum FontStyle {
-        normal,
-        italic,
-        oblique
-    }
-
-    public enum TextAnchor {
-        Start,
-        Middle,
-        End
-    }
-
-    public enum TextDecoration {
-        None,
-        Underline,
-        Overline,
-        LineThrough,
-        Blink
-    }
-
-    public enum TextDirection {
-        LTR,
-        RTL
-    }
-
-    public enum VectorEffect {
-        None,
-        NonScalingStroke
-    }
-
-    public enum RenderQuality {
-        auto,
-        optimizeQuality,
-        optimizeSpeed
-    }
-
-    public enum Isolation {
-        auto,
-        isolate
-    }
-
-    public enum CSSBlendMode {
-        normal,
-        multiply,
-        screen,
-        overlay,
-        darken,
-        lighten,
-        color_dodge,
-        color_burn,
-        hard_light,
-        soft_light,
-        difference,
-        exclusion,
-        hue,
-        saturation,
-        color,
-        luminosity,
-        UNSUPPORTED;
-
-        private static final Map<String, Style.CSSBlendMode> cache = new HashMap<>();
-
-        static {
-            for (Style.CSSBlendMode mode : values()) {
-                if (mode != UNSUPPORTED) {
-                    final String key = mode.name().replace('_', '-');
-                    cache.put(key, mode);
-                }
-            }
-        }
-
-        public static Style.CSSBlendMode fromString(String str) {
-            // First check cache to see if it is there
-            Style.CSSBlendMode mode = cache.get(str);
-            if (mode != null) {
-                return mode;
-            }
-
-            return UNSUPPORTED;
-        }
-    }
-
-
-    public enum FontKerning {
-        auto,
-        normal,
-        none
-    }
-
-    public enum WritingMode {
-        // Old SVG 1.1 values
-        lr_tb,
-        rl_tb,
-        tb_rl,
-        lr,
-        rl,
-        tb,
-        // New CSS3 values
-        horizontal_tb,
-        vertical_rl,
-        vertical_lr
-    }
-
-
-    public enum GlypOrientationVertical {
-        auto,
-        angle0,
-        angle90,
-        angle180,
-        angle270
-    }
-
-
-    public enum TextOrientation {
-        mixed,
-        upright,
-        sideways
-    }
-
+    // Which properties have been explicitly specified by this element
+    long specifiedFlags = 0;
+    SVGBase.SvgPaint fill;
+    Style.FillRule fillRule;
+    Float fillOpacity;
+    SVGBase.SvgPaint stroke;
+    Float strokeOpacity;
+    SVGBase.Length strokeWidth;
+    Style.LineCap strokeLineCap;
+    Style.LineJoin strokeLineJoin;
+    Float strokeMiterLimit;
+    SVGBase.Length[] strokeDashArray;
+    SVGBase.Length strokeDashOffset;
+    Float opacity; // master opacity of both stroke and fill
+    SVGBase.Colour color;
+    java.util.List<String> fontFamily;
+    SVGBase.Length fontSize;
+    Float fontWeight;
+    Style.FontStyle fontStyle;
+    Float fontStretch;
+    Style.TextDecoration textDecoration;
+    Style.TextDirection direction;
+    Style.TextAnchor textAnchor;
+    Boolean overflow;  // true if overflow visible
+    SVGBase.CSSClipRect clip;
+    String markerStart;
+    String markerMid;
+    String markerEnd;
+    Boolean display;    // true if we should display
+    Boolean visibility; // true if visible
+    SVGBase.SvgPaint stopColor;
+    Float stopOpacity;
+    String clipPath;
+    Style.FillRule clipRule;
+    String mask;
+    SVGBase.SvgPaint solidColor;
+    Float solidOpacity;
+    SVGBase.SvgPaint viewportFill;
+    Float viewportFillOpacity;
+    Style.VectorEffect vectorEffect;
+    Style.RenderQuality imageRendering;
+    Style.Isolation isolation;
+    Style.CSSBlendMode mixBlendMode;
+    Style.FontKerning fontKerning;
+    CSSFontFeatureSettings fontVariantLigatures;
+    CSSFontFeatureSettings fontVariantPosition;
+    CSSFontFeatureSettings fontVariantCaps;
+    CSSFontFeatureSettings fontVariantNumeric;
+    CSSFontFeatureSettings fontVariantEastAsian;
+    CSSFontFeatureSettings fontFeatureSettings;
+    CSSFontVariationSettings fontVariationSettings;
+    Style.WritingMode writingMode;
+    Style.GlypOrientationVertical glyphOrientationVertical;
+    Style.TextOrientation textOrientation;
+    SVGBase.Length letterSpacing;
+    SVGBase.Length wordSpacing;
 
     static Style getDefaultStyle() {
         Style def = new Style();
@@ -358,39 +197,6 @@ public class Style implements Cloneable {
 
         return def;
     }
-
-
-    // Called on the state.style object to reset the properties that don't inherit
-    // from the parent style.
-    void resetNonInheritingProperties(boolean isRootSVG) {
-        this.display = Boolean.TRUE;
-        this.overflow = isRootSVG ? Boolean.TRUE : Boolean.FALSE;
-        this.clip = null;
-        this.clipPath = null;
-        this.opacity = 1f;
-        this.stopColor = SVGBase.Colour.BLACK;
-        this.stopOpacity = 1f;
-        this.mask = null;
-        this.solidColor = null;
-        this.solidOpacity = 1f;
-        this.viewportFill = null;
-        this.viewportFillOpacity = 1f;
-        this.vectorEffect = Style.VectorEffect.None;
-        this.isolation = Style.Isolation.auto;
-        this.mixBlendMode = Style.CSSBlendMode.normal;
-    }
-
-
-    @NonNull
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        Style obj = (Style) super.clone();
-        if (strokeDashArray != null) {
-            obj.strokeDashArray = strokeDashArray.clone();
-        }
-        return obj;
-    }
-
 
     static void processStyleProperty(Style style, String localName, String val, boolean isFromAttribute) {
         if (val.length() == 0) { // The spec doesn't say how to handle empty style attributes.
@@ -770,6 +576,176 @@ public class Style implements Cloneable {
             default:
                 break;
         }
+    }
+
+    // Called on the state.style object to reset the properties that don't inherit
+    // from the parent style.
+    void resetNonInheritingProperties(boolean isRootSVG) {
+        this.display = Boolean.TRUE;
+        this.overflow = isRootSVG ? Boolean.TRUE : Boolean.FALSE;
+        this.clip = null;
+        this.clipPath = null;
+        this.opacity = 1f;
+        this.stopColor = SVGBase.Colour.BLACK;
+        this.stopOpacity = 1f;
+        this.mask = null;
+        this.solidColor = null;
+        this.solidOpacity = 1f;
+        this.viewportFill = null;
+        this.viewportFillOpacity = 1f;
+        this.vectorEffect = Style.VectorEffect.None;
+        this.isolation = Style.Isolation.auto;
+        this.mixBlendMode = Style.CSSBlendMode.normal;
+    }
+
+    @NonNull
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        Style obj = (Style) super.clone();
+        if (strokeDashArray != null) {
+            obj.strokeDashArray = strokeDashArray.clone();
+        }
+        return obj;
+    }
+
+    public enum FillRule {
+        NonZero,
+        EvenOdd
+    }
+
+    public enum LineCap {
+        Butt,
+        Round,
+        Square
+    }
+
+    public enum LineJoin {
+        Miter,
+        Round,
+        Bevel
+    }
+
+    public enum FontStyle {
+        normal,
+        italic,
+        oblique
+    }
+
+    public enum TextAnchor {
+        Start,
+        Middle,
+        End
+    }
+
+    public enum TextDecoration {
+        None,
+        Underline,
+        Overline,
+        LineThrough,
+        Blink
+    }
+
+    public enum TextDirection {
+        LTR,
+        RTL
+    }
+
+
+    public enum VectorEffect {
+        None,
+        NonScalingStroke
+    }
+
+    public enum RenderQuality {
+        auto,
+        optimizeQuality,
+        optimizeSpeed
+    }
+
+
+    public enum Isolation {
+        auto,
+        isolate
+    }
+
+
+    public enum CSSBlendMode {
+        normal,
+        multiply,
+        screen,
+        overlay,
+        darken,
+        lighten,
+        color_dodge,
+        color_burn,
+        hard_light,
+        soft_light,
+        difference,
+        exclusion,
+        hue,
+        saturation,
+        color,
+        luminosity,
+        UNSUPPORTED;
+
+        private static final Map<String, Style.CSSBlendMode> cache = new HashMap<>();
+
+        static {
+            for (Style.CSSBlendMode mode : values()) {
+                if (mode != UNSUPPORTED) {
+                    final String key = mode.name().replace('_', '-');
+                    cache.put(key, mode);
+                }
+            }
+        }
+
+        public static Style.CSSBlendMode fromString(String str) {
+            // First check cache to see if it is there
+            Style.CSSBlendMode mode = cache.get(str);
+            if (mode != null) {
+                return mode;
+            }
+
+            return UNSUPPORTED;
+        }
+    }
+
+
+    public enum FontKerning {
+        auto,
+        normal,
+        none
+    }
+
+
+    public enum WritingMode {
+        // Old SVG 1.1 values
+        lr_tb,
+        rl_tb,
+        tb_rl,
+        lr,
+        rl,
+        tb,
+        // New CSS3 values
+        horizontal_tb,
+        vertical_rl,
+        vertical_lr
+    }
+
+
+    public enum GlypOrientationVertical {
+        auto,
+        angle0,
+        angle90,
+        angle180,
+        angle270
+    }
+
+
+    public enum TextOrientation {
+        mixed,
+        upright,
+        sideways
     }
 
 }

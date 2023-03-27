@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Picture;
 
 import java.io.IOException;
-
+import ca.on.hojat.renderer.svg.SVGParseException;
 import timber.log.Timber;
 
 import android.content.res.AssetManager;
@@ -27,7 +27,6 @@ import java.util.Set;
 
 import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
 import ca.on.hojat.renderer.svg.utils.CSSParser.Ruleset;
-import ca.on.hojat.renderer.svg.SVGParseException;
 import ca.on.hojat.renderer.svg.RenderOptions;
 import ca.on.hojat.renderer.svg.PreserveAspectRatio;
 import ca.on.hojat.renderer.svg.utils.CSSParser.Rule;
@@ -139,7 +138,7 @@ public class SVGBase {
      * @throws SVGParseException if there is an error parsing the document.
      */
     @SuppressWarnings("WeakerAccess")
-    public static SVGBase getFromInputStream(InputStream is) throws SVGParseException {
+    public static SVGBase getFromInputStream(InputStream is) throws ca.on.hojat.renderer.svg.SVGParseException {
         return createParser().parseStream(is);
     }
 
