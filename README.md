@@ -42,3 +42,29 @@ https://user-images.githubusercontent.com/8706521/227848954-49983ef8-609a-4a19-a
 <img src="/media/screenshot5.png" width="32%"/>
 <img src="/media/screenshot6.png" width="32%"/>
 </p>
+
+## Tech Stack
+
+- [Kotlin](https://kotlinlang.org/) - First class and official programming language for Android
+  development.
+- [MVVM + Clean Architecture](https://developer.android.com/jetpack/guide) - Official recommended
+  architecture for building robust, production-quality apps (the legacy codebase didn't have any
+  specific architecture and was sorted according to class types; I'm still in the process of
+  applying a complete architecture to it).
+- [Android Jetpack](https://developer.android.com/jetpack) - Jetpack is a suite of libraries to help
+  developers build state-of-the-art applications.
+    - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - The
+      ViewModel is designed to store and manage UI-related data in a lifecycle-aware manner.
+    - [Room](https://developer.android.com/topic/libraries/architecture/room) - The Room library
+      provides an abstraction layer over SQLite to allow for more robust database access.
+    - [SharedPreferences](https://developer.android.com/reference/kotlin/android/content/SharedPreferences)
+        - A native library from Android for saving key-value pairs to the disk.
+- [Reprint](https://github.com/ajalt/reprint) - An Android library for fingerprint recognition.
+- [Glide](https://bumptech.github.io/glide/) - An image loading library.
+
+### Contributors
+
+Main developer: [Hojat Ghasemi](mailto:hojat72elect@gmail.com)
+<br/>
+
+
