@@ -10,7 +10,7 @@
 
     <style name="FullScreenTheme" parent="FullScreenTheme.Base" />
 
-    <style name="AppTheme.Base" parent="Theme.AppCompat">
+    <style name="AppTheme.Base" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
