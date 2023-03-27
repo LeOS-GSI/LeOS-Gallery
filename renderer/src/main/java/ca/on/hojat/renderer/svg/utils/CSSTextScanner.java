@@ -1,8 +1,8 @@
 package ca.on.hojat.renderer.svg.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.ArrayList;
 
 public class CSSTextScanner extends TextScanner {
     static final Pattern PATTERN_BLOCK_COMMENTS = Pattern.compile("(?s)/\\*.*?\\*/");
@@ -182,18 +182,6 @@ public class CSSTextScanner extends TextScanner {
         return false;
     }
 
-
-    private static class AnPlusB {
-        final public int a;
-        final public int b;
-
-        AnPlusB(int a, int b) {
-            this.a = a;
-            this.b = b;
-        }
-    }
-
-
     private CSSTextScanner.AnPlusB nextAnPlusB() {
         if (empty())
             return null;
@@ -263,7 +251,6 @@ public class CSSTextScanner extends TextScanner {
         return null;
     }
 
-
     /*
      * Parse a list of identifiers from a pseudo class parameter set.
      * Eg. for :lang(en)
@@ -297,7 +284,6 @@ public class CSSTextScanner extends TextScanner {
         position = start;
         return null;
     }
-
 
     /*
      * Parse a simpleSelectors group inside a pair of brackets.  For the :not pseudo class.
@@ -341,7 +327,6 @@ public class CSSTextScanner extends TextScanner {
 
         return result;
     }
-
 
     /*
      * Parse a pseudo class (such as ":first-child")
@@ -451,7 +436,6 @@ public class CSSTextScanner extends TextScanner {
 //         simpleSelectors.addedAttributeOrPseudo();
     }
 
-
     /*
      * The value (bar) part of "[foo="bar"]".
      */
@@ -532,7 +516,6 @@ public class CSSTextScanner extends TextScanner {
         return sb.toString();
     }
 
-
     private int hexChar(int ch) {
         if (ch >= '0' && ch <= '9')
             return (ch - (int) '0');
@@ -542,7 +525,6 @@ public class CSSTextScanner extends TextScanner {
             return (ch - (int) 'a') + 10;
         return -1;
     }
-
 
     /*
      * Scans for a url("...")
@@ -574,7 +556,6 @@ public class CSSTextScanner extends TextScanner {
         position = start;
         return null;
     }
-
 
     /*
      * Scans for a legacy URL string
@@ -621,5 +602,15 @@ public class CSSTextScanner extends TextScanner {
         if (sb.length() == 0)
             return null;
         return sb.toString();
+    }
+
+    private static class AnPlusB {
+        final public int a;
+        final public int b;
+
+        AnPlusB(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
     }
 }
