@@ -14,7 +14,7 @@ of features you have been missing on your default Android gallery:
 <li>Recycle bin</li>
 <li>Favorites</li>
 <li>internal video player</li>
-<li>the ability to view vectors, gifs, and other rare media formats</li>
+<li>the ability to view SVG, GIF, and other rare media formats</li>
 <li>And so much more ....</li>
 </ul>
 

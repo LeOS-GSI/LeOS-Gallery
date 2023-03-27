@@ -578,8 +578,11 @@ public class Style implements Cloneable {
         }
     }
 
-    // Called on the state.style object to reset the properties that don't inherit
-    // from the parent style.
+
+    /**
+     * Called on the state.style object to reset the properties that don't inherit
+     * from the parent style.
+     */
     void resetNonInheritingProperties(boolean isRootSVG) {
         this.display = Boolean.TRUE;
         this.overflow = isRootSVG ? Boolean.TRUE : Boolean.FALSE;
@@ -650,7 +653,6 @@ public class Style implements Cloneable {
         RTL
     }
 
-
     public enum VectorEffect {
         None,
         NonScalingStroke
@@ -662,12 +664,10 @@ public class Style implements Cloneable {
         optimizeSpeed
     }
 
-
     public enum Isolation {
         auto,
         isolate
     }
-
 
     public enum CSSBlendMode {
         normal,
@@ -710,13 +710,11 @@ public class Style implements Cloneable {
         }
     }
 
-
     public enum FontKerning {
         auto,
         normal,
         none
     }
-
 
     public enum WritingMode {
         // Old SVG 1.1 values
@@ -732,7 +730,6 @@ public class Style implements Cloneable {
         vertical_lr
     }
 
-
     public enum GlypOrientationVertical {
         auto,
         angle0,
@@ -741,11 +738,9 @@ public class Style implements Cloneable {
         angle270
     }
 
-
     public enum TextOrientation {
         mixed,
         upright,
         sideways
     }
-
 }

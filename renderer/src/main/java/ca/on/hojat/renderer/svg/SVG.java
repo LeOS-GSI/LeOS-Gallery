@@ -50,18 +50,18 @@ import ca.on.hojat.renderer.svg.utils.SVGBase;
  */
 
 public class SVG {
-    //static final String  TAG = "SVG";
 
     private static final String VERSION = "1.5";
 
     private final SVGBase base;
 
-
-    // Users should use one of the getFromX() methods to create an instance of SVG
+    /**
+     * Users should use one of the getFromX() methods to create an instance of SVG
+     *
+     */
     private SVG(SVGBase base) {
         this.base = base;
     }
-
 
     /**
      * Read and parse an SVG from the given {@code InputStream}.

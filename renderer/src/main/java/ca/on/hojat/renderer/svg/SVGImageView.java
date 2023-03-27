@@ -40,29 +40,27 @@ public class SVGImageView extends AppCompatImageView {
     static {
         try {
             setLayerTypeMethod = View.class.getMethod("setLayerType", Integer.TYPE, Paint.class);
-        } catch (NoSuchMethodException e) { /* do nothing */ }
+        } catch (NoSuchMethodException e) {
+            Timber.e(e);
+        }
     }
 
     private final RenderOptions renderOptions = new RenderOptions();
     private SVG svg = null;
 
-
     public SVGImageView(Context context) {
         super(context);
     }
-
 
     public SVGImageView(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
         init(attrs, 0);
     }
 
-
     public SVGImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
-
 
     private void init(AttributeSet attrs, int defStyle) {
         if (isInEditMode())
@@ -184,10 +182,7 @@ public class SVGImageView extends AppCompatImageView {
     }
 
 
-    //===============================================================================================
-
-
-    /*
+    /**
      * Attempt to set a picture from a Uri. Return true if it worked.
      */
     private boolean internalSetImageURI(Uri uri) {
@@ -201,7 +196,6 @@ public class SVGImageView extends AppCompatImageView {
 
     }
 
-
     private boolean internalSetImageAsset(String filename) {
         try {
             InputStream is = getContext().getAssets().open(filename);
@@ -213,7 +207,6 @@ public class SVGImageView extends AppCompatImageView {
 
     }
 
-
     private void setFromString(String url) {
         try {
             this.svg = SVG.getFromString(url);
@@ -224,10 +217,7 @@ public class SVGImageView extends AppCompatImageView {
         }
     }
 
-
-    //===============================================================================================
-
-    /*
+    /**
      * Use reflection to call an API 11 method from this library (which is configured with a minSdkVersion of 8)
      */
     private void setSoftwareLayerType() {
@@ -249,9 +239,6 @@ public class SVGImageView extends AppCompatImageView {
         setSoftwareLayerType();
         setImageDrawable(new PictureDrawable(picture));
     }
-
-
-    //===============================================================================================
 
     @SuppressLint("StaticFieldLeak")
     private class LoadResourceTask extends AsyncTask<Integer, Integer, SVG> {
