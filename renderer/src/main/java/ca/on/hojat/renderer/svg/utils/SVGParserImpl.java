@@ -1246,10 +1246,7 @@ class SVGParserImpl implements SVGParser {
         return this;
     }
 
-
-    //=========================================================================
     // <line> element
-
     @Override
     public SVGParser setExternalFileResolver(SVGExternalFileResolver fileResolver) {
         externalFileResolver = fileResolver;

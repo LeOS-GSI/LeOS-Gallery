@@ -1,20 +1,16 @@
 package ca.on.hojat.renderer.svg.utils;
 
-import android.graphics.Canvas;
-import android.graphics.Picture;
-
-import java.io.IOException;
-import ca.on.hojat.renderer.svg.SVGParseException;
-import timber.log.Timber;
-
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.graphics.RectF;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Picture;
+import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,12 +20,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
-import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
-import ca.on.hojat.renderer.svg.utils.CSSParser.Ruleset;
-import ca.on.hojat.renderer.svg.RenderOptions;
 import ca.on.hojat.renderer.svg.PreserveAspectRatio;
+import ca.on.hojat.renderer.svg.RenderOptions;
+import ca.on.hojat.renderer.svg.SVGExternalFileResolver;
+import ca.on.hojat.renderer.svg.SVGParseException;
 import ca.on.hojat.renderer.svg.utils.CSSParser.Rule;
+import ca.on.hojat.renderer.svg.utils.CSSParser.Ruleset;
+import timber.log.Timber;
 
 /**
  * AndroidSVG is a library for reading, parsing and rendering SVG documents on Android devices.
@@ -84,43 +81,17 @@ public class SVGBase {
     // when parsing addition CSS.
     private final SVGExternalFileResolver externalFileResolver;
     private final boolean enableInternalEntities;
-
+    // CSS rules
+    private final Ruleset cssRules = new Ruleset();
+    // Map from id attribute to element
+    private final Map<String, SvgElementBase> idToElementMap = new HashMap<>();
     // The root svg element
     private Svg rootElement = null;
-
     // Metadata
     private String title = "";
     private String desc = "";
-
     // DPI to use for rendering
     private float renderDPI = 96f;   // default is 96
-
-    // CSS rules
-    private final Ruleset cssRules = new Ruleset();
-
-    // Map from id attribute to element
-    private final Map<String, SvgElementBase> idToElementMap = new HashMap<>();
-
-
-    enum Unit {
-        px,
-        em,
-        ex,
-        in,
-        cm,
-        mm,
-        pt,
-        pc,
-        percent
-    }
-
-
-    @SuppressWarnings("unused")
-    enum GradientSpread {
-        pad,
-        reflect,
-        repeat
-    }
 
 
     /* package private */
@@ -128,7 +99,6 @@ public class SVGBase {
         this.enableInternalEntities = enableInternalEntities;
         this.externalFileResolver = fileResolver;
     }
-
 
     /**
      * Read and parse an SVG from the given {@code InputStream}.
@@ -142,7 +112,6 @@ public class SVGBase {
         return createParser().parseStream(is);
     }
 
-
     /**
      * Read and parse an SVG from the given {@code String}.
      *
@@ -154,7 +123,6 @@ public class SVGBase {
     public static SVGBase getFromString(String svg) throws SVGParseException {
         return createParser().parseStream(new ByteArrayInputStream(svg.getBytes()));
     }
-
 
     /**
      * Read and parse an SVG from the given resource location.
@@ -180,7 +148,6 @@ public class SVGBase {
         }
     }
 
-
     /**
      * Read and parse an SVG from the assets folder.
      *
@@ -204,7 +171,6 @@ public class SVGBase {
             }
         }
     }
-
 
     /**
      * Parse an SVG path definition from the given {@code String}.
@@ -238,8 +204,57 @@ public class SVGBase {
         return pathConv.getPath();
     }
 
+    /**
+     * Register an {@link SVGExternalFileResolver} instance that the renderer should use when resolving
+     * external references such as images, fonts, and CSS stylesheets.
+     *
+     * <p>
+     * <em>Note: prior to release 1.3, this was an instance method of (@code SVG}.  In 1.3, it was
+     * changed to a static method so that users can resolve external references to CSSS files while
+     * the SVG is being parsed.</em>
+     * </p>
+     *
+     * @param fileResolver the resolver to use.
+     * @since 1.3
+     */
+    @SuppressWarnings("unused")
+    public static void registerExternalFileResolver(SVGExternalFileResolver fileResolver) {
+        externalFileResolverSingleton = fileResolver;
+    }
+
+    /**
+     * De-register the current {@link SVGExternalFileResolver} instance.
+     *
+     * @since 1.3
+     */
+    @SuppressWarnings("unused")
+    public static void deregisterExternalFileResolver() {
+        externalFileResolverSingleton = null;
+    }
+
 
     //===============================================================================
+
+    protected static SVGParser createParser() {
+        return new SVGParserImpl().setInternalEntitiesEnabled(enableInternalEntitiesSingleton)
+                .setExternalFileResolver(externalFileResolverSingleton);
+    }
+
+    /**
+     * Indicates whether internal entities were enabled when this SVG was parsed.
+     *
+     * <p>
+     * <em>Note: prior to release 1.5, this was a static method of (@code SVG}.  In 1.5, it was
+     * changed to a instance method to coincide with the change making parsing settings thread safe.</em>
+     * </p>
+     *
+     * @return true if internal entity expansion is enabled in the parser
+     * @since 1.5
+     */
+    @SuppressWarnings("unused")
+    public boolean isInternalEntitiesEnabled() {
+        return enableInternalEntities;
+    }
 
     /**
      * Tells the parser whether to allow the expansion of internal entities.
@@ -269,53 +284,6 @@ public class SVGBase {
     }
 
     /**
-     * Indicates whether internal entities were enabled when this SVG was parsed.
-     *
-     * <p>
-     * <em>Note: prior to release 1.5, this was a static method of (@code SVG}.  In 1.5, it was
-     * changed to a instance method to coincide with the change making parsing settings thread safe.</em>
-     * </p>
-     *
-     * @return true if internal entity expansion is enabled in the parser
-     * @since 1.5
-     */
-    @SuppressWarnings("unused")
-    public boolean isInternalEntitiesEnabled() {
-        return enableInternalEntities;
-    }
-
-
-    /**
-     * Register an {@link SVGExternalFileResolver} instance that the renderer should use when resolving
-     * external references such as images, fonts, and CSS stylesheets.
-     *
-     * <p>
-     * <em>Note: prior to release 1.3, this was an instance method of (@code SVG}.  In 1.3, it was
-     * changed to a static method so that users can resolve external references to CSSS files while
-     * the SVG is being parsed.</em>
-     * </p>
-     *
-     * @param fileResolver the resolver to use.
-     * @since 1.3
-     */
-    @SuppressWarnings("unused")
-    public static void registerExternalFileResolver(SVGExternalFileResolver fileResolver) {
-        externalFileResolverSingleton = fileResolver;
-    }
-
-
-    /**
-     * De-register the current {@link SVGExternalFileResolver} instance.
-     *
-     * @since 1.3
-     */
-    @SuppressWarnings("unused")
-    public static void deregisterExternalFileResolver() {
-        externalFileResolverSingleton = null;
-    }
-
-
-    /**
      * Get the {@link SVGExternalFileResolver} in effect when this SVG was parsed..
      *
      * @return the current external file resolver instance
@@ -326,6 +294,15 @@ public class SVGBase {
         return externalFileResolver;
     }
 
+    /**
+     * Get the current render DPI setting.
+     *
+     * @return the DPI value
+     */
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    public float getRenderDPI() {
+        return renderDPI;
+    }
 
     /**
      * Set the DPI (dots-per-inch) value to use when rendering.  The DPI setting is used in the
@@ -341,22 +318,6 @@ public class SVGBase {
         this.renderDPI = dpi;
     }
 
-
-    /**
-     * Get the current render DPI setting.
-     *
-     * @return the DPI value
-     */
-    @SuppressWarnings({"WeakerAccess", "unused"})
-    public float getRenderDPI() {
-        return renderDPI;
-    }
-
-
-    //===============================================================================
-    // SVG document rendering to a Picture object (indirect rendering)
-
-
     /**
      * Renders this SVG document to a Picture object.
      * <p>
@@ -370,6 +331,7 @@ public class SVGBase {
         return renderToPicture(null);
     }
 
+    // SVG document rendering to a Picture object (indirect rendering)
 
     /**
      * Renders this SVG document to a {@link Picture}.
@@ -382,7 +344,6 @@ public class SVGBase {
     public Picture renderToPicture(int widthInPixels, int heightInPixels) {
         return renderToPicture(widthInPixels, heightInPixels, null);
     }
-
 
     /**
      * Renders this SVG document to a {@link Picture}.
@@ -422,7 +383,6 @@ public class SVGBase {
         }
     }
 
-
     /**
      * Renders this SVG document to a {@link Picture}.
      *
@@ -449,7 +409,6 @@ public class SVGBase {
         picture.endRecording();
         return picture;
     }
-
 
     /**
      * Renders this SVG document to a {@link Picture} using the specified view defined in the document.
@@ -482,11 +441,6 @@ public class SVGBase {
         return picture;
     }
 
-
-    //===============================================================================
-    // SVG document rendering to a canvas object (direct rendering)
-
-
     /**
      * Renders this SVG document to a Canvas object.  The full width and height of the canvas
      * will be used as the viewport into which the document will be rendered.
@@ -499,6 +453,9 @@ public class SVGBase {
         renderToCanvas(canvas, (RenderOptions) null);
     }
 
+
+    //===============================================================================
+    // SVG document rendering to a canvas object (direct rendering)
 
     /**
      * Renders this SVG document to a Canvas object.
@@ -521,7 +478,6 @@ public class SVGBase {
         renderer.renderDocument(this, renderOptions);
     }
 
-
     /**
      * Renders this SVG document to a Canvas object.
      *
@@ -543,7 +499,6 @@ public class SVGBase {
         renderer.renderDocument(this, renderOptions);
     }
 
-
     /**
      * Renders this SVG document to a Canvas using the specified view defined in the document.
      * <p>
@@ -561,7 +516,6 @@ public class SVGBase {
     public void renderViewToCanvas(String viewId, Canvas canvas) {
         renderToCanvas(canvas, RenderOptions.create().view(viewId));
     }
-
 
     /**
      * Renders this SVG document to a Canvas using the specified view defined in the document.
@@ -588,11 +542,6 @@ public class SVGBase {
         renderToCanvas(canvas, renderOptions);
     }
 
-
-    //===============================================================================
-    // Other document utility API functions
-
-
     /**
      * Returns the contents of the {@code <title>} element in the SVG document.
      *
@@ -608,6 +557,9 @@ public class SVGBase {
     }
 
 
+    //===============================================================================
+    // Other document utility API functions
+
     /**
      * Returns the contents of the {@code <desc>} element in the SVG document.
      *
@@ -622,7 +574,6 @@ public class SVGBase {
         return desc;
     }
 
-
     /**
      * Returns the SVG version number as provided in the root {@code <svg>} tag of the document.
      *
@@ -636,7 +587,6 @@ public class SVGBase {
 
         return rootElement.version;
     }
-
 
     /**
      * Returns a list of ids for all {@code <view>} elements in this SVG document.
@@ -664,7 +614,6 @@ public class SVGBase {
         return viewIds;
     }
 
-
     /**
      * Returns the width of the document as specified in the SVG file.
      * <p>
@@ -685,7 +634,6 @@ public class SVGBase {
         return getDocumentDimensions(this.renderDPI).width;
     }
 
-
     /**
      * Change the width of the document by altering the "width" attribute
      * of the root {@code <svg>} element.
@@ -700,7 +648,6 @@ public class SVGBase {
 
         this.rootElement.width = new Length(pixels);
     }
-
 
     /**
      * Change the width of the document by altering the "width" attribute
@@ -717,7 +664,6 @@ public class SVGBase {
 
         this.rootElement.width = SVGParserImpl.parseLength(value);
     }
-
 
     /**
      * Returns the height of the document as specified in the SVG file.
@@ -739,7 +685,6 @@ public class SVGBase {
         return getDocumentDimensions(this.renderDPI).height;
     }
 
-
     /**
      * Change the height of the document by altering the "height" attribute
      * of the root {@code <svg>} element.
@@ -754,7 +699,6 @@ public class SVGBase {
 
         this.rootElement.height = new SVGBase.Length(pixels);
     }
-
 
     /**
      * Change the height of the document by altering the "height" attribute
@@ -771,7 +715,6 @@ public class SVGBase {
 
         this.rootElement.height = SVGParserImpl.parseLength(value);
     }
-
 
     /**
      * Change the document view box by altering the "viewBox" attribute
@@ -799,7 +742,6 @@ public class SVGBase {
         this.rootElement.viewBox = new Box(minX, minY, width, height);
     }
 
-
     /**
      * Returns the viewBox attribute of the current SVG document.
      *
@@ -816,25 +758,6 @@ public class SVGBase {
 
         return this.rootElement.viewBox.toRectF();
     }
-
-
-    /**
-     * Change the document positioning by altering the "preserveAspectRatio"
-     * attribute of the root {@code <svg>} element.  See the
-     * documentation for {@link PreserveAspectRatio} for more information
-     * on how positioning works.
-     *
-     * @param preserveAspectRatio the new {@code preserveAspectRatio} setting for the root {@code <svg>} element.
-     * @throws IllegalArgumentException if there is no current SVG document loaded.
-     */
-    @SuppressWarnings({"WeakerAccess", "unused"})
-    public void setDocumentPreserveAspectRatio(PreserveAspectRatio preserveAspectRatio) {
-        if (this.rootElement == null)
-            throw new IllegalArgumentException("SVG document is empty");
-
-        this.rootElement.preserveAspectRatio = preserveAspectRatio;
-    }
-
 
     /**
      * Return the "preserveAspectRatio" attribute of the root {@code <svg>}
@@ -854,6 +777,22 @@ public class SVGBase {
         return this.rootElement.preserveAspectRatio;
     }
 
+    /**
+     * Change the document positioning by altering the "preserveAspectRatio"
+     * attribute of the root {@code <svg>} element.  See the
+     * documentation for {@link PreserveAspectRatio} for more information
+     * on how positioning works.
+     *
+     * @param preserveAspectRatio the new {@code preserveAspectRatio} setting for the root {@code <svg>} element.
+     * @throws IllegalArgumentException if there is no current SVG document loaded.
+     */
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    public void setDocumentPreserveAspectRatio(PreserveAspectRatio preserveAspectRatio) {
+        if (this.rootElement == null)
+            throw new IllegalArgumentException("SVG document is empty");
+
+        this.rootElement.preserveAspectRatio = preserveAspectRatio;
+    }
 
     /**
      * Returns the aspect ratio of the document as a width/height fraction.
@@ -890,28 +829,13 @@ public class SVGBase {
         return -1f;
     }
 
-
-    //===============================================================================
-
-
-    protected static SVGParser createParser() {
-        return new SVGParserImpl().setInternalEntitiesEnabled(enableInternalEntitiesSingleton)
-                .setExternalFileResolver(externalFileResolverSingleton);
-    }
-
-
-    //===============================================================================
-
-
     public Svg getRootElement() {
         return rootElement;
     }
 
-
     void setRootElement(Svg rootElement) {
         this.rootElement = rootElement;
     }
-
 
     SvgObject resolveIRI(String iri) {
         if (iri == null)
@@ -924,7 +848,6 @@ public class SVGBase {
         return null;
     }
 
-
     private String cssQuotedString(String str) {
         if (str.startsWith("\"") && str.endsWith("\"")) {
             // Remove quotes and replace escaped double-quote
@@ -936,7 +859,6 @@ public class SVGBase {
         // Remove escaped newline. Replace escape seq representing newline
         return str.replace("\\\n", "").replace("\\A", "\n");
     }
-
 
     private Box getDocumentDimensions(float dpi) {
         Length w = this.rootElement.width;
@@ -965,34 +887,183 @@ public class SVGBase {
         return new Box(0, 0, wOut, hOut);
     }
 
-
-    //===============================================================================
-    // CSS support methods
-
-
     void addCSSRules(Ruleset ruleset) {
         this.cssRules.addAll(ruleset);
     }
-
 
     List<Rule> getCSSRules() {
         return this.cssRules.getRules();
     }
 
 
+    //===============================================================================
+    // CSS support methods
+
     boolean hasCSSRules() {
         return !this.cssRules.isEmpty();
     }
 
-
     void clearRenderCSSRules() {
         this.cssRules.removeFromSource(CSSParser.Source.RenderOptions);
+    }
+
+    void setTitle(String title) {
+        this.title = title;
+    }
+
+    void setDesc(String desc) {
+        this.desc = desc;
     }
 
 
     //===============================================================================
     // Object sub-types used in the SVG object tree
 
+    SvgElementBase getElementById(String id) {
+        if (id == null || id.length() == 0)
+            return null;
+        if (id.equals(rootElement.id))
+            return rootElement;
+
+        if (idToElementMap.containsKey(id))
+            return idToElementMap.get(id);
+
+        // Search the object tree for a node with id property that matches 'id'
+        SvgElementBase result = getElementById(rootElement, id);
+        idToElementMap.put(id, result);
+        return result;
+    }
+
+    private SvgElementBase getElementById(SvgContainer obj, String id) {
+        SvgElementBase elem = (SvgElementBase) obj;
+        if (id.equals(elem.id))
+            return elem;
+        for (SvgObject child : obj.getChildren()) {
+            if (!(child instanceof SvgElementBase))
+                continue;
+            SvgElementBase childElem = (SvgElementBase) child;
+            if (id.equals(childElem.id))
+                return childElem;
+            if (child instanceof SvgContainer) {
+                SvgElementBase found = getElementById((SvgContainer) child, id);
+                if (found != null)
+                    return found;
+            }
+        }
+        return null;
+    }
+
+    private List<SvgObject> getElementsByTagName() {
+        List<SvgObject> result = new ArrayList<>();
+
+        // Search the object tree for nodes with the give element class
+        getElementsByTagName(result, rootElement, View.NODE_NAME);
+        return result;
+    }
+
+    private void getElementsByTagName(List<SvgObject> result, SvgObject obj, String nodeName) {
+
+        if (obj.getNodeName().equals(nodeName))
+            result.add(obj);
+
+        if (obj instanceof SvgContainer) {
+            for (SvgObject child : ((SvgContainer) obj).getChildren())
+                getElementsByTagName(result, child, nodeName);
+        }
+    }
+
+
+    enum Unit {
+        px,
+        em,
+        ex,
+        in,
+        cm,
+        mm,
+        pt,
+        pc,
+        percent
+    }
+
+
+    @SuppressWarnings("unused")
+    enum GradientSpread {
+        pad,
+        reflect,
+        repeat
+    }
+
+
+    // Any element that can appear inside a <switch> element.
+    interface SvgConditional {
+        Set<String> getRequiredFeatures();
+
+        void setRequiredFeatures(Set<String> features);
+
+        String getRequiredExtensions();
+
+        void setRequiredExtensions(String extensions);
+
+        Set<String> getSystemLanguage();
+
+        void setSystemLanguage(Set<String> languages);
+
+        Set<String> getRequiredFormats();
+
+        void setRequiredFormats(Set<String> mimeTypes);
+
+        Set<String> getRequiredFonts();
+
+        void setRequiredFonts(Set<String> fontNames);
+    }
+
+
+    //===============================================================================
+    // The objects in the SVG object tree
+    //===============================================================================
+
+
+    public interface SvgContainer {
+        List<SvgObject> getChildren();
+
+        void addChild(SvgObject elem) throws SVGParseException;
+    }
+
+
+    interface HasTransform {
+        void setTransform(Matrix matrix);
+    }
+
+
+    interface NotDirectlyRendered {
+    }
+
+
+    // A root text container such as <text> or <textPath>
+    interface TextRoot {
+    }
+
+
+    interface TextChild {
+        TextRoot getTextRoot();
+
+        void setTextRoot(TextRoot obj);
+    }
+
+
+    interface PathInterface {
+        void moveTo(float x, float y);
+
+        void lineTo(float x, float y);
+
+        void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3);
+
+        void quadTo(float x1, float y1, float x2, float y2);
+
+        void arcTo(float rx, float ry, float xAxisRotation, boolean largeArcFlag, boolean sweepFlag, float x, float y);
+
+        void close();
+    }
 
     static class Box {
         float minX, minY, width, height;
@@ -1040,17 +1111,14 @@ public class SVGBase {
         }
     }
 
-
     // What fill or stroke is
     public abstract static class SvgPaint implements Cloneable {
     }
 
-
     public static class Colour extends SvgPaint {
-        final int colour;
-
         static final Colour BLACK = new Colour(0xff000000);  // Black singleton - a common default value.
         static final Colour TRANSPARENT = new Colour(0);     // Transparent black
+        final int colour;
 
         Colour(int val) {
             this.colour = val;
@@ -1061,7 +1129,6 @@ public class SVGBase {
             return String.format("#%08x", colour);
         }
     }
-
 
     // Special version of Colour that indicates use of 'currentColor' keyword
     static class CurrentColor extends SvgPaint {
@@ -1074,7 +1141,6 @@ public class SVGBase {
             return instance;
         }
     }
-
 
     static class PaintReference extends SvgPaint {
         final String href;
@@ -1091,13 +1157,11 @@ public class SVGBase {
         }
     }
 
-
     public static class Length implements Cloneable {
-        final float value;
-        final Unit unit;
-
         final static Length ZERO = new Length(0f);
         final static Length PERCENT_100 = new Length(100f, Unit.percent);
+        final float value;
+        final Unit unit;
 
         public Length(float value, Unit unit) {
             this.value = value;
@@ -1216,7 +1280,6 @@ public class SVGBase {
         }
     }
 
-
     public static class CSSClipRect {
         final Length top;
         final Length right;
@@ -1231,12 +1294,6 @@ public class SVGBase {
         }
     }
 
-
-    //===============================================================================
-    // The objects in the SVG object tree
-    //===============================================================================
-
-
     // Any object that can be part of the tree
     public static class SvgObject {
         SVGBase document;
@@ -1246,7 +1303,6 @@ public class SVGBase {
             return "";
         }
     }
-
 
     // Any object in the tree that corresponds to an SVG element
     static abstract class SvgElementBase extends SvgObject {
@@ -1262,36 +1318,10 @@ public class SVGBase {
         }
     }
 
-
     // Any object in the tree that corresponds to an SVG element
     static abstract class SvgElement extends SvgElementBase {
         Box boundingBox = null;
     }
-
-
-    // Any element that can appear inside a <switch> element.
-    interface SvgConditional {
-        void setRequiredFeatures(Set<String> features);
-
-        Set<String> getRequiredFeatures();
-
-        void setRequiredExtensions(String extensions);
-
-        String getRequiredExtensions();
-
-        void setSystemLanguage(Set<String> languages);
-
-        Set<String> getSystemLanguage();
-
-        void setRequiredFormats(Set<String> mimeTypes);
-
-        Set<String> getRequiredFormats();
-
-        void setRequiredFonts(Set<String> fontNames);
-
-        Set<String> getRequiredFonts();
-    }
-
 
     // Any element that can appear inside a <switch> element.
     static abstract class SvgConditionalElement extends SvgElement implements SvgConditional {
@@ -1302,18 +1332,13 @@ public class SVGBase {
         Set<String> requiredFonts = null;
 
         @Override
-        public void setRequiredFeatures(Set<String> features) {
-            this.requiredFeatures = features;
-        }
-
-        @Override
         public Set<String> getRequiredFeatures() {
             return this.requiredFeatures;
         }
 
         @Override
-        public void setRequiredExtensions(String extensions) {
-            this.requiredExtensions = extensions;
+        public void setRequiredFeatures(Set<String> features) {
+            this.requiredFeatures = features;
         }
 
         @Override
@@ -1322,8 +1347,8 @@ public class SVGBase {
         }
 
         @Override
-        public void setSystemLanguage(Set<String> languages) {
-            this.systemLanguage = languages;
+        public void setRequiredExtensions(String extensions) {
+            this.requiredExtensions = extensions;
         }
 
         @Override
@@ -1332,8 +1357,8 @@ public class SVGBase {
         }
 
         @Override
-        public void setRequiredFormats(Set<String> mimeTypes) {
-            this.requiredFormats = mimeTypes;
+        public void setSystemLanguage(Set<String> languages) {
+            this.systemLanguage = languages;
         }
 
         @Override
@@ -1342,23 +1367,20 @@ public class SVGBase {
         }
 
         @Override
-        public void setRequiredFonts(Set<String> fontNames) {
-            this.requiredFonts = fontNames;
+        public void setRequiredFormats(Set<String> mimeTypes) {
+            this.requiredFormats = mimeTypes;
         }
 
         @Override
         public Set<String> getRequiredFonts() {
             return this.requiredFonts;
         }
+
+        @Override
+        public void setRequiredFonts(Set<String> fontNames) {
+            this.requiredFonts = fontNames;
+        }
     }
-
-
-    public interface SvgContainer {
-        List<SvgObject> getChildren();
-
-        void addChild(SvgObject elem) throws SVGParseException;
-    }
-
 
     public static abstract class SvgConditionalContainer extends SvgElement implements SvgContainer, SvgConditional {
         List<SvgObject> children = new ArrayList<>();
@@ -1380,18 +1402,13 @@ public class SVGBase {
         }
 
         @Override
-        public void setRequiredFeatures(Set<String> features) {
-            this.requiredFeatures = features;
-        }
-
-        @Override
         public Set<String> getRequiredFeatures() {
             return this.requiredFeatures;
         }
 
         @Override
-        public void setRequiredExtensions(String extensions) {
-            this.requiredExtensions = extensions;
+        public void setRequiredFeatures(Set<String> features) {
+            this.requiredFeatures = features;
         }
 
         @Override
@@ -1400,8 +1417,8 @@ public class SVGBase {
         }
 
         @Override
-        public void setSystemLanguage(Set<String> languages) {
-            this.systemLanguage = languages;
+        public void setRequiredExtensions(String extensions) {
+            this.requiredExtensions = extensions;
         }
 
         @Override
@@ -1410,8 +1427,8 @@ public class SVGBase {
         }
 
         @Override
-        public void setRequiredFormats(Set<String> mimeTypes) {
-            this.requiredFormats = mimeTypes;
+        public void setSystemLanguage(Set<String> languages) {
+            this.systemLanguage = languages;
         }
 
         @Override
@@ -1420,45 +1437,41 @@ public class SVGBase {
         }
 
         @Override
-        public void setRequiredFonts(Set<String> fontNames) {
-            this.requiredFonts = fontNames;
+        public void setRequiredFormats(Set<String> mimeTypes) {
+            this.requiredFormats = mimeTypes;
         }
 
         @Override
         public Set<String> getRequiredFonts() {
             return this.requiredFonts;
         }
+
+        @Override
+        public void setRequiredFonts(Set<String> fontNames) {
+            this.requiredFonts = fontNames;
+        }
     }
-
-
-    interface HasTransform {
-        void setTransform(Matrix matrix);
-    }
-
 
     static abstract class SvgPreserveAspectRatioContainer extends SvgConditionalContainer {
         PreserveAspectRatio preserveAspectRatio = null;
     }
 
-
     static abstract class SvgViewBoxContainer extends SvgPreserveAspectRatioContainer {
         Box viewBox;
     }
 
-
     public static class Svg extends SvgViewBoxContainer {
+        public String version;
         Length x;
         Length y;
         Length width;
         Length height;
-        public String version;
 
         @Override
         String getNodeName() {
             return "svg";
         }
     }
-
 
     // An SVG element that can contain other elements.
     static class Group extends SvgConditionalContainer implements HasTransform {
@@ -1475,11 +1488,6 @@ public class SVGBase {
         }
     }
 
-
-    interface NotDirectlyRendered {
-    }
-
-
     // A <defs> object contains objects that are not rendered directly, but are instead
     // referenced from other parts of the file.
     static class Defs extends Group implements NotDirectlyRendered {
@@ -1488,7 +1496,6 @@ public class SVGBase {
             return "defs";
         }
     }
-
 
     // One of the element types that can cause graphics to be drawn onto the target canvas.
     // Specifically: 'circle', 'ellipse', 'image', 'line', 'path', 'polygon', 'polyline', 'rect', 'text' and 'use'.
@@ -1501,7 +1508,6 @@ public class SVGBase {
         }
     }
 
-
     // A linking element (we don't currently do anything with this. It is basically just treated like a Group.
     static class A extends Group {
         String href;
@@ -1511,7 +1517,6 @@ public class SVGBase {
             return "a";
         }
     }
-
 
     static class Use extends Group {
         String href;
@@ -1526,7 +1531,6 @@ public class SVGBase {
         }
     }
 
-
     static class Path extends GraphicsElement {
         PathDefinition d;
         Float pathLength;
@@ -1536,7 +1540,6 @@ public class SVGBase {
             return "path";
         }
     }
-
 
     static class Rect extends GraphicsElement {
         Length x;
@@ -1552,7 +1555,6 @@ public class SVGBase {
         }
     }
 
-
     static class Circle extends GraphicsElement {
         Length cx;
         Length cy;
@@ -1563,7 +1565,6 @@ public class SVGBase {
             return "circle";
         }
     }
-
 
     static class Ellipse extends GraphicsElement {
         Length cx;
@@ -1577,7 +1578,6 @@ public class SVGBase {
         }
     }
 
-
     static class Line extends GraphicsElement {
         Length x1;
         Length y1;
@@ -1590,7 +1590,6 @@ public class SVGBase {
         }
     }
 
-
     static class PolyLine extends GraphicsElement {
         float[] points;
 
@@ -1600,26 +1599,12 @@ public class SVGBase {
         }
     }
 
-
     static class Polygon extends PolyLine {
         @Override
         String getNodeName() {
             return "polygon";
         }
     }
-
-
-    // A root text container such as <text> or <textPath>
-    interface TextRoot {
-    }
-
-
-    interface TextChild {
-        void setTextRoot(TextRoot obj);
-
-        TextRoot getTextRoot();
-    }
-
 
     public static abstract class TextContainer extends SvgConditionalContainer {
         @Override
@@ -1631,14 +1616,12 @@ public class SVGBase {
         }
     }
 
-
     static abstract class TextPositionedContainer extends TextContainer {
         List<Length> x;
         List<Length> y;
         List<Length> dx;
         List<Length> dy;
     }
-
 
     static class Text extends TextPositionedContainer implements TextRoot, HasTransform {
         Matrix transform;
@@ -1654,14 +1637,8 @@ public class SVGBase {
         }
     }
 
-
     static class TSpan extends TextPositionedContainer implements TextChild {
         private TextRoot textRoot;
-
-        @Override
-        public void setTextRoot(TextRoot obj) {
-            this.textRoot = obj;
-        }
 
         @Override
         public TextRoot getTextRoot() {
@@ -1669,11 +1646,15 @@ public class SVGBase {
         }
 
         @Override
+        public void setTextRoot(TextRoot obj) {
+            this.textRoot = obj;
+        }
+
+        @Override
         String getNodeName() {
             return "tspan";
         }
     }
-
 
     public static class TextSequence extends SvgObject implements TextChild {
         String text;
@@ -1690,16 +1671,15 @@ public class SVGBase {
         }
 
         @Override
-        public void setTextRoot(TextRoot obj) {
-            this.textRoot = obj;
-        }
-
-        @Override
         public TextRoot getTextRoot() {
             return this.textRoot;
         }
-    }
 
+        @Override
+        public void setTextRoot(TextRoot obj) {
+            this.textRoot = obj;
+        }
+    }
 
     static class TRef extends TextContainer implements TextChild {
         String href;
@@ -1707,13 +1687,13 @@ public class SVGBase {
         private TextRoot textRoot;
 
         @Override
-        public void setTextRoot(TextRoot obj) {
-            this.textRoot = obj;
+        public TextRoot getTextRoot() {
+            return this.textRoot;
         }
 
         @Override
-        public TextRoot getTextRoot() {
-            return this.textRoot;
+        public void setTextRoot(TextRoot obj) {
+            this.textRoot = obj;
         }
 
         @Override
@@ -1722,7 +1702,6 @@ public class SVGBase {
         }
     }
 
-
     static class TextPath extends TextContainer implements TextChild {
         String href;
         Length startOffset;
@@ -1730,13 +1709,13 @@ public class SVGBase {
         private TextRoot textRoot;
 
         @Override
-        public void setTextRoot(TextRoot obj) {
-            this.textRoot = obj;
+        public TextRoot getTextRoot() {
+            return this.textRoot;
         }
 
         @Override
-        public TextRoot getTextRoot() {
-            return this.textRoot;
+        public void setTextRoot(TextRoot obj) {
+            this.textRoot = obj;
         }
 
         @Override
@@ -1744,7 +1723,6 @@ public class SVGBase {
             return "textPath";
         }
     }
-
 
     // An SVG element that can contain other elements.
     static class Switch extends Group {
@@ -1754,14 +1732,12 @@ public class SVGBase {
         }
     }
 
-
     static class Symbol extends SvgViewBoxContainer implements NotDirectlyRendered {
         @Override
         String getNodeName() {
             return "symbol";
         }
     }
-
 
     static class Marker extends SvgViewBoxContainer implements NotDirectlyRendered {
         boolean markerUnitsAreUser;
@@ -1776,7 +1752,6 @@ public class SVGBase {
             return "marker";
         }
     }
-
 
     static abstract class GradientElement extends SvgElementBase implements SvgContainer {
         List<SvgObject> children = new ArrayList<>();
@@ -1800,7 +1775,6 @@ public class SVGBase {
         }
     }
 
-
     static class Stop extends SvgElementBase implements SvgContainer {
         Float offset;
 
@@ -1820,7 +1794,6 @@ public class SVGBase {
         }
     }
 
-
     static class SvgLinearGradient extends GradientElement {
         Length x1;
         Length y1;
@@ -1833,6 +1806,9 @@ public class SVGBase {
         }
     }
 
+
+    //===============================================================================
+    // Protected setters for internal use
 
     static class SvgRadialGradient extends GradientElement {
         Length cx;
@@ -1848,7 +1824,6 @@ public class SVGBase {
         }
     }
 
-
     static class ClipPath extends Group implements NotDirectlyRendered {
         static final String NODE_NAME = "clipPath";
 
@@ -1860,6 +1835,9 @@ public class SVGBase {
         }
     }
 
+
+    //===============================================================================
+    // Path definition
 
     static class Pattern extends SvgViewBoxContainer implements NotDirectlyRendered {
         Boolean patternUnitsAreUser;
@@ -1876,7 +1854,6 @@ public class SVGBase {
             return "pattern";
         }
     }
-
 
     static class Image extends SvgPreserveAspectRatioContainer implements HasTransform {
         String href;
@@ -1897,7 +1874,6 @@ public class SVGBase {
         }
     }
 
-
     static class View extends SvgViewBoxContainer implements NotDirectlyRendered {
         static final String NODE_NAME = "view";
 
@@ -1906,7 +1882,6 @@ public class SVGBase {
             return NODE_NAME;
         }
     }
-
 
     static class Mask extends SvgConditionalContainer implements NotDirectlyRendered {
         Boolean maskUnitsAreUser;
@@ -1921,7 +1896,6 @@ public class SVGBase {
             return "mask";
         }
     }
-
 
     static class SolidColor extends SvgElementBase implements SvgContainer {
         // Not needed right now. Colour is set in this.baseStyle.
@@ -1942,52 +1916,17 @@ public class SVGBase {
         }
     }
 
-
-    //===============================================================================
-    // Protected setters for internal use
-
-
-    void setTitle(String title) {
-        this.title = title;
-    }
-
-
-    void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-
-    //===============================================================================
-    // Path definition
-
-
-    interface PathInterface {
-        void moveTo(float x, float y);
-
-        void lineTo(float x, float y);
-
-        void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3);
-
-        void quadTo(float x1, float y1, float x2, float y2);
-
-        void arcTo(float rx, float ry, float xAxisRotation, boolean largeArcFlag, boolean sweepFlag, float x, float y);
-
-        void close();
-    }
-
-
     static class PathDefinition implements PathInterface {
-        private byte[] commands;
-        private int commandsLength = 0;
-        private float[] coords;
-        private int coordsLength = 0;
-
         private static final byte MOVETO = 0;
         private static final byte LINETO = 1;
         private static final byte CUBICTO = 2;
         private static final byte QUADTO = 3;
         private static final byte ARCTO = 4;   // 4-7
         private static final byte CLOSE = 8;
+        private byte[] commands;
+        private int commandsLength = 0;
+        private float[] coords;
+        private int coordsLength = 0;
 
 
         PathDefinition() {
@@ -2110,63 +2049,6 @@ public class SVGBase {
             }
         }
 
-    }
-
-
-    SvgElementBase getElementById(String id) {
-        if (id == null || id.length() == 0)
-            return null;
-        if (id.equals(rootElement.id))
-            return rootElement;
-
-        if (idToElementMap.containsKey(id))
-            return idToElementMap.get(id);
-
-        // Search the object tree for a node with id property that matches 'id'
-        SvgElementBase result = getElementById(rootElement, id);
-        idToElementMap.put(id, result);
-        return result;
-    }
-
-
-    private SvgElementBase getElementById(SvgContainer obj, String id) {
-        SvgElementBase elem = (SvgElementBase) obj;
-        if (id.equals(elem.id))
-            return elem;
-        for (SvgObject child : obj.getChildren()) {
-            if (!(child instanceof SvgElementBase))
-                continue;
-            SvgElementBase childElem = (SvgElementBase) child;
-            if (id.equals(childElem.id))
-                return childElem;
-            if (child instanceof SvgContainer) {
-                SvgElementBase found = getElementById((SvgContainer) child, id);
-                if (found != null)
-                    return found;
-            }
-        }
-        return null;
-    }
-
-
-    private List<SvgObject> getElementsByTagName() {
-        List<SvgObject> result = new ArrayList<>();
-
-        // Search the object tree for nodes with the give element class
-        getElementsByTagName(result, rootElement, View.NODE_NAME);
-        return result;
-    }
-
-
-    private void getElementsByTagName(List<SvgObject> result, SvgObject obj, String nodeName) {
-
-        if (obj.getNodeName().equals(nodeName))
-            result.add(obj);
-
-        if (obj instanceof SvgContainer) {
-            for (SvgObject child : ((SvgContainer) obj).getChildren())
-                getElementsByTagName(result, child, nodeName);
-        }
     }
 
 
