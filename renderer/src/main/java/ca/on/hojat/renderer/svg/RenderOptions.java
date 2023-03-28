@@ -120,8 +120,6 @@ public class RenderOptions extends RenderOptionsBase {
     public RenderOptions view(String viewId) {
         return (RenderOptions) super.view(viewId);
     }
-
-
     /**
      * Returns true if this RenderOptions instance has had a view set with {@code view()}.
      *
@@ -130,8 +128,6 @@ public class RenderOptions extends RenderOptionsBase {
     public boolean hasView() {
         return super.hasView();
     }
-
-
     /**
      * Specifies alternative values to use for the root element {@code viewBox}. Any existing {@code viewBox}
      * attribute value will be ignored.
@@ -171,8 +167,6 @@ public class RenderOptions extends RenderOptionsBase {
     public RenderOptions viewPort(float minX, float minY, float width, float height) {
         return (RenderOptions) super.viewPort(minX, minY, width, height);
     }
-
-
     /**
      * Returns true if this RenderOptions instance has had a viewPort set with {@code viewPort()}.
      *
@@ -181,8 +175,6 @@ public class RenderOptions extends RenderOptionsBase {
     public boolean hasViewPort() {
         return super.hasViewPort();
     }
-
-
     /**
      * Specifies the {@code id} of an element, in the SVG, to treat as the target element when
      * using the {@code :target} CSS pseudo class.
@@ -193,7 +185,6 @@ public class RenderOptions extends RenderOptionsBase {
     public RenderOptions target(String targetId) {
         return (RenderOptions) super.target(targetId);
     }
-
 
     /**
      * Returns true if this RenderOptions instance has had a target set with {@code target()}.

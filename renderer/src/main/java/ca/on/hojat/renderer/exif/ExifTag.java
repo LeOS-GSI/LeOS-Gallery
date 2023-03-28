@@ -1,11 +1,11 @@
 package ca.on.hojat.renderer.exif;
 
-import java.text.SimpleDateFormat;
+import androidx.annotation.NonNull;
+
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
-import androidx.annotation.NonNull;
 
 /**
  * This class stores information of an EXIF tag. For more information about
@@ -58,6 +58,8 @@ public class ExifTag {
     private static final long UNSIGNED_LONG_MAX = 4294967295L;
     private static final long LONG_MAX = Integer.MAX_VALUE;
     private static final long LONG_MIN = Integer.MIN_VALUE;
+    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("yyyy:MM:dd kk:mm:ss");
+    private static Charset US_ASCII = Charset.forName("US-ASCII");
 
     static {
         TYPE_TO_SIZE_MAP[TYPE_UNSIGNED_BYTE] = 1;
@@ -70,8 +72,6 @@ public class ExifTag {
         TYPE_TO_SIZE_MAP[TYPE_RATIONAL] = 8;
     }
 
-    private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("yyyy:MM:dd kk:mm:ss");
-    private static Charset US_ASCII = Charset.forName("US-ASCII");
     // Exif TagId
     private final short mTagId;
     // Exif Tag Type
@@ -116,6 +116,45 @@ public class ExifTag {
     }
 
     /**
+     * Gets the element size of the given data type in bytes.
+     *
+     * @see #TYPE_ASCII
+     * @see #TYPE_LONG
+     * @see #TYPE_RATIONAL
+     * @see #TYPE_UNDEFINED
+     * @see #TYPE_UNSIGNED_BYTE
+     * @see #TYPE_UNSIGNED_LONG
+     * @see #TYPE_UNSIGNED_RATIONAL
+     * @see #TYPE_UNSIGNED_SHORT
+     */
+    public static int getElementSize(short type) {
+        return TYPE_TO_SIZE_MAP[type];
+    }
+
+    private static String convertTypeToString(short type) {
+        switch (type) {
+            case TYPE_UNSIGNED_BYTE:
+                return "UNSIGNED_BYTE";
+            case TYPE_ASCII:
+                return "ASCII";
+            case TYPE_UNSIGNED_SHORT:
+                return "UNSIGNED_SHORT";
+            case TYPE_UNSIGNED_LONG:
+                return "UNSIGNED_LONG";
+            case TYPE_UNSIGNED_RATIONAL:
+                return "UNSIGNED_RATIONAL";
+            case TYPE_UNDEFINED:
+                return "UNDEFINED";
+            case TYPE_LONG:
+                return "LONG";
+            case TYPE_RATIONAL:
+                return "RATIONAL";
+            default:
+                return "";
+        }
+    }
+
+    /**
      * Returns the ID of the IFD this tag belongs to.
      *
      * @see IfdId#TYPE_IFD_0
@@ -153,22 +192,6 @@ public class ExifTag {
     // TODO: fix integer overflows with this
     public int getComponentCount() {
         return mComponentCountActual;
-    }
-
-    /**
-     * Gets the element size of the given data type in bytes.
-     *
-     * @see #TYPE_ASCII
-     * @see #TYPE_LONG
-     * @see #TYPE_RATIONAL
-     * @see #TYPE_UNDEFINED
-     * @see #TYPE_UNSIGNED_BYTE
-     * @see #TYPE_UNSIGNED_LONG
-     * @see #TYPE_UNSIGNED_RATIONAL
-     * @see #TYPE_UNSIGNED_SHORT
-     */
-    public static int getElementSize(short type) {
-        return TYPE_TO_SIZE_MAP[type];
     }
 
     /**
@@ -734,29 +757,6 @@ public class ExifTag {
             return ((byte[]) mValue)[index];
         }
         throw new IllegalArgumentException("Cannot get integer value from " + convertTypeToString(mDataType));
-    }
-
-    private static String convertTypeToString(short type) {
-        switch (type) {
-            case TYPE_UNSIGNED_BYTE:
-                return "UNSIGNED_BYTE";
-            case TYPE_ASCII:
-                return "ASCII";
-            case TYPE_UNSIGNED_SHORT:
-                return "UNSIGNED_SHORT";
-            case TYPE_UNSIGNED_LONG:
-                return "UNSIGNED_LONG";
-            case TYPE_UNSIGNED_RATIONAL:
-                return "UNSIGNED_RATIONAL";
-            case TYPE_UNDEFINED:
-                return "UNDEFINED";
-            case TYPE_LONG:
-                return "LONG";
-            case TYPE_RATIONAL:
-                return "RATIONAL";
-            default:
-                return "";
-        }
     }
 
     /**

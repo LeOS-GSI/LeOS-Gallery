@@ -57,7 +57,6 @@ public class SVG {
 
     /**
      * Users should use one of the getFromX() methods to create an instance of SVG
-     *
      */
     private SVG(SVGBase base) {
         this.base = base;
