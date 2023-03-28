@@ -1,13 +1,13 @@
 package ca.on.hojat.renderer.exif;
 
+import java.io.EOFException;
 import java.io.FilterInputStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.EOFException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 class CountedDataInputStream extends FilterInputStream {
 
@@ -21,12 +21,12 @@ class CountedDataInputStream extends FilterInputStream {
         super(in);
     }
 
-    public void setEnd(int end) {
-        mEnd = end;
-    }
-
     public int getEnd() {
         return mEnd;
+    }
+
+    public void setEnd(int end) {
+        mEnd = end;
     }
 
     public int getReadByteCount() {

@@ -1,15 +1,14 @@
 package ca.on.hojat.renderer.exif;
 
-import java.util.List;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteOrder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 
 import timber.log.Timber;
-
-import java.util.Collections;
 
 /**
  * This class stores the EXIF header in IFDs according to the JPEG
@@ -22,16 +21,15 @@ class ExifData {
     private static final byte[] USER_COMMENT_ASCII = {0x41, 0x53, 0x43, 0x49, 0x49, 0x00, 0x00, 0x00};
     private static final byte[] USER_COMMENT_JIS = {0x4A, 0x49, 0x53, 0x00, 0x00, 0x00, 0x00, 0x00};
     private static final byte[] USER_COMMENT_UNICODE = {0x55, 0x4E, 0x49, 0x43, 0x4F, 0x44, 0x45, 0x00};
-
-    private List<ExifParser.Section> mSections;
     private final IfdData[] mIfdDatas = new IfdData[IfdId.TYPE_IFD_COUNT];
     private final ByteOrder mByteOrder;
-    private byte[] mThumbnail;
     private final ArrayList<byte[]> mStripBytes = new ArrayList<>();
+    public int mUncompressedDataPosition = 0;
+    private List<ExifParser.Section> mSections;
+    private byte[] mThumbnail;
     private int qualityGuess = 0;
     private int imageLength = -1, imageWidth = -1;
     private short jpegProcess = 0;
-    public int mUncompressedDataPosition = 0;
 
     ExifData(ByteOrder order) {
         mByteOrder = order;
@@ -326,12 +324,12 @@ class ExifData {
         return null;
     }
 
-    protected void setQualityGuess(final int qualityGuess) {
-        this.qualityGuess = qualityGuess;
-    }
-
     public int getQualityGuess() {
         return qualityGuess;
+    }
+
+    protected void setQualityGuess(final int qualityGuess) {
+        this.qualityGuess = qualityGuess;
     }
 
     protected void setImageSize(final int imageWidth, final int imageLength) {
@@ -343,19 +341,19 @@ class ExifData {
         return new int[]{imageWidth, imageLength};
     }
 
-    public void setJpegProcess(final short jpegProcess) {
-        this.jpegProcess = jpegProcess;
-    }
-
     public short getJpegProcess() {
         return this.jpegProcess;
     }
 
-    public void setSections(final List<ExifParser.Section> sections) {
-        mSections = sections;
+    public void setJpegProcess(final short jpegProcess) {
+        this.jpegProcess = jpegProcess;
     }
 
     public List<ExifParser.Section> getSections() {
         return mSections;
+    }
+
+    public void setSections(final List<ExifParser.Section> sections) {
+        mSections = sections;
     }
 }

@@ -232,9 +232,6 @@ public class SVGBase {
         externalFileResolverSingleton = null;
     }
 
-
-    //===============================================================================
-
     protected static SVGParser createParser() {
         return new SVGParserImpl().setInternalEntitiesEnabled(enableInternalEntitiesSingleton)
                 .setExternalFileResolver(externalFileResolverSingleton);

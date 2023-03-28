@@ -1,34 +1,15 @@
 package ca.on.hojat.renderer.exif;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
-import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.ArrayList;
-
-import android.annotation.SuppressLint;
-import android.util.SparseIntArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import timber.log.Timber;
 
 /**
  * This class provides methods and constants for reading and writing jpeg file
@@ -735,21 +716,22 @@ public class ExifInterface {
 
 
     public static final java.nio.ByteOrder DEFAULT_BYTE_ORDER = java.nio.ByteOrder.BIG_ENDIAN;
-    private ExifData mData = new ExifData(DEFAULT_BYTE_ORDER);
     private static final String NULL_ARGUMENT_STRING = "Argument is null";
-
     private static final String GPS_DATE_FORMAT_STR = "yyyy:MM:dd";
     @android.annotation.SuppressLint("SimpleDateFormat")
     private static final java.text.DateFormat mGPSDateStampFormat = new java.text.SimpleDateFormat(GPS_DATE_FORMAT_STR);
     private static final String DATETIME_FORMAT_STR = "yyyy:MM:dd kk:mm:ss";
     @android.annotation.SuppressLint("SimpleDateFormat")
     private static final java.text.DateFormat mDateTimeStampFormat = new java.text.SimpleDateFormat(DATETIME_FORMAT_STR);
-
     /**
      * Tags that contain offset markers. These are included in the banned
      * defines.
      */
     private static java.util.HashSet<Short> sOffsetTags = new java.util.HashSet<>();
+    /**
+     * Tags with definitions that cannot be overridden (banned defines).
+     */
+    protected static java.util.HashSet<Short> sBannedDefines = new java.util.HashSet<>(sOffsetTags);
 
     static {
         sOffsetTags.add(getTrueTagKey(TAG_GPS_IFD));
@@ -759,11 +741,6 @@ public class ExifInterface {
         sOffsetTags.add(getTrueTagKey(TAG_STRIP_OFFSETS));
     }
 
-    /**
-     * Tags with definitions that cannot be overridden (banned defines).
-     */
-    protected static java.util.HashSet<Short> sBannedDefines = new java.util.HashSet<>(sOffsetTags);
-
     static {
         sBannedDefines.add(getTrueTagKey(TAG_NULL));
         sBannedDefines.add(getTrueTagKey(TAG_JPEG_INTERCHANGE_FORMAT_LENGTH));
@@ -771,6 +748,7 @@ public class ExifInterface {
     }
 
     private final java.util.Calendar mGPSTimeStampCalendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"));
+    private ExifData mData = new ExifData(DEFAULT_BYTE_ORDER);
     private android.util.SparseIntArray mTagInfo = null;
 
     public ExifInterface() {
@@ -836,34 +814,6 @@ public class ExifInterface {
     }
 
     /**
-     * Given the value from {@link #TAG_FOCAL_PLANE_RESOLUTION_UNIT} or {@link #TAG_RESOLUTION_UNIT}
-     * this method will return the corresponding value in millimeters
-     *
-     * @param resolution {@link #TAG_FOCAL_PLANE_RESOLUTION_UNIT} or {@link #TAG_RESOLUTION_UNIT}
-     * @return resolution in millimeters
-     */
-    @SuppressWarnings("unused")
-    public double getResolutionUnit(int resolution) {
-        switch (resolution) {
-            case 1:
-            case ExifInterface.ResolutionUnit.INCHES:
-                return 25.4;
-
-            case ExifInterface.ResolutionUnit.CENTIMETERS:
-                return 10;
-
-            case ExifInterface.ResolutionUnit.MILLIMETERS:
-                return 1;
-
-            case ExifInterface.ResolutionUnit.MICROMETERS:
-                return .001;
-
-            default:
-                return 25.4;
-        }
-    }
-
-    /**
      * Gets the double representation of the GPS latitude or longitude
      * coordinate.
      *
@@ -909,6 +859,213 @@ public class ExifInterface {
             ret[j++] = i;
         }
         return ret;
+    }
+
+    protected static void closeSilently(Closeable c) {
+        if (c != null) {
+            try {
+                c.close();
+            } catch (Throwable e) {
+                // ignored
+            }
+        }
+    }
+
+    private static int writeExif_internal(final InputStream input, final OutputStream output, ExifData exifData) throws IOException {
+        // Log.i( TAG, "writeExif_internal" );
+
+        // 1. read the output file first
+        ExifInterface src_exif = new ExifInterface();
+        src_exif.readExif(input, 0);
+
+        // 4. Create the destination outputstream
+        // 5. write headers
+        output.write(0xFF);
+        output.write(JpegHeader.TAG_SOI);
+
+        final java.util.List<ExifParser.Section> sections = src_exif.mData.getSections();
+
+        // 6. write all the sections from the srcFilename
+        if (sections.get(0).type != JpegHeader.TAG_M_JFIF) {
+            timber.log.Timber.w("first section is not a JFIF or EXIF tag");
+            output.write(JpegHeader.JFIF_HEADER);
+        }
+
+        // 6.1 write the *new* EXIF tag
+        ExifOutputStream eo = new ExifOutputStream(src_exif);
+        eo.setExifData(exifData);
+        eo.writeExifData(output);
+
+        // 6.2 write all the sections except for the SOS ( start of scan )
+        for (int a = 0; a < sections.size() - 1; a++) {
+            ExifParser.Section current = sections.get(a);
+            // Log.v( TAG, "writing section.. " + String.format( "0x%2X", current.type ) );
+            output.write(0xFF);
+            output.write(current.type);
+            output.write(current.data);
+        }
+
+        // 6.3 write the last SOS marker
+        ExifParser.Section current = sections.get(sections.size() - 1);
+        // Log.v( TAG, "writing last section.. " + String.format( "0x%2X", current.type ) );
+        output.write(0xFF);
+        output.write(current.type);
+        output.write(current.data);
+
+        // return the position where the input stream should be copied
+        return src_exif.mData.mUncompressedDataPosition;
+    }
+
+    /**
+     * Returns the default IFD for a tag constant.
+     */
+    public static int getTrueIfd(int tag) {
+        return tag >>> 16;
+    }
+
+    /**
+     * Returns the TID for a tag constant.
+     */
+    public static short getTrueTagKey(int tag) {
+        // Truncate
+        return (short) tag;
+    }
+
+    protected static int getFlagsFromAllowedIfds(int[] allowedIfds) {
+        if (allowedIfds == null || allowedIfds.length == 0) {
+            return 0;
+        }
+        int flags = 0;
+        int[] ifds = IfdData.getIfds();
+        for (int i = 0; i < IfdId.TYPE_IFD_COUNT; i++) {
+            for (int j : allowedIfds) {
+                if (ifds[i] == j) {
+                    flags |= 1 << i;
+                    break;
+                }
+            }
+        }
+        return flags;
+    }
+
+    protected static int getComponentCountFromInfo(int info) {
+        return info & 0x0ffff;
+    }
+
+    protected static short getTypeFromInfo(int info) {
+        return (short) ((info >> 16) & 0x0ff);
+    }
+
+    /**
+     * Returns the constant representing a tag with a given TID and default IFD.
+     */
+    public static int defineTag(int ifdId, short tagId) {
+        return (tagId & 0x0000ffff) | (ifdId << 16);
+    }
+
+    @android.annotation.SuppressLint("DefaultLocale")
+    private static String convertRationalLatLonToString(Rational[] coord, String ref) {
+        try {
+
+            double degrees = coord[0].toDouble();
+            double minutes = coord[1].toDouble();
+            double seconds = coord[2].toDouble();
+            ref = ref.substring(0, 1);
+
+            return String.format("%1$.0f° %2$.0f' %3$.0f\" %4$s", degrees, minutes, seconds, ref.toUpperCase(java.util.Locale.getDefault()));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Given an exif date time, like {@link #TAG_DATE_TIME} or {@link #TAG_DATE_TIME_DIGITIZED}
+     * returns a java Date object
+     *
+     * @param dateTimeString one of the value of {@link #TAG_DATE_TIME} or {@link #TAG_DATE_TIME_DIGITIZED}
+     * @param timeZone       the target timezone
+     * @return the parsed date
+     */
+    public static java.util.Date getDateTime(String dateTimeString, java.util.TimeZone timeZone) {
+        if (dateTimeString == null) return null;
+
+        @android.annotation.SuppressLint("SimpleDateFormat") java.text.DateFormat formatter = new java.text.SimpleDateFormat(DATETIME_FORMAT_STR);
+        formatter.setTimeZone(timeZone);
+
+        try {
+            return formatter.parse(dateTimeString);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected static boolean isIfdAllowed(int info, int ifd) {
+        int[] ifds = IfdData.getIfds();
+        int ifdFlags = getAllowedIfdFlagsFromInfo(info);
+        for (int i = 0; i < ifds.length; i++) {
+            if (ifd == ifds[i] && ((ifdFlags >> i) & 1) == 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected static int getAllowedIfdFlagsFromInfo(int info) {
+        return info >>> 24;
+    }
+
+    private static Rational[] toExifLatLong(double value) {
+        // convert to the format dd/1 mm/1 ssss/100
+        value = Math.abs(value);
+        int degrees = (int) value;
+        value = (value - degrees) * 60;
+        int minutes = (int) value;
+        value = (value - minutes) * 6000;
+        int seconds = (int) value;
+        return new Rational[]{new Rational(degrees, 1), new Rational(minutes, 1), new Rational(seconds, 100)};
+    }
+
+    @SuppressWarnings("unused")
+    public static byte[] toBitArray(short value) {
+        byte[] result = new byte[16];
+        for (int i = 0; i < 16; i++) {
+            result[15 - i] = (byte) ((value >> i) & 1);
+        }
+        return result;
+    }
+
+    /**
+     * Given the value from {@link #TAG_FOCAL_PLANE_RESOLUTION_UNIT} or {@link #TAG_RESOLUTION_UNIT}
+     * this method will return the corresponding value in millimeters
+     *
+     * @param resolution {@link #TAG_FOCAL_PLANE_RESOLUTION_UNIT} or {@link #TAG_RESOLUTION_UNIT}
+     * @return resolution in millimeters
+     */
+    @SuppressWarnings("unused")
+    public double getResolutionUnit(int resolution) {
+        switch (resolution) {
+            case 1:
+            case ExifInterface.ResolutionUnit.INCHES:
+                return 25.4;
+
+            case ExifInterface.ResolutionUnit.CENTIMETERS:
+                return 10;
+
+            case ExifInterface.ResolutionUnit.MILLIMETERS:
+                return 1;
+
+            case ExifInterface.ResolutionUnit.MICROMETERS:
+                return .001;
+
+            default:
+                return 25.4;
+        }
     }
 
     /**
@@ -963,16 +1120,6 @@ public class ExifInterface {
             throw new IOException("Invalid exif format : " + e);
         }
         mData = d;
-    }
-
-    protected static void closeSilently(Closeable c) {
-        if (c != null) {
-            try {
-                c.close();
-            } catch (Throwable e) {
-                // ignored
-            }
-        }
     }
 
     /**
@@ -1112,52 +1259,6 @@ public class ExifInterface {
         writeExif(in, dstFilename);
     }
 
-    private static int writeExif_internal(final InputStream input, final OutputStream output, ExifData exifData) throws IOException {
-        // Log.i( TAG, "writeExif_internal" );
-
-        // 1. read the output file first
-        ExifInterface src_exif = new ExifInterface();
-        src_exif.readExif(input, 0);
-
-        // 4. Create the destination outputstream
-        // 5. write headers
-        output.write(0xFF);
-        output.write(JpegHeader.TAG_SOI);
-
-        final java.util.List<ExifParser.Section> sections = src_exif.mData.getSections();
-
-        // 6. write all the sections from the srcFilename
-        if (sections.get(0).type != JpegHeader.TAG_M_JFIF) {
-            timber.log.Timber.w("first section is not a JFIF or EXIF tag");
-            output.write(JpegHeader.JFIF_HEADER);
-        }
-
-        // 6.1 write the *new* EXIF tag
-        ExifOutputStream eo = new ExifOutputStream(src_exif);
-        eo.setExifData(exifData);
-        eo.writeExifData(output);
-
-        // 6.2 write all the sections except for the SOS ( start of scan )
-        for (int a = 0; a < sections.size() - 1; a++) {
-            ExifParser.Section current = sections.get(a);
-            // Log.v( TAG, "writing section.. " + String.format( "0x%2X", current.type ) );
-            output.write(0xFF);
-            output.write(current.type);
-            output.write(current.data);
-        }
-
-        // 6.3 write the last SOS marker
-        ExifParser.Section current = sections.get(sections.size() - 1);
-        // Log.v( TAG, "writing last section.. " + String.format( "0x%2X", current.type ) );
-        output.write(0xFF);
-        output.write(current.type);
-        output.write(current.data);
-
-        // return the position where the input stream should be copied
-        return src_exif.mData.mUncompressedDataPosition;
-    }
-
-
     /**
      * Get the exif tags in this ExifInterface object or null if none exist.
      *
@@ -1254,21 +1355,6 @@ public class ExifInterface {
             initTagInfo();
         }
         return mTagInfo;
-    }
-
-    /**
-     * Returns the default IFD for a tag constant.
-     */
-    public static int getTrueIfd(int tag) {
-        return tag >>> 16;
-    }
-
-    /**
-     * Returns the TID for a tag constant.
-     */
-    public static short getTrueTagKey(int tag) {
-        // Truncate
-        return (short) tag;
     }
 
     private void initTagInfo() {
@@ -1419,23 +1505,6 @@ public class ExifInterface {
         mTagInfo.put(TAG_INTEROP_VERSION, interopFlags | ExifTag.TYPE_UNDEFINED << 16 | 4);
     }
 
-    protected static int getFlagsFromAllowedIfds(int[] allowedIfds) {
-        if (allowedIfds == null || allowedIfds.length == 0) {
-            return 0;
-        }
-        int flags = 0;
-        int[] ifds = IfdData.getIfds();
-        for (int i = 0; i < IfdId.TYPE_IFD_COUNT; i++) {
-            for (int j : allowedIfds) {
-                if (ifds[i] == j) {
-                    flags |= 1 << i;
-                    break;
-                }
-            }
-        }
-        return flags;
-    }
-
     /**
      * Returns the value of the ExifTag in that tag's default IFD for a defined
      * tag constant or null if none exists or the value could not be cast into
@@ -1498,6 +1567,11 @@ public class ExifInterface {
         }
         return l[0];
     }
+
+    /*
+     * Getter methods that are similar to getTagValue. Null is returned if the
+     * tag value cannot be cast into the return type.
+     */
 
     /**
      * @see #getTagValue
@@ -1589,11 +1663,6 @@ public class ExifInterface {
         return new Rational(l[0]);
     }
 
-    /*
-     * Getter methods that are similar to getTagValue. Null is returned if the
-     * tag value cannot be cast into the return type.
-     */
-
     /**
      * @see #getTagValue
      */
@@ -1653,10 +1722,6 @@ public class ExifInterface {
         return info != 0 && getComponentCountFromInfo(info) != ExifTag.SIZE_UNDEFINED;
     }
 
-    protected static int getComponentCountFromInfo(int info) {
-        return info & 0x0ffff;
-    }
-
     /**
      * Gets the defined number of elements for a tag.
      *
@@ -1705,10 +1770,6 @@ public class ExifInterface {
             return -1;
         }
         return getTypeFromInfo(info);
-    }
-
-    protected static short getTypeFromInfo(int info) {
-        return (short) ((info >> 16) & 0x0ff);
     }
 
     protected ExifTag buildUninitializedTag(int tagId) {
@@ -1835,13 +1896,6 @@ public class ExifInterface {
     @SuppressWarnings("unused")
     protected int getTagDefinition(short tagId, int defaultIfd) {
         return getTagInfo().get(defineTag(defaultIfd, tagId));
-    }
-
-    /**
-     * Returns the constant representing a tag with a given TID and default IFD.
-     */
-    public static int defineTag(int ifdId, short tagId) {
-        return (tagId & 0x0000ffff) | (ifdId << 16);
     }
 
     protected int[] getTagDefinitionsForTagId(short tagId) {
@@ -2133,48 +2187,6 @@ public class ExifInterface {
         return convertRationalLatLonToString(longitude, longitudeRef);
     }
 
-    @android.annotation.SuppressLint("DefaultLocale")
-    private static String convertRationalLatLonToString(Rational[] coord, String ref) {
-        try {
-
-            double degrees = coord[0].toDouble();
-            double minutes = coord[1].toDouble();
-            double seconds = coord[2].toDouble();
-            ref = ref.substring(0, 1);
-
-            return String.format("%1$.0f° %2$.0f' %3$.0f\" %4$s", degrees, minutes, seconds, ref.toUpperCase(java.util.Locale.getDefault()));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Given an exif date time, like {@link #TAG_DATE_TIME} or {@link #TAG_DATE_TIME_DIGITIZED}
-     * returns a java Date object
-     *
-     * @param dateTimeString one of the value of {@link #TAG_DATE_TIME} or {@link #TAG_DATE_TIME_DIGITIZED}
-     * @param timeZone       the target timezone
-     * @return the parsed date
-     */
-    public static java.util.Date getDateTime(String dateTimeString, java.util.TimeZone timeZone) {
-        if (dateTimeString == null) return null;
-
-        @android.annotation.SuppressLint("SimpleDateFormat") java.text.DateFormat formatter = new java.text.SimpleDateFormat(DATETIME_FORMAT_STR);
-        formatter.setTimeZone(timeZone);
-
-        try {
-            return formatter.parse(dateTimeString);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     /**
      * Creates, formats, and sets the DateTimeStamp tag for one of:
      * {@link #TAG_DATE_TIME}, {@link #TAG_DATE_TIME_DIGITIZED},
@@ -2240,21 +2252,6 @@ public class ExifInterface {
         return t;
     }
 
-    protected static boolean isIfdAllowed(int info, int ifd) {
-        int[] ifds = IfdData.getIfds();
-        int ifdFlags = getAllowedIfdFlagsFromInfo(info);
-        for (int i = 0; i < ifds.length; i++) {
-            if (ifd == ifds[i] && ((ifdFlags >> i) & 1) == 1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected static int getAllowedIfdFlagsFromInfo(int info) {
-        return info >>> 24;
-    }
-
     /**
      * Creates and sets all to the GPS tags for a give latitude and longitude.
      *
@@ -2276,17 +2273,6 @@ public class ExifInterface {
         setTag(latRefTag);
         setTag(longRefTag);
         return true;
-    }
-
-    private static Rational[] toExifLatLong(double value) {
-        // convert to the format dd/1 mm/1 ssss/100
-        value = Math.abs(value);
-        int degrees = (int) value;
-        value = (value - degrees) * 60;
-        int minutes = (int) value;
-        value = (value - minutes) * 6000;
-        int seconds = (int) value;
-        return new Rational[]{new Rational(degrees, 1), new Rational(minutes, 1), new Rational(seconds, 100)};
     }
 
     /**
@@ -2382,6 +2368,8 @@ public class ExifInterface {
         public static final short CO_SITED = 2;
     }
 
+    // TODO: uncompressed thumbnail setters
+
     /**
      * Constants for {@link #TAG_COMPRESSION}
      */
@@ -2390,8 +2378,6 @@ public class ExifInterface {
         public static final short UNCOMPRESSION = 1;
         public static final short JPEG = 6;
     }
-
-    // TODO: uncompressed thumbnail setters
 
     /**
      * Constants for {@link #TAG_RESOLUTION_UNIT}
@@ -2413,6 +2399,8 @@ public class ExifInterface {
         public static final short YCBCR = 6;
     }
 
+    // Convenience methods:
+
     /**
      * Constants for {@link #TAG_PLANAR_CONFIGURATION}
      */
@@ -2421,8 +2409,6 @@ public class ExifInterface {
         public static final short CHUNKY = 1;
         public static final short PLANAR = 2;
     }
-
-    // Convenience methods:
 
     /**
      * Constants for {@link #TAG_EXPOSURE_PROGRAM}
@@ -2453,15 +2439,6 @@ public class ExifInterface {
         public static final short PATTERN = 5;
         public static final short PARTAIL = 6;
         public static final short OTHER = 255;
-    }
-
-    @SuppressWarnings("unused")
-    public static byte[] toBitArray(short value) {
-        byte[] result = new byte[16];
-        for (int i = 0; i < 16; i++) {
-            result[15 - i] = (byte) ((value >> i) & 1);
-        }
-        return result;
     }
 
     /**
@@ -2597,13 +2574,13 @@ public class ExifInterface {
      */
     @SuppressWarnings("unused")
     public static interface SensingMethod {
-        public static final short NOT_DEFINED = 1;
-        public static final short ONE_CHIP_COLOR = 2;
-        public static final short TWO_CHIP_COLOR = 3;
-        public static final short THREE_CHIP_COLOR = 4;
-        public static final short COLOR_SEQUENTIAL_AREA = 5;
-        public static final short TRILINEAR = 7;
-        public static final short COLOR_SEQUENTIAL_LINEAR = 8;
+        short NOT_DEFINED = 1;
+        short ONE_CHIP_COLOR = 2;
+        short TWO_CHIP_COLOR = 3;
+        short THREE_CHIP_COLOR = 4;
+        short COLOR_SEQUENTIAL_AREA = 5;
+        short TRILINEAR = 7;
+        short COLOR_SEQUENTIAL_LINEAR = 8;
     }
 
     /**
@@ -2611,7 +2588,7 @@ public class ExifInterface {
      */
     @SuppressWarnings("unused")
     public static interface FileSource {
-        public static final short DSC = 3;
+        short DSC = 3;
     }
 
     /**
@@ -2619,60 +2596,55 @@ public class ExifInterface {
      */
     @SuppressWarnings("unused")
     public static interface SceneType {
-        public static final short DIRECT_PHOTOGRAPHED = 1;
+        short DIRECT_PHOTOGRAPHED = 1;
     }
 
     /**
      * Constants for {@link #TAG_GAIN_CONTROL}
      */
-    @SuppressWarnings("unused")
     public static interface GainControl {
-        public static final short NONE = 0;
-        public static final short LOW_UP = 1;
-        public static final short HIGH_UP = 2;
-        public static final short LOW_DOWN = 3;
-        public static final short HIGH_DOWN = 4;
+        short NONE = 0;
+        short LOW_UP = 1;
+        short HIGH_UP = 2;
+        short LOW_DOWN = 3;
+        short HIGH_DOWN = 4;
     }
 
     /**
      * Constants for {@link #TAG_CONTRAST}
      */
-    @SuppressWarnings("unused")
-    public static interface Contrast {
-        public static final short NORMAL = 0;
-        public static final short SOFT = 1;
-        public static final short HARD = 2;
+    public interface Contrast {
+        short NORMAL = 0;
+        short SOFT = 1;
+        short HARD = 2;
     }
 
     /**
      * Constants for {@link #TAG_SATURATION}
      */
-    @SuppressWarnings("unused")
-    public static interface Saturation {
-        public static final short NORMAL = 0;
-        public static final short LOW = 1;
-        public static final short HIGH = 2;
+    public interface Saturation {
+        short NORMAL = 0;
+        short LOW = 1;
+        short HIGH = 2;
     }
 
     /**
      * Constants for {@link #TAG_SHARPNESS}
      */
-    @SuppressWarnings("unused")
-    public static interface Sharpness {
-        public static final short NORMAL = 0;
-        public static final short SOFT = 1;
-        public static final short HARD = 2;
+    public interface Sharpness {
+        short NORMAL = 0;
+        short SOFT = 1;
+        short HARD = 2;
     }
 
     /**
      * Constants for {@link #TAG_SUBJECT_DISTANCE}
      */
-    @SuppressWarnings("unused")
-    public static interface SubjectDistance {
-        public static final short UNKNOWN = 0;
-        public static final short MACRO = 1;
-        public static final short CLOSE_VIEW = 2;
-        public static final short DISTANT_VIEW = 3;
+    public interface SubjectDistance {
+        short UNKNOWN = 0;
+        short MACRO = 1;
+        short CLOSE_VIEW = 2;
+        short DISTANT_VIEW = 3;
     }
 
     /**
@@ -2681,8 +2653,8 @@ public class ExifInterface {
      */
     @SuppressWarnings("unused")
     public static interface GpsLatitudeRef {
-        public static final String NORTH = "N";
-        public static final String SOUTH = "S";
+        String NORTH = "N";
+        String SOUTH = "S";
     }
 
     /**
@@ -2691,23 +2663,21 @@ public class ExifInterface {
      */
     @SuppressWarnings("unused")
     public static interface GpsLongitudeRef {
-        public static final String EAST = "E";
-        public static final String WEST = "W";
+        String EAST = "E";
+        String WEST = "W";
     }
 
     /**
      * Constants for {@link #TAG_GPS_ALTITUDE_REF}
      */
-    @SuppressWarnings("unused")
-    public static interface GpsAltitudeRef {
-        public static final short SEA_LEVEL = 0;
-        public static final short SEA_LEVEL_NEGATIVE = 1;
+    public interface GpsAltitudeRef {
+        short SEA_LEVEL = 0;
+        short SEA_LEVEL_NEGATIVE = 1;
     }
 
     /**
      * Constants for {@link #TAG_GPS_STATUS}
      */
-    @SuppressWarnings("unused")
     public static interface GpsStatus {
         public static final String IN_PROGRESS = "A";
         public static final String INTEROPERABILITY = "V";
@@ -2716,7 +2686,6 @@ public class ExifInterface {
     /**
      * Constants for {@link #TAG_GPS_MEASURE_MODE}
      */
-    @SuppressWarnings("unused")
     public static interface GpsMeasureMode {
         public static final String MODE_2_DIMENSIONAL = "2";
         public static final String MODE_3_DIMENSIONAL = "3";
