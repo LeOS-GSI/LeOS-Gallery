@@ -3,13 +3,13 @@ package ca.on.sudbury.hojat.smartgallery.activities
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.checkAppSideloading
-import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
-import ca.on.sudbury.hojat.smartgallery.extensions.showSideloadingDialog
-import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.extensions.getMyContentProviderCursorLoader
 import ca.on.sudbury.hojat.smartgallery.extensions.getSharedThemeSync
+import ca.on.sudbury.hojat.smartgallery.extensions.isUsingSystemDarkTheme
+import ca.on.sudbury.hojat.smartgallery.extensions.showSideloadingDialog
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_TRUE
 import ca.on.sudbury.hojat.smartgallery.helpers.SIDELOADING_UNCHECKED
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme

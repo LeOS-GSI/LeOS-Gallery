@@ -2,9 +2,6 @@ package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.os.Bundle
 import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
-import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
-import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.adapters.ManageHiddenFoldersAdapter
 import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityManageFoldersBinding
@@ -12,6 +9,9 @@ import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.addNoMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
+import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.helpers.NavigationIcon
+import ca.on.sudbury.hojat.smartgallery.interfaces.RefreshRecyclerViewListener
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 

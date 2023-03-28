@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
 import android.widget.LinearLayout
+import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.ActivityLicenseBinding
+import ca.on.sudbury.hojat.smartgallery.databinding.ItemLicenseBinding
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
@@ -44,9 +47,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SANSELAN
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SMS_MMS
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_STETHO
 import ca.on.sudbury.hojat.smartgallery.helpers.LICENSE_SUBSAMPLING
-import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.databinding.ActivityLicenseBinding
-import ca.on.sudbury.hojat.smartgallery.databinding.ItemLicenseBinding
 import ca.on.sudbury.hojat.smartgallery.models.License
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 

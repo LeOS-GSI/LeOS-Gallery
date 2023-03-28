@@ -16,6 +16,10 @@ import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import androidx.core.net.toUri
+import ca.on.sudbury.hojat.smartgallery.R
+import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.getContrastColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperBackgroundColor
@@ -33,10 +37,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_VERSION_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
-import ca.on.sudbury.hojat.smartgallery.R
-import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
-import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
 
