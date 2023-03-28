@@ -46,7 +46,7 @@ class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context
         pattern_lock_view.correctStateColor = context.getProperPrimaryColor()
         pattern_lock_view.normalStateColor = textColor
         pattern_lock_view.addPatternLockListener(object : PatternLockViewListener {
-            override fun onComplete(pattern: MutableList<PatternLockView.Dot>?) {
+            override fun onComplete(pattern: List<PatternLockView.Dot>?) {
                 receivedHash(PatternLockUtils.patternToSha1(pattern_lock_view, pattern))
             }
 
@@ -54,7 +54,7 @@ class PatternTab(context: Context, attrs: AttributeSet) : RelativeLayout(context
 
             override fun onStarted() {}
 
-            override fun onProgress(progressPattern: MutableList<PatternLockView.Dot>?) {}
+            override fun onProgress(progressPattern: List<PatternLockView.Dot>?) {}
         })
     }
 

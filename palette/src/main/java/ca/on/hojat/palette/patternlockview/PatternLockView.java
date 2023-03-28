@@ -104,6 +104,7 @@ public class PatternLockView extends View {
     public PatternLockView(Context context) {
         this(context, null);
     }
+
     public PatternLockView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
