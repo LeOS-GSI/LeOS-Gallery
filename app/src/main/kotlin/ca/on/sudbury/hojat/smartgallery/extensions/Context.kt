@@ -45,6 +45,9 @@ import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.documentfile.provider.DocumentFile
 import androidx.loader.content.CursorLoader
+import ca.on.hojat.palette.views.MyButton
+import ca.on.hojat.palette.views.MySquareImageView
+import ca.on.hojat.palette.views.MyTextView
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.asynctasks.GetMediaAsynctask
 import ca.on.sudbury.hojat.smartgallery.database.MediumDao
@@ -52,6 +55,7 @@ import ca.on.sudbury.hojat.smartgallery.database.WidgetsDao
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.helpers.AlphanumericComparator
 import ca.on.sudbury.hojat.smartgallery.helpers.BaseConfig
+import ca.on.sudbury.hojat.smartgallery.helpers.BaseContentProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.Config
 import ca.on.sudbury.hojat.smartgallery.helpers.DARK_GREY
 import ca.on.sudbury.hojat.smartgallery.helpers.EXTERNAL_STORAGE_PROVIDER_AUTHORITY
@@ -60,11 +64,12 @@ import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_LARGE
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_MEDIUM
 import ca.on.sudbury.hojat.smartgallery.helpers.FONT_SIZE_SMALL
+import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
+import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
 import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.IsoTypeReader
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
-import ca.on.sudbury.hojat.smartgallery.helpers.BaseContentProvider
-import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryWidgetProvider
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.NOMEDIA
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CALL_PHONE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_CAMERA
@@ -98,6 +103,7 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_RANDOM
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_DESCENDING
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryWidgetProvider
 import ca.on.sudbury.hojat.smartgallery.helpers.sumByLong
 import ca.on.sudbury.hojat.smartgallery.models.AlbumCover
 import ca.on.sudbury.hojat.smartgallery.models.Directory
@@ -107,30 +113,24 @@ import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.SharedTheme
 import ca.on.sudbury.hojat.smartgallery.models.ThumbnailItem
 import ca.on.sudbury.hojat.smartgallery.svg.SvgSoftwareLayerSetter
+import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatCheckbox
 import ca.on.sudbury.hojat.smartgallery.views.MyAppCompatSpinner
 import ca.on.sudbury.hojat.smartgallery.views.MyAutoCompleteTextView
-import ca.on.hojat.palette.views.MyButton
 import ca.on.sudbury.hojat.smartgallery.views.MyCompatRadioButton
 import ca.on.sudbury.hojat.smartgallery.views.MyEditText
 import ca.on.sudbury.hojat.smartgallery.views.MyFloatingActionButton
 import ca.on.sudbury.hojat.smartgallery.views.MySeekBar
-import ca.on.hojat.palette.views.MySquareImageView
 import ca.on.sudbury.hojat.smartgallery.views.MySwitchCompat
 import ca.on.sudbury.hojat.smartgallery.views.MyTextInputLayout
-import ca.on.hojat.palette.views.MyTextView
-import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
-import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
-import ca.on.sudbury.hojat.smartgallery.usecases.IsMarshmallowPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsQPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsGifUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnSdUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsPngUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.DataSource
@@ -154,9 +154,7 @@ import java.net.URLDecoder
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
-import java.util.Collections
+import java.util.*
 import java.util.regex.Pattern
 import kotlin.collections.set
 import kotlin.math.roundToInt
@@ -2379,8 +2377,7 @@ fun Context.getSAFDocumentId(path: String): String {
     return "$storageId:$relativePath"
 }
 
-fun Context.getStoreUrl() =
-    "https://play.google.com/store/apps/details?id=${packageName.removeSuffix(".debug")}"
+fun Context.getStoreUrl() = "https://github.com/hojat72elect/Smart-Gallery"
 
 fun Context.getTextSize() = when (baseConfig.fontSize) {
     FONT_SIZE_SMALL -> resources.getDimension(R.dimen.smaller_text_size)

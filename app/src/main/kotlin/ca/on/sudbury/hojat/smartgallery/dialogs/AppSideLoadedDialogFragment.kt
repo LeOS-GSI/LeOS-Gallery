@@ -18,8 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
  */
 class AppSideLoadedDialogFragment(val callback: () -> Unit) : DialogFragment() {
 
-    private val url =
-        "https://play.google.com/store/apps/details?id=${getString(R.string.package_name)}"
+    private val url = "https://github.com/hojat72elect/Smart-Gallery"
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         AlertDialog.Builder(requireContext())

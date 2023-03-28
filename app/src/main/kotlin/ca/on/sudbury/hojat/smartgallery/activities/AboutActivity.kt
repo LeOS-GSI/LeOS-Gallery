@@ -1,21 +1,16 @@
 package ca.on.sudbury.hojat.smartgallery.activities
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.Intent.ACTION_SEND
-import android.content.Intent.ACTION_SENDTO
-import android.content.Intent.EXTRA_EMAIL
 import android.content.Intent.EXTRA_SUBJECT
 import android.content.Intent.EXTRA_TEXT
 import android.content.Intent.createChooser
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
 import android.view.View
 import android.widget.Toast
-import androidx.core.net.toUri
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityAboutBinding
 import ca.on.sudbury.hojat.smartgallery.dialogs.ConfirmationAdvancedDialogFragment
@@ -35,7 +30,6 @@ import ca.on.sudbury.hojat.smartgallery.helpers.APP_LAUNCHER_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_LICENSES
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_NAME
 import ca.on.sudbury.hojat.smartgallery.helpers.APP_VERSION_NAME
-import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_FAQ_BEFORE_MAIL
 import ca.on.sudbury.hojat.smartgallery.models.FaqItem
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -157,58 +151,7 @@ class AboutActivity : BaseSimpleActivity() {
         }
 
         binding.aboutEmailHolder.setOnClickListener {
-            val msg =
-                "${getString(R.string.before_asking_question_read_faq)}\n\n${getString(R.string.make_sure_latest)}"
-            if (intent.getBooleanExtra(
-                    SHOW_FAQ_BEFORE_MAIL,
-                    false
-                ) && !baseConfig.wasBeforeAskingShown
-            ) {
-                baseConfig.wasBeforeAskingShown = true
-                val callback: (Boolean) -> Unit = { result ->
-                    if (result) {
-                        binding.aboutFaqHolder.performClick()
-                    } else {
-                        binding.aboutEmailHolder.performClick()
-                    }
-                }
-                ConfirmationAdvancedDialogFragment(
-                    message = msg,
-                    messageId = 0,
-                    positive = R.string.read_faq,
-                    negative = R.string.skip,
-                    callback = callback
-                ).show(supportFragmentManager, ConfirmationAdvancedDialogFragment.TAG)
-            } else {
-                val appVersion = String.format(
-                    getString(
-                        R.string.app_version,
-                        intent.getStringExtra(APP_VERSION_NAME)
-                    )
-                )
-                val deviceOS = String.format(getString(R.string.device_os), Build.VERSION.RELEASE)
-                val newline = "\n"
-                val separator = "------------------------------"
-                val body = "$appVersion$newline$deviceOS$newline$separator$newline$newline"
-
-                val address = getString(R.string.my_email)
-                val selectorIntent = Intent(ACTION_SENDTO)
-                    .setData("mailto:$address".toUri())
-                val emailIntent = Intent(ACTION_SEND).apply {
-                    putExtra(EXTRA_EMAIL, arrayOf(address))
-                    putExtra(EXTRA_SUBJECT, appName)
-                    putExtra(EXTRA_TEXT, body)
-                    selector = selectorIntent
-                }
-
-                try {
-                    startActivity(emailIntent)
-                } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(this, R.string.no_app_found, Toast.LENGTH_LONG).show()
-                } catch (e: Exception) {
-                    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show()
-                }
-            }
+            Toast.makeText(this, "This feature isn't implemented yet!", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -335,7 +278,7 @@ class AboutActivity : BaseSimpleActivity() {
         }
 
         binding.aboutMoreAppsHolder.setOnClickListener {
-            launchViewIntent("https://play.google.com/store/apps/dev?id=9070296388022589266")
+            launchViewIntent("https://github.com/hojat72elect/Smart-Gallery")
         }
     }
 

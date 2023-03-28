@@ -599,7 +599,7 @@ abstract class BaseSimpleActivity : AppCompatActivity() {
                     "You are using a fake version of the app. For your own safety download the original one from www.simplemobiletools.com. Thanks"
 
                 val callback: () -> Unit =
-                    { launchViewIntent("https://play.google.com/store/apps/dev?id=9070296388022589266") }
+                    { launchViewIntent("https://github.com/hojat72elect/Smart-Gallery") }
                 ConfirmationDialogFragment(
                     message = label,
                     positive = R.string.ok,
