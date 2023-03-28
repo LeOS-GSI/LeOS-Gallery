@@ -17,8 +17,8 @@ android {
         minSdk 21
         //noinspection OldTargetApi
         targetSdk 31
-        versionCode 374
-        versionName "6.24.1"
+        versionCode 1
+        versionName "0.0.1"
         setProperty("archivesBaseName", "ca.on.sudbury.hojat.smartgallery-$versionCode")
         vectorDrawables.useSupportLibrary = true
     }
