@@ -1,5 +1,13 @@
 package ca.on.hojat.palette.patternlockview.utils;
 
+import android.content.Context;
+
+import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+
 public class ResourceUtils {
 
     private ResourceUtils() {
@@ -14,8 +22,8 @@ public class ResourceUtils {
      * @param colorRes The resource identifier of the color
      * @return The resolved color value
      */
-    public static int getColor(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.ColorRes int colorRes) {
-        return androidx.core.content.ContextCompat.getColor(context, colorRes);
+    public static int getColor(@NonNull Context context, @ColorRes int colorRes) {
+        return ContextCompat.getColor(context, colorRes);
     }
 
     /**
@@ -25,7 +33,7 @@ public class ResourceUtils {
      * @param stringRes The resource identifier of the string
      * @return The string value
      */
-    public static String getString(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.StringRes int stringRes) {
+    public static String getString(@NonNull Context context, @StringRes int stringRes) {
         return context.getString(stringRes);
     }
 
@@ -36,7 +44,7 @@ public class ResourceUtils {
      * @param dimenRes The resource identifier of the dimension
      * @return The dimension in pixels
      */
-    public static float getDimensionInPx(@androidx.annotation.NonNull android.content.Context context, @androidx.annotation.DimenRes int dimenRes) {
+    public static float getDimensionInPx(@NonNull Context context, @DimenRes int dimenRes) {
         return context.getResources().getDimension(dimenRes);
     }
 }
