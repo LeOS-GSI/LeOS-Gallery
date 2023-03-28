@@ -23,6 +23,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuItemCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.RecyclerView
+import ca.on.hojat.palette.views.MyGridLayoutManager
 import ca.on.sudbury.hojat.smartgallery.BuildConfig
 import ca.on.sudbury.hojat.smartgallery.R
 import ca.on.sudbury.hojat.smartgallery.adapters.DirectoryAdapter
@@ -30,8 +31,16 @@ import ca.on.sudbury.hojat.smartgallery.base.SimpleActivity
 import ca.on.sudbury.hojat.smartgallery.database.DirectoryOperationsListener
 import ca.on.sudbury.hojat.smartgallery.databases.GalleryDatabase
 import ca.on.sudbury.hojat.smartgallery.databinding.ActivityMainBinding
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
+import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
 import ca.on.sudbury.hojat.smartgallery.extensions.addTempFolderIfNeeded
 import ca.on.sudbury.hojat.smartgallery.extensions.areSystemAnimationsEnabled
+import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.extensions.checkWhatsNew
 import ca.on.sudbury.hojat.smartgallery.extensions.config
 import ca.on.sudbury.hojat.smartgallery.extensions.createDirectoryFromMedia
@@ -41,6 +50,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getCachedMedia
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirectorySortingValue
 import ca.on.sudbury.hojat.smartgallery.extensions.getDirsToShow
 import ca.on.sudbury.hojat.smartgallery.extensions.getDistinctPath
+import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
 import ca.on.sudbury.hojat.smartgallery.extensions.getDoesFilePathExist
 import ca.on.sudbury.hojat.smartgallery.extensions.getFavoritePaths
 import ca.on.sudbury.hojat.smartgallery.extensions.getFilePublicUri
@@ -51,6 +61,8 @@ import ca.on.sudbury.hojat.smartgallery.extensions.getMimeType
 import ca.on.sudbury.hojat.smartgallery.extensions.getNoMediaFoldersSync
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperPrimaryColor
 import ca.on.sudbury.hojat.smartgallery.extensions.getProperTextColor
+import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
+import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getSortedDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.getStorageDirectories
 import ca.on.sudbury.hojat.smartgallery.extensions.handleExcludedFolderPasswordProtection
@@ -77,16 +89,21 @@ import ca.on.sudbury.hojat.smartgallery.extensions.updateWidgets
 import ca.on.sudbury.hojat.smartgallery.helpers.DAY_SECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.DIRECTORY
 import ca.on.sudbury.hojat.smartgallery.helpers.FAVORITES
+import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_ANY_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_IMAGE_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.GET_VIDEO_INTENT
+import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
+import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
 import ca.on.sudbury.hojat.smartgallery.helpers.MAX_COLUMN_COUNT
 import ca.on.sudbury.hojat.smartgallery.helpers.MONTH_MILLISECONDS
 import ca.on.sudbury.hojat.smartgallery.helpers.MediaFetcher
+import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_MEDIA_LOCATION
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_READ_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.PERMISSION_WRITE_STORAGE
 import ca.on.sudbury.hojat.smartgallery.helpers.PICKED_PATHS
+import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
 import ca.on.sudbury.hojat.smartgallery.helpers.RECYCLE_BIN
 import ca.on.sudbury.hojat.smartgallery.helpers.SET_WALLPAPER_INTENT
 import ca.on.sudbury.hojat.smartgallery.helpers.SHOW_ALL
@@ -96,33 +113,14 @@ import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_MODIFIED
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_DATE_TAKEN
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_BY_SIZE
 import ca.on.sudbury.hojat.smartgallery.helpers.SORT_USE_NUMERIC_VALUE
+import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
+import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
 import ca.on.sudbury.hojat.smartgallery.helpers.getDefaultFileFilter
 import ca.on.sudbury.hojat.smartgallery.jobs.NewPhotoFetcher
 import ca.on.sudbury.hojat.smartgallery.models.Directory
 import ca.on.sudbury.hojat.smartgallery.models.FileDirItem
 import ca.on.sudbury.hojat.smartgallery.models.Medium
 import ca.on.sudbury.hojat.smartgallery.models.Release
-import ca.on.hojat.palette.views.MyGridLayoutManager
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeSortingDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.ChangeViewTypeDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.CreateNewFolderDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilePickerDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.FilterMediaDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.RateStarsDialogFragment
-import ca.on.sudbury.hojat.smartgallery.dialogs.SecurityDialogFragment
-import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
-import ca.on.sudbury.hojat.smartgallery.extensions.getDocumentFile
-import ca.on.sudbury.hojat.smartgallery.extensions.getRealInternalStoragePath
-import ca.on.sudbury.hojat.smartgallery.extensions.getSDCardPath
-import ca.on.sudbury.hojat.smartgallery.helpers.FileLocation
-import ca.on.sudbury.hojat.smartgallery.helpers.GroupBy
-import ca.on.sudbury.hojat.smartgallery.helpers.INVALID_NAVIGATION_BAR_COLOR
-import ca.on.sudbury.hojat.smartgallery.helpers.MediaType
-import ca.on.sudbury.hojat.smartgallery.helpers.ProtectionType
-import ca.on.sudbury.hojat.smartgallery.helpers.SmartGalleryTimeFormat
-import ca.on.sudbury.hojat.smartgallery.helpers.ViewType
-import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
-import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.repositories.SupportedExtensionsRepository
 import ca.on.sudbury.hojat.smartgallery.settings.SettingsActivity
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
@@ -130,7 +128,9 @@ import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectoryFileCountUseC
 import ca.on.sudbury.hojat.smartgallery.usecases.CalculateDirectorySizeUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.CheckAppIconColorUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.HideKeyboardUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsPathOnOtgUseCase
+import ca.on.sudbury.hojat.smartgallery.usecases.IsRPlusUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.IsSvgUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.LaunchCameraUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
@@ -1858,17 +1858,7 @@ class MainActivity : SimpleActivity(), DirectoryOperationsListener {
 
     private fun checkWhatsNewDialog() {
         arrayListOf<Release>().apply {
-            add(Release(213, R.string.release_213))
-            add(Release(217, R.string.release_217))
-            add(Release(220, R.string.release_220))
-            add(Release(221, R.string.release_221))
-            add(Release(225, R.string.release_225))
-            add(Release(258, R.string.release_258))
-            add(Release(277, R.string.release_277))
-            add(Release(295, R.string.release_295))
-            add(Release(327, R.string.release_327))
-            add(Release(359, R.string.faq_16_text))
-            add(Release(369, R.string.release_369))
+            add(Release(1, R.string.release_001))
             checkWhatsNew(this, BuildConfig.VERSION_CODE)
         }
     }
