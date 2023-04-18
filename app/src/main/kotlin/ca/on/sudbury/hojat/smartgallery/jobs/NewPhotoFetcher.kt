@@ -16,10 +16,9 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.provider.MediaStore.Video
 import androidx.annotation.RequiresApi
+import ca.on.sudbury.hojat.smartgallery.extensions.addPathToDB
 import ca.on.sudbury.hojat.smartgallery.extensions.getParentPath
 import ca.on.sudbury.hojat.smartgallery.extensions.getStringValue
-
-import ca.on.sudbury.hojat.smartgallery.extensions.addPathToDB
 import ca.on.sudbury.hojat.smartgallery.extensions.updateDirectoryPath
 import ca.on.sudbury.hojat.smartgallery.usecases.RunOnBackgroundThreadUseCase
 
@@ -76,7 +75,7 @@ class NewPhotoFetcher : JobService() {
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartJob(params: JobParameters): Boolean {
         mRunningParams = params
-        RunOnBackgroundThreadUseCase{
+        RunOnBackgroundThreadUseCase {
 
             val affectedFolderPaths = HashSet<String>()
             if (params.triggeredContentAuthorities != null && params.triggeredContentUris != null) {

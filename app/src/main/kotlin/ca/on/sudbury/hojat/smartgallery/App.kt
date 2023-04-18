@@ -6,10 +6,10 @@ import ca.on.sudbury.hojat.smartgallery.extensions.baseConfig
 import ca.on.sudbury.hojat.smartgallery.usecases.IsNougatPlusUseCase
 import com.squareup.picasso.Downloader
 import com.squareup.picasso.Picasso
+import java.util.Locale
 import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
-import java.util.Locale
 
 class App : Application() {
     override fun onCreate() {
