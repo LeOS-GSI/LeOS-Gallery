@@ -19,7 +19,7 @@ of features you have been missing on your default Android gallery:
 </ul>
 
 The trello board I use for keeping track of all the tickets of this project is shared
-in <a href="https://trello.com/b/PkJ1D5pO/smart-gallery">here</a>.
+in [here](https://trello.com/b/PkJ1D5pO/smart-gallery).
 
 ## Video demo
 
