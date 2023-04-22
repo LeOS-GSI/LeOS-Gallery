@@ -91,9 +91,9 @@ public class MarshmallowReprintModule implements ReprintModule {
     public static final int FINGERPRINT_AUTHENTICATION_FAILED = 1001;
 
     private final Context context;
-    private final Reprint.Logger logger;
+    private final ca.on.hojat.fingerprint.core.Reprint.Logger logger;
 
-    public MarshmallowReprintModule(Context context, Reprint.Logger logger) {
+    public MarshmallowReprintModule(Context context, ca.on.hojat.fingerprint.core.Reprint.Logger logger) {
         this.context = context.getApplicationContext();
         this.logger = logger;
     }
@@ -101,9 +101,9 @@ public class MarshmallowReprintModule implements ReprintModule {
     // We used to use the appcompat library to load the fingerprint manager, but v25.1.0 was broken
     // on many phones. Instead, we handle the manager ourselves. FingerprintManagerCompat just
     // forwards calls anyway, so it doesn't add any value for us.
-    private android.hardware.fingerprint.FingerprintManager fingerprintManager() {
+    private FingerprintManager fingerprintManager() {
         try {
-            return context.getSystemService(android.hardware.fingerprint.FingerprintManager.class);
+            return context.getSystemService(FingerprintManager.class);
         } catch (Exception e) {
             logger.logException(e, "Could not get fingerprint system service on API that should support it.");
         } catch (NoClassDefFoundError e) {
@@ -119,7 +119,7 @@ public class MarshmallowReprintModule implements ReprintModule {
 
     @Override
     public boolean isHardwarePresent() {
-        final android.hardware.fingerprint.FingerprintManager fingerprintManager = fingerprintManager();
+        final FingerprintManager fingerprintManager = fingerprintManager();
         if (fingerprintManager == null) return false;
         // Normally, a security exception is only thrown if you don't have the USE_FINGERPRINT
         // permission in your manifest. However, some OEMs have pushed updates to M for phones
@@ -187,7 +187,7 @@ public class MarshmallowReprintModule implements ReprintModule {
         }
     }
 
-    class AuthCallback extends android.hardware.fingerprint.FingerprintManager.AuthenticationCallback {
+    class AuthCallback extends FingerprintManager.AuthenticationCallback {
         private final Reprint.RestartPredicate restartPredicate;
         private final CancellationSignal cancellationSignal;
         private AuthenticationListener listener;
