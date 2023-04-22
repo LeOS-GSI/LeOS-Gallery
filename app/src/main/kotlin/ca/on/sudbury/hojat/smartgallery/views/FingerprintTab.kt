@@ -19,7 +19,10 @@ import ca.on.sudbury.hojat.smartgallery.interfaces.HashListener
 import ca.on.sudbury.hojat.smartgallery.interfaces.SecurityTab
 import ca.on.sudbury.hojat.smartgallery.usecases.ApplyColorFilterUseCase
 import ca.on.sudbury.hojat.smartgallery.usecases.BeVisibleOrGoneUseCase
-import kotlinx.android.synthetic.main.tab_fingerprint.view.*
+import kotlinx.android.synthetic.main.tab_fingerprint.view.fingerprint_image
+import kotlinx.android.synthetic.main.tab_fingerprint.view.fingerprint_label
+import kotlinx.android.synthetic.main.tab_fingerprint.view.fingerprint_lock_holder
+import kotlinx.android.synthetic.main.tab_fingerprint.view.fingerprint_settings
 import timber.log.Timber
 
 class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(context, attrs),
@@ -72,7 +75,7 @@ class FingerprintTab(context: Context, attrs: AttributeSet) : RelativeLayout(con
             override fun onFailure(
                 failureReason: AuthenticationFailureReason,
                 fatal: Boolean,
-                errorMessage: CharSequence?,
+                errorMessage: CharSequence,
                 moduleTag: Int,
                 errorCode: Int
             ) {

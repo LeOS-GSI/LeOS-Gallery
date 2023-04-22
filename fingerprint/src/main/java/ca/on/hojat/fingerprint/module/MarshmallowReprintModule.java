@@ -1,20 +1,18 @@
 package ca.on.hojat.fingerprint.module;
 
-import android.os.Build;
 import android.annotation.TargetApi;
 import android.content.Context;
-
-import androidx.core.os.CancellationSignal;
-
 import android.hardware.fingerprint.FingerprintManager;
+import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.os.CancellationSignal;
 
-import ca.on.hojat.fingerprint.core.ReprintModule;
-import ca.on.hojat.fingerprint.core.Reprint;
-import ca.on.hojat.fingerprint.core.AuthenticationListener;
-import ca.on.hojat.fingerprint.core.AuthenticationFailureReason;
 import ca.on.hojat.fingerprint.R;
+import ca.on.hojat.fingerprint.core.AuthenticationFailureReason;
+import ca.on.hojat.fingerprint.core.AuthenticationListener;
+import ca.on.hojat.fingerprint.core.Reprint;
+import ca.on.hojat.fingerprint.core.ReprintModule;
 
 /**
  * A reprint module that authenticates fingerprint using the marshmallow Imprint API.

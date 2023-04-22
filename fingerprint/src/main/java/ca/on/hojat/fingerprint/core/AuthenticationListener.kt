@@ -1,16 +1,18 @@
-package ca.on.hojat.fingerprint.core;
-
+package ca.on.hojat.fingerprint.core
 
 /**
- * A listener that is notified of the results of fingerprint authentication.
+ * A listener that is notified of the results of fingerprint
+ * authentication.
  */
-public interface AuthenticationListener {
+interface AuthenticationListener {
+
     /**
      * Called after a fingerprint is successfully authenticated.
      *
-     * @param moduleTag The {@link ReprintModule#tag()} of the module that was used for authentication.
+     * @param moduleTag The [ReprintModule.tag()] of the module
+     * that was used for authentication.
      */
-    void onSuccess(int moduleTag);
+    fun onSuccess(moduleTag: Int)
 
     /**
      * Called after an error or authentication failure.
@@ -23,12 +25,16 @@ public interface AuthenticationListener {
      *                      displayed in the ui. This string is never null, and will be localized to the
      *                      current locale. You should show this text to the user, or some other message of
      *                      your own based on the failureReason.
-     * @param moduleTag     The {@link ReprintModule#tag()} of the module that is currently active. This is
+     * @param moduleTag     The [ReprintModule.tag()] of the module that is currently active. This is
      *                      useful to know the meaning of the error code.
      * @param errorCode     The specific error code returned by the module's underlying sdk. Check the
      *                      constants defined in the module for possible values and their meanings.
      */
-    void onFailure(AuthenticationFailureReason failureReason,
-                   boolean fatal, CharSequence errorMessage,
-                   int moduleTag, int errorCode);
+    fun onFailure(
+        failureReason: AuthenticationFailureReason,
+        fatal: Boolean,
+        errorMessage: CharSequence,
+        moduleTag: Int,
+        errorCode: Int
+    )
 }

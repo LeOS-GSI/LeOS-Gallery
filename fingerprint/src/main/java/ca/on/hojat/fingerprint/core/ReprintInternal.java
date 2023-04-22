@@ -1,19 +1,18 @@
 package ca.on.hojat.fingerprint.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.annotation.SuppressLint;
-
-import java.util.concurrent.atomic.AtomicReference;
+import android.util.Log;
 
 import androidx.core.os.CancellationSignal;
 
 import java.lang.reflect.Constructor;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
-import ca.on.hojat.fingerprint.module.MarshmallowReprintModule;
 import ca.on.hojat.fingerprint.R;
-
-import android.util.Log;
+import ca.on.hojat.fingerprint.module.MarshmallowReprintModule;
 
 /**
  * Methods for performing fingerprint authentication.
@@ -98,7 +97,7 @@ enum ReprintInternal {
     public void authenticate(final AuthenticationListener listener, Reprint.RestartPredicate restartPredicate) {
         if (module == null || !module.isHardwarePresent()) {
             listener.onFailure(AuthenticationFailureReason.NO_HARDWARE, true,
-                    getString(R.string.fingerprint_error_hw_not_available), 0, 0);
+                    Objects.requireNonNull(getString(R.string.fingerprint_error_hw_not_available)), 0, 0);
             return;
         }
 
