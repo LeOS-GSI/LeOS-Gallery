@@ -5,6 +5,7 @@ import android.content.Context;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.os.CancellationSignal;
 
@@ -12,6 +13,7 @@ import ca.on.hojat.fingerprint.R;
 import ca.on.hojat.fingerprint.core.AuthenticationFailureReason;
 import ca.on.hojat.fingerprint.core.AuthenticationListener;
 import ca.on.hojat.fingerprint.core.Reprint;
+import ca.on.hojat.fingerprint.core.Reprint.Logger;
 import ca.on.hojat.fingerprint.core.ReprintModule;
 
 /**
@@ -91,9 +93,9 @@ public class MarshmallowReprintModule implements ReprintModule {
     public static final int FINGERPRINT_AUTHENTICATION_FAILED = 1001;
 
     private final Context context;
-    private final ca.on.hojat.fingerprint.core.Reprint.Logger logger;
+    private final Logger logger;
 
-    public MarshmallowReprintModule(Context context, ca.on.hojat.fingerprint.core.Reprint.Logger logger) {
+    public MarshmallowReprintModule(Context context, Logger logger) {
         this.context = context.getApplicationContext();
         this.logger = logger;
     }
@@ -152,9 +154,11 @@ public class MarshmallowReprintModule implements ReprintModule {
     }
 
     @Override
-    public void authenticate(final CancellationSignal cancellationSignal,
-                             final AuthenticationListener listener,
-                             final Reprint.RestartPredicate restartPredicate) {
+    public void authenticate(
+            @NonNull final CancellationSignal cancellationSignal,
+            @NonNull final AuthenticationListener listener,
+            @NonNull final Reprint.RestartPredicate restartPredicate
+    ) {
         authenticate(cancellationSignal, listener, restartPredicate, 0);
     }
 

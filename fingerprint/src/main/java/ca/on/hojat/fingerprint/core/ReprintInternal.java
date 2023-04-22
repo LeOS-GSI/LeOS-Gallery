@@ -3,8 +3,8 @@ package ca.on.hojat.fingerprint.core;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.os.CancellationSignal;
 
 import java.lang.reflect.Constructor;
@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import ca.on.hojat.fingerprint.R;
 import ca.on.hojat.fingerprint.module.MarshmallowReprintModule;
+import timber.log.Timber;
 
 /**
  * Methods for performing fingerprint authentication.
@@ -21,10 +22,10 @@ enum ReprintInternal {
     @SuppressLint("StaticFieldLeak") INSTANCE;
 
     public static final Reprint.Logger NULL_LOGGER = new Reprint.Logger() {
-        public void log(String message) {
+        public void log(@NonNull String message) {
         }
 
-        public void logException(Throwable throwable, String message) {
+        public void logException(@NonNull Throwable throwable, @NonNull String message) {
         }
     };
 
@@ -66,7 +67,7 @@ enum ReprintInternal {
             ReprintModule module = (ReprintModule) constructor.newInstance(context, logger);
             registerModule(module);
         } catch (Exception e) {
-            Log.e("ReprintInternal", e.getMessage());
+            Timber.e(e);
         }
     }
 

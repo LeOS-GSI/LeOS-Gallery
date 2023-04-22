@@ -1,11 +1,15 @@
 package ca.on.hojat.palette.patternlockview.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Random utilities.
  */
 public class RandomUtils {
 
-    private static final java.util.Random RANDOM = new java.util.Random();
+    private static final Random RANDOM = new Random();
 
     private RandomUtils() {
         throw new AssertionError("You can not instantiate this class. Use its static utility " +
@@ -42,7 +46,7 @@ public class RandomUtils {
             return new int[0];
         }
 
-        final java.util.List<Integer> values = new java.util.ArrayList<>();
+        final List<Integer> values = new ArrayList<>();
         for (int i = start; i < end; i++) {
             values.add(i);
         }

@@ -3,6 +3,8 @@ package ca.on.hojat.fingerprint.core;
 
 import static ca.on.hojat.fingerprint.core.AuthenticationFailureReason.TIMEOUT;
 
+import androidx.annotation.NonNull;
+
 public class RestartPredicates {
     /**
      * A predicate that will retry all non-fatal failures indefinitely, and timeouts a given number
@@ -15,7 +17,7 @@ public class RestartPredicates {
             private int timeoutRestarts = 0;
 
             @Override
-            public boolean invoke(AuthenticationFailureReason reason, int restartCount) {
+            public boolean invoke(@NonNull AuthenticationFailureReason reason, int restartCount) {
                 return reason != TIMEOUT || timeoutRestarts++ < timeoutRestartCount;
             }
         };
