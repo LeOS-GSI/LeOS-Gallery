@@ -1,92 +1,78 @@
-package ca.on.hojat.fingerprint.core;
+package ca.on.hojat.fingerprint.core
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Build;
-
-import androidx.annotation.NonNull;
-import androidx.core.os.CancellationSignal;
-
-import java.lang.reflect.Constructor;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-
-import ca.on.hojat.fingerprint.R;
-import ca.on.hojat.fingerprint.module.MarshmallowReprintModule;
-import timber.log.Timber;
+import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
+import androidx.core.os.CancellationSignal
+import ca.on.hojat.fingerprint.R
+import ca.on.hojat.fingerprint.core.Reprint.RestartPredicate
+import ca.on.hojat.fingerprint.module.MarshmallowReprintModule
+import java.util.concurrent.atomic.AtomicReference
+import timber.log.Timber
 
 /**
  * Methods for performing fingerprint authentication.
  */
-enum ReprintInternal {
-    @SuppressLint("StaticFieldLeak") INSTANCE;
+internal enum class ReprintInternal {
 
-    public static final Reprint.Logger NULL_LOGGER = new Reprint.Logger() {
-        public void log(@NonNull String message) {
-        }
+    @SuppressLint("StaticFieldLeak")
+    INSTANCE;
 
-        public void logException(@NonNull Throwable throwable, @NonNull String message) {
-        }
-    };
-
-    private static final String REPRINT_SPASS_MODULE = "ca.on.hojat.fingerprint.module.spass.SpassReprintModule";
-    private final AtomicReference<CancellationSignal> cancellationSignal = new AtomicReference<>();
-    private ReprintModule module;
-    private Context context;
-
-    public void initialize(Context context, Reprint.Logger logger) {
-        this.context = context.getApplicationContext();
+    private val cancellationSignal = AtomicReference<CancellationSignal>()
+    private var module: ReprintModule? = null
+    private var context: Context? = null
+    fun initialize(context: Context, logger: Reprint.Logger?) {
+        var logger = logger
+        this.context = context.applicationContext
 
         // The SPass module doesn't work below API 17, and the Imprint module obviously requires
         // Marshmallow.
-        if (module != null) return;
-
-        if (logger == null) logger = ReprintInternal.NULL_LOGGER;
+        if (module != null) return
+        if (logger == null) logger = NULL_LOGGER
 
         // Only use the Spass module on APIs that don't support Imprint.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            registerSpassModule(context, logger);
+            registerSpassModule(context, logger)
         }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            MarshmallowReprintModule marshmallowModule = new MarshmallowReprintModule(context, logger);
+            val marshmallowModule = MarshmallowReprintModule(context, logger)
 
             // Some phones like the Galaxy S5 run marshmallow, but only work with Spass
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M && !marshmallowModule.isHardwarePresent()) {
-                registerSpassModule(context, logger);
+                registerSpassModule(context, logger)
             } else {
-                registerModule(marshmallowModule);
+                registerModule(marshmallowModule)
             }
         }
     }
 
-    private void registerSpassModule(Context context, Reprint.Logger logger) {
+    private fun registerSpassModule(context: Context, logger: Reprint.Logger) {
         try {
-            final Class<?> spassModuleClass = Class.forName(REPRINT_SPASS_MODULE);
-            final Constructor<?> constructor = spassModuleClass.getConstructor(Context.class, Reprint.Logger.class);
-            ReprintModule module = (ReprintModule) constructor.newInstance(context, logger);
-            registerModule(module);
-        } catch (Exception e) {
-            Timber.e(e);
+            val spassModuleClass = Class.forName(REPRINT_SPASS_MODULE)
+            val constructor = spassModuleClass.getConstructor(
+                Context::class.java, Reprint.Logger::class.java
+            )
+            val module = constructor.newInstance(context, logger) as ReprintModule
+            registerModule(module)
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 
-    public void registerModule(ReprintModule module) {
-        if (module == null || this.module != null && module.tag() == this.module.tag()) {
-            return;
+    fun registerModule(module: ReprintModule) {
+        if (this.module != null && module.tag() == this.module!!.tag()) {
+            return
         }
-
         if (module.isHardwarePresent()) {
-            this.module = module;
+            this.module = module
         }
     }
 
-    public boolean isHardwarePresent() {
-        return module != null && module.isHardwarePresent();
-    }
+    val isHardwarePresent: Boolean
+        get() = module != null && module!!.isHardwarePresent()
 
-    public boolean hasFingerprintRegistered() {
-        return module != null && module.hasFingerprintRegistered();
+    fun hasFingerprintRegistered(): Boolean {
+        return module != null && module!!.hasFingerprintRegistered()
     }
 
     /**
@@ -95,35 +81,46 @@ enum ReprintInternal {
      * @param listener         The listener to be notified.
      * @param restartPredicate The predicate that determines whether to restart or not.
      */
-    public void authenticate(final AuthenticationListener listener, Reprint.RestartPredicate restartPredicate) {
-        if (module == null || !module.isHardwarePresent()) {
-            listener.onFailure(AuthenticationFailureReason.NO_HARDWARE, true,
-                    Objects.requireNonNull(getString(R.string.fingerprint_error_hw_not_available)), 0, 0);
-            return;
+    fun authenticate(listener: AuthenticationListener, restartPredicate: RestartPredicate) {
+        if (module == null || !module!!.isHardwarePresent()) {
+            listener.onFailure(
+                AuthenticationFailureReason.NO_HARDWARE, true,
+                getString(R.string.fingerprint_error_hw_not_available)!!, 0, 0
+            )
+            return
         }
-
-        if (!module.hasFingerprintRegistered()) {
-            listener.onFailure(AuthenticationFailureReason.NO_FINGERPRINTS_REGISTERED, true,
-                    "Not recognized", 0, 0);
-            return;
+        if (!module!!.hasFingerprintRegistered()) {
+            listener.onFailure(
+                AuthenticationFailureReason.NO_FINGERPRINTS_REGISTERED, true,
+                "Not recognized", 0, 0
+            )
+            return
         }
-
-        cancellationSignal.set(new CancellationSignal());
-        module.authenticate(cancellationSignal.get(), listener, restartPredicate);
+        cancellationSignal.set(CancellationSignal())
+        module!!.authenticate(cancellationSignal.get(), listener, restartPredicate)
     }
 
-    public void cancelAuthentication() {
-        final androidx.core.os.CancellationSignal signal = cancellationSignal.getAndSet(null);
+    fun cancelAuthentication() {
+        val signal = cancellationSignal.getAndSet(null)
         if (signal != null) {
             try {
-                signal.cancel();
-            } catch (NullPointerException e) {
-                // Occasionally the cancel call throws an NPE when trying to unparcelize something.
+                signal.cancel()
+            } catch (e: NullPointerException) {
+                Timber.e(e)
             }
         }
     }
 
-    private String getString(int resid) {
-        return context == null ? null : context.getString(resid);
+    private fun getString(resid: Int): String? {
+        return if (context == null) null else context!!.getString(resid)
+    }
+
+    companion object {
+        val NULL_LOGGER: Reprint.Logger = object : Reprint.Logger {
+            override fun log(message: String) {}
+            override fun logException(throwable: Throwable, message: String) {}
+        }
+        private const val REPRINT_SPASS_MODULE =
+            "ca.on.hojat.fingerprint.module.spass.SpassReprintModule"
     }
 }
