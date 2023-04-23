@@ -9,16 +9,16 @@ object ExifUtil {
 
     @JvmStatic
     fun processLensSpecifications(values: Array<Rational>): String {
-        val min_focal = values[0]
-        val max_focal = values[1]
-        val min_f = values[2]
-        val max_f = values[3]
+        val minFocal = values[0]
+        val maxFocal = values[1]
+        val minF = values[2]
+        val maxF = values[3]
 
         formatter.maximumFractionDigits = 1
-        return "${formatter.format(min_focal.toDouble())}-${formatter.format(max_focal.toDouble())}mm f/${
+        return "${formatter.format(minFocal.toDouble())}-${formatter.format(maxFocal.toDouble())}mm f/${
             formatter.format(
-                min_f.toDouble()
+                minF.toDouble()
             )
-        }-${formatter.format(max_f.toDouble())}"
+        }-${formatter.format(maxF.toDouble())}"
     }
 }
