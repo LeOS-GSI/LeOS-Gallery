@@ -31,7 +31,7 @@ public final class StreamUtils {
     }
 
 
-    private static long copyLarge(InputStream input, OutputStream output) throws java.io.IOException {
+    private static long copyLarge(InputStream input, OutputStream output) throws IOException {
         long count = 0;
         int n;
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
