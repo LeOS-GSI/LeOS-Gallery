@@ -1,5 +1,9 @@
 package ca.on.hojat.palette.patternlockview;
 
+import static java.lang.Math.min;
+import static java.lang.Math.max;
+import static java.lang.Math.round;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
@@ -194,15 +198,15 @@ public class PatternLockView extends View {
         int newHeight;
         switch (mAspectRatio) {
             case AspectRatio.ASPECT_RATIO_SQUARE:
-                newWidth = newHeight = Math.min(oldWidth, oldHeight);
+                newWidth = newHeight = min(oldWidth, oldHeight);
                 break;
             case AspectRatio.ASPECT_RATIO_WIDTH_BIAS:
                 newWidth = oldWidth;
-                newHeight = Math.min(oldWidth, oldHeight);
+                newHeight = min(oldWidth, oldHeight);
                 break;
 
             case AspectRatio.ASPECT_RATIO_HEIGHT_BIAS:
-                newWidth = Math.min(oldWidth, oldHeight);
+                newWidth = min(oldWidth, oldHeight);
                 newHeight = oldHeight;
                 break;
 
@@ -918,10 +922,10 @@ public class PatternLockView extends View {
 
                 // Adjust for drawn segment from last cell to (x,y). Radius
                 // accounts for line width.
-                float left = Math.min(lastCellCenterX, x) - radius;
-                float right = Math.max(lastCellCenterX, x) + radius;
-                float top = Math.min(lastCellCenterY, y) - radius;
-                float bottom = Math.max(lastCellCenterY, y) + radius;
+                float left = min(lastCellCenterX, x) - radius;
+                float right = max(lastCellCenterX, x) + radius;
+                float top = min(lastCellCenterY, y) - radius;
+                float bottom = max(lastCellCenterY, y) + radius;
 
                 // Invalidate between the pattern's new cell and the pattern's
                 // previous cell
@@ -931,16 +935,16 @@ public class PatternLockView extends View {
                     float hitCellCenterX = getCenterXForColumn(hitDot.mColumn);
                     float hitCellCenterY = getCenterYForRow(hitDot.mRow);
 
-                    left = Math.min(hitCellCenterX - width, left);
-                    right = Math.max(hitCellCenterX + width, right);
-                    top = Math.min(hitCellCenterY - height, top);
-                    bottom = Math.max(hitCellCenterY + height, bottom);
+                    left = min(hitCellCenterX - width, left);
+                    right = max(hitCellCenterX + width, right);
+                    top = min(hitCellCenterY - height, top);
+                    bottom = max(hitCellCenterY + height, bottom);
                 }
 
                 // Invalidate between the pattern's last cell and the previous
                 // location
-                mTempInvalidateRect.union(Math.round(left), Math.round(top),
-                        Math.round(right), Math.round(bottom));
+                mTempInvalidateRect.union(round(left), round(top),
+                        round(right), round(bottom));
             }
         }
         mInProgressX = event.getX();
@@ -1036,7 +1040,7 @@ public class PatternLockView extends View {
         float diffY = y - lastY;
         float dist = (float) Math.sqrt(diffX * diffX + diffY * diffY);
         float fraction = dist / mViewWidth;
-        return Math.min(1f, Math.max(0f, (fraction - 0.3f) * 4f));
+        return min(1f, max(0f, (fraction - 0.3f) * 4f));
     }
 
     private int getCurrentColor(boolean partOfPattern) {

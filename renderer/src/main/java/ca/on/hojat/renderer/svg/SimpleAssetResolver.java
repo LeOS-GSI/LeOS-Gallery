@@ -1,5 +1,16 @@
 package ca.on.hojat.renderer.svg;
 
+import android.content.res.AssetManager;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.util.HashSet;
+import java.util.Set;
+
+import timber.log.Timber;
 
 /**
  * A sample implementation of {@link SVGExternalFileResolver} that retrieves files from
@@ -8,18 +19,7 @@ package ca.on.hojat.renderer.svg;
 
 public class SimpleAssetResolver extends SVGExternalFileResolver {
     private static final String TAG = "SimpleAssetResolver";
-
-    private android.content.res.AssetManager assetManager;
-
-
-    @SuppressWarnings({"WeakerAccess", "unused"})
-    public SimpleAssetResolver(android.content.res.AssetManager assetManager) {
-        super();
-        this.assetManager = assetManager;
-    }
-
-
-    private static final java.util.Set<String> supportedFormats = new java.util.HashSet<>(8);
+    private static final Set<String> supportedFormats = new HashSet<>(8);
 
     // Static initialiser
     static {
@@ -36,18 +36,25 @@ public class SimpleAssetResolver extends SVGExternalFileResolver {
         supportedFormats.add("image/webp");
     }
 
+    private AssetManager assetManager;
+
+    @SuppressWarnings({"WeakerAccess", "unused"})
+    public SimpleAssetResolver(AssetManager assetManager) {
+        super();
+        this.assetManager = assetManager;
+    }
 
     /*
      * Read the contents of the asset whose name is given by "url" and return it as a String.
      */
     private String getAssetAsString(String url) {
-        java.io.InputStream is = null;
+        InputStream is = null;
         //noinspection TryFinallyCanBeTryWithResources
         try {
             is = assetManager.open(url);
 
             //noinspection CharsetObjectCanBeUsed
-            java.io.Reader r = new java.io.InputStreamReader(is, java.nio.charset.Charset.forName("UTF-8"));
+            Reader r = new InputStreamReader(is, Charset.forName("UTF-8"));
             char[] buffer = new char[4096];
             StringBuilder sb = new StringBuilder();
             int len = r.read(buffer);
@@ -56,14 +63,14 @@ public class SimpleAssetResolver extends SVGExternalFileResolver {
                 len = r.read(buffer);
             }
             return sb.toString();
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             return null;
         } finally {
             try {
                 if (is != null)
                     is.close();
-            } catch (java.io.IOException e) {
-                // Do nothing
+            } catch (IOException e) {
+                Timber.e(e);
             }
         }
     }

@@ -1,12 +1,15 @@
 package ca.on.hojat.palette.patternlockview.utils;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.nio.charset.StandardCharsets;
 
 import ca.on.hojat.palette.patternlockview.PatternLockView;
 
@@ -136,9 +139,9 @@ public class PatternLockUtils {
 
             // This is the max available rows/ columns that we can reach from
             // the cell of `lastId` to the border of the matrix.
-            final int maxDistance = Math.max(
-                    Math.max(lastRow, patternLockView.getDotCount() - lastRow),
-                    Math.max(lastCol, patternLockView.getDotCount() - lastCol));
+            final int maxDistance = max(
+                    max(lastRow, patternLockView.getDotCount() - lastRow),
+                    max(lastCol, patternLockView.getDotCount() - lastCol));
 
             lastId = -1;
 
@@ -162,8 +165,8 @@ public class PatternLockUtils {
                     switch (line) {
                         case 0: {
                             if (rowA >= 0) {
-                                randomValues = RandomUtils.randIntArray(Math.max(0, colA),
-                                        Math.min(patternLockView.getDotCount(),
+                                randomValues = RandomUtils.randIntArray(max(0, colA),
+                                        min(patternLockView.getDotCount(),
                                                 colC + 1));
                                 for (int c : randomValues) {
                                     lastId = rowA * patternLockView.getDotCount()
@@ -180,8 +183,8 @@ public class PatternLockUtils {
 
                         case 1: {
                             if (colC < patternLockView.getDotCount()) {
-                                randomValues = RandomUtils.randIntArray(Math.max(0, rowA + 1),
-                                        Math.min(patternLockView.getDotCount(),
+                                randomValues = RandomUtils.randIntArray(max(0, rowA + 1),
+                                        min(patternLockView.getDotCount(),
                                                 rowC + 1));
                                 for (int r : randomValues) {
                                     lastId = r * patternLockView.getDotCount()
@@ -198,8 +201,8 @@ public class PatternLockUtils {
 
                         case 2: {
                             if (rowC < patternLockView.getDotCount()) {
-                                randomValues = RandomUtils.randIntArray(Math.max(0, colA),
-                                        Math.min(patternLockView.getDotCount(),
+                                randomValues = RandomUtils.randIntArray(max(0, colA),
+                                        min(patternLockView.getDotCount(),
                                                 colC));
                                 for (int c : randomValues) {
                                     lastId = rowC * patternLockView.getDotCount()
@@ -216,8 +219,8 @@ public class PatternLockUtils {
 
                         case 3: {
                             if (colA >= 0) {
-                                randomValues = RandomUtils.randIntArray(Math.max(0, rowA + 1),
-                                        Math.min(patternLockView.getDotCount(),
+                                randomValues = RandomUtils.randIntArray(max(0, rowA + 1),
+                                        min(patternLockView.getDotCount(),
                                                 rowC));
                                 for (int r : randomValues) {
                                     lastId = r * patternLockView.getDotCount()

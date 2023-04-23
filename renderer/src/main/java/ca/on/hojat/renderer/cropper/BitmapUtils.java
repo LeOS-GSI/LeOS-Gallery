@@ -1,22 +1,54 @@
 package ca.on.hojat.renderer.cropper;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.cos;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+import static java.lang.Math.round;
+import static java.lang.Math.sin;
+import static java.lang.Math.toRadians;
+
+import android.content.ContentResolver;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.net.Uri;
+import android.util.Pair;
 
 import androidx.exifinterface.media.ExifInterface;
+
+import java.io.File;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+
+import javax.microedition.khronos.egl.EGL10;
+import javax.microedition.khronos.egl.EGLDisplay;
+import javax.microedition.khronos.egl.EGLContext;
+import javax.microedition.khronos.egl.EGLConfig;
+
+import timber.log.Timber;
 
 /**
  * Utility class that deals with operations with an ImageView.
  */
 final class BitmapUtils {
 
-    static final android.graphics.Rect EMPTY_RECT = new android.graphics.Rect();
+    static final Rect EMPTY_RECT = new Rect();
 
-    static final android.graphics.RectF EMPTY_RECT_F = new android.graphics.RectF();
+    static final RectF EMPTY_RECT_F = new RectF();
 
     /**
      * Reusable rectangle for general internal usage
      */
-    static final android.graphics.RectF RECT = new android.graphics.RectF();
+    static final RectF RECT = new RectF();
 
     /**
      * Reusable point for general internal usage
@@ -27,33 +59,31 @@ final class BitmapUtils {
      * Reusable point for general internal usage
      */
     static final float[] POINTS2 = new float[6];
-
+    /**
+     * used to save bitmaps during state save and restore so not to reload them.
+     */
+    static Pair<String, WeakReference<Bitmap>> mStateBitmap;
     /**
      * Used to know the max texture size allowed to be rendered
      */
     private static int mMaxTextureSize;
 
     /**
-     * used to save bitmaps during state save and restore so not to reload them.
-     */
-    static android.util.Pair<String, java.lang.ref.WeakReference<android.graphics.Bitmap>> mStateBitmap;
-
-    /**
      * Rotate the given image by reading the Exif value of the image (uri).<br>
      * If no rotation is required the image will not be rotated.<br>
      * New bitmap is created and the old one is recycled.
      */
-    static ca.on.hojat.renderer.cropper.BitmapUtils.RotateBitmapResult rotateBitmapByExif(android.graphics.Bitmap bitmap, android.content.Context context, android.net.Uri uri) {
-        androidx.exifinterface.media.ExifInterface ei = null;
+    static RotateBitmapResult rotateBitmapByExif(Bitmap bitmap, Context context, Uri uri) {
+        ExifInterface ei = null;
         try {
-            java.io.InputStream is = context.getContentResolver().openInputStream(uri);
+            InputStream is = context.getContentResolver().openInputStream(uri);
             if (is != null) {
-                ei = new androidx.exifinterface.media.ExifInterface(is);
+                ei = new ExifInterface(is);
                 is.close();
             }
         } catch (Exception ignored) {
         }
-        return ei != null ? rotateBitmapByExif(bitmap, ei) : new ca.on.hojat.renderer.cropper.BitmapUtils.RotateBitmapResult(bitmap, 0);
+        return ei != null ? rotateBitmapByExif(bitmap, ei) : new RotateBitmapResult(bitmap, 0);
     }
 
     /**
@@ -61,37 +91,37 @@ final class BitmapUtils {
      * If no rotation is required the image will not be rotated.<br>
      * New bitmap is created and the old one is recycled.
      */
-    static ca.on.hojat.renderer.cropper.BitmapUtils.RotateBitmapResult rotateBitmapByExif(android.graphics.Bitmap bitmap, androidx.exifinterface.media.ExifInterface exif) {
+    static RotateBitmapResult rotateBitmapByExif(Bitmap bitmap, ExifInterface exif) {
         int degrees;
         int orientation =
-                exif.getAttributeInt(androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION, androidx.exifinterface.media.ExifInterface.ORIENTATION_NORMAL);
+                exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         switch (orientation) {
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90:
+            case ExifInterface.ORIENTATION_ROTATE_90:
                 degrees = 90;
                 break;
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180:
+            case ExifInterface.ORIENTATION_ROTATE_180:
                 degrees = 180;
                 break;
-            case androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270:
+            case ExifInterface.ORIENTATION_ROTATE_270:
                 degrees = 270;
                 break;
             default:
                 degrees = 0;
                 break;
         }
-        return new ca.on.hojat.renderer.cropper.BitmapUtils.RotateBitmapResult(bitmap, degrees);
+        return new RotateBitmapResult(bitmap, degrees);
     }
 
     /**
      * Decode bitmap from stream using sampling to get bitmap with the requested limit.
      */
-    static ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled decodeSampledBitmap(android.content.Context context, android.net.Uri uri, int reqWidth, int reqHeight) {
+    static BitmapUtils.BitmapSampled decodeSampledBitmap(Context context, Uri uri, int reqWidth, int reqHeight) {
 
         try {
-            android.content.ContentResolver resolver = context.getContentResolver();
+            ContentResolver resolver = context.getContentResolver();
 
             // First decode with inJustDecodeBounds=true to check dimensions
-            android.graphics.BitmapFactory.Options options = decodeImageForOption(resolver, uri);
+            BitmapFactory.Options options = decodeImageForOption(resolver, uri);
 
             if (options.outWidth == -1 && options.outHeight == -1)
                 throw new RuntimeException("File is not a picture");
@@ -104,9 +134,9 @@ final class BitmapUtils {
                             calculateInSampleSizeByMaxTextureSize(options.outWidth, options.outHeight));
 
             // Decode bitmap with inSampleSize set
-            android.graphics.Bitmap bitmap = decodeImage(resolver, uri, options);
+            Bitmap bitmap = decodeImage(resolver, uri, options);
 
-            return new ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled(bitmap, options.inSampleSize);
+            return new BitmapUtils.BitmapSampled(bitmap, options.inSampleSize);
 
         } catch (Exception e) {
             throw new RuntimeException(
@@ -122,8 +152,8 @@ final class BitmapUtils {
      * If crop fails due to OOM we scale the cropping image by 0.5 every time it fails until it is
      * small enough.
      */
-    static ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled cropBitmapObjectHandleOOM(
-            android.graphics.Bitmap bitmap,
+    static BitmapUtils.BitmapSampled cropBitmapObjectHandleOOM(
+            Bitmap bitmap,
             float[] points,
             int degreesRotated,
             boolean fixAspectRatio,
@@ -134,7 +164,7 @@ final class BitmapUtils {
         int scale = 1;
         while (true) {
             try {
-                android.graphics.Bitmap cropBitmap =
+                Bitmap cropBitmap =
                         cropBitmapObjectWithScale(
                                 bitmap,
                                 points,
@@ -145,7 +175,7 @@ final class BitmapUtils {
                                 1 / (float) scale,
                                 flipHorizontally,
                                 flipVertically);
-                return new ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled(cropBitmap, scale);
+                return new BitmapUtils.BitmapSampled(cropBitmap, scale);
             } catch (OutOfMemoryError e) {
                 scale *= 2;
                 if (scale > 8) {
@@ -164,8 +194,8 @@ final class BitmapUtils {
      * @param scale how much to scale the cropped image part, use 0.5 to lower the image by half (OOM
      *              handling)
      */
-    private static android.graphics.Bitmap cropBitmapObjectWithScale(
-            android.graphics.Bitmap bitmap,
+    private static Bitmap cropBitmapObjectWithScale(
+            Bitmap bitmap,
             float[] points,
             int degreesRotated,
             boolean fixAspectRatio,
@@ -177,7 +207,7 @@ final class BitmapUtils {
 
         // get the rectangle in original image that contains the required cropped area (larger for non
         // rectangular crop)
-        android.graphics.Rect rect =
+        Rect rect =
                 getRectFromPoints(
                         points,
                         bitmap.getWidth(),
@@ -187,11 +217,11 @@ final class BitmapUtils {
                         aspectRatioY);
 
         // crop and rotate the cropped image in one operation
-        android.graphics.Matrix matrix = new android.graphics.Matrix();
+        Matrix matrix = new Matrix();
         matrix.setRotate(degreesRotated, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
         matrix.postScale(flipHorizontally ? -scale : scale, flipVertically ? -scale : scale);
-        android.graphics.Bitmap result =
-                android.graphics.Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height(), matrix, true);
+        Bitmap result =
+                Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height(), matrix, true);
 
         if (result == bitmap) {
             // corner case when all bitmap is selected, no worth optimizing for it
@@ -216,9 +246,9 @@ final class BitmapUtils {
      * required.<br>
      * Additionally if OOM is thrown try to increase the sampling (2,4,8).
      */
-    static ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled cropBitmap(
-            android.content.Context context,
-            android.net.Uri loadedImageUri,
+    static BitmapUtils.BitmapSampled cropBitmap(
+            Context context,
+            Uri loadedImageUri,
             float[] points,
             int degreesRotated,
             int orgWidth,
@@ -270,28 +300,28 @@ final class BitmapUtils {
      * Get left value of the bounding rectangle of the given points.
      */
     static float getRectLeft(float[] points) {
-        return Math.min(Math.min(Math.min(points[0], points[2]), points[4]), points[6]);
+        return min(min(min(points[0], points[2]), points[4]), points[6]);
     }
 
     /**
      * Get top value of the bounding rectangle of the given points.
      */
     static float getRectTop(float[] points) {
-        return Math.min(Math.min(Math.min(points[1], points[3]), points[5]), points[7]);
+        return min(min(min(points[1], points[3]), points[5]), points[7]);
     }
 
     /**
      * Get right value of the bounding rectangle of the given points.
      */
     static float getRectRight(float[] points) {
-        return Math.max(Math.max(Math.max(points[0], points[2]), points[4]), points[6]);
+        return max(max(max(points[0], points[2]), points[4]), points[6]);
     }
 
     /**
      * Get bottom value of the bounding rectangle of the given points.
      */
     static float getRectBottom(float[] points) {
-        return Math.max(Math.max(Math.max(points[1], points[3]), points[5]), points[7]);
+        return max(max(max(points[1], points[3]), points[5]), points[7]);
     }
 
     /**
@@ -333,12 +363,12 @@ final class BitmapUtils {
             boolean fixAspectRatio,
             int aspectRatioX,
             int aspectRatioY) {
-        int left = Math.round(Math.max(0, getRectLeft(points)));
-        int top = Math.round(Math.max(0, getRectTop(points)));
-        int right = Math.round(Math.min(imageWidth, getRectRight(points)));
-        int bottom = Math.round(Math.min(imageHeight, getRectBottom(points)));
+        int left = round(Math.max(0, getRectLeft(points)));
+        int top = round(Math.max(0, getRectTop(points)));
+        int right = round(min(imageWidth, getRectRight(points)));
+        int bottom = round(min(imageHeight, getRectBottom(points)));
 
-        android.graphics.Rect rect = new android.graphics.Rect(left, top, right, bottom);
+        Rect rect = new Rect(left, top, right, bottom);
         if (fixAspectRatio) {
             fixRectForAspectRatio(rect, aspectRatioX, aspectRatioY);
         }
@@ -350,7 +380,7 @@ final class BitmapUtils {
      * Fix the given rectangle if it doesn't confirm to aspect ration rule.<br>
      * Make sure that width and height are equal if 1:1 fixed aspect ratio is requested.
      */
-    private static void fixRectForAspectRatio(android.graphics.Rect rect, int aspectRatioX, int aspectRatioY) {
+    private static void fixRectForAspectRatio(Rect rect, int aspectRatioX, int aspectRatioY) {
         if (aspectRatioX == aspectRatioY && rect.width() != rect.height()) {
             if (rect.height() > rect.width()) {
                 rect.bottom -= rect.height() - rect.width();
@@ -368,22 +398,22 @@ final class BitmapUtils {
      * @return the uri where the image was saved in, either the given uri or new pointing to temp
      * file.
      */
-    static android.net.Uri writeTempStateStoreBitmap(android.content.Context context, android.graphics.Bitmap bitmap, android.net.Uri uri) {
+    static Uri writeTempStateStoreBitmap(Context context, Bitmap bitmap, Uri uri) {
         try {
             boolean needSave = true;
             if (uri == null) {
                 uri =
-                        android.net.Uri.fromFile(
-                                java.io.File.createTempFile("aic_state_store_temp", ".jpg", context.getCacheDir()));
-            } else if (new java.io.File(uri.getPath()).exists()) {
+                        Uri.fromFile(
+                                File.createTempFile("aic_state_store_temp", ".jpg", context.getCacheDir()));
+            } else if (new File(uri.getPath()).exists()) {
                 needSave = false;
             }
             if (needSave) {
-                writeBitmapToUri(context, bitmap, uri, android.graphics.Bitmap.CompressFormat.JPEG, 95);
+                writeBitmapToUri(context, bitmap, uri, Bitmap.CompressFormat.JPEG, 95);
             }
             return uri;
         } catch (Exception e) {
-            timber.log.Timber.tag("AIC").w(e, "Failed to write bitmap to temp file for image-cropper save instance state");
+            Timber.tag("AIC").w(e, "Failed to write bitmap to temp file for image-cropper save instance state");
             return null;
         }
     }
@@ -392,13 +422,13 @@ final class BitmapUtils {
      * Write the given bitmap to the given uri using the given compression.
      */
     static void writeBitmapToUri(
-            android.content.Context context,
-            android.graphics.Bitmap bitmap,
-            android.net.Uri uri,
-            android.graphics.Bitmap.CompressFormat compressFormat,
+            Context context,
+            Bitmap bitmap,
+            Uri uri,
+            Bitmap.CompressFormat compressFormat,
             int compressQuality)
-            throws java.io.FileNotFoundException {
-        java.io.OutputStream outputStream = null;
+            throws FileNotFoundException {
+        OutputStream outputStream = null;
         try {
             outputStream = context.getContentResolver().openOutputStream(uri);
             bitmap.compress(compressFormat, compressQuality, outputStream);
@@ -410,8 +440,8 @@ final class BitmapUtils {
     /**
      * Resize the given bitmap to the given width/height by the given option.<br>
      */
-    static android.graphics.Bitmap resizeBitmap(
-            android.graphics.Bitmap bitmap, int reqWidth, int reqHeight, CropImageView.RequestSizeOptions options) {
+    static Bitmap resizeBitmap(
+            Bitmap bitmap, int reqWidth, int reqHeight, CropImageView.RequestSizeOptions options) {
         try {
             if (reqWidth > 0
                     && reqHeight > 0
@@ -419,16 +449,16 @@ final class BitmapUtils {
                     || options == CropImageView.RequestSizeOptions.RESIZE_INSIDE
                     || options == CropImageView.RequestSizeOptions.RESIZE_EXACT)) {
 
-                android.graphics.Bitmap resized = null;
+                Bitmap resized = null;
                 if (options == CropImageView.RequestSizeOptions.RESIZE_EXACT) {
-                    resized = android.graphics.Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
+                    resized = Bitmap.createScaledBitmap(bitmap, reqWidth, reqHeight, false);
                 } else {
                     int width = bitmap.getWidth();
                     int height = bitmap.getHeight();
-                    float scale = Math.max(width / (float) reqWidth, height / (float) reqHeight);
+                    float scale = max(width / (float) reqWidth, height / (float) reqHeight);
                     if (scale > 1 || options == CropImageView.RequestSizeOptions.RESIZE_FIT) {
                         resized =
-                                android.graphics.Bitmap.createScaledBitmap(
+                                Bitmap.createScaledBitmap(
                                         bitmap, (int) (width / scale), (int) (height / scale), false);
                     }
                 }
@@ -440,7 +470,7 @@ final class BitmapUtils {
                 }
             }
         } catch (Exception e) {
-            timber.log.Timber.tag("AIC").w(e, "Failed to resize cropped image, return bitmap before resize");
+            Timber.tag("AIC").w(e, "Failed to resize cropped image, return bitmap before resize");
         }
         return bitmap;
     }
@@ -455,9 +485,9 @@ final class BitmapUtils {
      * @param orgHeight   used to get rectangle from points (handle edge cases to limit rectangle)
      * @param sampleMulti used to increase the sampling of the image to handle memory issues.
      */
-    private static ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled cropBitmap(
-            android.content.Context context,
-            android.net.Uri loadedImageUri,
+    private static BitmapUtils.BitmapSampled cropBitmap(
+            Context context,
+            Uri loadedImageUri,
             float[] points,
             int degreesRotated,
             int orgWidth,
@@ -473,18 +503,18 @@ final class BitmapUtils {
 
         // get the rectangle in original image that contains the required cropped area (larger for non
         // rectangular crop)
-        android.graphics.Rect rect =
+        Rect rect =
                 getRectFromPoints(points, orgWidth, orgHeight, fixAspectRatio, aspectRatioX, aspectRatioY);
 
         int width = reqWidth > 0 ? reqWidth : rect.width();
         int height = reqHeight > 0 ? reqHeight : rect.height();
 
-        android.graphics.Bitmap result = null;
+        Bitmap result = null;
         int sampleSize = 1;
         try {
             // decode only the required image from URI, optionally sub-sampling if reqWidth/reqHeight is
             // given.
-            ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled bitmapSampled =
+            BitmapUtils.BitmapSampled bitmapSampled =
                     decodeSampledBitmapRegion(context, loadedImageUri, rect, width, height, sampleMulti);
             result = bitmapSampled.bitmap;
             sampleSize = bitmapSampled.sampleSize;
@@ -511,7 +541,7 @@ final class BitmapUtils {
                 }
                 throw e;
             }
-            return new ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled(result, sampleSize);
+            return new BitmapUtils.BitmapSampled(result, sampleSize);
         } else {
             // failed to decode region, may be skia issue, try full decode and then crop
             return cropBitmap(
@@ -536,29 +566,28 @@ final class BitmapUtils {
      * region failed.
      */
     private static ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled cropBitmap(
-            android.content.Context context,
-            android.net.Uri loadedImageUri,
+            Context context, Uri loadedImageUri,
             float[] points,
             int degreesRotated,
             boolean fixAspectRatio,
             int aspectRatioX,
             int aspectRatioY,
             int sampleMulti,
-            android.graphics.Rect rect,
+            Rect rect,
             int width,
             int height,
             boolean flipHorizontally,
             boolean flipVertically) {
-        android.graphics.Bitmap result = null;
+        Bitmap result = null;
         int sampleSize;
         try {
-            android.graphics.BitmapFactory.Options options = new android.graphics.BitmapFactory.Options();
+            BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize =
                     sampleSize =
                             sampleMulti
                                     * calculateInSampleSizeByReqestedSize(rect.width(), rect.height(), width, height);
 
-            android.graphics.Bitmap fullBitmap = decodeImage(context.getContentResolver(), loadedImageUri, options);
+            Bitmap fullBitmap = decodeImage(context.getContentResolver(), loadedImageUri, options);
             if (fullBitmap != null) {
                 try {
                     // adjust crop points by the sampling because the image is smaller
@@ -594,20 +623,20 @@ final class BitmapUtils {
             throw new RuntimeException(
                     "Failed to load sampled bitmap: " + loadedImageUri + "\r\n" + e.getMessage(), e);
         }
-        return new ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled(result, sampleSize);
+        return new BitmapUtils.BitmapSampled(result, sampleSize);
     }
 
     /**
      * Decode image from uri using "inJustDecodeBounds" to get the image dimensions.
      */
-    private static android.graphics.BitmapFactory.Options decodeImageForOption(android.content.ContentResolver resolver, android.net.Uri uri)
+    private static BitmapFactory.Options decodeImageForOption(android.content.ContentResolver resolver, android.net.Uri uri)
             throws java.io.FileNotFoundException {
         java.io.InputStream stream = null;
         try {
             stream = resolver.openInputStream(uri);
-            android.graphics.BitmapFactory.Options options = new android.graphics.BitmapFactory.Options();
+            BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            android.graphics.BitmapFactory.decodeStream(stream, EMPTY_RECT, options);
+            BitmapFactory.decodeStream(stream, EMPTY_RECT, options);
             options.inJustDecodeBounds = false;
             return options;
         } finally {
@@ -619,14 +648,14 @@ final class BitmapUtils {
      * Decode image from uri using given "inSampleSize", but if failed due to out-of-memory then raise
      * the inSampleSize until success.
      */
-    private static android.graphics.Bitmap decodeImage(
-            android.content.ContentResolver resolver, android.net.Uri uri, android.graphics.BitmapFactory.Options options)
-            throws java.io.FileNotFoundException {
+    private static Bitmap decodeImage(
+            ContentResolver resolver, Uri uri, BitmapFactory.Options options)
+            throws FileNotFoundException {
         do {
-            java.io.InputStream stream = null;
+            InputStream stream = null;
             try {
                 stream = resolver.openInputStream(uri);
-                return android.graphics.BitmapFactory.decodeStream(stream, EMPTY_RECT, options);
+                return BitmapFactory.decodeStream(stream, EMPTY_RECT, options);
             } catch (OutOfMemoryError e) {
                 options.inSampleSize *= 2;
             } finally {
@@ -642,22 +671,22 @@ final class BitmapUtils {
      *
      * @param sampleMulti used to increase the sampling of the image to handle memory issues.
      */
-    private static ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled decodeSampledBitmapRegion(
-            android.content.Context context, android.net.Uri uri, android.graphics.Rect rect, int reqWidth, int reqHeight, int sampleMulti) {
-        java.io.InputStream stream = null;
-        android.graphics.BitmapRegionDecoder decoder = null;
+    private static BitmapUtils.BitmapSampled decodeSampledBitmapRegion(
+            Context context, Uri uri, Rect rect, int reqWidth, int reqHeight, int sampleMulti) {
+        InputStream stream = null;
+        BitmapRegionDecoder decoder = null;
         try {
-            android.graphics.BitmapFactory.Options options = new android.graphics.BitmapFactory.Options();
+            BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize =
                     sampleMulti
                             * calculateInSampleSizeByReqestedSize(
                             rect.width(), rect.height(), reqWidth, reqHeight);
 
             stream = context.getContentResolver().openInputStream(uri);
-            decoder = android.graphics.BitmapRegionDecoder.newInstance(stream, false);
+            decoder = BitmapRegionDecoder.newInstance(stream, false);
             do {
                 try {
-                    return new ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled(decoder.decodeRegion(rect, options), options.inSampleSize);
+                    return new BitmapUtils.BitmapSampled(decoder.decodeRegion(rect, options), options.inSampleSize);
                 } catch (OutOfMemoryError e) {
                     options.inSampleSize *= 2;
                 }
@@ -671,7 +700,7 @@ final class BitmapUtils {
                 decoder.recycle();
             }
         }
-        return new ca.on.hojat.renderer.cropper.BitmapUtils.BitmapSampled(null, 1);
+        return new BitmapUtils.BitmapSampled(null, 1);
     }
 
     /**
@@ -680,10 +709,10 @@ final class BitmapUtils {
      * bitmap to the final rectangle.<br>
      * Note: rotating by 0, 90, 180 or 270 degrees doesn't require extra cropping.
      */
-    private static android.graphics.Bitmap cropForRotatedImage(
-            android.graphics.Bitmap bitmap,
+    private static Bitmap cropForRotatedImage(
+            Bitmap bitmap,
             float[] points,
-            android.graphics.Rect rect,
+            Rect rect,
             int degreesRotated,
             boolean fixAspectRatio,
             int aspectRatioX,
@@ -691,17 +720,17 @@ final class BitmapUtils {
         if (degreesRotated % 90 != 0) {
 
             int adjLeft = 0, adjTop = 0, width = 0, height = 0;
-            double rads = Math.toRadians(degreesRotated);
+            double rads = toRadians(degreesRotated);
             int compareTo =
                     degreesRotated < 90 || (degreesRotated > 180 && degreesRotated < 270)
                             ? rect.left
                             : rect.right;
             for (int i = 0; i < points.length; i += 2) {
                 if (points[i] >= compareTo - 1 && points[i] <= compareTo + 1) {
-                    adjLeft = (int) Math.abs(Math.sin(rads) * (rect.bottom - points[i + 1]));
-                    adjTop = (int) Math.abs(Math.cos(rads) * (points[i + 1] - rect.top));
-                    width = (int) Math.abs((points[i + 1] - rect.top) / Math.sin(rads));
-                    height = (int) Math.abs((rect.bottom - points[i + 1]) / Math.cos(rads));
+                    adjLeft = (int) abs(sin(rads) * (rect.bottom - points[i + 1]));
+                    adjTop = (int) abs(cos(rads) * (points[i + 1] - rect.top));
+                    width = (int) abs((points[i + 1] - rect.top) / sin(rads));
+                    height = (int) abs((rect.bottom - points[i + 1]) / cos(rads));
                     break;
                 }
             }
@@ -711,8 +740,8 @@ final class BitmapUtils {
                 fixRectForAspectRatio(rect, aspectRatioX, aspectRatioY);
             }
 
-            android.graphics.Bitmap bitmapTmp = bitmap;
-            bitmap = android.graphics.Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height());
+            Bitmap bitmapTmp = bitmap;
+            bitmap = Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height());
             if (bitmapTmp != bitmap) {
                 bitmapTmp.recycle();
             }
@@ -757,14 +786,14 @@ final class BitmapUtils {
      * Rotate the given bitmap by the given degrees.<br>
      * New bitmap is created and the old one is recycled.
      */
-    private static android.graphics.Bitmap rotateAndFlipBitmapInt(
-            android.graphics.Bitmap bitmap, int degrees, boolean flipHorizontally, boolean flipVertically) {
+    private static Bitmap rotateAndFlipBitmapInt(
+            Bitmap bitmap, int degrees, boolean flipHorizontally, boolean flipVertically) {
         if (degrees > 0 || flipHorizontally || flipVertically) {
-            android.graphics.Matrix matrix = new android.graphics.Matrix();
+            Matrix matrix = new Matrix();
             matrix.setRotate(degrees);
             matrix.postScale(flipHorizontally ? -1 : 1, flipVertically ? -1 : 1);
-            android.graphics.Bitmap newBitmap =
-                    android.graphics.Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+            Bitmap newBitmap =
+                    Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
             if (newBitmap != bitmap) {
                 bitmap.recycle();
             }
@@ -776,7 +805,7 @@ final class BitmapUtils {
 
     /**
      * Get the max size of bitmap allowed to be rendered on the device.<br>
-     * http://stackoverflow.com/questions/7428996/hw-accelerated-activity-how-to-get-opengl-texture-size-limit.
+     * <a href="http://stackoverflow.com/questions/7428996/hw-accelerated-activity-how-to-get-opengl-texture-size-limit">Look at this</a>.
      */
     private static int getMaxTextureSize() {
         // Safe minimum default size
@@ -784,8 +813,8 @@ final class BitmapUtils {
 
         try {
             // Get EGL Display
-            javax.microedition.khronos.egl.EGL10 egl = (javax.microedition.khronos.egl.EGL10) javax.microedition.khronos.egl.EGLContext.getEGL();
-            javax.microedition.khronos.egl.EGLDisplay display = egl.eglGetDisplay(javax.microedition.khronos.egl.EGL10.EGL_DEFAULT_DISPLAY);
+            EGL10 egl = (EGL10) EGLContext.getEGL();
+            EGLDisplay display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
 
             // Initialise
             int[] version = new int[2];
@@ -796,7 +825,7 @@ final class BitmapUtils {
             egl.eglGetConfigs(display, null, 0, totalConfigurations);
 
             // Query actual list configurations
-            javax.microedition.khronos.egl.EGLConfig[] configurationsList = new javax.microedition.khronos.egl.EGLConfig[totalConfigurations[0]];
+            EGLConfig[] configurationsList = new EGLConfig[totalConfigurations[0]];
             egl.eglGetConfigs(display, configurationsList, totalConfigurations[0], totalConfigurations);
 
             int[] textureSize = new int[1];
@@ -806,7 +835,7 @@ final class BitmapUtils {
             for (int i = 0; i < totalConfigurations[0]; i++) {
                 // Only need to check for width since opengl textures are always squared
                 egl.eglGetConfigAttrib(
-                        display, configurationsList[i], javax.microedition.khronos.egl.EGL10.EGL_MAX_PBUFFER_WIDTH, textureSize);
+                        display, configurationsList[i], EGL10.EGL_MAX_PBUFFER_WIDTH, textureSize);
 
                 // Keep track of the maximum texture size
                 if (maximumTextureSize < textureSize[0]) {
@@ -818,7 +847,7 @@ final class BitmapUtils {
             egl.eglTerminate(display);
 
             // Return largest texture size found, or default
-            return Math.max(maximumTextureSize, IMAGE_MAX_BITMAP_DIMENSION);
+            return max(maximumTextureSize, IMAGE_MAX_BITMAP_DIMENSION);
         } catch (Exception e) {
             return IMAGE_MAX_BITMAP_DIMENSION;
         }
@@ -830,11 +859,11 @@ final class BitmapUtils {
      *
      * @param closeable the closable object to close
      */
-    private static void closeSafe(java.io.Closeable closeable) {
+    private static void closeSafe(Closeable closeable) {
         if (closeable != null) {
             try {
                 closeable.close();
-            } catch (java.io.IOException ignored) {
+            } catch (IOException ignored) {
             }
         }
     }
@@ -850,14 +879,14 @@ final class BitmapUtils {
         /**
          * The bitmap instance
          */
-        public final android.graphics.Bitmap bitmap;
+        public final Bitmap bitmap;
 
         /**
          * The sample size used to lower the size of the bitmap (1,2,4,8,...)
          */
         final int sampleSize;
 
-        BitmapSampled(android.graphics.Bitmap bitmap, int sampleSize) {
+        BitmapSampled(Bitmap bitmap, int sampleSize) {
             this.bitmap = bitmap;
             this.sampleSize = sampleSize;
         }
@@ -874,14 +903,14 @@ final class BitmapUtils {
         /**
          * The loaded bitmap
          */
-        public final android.graphics.Bitmap bitmap;
+        public final Bitmap bitmap;
 
         /**
          * The degrees the image was rotated
          */
         final int degrees;
 
-        RotateBitmapResult(android.graphics.Bitmap bitmap, int degrees) {
+        RotateBitmapResult(Bitmap bitmap, int degrees) {
             this.bitmap = bitmap;
             this.degrees = degrees;
         }
