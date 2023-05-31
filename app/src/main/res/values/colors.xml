@@ -14,7 +14,7 @@
     <color name="crop_image_view_background">#BB000000</color>
     <color name="circle_black_background">#66000000</color>
 
-    <color name="color_primary">#193c5c</color>
+    <color name="color_primary">#455A64</color>
     <color name="color_primary_dark">#FFD76D00</color>
     <color name="color_accent">@color/color_primary</color>
 

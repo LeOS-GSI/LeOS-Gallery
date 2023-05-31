@@ -1132,14 +1132,14 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="version_placeholder">Version %s</string>
     <string name="hello">Hello :)</string>
-    <string name="about_footer">Made with &#10084;&#65039; in Canada</string>
+    <string name="about_footer">Rebranded with &#10084;&#65039; in Austria</string>
     <string name="additional_info">Additional info</string>
     <string name="app_version">App version: %s</string>
     <string name="device_os">Device OS: %s</string>
 
 
     <string name="purchase">Purchase</string>
-    <string name="order_simple_phone">Order Simple Phone</string>
+    <string name="order_simple_phone">Order LeOS Phone</string>
     <string name="update_thank_you">Please update Simple Thank You to the latest version</string>
     <string name="before_asking_question_read_faq">Before you ask a question, please check the app settings and read the Frequently Asked Questions first. Maybe the solution is there.</string>
     <string name="before_rate_read_faq">Before you rate us, please check the app settings and read the Frequently Asked Questions first. If you have any problems, maybe the solution is there.</string>

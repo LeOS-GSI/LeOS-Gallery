@@ -18,7 +18,7 @@ import ca.on.sudbury.hojat.smartgallery.extensions.launchViewIntent
  */
 class AppSideLoadedDialogFragment(val callback: () -> Unit) : DialogFragment() {
 
-    private val url = "https://github.com/hojat72elect/Smart-Gallery"
+    private val url = "https://github.com/LeOS-GSI/LeOS-Gallery"
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         AlertDialog.Builder(requireContext())

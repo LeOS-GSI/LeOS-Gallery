@@ -60,11 +60,9 @@ class AboutActivity : BaseSimpleActivity() {
 
         arrayOf(
             binding.aboutFaqIcon,
-            binding.aboutRateUsIcon,
             binding.aboutDonateIcon,
             binding.aboutInviteIcon,
             binding.aboutContributorsIcon,
-            binding.aboutMoreAppsIcon,
             binding.aboutEmailIcon,
             binding.aboutPrivacyPolicyIcon,
             binding.aboutLicensesIcon,
@@ -77,7 +75,6 @@ class AboutActivity : BaseSimpleActivity() {
         arrayOf(
             binding.aboutSupport,
             binding.aboutHelpUs,
-            binding.aboutSocial,
             binding.aboutOther
         ).forEach { textView ->
             textView.setTextColor(primaryColor)
@@ -104,9 +101,6 @@ class AboutActivity : BaseSimpleActivity() {
         setupInvite()
         setupContributors()
         setupDonate()
-        setupFacebook()
-        setupReddit()
-        setupMoreApps()
         setupWebsite()
         setupPrivacyPolicy()
         setupLicense()
@@ -248,39 +242,7 @@ class AboutActivity : BaseSimpleActivity() {
         }
     }
 
-    private fun setupFacebook() {
-        if (resources.getBoolean(R.bool.hide_all_external_links)) {
-            binding.aboutSocial.visibility = View.GONE
-            binding.aboutSocialHolder.visibility = View.GONE
-        }
 
-        binding.aboutFacebookHolder.setOnClickListener {
-            var link = "https://www.facebook.com/simplemobiletools"
-            try {
-                packageManager.getPackageInfo("com.facebook.katana", 0)
-                link = "fb://page/150270895341774"
-            } catch (ignored: Exception) {
-            }
-
-            launchViewIntent(link)
-        }
-    }
-
-    private fun setupReddit() {
-        binding.aboutRedditHolder.setOnClickListener {
-            launchViewIntent("https://www.reddit.com/r/SimpleMobileTools")
-        }
-    }
-
-    private fun setupMoreApps() {
-        if (resources.getBoolean(R.bool.hide_google_relations)) {
-            binding.aboutMoreAppsHolder.visibility = View.GONE
-        }
-
-        binding.aboutMoreAppsHolder.setOnClickListener {
-            launchViewIntent("https://github.com/hojat72elect/Smart-Gallery")
-        }
-    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun setupWebsite() {

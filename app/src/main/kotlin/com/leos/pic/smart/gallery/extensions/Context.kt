@@ -2377,7 +2377,7 @@ fun Context.getSAFDocumentId(path: String): String {
     return "$storageId:$relativePath"
 }
 
-fun Context.getStoreUrl() = "https://github.com/hojat72elect/Smart-Gallery"
+fun Context.getStoreUrl() = "https://github.com/LeOS-GSI/LeOS-Gallery"
 
 fun Context.getTextSize() = when (baseConfig.fontSize) {
     FONT_SIZE_SMALL -> resources.getDimension(R.dimen.smaller_text_size)
